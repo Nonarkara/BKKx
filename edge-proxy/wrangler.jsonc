@@ -1,0 +1,15 @@
+{
+  "$schema": "../site/node_modules/wrangler/config-schema.json",
+  "name": "bkkx-domain-proxy",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-08-03",
+  "routes": [
+    {
+      "pattern": "bkk.nonarkara.org",
+      "custom_domain": true
+    }
+  ],
+  "observability": {
+    "enabled": true
+  }
+}

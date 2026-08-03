@@ -26,6 +26,7 @@ The installer uses a local generated world when present. A lightweight GitHub cl
 
 ```text
 site/       public walkthrough, landmark chapters and pageview analytics
+edge-proxy/ custom-domain binding for bkk.nonarkara.org
 worlds/     generation manifests and local world data when available
 previews/   validated top-down world maps
 releases/   archive checksums; binary worlds are attached to GitHub Releases
