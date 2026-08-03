@@ -1,0 +1,9 @@
+.DS_Store
+*.log
+.staging/
+releases/*.zip
+worlds/*/arnis_world_map.png
+worlds/*/data/
+worlds/*/icon.png
+worlds/*/level.dat
+worlds/*/region/
