@@ -240,7 +240,15 @@ export function AtlasView({ world }: Props) {
     });
 
     mapRef.current = map;
+
+    // The atlas grid can settle after the map mounts (fonts, fixed-layout
+    // pass), leaving maplibre's canvas frozen at the pre-layout size.
+    // Track the container directly so the canvas always fills it.
+    const resizeObserver = new ResizeObserver(() => map.resize());
+    resizeObserver.observe(map.getContainer());
+
     return () => {
+      resizeObserver.disconnect();
       markerRefs.current.forEach((marker) => marker.remove());
       markerRefs.current = [];
       map.remove();
