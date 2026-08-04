@@ -12,8 +12,18 @@ export default {
     const headers = new Headers(upstreamResponse.headers);
     const location = headers.get("location");
 
-    if (location?.startsWith(UPSTREAM)) {
-      headers.set("location", location.replace(UPSTREAM, incomingUrl.origin));
+    if (location) {
+      try {
+        const parsed = new URL(location); // throws on relative redirects; leave those as-is
+        if (parsed.host === new URL(UPSTREAM).host) {
+          headers.set(
+            "location",
+            `${incomingUrl.origin}${parsed.pathname}${parsed.search}${parsed.hash}`,
+          );
+        }
+      } catch {
+        // relative Location — already correct for the custom domain
+      }
     }
     headers.set("x-bkkx-edge", "bangkok-atlas");
 
