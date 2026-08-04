@@ -1,0 +1,49 @@
+{
+  "id": "ljubljana-centre-java",
+  "title": "Ljubljana · Centre",
+  "edition": "Minecraft Java Edition",
+  "minecraft_version": "1.21.4+",
+  "status": "scaffold",
+  "notes": "Portability probe 2026-08-04. Browser 3D twin is live in UNL city-hub (Ljubljana threeD + /geo/ljubljana-buildings.geojson). Minecraft world binary not yet generated — run Arnis on the bounds below, then fill validation + attach release zip.",
+  "generator": {
+    "name": "Arnis",
+    "version": "3.0.0",
+    "repository": "https://github.com/louis-e/arnis",
+    "howto": "https://arnismc.com/"
+  },
+  "geography": {
+    "name": "Ljubljana Centre, Slovenia",
+    "openstreetmap_relation": 1676368,
+    "bounds": {
+      "min_lat": 46.03,
+      "min_lon": 14.48,
+      "max_lat": 46.08,
+      "max_lon": 14.54
+    },
+    "spawn": {
+      "lat": 46.0569,
+      "lon": 14.5058
+    }
+  },
+  "scale_blocks_per_metre": 1.0,
+  "projection": "local",
+  "settings": {
+    "game_mode": "creative",
+    "world_time_ticks": 6000,
+    "map_preview": true,
+    "map_item": true,
+    "overture_buildings": true,
+    "external_3d_assets": true,
+    "terrain_elevation": true
+  },
+  "validation": {
+    "region_files": 0,
+    "chunks": 0,
+    "status": "pending_generation"
+  },
+  "linked_surfaces": {
+    "unl_city_hub": "https://city-hub.pages.dev/?city=ljubljana",
+    "buildings_geojson": "UNL/public/geo/ljubljana-buildings.geojson"
+  },
+  "attribution": "Geographic data © OpenStreetMap contributors, ODbL 1.0. Arnis is Apache-2.0."
+}
