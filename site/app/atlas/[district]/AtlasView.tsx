@@ -154,8 +154,9 @@ export function AtlasView({ world }: Props) {
               "raster-brightness-max": 0.96,
             },
           });
-        } catch {
+        } catch (err) {
           // If the source can't be created, fall back to the dark style as-is.
+          console.warn("bkkx: satellite layer failed", err);
         }
       }
 
@@ -185,9 +186,10 @@ export function AtlasView({ world }: Props) {
                 "line-opacity": opacity,
               },
             });
-          } catch {
+          } catch (err) {
             // Style schema may omit transportation on some maps; degrade
-            // silently rather than blocking the buildings layer.
+            // gracefully rather than blocking the buildings layer.
+            console.warn(`bkkx: road layer ${id} failed`, err);
           }
         };
 
@@ -208,8 +210,9 @@ export function AtlasView({ world }: Props) {
             minzoom: 13,
             paint: BKKX_BUILDING_PAINT,
           });
-        } catch {
-          // Some style schemas omit render_height; degrade silently.
+        } catch (err) {
+          // Some style schemas omit render_height; degrade gracefully.
+          console.warn("bkkx: 3d buildings layer failed", err);
         }
       }
       setMapReady(true);
