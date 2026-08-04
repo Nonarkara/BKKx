@@ -8,3 +8,5 @@ worlds/*/data/
 worlds/*/icon.png
 worlds/*/level.dat
 worlds/*/region/
+.claude/
+edge-proxy/.wrangler/
