@@ -33,6 +33,27 @@ test("renders the Bangkok walkthrough", async () => {
   assert.match(html, /block by block\./);
   assert.match(html, /Ratchathewi/);
   assert.match(html, /Historic Core/);
+  assert.match(html, /Walk in 3D/);
+  assert.match(html, /\/atlas\/ratchathewi/);
   assert.match(html, /application\/ld\+json/);
   assert.doesNotMatch(html, /codex-preview|Building your site|react-loading-skeleton/i);
+});
+
+test("renders the 3D atlas page for a district", async () => {
+  const response = await render("/atlas/ratchathewi");
+  assert.equal(response.status, 200);
+  assert.match(response.headers.get("content-type") ?? "", /^text\/html\b/i);
+
+  const html = await response.text();
+  assert.match(html, /<title>Ratchathewi — 3D atlas · BKKx<\/title>/i);
+  assert.match(html, /Ratchathewi/);
+  assert.match(html, /ราชเทวี/);
+  assert.match(html, /Victory Monument/);
+  assert.match(html, /Download world/);
+  assert.match(html, /Walk in 3D|atlas-page|bkkx-marker/);
+});
+
+test("returns 404 for an unknown atlas district", async () => {
+  const response = await render("/atlas/atlantis");
+  assert.equal(response.status, 404);
 });

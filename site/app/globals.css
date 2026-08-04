@@ -536,14 +536,31 @@ button {
 .steps code { padding: 2px 5px; background: #e3e1d9; font-family: monospace; font-size: 12px; }
 
 .download-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-top: 18px; }
-.download-card { display: grid; min-height: 190px; grid-template-columns: auto 1fr auto; align-items: center; gap: 26px; padding: 30px; border: 1px solid var(--ink); background: var(--paper); transition: color 180ms ease, background 180ms ease, transform 180ms ease; }
+.download-card { display: grid; min-height: 220px; grid-template-columns: auto 1fr auto; align-items: stretch; gap: 26px; padding: 30px; border: 1px solid var(--ink); background: var(--paper); transition: color 180ms ease, background 180ms ease; }
 .download-card:hover,
-.download-card:focus-visible { color: var(--paper); background: var(--ink); transform: translateY(-4px); }
+.download-card:focus-within { color: var(--paper); background: var(--ink); }
 .download-number { align-self: start; color: #777970; font-family: var(--font-display); font-size: 13px; font-weight: 800; }
 .download-card small { color: #6e7168; font-size: 9px; font-weight: 800; letter-spacing: .11em; }
 .download-card h3 { margin: 8px 0 0; font-family: var(--font-display); font-size: clamp(28px, 3vw, 44px); letter-spacing: -.06em; }
 .download-card p { margin: 4px 0 0; color: #74776e; font-size: 13px; }
-.download-arrow { display: grid; width: 48px; height: 48px; place-items: center; border-radius: 50%; color: var(--ink); background: var(--signal); font-size: 22px; }
+.download-card:hover p,
+.download-card:focus-within p { color: #cfd2c6; }
+.download-card:hover small,
+.download-card:focus-within small { color: #aeb1a4; }
+.download-actions { display: flex; flex-direction: column; gap: 10px; align-self: stretch; min-width: 200px; }
+.download-action { display: flex; flex-direction: column; justify-content: center; gap: 2px; padding: 12px 16px; border: 1px solid var(--ink); font-family: var(--font-body); text-align: left; transition: background 160ms ease, color 160ms ease, border-color 160ms ease; }
+.download-action span { font-size: 12px; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; }
+.download-action small { margin: 0; font-size: 9px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; }
+.download-action-primary { color: var(--ink); background: var(--signal); border-color: var(--signal); }
+.download-action-primary:hover,
+.download-action-primary:focus-visible { background: var(--paper-strong); border-color: var(--paper-strong); }
+.download-action-quiet { color: var(--ink); background: transparent; border-color: var(--ink); }
+.download-action-quiet:hover,
+.download-action-quiet:focus-visible { color: var(--ink); background: var(--paper); }
+.download-card:hover .download-action-quiet,
+.download-card:focus-within .download-action-quiet { color: var(--paper); border-color: var(--paper); }
+.download-card:hover .download-action-quiet:hover,
+.download-card:focus-within .download-action-quiet:focus-visible { color: var(--ink); background: var(--paper); }
 
 .pipeline-section {
   display: grid;
@@ -644,4 +661,344 @@ footer small { grid-column: 1 / -1; margin-top: 60px; padding-top: 24px; border-
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; }
+}
+
+/* =========================================================================
+   3D atlas page — MapLibre-driven walkthrough of every BKKx district.
+   Mirrors the main walkthrough palette: ink, paper, signal yellow.
+   No rounded corners, no shadows on the chrome. Sharp edges only.
+   ========================================================================= */
+
+.atlas-page {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(320px, 380px);
+  grid-template-rows: auto 1fr;
+  grid-template-areas:
+    "header header"
+    "map panel";
+  background: var(--ink);
+  color: var(--paper);
+}
+
+.atlas-header {
+  grid-area: header;
+  z-index: 30;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 24px;
+  padding: 18px clamp(20px, 3vw, 48px);
+  background: rgba(17, 18, 15, 0.88);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.16);
+  backdrop-filter: blur(8px);
+}
+
+.atlas-header-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.atlas-eyebrow {
+  color: var(--signal);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.atlas-header-meta strong {
+  font-family: var(--font-display);
+  font-size: clamp(20px, 2vw, 28px);
+  font-weight: 800;
+  letter-spacing: -0.05em;
+}
+
+.atlas-header-meta small {
+  color: var(--muted);
+  font-size: 11px;
+  letter-spacing: 0.04em;
+}
+
+.atlas-header-nav {
+  display: flex;
+  align-items: center;
+  gap: 22px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.atlas-header-nav a {
+  color: var(--paper);
+  transition: color 180ms ease;
+}
+
+.atlas-header-nav a:hover,
+.atlas-header-nav a:focus-visible {
+  color: var(--signal);
+}
+
+.atlas-download {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  border: 1px solid var(--signal);
+  color: var(--ink) !important;
+  background: var(--signal);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.atlas-download:hover,
+.atlas-download:focus-visible {
+  color: var(--ink) !important;
+  background: var(--paper-strong);
+  border-color: var(--paper-strong);
+}
+
+.atlas-map {
+  grid-area: map;
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background: #0a0b08;
+}
+
+.atlas-map :where(.maplibregl-canvas) {
+  outline: none;
+}
+
+.atlas-map :where(.maplibregl-ctrl-attrib) {
+  background: rgba(17, 18, 15, 0.7);
+  color: var(--muted);
+  font-size: 10px;
+  font-family: var(--font-body);
+}
+
+.atlas-map :where(.maplibregl-ctrl-attrib a) {
+  color: var(--paper);
+}
+
+.atlas-map :where(.maplibregl-ctrl-group) {
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(17, 18, 15, 0.86);
+  box-shadow: none;
+}
+
+.atlas-map :where(.maplibregl-ctrl button) {
+  background-color: transparent;
+  filter: invert(1) hue-rotate(180deg);
+}
+
+.atlas-panel {
+  grid-area: panel;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 28px clamp(22px, 2.6vw, 36px) 32px;
+  overflow-y: auto;
+  background: #0d0e0b;
+  border-left: 1px solid rgba(255, 255, 255, 0.16);
+}
+
+.atlas-panel-eyebrow {
+  margin: 0;
+  color: var(--signal);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.atlas-panel h2 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(28px, 2.4vw, 38px);
+  font-weight: 800;
+  letter-spacing: -0.06em;
+  line-height: 0.96;
+}
+
+.atlas-panel-thai {
+  margin: 0;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.atlas-panel-desc {
+  margin: 8px 0 0;
+  color: #d2d4ca;
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+.atlas-field-note {
+  margin: 6px 0 0;
+  padding: 14px 0 0 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.14);
+  border-left: 2px solid var(--signal);
+}
+
+.atlas-field-note span {
+  color: var(--signal);
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.atlas-field-note p {
+  margin: 6px 0 0;
+  color: #d9dbd2;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.atlas-coordinates {
+  margin: 0;
+  color: #7f8278;
+  font-family: monospace;
+  font-size: 10px;
+  letter-spacing: 0.04em;
+}
+
+.atlas-chapters {
+  list-style: none;
+  margin: 12px 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  border-top: 1px solid rgba(255, 255, 255, 0.14);
+}
+
+.atlas-chapters li + li {
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.atlas-chapters button {
+  display: grid;
+  width: 100%;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 0;
+  border: 0;
+  background: transparent;
+  color: #aaa;
+  font-family: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: color 160ms ease, transform 160ms ease;
+}
+
+.atlas-chapters button span {
+  font-family: var(--font-display);
+  font-size: 14px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.atlas-chapters button strong {
+  display: block;
+  color: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.atlas-chapters button small {
+  display: block;
+  color: var(--muted);
+  font-size: 11px;
+  margin-top: 2px;
+}
+
+.atlas-chapters button:hover,
+.atlas-chapters button:focus-visible,
+.atlas-chapters button.is-active {
+  color: var(--paper);
+  transform: translateX(2px);
+}
+
+.atlas-chapters button.is-active span,
+.atlas-chapters button.is-active strong {
+  color: var(--signal);
+}
+
+.atlas-back {
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px solid rgba(255, 255, 255, 0.14);
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  transition: color 160ms ease;
+}
+
+.atlas-back:hover,
+.atlas-back:focus-visible {
+  color: var(--signal);
+}
+
+/* Markers rendered into MapLibre via DOM elements. */
+
+.bkkx-marker {
+  display: grid;
+  width: 32px;
+  height: 32px;
+  place-items: center;
+  border: 1px solid var(--paper);
+  color: var(--paper);
+  background: rgba(17, 18, 15, 0.84);
+  cursor: pointer;
+  transform: translateY(0) rotate(45deg);
+  transition: transform 160ms ease, background 160ms ease, border-color 160ms ease, color 160ms ease;
+}
+
+.bkkx-marker span {
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  transform: rotate(-45deg);
+}
+
+.bkkx-marker:hover,
+.bkkx-marker:focus-visible {
+  color: var(--ink);
+  background: var(--signal);
+  border-color: var(--signal);
+  transform: translateY(-3px) rotate(45deg);
+}
+
+@media (max-width: 900px) {
+  .atlas-page {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto minmax(55vh, 1fr) auto;
+    grid-template-areas:
+      "header"
+      "map"
+      "panel";
+  }
+  .atlas-panel {
+    border-left: 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.16);
+    max-height: 45vh;
+  }
+  .atlas-header-nav a:not(.atlas-download) {
+    display: none;
+  }
 }
