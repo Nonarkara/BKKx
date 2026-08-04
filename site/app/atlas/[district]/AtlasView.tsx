@@ -14,6 +14,52 @@ const OPENFREEMAP_DARK_STYLE = "https://tiles.openfreemap.org/styles/dark";
 
 const BUILDING_SOURCE_CANDIDATES = ["openfreemap", "openmaptiles"];
 
+// Real Bangkok over the OpenFreeMap dark base. Esri World Imagery is free
+// for non-commercial use; attribution is wired in below.
+const ESRI_IMAGERY_TILES = [
+  "https://services.arcgisonline.com/arcgis/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
+];
+const ESRI_IMAGERY_ATTRIBUTION =
+  "Imagery © Esri, Maxar, Earthstar Geographics, and the GIS User Community";
+
+const BKKX_BUILDING_PAINT: maplibregl.FillExtrusionLayerSpecification["paint"] = {
+  "fill-extrusion-color": "#c9ff38",
+  "fill-extrusion-height": [
+    "coalesce",
+    ["get", "render_height"],
+    ["get", "height"],
+    0,
+  ] as unknown as number,
+  "fill-extrusion-base": [
+    "coalesce",
+    ["get", "render_min_height"],
+    ["get", "min_height"],
+    0,
+  ] as unknown as number,
+  // Slightly translucent so the satellite imagery shows through walls and
+  // gaps. The BKKx signature stays in the building silhouettes.
+  "fill-extrusion-opacity": 0.7,
+  "fill-extrusion-vertical-gradient": true,
+};
+
+const ROAD_TIER_FILTERS: Record<string, maplibregl.ExpressionSpecification> = {
+  motorway: ["==", "class", "motorway"],
+  major: ["in", "class", "trunk", "primary", "secondary"] as unknown as maplibregl.ExpressionSpecification,
+  minor: ["in", "class", "tertiary", "minor", "service"] as unknown as maplibregl.ExpressionSpecification,
+};
+
+function roadLineWidth(base: number, top: number): maplibregl.ExpressionSpecification {
+  return [
+    "interpolate",
+    ["linear"],
+    ["zoom"],
+    10,
+    base,
+    18,
+    top,
+  ];
+}
+
 function parseCoordinates(value: string): LngLat | null {
   const match = value.match(
     /(-?\d+(?:\.\d+)?)\s*°\s*([NS])\s*·\s*(-?\d+(?:\.\d+)?)\s*°\s*([EW])/i,
@@ -82,6 +128,76 @@ export function AtlasView({ world }: Props) {
             BUILDING_SOURCE_CANDIDATES.includes(name),
           )?.[0]
         : undefined;
+
+      // 1. Satellite base (Esri World Imagery). Sits below everything we add.
+      if (!map.getSource("bkkx-esri-imagery")) {
+        try {
+          map.addSource("bkkx-esri-imagery", {
+            type: "raster",
+            tiles: ESRI_IMAGERY_TILES,
+            tileSize: 256,
+            attribution: ESRI_IMAGERY_ATTRIBUTION,
+            maxzoom: 19,
+          });
+          map.addLayer({
+            id: "bkkx-satellite",
+            type: "raster",
+            source: "bkkx-esri-imagery",
+            paint: {
+              // Desaturate slightly so the signal yellow on buildings
+              // and expressways pops instead of fighting Esri's true-color
+              // satellite palette.
+              "raster-opacity": 0.78,
+              "raster-saturation": -0.45,
+              "raster-contrast": 0.08,
+              "raster-brightness-min": 0.04,
+              "raster-brightness-max": 0.96,
+            },
+          });
+        } catch {
+          // If the source can't be created, fall back to the dark style as-is.
+        }
+      }
+
+      // 2. Roads in three tiers, drawn from the OpenFreeMap transportation
+      //    source-layer (no extra fetch). Motorways (Bangkok's expressways)
+      //    glow signal yellow; major roads are paper-gray; minor roads
+      //    stay dark so they don't crowd the panel.
+      if (source && !map.getLayer("bkkx-roads-minor")) {
+        const addLine = (
+          id: string,
+          filter: maplibregl.ExpressionSpecification,
+          color: string,
+          width: maplibregl.ExpressionSpecification,
+          opacity = 0.85,
+        ) => {
+          try {
+            map.addLayer({
+              id,
+              type: "line",
+              source,
+              "source-layer": "transportation",
+              filter,
+              layout: { "line-join": "round", "line-cap": "round" },
+              paint: {
+                "line-color": color,
+                "line-width": width,
+                "line-opacity": opacity,
+              },
+            });
+          } catch {
+            // Style schema may omit transportation on some maps; degrade
+            // silently rather than blocking the buildings layer.
+          }
+        };
+
+        addLine("bkkx-roads-minor", ROAD_TIER_FILTERS.minor, "#2c2d28", roadLineWidth(0.3, 2.4), 0.7);
+        addLine("bkkx-roads-major", ROAD_TIER_FILTERS.major, "#5e6157", roadLineWidth(0.4, 3.6), 0.9);
+        addLine("bkkx-roads-motorway", ROAD_TIER_FILTERS.motorway, "#c9ff38", roadLineWidth(0.6, 5.2), 1.0);
+      }
+
+      // 3. 3D buildings on top, in BKKx signal yellow with a faint vertical
+      //    gradient so the silhouette reads as architecture, not paint.
       if (source && !map.getLayer("bkkx-3d-buildings")) {
         try {
           map.addLayer({
@@ -90,22 +206,7 @@ export function AtlasView({ world }: Props) {
             source,
             "source-layer": "building",
             minzoom: 13,
-            paint: {
-              "fill-extrusion-color": "#c9ff38",
-              "fill-extrusion-height": [
-                "coalesce",
-                ["get", "render_height"],
-                ["get", "height"],
-                0,
-              ],
-              "fill-extrusion-base": [
-                "coalesce",
-                ["get", "render_min_height"],
-                ["get", "min_height"],
-                0,
-              ],
-              "fill-extrusion-opacity": 0.72,
-            },
+            paint: BKKX_BUILDING_PAINT,
           });
         } catch {
           // Some style schemas omit render_height; degrade silently.
