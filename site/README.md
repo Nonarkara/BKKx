@@ -1,6 +1,6 @@
 # BKKx web atlas
 
-The public walkthrough for [bkk.nonarkara.org](https://bkk.nonarkara.org). It presents Bangkok's generated Minecraft worlds as a guided, bilingual field atlas with landmark chapters, download links and lightweight D1 pageview analytics.
+The public walkthrough for [atlas.nonarkara.org](https://atlas.nonarkara.org). It presents Bangkok's generated Minecraft worlds as a guided, bilingual field atlas with landmark chapters, download links and lightweight D1 pageview analytics.
 
 ## Development
 

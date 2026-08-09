@@ -1,6 +1,6 @@
 # BKKx — Bangkok, block by block
 
-[bkk.nonarkara.org](https://bkk.nonarkara.org) is an open, playable walkthrough of Bangkok. BKKx turns public geographic data into Minecraft Java worlds, then layers a guided field atlas on top so anyone can read the city from above and explore it one block at a time.
+[atlas.nonarkara.org](https://atlas.nonarkara.org) is an open, playable walkthrough of Bangkok. BKKx turns public geographic data into Minecraft Java worlds, then layers a guided field atlas on top so anyone can read the city from above and explore it one block at a time.
 
 ## What is live
 
@@ -26,7 +26,7 @@ The installer uses a local generated world when present. A lightweight GitHub cl
 
 ```text
 site/       public walkthrough, landmark chapters and pageview analytics
-edge-proxy/ custom-domain binding for bkk.nonarkara.org
+edge-proxy/ custom-domain binding for atlas.nonarkara.org
 worlds/     generation manifests and local world data when available
 previews/   validated top-down world maps
 releases/   archive checksums; binary worlds are attached to GitHub Releases

@@ -12,7 +12,7 @@ const structuredData = {
   "@type": "WebSite",
   name: "BKKx",
   alternateName: "Bangkok, block by block",
-  url: "https://bkk.nonarkara.org",
+  url: "https://atlas.nonarkara.org",
   description:
     "An open, playable city atlas that turns Bangkok into Minecraft worlds.",
   creator: {

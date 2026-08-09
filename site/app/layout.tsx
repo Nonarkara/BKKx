@@ -15,7 +15,7 @@ const manrope = Manrope({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://bkk.nonarkara.org"),
+  metadataBase: new URL("https://atlas.nonarkara.org"),
   title: {
     default: "BKKx — Bangkok, block by block",
     template: "%s · BKKx",

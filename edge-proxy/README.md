@@ -1,6 +1,6 @@
 # BKKx custom-domain edge
 
-This tiny Cloudflare Worker binds `bkk.nonarkara.org` to the public BKKx Sites deployment. It fixes the upstream origin, preserves the incoming path and query, rewrites same-origin redirects, and contains no application state.
+This tiny Cloudflare Worker binds `atlas.nonarkara.org` to the public BKKx Sites deployment, while redirecting the retired `bkk.nonarkara.org` hostname. It fixes the upstream origin, preserves the incoming path and query, rewrites same-origin redirects, and contains no application state.
 
 ```bash
 wrangler deploy --config edge-proxy/wrangler.jsonc

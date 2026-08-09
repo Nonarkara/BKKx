@@ -7,6 +7,10 @@
     {
       "pattern": "bkk.nonarkara.org",
       "custom_domain": true
+    },
+    {
+      "pattern": "atlas.nonarkara.org",
+      "custom_domain": true
     }
   ],
   "observability": {

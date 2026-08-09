@@ -37,7 +37,7 @@ Usage: $0 [install|check|package|deploy-orphan]
   check           Only verify the atlas files and dependency are present.
   package         Build, test, and emit a Codex deploy archive under dist/.
   deploy-orphan   Deploy to the personal Cloudflare Workers account
-                  (preview URL only — NOT bkk.nonarkara.org).
+                  (preview URL only — NOT atlas.nonarkara.org).
 EOF
   exit 2
 }
@@ -72,9 +72,9 @@ fi
 if [ "$action" = "deploy-orphan" ]; then
   say "Building site (vinext → Cloudflare Worker bundle)..."
   (cd "$site_dir" && npm run build)
-  say "Deploying to personal Cloudflare (orphan worker, NOT bkk.nonarkara.org)..."
+  say "Deploying to personal Cloudflare (orphan worker, NOT atlas.nonarkara.org)..."
   (cd "$site_dir" && npx wrangler deploy)
-  say "Orphan deploy complete. Production deploy to bkk.nonarkara.org still"
+  say "Orphan deploy complete. Production deploy to atlas.nonarkara.org still"
   say "requires the Codex Sites plugin (see $0 package + Codex deploy step)."
   exit 0
 fi
@@ -102,7 +102,7 @@ if [ "$action" = "package" ]; then
   say "Archive: $archive"
   say "Next: hand the archive to the Codex Sites plugin to create a new"
   say "site_version, then call deploy_private_site_version. Production URL"
-  say "remains bkk.nonarkara.org (fronted by edge-proxy)."
+  say "remains atlas.nonarkara.org (fronted by edge-proxy)."
   exit 0
 fi
 
@@ -110,6 +110,6 @@ say "Done. Next steps:"
 say "  - Add a new district: edit site/app/walkthrough-data.ts (the worlds[]"
 say "    array), then re-run $0"
 say "  - Personal Cloudflare preview (NOT production): $0 deploy-orphan"
-say "  - Codex hosting archive (for production bkk.nonarkara.org): $0 package"
+  say "  - Codex hosting archive (for production atlas.nonarkara.org): $0 package"
 say "  - Local preview: cd site && npm run dev, then open"
 say "    http://localhost:3000/atlas/ratchathewi"
