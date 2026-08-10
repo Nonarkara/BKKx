@@ -34,7 +34,16 @@ export default {
         // relative Location — already correct for the custom domain
       }
     }
-    headers.set("x-bkkx-edge", "bangkok-atlas");
+    // HTML must always revalidate. Without this the browser applies heuristic
+    // caching to the pages themselves, so a deploy can leave someone reading a
+    // stale copy with no way to tell. Hashed assets under /assets/ are
+    // immutable by construction and keep whatever caching they arrive with.
+    const type = headers.get("content-type") ?? "";
+    if (type.includes("text/html") && !headers.has("cache-control")) {
+      headers.set("cache-control", "public, max-age=0, must-revalidate");
+    }
+
+    headers.set("x-bkkx-edge", "bkk-heritage");
 
     return new Response(upstreamResponse.body, {
       status: upstreamResponse.status,
