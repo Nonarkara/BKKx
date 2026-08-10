@@ -1,4 +1,12 @@
-const UPSTREAM = "https://bkkx-bangkok-atlas.nonsmartcity.chatgpt.site";
+// The site is built by `npm run build --prefix site` and deployed straight to
+// Cloudflare as the `bkkx-site` Worker:
+//
+//   npx wrangler deploy -c site/dist/server/wrangler.json --name bkkx-site
+//
+// It used to sit on Codex Sites, which meant a page could only go live from
+// ChatGPT. Deploying from the repo removes that dependency; this proxy stays
+// only because it holds the bkk.nonarkara.org custom domain.
+const UPSTREAM = "https://bkkx-site.drnon.workers.dev";
 
 export default {
   async fetch(request: Request): Promise<Response> {
