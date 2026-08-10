@@ -69,8 +69,40 @@ test("returns 404 for an unknown atlas district", async () => {
   assert.equal(response.status, 404);
 });
 
-test("serves the heritage register at the site root", async () => {
+test("serves the 3D map heritage atlas as the front door", async () => {
+  // The 3D map is the homepage (2026-08-11 redesign). The Editorial
+  // register content moved to /heritage; the map iframe of
+  // atlas.nonarkara.org fills the page, with a 9-quarter quick-jump
+  // panel in the side. No "choose your district" gate.
   const response = await render("/");
+  assert.equal(response.status, 200);
+  assert.match(response.headers.get("content-type") ?? "", /^text\/html\b/i);
+
+  const html = await response.text();
+  // 3D map front door
+  assert.match(html, /atlas-shell/);
+  assert.match(html, /atlas-shell-map/);
+  assert.match(html, /src="https:\/\/atlas\.nonarkara\.org\//);
+  // 9 quarters as quick-jumps
+  assert.match(html, /atlas-shell-quarter-chips/);
+  assert.match(html, /Rattanakosin/);
+  assert.match(html, /Bang Krachao/);
+  assert.match(html, /Kudi Chin/);
+  // Side offers (Minecraft worlds), not a section
+  assert.match(html, /Minecraft world/);
+  // Editorial register chrome (the shell) is here, the actual
+  // register moved to /heritage.
+  assert.match(html, /block by block/);
+  assert.match(html, /application\/ld\+json/);
+});
+
+test("keeps the editorial heritage register at /heritage", async () => {
+  // Pre-2026-08-11 the register was at /, with /heritage as a
+  // permanentRedirect. After the redesign, /heritage is the actual
+  // register page (200), and the homepage is the 3D map. Anyone who
+  // saved /heritage during the redirect-stub era now lands on the
+  // real register, not a redirect.
+  const response = await render("/heritage");
   assert.equal(response.status, 200);
   assert.match(response.headers.get("content-type") ?? "", /^text\/html\b/i);
 
@@ -81,12 +113,6 @@ test("serves the heritage register at the site root", async () => {
   assert.match(html, /register-filters/);
   assert.match(html, /Fine Arts Department/);
   assert.match(html, /application\/ld\+json/);
-});
-
-test("keeps the old /heritage URL working", async () => {
-  const response = await render("/heritage");
-  assert.equal(response.status, 308);
-  assert.equal(new URL(response.headers.get("location"), "http://localhost").pathname, "/");
 });
 
 test("ships a heritage register whose Minecraft coordinates are inside the worlds", async () => {

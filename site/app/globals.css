@@ -2456,3 +2456,270 @@ footer small { grid-column: 1 / -1; margin-top: 60px; padding-top: 24px; border-
     grid-template-columns: repeat(4, 1fr);
   }
 }
+
+/* ─────────────────────────────────────────────────────────────────
+ * atlas-shell — the new BKKx front door (2026-08-11).
+ *
+ * The shell keeps the Editorial register chrome (light, paper
+ * background, IBM Plex Sans Thai body) and hosts a dark Console
+ * iframe of atlas.nonarkara.org. The contrast is intentional:
+ * Editorial frames, Console focus.
+ *
+ * Hard rules:
+ *   - No rounded corners, no shadows, no gradients.
+ *   - The shell chrome must not compete with the map visually —
+ *     it's a thin frame, not a co-equal surface.
+ *   - Quarter chips follow the bkk Editorial register's existing
+ *     type rhythm (Josefin Sans display, signal yellow hover).
+ *   - The iframe fills the rest of the viewport; the masthead is
+ *     fixed-height, the side panel is a fixed-width column.
+ * ───────────────────────────────────────────────────────────────── */
+.atlas-shell {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  height: 100vh;
+  min-height: 100vh;
+  background: var(--paper);
+  color: var(--ink);
+}
+
+.atlas-shell-masthead {
+  display: grid;
+  grid-template-columns: minmax(180px, 240px) 1fr auto;
+  align-items: center;
+  gap: calc(var(--cap, 32px) * 0.75);
+  padding: 16px 28px;
+  border-bottom: 1px solid var(--ink);
+  background: var(--paper-strong);
+}
+
+.atlas-shell-masthead-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+.atlas-shell-masthead-meta strong {
+  font-family: var(--font-display);
+  font-size: 22px;
+  line-height: 1.05;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+}
+.atlas-shell-masthead-meta small {
+  font-family: var(--font-body);
+  font-size: 13px;
+  line-height: 1.45;
+  color: var(--quiet, rgba(17, 18, 15, 0.65));
+  max-width: 60ch;
+}
+
+.atlas-shell-nav {
+  display: flex;
+  gap: 22px;
+  align-items: center;
+}
+.atlas-shell-nav a {
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--ink);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  padding: 4px 0;
+}
+.atlas-shell-nav a:hover {
+  border-bottom-color: var(--ink);
+}
+.atlas-shell-nav a.atlas-shell-download {
+  background: var(--ink);
+  color: var(--paper-strong);
+  padding: 6px 12px;
+  border: 0;
+}
+.atlas-shell-nav a.atlas-shell-download:hover {
+  background: var(--seal, #8c2f23);
+}
+
+.atlas-shell-body {
+  display: grid;
+  grid-template-columns: minmax(320px, 380px) 1fr;
+  min-height: 0;
+}
+
+.atlas-shell-quarters {
+  overflow-y: auto;
+  border-right: 1px solid var(--ink);
+  background: var(--paper);
+  padding: 24px 24px 64px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.atlas-shell-quarters-title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 24px;
+  line-height: 1.1;
+}
+.atlas-shell-quarters-lede {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: 14px;
+  line-height: 1.55;
+  color: rgba(17, 18, 15, 0.72);
+}
+.atlas-shell-quarters-after {
+  margin-top: 8px;
+}
+
+.atlas-shell-quarter-chips {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  counter-reset: quarter;
+}
+.atlas-shell-quarter-chips li {
+  counter-increment: quarter;
+}
+.atlas-shell-quarter-chips button {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: baseline;
+  column-gap: 12px;
+  width: 100%;
+  text-align: left;
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid rgba(17, 18, 15, 0.12);
+  padding: 10px 0 10px 0;
+  font-family: var(--font-body);
+  color: var(--ink);
+  cursor: pointer;
+  transition: background 80ms linear, border-color 80ms linear;
+}
+.atlas-shell-quarter-chips button::before {
+  content: counter(quarter, decimal-leading-zero);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  color: rgba(17, 18, 15, 0.5);
+  align-self: start;
+  padding-top: 2px;
+}
+.atlas-shell-quarter-chips button:hover {
+  background: rgba(201, 255, 56, 0.12);
+}
+.atlas-shell-quarter-chips button.is-active {
+  background: var(--ink);
+  color: var(--paper-strong);
+  border-color: var(--ink);
+}
+.atlas-shell-quarter-chips button.is-active::before {
+  color: var(--signal);
+}
+.atlas-shell-quarter-name {
+  display: block;
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.25;
+}
+.atlas-shell-quarter-name small {
+  display: block;
+  font-size: 12px;
+  font-weight: 400;
+  opacity: 0.78;
+  margin-top: 2px;
+}
+.atlas-shell-quarter-tag {
+  display: block;
+  grid-column: 2 / 3;
+  font-size: 12px;
+  line-height: 1.4;
+  opacity: 0.7;
+  margin-top: 2px;
+}
+.atlas-shell-quarter-chips button.is-active .atlas-shell-quarter-tag {
+  opacity: 0.9;
+}
+
+.atlas-shell-side {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: 13px;
+}
+.atlas-shell-side a {
+  color: var(--ink);
+  text-decoration: none;
+  border-bottom: 1px solid rgba(17, 18, 15, 0.18);
+  padding: 4px 0;
+}
+.atlas-shell-side a:hover {
+  border-bottom-color: var(--seal, #8c2f23);
+  color: var(--seal, #8c2f23);
+}
+
+.atlas-shell-footnote {
+  margin: 8px 0 0;
+  font-family: var(--font-body);
+  font-size: 11px;
+  line-height: 1.55;
+  color: rgba(17, 18, 15, 0.55);
+}
+.atlas-shell-footnote a {
+  color: var(--seal, #8c2f23);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.atlas-shell-map {
+  position: relative;
+  background: var(--ink);
+  min-height: 0;
+}
+.atlas-shell-map iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  display: block;
+}
+
+/* Mobile: side panel collapses to a top drawer; the map is the body. */
+@media (max-width: 760px) {
+  .atlas-shell {
+    height: auto;
+    min-height: 100vh;
+    grid-template-rows: auto auto 1fr;
+  }
+  .atlas-shell-masthead {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  .atlas-shell-masthead-meta strong { font-size: 18px; }
+  .atlas-shell-masthead-meta small { font-size: 12px; }
+  .atlas-shell-nav {
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .atlas-shell-body {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr;
+  }
+  .atlas-shell-quarters {
+    border-right: 0;
+    border-bottom: 1px solid var(--ink);
+    max-height: 50vh;
+  }
+  .atlas-shell-map {
+    min-height: 70vh;
+  }
+}
