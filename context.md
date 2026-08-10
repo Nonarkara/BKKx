@@ -7,14 +7,30 @@ custom domain. The two used to collide — see "Domains" below.
 
 ## What this is
 
-Two things under one roof, in this order of importance:
+A cultural heritage system for Bangkok, in this order of importance:
 
-1. **The Bangkok heritage register** (the site root). Every registered ancient
+1. **The heritage register** (the site root). Every registered ancient
    monument in Bangkok from the Fine Arts Department register, mapped, with
    what the register actually says about each one.
-2. **The Minecraft worlds** (`/worlds`). Parts of Bangkok generated block by
+2. **Nine heritage quarters** (`/areas/:slug`) — Rattanakosin, Kudi Chin,
+   Talad Noi, Song Wat, Yaowarat–Sampheng, Sam Phraeng, Nang Loeng,
+   Charoen Krung, Bang Krachao. Authored editorial pages with a licensed
+   Commons photo each (attribution rendered on-page) and the quarter's
+   register monuments mapped.
+3. **Seven walks** (`/walks/:slug`) — six-faiths, talad-noi-songwad,
+   royal-axis, sam-phraeng-lanes, charoen-krung-creative, nang-loeng-market,
+   bang-krachao-loop (bicycle). Real OSRM foot-profile route lines, numbered
+   stops with notes, register ids and Minecraft teleports where applicable.
+4. **The Minecraft worlds** (`/worlds`). Parts of Bangkok generated block by
    block at 1 block = 1 metre, plus a 3D browser atlas per district
    (`/atlas/:district`).
+
+Quarters/walks data: `scripts/build-heritage-places.py` (authored content
+lives IN the script; stops resolve register → OSM → hand-with-reason, routes
+from OSRM foot, all cached in `.cache/heritage/`). Photos:
+`scripts/fetch-heritage-photos.py` (Commons, free licences only, manifest at
+`site/public/heritage/photos.json`; two slots pinned after review — Commons
+titles are not evidence of content). One photo per slot, none reused.
 
 The register is the front door because that is what people arrive to learn
 about; the worlds are what make it walkable.
@@ -105,6 +121,14 @@ whenever that hop is worth removing.
 the client bundle and the RSC preload manifest in separate passes and their
 hashes disagree, so without it every page fires a 404 for a MapLibre chunk that
 does not exist.
+
+## Deploy-time gotcha
+
+Cloudflare negative-caches 404s at the custom domain for a few minutes. Do
+not browser-test bkk.nonarkara.org in the first minutes after a deploy that
+changed chunk hashes — a request racing the asset upload poisons the edge
+with 404s for those URLs until the TTL expires. Test the workers.dev URL
+first; it is not cached.
 
 ## Domains
 
