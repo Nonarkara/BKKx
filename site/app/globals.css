@@ -1615,6 +1615,7 @@ footer small { grid-column: 1 / -1; margin-top: 60px; padding-top: 24px; border-
 .register .register-wordmark:hover {
   display: inline-flex;
   align-items: baseline;
+  min-height: 44px;
   color: var(--ink);
   font-family: var(--font-display);
   font-size: var(--size-up);
@@ -2136,5 +2137,322 @@ footer small { grid-column: 1 / -1; margin-top: 60px; padding-top: 24px; border-
     border-left: 1px solid var(--ink);
     padding-top: 0;
     padding-left: calc(var(--page-unit) * 1.2);
+  }
+}
+
+/* ---- heritage quarters & walks (Editorial, same tokens) ---- */
+
+.register-figure {
+  margin: calc(var(--baseline) * 1) 0 0;
+}
+
+/* §XX rule 5: the image runs the full layout width while text stays at
+   measure — the width delta is the signal. Rule 7: tight above, pushed
+   away below. */
+.register-figure img {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: 72dvh;
+  object-fit: cover;
+  border: 1px solid var(--ink);
+}
+
+.register-figure figcaption {
+  margin-top: var(--cap);
+  margin-bottom: calc(var(--baseline) * 2);
+  color: var(--quiet);
+  font-size: var(--size-down);
+  line-height: 1.5;
+}
+
+.register-section-title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--size-up);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+}
+
+.register-section-lede {
+  max-width: 68ch;
+  margin: var(--cap) 0 0;
+  color: var(--quiet);
+}
+
+.register-quarters,
+.register-walks-index {
+  width: min(var(--shell), 100% - (var(--page-unit) * 2));
+  margin: calc(var(--page-unit) * 2.5) auto 0;
+  border-top: 1px solid var(--ink);
+  padding-top: var(--baseline);
+}
+
+.register-section-head {
+  margin-top: calc(var(--page-unit) * 2.5);
+  border-top: 1px solid var(--ink);
+  padding-top: var(--baseline);
+}
+
+.quarters-index,
+.walks-index {
+  margin: var(--baseline) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.quarters-index li,
+.walks-index li {
+  border-bottom: 1px solid var(--hairline);
+}
+
+.quarters-index a,
+.walks-index a {
+  display: grid;
+  gap: 2px var(--page-unit);
+  padding: var(--cap) 0;
+  min-height: 44px;
+  text-decoration: none;
+}
+
+.quarters-index a:hover .quarters-name,
+.walks-index a:hover .walks-name {
+  color: var(--seal);
+  text-decoration: underline;
+  text-underline-offset: 0.22em;
+}
+
+.quarters-name,
+.walks-name {
+  font-family: var(--font-display);
+  font-size: var(--size-up);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+
+.quarters-name small,
+.place-page h1 small {
+  display: block;
+  margin-top: 2px;
+  color: var(--quiet);
+  font-family: var(--font-body);
+  font-size: var(--size-down);
+  font-weight: 400;
+  letter-spacing: 0.04em;
+}
+
+.quarters-tag,
+.walks-meta {
+  color: var(--quiet);
+  font-size: var(--size-down);
+}
+
+.walks-pattern {
+  color: var(--seal);
+  font-size: var(--size-down);
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+@media (min-width: 760px) {
+  .quarters-index a {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr);
+    align-items: baseline;
+  }
+
+  .walks-index a {
+    grid-template-columns: 180px minmax(0, 1fr) auto;
+    align-items: baseline;
+  }
+}
+
+/* ---- area & walk pages ---- */
+
+.place-page h1 {
+  max-width: none;
+}
+
+.place-tagline {
+  max-width: 68ch;
+  margin: var(--baseline) 0 0;
+  color: var(--quiet);
+  font-size: var(--size-up);
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.3;
+}
+
+.place-map {
+  height: min(52dvh, 520px);
+  min-height: 280px;
+}
+
+.place-monuments,
+.place-walks {
+  margin-top: calc(var(--page-unit) * 1.5);
+  border-top: 1px solid var(--ink);
+  padding-top: var(--baseline);
+}
+
+.place-monuments h2,
+.place-walks h2 {
+  margin: 0 0 var(--cap);
+  font-family: var(--font-display);
+  font-size: var(--size-up);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.place-monuments ul,
+.place-walks ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.place-monuments li {
+  display: grid;
+  grid-template-columns: 9px 1fr;
+  gap: 0 var(--cap);
+  align-items: baseline;
+  border-bottom: 1px solid var(--hairline);
+  padding: var(--cap) 0;
+}
+
+.place-monuments li small {
+  grid-column: 2;
+  color: var(--quiet);
+  font-size: var(--size-down);
+}
+
+.place-monuments .seal {
+  position: relative;
+  top: 1px;
+}
+
+.place-none {
+  margin: 0;
+  color: var(--quiet);
+}
+
+.place-walks li {
+  border-bottom: 1px solid var(--hairline);
+  padding: var(--cap) 0;
+}
+
+.place-walks li small {
+  display: block;
+  color: var(--quiet);
+  font-size: var(--size-down);
+}
+
+/* ---- walk pages ---- */
+
+.walk-facts {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1px;
+  margin: var(--baseline) 0 0;
+  max-width: 560px;
+  border-top: 1px solid var(--ink);
+  border-bottom: 1px solid var(--rule);
+  background: var(--rule);
+}
+
+.walk-facts > div {
+  padding: var(--cap) 0 calc(var(--cap) * 1.2);
+  background: var(--paper);
+}
+
+.walk-facts dt {
+  color: var(--quiet);
+  font-size: var(--size-down);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.walk-facts dd {
+  margin: 2px 0 0;
+  font-family: var(--font-display);
+  font-size: var(--size-up);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.03em;
+}
+
+.walk-stops {
+  margin: calc(var(--page-unit) * 1.5) 0 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: none;
+}
+
+.walk-stops li {
+  display: grid;
+  grid-template-columns: 34px 1fr;
+  gap: 0 var(--cap);
+  border-top: 1px solid var(--rule);
+  padding: var(--baseline) 0;
+}
+
+/* Numbered because a route IS a real ordered sequence — the numbers on the
+   page are the numbers on the map. */
+.walk-stop-n {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: var(--seal);
+  color: var(--paper);
+  font-family: var(--font-mono);
+  font-size: var(--size-down);
+  font-variant-numeric: tabular-nums;
+}
+
+.walk-stops h2 {
+  margin: 0 0 calc(var(--cap) * 0.6);
+  font-family: var(--font-display);
+  font-size: var(--size-up);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+
+.walk-stops h2 small {
+  display: block;
+  margin-top: 2px;
+  color: var(--quiet);
+  font-family: var(--font-body);
+  font-size: var(--size-down);
+  font-weight: 400;
+}
+
+.walk-stops p {
+  margin: 0;
+  max-width: 62ch;
+  line-height: 1.75;
+}
+
+.walk-stop-meta {
+  margin-top: calc(var(--cap) * 0.6) !important;
+  color: var(--quiet);
+  font-size: var(--size-down);
+  font-variant-numeric: tabular-nums;
+}
+
+.walk-stop-meta code {
+  font-family: var(--font-mono);
+  font-size: var(--size-down);
+  color: var(--seal);
+}
+
+@media (min-width: 760px) {
+  .walk-facts {
+    grid-template-columns: repeat(4, 1fr);
   }
 }

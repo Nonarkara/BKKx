@@ -125,3 +125,87 @@ test("ships a heritage register whose Minecraft coordinates are inside the world
     assert.equal(site.block, undefined, `${site.id} is district-precision but walkable`);
   }
 });
+
+test("renders a heritage quarter page with photo attribution", async () => {
+  const response = await render("/areas/kudi-chin");
+  assert.equal(response.status, 200);
+  const html = await response.text();
+  assert.match(html, /Kudi Chin/);
+  assert.match(html, /Santa Cruz/);
+  assert.match(html, /Wikimedia Commons/);
+  assert.match(html, /CC BY/i);
+  assert.match(html, /In the Fine Arts register/);
+});
+
+test("renders a heritage walk page with numbered stops", async () => {
+  const response = await render("/walks/six-faiths");
+  assert.equal(response.status, 200);
+  const html = await response.text();
+  assert.match(html, /Six Faiths of Kudi Chin/);
+  assert.match(html, /Wat Kalayanamit/);
+  assert.match(html, /Bang Luang Mosque/);
+  assert.match(html, /walk-stop-n/);
+  assert.match(html, /OSRM foot profile/);
+});
+
+test("404s an unknown quarter and an unknown walk", async () => {
+  assert.equal((await render("/areas/atlantis")).status, 404);
+  assert.equal((await render("/walks/atlantis")).status, 404);
+});
+
+test("heritage places data is internally consistent", async () => {
+  const { default: places } = await import("../app/data/heritage-places.json", {
+    with: { type: "json" },
+  });
+  const { default: photos } = await import("../public/heritage/photos.json", {
+    with: { type: "json" },
+  });
+  const { default: geometry } = await import("../public/heritage-walk-geometry.json", {
+    with: { type: "json" },
+  });
+  const { existsSync } = await import("node:fs");
+  const { fileURLToPath } = await import("node:url");
+
+  const walkSlugs = new Set(places.walks.map((w) => w.slug));
+  const okLicence = /^(PD|Public domain|CC0|CC[ -]?BY)/i;
+
+  for (const area of places.areas) {
+    // every walk an area advertises must exist
+    for (const w of area.walks) assert.ok(walkSlugs.has(w), `${area.slug} -> missing walk ${w}`);
+    // every area photo must exist on disk with a free licence on record
+    const photo = photos[area.photo];
+    assert.ok(photo, `${area.slug}: no attribution entry for photo '${area.photo}'`);
+    assert.match(photo.licence, okLicence, `${area.slug}: licence '${photo.licence}' not free`);
+    const onDisk = fileURLToPath(new URL(`../public${photo.file}`, import.meta.url));
+    assert.ok(existsSync(onDisk), `${area.slug}: photo file missing ${photo.file}`);
+  }
+
+  // no photo reused across slots
+  const titles = Object.values(photos).map((p) => p.title);
+  assert.equal(new Set(titles).size, titles.length, "a Commons photo is used twice");
+
+  for (const walk of places.walks) {
+    assert.ok(walk.stops.length >= 4, `${walk.slug}: fewer than 4 stops`);
+    for (const stop of walk.stops) {
+      assert.ok(
+        typeof stop.lat === "number" && typeof stop.lon === "number",
+        `${walk.slug}/${stop.name}: unresolved stop`,
+      );
+      // a hand-placed stop must say so and say why
+      if (stop.locatedBy === "hand") {
+        assert.ok(stop.approx && stop.approxWhy, `${walk.slug}/${stop.name}: silent hand placement`);
+      }
+    }
+    // routed walks carry a line whose ends sit near the first and last stop
+    const geom = geometry[walk.slug];
+    if (walk.distanceM) {
+      assert.ok(geom?.line?.length > 10, `${walk.slug}: distance without a line`);
+      const [flon, flat] = geom.line[0];
+      const near = (a, b) => Math.abs(a - b) < 0.005;
+      assert.ok(
+        near(flat, walk.stops[0].lat) && near(flon, walk.stops[0].lon),
+        `${walk.slug}: route line does not start at stop 1`,
+      );
+    }
+  }
+});
