@@ -68,3 +68,53 @@ test("returns 404 for an unknown atlas district", async () => {
   const response = await render("/atlas/atlantis");
   assert.equal(response.status, 404);
 });
+
+test("renders the heritage register page", async () => {
+  const response = await render("/heritage");
+  assert.equal(response.status, 200);
+  assert.match(response.headers.get("content-type") ?? "", /^text\/html\b/i);
+
+  const html = await response.text();
+  assert.match(html, /<title>Heritage register · BKKx<\/title>/i);
+  assert.match(html, /Bangkok, monument by monument/);
+  assert.match(html, /heritage-canvas/);
+  assert.match(html, /heritage-filters/);
+  assert.match(html, /application\/ld\+json/);
+});
+
+test("ships a heritage register whose Minecraft coordinates are inside the worlds", async () => {
+  // The whole point of the page is that a block coordinate walks you to a
+  // real monument. This is the check that fails if the projection, the world
+  // bounds, or the register build ever drift apart.
+  const { default: register } = await import("../public/heritage-register.json", {
+    with: { type: "json" },
+  });
+
+  assert.ok(register.counts.walkable > 100, "expected 100+ walkable monuments");
+  assert.equal(
+    register.sites.filter((site) => site.block).length,
+    register.counts.walkable,
+  );
+
+  for (const site of register.sites) {
+    if (!site.block) continue;
+    const world = register.worlds[site.world];
+    assert.ok(world, `${site.id} names a world that is not in the payload`);
+    assert.ok(
+      site.block.x >= 0 && site.block.x <= world.blocks.maxX,
+      `${site.id} x=${site.block.x} outside 0..${world.blocks.maxX}`,
+    );
+    assert.ok(
+      site.block.z >= 0 && site.block.z <= world.blocks.maxZ,
+      `${site.id} z=${site.block.z} outside 0..${world.blocks.maxZ}`,
+    );
+  }
+
+  // A district-precision row must never carry a coordinate — that is the
+  // difference between "we do not know" and a plausible-looking guess.
+  for (const site of register.sites) {
+    if (site.precision !== "district") continue;
+    assert.equal(site.lat, undefined, `${site.id} is district-precision but pinned`);
+    assert.equal(site.block, undefined, `${site.id} is district-precision but walkable`);
+  }
+});

@@ -10,3 +10,7 @@ worlds/*/level.dat
 worlds/*/region/
 .claude/
 edge-proxy/.wrangler/
+
+# Heritage register source pulls (8 MB CSV + Overpass dumps); rebuilt by
+# scripts/build-heritage-register.py --refresh
+.cache/

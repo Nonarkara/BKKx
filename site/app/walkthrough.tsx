@@ -57,6 +57,7 @@ export function BangkokWalkthrough() {
         <nav aria-label="Primary navigation">
           <a href="#atlas">Walkthrough</a>
           <Link href="/atlas/ratchathewi">3D atlas</Link>
+          <Link href="/heritage">Heritage</Link>
           <a href="#enter">Enter the world</a>
           <a href={REPOSITORY} target="_blank" rel="noreferrer">
             GitHub <ArrowIcon />
@@ -76,7 +77,7 @@ export function BangkokWalkthrough() {
             <em>block by block.</em>
           </h1>
           <p className="hero-lede">
-            กรุงเทพฯ ทีละบล็อก — an open, playable city atlas. Follow the
+            <span lang="th">กรุงเทพฯ ทีละบล็อก</span> — an open, playable city atlas. Follow the
             streets, cross the river, then step inside the map.
           </p>
           <div className="hero-actions">
@@ -100,6 +101,7 @@ export function BangkokWalkthrough() {
             alt="Top-down Minecraft map of Ratchathewi, Bangkok"
             fill
             priority
+            fetchPriority="high"
             sizes="(max-width: 900px) 92vw, 52vw"
           />
           <div className="map-scanline" />
@@ -127,7 +129,7 @@ export function BangkokWalkthrough() {
 
       <section className="atlas-section" id="atlas">
         <div className="section-heading">
-          <p className="eyebrow">Field atlas / สมุดภาคสนาม</p>
+          <p className="eyebrow">Field atlas / <span lang="th">สมุดภาคสนาม</span></p>
           <h2>Pick a district.<br />Follow the signals.</h2>
           <p>
             Each marker is a chapter. Read the city from above, then download
@@ -139,20 +141,27 @@ export function BangkokWalkthrough() {
           {worlds.map((item) => (
             <button
               key={item.id}
+              id={`tab-${item.id}`}
               type="button"
               role="tab"
               aria-selected={item.id === world.id}
+              aria-controls={`panel-${item.id}`}
               className={item.id === world.id ? "is-active" : ""}
               onClick={() => chooseWorld(item)}
             >
               <span>{item.number}</span>
               <strong>{item.name}</strong>
-              <small>{item.thai}</small>
+              <small lang="th">{item.thai}</small>
             </button>
           ))}
         </div>
 
-        <article className="world-intro">
+        <article
+          className="world-intro"
+          id={`panel-${world.id}`}
+          role="tabpanel"
+          aria-labelledby={`tab-${world.id}`}
+        >
           <div>
             <p className="world-number">WORLD {world.number}</p>
             <h3>{world.strapline}</h3>
@@ -201,7 +210,7 @@ export function BangkokWalkthrough() {
             </div>
             <p className="chapter-kicker">{stop.chapter}</p>
             <h3>{stop.name}</h3>
-            <p className="chapter-thai">{stop.thai}</p>
+            <p className="chapter-thai" lang="th">{stop.thai}</p>
             <p className="chapter-description">{stop.description}</p>
             <div className="field-note">
               <span>FIELD NOTE</span>
@@ -310,7 +319,7 @@ export function BangkokWalkthrough() {
 
       <footer>
         <a className="wordmark footer-wordmark" href="#top"><span>BKK</span><b>x</b></a>
-        <p>Bangkok, block by block.<br />กรุงเทพฯ ทีละบล็อก</p>
+        <p>Bangkok, block by block.<br /><span lang="th">กรุงเทพฯ ทีละบล็อก</span></p>
         <div>
           <a href={REPOSITORY} target="_blank" rel="noreferrer">GitHub</a>
           <a href="https://github.com/louis-e/arnis" target="_blank" rel="noreferrer">Arnis</a>
