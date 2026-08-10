@@ -51,14 +51,14 @@ export function BangkokWalkthrough() {
   return (
     <main>
       <header className="site-header">
-        <a className="wordmark" href="#top" aria-label="BKKx home">
+        <Link className="wordmark" href="/" aria-label="BKKx home">
           <span>BKK</span><b>x</b>
-        </a>
+        </Link>
         <nav aria-label="Primary navigation">
-          <a href="#atlas">Walkthrough</a>
+          <Link href="/">Heritage register</Link>
+          <a href="#atlas">The worlds</a>
           <Link href="/atlas/ratchathewi">3D atlas</Link>
-          <Link href="/heritage">Heritage</Link>
-          <a href="#enter">Enter the world</a>
+          <a href="#enter">Download</a>
           <a href={REPOSITORY} target="_blank" rel="noreferrer">
             GitHub <ArrowIcon />
           </a>

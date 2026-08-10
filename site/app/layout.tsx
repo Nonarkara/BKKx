@@ -1,27 +1,39 @@
 import type { Metadata, Viewport } from "next";
-import { Inter, Manrope } from "next/font/google";
+import { IBM_Plex_Sans_Thai, JetBrains_Mono, Josefin_Sans } from "next/font/google";
 import "./globals.css";
 
-const inter = Inter({
-  variable: "--font-inter",
+// Inter is banned workspace-wide as an AI-default tell, and the register's
+// body text is overwhelmingly Thai. IBM Plex Sans Thai is non-looped, which
+// is the hard requirement for any Thai-facing surface here — looped faces
+// read as learner material to a Thai reader.
+const plexThai = IBM_Plex_Sans_Thai({
+  variable: "--font-plex-thai",
+  subsets: ["latin", "thai"],
+  weight: ["400", "500", "600", "700"],
+  display: "swap",
+});
+
+const josefin = Josefin_Sans({
+  variable: "--font-josefin",
   subsets: ["latin"],
   display: "swap",
 });
 
-const manrope = Manrope({
-  variable: "--font-manrope",
+// Coordinates, gazette volumes, block numbers.
+const mono = JetBrains_Mono({
+  variable: "--font-jetbrains",
   subsets: ["latin"],
   display: "swap",
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://atlas.nonarkara.org"),
+  metadataBase: new URL("https://bkk.nonarkara.org"),
   title: {
-    default: "BKKx — Bangkok, block by block",
+    default: "BKKx — Bangkok's heritage, monument by monument",
     template: "%s · BKKx",
   },
   description:
-    "Explore Bangkok block by block through open, playable Minecraft city worlds.",
+    "Every registered ancient monument in Bangkok, mapped from the Fine Arts Department register — and the Minecraft worlds that let you walk them.",
   alternates: { canonical: "/" },
   icons: {
     icon: "/favicon.png",
@@ -47,8 +59,8 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#11120f",
-  colorScheme: "dark",
+  themeColor: "#f4f2ec",
+  colorScheme: "light",
 };
 
 export default function RootLayout({
@@ -57,10 +69,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={`${inter.variable} ${manrope.variable}`}>
-        {children}
-      </body>
+    // The font variables go on <html>, not <body>. globals.css declares
+    // --font-body/--font-display on :root, and a custom property is
+    // substituted using the element it is declared on — so a --font-* living
+    // one level down on <body> is invisible to it, the whole chain computes
+    // to nothing, and everything silently falls back to system-ui.
+    <html lang="en" className={`${plexThai.variable} ${josefin.variable} ${mono.variable}`}>
+      <body>{children}</body>
     </html>
   );
 }

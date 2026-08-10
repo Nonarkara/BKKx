@@ -686,7 +686,8 @@ export function AtlasView({ world }: Props) {
           <small><span lang="th">{world.thai}</span> · {world.distance}</small>
         </div>
         <nav className="atlas-header-nav" aria-label="Atlas navigation">
-          <Link href="/#atlas">Walkthrough</Link>
+          <Link href="/">Heritage register</Link>
+          <Link href="/worlds#atlas">The worlds</Link>
           <a className="atlas-download" href={world.download} target="_blank" rel="noreferrer">
             Download world <span aria-hidden="true">↓</span>
           </a>

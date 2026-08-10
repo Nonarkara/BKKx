@@ -1,7 +1,7 @@
 import type { MetadataRoute } from "next";
 import { worlds } from "./walkthrough-data";
 
-const siteUrl = "https://atlas.nonarkara.org";
+const siteUrl = "https://bkk.nonarkara.org";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const lastModified = new Date("2026-08-09T00:00:00+07:00");
@@ -12,6 +12,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified,
       changeFrequency: "weekly",
       priority: 1,
+    },
+    {
+      url: `${siteUrl}/worlds`,
+      lastModified,
+      changeFrequency: "monthly" as const,
+      priority: 0.8,
     },
     ...worlds.map((world) => ({
       url: `${siteUrl}/atlas/${world.id}`,

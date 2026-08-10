@@ -8,8 +8,9 @@
   --orange: #ff6b35;
   --muted: #a4a69b;
   --line: rgba(241, 239, 232, 0.18);
-  --font-body: var(--font-inter), sans-serif;
-  --font-display: var(--font-manrope), sans-serif;
+  --font-body: var(--font-plex-thai), sans-serif;
+  --font-display: var(--font-josefin), sans-serif;
+  --font-mono: var(--font-jetbrains), ui-monospace, monospace;
 }
 
 * {
@@ -1521,488 +1522,619 @@ footer small { grid-column: 1 / -1; margin-top: 60px; padding-top: 24px; border-
   }
 }
 
-/* ------------------------------------------------------------------
-   Heritage register — bkk.nonarkara.org/heritage
+/* ==================================================================
+   THE REGISTER — bkk.nonarkara.org
+   Axiom Design register: EDITORIAL. The reader is someone learning
+   about Bangkok's heritage start to finish, by choice — not a 2am
+   operator. atlas.nonarkara.org is CONSOLE (dark ground, one amber)
+   and this is its deliberate opposite: light ground, one quiet
+   accent, low density. Both the atlas amber (#f5a524, 1.8:1) and the
+   BKKx lime (#c9ff38, 1.1:1) fail contrast on this paper, so the two
+   identities cannot be confused or accidentally merged.
 
-   Phone-first: the map takes the top half and the panel slides under it;
-   at 900px the two become columns. Zero border-radius, no shadows, three
-   text sizes (display / body / micro), same as the rest of the site.
-   ------------------------------------------------------------------ */
+   Layout law is the MoMA Grid (design.md §XX): one container, the
+   2/3 + 1/3 uneven pair, spacing in page-units and baselines, text
+   held at measure while the map runs the full layout width, links
+   carrying their underline at rest.
 
-.heritage {
-  display: flex;
-  flex-direction: column;
+   Divergence from the Editorial preset, per §XVII: the preset asks
+   for a serif body. The reading matter here is ~90% Thai, and every
+   serif-adjacent Thai face (Sarabun and the looped families) is
+   banned as looped. Body is therefore set in IBM Plex Sans Thai,
+   non-looped. Named, load-bearing, written down — see context.md.
+   ================================================================== */
+
+.register {
+  --paper: #f4f2ec;
+  --paper-raised: #fbfaf6;
+  --ink: #14140f;
+  --seal: #8c2f23;          /* the one accent — gazetted status only */
+  --quiet: #5f5c52;
+  --rule: rgba(20, 20, 15, 0.2);
+  --hairline: rgba(20, 20, 15, 0.11);
+
+  /* Three spacing currencies, no others (§XX rule 3). */
+  --page-unit: 24px;
+  --baseline: 1.7rem;
+  --cap: 0.75em;
+
+  /* One container (§XX rule 1). */
+  --shell: 1184px;
+
+  /* Three rendered sizes per view (§XIV invariant 4): base, one step
+     down, one step up. Everything derives from these. */
+  --size-base: 17px;
+  --size-down: 12.75px;
+  --size-up: 22.7px;
+
   min-height: 100dvh;
+  padding-bottom: calc(var(--page-unit) * 3);
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: var(--size-base);
+  line-height: 1.7;
+}
+
+.register ::selection {
+  color: var(--paper);
+  background: var(--seal);
+}
+
+/* Affordance at rest (§XX rule 9): the underline is permanent. Hover
+   confirms, it never reveals. */
+.register a {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 0.22em;
+  text-decoration-thickness: 1px;
+  text-decoration-color: var(--rule);
+  transition: text-decoration-color 140ms ease, color 140ms ease;
+}
+
+.register a:hover,
+.register a:focus-visible {
+  color: var(--seal);
+  text-decoration-color: var(--seal);
+}
+
+/* ---- masthead ---- */
+
+.register-masthead {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--page-unit);
+  width: min(var(--shell), 100% - (var(--page-unit) * 2));
+  margin: 0 auto;
+  padding: calc(var(--page-unit) * 1.25) 0;
+  border-bottom: 1px solid var(--ink);
+}
+
+.register .register-wordmark,
+.register .register-wordmark:hover {
+  display: inline-flex;
+  align-items: baseline;
+  color: var(--ink);
+  font-family: var(--font-display);
+  font-size: var(--size-up);
+  font-weight: 700;
+  letter-spacing: -0.06em;
+  line-height: 1;
+  text-decoration: none;
+}
+
+.register-wordmark b {
+  color: var(--seal);
+  font-size: calc(var(--size-up) * 1.35);
+  font-weight: 700;
+}
+
+.register-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 var(--page-unit);
+  font-size: var(--size-down);
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+}
+
+.register-nav a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  color: var(--quiet);
+}
+
+/* ---- lede ---- */
+
+.register-lede {
+  width: min(var(--shell), 100% - (var(--page-unit) * 2));
+  margin: 0 auto;
+  padding-top: calc(var(--page-unit) * 2);
+}
+
+.register-eyebrow {
+  margin: 0 0 var(--baseline);
+  color: var(--seal);
+  font-size: var(--size-down);
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.register-lede h1 {
+  max-width: 16ch;
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(38px, 6vw, 78px);
+  font-weight: 700;
+  letter-spacing: -0.045em;
+  line-height: 1;
+  text-wrap: balance;
+}
+
+/* Text is capped at the 2/3 main column, inside a 65–75ch measure
+   (§XX rule 5). The map below is what runs full width. */
+.register-intro {
+  max-width: 68ch;
+  margin-top: calc(var(--page-unit) * 1.5);
+}
+
+.register-intro p {
+  margin: 0 0 var(--baseline);
+}
+
+.register-intro p:last-child {
+  margin-bottom: 0;
+}
+
+.register-intro b {
+  font-weight: 600;
+}
+
+/* ---- explorer ---- */
+
+.register-explorer {
+  width: min(var(--shell), 100% - (var(--page-unit) * 2));
+  margin: calc(var(--page-unit) * 2) auto 0;
+}
+
+.register-tally {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1px;
+  margin: 0 0 calc(var(--page-unit) * 1.5);
+  border-top: 1px solid var(--ink);
+  border-bottom: 1px solid var(--rule);
+  background: var(--rule);
+}
+
+.register-tally > div {
+  padding: var(--cap) 0 calc(var(--cap) * 1.2);
+  background: var(--paper);
+}
+
+.register-tally dt {
+  color: var(--quiet);
+  font-size: var(--size-down);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.register-tally dd {
+  margin: 2px 0 0;
+  font-family: var(--font-display);
+  font-size: var(--size-up);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.03em;
+}
+
+/* The map is the artifact: it runs the full layout width while the
+   prose stays at measure. The width delta is the signal (§XX rule 5). */
+.register-canvas-frame {
+  position: relative;
+  height: min(58dvh, 560px);
+  min-height: 300px;
+  border: 1px solid var(--ink);
+  background: var(--paper-raised);
+}
+
+/* Two classes: MapLibre stamps `maplibregl-map` on this same div and
+   its stylesheet lands after this file, so at equal specificity its
+   `position: relative` wins and the map collapses to zero height. */
+.register-canvas-frame .register-canvas {
+  position: absolute;
+  inset: 0;
+}
+
+.register-state {
+  position: absolute;
+  right: var(--page-unit);
+  bottom: var(--page-unit);
+  left: var(--page-unit);
+  z-index: 2;
+  margin: 0;
+  border: 1px solid var(--ink);
+  background: var(--paper);
+  padding: var(--cap);
+  font-size: var(--size-down);
+  line-height: 1.5;
+}
+
+.register-state.is-error {
+  border-color: var(--seal);
+  color: var(--seal);
+}
+
+/* Captions: one step down, reduced-alpha ink, left-aligned to the
+   artifact edge, one baseline below (§XX rule 8). */
+.register-caption {
+  max-width: 74ch;
+  margin: var(--baseline) 0 0;
+  color: var(--quiet);
+  font-size: var(--size-down);
+  line-height: 1.55;
+}
+
+/* The uneven pair — the only asymmetric split permitted (§XX rule 2). */
+.register-body {
+  display: grid;
+  gap: calc(var(--page-unit) * 1.5);
+  margin-top: calc(var(--page-unit) * 2);
+  border-top: 1px solid var(--ink);
+  padding-top: calc(var(--page-unit) * 1.5);
+}
+
+/* ---- index column ---- */
+
+.register-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0;
+  border: 1px solid var(--rule);
+}
+
+.register-filters button {
+  flex: 1 1 auto;
+  min-height: 44px;
+  border: 0;
+  border-right: 1px solid var(--rule);
+  background: transparent;
+  padding: 0 var(--cap);
+  color: var(--quiet);
+  font-family: inherit;
+  font-size: var(--size-down);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: color 140ms ease, background 140ms ease;
+}
+
+.register-filters button:last-child {
+  border-right: 0;
+}
+
+.register-filters button:hover {
+  color: var(--ink);
+  background: rgba(20, 20, 15, 0.04);
+}
+
+.register-filters button.is-active {
+  color: var(--paper);
   background: var(--ink);
 }
 
-.heritage-header {
-  position: static;
-  flex-wrap: wrap;
-  gap: 14px 20px;
-  padding: 18px clamp(16px, 4vw, 40px);
+.register-showing {
+  margin: var(--baseline) 0 0;
+  color: var(--quiet);
+  font-size: var(--size-down);
 }
 
-.heritage-title {
-  flex: 1 1 260px;
-  min-width: 0;
+.register-showing b {
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
 }
 
-.heritage-title .eyebrow {
-  margin: 0 0 6px;
+.register-list {
+  margin: calc(var(--cap) * 1.2) 0 0;
+  border-top: 1px solid var(--rule);
+  padding: 0;
+  list-style: none;
 }
 
-.heritage-title h1 {
-  margin: 0;
+.register-list li {
+  border-bottom: 1px solid var(--hairline);
+}
+
+.register-list li.is-selected {
+  background: rgba(140, 47, 35, 0.06);
+}
+
+.register-list button {
+  display: grid;
+  grid-template-columns: 9px 1fr;
+  gap: 0 var(--cap);
+  width: 100%;
+  min-height: 44px;
+  border: 0;
+  background: transparent;
+  padding: var(--cap) 2px;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.register-list button:hover {
+  background: rgba(20, 20, 15, 0.04);
+}
+
+/* The one accent carries a single meaning: gazetted. Awaiting is the
+   absence of it, not a second hue. */
+.seal {
+  width: 9px;
+  height: 9px;
+  margin-top: 0.5em;
+  border-radius: 50%;
+}
+
+.seal.is-gazetted {
+  background: var(--seal);
+}
+
+.seal.is-awaiting {
+  border: 1px solid var(--quiet);
+}
+
+.register-list-name {
+  font-size: var(--size-base);
+  line-height: 1.45;
+}
+
+.register-list-meta {
+  grid-column: 2;
+  color: var(--quiet);
+  font-family: var(--font-mono);
+  font-size: var(--size-down);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---- detail column ---- */
+
+.register-detail {
+  border-top: 1px solid var(--ink);
+  padding-top: var(--baseline);
+}
+
+.register-detail h2 {
+  margin: 0 0 var(--baseline);
   font-family: var(--font-display);
-  font-size: 20px;
-  font-weight: 800;
+  font-size: var(--size-up);
+  font-weight: 700;
   letter-spacing: -0.03em;
-  line-height: 1.1;
+  line-height: 1.2;
+  text-wrap: balance;
 }
 
-.heritage-nav {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 4px 18px;
-  font-size: 11px;
+.register-detail .register-eyebrow {
+  margin-bottom: calc(var(--cap) * 0.8);
+}
+
+.register-detail-empty p {
+  margin: 0;
+  color: var(--quiet);
+}
+
+.register-facts {
+  margin: 0;
+  border-top: 1px solid var(--rule);
+}
+
+.register-facts dt {
+  padding-top: var(--cap);
+  color: var(--quiet);
+  font-size: var(--size-down);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.register-facts dd {
+  margin: 0;
+  border-bottom: 1px solid var(--hairline);
+  padding-bottom: var(--cap);
+  font-variant-numeric: tabular-nums;
+}
+
+.register-facts dd.is-gazetted {
+  color: var(--seal);
+  font-weight: 600;
+}
+
+.register-facts dd.is-awaiting {
+  color: var(--quiet);
+}
+
+.register-facts small {
+  display: block;
+  margin-top: 4px;
+  color: var(--quiet);
+  font-size: var(--size-down);
+  line-height: 1.5;
+}
+
+/* ---- walk here ---- */
+
+.register-walk {
+  margin-top: calc(var(--page-unit) * 1.2);
+  border: 1px solid var(--seal);
+  padding: var(--cap);
+}
+
+.register-walk h3 {
+  margin: 0 0 var(--cap);
+  color: var(--seal);
+  font-size: var(--size-down);
   font-weight: 600;
   letter-spacing: 0.14em;
   text-transform: uppercase;
 }
 
-/* Beats `.site-header nav a` (which sets 12px) and, below 760px,
-   `.site-header nav a:not(:last-child) { display: none }`. That collapse is
-   right for the home page's long nav; this one is three short links that
-   wrap onto one extra line, so hiding two of them just loses the way out. */
-.heritage-header .heritage-nav a,
-.heritage-header .heritage-nav a:not(:last-child) {
-  display: inline-flex;
-  align-items: center;
-  min-height: 44px;
-  color: var(--muted);
-  font-size: 11px;
-  transition: color 140ms ease;
+.register-walk h3 span {
+  color: var(--quiet);
 }
 
-.heritage-nav a:hover {
-  color: var(--paper);
-}
-
-.heritage-body {
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  min-height: 0;
-}
-
-.heritage-map {
-  position: relative;
-  height: 46dvh;
-  min-height: 260px;
-  border-top: 1px solid var(--line);
-  border-bottom: 1px solid var(--line);
-}
-
-/* Two classes deliberately: MapLibre stamps `maplibregl-map` on this same
-   div and its stylesheet (imported by the component, so it lands after this
-   file) sets `position: relative`. At equal specificity that wins, `inset`
-   stops applying, and the map collapses to zero height. */
-.heritage-map .heritage-canvas {
-  position: absolute;
-  inset: 0;
-}
-
-/* MapLibre ships 29px zoom buttons. Square them off and bring them up to the
-   44px touch floor rather than leaving two undersized targets on a phone. */
-.heritage-map .maplibregl-ctrl-group {
-  border-radius: 0;
-  background: rgba(17, 18, 15, 0.9);
-  border: 1px solid var(--line);
-  box-shadow: none;
-}
-
-.heritage-map .maplibregl-ctrl-group button {
-  width: 44px;
-  height: 44px;
-  border-radius: 0;
-}
-
-.heritage-map .maplibregl-ctrl-group button + button {
-  border-top: 1px solid var(--line);
-}
-
-.heritage-map .maplibregl-ctrl-group button span {
-  filter: invert(1);
-}
-
-.heritage-loading,
-.heritage-error {
-  position: absolute;
-  left: 16px;
-  right: 16px;
-  bottom: 16px;
-  z-index: 2;
-  margin: 0;
-  border: 1px solid var(--line);
-  background: rgba(17, 18, 15, 0.94);
-  padding: 12px 14px;
-  color: var(--muted);
-  font-size: 11px;
-  line-height: 1.5;
-}
-
-.heritage-error {
-  border-color: rgba(255, 107, 53, 0.5);
-  color: #ffb694;
-}
-
-.heritage-panel {
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  min-height: 0;
-  padding: 16px clamp(16px, 4vw, 40px) 32px;
-}
-
-.heritage-filters {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-
-.heritage-filters button {
-  min-height: 44px;
-  border: 1px solid var(--line);
-  background: transparent;
-  padding: 0 16px;
-  color: var(--muted);
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  cursor: pointer;
-  transition: color 140ms ease, border-color 140ms ease;
-}
-
-.heritage-filters button:hover {
-  color: var(--paper);
-  border-color: rgba(241, 239, 232, 0.4);
-}
-
-.heritage-filters button.is-active {
-  border-color: var(--signal);
-  color: var(--signal);
-}
-
-.heritage-count {
-  margin: 14px 0 0;
-  color: var(--muted);
-  font-size: 11px;
-  line-height: 1.6;
-}
-
-.heritage-count strong {
-  color: var(--paper);
-}
-
-/* ---- list ---- */
-
-.heritage-list {
-  margin: 14px 0 0;
-  border-top: 1px solid var(--line);
-  padding: 0;
-  list-style: none;
-}
-
-.heritage-list li {
-  border-bottom: 1px solid var(--line);
-}
-
-.heritage-list button {
-  display: grid;
-  grid-template-columns: 10px 1fr;
-  gap: 2px 10px;
-  width: 100%;
-  min-height: 44px;
-  border: 0;
-  background: transparent;
-  padding: 10px 4px;
-  color: inherit;
-  text-align: left;
-  cursor: pointer;
-  transition: background 140ms ease;
-}
-
-.heritage-list button:hover {
-  background: rgba(241, 239, 232, 0.05);
-}
-
-.heritage-list .dot {
-  width: 8px;
-  height: 8px;
-  margin-top: 6px;
-  border-radius: 50%;
-}
-
-.dot.is-registered {
-  background: var(--signal);
-}
-
-.dot.is-awaiting {
-  background: var(--orange);
-}
-
-.heritage-list-name {
-  font-size: 14px;
-  line-height: 1.35;
-}
-
-.heritage-list-meta {
-  grid-column: 2;
-  color: var(--muted);
-  font-size: 11px;
-  font-variant-numeric: tabular-nums;
-}
-
-.heritage-more {
-  padding: 12px 4px;
-  color: var(--muted);
-  font-size: 11px;
-}
-
-/* ---- detail ---- */
-
-.heritage-detail {
-  position: relative;
-  margin-top: 14px;
-  border-top: 1px solid var(--line);
-  padding-top: 16px;
-}
-
-.heritage-close {
-  position: absolute;
-  top: 10px;
-  right: 0;
-  width: 44px;
-  height: 44px;
-  border: 1px solid var(--line);
-  background: transparent;
-  color: var(--muted);
-  font-size: 20px;
-  line-height: 1;
-  cursor: pointer;
-}
-
-.heritage-close:hover {
-  color: var(--paper);
-  border-color: rgba(241, 239, 232, 0.4);
-}
-
-.heritage-detail .eyebrow {
-  margin: 0 0 8px;
-}
-
-.heritage-detail h2 {
-  margin: 0 52px 16px 0;
-  font-family: var(--font-display);
-  font-size: 20px;
-  font-weight: 800;
-  letter-spacing: -0.02em;
-  line-height: 1.2;
-}
-
-.heritage-facts {
-  margin: 0;
-  border-top: 1px solid var(--line);
-  padding: 0;
-  list-style: none;
-}
-
-.heritage-facts li {
-  display: grid;
-  grid-template-columns: 96px 1fr;
-  gap: 12px;
-  border-bottom: 1px solid var(--line);
-  padding: 10px 0;
-}
-
-.heritage-facts span {
-  color: var(--muted);
-  font-size: 11px;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-}
-
-.heritage-facts b {
-  font-size: 14px;
-  font-weight: 500;
-  font-variant-numeric: tabular-nums;
-}
-
-.heritage-facts b.is-registered {
-  color: var(--signal);
-}
-
-.heritage-facts b.is-awaiting {
-  color: var(--orange);
-}
-
-.heritage-facts small {
-  display: block;
-  color: var(--muted);
-  font-size: 11px;
-  line-height: 1.5;
-}
-
-/* ---- teleport ---- */
-
-.heritage-tp {
-  margin-top: 20px;
-  border: 1px solid rgba(201, 255, 56, 0.4);
-  padding: 14px;
-}
-
-.heritage-tp .eyebrow {
-  margin: 0 0 10px;
-}
-
-.heritage-tp code {
+.register-walk code {
   display: block;
   overflow-x: auto;
-  background: rgba(201, 255, 56, 0.07);
-  padding: 10px 12px;
-  color: var(--signal);
-  font-size: 14px;
+  border: 1px solid var(--hairline);
+  background: var(--paper-raised);
+  padding: var(--cap);
+  font-family: var(--font-mono);
+  font-size: var(--size-base);
   white-space: nowrap;
 }
 
-.heritage-tp button {
+.register-walk button {
   min-height: 44px;
-  margin-top: 10px;
-  border: 1px solid var(--signal);
+  margin-top: var(--cap);
+  border: 1px solid var(--seal);
   background: transparent;
-  padding: 0 18px;
-  color: var(--signal);
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.14em;
+  padding: 0 var(--page-unit);
+  color: var(--seal);
+  font-family: inherit;
+  font-size: var(--size-down);
+  letter-spacing: 0.1em;
   text-transform: uppercase;
   cursor: pointer;
+  transition: background 140ms ease, color 140ms ease;
 }
 
-.heritage-tp button:hover {
-  background: var(--signal);
-  color: var(--ink);
+.register-walk button:hover {
+  color: var(--paper);
+  background: var(--seal);
 }
 
-.heritage-tp small {
+.register-walk small {
   display: block;
-  margin-top: 10px;
-  color: var(--muted);
-  font-size: 11px;
+  margin-top: var(--cap);
+  color: var(--quiet);
+  font-size: var(--size-down);
   line-height: 1.5;
-  font-variant-numeric: tabular-nums;
 }
 
-.heritage-note {
-  margin: 20px 0 0;
-  border-left: 2px solid var(--orange);
-  padding-left: 12px;
-  color: var(--muted);
-  font-size: 11px;
+.register-outside {
+  margin: calc(var(--page-unit) * 1.2) 0 0;
+  border-left: 2px solid var(--rule);
+  padding-left: var(--cap);
+  color: var(--quiet);
+  font-size: var(--size-down);
   line-height: 1.6;
 }
 
-.heritage-prose {
-  margin-top: 20px;
+.register-prose {
+  margin-top: calc(var(--page-unit) * 1.2);
 }
 
-.heritage-prose h3 {
-  margin: 0 0 8px;
-  color: var(--muted);
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
+.register-prose h3 {
+  margin: 0 0 calc(var(--cap) * 0.6);
+  color: var(--quiet);
+  font-size: var(--size-down);
+  font-weight: 600;
+  letter-spacing: 0.12em;
 }
 
-.heritage-prose p {
+.register-prose p {
   margin: 0;
   max-width: 68ch;
-  font-size: 14px;
-  line-height: 1.75;
+  line-height: 1.8;
 }
 
-.heritage-prose a {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  min-height: 44px;
-  color: var(--signal);
-  font-size: 11px;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
+.register-prose a {
+  display: inline-block;
+  margin-top: var(--cap);
+  font-size: var(--size-down);
 }
 
 /* ---- provenance ---- */
 
-.heritage-source {
-  margin-top: 20px;
-  border-top: 1px solid var(--line);
-  padding-top: 14px;
-  color: var(--muted);
-  font-size: 11px;
-  line-height: 1.6;
-}
-
-.heritage-source p {
-  margin: 0;
+.register-provenance {
   max-width: 74ch;
+  margin-top: calc(var(--page-unit) * 2.5);
+  border-top: 1px solid var(--ink);
+  padding-top: var(--baseline);
+  color: var(--quiet);
+  font-size: var(--size-down);
+  line-height: 1.65;
 }
 
-.heritage-source a {
-  color: var(--paper);
-  text-decoration: underline;
+.register-provenance h3 {
+  margin: 0 0 var(--cap);
+  color: var(--ink);
+  font-size: var(--size-down);
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
 }
 
-.heritage-caveat {
-  margin-top: 8px !important;
-  color: rgba(164, 166, 155, 0.8);
+.register-provenance p {
+  margin: 0 0 var(--cap);
 }
 
-@media (min-width: 900px) {
-  /* Desktop is an app shell: the page itself never scrolls, the panel does.
-     On phones the opposite is right — the map keeps a fixed slice of the
-     viewport and the page scrolls normally under it. */
-  .heritage {
-    height: 100dvh;
-    min-height: 0;
-    overflow: hidden;
+.register-provenance p:last-child {
+  margin-bottom: 0;
+}
+
+/* MapLibre ships 29px controls with radius and a shadow. Square them,
+   bring them to the 44px touch floor, and match the paper. */
+.register-canvas-frame .maplibregl-ctrl-group {
+  border: 1px solid var(--ink);
+  border-radius: 0;
+  background: var(--paper);
+  box-shadow: none;
+}
+
+.register-canvas-frame .maplibregl-ctrl-group button {
+  width: 44px;
+  height: 44px;
+  border-radius: 0;
+}
+
+.register-canvas-frame .maplibregl-ctrl-group button + button {
+  border-top: 1px solid var(--rule);
+}
+
+.register-canvas-frame .maplibregl-ctrl-attrib {
+  border-radius: 0;
+  font-size: 10px;
+}
+
+@media (min-width: 760px) {
+  .register {
+    --page-unit: 32px;
   }
 
-  .heritage-body {
-    flex-direction: row;
-    min-height: 0;
+  .register-tally {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@media (min-width: 1000px) {
+  /* The 2/3 + 1/3 uneven pair (§XX rule 2). */
+  .register-body {
+    grid-template-columns: 2fr 1fr;
   }
 
-  .heritage-map {
-    flex: 1 1 auto;
-    height: auto;
-    min-height: 0;
-    border-bottom: 0;
-    border-right: 1px solid var(--line);
-  }
-
-  /* flex-basis, not width: `flex: 1` would win over `width` and let the
-     panel swell to whatever the Thai prose needs. */
-  .heritage-panel {
-    flex: 0 0 min(460px, 38vw);
+  .register-detail {
+    position: sticky;
+    top: 0;
+    align-self: start;
+    max-height: 100dvh;
     overflow-y: auto;
-    border-top: 1px solid var(--line);
-  }
-
-  .heritage-title h1 {
-    font-size: 24px;
+    border-top: 0;
+    border-left: 1px solid var(--ink);
+    padding-top: 0;
+    padding-left: calc(var(--page-unit) * 1.2);
   }
 }

@@ -22,13 +22,13 @@ async function render(path = "/") {
   );
 }
 
-test("renders the Bangkok walkthrough", async () => {
-  const response = await render();
+test("renders the Bangkok walkthrough at /worlds", async () => {
+  const response = await render("/worlds");
   assert.equal(response.status, 200);
   assert.match(response.headers.get("content-type") ?? "", /^text\/html\b/i);
 
   const html = await response.text();
-  assert.match(html, /<title>Bangkok, block by block · BKKx<\/title>/i);
+  assert.match(html, /<title>The Minecraft worlds · BKKx<\/title>/i);
   assert.match(html, /Bangkok,/);
   assert.match(html, /block by block\./);
   assert.match(html, /Ratchathewi/);
@@ -69,17 +69,24 @@ test("returns 404 for an unknown atlas district", async () => {
   assert.equal(response.status, 404);
 });
 
-test("renders the heritage register page", async () => {
-  const response = await render("/heritage");
+test("serves the heritage register at the site root", async () => {
+  const response = await render("/");
   assert.equal(response.status, 200);
   assert.match(response.headers.get("content-type") ?? "", /^text\/html\b/i);
 
   const html = await response.text();
-  assert.match(html, /<title>Heritage register · BKKx<\/title>/i);
-  assert.match(html, /Bangkok, monument by monument/);
-  assert.match(html, /heritage-canvas/);
-  assert.match(html, /heritage-filters/);
+  assert.match(html, /Bangkok&#x27;s heritage,|Bangkok's heritage,/);
+  assert.match(html, /monument by monument/);
+  assert.match(html, /register-canvas/);
+  assert.match(html, /register-filters/);
+  assert.match(html, /Fine Arts Department/);
   assert.match(html, /application\/ld\+json/);
+});
+
+test("keeps the old /heritage URL working", async () => {
+  const response = await render("/heritage");
+  assert.equal(response.status, 308);
+  assert.equal(new URL(response.headers.get("location"), "http://localhost").pathname, "/");
 });
 
 test("ships a heritage register whose Minecraft coordinates are inside the worlds", async () => {

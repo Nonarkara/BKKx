@@ -2,7 +2,7 @@
 """
 build-heritage-register.py
 --------------------------
-Build site/app/data/heritage-register.json — the Bangkok heritage register
+Build site/public/heritage-register.json — the Bangkok heritage register
 that bkk.nonarkara.org explores, and the bridge from each registered
 monument to a block coordinate inside the BKKx Minecraft worlds.
 
@@ -42,6 +42,7 @@ from __future__ import annotations
 
 import argparse
 import collections
+import datetime as _dt
 import csv
 import difflib
 import io
@@ -445,6 +446,7 @@ def main() -> int:
                 "district precision and are never pinned."
             ),
             "osmAttribution": "© OpenStreetMap contributors, ODbL 1.0",
+            "retrieved": _dt.date.today().isoformat(),
         },
         "worlds": {
             w["id"]: {
