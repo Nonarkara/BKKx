@@ -15,32 +15,24 @@ type Quarter = {
 type Props = {
   quarters: Quarter[];
   initialQuarter?: string;
-  atlasBase: string;
 };
 
-const DEFAULT_ATLAS_BASE = "https://atlas.nonarkara.org";
+const HERITAGE_MAP_BASE = "/atlas/historic-core?embed=1";
 
-function atlasUrlFor(base: string, q: Quarter | null): string {
-  if (!q) return base + "/";
-  // The atlas accepts ?at=lng,lat,zoom for external fly-to (added 2026-08-11
-  // to support bkk's quarter chips). The atlas also accepts #area-id for its
-  // own quick-jumps — we prefer ?at= because every bkk quarter has a
-  // precise center+zoom, but the 16 atlas areas don't cover all 9 bkk quarters.
-  return `${base}/?at=${q.center[0]},${q.center[1]},${q.zoom}`;
+function heritageMapUrlFor(q: Quarter | null): string {
+  if (!q) return HERITAGE_MAP_BASE;
+  return `${HERITAGE_MAP_BASE}&at=${q.center[0]},${q.center[1]},${q.zoom}`;
 }
 
-export function HomepageClient({ quarters, initialQuarter, atlasBase }: Props) {
-  const base = atlasBase || DEFAULT_ATLAS_BASE;
+export function HomepageClient({ quarters, initialQuarter }: Props) {
   const [activeSlug, setActiveSlug] = useState<string | null>(initialQuarter ?? null);
   const [iframeKey, setIframeKey] = useState(0);
   const iframeRef = useRef<HTMLIFrameElement | null>(null);
 
   const activeQuarter = activeSlug ? quarters.find((q) => q.slug === activeSlug) : null;
-  const initialSrc = atlasUrlFor(base, activeQuarter ?? null);
+  const initialSrc = heritageMapUrlFor(activeQuarter ?? null);
 
-  // Reload the iframe on quarter change — the atlas accepts ?at= and
-  // re-flys on load. A postMessage channel would be smoother but
-  // requires the atlas to listen, which it doesn't yet.
+  // Reload BKK's own embedded heritage map at the selected quarter.
   function pickQuarter(q: Quarter) {
     if (q.slug === activeSlug) return;
     setActiveSlug(q.slug);
@@ -132,13 +124,9 @@ export function HomepageClient({ quarters, initialQuarter, atlasBase }: Props) {
           </p>
 
           <p className="atlas-shell-footnote">
-            The 3D map is the live{" "}
-            <a href={base} target="_blank" rel="noreferrer">
-              atlas.nonarkara.org
-            </a>{" "}
-            — same engine, with the heritage lens added by this shell. All
-            data: OpenStreetMap (ODbL), Fine Arts Department register,
-            Longdo / iTIC, Treasury, HII / ThaiWater. See{" "}
+            This heritage 3D view is served by bkk.nonarkara.org and is separate
+            from Bangkok&apos;s operational city twin. Data: OpenStreetMap (ODbL),
+            Fine Arts Department register and BMA planning context. See{" "}
             <Link href="/#register">the register</Link> for source notes.
           </p>
         </aside>

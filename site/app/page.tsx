@@ -62,7 +62,7 @@ export default function Home() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
       />
-      <HomepageClient quarters={quarters} atlasBase="https://atlas.nonarkara.org" />
+      <HomepageClient quarters={quarters} />
     </>
   );
 }

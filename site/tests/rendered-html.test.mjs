@@ -71,8 +71,8 @@ test("returns 404 for an unknown atlas district", async () => {
 
 test("serves the 3D map heritage atlas as the front door", async () => {
   // The 3D map is the homepage (2026-08-11 redesign). The Editorial
-  // register content moved to /heritage; the map iframe of
-  // atlas.nonarkara.org fills the page, with a 9-quarter quick-jump
+  // register content moved to /heritage; BKK's own heritage map iframe
+  // fills the page, with a 9-quarter quick-jump
   // panel in the side. No "choose your district" gate.
   const response = await render("/");
   assert.equal(response.status, 200);
@@ -82,7 +82,8 @@ test("serves the 3D map heritage atlas as the front door", async () => {
   // 3D map front door
   assert.match(html, /atlas-shell/);
   assert.match(html, /atlas-shell-map/);
-  assert.match(html, /src="https:\/\/atlas\.nonarkara\.org\//);
+  assert.match(html, /src="\/atlas\/historic-core\?embed=1"/);
+  assert.doesNotMatch(html, /src="https:\/\/atlas\.nonarkara\.org/i);
   // 9 quarters as quick-jumps
   assert.match(html, /atlas-shell-quarter-chips/);
   assert.match(html, /Rattanakosin/);

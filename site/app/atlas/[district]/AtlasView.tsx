@@ -15,7 +15,11 @@ import {
   BKK_URBAN_ZONING_NOTE,
 } from "../../data/zoning-planning";
 
-type Props = { world: World };
+type Props = {
+  world: World;
+  embedded?: boolean;
+  initialView?: { center: LngLat; zoom: number };
+};
 
 type LngLat = [number, number];
 
@@ -212,7 +216,7 @@ interface OpenMeteoAQIResponse {
   };
 }
 
-export function AtlasView({ world }: Props) {
+export function AtlasView({ world, embedded = false, initialView }: Props) {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const mapRef = useRef<maplibregl.Map | null>(null);
   const markerRefs = useRef<maplibregl.Marker[]>([]);
@@ -313,8 +317,8 @@ export function AtlasView({ world }: Props) {
       const map = new maplibregl.Map({
         container: containerRef.current!,
         style: OPENFREEMAP_DARK_STYLE,
-        center: districtCenter(world.stops),
-        zoom: 15.4,
+        center: initialView?.center ?? districtCenter(world.stops),
+        zoom: initialView?.zoom ?? 15.4,
         pitch: 60,
         bearing: -20,
         maxPitch: 75,
@@ -551,7 +555,7 @@ export function AtlasView({ world }: Props) {
       }
       mapRef.current = null;
     };
-  }, [world, hasHistoricContext]);
+  }, [world, hasHistoricContext, initialView]);
 
   // Synchronize Zoning Layer visibility
   useEffect(() => {
@@ -616,13 +620,13 @@ export function AtlasView({ world }: Props) {
   // Handle stop switching when user is NOT in tour mode
   useEffect(() => {
     const map = mapRef.current;
-    if (!map || !mapReady || isTourPlaying) return;
+    if (!map || !mapReady || isTourPlaying || initialView) return;
     const stop = world.stops.find((item) => item.id === activeStopId);
     if (!stop) return;
     const coord = parseCoordinates(stop.coordinates);
     if (!coord) return;
     map.flyTo({ center: coord, zoom: 16.6, pitch: 64, speed: 0.7, essential: true });
-  }, [activeStopId, mapReady, world.stops, isTourPlaying]);
+  }, [activeStopId, mapReady, world.stops, isTourPlaying, initialView]);
 
   // Cinematic Tour Orchestrator
   useEffect(() => {
@@ -672,8 +676,8 @@ export function AtlasView({ world }: Props) {
   }, [weatherMode, pm25]);
 
   return (
-    <main className="atlas-page">
-      <header className="atlas-header">
+    <main className={`atlas-page${embedded ? " is-embedded" : ""}`}>
+      {!embedded && <header className="atlas-header">
         <Link className="wordmark" href="/" aria-label="BKKx home">
           <span>BKK</span>
           <b>x</b>
@@ -692,7 +696,7 @@ export function AtlasView({ world }: Props) {
             Download world <span aria-hidden="true">↓</span>
           </a>
         </nav>
-      </header>
+      </header>}
 
       <div className="atlas-map" aria-label={`3D map of ${world.name}, Bangkok`}>
         <div ref={containerRef} style={{ width: "100%", height: "100%" }} />
@@ -854,7 +858,7 @@ export function AtlasView({ world }: Props) {
         )}
       </div>
 
-      <aside className="atlas-panel" aria-live="polite">
+      {!embedded && <aside className="atlas-panel" aria-live="polite">
         <p className="atlas-panel-eyebrow">{activeStop.chapter}</p>
         <h2>{activeStop.name}</h2>
         <p className="atlas-panel-thai" lang="th">{activeStop.thai}</p>
@@ -904,7 +908,7 @@ export function AtlasView({ world }: Props) {
           ))}
         </ol>
         <Link className="atlas-back" href="/#atlas">← Back to walkthrough</Link>
-      </aside>
+      </aside>}
     </main>
   );
 }

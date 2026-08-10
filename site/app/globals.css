@@ -683,6 +683,13 @@ footer small { grid-column: 1 / -1; margin-top: 60px; padding-top: 24px; border-
   color: var(--paper);
 }
 
+.atlas-page.is-embedded {
+  position: absolute;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: minmax(0, 1fr);
+  grid-template-areas: "map";
+}
+
 .atlas-header {
   grid-area: header;
   z-index: 30;
@@ -2461,8 +2468,8 @@ footer small { grid-column: 1 / -1; margin-top: 60px; padding-top: 24px; border-
  * atlas-shell — the new BKKx front door (2026-08-11).
  *
  * The shell keeps the Editorial register chrome (light, paper
- * background, IBM Plex Sans Thai body) and hosts a dark Console
- * iframe of atlas.nonarkara.org. The contrast is intentional:
+ * background, IBM Plex Sans Thai body) and hosts BKK's own dark heritage
+ * map in a same-origin iframe. The contrast is intentional:
  * Editorial frames, Console focus.
  *
  * Hard rules:
