@@ -51,6 +51,17 @@ test("renders the 3D atlas page for a district", async () => {
   assert.match(html, /Victory Monument/);
   assert.match(html, /Download world/);
   assert.match(html, /Walk in 3D|atlas-page|bkkx-marker/);
+  assert.doesNotMatch(html, /Heritage\s*\([^)]*16|Historic context/);
+});
+
+test("limits Old Town context layers to Historic Core", async () => {
+  const response = await render("/atlas/historic-core");
+  assert.equal(response.status, 200);
+
+  const html = await response.text();
+  assert.match(html, /Heritage\s*\([^)]*16/);
+  assert.match(html, /Historic context/);
+  assert.match(html, /orientation only/i);
 });
 
 test("returns 404 for an unknown atlas district", async () => {
