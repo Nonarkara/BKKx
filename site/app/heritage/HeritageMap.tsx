@@ -236,6 +236,11 @@ antialias: true,
           minzoom: 14,
           layout: {
             "text-field": ["get", "name"],
+            // The only stack OpenFreeMap serves, and it carries the Thai
+            // block. Leaving this unset makes MapLibre ask for its default
+            // "Open Sans Regular, Arial Unicode MS Regular", which 404s —
+            // so every monument label rendered blank.
+            "text-font": ["Noto Sans Regular"],
             "text-size": 11,
             "text-offset": [0, 1.1],
             "text-anchor": "top",
