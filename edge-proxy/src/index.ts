@@ -1,17 +1,8 @@
 const UPSTREAM = "https://bkkx-bangkok-atlas.nonsmartcity.chatgpt.site";
-const CANONICAL_HOST = "atlas.nonarkara.org";
 
 export default {
   async fetch(request: Request): Promise<Response> {
     const incomingUrl = new URL(request.url);
-
-    if (incomingUrl.host === "bkk.nonarkara.org") {
-      const canonicalUrl = new URL(
-        `${incomingUrl.pathname}${incomingUrl.search}`,
-        `https://${CANONICAL_HOST}`,
-      );
-      return Response.redirect(canonicalUrl, 308);
-    }
 
     const upstreamUrl = new URL(
       `${incomingUrl.pathname}${incomingUrl.search}`,
