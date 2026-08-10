@@ -23,7 +23,7 @@ import { HomepageClient } from "./heritage-atlas/HomepageClient";
 // picks it up for SSR/SEO. The iframe is rendered client-side
 // because the quarter click changes the iframe's src.
 export const metadata: Metadata = {
-  title: "Bangkok's heritage, block by block · BKKx",
+  title: "Bangkok's heritage, block by block",
   description:
     "An open 3D atlas of Bangkok's heritage: nine quarters from the royal island to Bang Krachao, 571 registered ancient monuments, seven walks, and the Minecraft worlds that let you walk them block by block.",
   alternates: { canonical: "/" },

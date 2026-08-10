@@ -14,7 +14,7 @@ import { AREAS, WALKS, photoFor, walkDistance } from "../data/heritage-content";
 // aesthetic is preserved.
 
 export const metadata: Metadata = {
-  title: "Bangkok's heritage register — BKKx",
+  title: "Bangkok's heritage register",
   description:
     "The Fine Arts Department register of Thailand's ancient monuments, all 571 in Bangkok, mapped honestly with the quarters they cluster in and the walks that string them together.",
   alternates: { canonical: "/heritage" },
