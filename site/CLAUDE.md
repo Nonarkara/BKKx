@@ -4,14 +4,23 @@
 - `npm run build` creates the Cloudflare Worker bundle in `dist/`.
 - Keep walkthrough data in `app/walkthrough.tsx` until a third independent view needs it.
 - Do not commit Minecraft world binaries into the website bundle. Link GitHub Release assets.
-- Use `#c9ff38` only for signals, selected state and primary actions.
+- Use `#c9ff38` only for signals, selected state and primary actions — and
+  only on the dark Console surfaces (`/worlds`, `/atlas/*`). The Editorial
+  register surfaces use one accent, the oxide seal `#8c2f23`.
+- The site typeface is **Sao Chingcha** (self-hosted, `public/fonts/`,
+  three weights, declared in `globals.css`). IBM Plex Sans Thai is its
+  fallback; JetBrains Mono carries coordinates and block numbers. Never
+  Inter/Roboto/Poppins/Montserrat/Open Sans/Lato.
 - Preserve keyboard access and reduced-motion behavior when adding interactions.
 - D1 stores aggregate pageviews only; never collect IP addresses or credentials.
 
 ## The new front door (2026-08-11)
 
 The 3D map IS the homepage. `app/page.tsx` renders a thin Editorial shell
-that hosts a dark Console iframe of `https://atlas.nonarkara.org`. The
+that hosts a dark Console iframe of `/atlas/historic-core?embed=1` — a
+path on THIS domain, never `https://atlas.nonarkara.org`. Pointing the
+iframe at the atlas domain is what made bkk.nonarkara.org look like the
+atlas to its owner; keep it relative. The
 nine heritage quarters are quick-jump chips in the side panel that fly
 the iframe to a precise center+zoom (atlas accepts `?at=lng,lat,zoom`).
 The two Minecraft worlds are side offers in the masthead, not a section.
@@ -23,8 +32,8 @@ Anyone who saved the old URL `/heritage` (which used to redirect
 to `/`) now lands on the actual register page.
 
 The deliberate visual split is **Editorial frames, Console focus**:
-the shell chrome stays in the bkk Editorial register (paper, IBM Plex
-Sans Thai, Josefin Sans display, signal-yellow on hover); the iframe
+the shell chrome stays in the bkk Editorial register (paper, Sao
+Chingcha type, oxide seal accent); the iframe
 shows the dark CONSOLE atlas (ink, signal yellow for buildings,
 amber for Buzz, alarm red for live incidents). Two design systems
 deliberately held apart — the bkk shell's job is to frame the atlas,

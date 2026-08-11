@@ -1,21 +1,15 @@
 import type { Metadata, Viewport } from "next";
-import { IBM_Plex_Sans_Thai, JetBrains_Mono, Josefin_Sans } from "next/font/google";
+import { IBM_Plex_Sans_Thai, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 
-// Inter is banned workspace-wide as an AI-default tell, and the register's
-// body text is overwhelmingly Thai. IBM Plex Sans Thai is non-looped, which
-// is the hard requirement for any Thai-facing surface here — looped faces
-// read as learner material to a Thai reader.
+// Sao Chingcha (self-hosted, declared in globals.css) is the site's face.
+// IBM Plex Sans Thai stays as its fallback: non-looped, which is the hard
+// requirement for any Thai-facing surface here — looped faces read as
+// learner material to a Thai reader. Inter is banned workspace-wide.
 const plexThai = IBM_Plex_Sans_Thai({
   variable: "--font-plex-thai",
   subsets: ["latin", "thai"],
   weight: ["400", "500", "600", "700"],
-  display: "swap",
-});
-
-const josefin = Josefin_Sans({
-  variable: "--font-josefin",
-  subsets: ["latin"],
   display: "swap",
 });
 
@@ -74,7 +68,7 @@ export default function RootLayout({
     // substituted using the element it is declared on — so a --font-* living
     // one level down on <body> is invisible to it, the whole chain computes
     // to nothing, and everything silently falls back to system-ui.
-    <html lang="en" className={`${plexThai.variable} ${josefin.variable} ${mono.variable}`}>
+    <html lang="en" className={`${plexThai.variable} ${mono.variable}`}>
       <body>{children}</body>
     </html>
   );

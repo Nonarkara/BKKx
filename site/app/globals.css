@@ -1,5 +1,36 @@
 @import "tailwindcss";
 
+/* Sao Chingcha — the site's typeface. A Thai foundry display face named
+   after เสาชิงช้า, the Giant Swing, which is register monument fad-3 on
+   this very site. Non-looped, as every Thai-facing surface here must be.
+   Self-hosted from public/fonts/ (72 KB for all three weights); the
+   foundry ships each weight as its own family, so they are unified here
+   under one family with real weight values. */
+@font-face {
+  font-family: "Sao Chingcha";
+  src: url("/fonts/sao-chingcha-300.woff2") format("woff2");
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Sao Chingcha";
+  src: url("/fonts/sao-chingcha-400.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Sao Chingcha";
+  src: url("/fonts/sao-chingcha-700.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+
 :root {
   --ink: #11120f;
   --paper: #f1efe8;
@@ -8,8 +39,11 @@
   --orange: #ff6b35;
   --muted: #a4a69b;
   --line: rgba(241, 239, 232, 0.18);
-  --font-body: var(--font-plex-thai), sans-serif;
-  --font-display: var(--font-josefin), sans-serif;
+  /* Sao Chingcha carries the whole site — 87/87 Thai and full Latin.
+     IBM Plex Sans Thai stays as the fallback while the face loads and
+     for any glyph outside its 342. */
+  --font-body: "Sao Chingcha", var(--font-plex-thai), sans-serif;
+  --font-display: "Sao Chingcha", var(--font-plex-thai), sans-serif;
   --font-mono: var(--font-jetbrains), ui-monospace, monospace;
 }
 
