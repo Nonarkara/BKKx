@@ -224,7 +224,7 @@ AREAS = [
             "The heritage here is the architecture of trade and treaty. Assumption Cathedral, rebuilt 1909–1918 in red brick, seats the Catholic archdiocese behind the Oriental's back lanes. The East Asiatic Company's 1901 headquarters and the old Customs House of 1888 — Joachim Grassi's grand riverfront ruin, for decades a fire station — face the water they taxed. The Portuguese Embassy has held its ground since 1860, the oldest foreign mission in the country. And the 1940 General Post Office, a monumental Art Deco slab on the road itself, now houses the Thailand Creative & Design Centre — the anchor tenant of the 'Creative District' that has refilled the quarter's warehouses with studios and galleries since the 2010s.",
             "One block east of the cathedral, the lanes of the Haroon Mosque community — Javanese-descended, Muslim, riverside — have been serving oxtail soup in the shadow of the GPO for a century, which is Bang Rak's whole story: every faith and flag of the treaty port, still on speaking terms.",
         ],
-        "monuments": ["fad-106", "fad-5487", "fad-8878"],
+        "monuments": ["fad-106", "fad-5487", "fad-8878", "fad-103"],
         "walks": ["charoen-krung-creative"],
     },
     {
@@ -399,6 +399,9 @@ WALKS = [
             "District. Start from Saphan Taksin BTS via the Oriental lane."
         ),
         "stops": [
+            {"name": "Neilson Hays Library", "thai": "หอสมุดเนียลสัน เฮส์", "coord": [100.5229655, 13.7271053],
+             "approx_why": "coordinate from OpenStreetMap Nominatim; not in the Fine Arts register",
+             "note": "A 1922 Renaissance Revival library funded by Dr. Heyward Hays in memory of his wife Jennie Neilson Hays — still Bangkok's oldest English-language lending library, and an ASA Architectural Conservation Award winner."},
             {"name": "Assumption Cathedral", "thai": "อาสนวิหารอัสสัมชัญ", "fad": "fad-5487",
              "note": "The Catholic archcathedral, rebuilt in red brick 1909–1918 behind the Oriental — Romanesque outside, gilded rib-vaults inside."},
             {"name": "East Asiatic Building", "thai": "อาคารอีสท์เอเชียติก", "osm-extra": "east-asiatic",

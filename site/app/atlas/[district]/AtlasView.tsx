@@ -14,6 +14,18 @@ import {
   BKK_URBAN_ZONING_GEOJSON,
   BKK_URBAN_ZONING_NOTE,
 } from "../../data/zoning-planning";
+import { WALKS, photoFor } from "../../data/heritage-content";
+
+// The walks that geographically belong to Historic Core — everything except
+// bang-krachao-loop, a disconnected bike loop far south of the old town.
+const HISTORIC_CORE_WALK_SLUGS = [
+  "six-faiths",
+  "talad-noi-songwad",
+  "royal-axis",
+  "sam-phraeng-lanes",
+  "charoen-krung-creative",
+  "nang-loeng-market",
+];
 
 type Props = {
   world: World;
@@ -216,6 +228,20 @@ interface OpenMeteoAQIResponse {
   };
 }
 
+interface OpenMeteoWeatherResponse {
+  current?: {
+    weather_code?: number;
+    precipitation?: number;
+  };
+}
+
+// WMO weather codes 51-99 cover drizzle through thunderstorm — anything in
+// that range means it's actually raining in Bangkok right now.
+function isLiveRain(weatherCode: number | null, precipitation: number | null): boolean {
+  if (typeof precipitation === "number" && precipitation > 0) return true;
+  return typeof weatherCode === "number" && weatherCode >= 51 && weatherCode <= 99;
+}
+
 export function AtlasView({ world, embedded = false, initialView }: Props) {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const mapRef = useRef<maplibregl.Map | null>(null);
@@ -228,6 +254,9 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
   const [timeMode, setTimeMode] = useState<"realtime" | "sunrise" | "noon" | "sunset" | "night">("realtime");
   const [weatherMode, setWeatherMode] = useState<"clear" | "rainy" | "hazepm25">("clear");
   const [pm25, setPm25] = useState<number | null>(null);
+  // Flips true the moment the user picks a weather mode themselves, so the
+  // live-conditions default below only ever applies once, before that.
+  const weatherTouchedRef = useRef(false);
 
   // Cinematic Tour States
   const [isTourPlaying, setIsTourPlaying] = useState(false);
@@ -239,6 +268,8 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
   const [showZoning, setShowZoning] = useState(true);
   const [selectedHeritage, setSelectedHeritage] = useState<HeritageSite | null>(null);
   const heritageMarkerRefs = useRef<maplibregl.Marker[]>([]);
+  const [selectedWalkSlug, setSelectedWalkSlug] = useState<string | null>(null);
+  const [walkGeometry, setWalkGeometry] = useState<Record<string, { line: LngLat[] }> | null>(null);
 
   // Command Copy State
   const [copied, setCopied] = useState(false);
@@ -260,13 +291,38 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
     isTourPlayingRef.current = isTourPlaying;
   }, [tourIndex, isTourPlaying]);
 
+  // Refs mirror the latest fetched values so either fetch's callback can
+  // apply the live-conditions default using both, whichever resolves last.
+  const pm25Ref = useRef<number | null>(null);
+  const liveWeatherRef = useRef<{ code: number | null; precipitation: number | null }>({
+    code: null,
+    precipitation: null,
+  });
+
+  // The Atmosphere Engine defaults to what Bangkok is actually doing right
+  // now — live rain wins, then unhealthy live PM2.5, else it stays clear.
+  // Only applies once, and never after the user has picked a mode themselves.
+  const applyLiveWeatherDefault = () => {
+    if (weatherTouchedRef.current) return;
+    if (isLiveRain(liveWeatherRef.current.code, liveWeatherRef.current.precipitation)) {
+      setWeatherMode("rainy");
+    } else if (pm25Ref.current !== null && pm25Ref.current > 55) {
+      setWeatherMode("hazepm25");
+    }
+  };
+
   // Live AQI Fetch
   useEffect(() => {
     fetch("https://air-quality-api.open-meteo.com/v1/air-quality?latitude=13.7563&longitude=100.5018&current=pm2_5")
       .then((res) => (res.ok ? (res.json() as Promise<OpenMeteoAQIResponse>) : null))
       .then((data) => {
         const val = data?.current?.pm2_5;
-        if (typeof val === "number") setPm25(Math.round(val));
+        if (typeof val === "number") {
+          const rounded = Math.round(val);
+          setPm25(rounded);
+          pm25Ref.current = rounded;
+          applyLiveWeatherDefault();
+        }
       })
       .catch((err) => console.warn("bkkx: pm25 fetch failed", err));
   }, []);
@@ -278,6 +334,40 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
     if (pm25 <= 55) return { text: `${pm25} µg/m³ (Sensitive-Unhealthy)`, color: "#fd9f00" };
     return { text: `${pm25} µg/m³ (Unhealthy)`, color: "#fd3300" };
   }, [pm25]);
+
+  // Live weather fetch — same Bangkok coordinate as the PM2.5 call above.
+  useEffect(() => {
+    fetch("https://api.open-meteo.com/v1/forecast?latitude=13.7563&longitude=100.5018&current=weather_code,precipitation")
+      .then((res) => (res.ok ? (res.json() as Promise<OpenMeteoWeatherResponse>) : null))
+      .then((data) => {
+        const code = data?.current?.weather_code;
+        const precipitation = data?.current?.precipitation;
+        const resolved = {
+          code: typeof code === "number" ? code : null,
+          precipitation: typeof precipitation === "number" ? precipitation : null,
+        };
+        liveWeatherRef.current = resolved;
+        applyLiveWeatherDefault();
+      })
+      .catch((err) => console.warn("bkkx: weather fetch failed", err));
+  }, []);
+
+  // Walk route geometry — same file /walks/:slug pages already draw
+  // (PlaceMap.tsx), fetched once so any walk can be picked from the panel.
+  useEffect(() => {
+    if (!hasHistoricContext) return;
+    fetch("/heritage-walk-geometry.json")
+      .then((res) => (res.ok ? (res.json() as Promise<Record<string, { line: LngLat[] }>>) : null))
+      .then((data) => {
+        if (data) setWalkGeometry(data);
+      })
+      .catch((err) => console.warn("bkkx: walk geometry fetch failed", err));
+  }, [hasHistoricContext]);
+
+  const historicCoreWalks = useMemo(
+    () => WALKS.filter((walk) => HISTORIC_CORE_WALK_SLUGS.includes(walk.slug)),
+    [],
+  );
 
   // Compute Minecraft TP coordinates
   const mcCoords = useMemo(() => {
@@ -479,6 +569,35 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
           }
         }
 
+        // Walk-route line, empty until a walk is picked from the GIS Layers
+        // panel — real street-following geometry, filled in by the sync
+        // effect below, same as /heritage-walk-geometry.json already draws
+        // on the individual /walks/:slug pages (see PlaceMap.tsx).
+        if (hasHistoricContext && !map.getSource("bkkx-route-src")) {
+          try {
+            map.addSource("bkkx-route-src", {
+              type: "geojson",
+              data: { type: "Feature", properties: {}, geometry: { type: "LineString", coordinates: [] } },
+            });
+            map.addLayer({
+              id: "bkkx-route-casing",
+              type: "line",
+              source: "bkkx-route-src",
+              layout: { visibility: "none" },
+              paint: { "line-color": "#14140f", "line-width": 6, "line-opacity": 0.8 },
+            });
+            map.addLayer({
+              id: "bkkx-route-line",
+              type: "line",
+              source: "bkkx-route-src",
+              layout: { visibility: "none" },
+              paint: { "line-color": "#c9ff38", "line-width": 2.5 },
+            });
+          } catch (err) {
+            console.warn("bkkx: route layer failed", err);
+          }
+        }
+
         setMapReady(true);
       });
 
@@ -568,6 +687,40 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
       map.setLayoutProperty("bkkx-zoning-line", "visibility", showZoning ? "visible" : "none");
     }
   }, [showZoning, mapReady]);
+
+  // Synchronize the walk-route line: draw the selected walk's real geometry
+  // and fit the map to it, or hide the layer when nothing is selected.
+  useEffect(() => {
+    const map = mapRef.current;
+    if (!map || !mapReady) return;
+    const source = map.getSource("bkkx-route-src") as maplibregl.GeoJSONSource | undefined;
+    if (!source) return;
+
+    const line = selectedWalkSlug ? walkGeometry?.[selectedWalkSlug]?.line : null;
+    const visible = Boolean(line && line.length > 1);
+
+    source.setData({
+      type: "Feature",
+      properties: {},
+      geometry: { type: "LineString", coordinates: line ?? [] },
+    });
+    for (const id of ["bkkx-route-casing", "bkkx-route-line"]) {
+      if (map.getLayer(id)) {
+        map.setLayoutProperty(id, "visibility", visible ? "visible" : "none");
+      }
+    }
+    if (visible && line) {
+      const lons = line.map(([lon]) => lon);
+      const lats = line.map(([, lat]) => lat);
+      map.fitBounds(
+        [
+          [Math.min(...lons), Math.min(...lats)],
+          [Math.max(...lons), Math.max(...lats)],
+        ],
+        { padding: 72, duration: 600, maxZoom: 17 },
+      );
+    }
+  }, [selectedWalkSlug, walkGeometry, mapReady]);
 
   // Synchronize Heritage Markers visibility
   useEffect(() => {
@@ -764,6 +917,7 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
                   <button
                     key={w}
                     onClick={() => {
+                      weatherTouchedRef.current = true;
                       if (isTourPlaying) {
                         setIsTourPlaying(false);
                         setActiveStopId(world.stops[tourIndex]?.id ?? world.stops[0].id);
@@ -812,12 +966,46 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
                 <small className="control-source-note">{BKK_URBAN_ZONING_NOTE}</small>
               </div>
             )}
+
+            {hasHistoricContext && (
+              <div className="control-row">
+                <small className="control-label">Walks</small>
+                <div className="btn-group-walks" role="group" aria-label="Show a walk's route">
+                  {historicCoreWalks.map((walk) => (
+                    <button
+                      key={walk.slug}
+                      type="button"
+                      onClick={() =>
+                        setSelectedWalkSlug((prev) => (prev === walk.slug ? null : walk.slug))
+                      }
+                      className={`layer-toggle-btn ${selectedWalkSlug === walk.slug ? "active" : ""}`}
+                      aria-pressed={selectedWalkSlug === walk.slug}
+                    >
+                      {walk.name}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
         </div>
 
         {/* Heritage Inspector Card Popup */}
         {hasHistoricContext && selectedHeritage && (
           <div className="heritage-inspector-card" role="dialog" aria-modal="false" aria-label={`Heritage Site: ${selectedHeritage.name}`}>
+            {selectedHeritage.photo && photoFor(selectedHeritage.photo) && (
+              <figure className="heritage-card-photo">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={photoFor(selectedHeritage.photo)!.file} alt={selectedHeritage.name} loading="lazy" />
+                <figcaption>
+                  Photo: {photoFor(selectedHeritage.photo)!.artist} ·{" "}
+                  <a href={photoFor(selectedHeritage.photo)!.descriptionUrl} target="_blank" rel="noreferrer">
+                    Wikimedia Commons
+                  </a>{" "}
+                  · {photoFor(selectedHeritage.photo)!.licence}
+                </figcaption>
+              </figure>
+            )}
             <div className="heritage-card-header">
               <div className="heritage-badge-group">
                 <span className="heritage-reg-badge">🏛️ {selectedHeritage.regId}</span>

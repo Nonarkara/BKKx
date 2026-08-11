@@ -64,6 +64,27 @@ SLOTS: dict[str, list] = {
     "charoen-krung": ["Old Customs House Bangkok", "Assumption Cathedral Bangkok",
                       "General Post Office Bangkok"],
     "bang-krachao": ["Bang Kachao", "Bang Krachao aerial", "Sri Nakhon Khuean Khan Park"],
+
+    # One per site in app/data/heritage-finearts.ts (the 3D atlas's curated
+    # heritage markers) — a distinct photo per marker, for the click-to-see
+    # popup. Slot keys are each site's id with the "fa-" prefix stripped.
+    "grand-palace": ["Grand Palace Bangkok gate", "Wat Phra Kaew emerald buddha temple",
+                     "Grand Palace Bangkok wall"],
+    "wat-pho": ["Wat Pho reclining buddha", "Wat Pho temple complex", "Wat Pho chedi"],
+    "wat-arun": ["Wat Arun prang close-up", "Wat Arun porcelain", "Temple of Dawn Bangkok"],
+    "giant-swing": ["Giant Swing Bangkok Sao Ching Cha", "เสาชิงช้า กรุงเทพ"],
+    "wat-suthat": ["Wat Suthat temple Bangkok", "Wat Suthat viharn"],
+    "phra-sumen-fort": ["Phra Sumen Fort Bangkok", "ป้อมพระสุเมรุ"],
+    "mahakan-fort": ["Mahakan Fort Bangkok", "ป้อมมหากาฬ"],
+    "front-palace": ["National Museum Bangkok building", "Wang Na palace Bangkok"],
+    "wat-bowonniwet": ["Wat Bowonniwet Bangkok", "วัดบวรนิเวศ"],
+    "wat-saket": ["Golden Mount Bangkok", "Wat Saket Phu Khao Thong"],
+    "wat-ratchanaddaram": ["Loha Prasat Bangkok", "Wat Ratchanatdaram metal temple"],
+    "wat-ratchabophit": ["Wat Ratchabophit Bangkok", "วัดราชบพิธ"],
+    "wat-prayurawongsawat": ["Wat Prayurawongsawat chedi Bangkok", "Wat Prayoon white chedi"],
+    "santa-cruz": ["Santa Cruz Church Bangkok dome", "Kudi Chin church Thonburi"],
+    "saranrom-palace": ["Saranrom Palace Bangkok", "พระราชวังสราญรมย์"],
+    "bang-khun-phrom": ["Bang Khun Phrom Palace Bangkok", "วังบางขุนพรหม"],
 }
 
 

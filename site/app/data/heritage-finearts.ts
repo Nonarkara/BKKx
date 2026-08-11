@@ -11,6 +11,9 @@ export interface HeritageSite {
   year: string;
   description: string;
   gazette: string;
+  // Slot key into public/heritage/photos.json (fetch-heritage-photos.py) —
+  // absent until that slot has a real, licensed Commons photo.
+  photo?: string;
 }
 
 export const FINEARTS_HERITAGE_SOURCE = {
@@ -33,6 +36,7 @@ export const FINEARTS_HERITAGE_SITES: HeritageSite[] = [
     year: "1782",
     description: "The royal residence and spiritual core of the Rattanakosin Kingdom, founded at the establishment of Bangkok as the capital.",
     gazette: "Vol. 66, Section 64 (1949)",
+    photo: "grand-palace",
   },
   {
     id: "fa-wat-pho",
@@ -45,6 +49,7 @@ export const FINEARTS_HERITAGE_SITES: HeritageSite[] = [
     year: "1788",
     description: "Ancient royal monastery housing the giant Reclining Buddha and UNESCO Memory of the World marble epigraphic inscriptions.",
     gazette: "Vol. 66, Section 64 (1949)",
+    photo: "wat-pho",
   },
   {
     id: "fa-wat-arun",
@@ -57,6 +62,7 @@ export const FINEARTS_HERITAGE_SITES: HeritageSite[] = [
     year: "1768",
     description: "Iconic 82-metre riverside prang encrusted with Chinese porcelain shards, marking the former royal palace grounds of King Taksin.",
     gazette: "Vol. 66, Section 64 (1949)",
+    photo: "wat-arun",
   },
   {
     id: "fa-giant-swing",
@@ -69,6 +75,7 @@ export const FINEARTS_HERITAGE_SITES: HeritageSite[] = [
     year: "1784",
     description: "Monumental red teak frame constructed for the annual Royal Triyampawai Brahmin swinging ceremonies.",
     gazette: "Vol. 66, Section 64 (1949)",
+    photo: "giant-swing",
   },
   {
     id: "fa-wat-suthat",
@@ -81,6 +88,7 @@ export const FINEARTS_HERITAGE_SITES: HeritageSite[] = [
     year: "1807",
     description: "Grand royal temple holding the 14th-century Sukhothai bronze Buddha (Phra Si Sakyamuni) and monumental early Bangkok Jataka murals.",
     gazette: "Vol. 66, Section 64 (1949)",
+    photo: "wat-suthat",
   },
   {
     id: "fa-phra-sumen-fort",
@@ -93,6 +101,7 @@ export const FINEARTS_HERITAGE_SITES: HeritageSite[] = [
     year: "1783",
     description: "One of only two surviving 18th-century octagonal brick-and-stucco bastions guarding the northern entrance of Khlong Rop Krung.",
     gazette: "Vol. 66, Section 64 (1949)",
+    photo: "phra-sumen-fort",
   },
   {
     id: "fa-mahakan-fort",
@@ -105,6 +114,7 @@ export const FINEARTS_HERITAGE_SITES: HeritageSite[] = [
     year: "1783",
     description: "Eastern hexagonal corner fort guarding the junction of Khlong Ong Ang and Khlong Mahanak next to Phan Fa Lilat Bridge.",
     gazette: "Vol. 66, Section 64 (1949)",
+    photo: "mahakan-fort",
   },
   {
     id: "fa-front-palace",
@@ -117,6 +127,7 @@ export const FINEARTS_HERITAGE_SITES: HeritageSite[] = [
     year: "1782",
     description: "Historical palace complex of the Viceroys of Siam, featuring the revered Buddhaisawan Chapel with original 1795 wall frescoes.",
     gazette: "Vol. 43, Section 14 (1926)",
+    photo: "front-palace",
   },
   {
     id: "fa-wat-bowonniwet",
@@ -129,6 +140,7 @@ export const FINEARTS_HERITAGE_SITES: HeritageSite[] = [
     year: "1826",
     description: "Seat of the Supreme Patriarch and spiritual heart of the Thammayut monastic order, housing Phra Phuttha Chinnasi.",
     gazette: "Vol. 66, Section 64 (1949)",
+    photo: "wat-bowonniwet",
   },
   {
     id: "fa-wat-saket",
@@ -141,6 +153,7 @@ export const FINEARTS_HERITAGE_SITES: HeritageSite[] = [
     year: "1865",
     description: "Artificial 77-metre hill crowned with a golden stupa containing sacred relics from Kapilavastu, anchoring the eastern skyline.",
     gazette: "Vol. 66, Section 64 (1949)",
+    photo: "wat-saket",
   },
   {
     id: "fa-wat-ratchanaddaram",
@@ -153,6 +166,7 @@ export const FINEARTS_HERITAGE_SITES: HeritageSite[] = [
     year: "1846",
     description: "The world's only surviving multi-tiered metal palace pagoda, featuring 37 iron spires symbolizing the 37 Bodhipakkhiya-dhamma virtues.",
     gazette: "Vol. 66, Section 64 (1949)",
+    photo: "wat-ratchanaddaram",
   },
   {
     id: "fa-wat-ratchabophit",
@@ -165,6 +179,7 @@ export const FINEARTS_HERITAGE_SITES: HeritageSite[] = [
     year: "1869",
     description: "Exquisite blend of traditional Thai exterior with colorful Benjarong hand-painted tiles and Gothic revival interior vaulted halls.",
     gazette: "Vol. 66, Section 64 (1949)",
+    photo: "wat-ratchabophit",
   },
   {
     id: "fa-wat-prayurawongsawat",
@@ -177,6 +192,7 @@ export const FINEARTS_HERITAGE_SITES: HeritageSite[] = [
     year: "1828",
     description: "Riverside Thonburi monastery recipient of the UNESCO Asia-Pacific Award of Excellence for its ancient chedi restoration.",
     gazette: "Vol. 66, Section 64 (1949)",
+    photo: "wat-prayurawongsawat",
   },
   {
     id: "fa-santa-cruz",
@@ -189,6 +205,7 @@ export const FINEARTS_HERITAGE_SITES: HeritageSite[] = [
     year: "1770",
     description: "Historic Portuguese-Catholic neoclassical cathedral commanding the Kudi Chin heritage waterfront in Thonburi.",
     gazette: "Vol. 104, Section 13 (1987)",
+    photo: "santa-cruz",
   },
   {
     id: "fa-saranrom-palace",
@@ -201,6 +218,7 @@ export const FINEARTS_HERITAGE_SITES: HeritageSite[] = [
     year: "1866",
     description: "Western Victorian-style royal palace and botanical park opposite the Grand Palace, once housing the Ministry of Foreign Affairs.",
     gazette: "Vol. 104, Section 13 (1987)",
+    photo: "saranrom-palace",
   },
   {
     id: "fa-bang-khun-phrom",
@@ -213,5 +231,6 @@ export const FINEARTS_HERITAGE_SITES: HeritageSite[] = [
     year: "1901",
     description: "Masterpiece of Baroque and Rococo palace architecture along the Chao Phraya, designed by Karl Döhring and Mario Tamagno.",
     gazette: "Vol. 104, Section 13 (1987)",
+    photo: "bang-khun-phrom",
   },
 ];
