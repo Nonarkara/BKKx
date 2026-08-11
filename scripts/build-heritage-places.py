@@ -489,6 +489,8 @@ def resolve_stop(stop: dict, register: dict, poi: dict) -> dict:
         if site and site.get("lat"):
             out.update(lat=site["lat"], lon=site["lon"], fad=stop["fad"],
                        registered=site["registered"], locatedBy="register")
+            if site.get("gazette"):
+                out["gazette"] = site["gazette"]
             if site.get("block"):
                 out["block"] = site["block"]
                 out["world"] = site["world"]
@@ -504,6 +506,8 @@ def resolve_stop(stop: dict, register: dict, poi: dict) -> dict:
             raise SystemExit(f"stop '{stop['name']}' cites unpinned {stop['fad']} with no fallback")
         out["fad"] = stop["fad"]
         out["registered"] = bool(site and site.get("registered"))
+        if site and site.get("gazette"):
+            out["gazette"] = site["gazette"]
     if "osm" in stop:
         lat, lon, ref = OSM_EXTRA[stop["osm"]]
         out.update(lat=lat, lon=lon, locatedBy=f"osm:{ref}")
@@ -529,6 +533,40 @@ def resolve_stop(stop: dict, register: dict, poi: dict) -> dict:
     raise SystemExit(f"stop '{stop['name']}' has no location source")
 
 
+def gazette_year(g: dict | None) -> int | None:
+    """Parse the D/M/YYYY Royal Gazette date. Every sample checked in this
+    register is already Gregorian (1949, 2001, 2022…), not Buddhist Era."""
+    if not g or not g.get("date"):
+        return None
+    parts = g["date"].split("/")
+    if len(parts) != 3:
+        return None
+    try:
+        return int(parts[2])
+    except ValueError:
+        return None
+
+
+def walk_stats(stops: list[dict]) -> dict:
+    """Real, computed-not-guessed numbers about one walk. Every figure here
+    traces to either the Fine Arts register or an actual OSRM route leg —
+    nothing here is estimated or invented."""
+    cited = [s for s in stops if "fad" in s]
+    gazetted = [s for s in cited if s.get("registered")]
+    years = sorted(y for s in cited if (y := gazette_year(s.get("gazette"))))
+    legs = [s["distanceFromPrevM"] for s in stops if "distanceFromPrevM" in s]
+    return {
+        "citedInRegister": len(cited),
+        "gazetted": len(gazetted),
+        "awaitingConsideration": len(cited) - len(gazetted),
+        "walkable": sum(1 for s in stops if s.get("block")),
+        "oldestGazetteYear": years[0] if years else None,
+        "newestGazetteYear": years[-1] if years else None,
+        "longestLegM": max(legs) if legs else None,
+        "shortestLegM": min(legs) if legs else None,
+    }
+
+
 def fetch_route(coords: list[tuple[float, float]], slug: str, reroute: bool) -> dict | None:
     """Street-following walking line through every stop, cached."""
     CACHE.mkdir(parents=True, exist_ok=True)
@@ -551,6 +589,10 @@ def fetch_route(coords: list[tuple[float, float]], slug: str, reroute: bool) -> 
             "distanceM": round(route["distance"]),
             "durationMin": round(route["duration"] / 60),
             "line": [[round(lon, 6), round(lat, 6)] for lon, lat in route["geometry"]["coordinates"]],
+            # One leg per consecutive stop pair — the real walked distance
+            # between stop i and stop i+1, not a straight-line guess.
+            "legs": [{"distanceM": round(leg["distance"]), "durationMin": round(leg["duration"] / 60)}
+                     for leg in route.get("legs", [])],
         }
         cache.write_text(json.dumps(result))
         return result
@@ -585,6 +627,16 @@ def main() -> int:
                 "line": route["line"],
                 "stops": [[s["lon"], s["lat"]] for s in stops],
             }
+            # One real walked leg per consecutive stop pair, not a
+            # straight-line guess — OSRM returns exactly len(stops)-1 legs
+            # for a len(stops)-waypoint route.
+            legs = route.get("legs", [])
+            if len(legs) == len(stops) - 1:
+                for stop, leg in zip(stops[1:], legs):
+                    stop["distanceFromPrevM"] = leg["distanceM"]
+                    stop["durationFromPrevMin"] = leg["durationMin"]
+
+        entry["stats"] = walk_stats(stops)
         walks_out.append(entry)
         km = f"{route['distanceM']/1000:.1f} km" if route else "no route line"
         print(f"  {walk['slug']:24} {len(stops)} stops · {km}", file=sys.stderr)

@@ -3,7 +3,23 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { PlaceMasthead } from "../../PlaceMasthead";
 import { PlaceMap } from "../../PlaceMap";
-import { WALKS, areaBySlug, walkBySlug, walkDistance } from "../../data/heritage-content";
+import {
+  WALKS,
+  areaBySlug,
+  walkBySlug,
+  walkDistance,
+  type Gazette,
+} from "../../data/heritage-content";
+
+function gazetteYear(g: Gazette | undefined): number | null {
+  const year = Number(g?.date.split("/")[2]);
+  return Number.isFinite(year) && year > 1800 ? year : null;
+}
+
+function paceLabel(distanceM: number, durationMin: number): string {
+  const kmh = distanceM / 1000 / (durationMin / 60);
+  return `${kmh.toFixed(1)} km/h`;
+}
 
 type Params = { slug: string };
 type Props = { params: Promise<Params> };
@@ -37,6 +53,8 @@ export default async function WalkPage({ params }: Props) {
     .map((a) => areaBySlug(a))
     .filter((a): a is NonNullable<typeof a> => Boolean(a));
   const distance = walkDistance(walk);
+  const stats = walk.stats;
+  const thisYear = new Date().getFullYear();
 
   return (
     <div className="register">
@@ -99,6 +117,58 @@ export default async function WalkPage({ params }: Props) {
           . Follow the numbers.
         </p>
 
+        <div className="walk-stats">
+          <h2>By the numbers</h2>
+          <dl>
+            {stats.citedInRegister > 0 ? (
+              <div>
+                <dt>On the Fine Arts register</dt>
+                <dd>
+                  {stats.gazetted} gazetted
+                  {stats.awaitingConsideration
+                    ? `, ${stats.awaitingConsideration} awaiting consideration`
+                    : ""}
+                </dd>
+              </div>
+            ) : null}
+            {stats.oldestGazetteYear ? (
+              <div>
+                <dt>Oldest gazette entry on this walk</dt>
+                <dd>
+                  {stats.oldestGazetteYear}
+                  <small>
+                    {" "}
+                    — {thisYear - stats.oldestGazetteYear} years ago
+                    {stats.newestGazetteYear && stats.newestGazetteYear !== stats.oldestGazetteYear
+                      ? `, newest ${stats.newestGazetteYear}`
+                      : ""}
+                  </small>
+                </dd>
+              </div>
+            ) : null}
+            <div>
+              <dt>Walkable in Minecraft</dt>
+              <dd>
+                {stats.walkable} of {walk.stops.length} stops
+              </dd>
+            </div>
+            {walk.distanceM && walk.durationMin ? (
+              <div>
+                <dt>Pace</dt>
+                <dd>{paceLabel(walk.distanceM, walk.durationMin)}</dd>
+              </div>
+            ) : null}
+            {stats.longestLegM && stats.shortestLegM ? (
+              <div>
+                <dt>Longest / shortest leg</dt>
+                <dd>
+                  {stats.longestLegM} m / {stats.shortestLegM} m
+                </dd>
+              </div>
+            ) : null}
+          </dl>
+        </div>
+
         <ol className="walk-stops">
           {walk.stops.map((stop, i) => (
             <li key={stop.name} id={`stop-${i + 1}`}>
@@ -125,6 +195,22 @@ export default async function WalkPage({ params }: Props) {
                     <>
                       {" "}· in Minecraft: <code>{stop.tp}</code>
                     </>
+                  ) : null}
+                </p>
+                <p className="walk-stop-numbers">
+                  {(() => {
+                    const year = gazetteYear(stop.gazette);
+                    return year ? (
+                      <span>
+                        Gazetted {year} · {thisYear - year} years ago
+                      </span>
+                    ) : null;
+                  })()}
+                  {stop.distanceFromPrevM ? (
+                    <span>
+                      {stop.distanceFromPrevM} m from stop {i}
+                      {stop.durationFromPrevMin ? ` · ${stop.durationFromPrevMin} min walk` : ""}
+                    </span>
                   ) : null}
                 </p>
               </div>

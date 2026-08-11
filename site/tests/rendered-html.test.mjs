@@ -184,6 +184,46 @@ test("renders a heritage walk page with numbered stops", async () => {
   assert.match(html, /OSRM foot profile/);
 });
 
+test("walk pages show real gazette and leg-distance numbers, not estimates", async () => {
+  const response = await render("/walks/six-faiths");
+  assert.equal(response.status, 200);
+  const html = await response.text();
+  // "By the numbers" block: gazetted/awaiting split, oldest gazette age
+  assert.match(html, /By the numbers/);
+  assert.match(html, /gazetted/);
+  assert.match(html, /Oldest gazette entry/);
+  assert.match(html, /years ago/);
+  // Per-stop: at least one real OSRM leg distance rendered. React splits
+  // adjacent JSX expressions with hydration comment markers, so match
+  // loosely rather than assuming the numbers sit next to their words.
+  assert.match(html, /walk-stop-numbers/);
+  assert.match(html, /m from stop/);
+  assert.match(html, /min walk/);
+});
+
+test("heritage-places.json carries real per-stop and per-walk numbers", async () => {
+  const { default: places } = await import("../app/data/heritage-places.json", {
+    with: { type: "json" },
+  });
+  for (const walk of places.walks) {
+    assert.ok(walk.stats, `${walk.slug}: missing stats`);
+    assert.ok(
+      walk.stats.gazetted + walk.stats.awaitingConsideration === walk.stats.citedInRegister,
+      `${walk.slug}: gazetted+awaiting must equal citedInRegister`,
+    );
+    // Every stop after the first on a routed walk carries a real OSRM leg —
+    // never a straight-line guess standing in for one.
+    if (walk.distanceM) {
+      for (const stop of walk.stops.slice(1)) {
+        assert.ok(
+          typeof stop.distanceFromPrevM === "number" && stop.distanceFromPrevM > 0,
+          `${walk.slug}/${stop.name}: missing real leg distance`,
+        );
+      }
+    }
+  }
+});
+
 test("404s an unknown quarter and an unknown walk", async () => {
   assert.equal((await render("/areas/atlantis")).status, 404);
   assert.equal((await render("/walks/atlantis")).status, 404);
