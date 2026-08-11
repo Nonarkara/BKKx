@@ -5,6 +5,7 @@ import { PlaceMap } from "../PlaceMap";
 import { useLocale } from "../i18n/LocaleContext";
 import { WALK_TH } from "../data/heritage-translations-th";
 import { MonumentStatus } from "./MonumentStatus";
+import { WalkNearby } from "./WalkNearby";
 import {
   walkDistance,
   type Area,
@@ -191,6 +192,7 @@ export function WalkContent({ walk, areas }: { walk: Walk; areas: Area[] }) {
                       </span>
                     ) : null}
                   </p>
+                  <WalkNearby stopN={i} walkSlug={walk.slug} />
                 </div>
               </li>
             );

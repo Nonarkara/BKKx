@@ -54,6 +54,11 @@ export default function Home() {
     tagline: a.tagline,
     center: a.center,
     zoom: a.zoom,
+    // Photo: every quarter has a licensed Commons photo in the
+    // attribution manifest at /public/heritage/photos/{slug}.jpg.
+    // The chip's thumbnail surfaces the photo as a small visual
+    // hook, so the heritage list is not just a wall of text.
+    photo: `/heritage/photos/${a.slug}.jpg`,
   }));
 
   return (

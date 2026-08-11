@@ -51,6 +51,8 @@ export const DICTIONARY = {
     walk_years_ago: "years ago",
     walk_newest: "newest",
     walk_gazetted_label: "Gazetted",
+    walk_nearby_eyebrow: "Nearby · street economy",
+    walk_nearby_source: "OpenStreetMap (ODbL) · sorted by distance from this stop",
     walk_from_stop: "m from stop",
     walk_min_walk: "min walk",
 
@@ -105,6 +107,8 @@ export const DICTIONARY = {
     walk_gazetted_label: "ขึ้นทะเบียนปี",
     walk_from_stop: "เมตร จากจุดที่",
     walk_min_walk: "นาทีเดิน",
+    walk_nearby_eyebrow: "ใกล้เคียง · เศรษฐกิจริมถนน",
+    walk_nearby_source: "OpenStreetMap (ODbL) · เรียงตามระยะทางจากจุด",
 
     lang_toggle_label: "ภาษา",
   },

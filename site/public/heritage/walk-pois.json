@@ -1,0 +1,1241 @@
+{
+  "six-faiths/1": {
+    "walkSlug": "six-faiths",
+    "stopN": 1,
+    "stopName": "Wat Kalayanamit",
+    "lat": 13.740062,
+    "lon": 100.491275,
+    "radiusM": 150,
+    "pois": []
+  },
+  "six-faiths/2": {
+    "walkSlug": "six-faiths",
+    "stopN": 2,
+    "stopName": "Kian Un Keng Shrine",
+    "lat": 13.7395,
+    "lon": 100.4927,
+    "radiusM": 150,
+    "pois": [
+      {
+        "name": "Portuguese Cake Bakery",
+        "kind": "shop",
+        "osmKey": "shop",
+        "osmValue": "bakery",
+        "lat": 13.7394987,
+        "lon": 100.4930347,
+        "distanceM": 36
+      },
+      {
+        "name": "พิพิธภัณฑ์บ้านกุฎีจีน",
+        "kind": "history",
+        "osmKey": "tourism",
+        "osmValue": "museum",
+        "lat": 13.7394088,
+        "lon": 100.4930491,
+        "distanceM": 39
+      },
+      {
+        "name": "Window Cafe",
+        "kind": "drink",
+        "osmKey": "amenity",
+        "osmValue": "cafe",
+        "lat": 13.7393017,
+        "lon": 100.493122,
+        "distanceM": 51
+      },
+      {
+        "name": "บ้านสกุลทอง",
+        "kind": "food",
+        "osmKey": "amenity",
+        "osmValue": "restaurant",
+        "lat": 13.739243,
+        "lon": 100.4931062,
+        "distanceM": 52
+      },
+      {
+        "name": "Street Art",
+        "kind": "history",
+        "osmKey": "tourism",
+        "osmValue": "artwork",
+        "lat": 13.739201,
+        "lon": 100.4932456,
+        "distanceM": 68
+      },
+      {
+        "name": "Kudichin Bakery",
+        "kind": "shop",
+        "osmKey": "shop",
+        "osmValue": "bakery",
+        "lat": 13.7391955,
+        "lon": 100.4933018,
+        "distanceM": 73
+      },
+      {
+        "name": "Grandma's",
+        "kind": "food",
+        "osmKey": "amenity",
+        "osmValue": "restaurant",
+        "lat": 13.7389874,
+        "lon": 100.4931648,
+        "distanceM": 76
+      },
+      {
+        "name": "Macaroni by Chris",
+        "kind": "food",
+        "osmKey": "amenity",
+        "osmValue": "restaurant",
+        "lat": 13.7389326,
+        "lon": 100.4934096,
+        "distanceM": 99
+      },
+      {
+        "name": "Bubble Tea Shop",
+        "kind": "drink",
+        "osmKey": "amenity",
+        "osmValue": "cafe",
+        "lat": 13.738329,
+        "lon": 100.4926047,
+        "distanceM": 131
+      }
+    ]
+  },
+  "six-faiths/3": {
+    "walkSlug": "six-faiths",
+    "stopN": 3,
+    "stopName": "Santa Cruz Church",
+    "lat": 13.738942,
+    "lon": 100.493764,
+    "radiusM": 150,
+    "pois": [
+      {
+        "name": "Macaroni by Chris",
+        "kind": "food",
+        "osmKey": "amenity",
+        "osmValue": "restaurant",
+        "lat": 13.7389326,
+        "lon": 100.4934096,
+        "distanceM": 38
+      },
+      {
+        "name": "Kudichin Bakery",
+        "kind": "shop",
+        "osmKey": "shop",
+        "osmValue": "bakery",
+        "lat": 13.7391955,
+        "lon": 100.4933018,
+        "distanceM": 57
+      },
+      {
+        "name": "Street Art",
+        "kind": "history",
+        "osmKey": "tourism",
+        "osmValue": "artwork",
+        "lat": 13.739201,
+        "lon": 100.4932456,
+        "distanceM": 63
+      },
+      {
+        "name": "Grandma's",
+        "kind": "food",
+        "osmKey": "amenity",
+        "osmValue": "restaurant",
+        "lat": 13.7389874,
+        "lon": 100.4931648,
+        "distanceM": 65
+      },
+      {
+        "name": "บ้านสกุลทอง",
+        "kind": "food",
+        "osmKey": "amenity",
+        "osmValue": "restaurant",
+        "lat": 13.739243,
+        "lon": 100.4931062,
+        "distanceM": 79
+      },
+      {
+        "name": "Window Cafe",
+        "kind": "drink",
+        "osmKey": "amenity",
+        "osmValue": "cafe",
+        "lat": 13.7393017,
+        "lon": 100.493122,
+        "distanceM": 80
+      },
+      {
+        "name": "พิพิธภัณฑ์บ้านกุฎีจีน",
+        "kind": "history",
+        "osmKey": "tourism",
+        "osmValue": "museum",
+        "lat": 13.7394088,
+        "lon": 100.4930491,
+        "distanceM": 93
+      },
+      {
+        "name": "Portuguese Cake Bakery",
+        "kind": "shop",
+        "osmKey": "shop",
+        "osmValue": "bakery",
+        "lat": 13.7394987,
+        "lon": 100.4930347,
+        "distanceM": 100
+      },
+      {
+        "name": "Bubble Tea Shop",
+        "kind": "drink",
+        "osmKey": "amenity",
+        "osmValue": "cafe",
+        "lat": 13.738329,
+        "lon": 100.4926047,
+        "distanceM": 143
+      }
+    ]
+  },
+  "six-faiths/4": {
+    "walkSlug": "six-faiths",
+    "stopN": 4,
+    "stopName": "Baan Kudichin Museum",
+    "lat": 13.739409,
+    "lon": 100.493049,
+    "radiusM": 150,
+    "pois": []
+  },
+  "six-faiths/5": {
+    "walkSlug": "six-faiths",
+    "stopN": 5,
+    "stopName": "Bang Luang Mosque (Kudi Khao)",
+    "lat": 13.738064,
+    "lon": 100.489366,
+    "radiusM": 150,
+    "pois": []
+  },
+  "six-faiths/6": {
+    "walkSlug": "six-faiths",
+    "stopN": 6,
+    "stopName": "Wat Prayurawongsawat",
+    "lat": 13.736713,
+    "lon": 100.495511,
+    "radiusM": 150,
+    "pois": [
+      {
+        "name": "white space",
+        "kind": "drink",
+        "osmKey": "amenity",
+        "osmValue": "bar",
+        "lat": 13.7377977,
+        "lon": 100.4954203,
+        "distanceM": 121
+      },
+      {
+        "name": "นวลหมูปิ้ง",
+        "kind": "food",
+        "osmKey": "amenity",
+        "osmValue": "restaurant",
+        "lat": 13.7376943,
+        "lon": 100.4948862,
+        "distanceM": 128
+      }
+    ]
+  },
+  "talad-noi-songwad/1": {
+    "walkSlug": "talad-noi-songwad",
+    "stopN": 1,
+    "stopName": "Wat Traimit",
+    "lat": 13.73809,
+    "lon": 100.513629,
+    "radiusM": 150,
+    "pois": [
+      {
+        "name": "ศูนย์ประวัติศาสตร์เยาวราช",
+        "kind": "history",
+        "osmKey": "tourism",
+        "osmValue": "museum",
+        "lat": 13.7376953,
+        "lon": 100.5137571,
+        "distanceM": 46
+      },
+      {
+        "name": "พิพิธภัณฑ์วัดไตรมิตร",
+        "kind": "history",
+        "osmKey": "tourism",
+        "osmValue": "museum",
+        "lat": 13.737669,
+        "lon": 100.5136741,
+        "distanceM": 47
+      },
+      {
+        "name": "leap",
+        "kind": "drink",
+        "osmKey": "amenity",
+        "osmValue": "cafe",
+        "lat": 13.7384162,
+        "lon": 100.5130133,
+        "distanceM": 76
+      },
+      {
+        "name": "ส้มตำหน้าวัดไตรมิตร",
+        "kind": "food",
+        "osmKey": "amenity",
+        "osmValue": "restaurant",
+        "lat": 13.7377916,
+        "lon": 100.5143193,
+        "distanceM": 82
+      },
+      {
+        "name": "หลงตู้",
+        "kind": "drink",
+        "osmKey": "amenity",
+        "osmValue": "cafe",
+        "lat": 13.7374135,
+        "lon": 100.513985,
+        "distanceM": 84
+      },
+      {
+        "name": "คาเฟ่ อเมซอน",
+        "kind": "drink",
+        "osmKey": "amenity",
+        "osmValue": "cafe",
+        "lat": 13.7375278,
+        "lon": 100.5142424,
+        "distanceM": 91
+      },
+      {
+        "name": "ขนมโดนัท",
+        "kind": "food",
+        "osmKey": "amenity",
+        "osmValue": "fast_food",
+        "lat": 13.7375138,
+        "lon": 100.5143013,
+        "distanceM": 97
+      },
+      {
+        "name": "ใบชาจิบอิ้ว",
+        "kind": "shop",
+        "osmKey": "shop",
+        "osmValue": "tea",
+        "lat": 13.7388998,
+        "lon": 100.5140347,
+        "distanceM": 100
+      },
+      {
+        "name": "Amass coffee art toys",
+        "kind": "drink",
+        "osmKey": "amenity",
+        "osmValue": "cafe",
+        "lat": 13.738416,
+        "lon": 100.5145173,
+        "distanceM": 103
+      },
+      {
+        "name": "Starbucks",
+        "kind": "drink",
+        "osmKey": "amenity",
+        "osmValue": "cafe",
+        "lat": 13.7379255,
+        "lon": 100.5126595,
+        "distanceM": 106
+      },
+      {
+        "name": "Jade",
+        "kind": "drink",
+        "osmKey": "amenity",
+        "osmValue": "cafe",
+        "lat": 13.7386438,
+        "lon": 100.5144295,
+        "distanceM": 106
+      },
+      {
+        "name": "Bimbo",
+        "kind": "food",
+        "osmKey": "amenity",
+        "osmValue": "restaurant",
+        "lat": 13.7385523,
+        "lon": 100.5145026,
+        "distanceM": 107
+      },
+      {
+        "name": "คาเฟ่ โกดัง",
+        "kind": "drink",
+        "osmKey": "amenity",
+        "osmValue": "cafe",
+        "lat": 13.7373628,
+        "lon": 100.5143214,
+        "distanceM": 110
+      },
+      {
+        "name": "เป็นอบชานอ้อย",
+        "kind": "food",
+        "osmKey": "amenity",
+        "osmValue": "restaurant",
+        "lat": 13.7376322,
+        "lon": 100.5145541,
+        "distanceM": 112
+      },
+      {
+        "name": "ไทยรุ่งเรือง",
+        "kind": "food",
+        "osmKey": "amenity",
+        "osmValue": "restaurant",
+        "lat": 13.737334,
+        "lon": 100.5143331,
+        "distanceM": 113
+      },
+      {
+        "name": "Friend's Coffee & Lounge",
+        "kind": "drink",
+        "osmKey": "amenity",
+        "osmValue": "cafe",
+        "lat": 13.7390222,
+        "lon": 100.513209,
+        "distanceM": 113
+      },
+      {
+        "name": "โจ๊กเจ๊มวยเกี้ย",
+        "kind": "food",
+        "osmKey": "amenity",
+        "osmValue": "restaurant",
+        "lat": 13.7373021,
+        "lon": 100.514346,
+        "distanceM": 117
+      },
+      {
+        "name": "โพธิ์ประดิษฐ์",
+        "kind": "shop",
+        "osmKey": "shop",
+        "osmValue": "herbalist",
+        "lat": 13.737957,
+        "lon": 100.5147508,
+        "distanceM": 122
+      },
+      {
+        "name": "ราชาหอยทอด",
+        "kind": "food",
+        "osmKey": "amenity",
+        "osmValue": "restaurant",
+        "lat": 13.7375891,
+        "lon": 100.5146544,
+        "distanceM": 124
+      },
+      {
+        "name": "7-Eleven",
+        "kind": "shop",
+        "osmKey": "shop",
+        "osmValue": "convenience",
+        "lat": 13.7377445,
+        "lon": 100.5147617,
+        "distanceM": 128
+      },
+      {
+        "name": "เจ๊เอ็ง หมูสะเต๊กห่อใบตอง",
+        "kind": "food",
+        "osmKey": "amenity",
+        "osmValue": "restaurant",
+        "lat": 13.7392156,
+        "lon": 100.5139096,
+        "distanceM": 129
+      },
+      {
+        "name": "เพชรชมพู",
+        "kind": "shop",
+        "osmKey": "shop",
+        "osmValue": "jewelry",
+        "lat": 13.7393448,
+        "lon": 100.5133888,
+        "distanceM": 142
+      },
+      {
+        "name": "ห้างใบชา ก.มุยกี่",
+        "kind": "shop",
+        "osmKey": "shop",
+        "osmValue": "tea",
+        "lat": 13.7381316,
+        "lon": 100.5149521,
+        "distanceM": 143
+      },
+      {
+        "name": "โอเวอร์ ดิอินฟลูเอนซ์",
+        "kind": "history",
+        "osmKey": "tourism",
+        "osmValue": "gallery",
+        "lat": 13.7371705,
+        "lon": 100.5126894,
+        "distanceM": 144
+      },
+      {
+        "name": "ห้างขายยาบ้วนหยูจั่น",
+        "kind": "shop",
+        "osmKey": "shop",
+        "osmValue": "herbalist",
+        "lat": 13.7381046,
+        "lon": 100.5149752,
+        "distanceM": 145
+      },
+      {
+        "name": "ถนนเยาวราช",
+        "kind": "history",
+        "osmKey": "tourism",
+        "osmValue": "attraction",
+        "lat": 13.7386945,
+        "lon": 100.5122461,
+        "distanceM": 164
+      }
+    ]
+  },
+  "talad-noi-songwad/2": {
+    "walkSlug": "talad-noi-songwad",
+    "stopN": 2,
+    "stopName": "Chow Sue Kong Shrine",
+    "lat": 13.734417,
+    "lon": 100.511709,
+    "radiusM": 150,
+    "pois": []
+  },
+  "talad-noi-songwad/3": {
+    "walkSlug": "talad-noi-songwad",
+    "stopN": 3,
+    "stopName": "So Heng Tai Mansion",
+    "lat": 13.733628,
+    "lon": 100.511977,
+    "radiusM": 150,
+    "pois": [
+      {
+        "name": "โซวเฮงไถ่",
+        "kind": "drink",
+        "osmKey": "amenity",
+        "osmValue": "cafe",
+        "lat": 13.7336284,
+        "lon": 100.5119772,
+        "distanceM": 0
+      },
+      {
+        "name": "บ้านโซวเฮงไถ่",
+        "kind": "history",
+        "osmKey": "tourism",
+        "osmValue": "attraction",
+        "lat": 13.7336206,
+        "lon": 100.5121101,
+        "distanceM": 14
+      },
+      {
+        "name": "Holy tree",
+        "kind": "history",
+        "osmKey": "tourism",
+        "osmValue": "attraction",
+        "lat": 13.7338481,
+        "lon": 100.5120083,
+        "distanceM": 25
+      },
+      {
+        "name": "บ้านริมน้ำตลาดน้อย",
+        "kind": "food",
+        "osmKey": "amenity",
+        "osmValue": "restaurant",
+        "lat": 13.7334218,
+        "lon": 100.5118388,
+        "distanceM": 27
+      },
+      {
+        "name": "รถเก่า",
+        "kind": "history",
+        "osmKey": "tourism",
+        "osmValue": "attraction",
+        "lat": 13.7339503,
+        "lon": 100.512101,
+        "distanceM": 38
+      },
+      {
+        "name": "Holy tree",
+        "kind": "history",
+        "osmKey": "tourism",
+        "osmValue": "attraction",
+        "lat": 13.7340546,
+        "lon": 100.5121323,
+        "distanceM": 50
+      },
+      {
+        "name": "สตรีทอาร์ต",
+        "kind": "history",
+        "osmKey": "tourism",
+        "osmValue": "artwork",
+        "lat": 13.7331482,
+        "lon": 100.5120554,
+        "distanceM": 54
+      },
+      {
+        "name": "Mother Roaster",
+        "kind": "drink",
+        "osmKey": "amenity",
+        "osmValue": "cafe",
+        "lat": 13.732996,
+        "lon": 100.5123095,
+        "distanceM": 79
+      },
+      {
+        "name": "Street Art",
+        "kind": "history",
+        "osmKey": "tourism",
+        "osmValue": "artwork",
+        "lat": 13.7329478,
+        "lon": 100.5122187,
+        "distanceM": 80
+      },
+      {
+        "name": "Street Art",
+        "kind": "history",
+        "osmKey": "tourism",
+        "osmValue": "artwork",
+        "lat": 13.7339748,
+        "lon": 100.5127328,
+        "distanceM": 90
+      },
+      {
+        "name": "River Vibe Restaurant & Bar",
+        "kind": "food",
+        "osmKey": "amenity",
+        "osmValue": "restaurant",
+        "lat": 13.7344426,
+        "lon": 100.5119774,
+        "distanceM": 91
+      },
+      {
+        "name": "Photohostel and Photocafe",
+        "kind": "drink",
+        "osmKey": "amenity",
+        "osmValue": "cafe",
+        "lat": 13.7344598,
+        "lon": 100.5118775,
+        "distanceM": 93
+      },
+      {
+        "name": "Elephant Parade",
+        "kind": "history",
+        "osmKey": "tourism",
+        "osmValue": "artwork",
+        "lat": 13.7344757,
+        "lon": 100.5118306,
+        "distanceM": 96
+      },
+      {
+        "name": "Tai Guan Cafe",
+        "kind": "drink",
+        "osmKey": "amenity",
+        "osmValue": "cafe",
+        "lat": 13.7345137,
+        "lon": 100.5118128,
+        "distanceM": 100
+      },
+      {
+        "name": "นายชาติหมูตุ๋นพระนคร",
+        "kind": "food",
+        "osmKey": "amenity",
+        "osmValue": "restaurant",
+        "lat": 13.733624,
+        "lon": 100.5129429,
+        "distanceM": 104
+      },
+      {
+        "name": "ก๋วยเตี๋ยวลูกชิ้นปลา",
+        "kind": "food",
+        "osmKey": "amenity",
+        "osmValue": "restaurant",
+        "lat": 13.733958,
+        "lon": 100.5128891,
+        "distanceM": 105
+      },
+      {
+        "name": "เป็ดตุ๋นเจ้าท่า",
+        "kind": "food",
+        "osmKey": "amenity",
+        "osmValue": "restaurant",
+        "lat": 13.7334294,
+        "lon": 100.5131229,
+        "distanceM": 126
+      },
+      {
+        "name": "Q&A Bar",
+        "kind": "drink",
+        "osmKey": "amenity",
+        "osmValue": "bar",
+        "lat": 13.7340915,
+        "lon": 100.5130578,
+        "distanceM": 128
+      },
+      {
+        "name": "หูฉลามตลาดน้อย",
+        "kind": "food",
+        "osmKey": "amenity",
+        "osmValue": "restaurant",
+        "lat": 13.7339097,
+        "lon": 100.5131502,
+        "distanceM": 131
+      },
+      {
+        "name": "ฮงเซียงกง",
+        "kind": "drink",
+        "osmKey": "amenity",
+        "osmValue": "cafe",
+        "lat": 13.7347427,
+        "lon": 100.5115917,
+        "distanceM": 131
+      },
+      {
+        "name": "Li Bing Waffle",
+        "kind": "drink",
+        "osmKey": "amenity",
+        "osmValue": "cafe",
+        "lat": 13.7332705,
+        "lon": 100.5131464,
+        "distanceM": 132
+      },
+      {
+        "name": "Fresh Juice and Shakes",
+        "kind": "drink",
+        "osmKey": "amenity",
+        "osmValue": "cafe",
+        "lat": 13.7330957,
+        "lon": 100.5131172,
+        "distanceM": 137
+      },
+      {
+        "name": "เจ๊วัชรี",
+        "kind": "shop",
+        "osmKey": "shop",
+        "osmValue": "bakery",
+        "lat": 13.7338826,
+        "lon": 100.513238,
+        "distanceM": 139
+      },
+      {
+        "name": "เป็ดตุ๋น เจ้าท่า",
+        "kind": "food",
+        "osmKey": "amenity",
+        "osmValue": "restaurant",
+        "lat": 13.7330466,
+        "lon": 100.5132191,
+        "distanceM": 149
+      },
+      {
+        "name": "Vanich House",
+        "kind": "shop",
+        "osmKey": "shop",
+        "osmValue": "art",
+        "lat": 13.7349102,
+        "lon": 100.5115599,
+        "distanceM": 150
+      }
+    ]
+  },
+  "talad-noi-songwad/4": {
+    "walkSlug": "talad-noi-songwad",
+    "stopN": 4,
+    "stopName": "Hong Sieng Kong",
+    "lat": 13.734743,
+    "lon": 100.511592,
+    "radiusM": 150,
+    "pois": [
+      {
+        "name": "ฮงเซียงกง",
+        "kind": "drink",
+        "osmKey": "amenity",
+        "osmValue": "cafe",
+        "lat": 13.7347427,
+        "lon": 100.5115917,
+        "distanceM": 0
+      },
+      {
+        "name": "Vanich House",
+        "kind": "shop",
+        "osmKey": "shop",
+        "osmValue": "art",
+        "lat": 13.7349102,
+        "lon": 100.5115599,
+        "distanceM": 19
+      },
+      {
+        "name": "Vanich House",
+        "kind": "drink",
+        "osmKey": "amenity",
+        "osmValue": "cafe",
+        "lat": 13.7350188,
+        "lon": 100.5115434,
+        "distanceM": 31
+      },
+      {
+        "name": "Tai Guan Cafe",
+        "kind": "drink",
+        "osmKey": "amenity",
+        "osmValue": "cafe",
+        "lat": 13.7345137,
+        "lon": 100.5118128,
+        "distanceM": 35
+      },
+      {
+        "name": "Elephant Parade",
+        "kind": "history",
+        "osmKey": "tourism",
+        "osmValue": "artwork",
+        "lat": 13.7344757,
+        "lon": 100.5118306,
+        "distanceM": 39
+      },
+      {
+        "name": "Photohostel and Photocafe",
+        "kind": "drink",
+        "osmKey": "amenity",
+        "osmValue": "cafe",
+        "lat": 13.7344598,
+        "lon": 100.5118775,
+        "distanceM": 44
+      },
+      {
+        "name": "Timo and Tintin",
+        "kind": "drink",
+        "osmKey": "amenity",
+        "osmValue": "cafe",
+        "lat": 13.7351654,
+        "lon": 100.5114717,
+        "distanceM": 49
+      },
+      {
+        "name": "พิพิธตลาดน้อย",
+        "kind": "history",
+        "osmKey": "tourism",
+        "osmValue": "museum",
+        "lat": 13.735041,
+        "lon": 100.5112538,
+        "distanceM": 49
+      },
+      {
+        "name": "River Vibe Restaurant & Bar",
+        "kind": "food",
+        "osmKey": "amenity",
+        "osmValue": "restaurant",
+        "lat": 13.7344426,
+        "lon": 100.5119774,
+        "distanceM": 53
+      },
+      {
+        "name": "Holy tree",
+        "kind": "history",
+        "osmKey": "tourism",
+        "osmValue": "attraction",
+        "lat": 13.7340546,
+        "lon": 100.5121323,
+        "distanceM": 96
+      },
+      {
+        "name": "รถเก่า",
+        "kind": "history",
+        "osmKey": "tourism",
+        "osmValue": "attraction",
+        "lat": 13.7339503,
+        "lon": 100.512101,
+        "distanceM": 104
+      },
+      {
+        "name": "กินกะเพราเคล้ากาแฟ",
+        "kind": "food",
+        "osmKey": "amenity",
+        "osmValue": "restaurant",
+        "lat": 13.7356262,
+        "lon": 100.51197,
+        "distanceM": 106
+      },
+      {
+        "name": "Holy tree",
+        "kind": "history",
+        "osmKey": "tourism",
+        "osmValue": "attraction",
+        "lat": 13.7338481,
+        "lon": 100.5120083,
+        "distanceM": 109
+      },
+      {
+        "name": "โซวเฮงไถ่",
+        "kind": "drink",
+        "osmKey": "amenity",
+        "osmValue": "cafe",
+        "lat": 13.7336284,
+        "lon": 100.5119772,
+        "distanceM": 131
+      },
+      {
+        "name": "บ้านโซวเฮงไถ่",
+        "kind": "history",
+        "osmKey": "tourism",
+        "osmValue": "attraction",
+        "lat": 13.7336206,
+        "lon": 100.5121101,
+        "distanceM": 137
+      },
+      {
+        "name": "บ้านริมน้ำตลาดน้อย",
+        "kind": "food",
+        "osmKey": "amenity",
+        "osmValue": "restaurant",
+        "lat": 13.7334218,
+        "lon": 100.5118388,
+        "distanceM": 149
+      },
+      {
+        "name": "Street Art",
+        "kind": "history",
+        "osmKey": "tourism",
+        "osmValue": "artwork",
+        "lat": 13.7339748,
+        "lon": 100.5127328,
+        "distanceM": 150
+      }
+    ]
+  },
+  "talad-noi-songwad/5": {
+    "walkSlug": "talad-noi-songwad",
+    "stopN": 5,
+    "stopName": "Holy Rosary Church",
+    "lat": 13.731211,
+    "lon": 100.513484,
+    "radiusM": 150,
+    "pois": []
+  },
+  "talad-noi-songwad/6": {
+    "walkSlug": "talad-noi-songwad",
+    "stopN": 6,
+    "stopName": "Siam Commercial Bank, Talad Noi",
+    "lat": 13.731943,
+    "lon": 100.512779,
+    "radiusM": 150,
+    "pois": []
+  },
+  "talad-noi-songwad/7": {
+    "walkSlug": "talad-noi-songwad",
+    "stopN": 7,
+    "stopName": "Wat Pathum Khongkha",
+    "lat": 13.736421,
+    "lon": 100.510991,
+    "radiusM": 150,
+    "pois": []
+  },
+  "talad-noi-songwad/8": {
+    "walkSlug": "talad-noi-songwad",
+    "stopN": 8,
+    "stopName": "Poey Eng School",
+    "lat": 13.739276,
+    "lon": 100.507038,
+    "radiusM": 150,
+    "pois": []
+  },
+  "talad-noi-songwad/9": {
+    "walkSlug": "talad-noi-songwad",
+    "stopN": 9,
+    "stopName": "Lao Pun Tao Kong Shrine",
+    "lat": 13.739005,
+    "lon": 100.506793,
+    "radiusM": 150,
+    "pois": []
+  },
+  "talad-noi-songwad/10": {
+    "walkSlug": "talad-noi-songwad",
+    "stopN": 10,
+    "stopName": "Sampheng Lane",
+    "lat": 13.740495,
+    "lon": 100.507561,
+    "radiusM": 150,
+    "pois": []
+  },
+  "royal-axis/1": {
+    "walkSlug": "royal-axis",
+    "stopN": 1,
+    "stopName": "Wat Pho",
+    "lat": 13.744778,
+    "lon": 100.496302,
+    "radiusM": 150,
+    "pois": []
+  },
+  "royal-axis/2": {
+    "walkSlug": "royal-axis",
+    "stopN": 2,
+    "stopName": "Grand Palace & Wat Phra Kaeo",
+    "lat": 13.749994,
+    "lon": 100.49175,
+    "radiusM": 150,
+    "pois": []
+  },
+  "royal-axis/3": {
+    "walkSlug": "royal-axis",
+    "stopN": 3,
+    "stopName": "City Pillar Shrine",
+    "lat": 13.752563,
+    "lon": 100.494031,
+    "radiusM": 150,
+    "pois": []
+  },
+  "royal-axis/4": {
+    "walkSlug": "royal-axis",
+    "stopN": 4,
+    "stopName": "Sanam Luang",
+    "lat": 13.7546,
+    "lon": 100.493,
+    "radiusM": 150,
+    "pois": []
+  },
+  "royal-axis/5": {
+    "walkSlug": "royal-axis",
+    "stopN": 5,
+    "stopName": "Wat Mahathat",
+    "lat": 13.75477,
+    "lon": 100.490798,
+    "radiusM": 150,
+    "pois": []
+  },
+  "royal-axis/6": {
+    "walkSlug": "royal-axis",
+    "stopN": 6,
+    "stopName": "National Museum (Wang Na)",
+    "lat": 13.758146,
+    "lon": 100.491528,
+    "radiusM": 150,
+    "pois": []
+  },
+  "royal-axis/7": {
+    "walkSlug": "royal-axis",
+    "stopN": 7,
+    "stopName": "Phra Athit shophouses",
+    "lat": 13.7617,
+    "lon": 100.4927,
+    "radiusM": 150,
+    "pois": []
+  },
+  "royal-axis/8": {
+    "walkSlug": "royal-axis",
+    "stopN": 8,
+    "stopName": "Phra Sumen Fort",
+    "lat": 13.763999,
+    "lon": 100.495753,
+    "radiusM": 150,
+    "pois": []
+  },
+  "sam-phraeng-lanes/1": {
+    "walkSlug": "sam-phraeng-lanes",
+    "stopN": 1,
+    "stopName": "Giant Swing",
+    "lat": 13.751809,
+    "lon": 100.501278,
+    "radiusM": 150,
+    "pois": []
+  },
+  "sam-phraeng-lanes/2": {
+    "walkSlug": "sam-phraeng-lanes",
+    "stopN": 2,
+    "stopName": "Wat Suthat",
+    "lat": 13.750117,
+    "lon": 100.500964,
+    "radiusM": 150,
+    "pois": []
+  },
+  "sam-phraeng-lanes/3": {
+    "walkSlug": "sam-phraeng-lanes",
+    "stopN": 3,
+    "stopName": "Devasathan (Brahmin Temple)",
+    "lat": 13.752384,
+    "lon": 100.500629,
+    "radiusM": 150,
+    "pois": []
+  },
+  "sam-phraeng-lanes/4": {
+    "walkSlug": "sam-phraeng-lanes",
+    "stopN": 4,
+    "stopName": "Bamrung Mueang shophouses",
+    "lat": 13.751445,
+    "lon": 100.496599,
+    "radiusM": 150,
+    "pois": []
+  },
+  "sam-phraeng-lanes/5": {
+    "walkSlug": "sam-phraeng-lanes",
+    "stopN": 5,
+    "stopName": "Phraeng Sanphasat Gate",
+    "lat": 13.75331,
+    "lon": 100.498362,
+    "radiusM": 150,
+    "pois": []
+  },
+  "sam-phraeng-lanes/6": {
+    "walkSlug": "sam-phraeng-lanes",
+    "stopN": 6,
+    "stopName": "Phraeng Phuthon Square",
+    "lat": 13.751933,
+    "lon": 100.497349,
+    "radiusM": 150,
+    "pois": []
+  },
+  "sam-phraeng-lanes/7": {
+    "walkSlug": "sam-phraeng-lanes",
+    "stopN": 7,
+    "stopName": "Wat Ratchabophit",
+    "lat": 13.749138,
+    "lon": 100.497319,
+    "radiusM": 150,
+    "pois": []
+  },
+  "sam-phraeng-lanes/8": {
+    "walkSlug": "sam-phraeng-lanes",
+    "stopN": 8,
+    "stopName": "Wat Ratchapradit",
+    "lat": 13.749539,
+    "lon": 100.495618,
+    "radiusM": 150,
+    "pois": []
+  },
+  "charoen-krung-creative/1": {
+    "walkSlug": "charoen-krung-creative",
+    "stopN": 1,
+    "stopName": "Neilson Hays Library",
+    "lat": 13.7271053,
+    "lon": 100.5229655,
+    "radiusM": 150,
+    "pois": []
+  },
+  "charoen-krung-creative/2": {
+    "walkSlug": "charoen-krung-creative",
+    "stopN": 2,
+    "stopName": "Assumption Cathedral",
+    "lat": 13.723038,
+    "lon": 100.515175,
+    "radiusM": 150,
+    "pois": []
+  },
+  "charoen-krung-creative/3": {
+    "walkSlug": "charoen-krung-creative",
+    "stopN": 3,
+    "stopName": "East Asiatic Building",
+    "lat": 13.723265,
+    "lon": 100.514094,
+    "radiusM": 150,
+    "pois": []
+  },
+  "charoen-krung-creative/4": {
+    "walkSlug": "charoen-krung-creative",
+    "stopN": 4,
+    "stopName": "Old Customs House",
+    "lat": 13.725148,
+    "lon": 100.51397,
+    "radiusM": 150,
+    "pois": []
+  },
+  "charoen-krung-creative/5": {
+    "walkSlug": "charoen-krung-creative",
+    "stopN": 5,
+    "stopName": "Haroon Mosque",
+    "lat": 13.725331,
+    "lon": 100.514929,
+    "radiusM": 150,
+    "pois": []
+  },
+  "charoen-krung-creative/6": {
+    "walkSlug": "charoen-krung-creative",
+    "stopN": 6,
+    "stopName": "Portuguese Embassy",
+    "lat": 13.727929,
+    "lon": 100.513953,
+    "radiusM": 150,
+    "pois": []
+  },
+  "charoen-krung-creative/7": {
+    "walkSlug": "charoen-krung-creative",
+    "stopN": 7,
+    "stopName": "General Post Office (TCDC)",
+    "lat": 13.72751,
+    "lon": 100.515568,
+    "radiusM": 150,
+    "pois": []
+  },
+  "charoen-krung-creative/8": {
+    "walkSlug": "charoen-krung-creative",
+    "stopN": 8,
+    "stopName": "Warehouse 30",
+    "lat": 13.7283,
+    "lon": 100.5133,
+    "radiusM": 150,
+    "pois": []
+  },
+  "charoen-krung-creative/9": {
+    "walkSlug": "charoen-krung-creative",
+    "stopN": 9,
+    "stopName": "So Heng Tai Mansion",
+    "lat": 13.733628,
+    "lon": 100.511977,
+    "radiusM": 150,
+    "pois": []
+  },
+  "nang-loeng-market/1": {
+    "walkSlug": "nang-loeng-market",
+    "stopN": 1,
+    "stopName": "Nang Loeng Market",
+    "lat": 13.759064,
+    "lon": 100.512147,
+    "radiusM": 150,
+    "pois": []
+  },
+  "nang-loeng-market/2": {
+    "walkSlug": "nang-loeng-market",
+    "stopN": 2,
+    "stopName": "Chalermthani Cinema",
+    "lat": 13.7592,
+    "lon": 100.5117,
+    "radiusM": 150,
+    "pois": []
+  },
+  "nang-loeng-market/3": {
+    "walkSlug": "nang-loeng-market",
+    "stopN": 3,
+    "stopName": "Wat Sunthon Thammathan",
+    "lat": 13.7576,
+    "lon": 100.5107,
+    "radiusM": 150,
+    "pois": []
+  },
+  "nang-loeng-market/4": {
+    "walkSlug": "nang-loeng-market",
+    "stopN": 4,
+    "stopName": "Wat Sommanat",
+    "lat": 13.760312,
+    "lon": 100.510427,
+    "radiusM": 150,
+    "pois": []
+  },
+  "bang-krachao-loop/1": {
+    "walkSlug": "bang-krachao-loop",
+    "stopN": 1,
+    "stopName": "Bang Krachao Pier",
+    "lat": 13.704289,
+    "lon": 100.562811,
+    "radiusM": 150,
+    "pois": []
+  },
+  "bang-krachao-loop/2": {
+    "walkSlug": "bang-krachao-loop",
+    "stopN": 2,
+    "stopName": "Sri Nakhon Khuean Khan Park",
+    "lat": 13.696805,
+    "lon": 100.566696,
+    "radiusM": 150,
+    "pois": []
+  },
+  "bang-krachao-loop/3": {
+    "walkSlug": "bang-krachao-loop",
+    "stopN": 3,
+    "stopName": "Bang Nam Phueng Floating Market",
+    "lat": 13.680295,
+    "lon": 100.57433,
+    "radiusM": 150,
+    "pois": []
+  },
+  "bang-krachao-loop/4": {
+    "walkSlug": "bang-krachao-loop",
+    "stopN": 4,
+    "stopName": "Wat Chak Daeng",
+    "lat": 13.662577,
+    "lon": 100.547672,
+    "radiusM": 150,
+    "pois": []
+  }
+}

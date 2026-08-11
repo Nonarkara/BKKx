@@ -13,6 +13,7 @@ type Quarter = {
   center: [number, number];
   zoom: number;
   tagline?: string;
+  photo?: string;
 };
 
 type Props = {
@@ -85,16 +86,33 @@ export function HomepageClient({ quarters, initialQuarter }: Props) {
                     className={isActive ? "is-active" : ""}
                     onClick={() => pickQuarter(q)}
                     aria-pressed={isActive}
+                    title={tag ? `${q.name} — ${tag}` : q.name}
                   >
-                    <span className="atlas-shell-quarter-name">
-                      {q.name}
-                      {q.thai ? <small lang="th"> {q.thai}</small> : null}
-                    </span>
-                    {tag ? (
-                      <span className="atlas-shell-quarter-tag" lang={th ? "th" : undefined}>
-                        {tag}
+                    {q.photo ? (
+                      <span
+                        className="atlas-shell-quarter-thumb"
+                        aria-hidden="true"
+                        style={{ backgroundImage: `url(${q.photo})` }}
+                      />
+                    ) : (
+                      <span
+                        className="atlas-shell-quarter-thumb atlas-shell-quarter-thumb-empty"
+                        aria-hidden="true"
+                      >
+                        {q.name.slice(0, 2)}
                       </span>
-                    ) : null}
+                    )}
+                    <span className="atlas-shell-quarter-body">
+                      <span className="atlas-shell-quarter-name">
+                        {q.name}
+                        {q.thai ? <small lang="th"> {q.thai}</small> : null}
+                      </span>
+                      {tag ? (
+                        <span className="atlas-shell-quarter-tag" lang={th ? "th" : undefined}>
+                          {tag}
+                        </span>
+                      ) : null}
+                    </span>
                   </button>
                 </li>
               );

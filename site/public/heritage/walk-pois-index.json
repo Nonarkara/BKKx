@@ -1,0 +1,394 @@
+{
+  "six-faiths/1": {
+    "walkSlug": "six-faiths",
+    "stopN": 1,
+    "stopName": "Wat Kalayanamit",
+    "count": 0,
+    "fetchedAt": 1786452166,
+    "tookMs": 5650
+  },
+  "six-faiths/2": {
+    "walkSlug": "six-faiths",
+    "stopN": 2,
+    "stopName": "Kian Un Keng Shrine",
+    "count": 9,
+    "fetchedAt": 1786452167,
+    "tookMs": 0
+  },
+  "six-faiths/3": {
+    "walkSlug": "six-faiths",
+    "stopN": 3,
+    "stopName": "Santa Cruz Church",
+    "count": 9,
+    "fetchedAt": 1786452168,
+    "tookMs": 0
+  },
+  "six-faiths/4": {
+    "walkSlug": "six-faiths",
+    "stopN": 4,
+    "stopName": "Baan Kudichin Museum",
+    "count": 0,
+    "fetchedAt": 1786452172,
+    "tookMs": 2643
+  },
+  "six-faiths/5": {
+    "walkSlug": "six-faiths",
+    "stopN": 5,
+    "stopName": "Bang Luang Mosque (Kudi Khao)",
+    "count": 0,
+    "fetchedAt": 1786452175,
+    "tookMs": 1638
+  },
+  "six-faiths/6": {
+    "walkSlug": "six-faiths",
+    "stopN": 6,
+    "stopName": "Wat Prayurawongsawat",
+    "count": 2,
+    "fetchedAt": 1786452176,
+    "tookMs": 0
+  },
+  "talad-noi-songwad/1": {
+    "walkSlug": "talad-noi-songwad",
+    "stopN": 1,
+    "stopName": "Wat Traimit",
+    "count": 26,
+    "fetchedAt": 1786452177,
+    "tookMs": 0
+  },
+  "talad-noi-songwad/2": {
+    "walkSlug": "talad-noi-songwad",
+    "stopN": 2,
+    "stopName": "Chow Sue Kong Shrine",
+    "count": 0,
+    "fetchedAt": 1786452180,
+    "tookMs": 2034
+  },
+  "talad-noi-songwad/3": {
+    "walkSlug": "talad-noi-songwad",
+    "stopN": 3,
+    "stopName": "So Heng Tai Mansion",
+    "count": 25,
+    "fetchedAt": 1786452181,
+    "tookMs": 0
+  },
+  "talad-noi-songwad/4": {
+    "walkSlug": "talad-noi-songwad",
+    "stopN": 4,
+    "stopName": "Hong Sieng Kong",
+    "count": 17,
+    "fetchedAt": 1786452182,
+    "tookMs": 0
+  },
+  "talad-noi-songwad/5": {
+    "walkSlug": "talad-noi-songwad",
+    "stopN": 5,
+    "stopName": "Holy Rosary Church",
+    "count": 0,
+    "fetchedAt": 1786452185,
+    "tookMs": 1681
+  },
+  "talad-noi-songwad/6": {
+    "walkSlug": "talad-noi-songwad",
+    "stopN": 6,
+    "stopName": "Siam Commercial Bank, Talad Noi",
+    "count": 0,
+    "fetchedAt": 1786452191,
+    "tookMs": 4667
+  },
+  "talad-noi-songwad/7": {
+    "walkSlug": "talad-noi-songwad",
+    "stopN": 7,
+    "stopName": "Wat Pathum Khongkha",
+    "count": 0,
+    "fetchedAt": 1786452192,
+    "tookMs": 597
+  },
+  "talad-noi-songwad/8": {
+    "walkSlug": "talad-noi-songwad",
+    "stopN": 8,
+    "stopName": "Poey Eng School",
+    "count": 0,
+    "fetchedAt": 1786452194,
+    "tookMs": 630
+  },
+  "talad-noi-songwad/9": {
+    "walkSlug": "talad-noi-songwad",
+    "stopN": 9,
+    "stopName": "Lao Pun Tao Kong Shrine",
+    "count": 0,
+    "fetchedAt": 1786452196,
+    "tookMs": 637
+  },
+  "talad-noi-songwad/10": {
+    "walkSlug": "talad-noi-songwad",
+    "stopN": 10,
+    "stopName": "Sampheng Lane",
+    "count": 0,
+    "fetchedAt": 1786452200,
+    "tookMs": 2687
+  },
+  "royal-axis/1": {
+    "walkSlug": "royal-axis",
+    "stopN": 1,
+    "stopName": "Wat Pho",
+    "count": 0,
+    "fetchedAt": 1786452202,
+    "tookMs": 1662
+  },
+  "royal-axis/2": {
+    "walkSlug": "royal-axis",
+    "stopN": 2,
+    "stopName": "Grand Palace & Wat Phra Kaeo",
+    "count": 0,
+    "fetchedAt": 1786452205,
+    "tookMs": 1655
+  },
+  "royal-axis/3": {
+    "walkSlug": "royal-axis",
+    "stopN": 3,
+    "stopName": "City Pillar Shrine",
+    "count": 0,
+    "fetchedAt": 1786452212,
+    "tookMs": 5650
+  },
+  "royal-axis/4": {
+    "walkSlug": "royal-axis",
+    "stopN": 4,
+    "stopName": "Sanam Luang",
+    "count": 0,
+    "fetchedAt": 1786452214,
+    "tookMs": 634
+  },
+  "royal-axis/5": {
+    "walkSlug": "royal-axis",
+    "stopN": 5,
+    "stopName": "Wat Mahathat",
+    "count": 0,
+    "fetchedAt": 1786452219,
+    "tookMs": 4625
+  },
+  "royal-axis/6": {
+    "walkSlug": "royal-axis",
+    "stopN": 6,
+    "stopName": "National Museum (Wang Na)",
+    "count": 0,
+    "fetchedAt": 1786452229,
+    "tookMs": 8624
+  },
+  "royal-axis/7": {
+    "walkSlug": "royal-axis",
+    "stopN": 7,
+    "stopName": "Phra Athit shophouses",
+    "count": 0,
+    "fetchedAt": 1786452234,
+    "tookMs": 3602
+  },
+  "royal-axis/8": {
+    "walkSlug": "royal-axis",
+    "stopN": 8,
+    "stopName": "Phra Sumen Fort",
+    "count": 0,
+    "fetchedAt": 1786452239,
+    "tookMs": 3803
+  },
+  "sam-phraeng-lanes/1": {
+    "walkSlug": "sam-phraeng-lanes",
+    "stopN": 1,
+    "stopName": "Giant Swing",
+    "count": 0,
+    "fetchedAt": 1786452242,
+    "tookMs": 1658
+  },
+  "sam-phraeng-lanes/2": {
+    "walkSlug": "sam-phraeng-lanes",
+    "stopN": 2,
+    "stopName": "Wat Suthat",
+    "count": 0,
+    "fetchedAt": 1786452244,
+    "tookMs": 1653
+  },
+  "sam-phraeng-lanes/3": {
+    "walkSlug": "sam-phraeng-lanes",
+    "stopN": 3,
+    "stopName": "Devasathan (Brahmin Temple)",
+    "count": 0,
+    "fetchedAt": 1786452246,
+    "tookMs": 843
+  },
+  "sam-phraeng-lanes/4": {
+    "walkSlug": "sam-phraeng-lanes",
+    "stopN": 4,
+    "stopName": "Bamrung Mueang shophouses",
+    "count": 0,
+    "fetchedAt": 1786452250,
+    "tookMs": 2788
+  },
+  "sam-phraeng-lanes/5": {
+    "walkSlug": "sam-phraeng-lanes",
+    "stopN": 5,
+    "stopName": "Phraeng Sanphasat Gate",
+    "count": 0,
+    "fetchedAt": 1786452252,
+    "tookMs": 627
+  },
+  "sam-phraeng-lanes/6": {
+    "walkSlug": "sam-phraeng-lanes",
+    "stopN": 6,
+    "stopName": "Phraeng Phuthon Square",
+    "count": 0,
+    "fetchedAt": 1786452254,
+    "tookMs": 633
+  },
+  "sam-phraeng-lanes/7": {
+    "walkSlug": "sam-phraeng-lanes",
+    "stopN": 7,
+    "stopName": "Wat Ratchabophit",
+    "count": 0,
+    "fetchedAt": 1786452255,
+    "tookMs": 23
+  },
+  "sam-phraeng-lanes/8": {
+    "walkSlug": "sam-phraeng-lanes",
+    "stopN": 8,
+    "stopName": "Wat Ratchapradit",
+    "count": 0,
+    "fetchedAt": 1786452256,
+    "tookMs": 8
+  },
+  "charoen-krung-creative/1": {
+    "walkSlug": "charoen-krung-creative",
+    "stopN": 1,
+    "stopName": "Neilson Hays Library",
+    "count": 0,
+    "fetchedAt": 1786452257,
+    "tookMs": 11
+  },
+  "charoen-krung-creative/2": {
+    "walkSlug": "charoen-krung-creative",
+    "stopN": 2,
+    "stopName": "Assumption Cathedral",
+    "count": 0,
+    "fetchedAt": 1786452258,
+    "tookMs": 5
+  },
+  "charoen-krung-creative/3": {
+    "walkSlug": "charoen-krung-creative",
+    "stopN": 3,
+    "stopName": "East Asiatic Building",
+    "count": 0,
+    "fetchedAt": 1786452259,
+    "tookMs": 9
+  },
+  "charoen-krung-creative/4": {
+    "walkSlug": "charoen-krung-creative",
+    "stopN": 4,
+    "stopName": "Old Customs House",
+    "count": 0,
+    "fetchedAt": 1786452261,
+    "tookMs": 1059
+  },
+  "charoen-krung-creative/5": {
+    "walkSlug": "charoen-krung-creative",
+    "stopN": 5,
+    "stopName": "Haroon Mosque",
+    "count": 0,
+    "fetchedAt": 1786452264,
+    "tookMs": 1208
+  },
+  "charoen-krung-creative/6": {
+    "walkSlug": "charoen-krung-creative",
+    "stopN": 6,
+    "stopName": "Portuguese Embassy",
+    "count": 0,
+    "fetchedAt": 1786452268,
+    "tookMs": 3194
+  },
+  "charoen-krung-creative/7": {
+    "walkSlug": "charoen-krung-creative",
+    "stopN": 7,
+    "stopName": "General Post Office (TCDC)",
+    "count": 0,
+    "fetchedAt": 1786452277,
+    "tookMs": 8364
+  },
+  "charoen-krung-creative/8": {
+    "walkSlug": "charoen-krung-creative",
+    "stopN": 8,
+    "stopName": "Warehouse 30",
+    "count": 0,
+    "fetchedAt": 1786452287,
+    "tookMs": 8277
+  },
+  "charoen-krung-creative/9": {
+    "walkSlug": "charoen-krung-creative",
+    "stopN": 9,
+    "stopName": "So Heng Tai Mansion",
+    "count": 0,
+    "fetchedAt": 1786452291,
+    "tookMs": 3304
+  },
+  "nang-loeng-market/1": {
+    "walkSlug": "nang-loeng-market",
+    "stopN": 1,
+    "stopName": "Nang Loeng Market",
+    "count": 0,
+    "fetchedAt": 1786452314,
+    "tookMs": 21572
+  },
+  "nang-loeng-market/2": {
+    "walkSlug": "nang-loeng-market",
+    "stopN": 2,
+    "stopName": "Chalermthani Cinema",
+    "count": 0,
+    "fetchedAt": 1786452322,
+    "tookMs": 6565
+  },
+  "nang-loeng-market/3": {
+    "walkSlug": "nang-loeng-market",
+    "stopN": 3,
+    "stopName": "Wat Sunthon Thammathan",
+    "count": 0,
+    "fetchedAt": 1786452326,
+    "tookMs": 3520
+  },
+  "nang-loeng-market/4": {
+    "walkSlug": "nang-loeng-market",
+    "stopN": 4,
+    "stopName": "Wat Sommanat",
+    "count": 0,
+    "fetchedAt": 1786452330,
+    "tookMs": 2577
+  },
+  "bang-krachao-loop/1": {
+    "walkSlug": "bang-krachao-loop",
+    "stopN": 1,
+    "stopName": "Bang Krachao Pier",
+    "count": 0,
+    "fetchedAt": 1786452336,
+    "tookMs": 4517
+  },
+  "bang-krachao-loop/2": {
+    "walkSlug": "bang-krachao-loop",
+    "stopN": 2,
+    "stopName": "Sri Nakhon Khuean Khan Park",
+    "count": 0,
+    "fetchedAt": 1786452344,
+    "tookMs": 7052
+  },
+  "bang-krachao-loop/3": {
+    "walkSlug": "bang-krachao-loop",
+    "stopN": 3,
+    "stopName": "Bang Nam Phueng Floating Market",
+    "count": 0,
+    "fetchedAt": 1786452346,
+    "tookMs": 861
+  },
+  "bang-krachao-loop/4": {
+    "walkSlug": "bang-krachao-loop",
+    "stopN": 4,
+    "stopName": "Wat Chak Daeng",
+    "count": 0,
+    "fetchedAt": 1786452354,
+    "tookMs": 6851
+  }
+}

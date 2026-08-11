@@ -162,6 +162,48 @@ test("ships a heritage register whose Minecraft coordinates are inside the world
   }
 });
 
+test("serves the Bangkok-by-the-numbers about page", async () => {
+  // The /about page is the dry frame for the city: 30+ stats with
+  // source attribution on every line, then the Dr Non essay (the
+  // qualitative side). Numbers first, photos+prose second.
+  const response = await render("/about");
+  assert.equal(response.status, 200);
+  assert.match(response.headers.get("content-type") ?? "", /^text\/html\b/i);
+
+  const html = await response.text();
+  // Numbers
+  assert.match(html, /Bangkok by the numbers/);
+  assert.match(html, /numbers-page/);
+  assert.match(html, /numbers-stat-grid/);
+  // 10.54M population, 39.9M visitors, 571 monuments, 432,077 buildings
+  assert.match(html, /10\.54/);
+  assert.match(html, /39\.9/);
+  assert.match(html, /571/);
+  assert.match(html, /432,077/);
+  // The 8 section eyebrows are present (the middot renders fine in HTML)
+  for (const eyebrow of [
+    "People",
+    "Economy",
+    "Tourism",
+    "Sentiment",
+    "Air",
+    "Safety",
+    "Heritage",
+    "Food (?:&|&amp;) street economy",
+  ]) {
+    assert.match(html, new RegExp(eyebrow));
+  }
+  // Source attributions are visible on every stat
+  assert.match(html, /NSO/);
+  assert.match(html, /TAT/);
+  assert.match(html, /PCD/);
+  assert.match(html, /Numbeo/);
+  // The Dr Non essay is the qualitative second half
+  assert.match(html, /numbers-essay/);
+  assert.match(html, /dr-non-siam-square\.jpg/);
+  assert.match(html, /application\/ld\+json/);
+});
+
 test("renders a heritage quarter page with photo attribution", async () => {
   const response = await render("/areas/kudi-chin");
   assert.equal(response.status, 200);
