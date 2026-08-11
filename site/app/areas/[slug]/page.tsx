@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { PlaceMasthead } from "../../PlaceMasthead";
 import { PlaceMap } from "../../PlaceMap";
 import { AreaProse, AreaTagline } from "../AreaProse";
+import { QuestSpots } from "../QuestSpots";
 import { MonumentStatus } from "../../walks/MonumentStatus";
 import {
   AREAS,
@@ -142,6 +143,8 @@ export default async function AreaPage({ params }: Props) {
             </ul>
           </div>
         ) : null}
+
+        <QuestSpots areaSlug={area.slug} />
       </section>
     </div>
   );

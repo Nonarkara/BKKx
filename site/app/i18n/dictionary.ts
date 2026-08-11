@@ -63,6 +63,11 @@ export const DICTIONARY = {
     poi_pin_label: "pin",
     poi_pins_label: "pins",
 
+    quests_heading: "Side quests near here",
+    quests_lede: "Real, currently-open spots — not a top-10 list. Verified before publishing; still worth calling ahead.",
+    quests_address_label: "Where",
+    quests_map_link: "Open in Maps",
+
     lang_toggle_label: "Language",
   },
   th: {
@@ -122,6 +127,11 @@ export const DICTIONARY = {
       "จากทะเบียนข้อมูลเปิด data.go.th และ data.bangkok.go.th กรองเฉพาะในกรุงเทพมหานคร (lng 100.2–101.0, lat 13.4–14.2)",
     poi_pin_label: "จุด",
     poi_pins_label: "จุด",
+
+    quests_heading: "ภารกิจใกล้เคียง",
+    quests_lede: "สถานที่จริงที่ยังเปิดอยู่ ไม่ใช่ลิสต์ท็อปเทน ตรวจสอบก่อนเผยแพร่แล้ว แต่ควรโทรเช็คก่อนไปอยู่ดี",
+    quests_address_label: "ที่ตั้ง",
+    quests_map_link: "เปิดในแผนที่",
 
     lang_toggle_label: "ภาษา",
   },

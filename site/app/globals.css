@@ -2529,6 +2529,81 @@ footer small { grid-column: 1 / -1; margin-top: 60px; padding-top: 24px; border-
   font-size: var(--size-down);
 }
 
+.place-quests {
+  margin-top: calc(var(--page-unit) * 1.5);
+  border-top: 1px solid var(--ink);
+  padding-top: var(--baseline);
+}
+
+.place-quests h2 {
+  margin: 0 0 var(--cap);
+  font-family: var(--font-display);
+  font-size: var(--size-up);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.place-quests-lede {
+  margin: 0 0 calc(var(--page-unit) * 1.2);
+  max-width: 52ch;
+  color: var(--quiet);
+}
+
+.place-quests-group {
+  margin-bottom: var(--page-unit);
+}
+
+.place-quests-group:last-child {
+  margin-bottom: 0;
+}
+
+.place-quests-theme {
+  display: flex;
+  align-items: center;
+  gap: var(--cap);
+  margin: 0 0 var(--cap);
+  color: var(--seal);
+  font-size: var(--size-down);
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.place-quests-group ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.place-quests-group li {
+  border-bottom: 1px solid var(--hairline);
+  padding: var(--cap) 0;
+}
+
+.place-quests-group li:last-child {
+  border-bottom: none;
+}
+
+.place-quests-thai {
+  margin-left: var(--cap);
+  color: var(--quiet);
+  font-weight: 400;
+}
+
+.place-quests-group li p {
+  margin: calc(var(--cap) * 0.5) 0;
+}
+
+.place-quests-group li small {
+  display: block;
+  color: var(--quiet);
+  font-size: var(--size-down);
+}
+
+.place-quests-group li small a {
+  color: var(--seal);
+}
+
 /* ---- walk pages ---- */
 
 /* Flex, not grid — Distance/On-foot are conditional on routing having

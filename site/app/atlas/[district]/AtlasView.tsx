@@ -348,6 +348,10 @@ const POI_LAYERS: PoiLayerSpec[] = [
 export function AtlasView({ world, embedded = false, initialView }: Props) {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const mapRef = useRef<maplibregl.Map | null>(null);
+  // The type-only top-level `maplibregl` import has no runtime value —
+  // effects outside the map-init closure that need to construct a Marker
+  // (the POI effect below) read the real module through this ref instead.
+  const maplibreModuleRef = useRef<typeof maplibregl | null>(null);
   const markerRefs = useRef<maplibregl.Marker[]>([]);
   const hasHistoricContext = world.id === "historic-core";
   const [activeStopId, setActiveStopId] = useState<string>(world.stops[0].id);
@@ -567,6 +571,7 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
     import("maplibre-gl").then((MapLibreModule) => {
       if (!active) return;
       const maplibregl = MapLibreModule.default;
+      maplibreModuleRef.current = maplibregl;
 
       const map = new maplibregl.Map({
         container: containerRef.current!,
@@ -848,7 +853,8 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
   // (b) data is loaded, or (c) the user toggles a layer.
   useEffect(() => {
     const map = mapRef.current;
-    if (!map || !mapReady) return;
+    const maplibregl = maplibreModuleRef.current;
+    if (!map || !maplibregl || !mapReady) return;
     for (const layer of POI_LAYERS) {
       const wantVisible = showPoi[layer.kind];
       const features = poiData[layer.kind];
