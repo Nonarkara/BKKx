@@ -19,7 +19,7 @@ export const metadata: Metadata = {
     "The Fine Arts Department register of Thailand's ancient monuments, all 571 in Bangkok, mapped honestly with the quarters they cluster in and the walks that string them together.",
   alternates: { canonical: "/heritage" },
   openGraph: {
-    title: "Bangkok's heritage register · BKKx",
+    title: "Bangkok's heritage register · BKKxC(ulture)",
     description:
       "571 registered monuments, nine heritage quarters, seven walks — the editorial register behind the heritage atlas.",
     url: "https://bkk.nonarkara.org/heritage",

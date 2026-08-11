@@ -21,7 +21,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     description: walk.intro,
     alternates: { canonical: `/walks/${walk.slug}` },
     openGraph: {
-      title: `${walk.name} — a Bangkok heritage walk · BKKx`,
+      title: `${walk.name} — a Bangkok heritage walk · BKKxC(ulture)`,
       description: walk.intro,
       url: `/walks/${walk.slug}`,
     },

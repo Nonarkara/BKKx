@@ -27,7 +27,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     description: area.tagline,
     alternates: { canonical: `/areas/${area.slug}` },
     openGraph: {
-      title: `${area.name} — Bangkok heritage · BKKx`,
+      title: `${area.name} — Bangkok heritage · BKKxC(ulture)`,
       description: area.tagline,
       url: `/areas/${area.slug}`,
       images: photoFor(area.photo) ? [{ url: photoFor(area.photo)!.file }] : undefined,
@@ -96,7 +96,7 @@ export default async function AreaPage({ params }: Props) {
           Register monuments of the quarter — filled marks are gazetted, hollow marks
           await consideration. Positions from the Fine Arts Department register,
           relocated where needed as documented on the{" "}
-          <Link href="/#register">register page</Link>.
+          <Link href="/heritage#register">register page</Link>.
         </p>
 
         {area.monuments.length ? (

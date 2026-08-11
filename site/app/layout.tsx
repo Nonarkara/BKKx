@@ -23,8 +23,8 @@ const mono = JetBrains_Mono({
 export const metadata: Metadata = {
   metadataBase: new URL("https://bkk.nonarkara.org"),
   title: {
-    default: "BKKx — Bangkok's heritage, monument by monument",
-    template: "%s · BKKx",
+    default: "BKKxC(ulture) — Bangkok's heritage, monument by monument",
+    template: "%s · BKKxC(ulture)",
   },
   description:
     "Every registered ancient monument in Bangkok, mapped from the Fine Arts Department register — and the Minecraft worlds that let you walk them.",
@@ -37,17 +37,17 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     url: "/",
-    siteName: "BKKx",
-    title: "BKKx — Bangkok, block by block",
+    siteName: "BKKxC(ulture)",
+    title: "BKKxC(ulture) — Bangkok's heritage, block by block",
     description:
-      "Walk through Bangkok as an open, playable Minecraft city atlas.",
+      "Walk through Bangkok's heritage as an open, playable 3D atlas.",
     images: [{ url: "/og.png", width: 1200, height: 630 }],
   },
   twitter: {
     card: "summary_large_image",
-    title: "BKKx — Bangkok, block by block",
+    title: "BKKxC(ulture) — Bangkok's heritage, block by block",
     description:
-      "Walk through Bangkok as an open, playable Minecraft city atlas.",
+      "Walk through Bangkok's heritage as an open, playable 3D atlas.",
     images: ["/og.png"],
   },
 };

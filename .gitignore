@@ -14,3 +14,8 @@ edge-proxy/.wrangler/
 # Heritage register source pulls (8 MB CSV + Overpass dumps); rebuilt by
 # scripts/build-heritage-register.py --refresh
 .cache/
+
+# Original full-resolution photos Dr Non supplied for the About essay.
+# Resized, renamed, web-ready copies are committed at site/public/about/ —
+# these originals stay local as the source, not duplicated into git history.
+public/photos/

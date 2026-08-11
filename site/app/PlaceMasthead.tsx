@@ -5,15 +5,16 @@ import Link from "next/link";
 export function PlaceMasthead() {
   return (
     <header className="register-masthead">
-      <Link className="register-wordmark" href="/" aria-label="BKKx home">
+      <Link className="register-wordmark" href="/" aria-label="BKKxC(ulture) home">
         <span>BKK</span>
         <b>x</b>
+        <em>C(ulture)</em>
       </Link>
       <nav className="register-nav" aria-label="Primary navigation">
-        <Link href="/#quarters">Quarters</Link>
-        <Link href="/#walks">Walks</Link>
-        <Link href="/#register">Register</Link>
-        <Link href="/worlds">The worlds</Link>
+        <Link href="/heritage#quarters">Quarters</Link>
+        <Link href="/heritage#walks">Walks</Link>
+        <Link href="/heritage#register">Register</Link>
+        <Link href="/about">About</Link>
         <a href="https://github.com/Nonarkara/BKKx" target="_blank" rel="noreferrer">
           GitHub
         </a>

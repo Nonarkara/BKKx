@@ -42,9 +42,10 @@ export function HomepageClient({ quarters, initialQuarter }: Props) {
   return (
     <div className="atlas-shell">
       <header className="atlas-shell-masthead" aria-label="BKKx primary">
-        <Link className="register-wordmark" href="/" aria-label="BKKx home">
+        <Link className="register-wordmark" href="/" aria-label="BKKxC(ulture) home">
           <span>BKK</span>
           <b>x</b>
+          <em>C(ulture)</em>
         </Link>
         <div className="atlas-shell-masthead-meta">
           <span className="register-eyebrow">
@@ -59,6 +60,7 @@ export function HomepageClient({ quarters, initialQuarter }: Props) {
         <nav className="atlas-shell-nav" aria-label="Heritage navigation">
           <Link href="/heritage#register">Register</Link>
           <Link href="/heritage#walks">Walks</Link>
+          <Link href="/about">About</Link>
         </nav>
       </header>
 

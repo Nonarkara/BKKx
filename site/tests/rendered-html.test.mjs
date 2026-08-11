@@ -28,7 +28,7 @@ test("renders the Bangkok walkthrough at /worlds", async () => {
   assert.match(response.headers.get("content-type") ?? "", /^text\/html\b/i);
 
   const html = await response.text();
-  assert.match(html, /<title>The Minecraft worlds · BKKx<\/title>/i);
+  assert.match(html, /<title>The Minecraft worlds · BKKxC\(ulture\)<\/title>/i);
   assert.match(html, /Bangkok,/);
   assert.match(html, /block by block\./);
   assert.match(html, /Ratchathewi/);
@@ -45,7 +45,7 @@ test("renders the 3D atlas page for a district", async () => {
   assert.match(response.headers.get("content-type") ?? "", /^text\/html\b/i);
 
   const html = await response.text();
-  assert.match(html, /<title>Ratchathewi — 3D atlas · BKKx<\/title>/i);
+  assert.match(html, /<title>Ratchathewi — 3D atlas · BKKxC\(ulture\)<\/title>/i);
   assert.match(html, /Ratchathewi/);
   assert.match(html, /ราชเทวี/);
   assert.match(html, /Victory Monument/);
@@ -243,5 +243,23 @@ test("heritage places data is internally consistent", async () => {
         `${walk.slug}: route line does not start at stop 1`,
       );
     }
+  }
+});
+
+test("renders the About page with all nine essay photos", async () => {
+  const response = await render("/about");
+  assert.equal(response.status, 200);
+  const html = await response.text();
+  assert.match(html, /The city that never got the plaque/);
+  assert.match(html, /Thammasat/);
+  assert.match(html, /Penang.*Kyoto.*Vienna.*Graz.*Prague.*Warsaw.*Krakow.*Wigan/s);
+  assert.match(html, /571 monuments/);
+  for (const file of [
+    "dr-non-siam-square.jpg", "dr-non-thammasat.jpg", "wat-arun-lasers.jpg",
+    "temples-everywhere.jpg", "foodstalls-at-night.jpg", "safe-city-night.jpg",
+    "shophouses-midnight.jpg", "alley-wat-arun-view.jpg", "bangkok-waterfront.jpg",
+    "open-space-oldtown.jpg",
+  ]) {
+    assert.match(html, new RegExp(`/about/${file}`), `missing photo ${file}`);
   }
 });

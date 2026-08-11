@@ -113,6 +113,17 @@ button {
   font-weight: 800;
 }
 
+.wordmark em {
+  margin-left: 7px;
+  align-self: flex-end;
+  padding-bottom: 3px;
+  color: var(--muted);
+  font-size: 13px;
+  font-style: normal;
+  font-weight: 600;
+  letter-spacing: 0;
+}
+
 .site-header nav {
   display: flex;
   gap: clamp(18px, 3vw, 42px);
@@ -1670,6 +1681,17 @@ footer small { grid-column: 1 / -1; margin-top: 60px; padding-top: 24px; border-
   color: var(--seal);
   font-size: calc(var(--size-up) * 1.35);
   font-weight: 700;
+}
+
+.register-wordmark em {
+  margin-left: 6px;
+  align-self: flex-end;
+  padding-bottom: 3px;
+  color: var(--quiet);
+  font-size: calc(var(--size-down) * 0.95);
+  font-style: normal;
+  font-weight: 500;
+  letter-spacing: 0;
 }
 
 .register-nav {
