@@ -3,6 +3,8 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { PlaceMasthead } from "../../PlaceMasthead";
 import { PlaceMap } from "../../PlaceMap";
+import { AreaProse, AreaTagline } from "../AreaProse";
+import { MonumentStatus } from "../../walks/MonumentStatus";
 import {
   AREAS,
   areaBySlug,
@@ -58,7 +60,7 @@ export default async function AreaPage({ params }: Props) {
           {area.name}
           <small lang="th">{area.thai}</small>
         </h1>
-        <p className="place-tagline">{area.tagline}</p>
+        <AreaTagline area={area} />
 
         {photo ? (
           <figure className="register-figure">
@@ -74,11 +76,7 @@ export default async function AreaPage({ params }: Props) {
           </figure>
         ) : null}
 
-        <div className="register-intro">
-          {area.prose.map((p) => (
-            <p key={p.slice(0, 32)}>{p}</p>
-          ))}
-        </div>
+        <AreaProse area={area} />
       </article>
 
       <section className="register-explorer place-page">
@@ -110,7 +108,9 @@ export default async function AreaPage({ params }: Props) {
                     aria-hidden="true"
                   />
                   <span lang="th">{m.name}</span>
-                  <small>{m.registered ? "gazetted" : "awaiting consideration"}</small>
+                  <small>
+                    <MonumentStatus registered={m.registered} />
+                  </small>
                 </li>
               ))}
             </ul>

@@ -2857,3 +2857,47 @@ footer small { grid-column: 1 / -1; margin-top: 60px; padding-top: 24px; border-
     min-height: 70vh;
   }
 }
+
+/* ---- language toggle (Editorial + Console mastheads share this) ---- */
+
+.lang-toggle {
+  display: inline-flex;
+  border: 1px solid currentColor;
+  opacity: 0.7;
+}
+
+.lang-toggle button {
+  min-height: 44px;
+  min-width: 40px;
+  border: 0;
+  background: transparent;
+  padding: 0 10px;
+  color: inherit;
+  font-family: inherit;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+}
+
+.lang-toggle button + button {
+  border-left: 1px solid currentColor;
+}
+
+.lang-toggle button.is-active {
+  background: currentColor;
+}
+
+.register-nav .lang-toggle,
+.atlas-shell-nav .lang-toggle {
+  color: var(--ink);
+}
+
+.register-nav .lang-toggle button.is-active,
+.atlas-shell-nav .lang-toggle button.is-active {
+  color: var(--paper);
+}
+
+.wordmark ~ * .lang-toggle {
+  color: var(--paper);
+}

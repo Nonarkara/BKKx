@@ -303,3 +303,47 @@ test("renders the About page with all nine essay photos", async () => {
     assert.match(html, new RegExp(`/about/${file}`), `missing photo ${file}`);
   }
 });
+
+test("Thai translations cover every area and walk slug, with no stray keys", async () => {
+  const { default: places } = await import("../app/data/heritage-places.json", {
+    with: { type: "json" },
+  });
+  const { AREA_TH, WALK_TH, ABOUT_TH } = await import("../app/data/heritage-translations-th.ts");
+
+  const areaSlugs = new Set(places.areas.map((a) => a.slug));
+  const walkSlugs = new Set(places.walks.map((w) => w.slug));
+
+  for (const slug of areaSlugs) {
+    assert.ok(AREA_TH[slug], `AREA_TH missing translation for ${slug}`);
+    assert.ok(AREA_TH[slug].prose.length >= 1, `AREA_TH[${slug}] has no prose`);
+  }
+  for (const key of Object.keys(AREA_TH)) {
+    assert.ok(areaSlugs.has(key), `AREA_TH has a stray slug not in heritage-places.json: ${key}`);
+  }
+
+  for (const walk of places.walks) {
+    const t = WALK_TH[walk.slug];
+    assert.ok(t, `WALK_TH missing translation for ${walk.slug}`);
+    for (const stop of walk.stops) {
+      assert.ok(
+        typeof t.stops[stop.name] === "string" && t.stops[stop.name].length > 0,
+        `WALK_TH[${walk.slug}] missing stop translation for "${stop.name}"`,
+      );
+    }
+  }
+  for (const key of Object.keys(WALK_TH)) {
+    assert.ok(walkSlugs.has(key), `WALK_TH has a stray slug not in heritage-places.json: ${key}`);
+  }
+
+  assert.equal(ABOUT_TH.paragraphs.length, 9, "About essay Thai translation must have exactly 9 paragraphs");
+  for (const key of ["portrait", "thammasat", "watarun1", "temples", "foodstalls", "safecity", "shophouses", "alley", "waterfront", "openspace"]) {
+    assert.ok(ABOUT_TH.captions[key], `ABOUT_TH.captions missing "${key}"`);
+  }
+});
+
+test("EN and TH dictionaries have exactly matching key sets", async () => {
+  const { DICTIONARY } = await import("../app/i18n/dictionary.ts");
+  const enKeys = Object.keys(DICTIONARY.en).sort();
+  const thKeys = Object.keys(DICTIONARY.th).sort();
+  assert.deepEqual(thKeys, enKeys, "dictionary.ts: en/th key sets diverged");
+});

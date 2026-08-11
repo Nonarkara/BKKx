@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { IBM_Plex_Sans_Thai, JetBrains_Mono } from "next/font/google";
+import { LocaleProvider } from "./i18n/LocaleContext";
 import "./globals.css";
 
 // Sao Chingcha (self-hosted, declared in globals.css) is the site's face.
@@ -69,7 +70,9 @@ export default function RootLayout({
     // one level down on <body> is invisible to it, the whole chain computes
     // to nothing, and everything silently falls back to system-ui.
     <html lang="en" className={`${plexThai.variable} ${mono.variable}`}>
-      <body>{children}</body>
+      <body>
+        <LocaleProvider>{children}</LocaleProvider>
+      </body>
     </html>
   );
 }
