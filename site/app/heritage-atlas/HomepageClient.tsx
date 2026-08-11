@@ -53,26 +53,12 @@ export function HomepageClient({ quarters, initialQuarter }: Props) {
           <strong>Bangkok&apos;s heritage, block by block.</strong>
           <small>
             The 3D map is the front door. Nine quarters, seven walks, 571
-            registered monuments, the Minecraft worlds that let you walk
-            them.
+            registered monuments — pick a quarter and fly there.
           </small>
         </div>
         <nav className="atlas-shell-nav" aria-label="Heritage navigation">
-          <Link href="/#register">Register</Link>
-          <Link href="/heritage">Walks</Link>
-          <Link href="/worlds">The worlds</Link>
-          <Link
-            className="atlas-shell-download"
-            href="/atlas/ratchathewi"
-          >
-            Walk Ratchathewi <span aria-hidden="true">↓</span>
-          </Link>
-          <Link
-            className="atlas-shell-download"
-            href="/atlas/historic-core"
-          >
-            Walk Old Town <span aria-hidden="true">↓</span>
-          </Link>
+          <Link href="/heritage#register">Register</Link>
+          <Link href="/heritage#walks">Walks</Link>
         </nav>
       </header>
 
@@ -113,21 +99,23 @@ export function HomepageClient({ quarters, initialQuarter }: Props) {
             })}
           </ol>
 
-          <p className="register-eyebrow atlas-shell-quarters-after">Side offers</p>
+          <p className="register-eyebrow atlas-shell-quarters-after">Source</p>
           <p className="atlas-shell-side">
-            <Link href="/atlas/ratchathewi">Minecraft world · Ratchathewi (4.96 × 2.95 km)</Link>
-            <Link href="/atlas/historic-core">Minecraft world · Historic Core (3.38 × 3.22 km)</Link>
-            <Link href="/worlds">All worlds, manifest, install instructions</Link>
             <a href="https://github.com/Nonarkara/BKKx" target="_blank" rel="noreferrer">
               Source on GitHub
             </a>
           </p>
 
           <p className="atlas-shell-footnote">
-            This heritage 3D view is served by bkk.nonarkara.org and is separate
-            from Bangkok&apos;s operational city twin. Data: OpenStreetMap (ODbL),
-            Fine Arts Department register and BMA planning context. See{" "}
-            <Link href="/#register">the register</Link> for source notes.
+            This heritage 3D view is one of two BKKx systems — the operational
+            city twin lives separately at{" "}
+            <a href="https://atlas.nonarkara.org" target="_blank" rel="noreferrer">
+              atlas.nonarkara.org
+            </a>
+            . Data here: OpenStreetMap (ODbL), Fine Arts Department register
+            and BMA planning context. See{" "}
+            <Link href="/heritage#register">the register</Link> for source
+            notes.
           </p>
         </aside>
 

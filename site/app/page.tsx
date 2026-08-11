@@ -25,12 +25,12 @@ import { HomepageClient } from "./heritage-atlas/HomepageClient";
 export const metadata: Metadata = {
   title: "Bangkok's heritage, block by block",
   description:
-    "An open 3D atlas of Bangkok's heritage: nine quarters from the royal island to Bang Krachao, 571 registered ancient monuments, seven walks, and the Minecraft worlds that let you walk them block by block.",
+    "An open 3D atlas of Bangkok's heritage: nine quarters from the royal island to Bang Krachao, 571 registered ancient monuments, and seven documented walks — the culture half of the BKKx pair, alongside the operational city twin at atlas.nonarkara.org.",
   alternates: { canonical: "/" },
   openGraph: {
     title: "Bangkok's heritage, block by block · BKKx",
     description:
-      "9 quarters, 7 walks, 571 registered monuments — and the Minecraft worlds that let you walk them. The 3D map is the front door.",
+      "9 quarters, 7 walks, 571 registered monuments. The 3D map is the front door.",
     url: "https://bkk.nonarkara.org",
   },
 };
@@ -42,7 +42,7 @@ const structuredData = {
   alternateName: "BKKx",
   url: "https://bkk.nonarkara.org",
   description:
-    "The heritage-focused 3D atlas of Bangkok: 9 quarters, 7 walks, 571 registered monuments, and the Minecraft worlds that let you walk them block by block.",
+    "The heritage-focused 3D atlas of Bangkok: 9 quarters, 7 walks, 571 registered monuments — the sibling system to Bangkok's operational digital twin at atlas.nonarkara.org.",
   creator: { "@type": "Person", name: "Non Arkara", url: "https://nonarkara.org" },
 };
 

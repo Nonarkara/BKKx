@@ -89,8 +89,17 @@ test("serves the 3D map heritage atlas as the front door", async () => {
   assert.match(html, /Rattanakosin/);
   assert.match(html, /Bang Krachao/);
   assert.match(html, /Kudi Chin/);
-  // Side offers (Minecraft worlds), not a section
-  assert.match(html, /Minecraft world/);
+  // Register/Walks nav connects to the real anchors on /heritage, not a
+  // dead #register on this page or a bare /heritage top scroll.
+  assert.match(html, /href="\/heritage#register"/);
+  assert.match(html, /href="\/heritage#walks"/);
+  // The Minecraft-worlds CTAs and nav tab were placeholders from the
+  // pre-redesign era (worlds built before the heritage pivot) and are
+  // gone from primary chrome as of 2026-08-11 — the front door promotes
+  // the register and walks, not a world download.
+  assert.doesNotMatch(html, /Walk Ratchathewi/);
+  assert.doesNotMatch(html, /Walk Old Town/);
+  assert.doesNotMatch(html, />The worlds</);
   // Editorial register chrome (the shell) is here, the actual
   // register moved to /heritage.
   assert.match(html, /block by block/);

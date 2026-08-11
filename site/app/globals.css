@@ -2572,15 +2572,6 @@ footer small { grid-column: 1 / -1; margin-top: 60px; padding-top: 24px; border-
 .atlas-shell-nav a:hover {
   border-bottom-color: var(--ink);
 }
-.atlas-shell-nav a.atlas-shell-download {
-  background: var(--ink);
-  color: var(--paper-strong);
-  padding: 6px 12px;
-  border: 0;
-}
-.atlas-shell-nav a.atlas-shell-download:hover {
-  background: var(--seal, #8c2f23);
-}
 
 .atlas-shell-body {
   display: grid;
