@@ -1378,6 +1378,93 @@ footer small { grid-column: 1 / -1; margin-top: 60px; padding-top: 24px; border-
   letter-spacing: 0.02em;
 }
 
+/* ==========================================================================
+   Data.go.th POI Layers (5 layers: temples, royal-temples, museums, etc.)
+   Color-coded swatches on chips; small icon+label DOM markers on the map.
+   ========================================================================== */
+
+.bkkx-poi-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  --poi-color: #888;
+}
+
+.bkkx-poi-chip .poi-chip-dot {
+  width: 8px;
+  height: 8px;
+  background: var(--poi-color);
+  flex-shrink: 0;
+  border-radius: 0; /* sharp edges per BKKx house style */
+}
+
+.bkkx-poi-chip.active {
+  border-color: var(--poi-color);
+  background: color-mix(in srgb, var(--poi-color) 22%, transparent);
+  color: var(--paper-strong);
+}
+
+.bkkx-poi-marker {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 6px;
+  background: rgba(15, 18, 22, 0.92);
+  border: 1px solid var(--poi-color, #888);
+  border-left: 3px solid var(--poi-color, #888);
+  color: var(--poi-color, #ccc);
+  font-family: var(--font-display);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(6px);
+  transition: background 120ms ease, color 120ms ease, transform 120ms ease;
+  transform: translate(-50%, -100%);
+  z-index: 8;
+  border-radius: 0;
+  max-width: 160px;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.bkkx-poi-marker:hover {
+  background: var(--poi-color, #888);
+  color: #0d1014;
+  transform: translate(-50%, -106%) scale(1.04);
+}
+
+.bkkx-poi-marker .poi-icon {
+  font-size: 11px;
+  line-height: 1;
+}
+
+.bkkx-poi-marker .poi-label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Subdued label when 460 temples are on — drop the label, keep the dot */
+.bkkx-poi-marker.bkkx-poi-temple .poi-label {
+  display: none;
+}
+
+.bkkx-poi-marker.bkkx-poi-temple {
+  padding: 4px 5px;
+}
+
+/* POI inspector card — same shell as heritage but tinted with --poi-color */
+.bkkx-poi-card {
+  --poi-color: #888;
+  border-left: 4px solid var(--poi-color);
+}
+.bkkx-poi-card-temple { --poi-color: #9c4a2b; }
+.bkkx-poi-card-royal-temple { --poi-color: #6b4f8c; }
+.bkkx-poi-card-national-museum { --poi-color: #3a3a3a; }
+.bkkx-poi-card-national-archive { --poi-color: #5f8a26; }
+.bkkx-poi-card-national-library { --poi-color: #2c5f7c; }
+
 /* Layer Toggle Group in Control Overlay */
 .btn-group-layers {
   display: flex;

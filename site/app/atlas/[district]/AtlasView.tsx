@@ -242,6 +242,109 @@ function isLiveRain(weatherCode: number | null, precipitation: number | null): b
   return typeof weatherCode === "number" && weatherCode >= 51 && weatherCode <= 99;
 }
 
+// ---------------------------------------------------------------------------
+// 5 data.go.th POI layers — see site/public/pois/<kind>.geojson
+// ---------------------------------------------------------------------------
+
+type PoiKind = "temple" | "royal-temple" | "national-museum" | "national-library" | "national-archive";
+
+type PoiFeature = {
+  type: "Feature";
+  geometry: { type: "Point"; coordinates: [number, number] };
+  properties: {
+    id: string;
+    kind: PoiKind;
+    name_th: string;
+    name_en?: string | null;
+    address?: string | null;
+    sub_district?: string | null;
+    district?: string | null;
+    province?: string | null;
+    postal_code?: string | null;
+    // kind-specific
+    temple_class?: string | null;
+    sect?: string | null;
+    established_be?: string | null;
+    kathin_type?: string | null;
+    museum_type?: string | null;
+    museum_branch?: string | null;
+    is_ancient_site?: string | null;
+    source: string;
+    source_url: string;
+  };
+};
+
+type PoiFeatureCollection = {
+  type: "FeatureCollection";
+  kind: PoiKind;
+  label_th: string;
+  label_en: string;
+  source: string;
+  source_url: string;
+  features: PoiFeature[];
+};
+
+type PoiLayerSpec = {
+  kind: PoiKind;
+  file: string;
+  label: string;
+  labelTh: string;
+  icon: string;
+  // Muted palette — distinct from each other and from the signal yellow / alarm
+  // red / amber layers. Inspired by the heritage fine-arts reg markers, but
+  // quieter so 4 layers can coexist without screaming.
+  color: string;
+  defaultOn: boolean;
+};
+
+const POI_LAYERS: PoiLayerSpec[] = [
+  {
+    kind: "temple",
+    file: "/pois/temples.geojson",
+    label: "Temples",
+    labelTh: "วัด",
+    icon: "🛕",
+    color: "#9c4a2b",
+    defaultOn: false, // 460 pins — opt-in to keep the map clean
+  },
+  {
+    kind: "royal-temple",
+    file: "/pois/royal-temples.geojson",
+    label: "Royal Temples",
+    labelTh: "พระอารามหลวง",
+    icon: "👑",
+    color: "#6b4f8c",
+    defaultOn: true,
+  },
+  {
+    kind: "national-museum",
+    file: "/pois/national-museums.geojson",
+    label: "National Museums",
+    labelTh: "พิพิธภัณฑสถานแห่งชาติ",
+    icon: "🏛️",
+    color: "#3a3a3a",
+    defaultOn: true,
+  },
+  {
+    kind: "national-archive",
+    file: "/pois/national-archives.geojson",
+    label: "National Archives",
+    labelTh: "หอจดหมายเหตุแห่งชาติ",
+    icon: "📜",
+    color: "#5f8a26",
+    defaultOn: true,
+  },
+  {
+    kind: "national-library",
+    file: "/pois/national-libraries.geojson",
+    label: "National Libraries",
+    labelTh: "หอสมุดแห่งชาติ",
+    icon: "📚",
+    color: "#2c5f7c",
+    defaultOn: true,
+  },
+];
+
 export function AtlasView({ world, embedded = false, initialView }: Props) {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const mapRef = useRef<maplibregl.Map | null>(null);
@@ -270,6 +373,33 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
   const heritageMarkerRefs = useRef<maplibregl.Marker[]>([]);
   const [selectedWalkSlug, setSelectedWalkSlug] = useState<string | null>(null);
   const [walkGeometry, setWalkGeometry] = useState<Record<string, { line: LngLat[] }> | null>(null);
+
+  // 5 data.go.th POI layers — each is a static GeoJSON of <500 KB
+  // served from /pois/. The 4 smaller layers are on by default; the 460-pin
+  // temples layer is opt-in.
+  const [showPoi, setShowPoi] = useState<Record<PoiKind, boolean>>(() => {
+    const init = {} as Record<PoiKind, boolean>;
+    for (const l of POI_LAYERS) init[l.kind] = l.defaultOn;
+    return init;
+  });
+  const [poiData, setPoiData] = useState<Record<PoiKind, PoiFeature[] | null>>(() => {
+    const init = {} as Record<PoiKind, PoiFeature[] | null>;
+    for (const l of POI_LAYERS) init[l.kind] = null;
+    return init;
+  });
+  const [poiCounts, setPoiCounts] = useState<Record<PoiKind, number>>(() => {
+    const init = {} as Record<PoiKind, number>;
+    for (const l of POI_LAYERS) init[l.kind] = 0;
+    return init;
+  });
+  const [selectedPoi, setSelectedPoi] = useState<PoiFeature | null>(null);
+  const poiMarkerRefs = useRef<Record<PoiKind, maplibregl.Marker[]>>({
+    temple: [],
+    "royal-temple": [],
+    "national-museum": [],
+    "national-archive": [],
+    "national-library": [],
+  });
 
   // Command Copy State
   const [copied, setCopied] = useState(false);
@@ -364,6 +494,31 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
       .catch((err) => console.warn("bkkx: walk geometry fetch failed", err));
   }, [hasHistoricContext]);
 
+  // 5 data.go.th POI layers — fetched once, only the visible ones get markers.
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      for (const layer of POI_LAYERS) {
+        try {
+          const res = await fetch(layer.file);
+          if (!res.ok) {
+            console.warn(`bkkx: ${layer.file} returned ${res.status}`);
+            continue;
+          }
+          const data = (await res.json()) as PoiFeatureCollection;
+          if (cancelled) return;
+          setPoiData((prev) => ({ ...prev, [layer.kind]: data.features }));
+          setPoiCounts((prev) => ({ ...prev, [layer.kind]: data.features.length }));
+        } catch (err) {
+          console.warn(`bkkx: ${layer.file} fetch failed`, err);
+        }
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
   const historicCoreWalks = useMemo(
     () => WALKS.filter((walk) => HISTORIC_CORE_WALK_SLUGS.includes(walk.slug)),
     [],
@@ -399,6 +554,15 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
     let active = true;
     let mapInstance: maplibregl.Map | null = null;
     let resizeObserverInstance: ResizeObserver | null = null;
+    // Snapshot the POI marker ref at effect-time so the cleanup can iterate
+    // a stable object even if React re-renders between effect and teardown.
+    const poiMarkerSnapshot: Record<PoiKind, maplibregl.Marker[]> = {
+      temple: [...poiMarkerRefs.current.temple],
+      "royal-temple": [...poiMarkerRefs.current["royal-temple"]],
+      "national-museum": [...poiMarkerRefs.current["national-museum"]],
+      "national-archive": [...poiMarkerRefs.current["national-archive"]],
+      "national-library": [...poiMarkerRefs.current["national-library"]],
+    };
 
     import("maplibre-gl").then((MapLibreModule) => {
       if (!active) return;
@@ -669,12 +833,62 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
       markerRefs.current = [];
       heritageMarkerRefs.current.forEach((marker) => marker.remove());
       heritageMarkerRefs.current = [];
+      // Clean up POI markers on map teardown
+      for (const kind of Object.keys(poiMarkerSnapshot) as PoiKind[]) {
+        poiMarkerSnapshot[kind].forEach((m) => m.remove());
+      }
       if (mapInstance) {
         mapInstance.remove();
       }
       mapRef.current = null;
     };
   }, [world, hasHistoricContext, initialView]);
+
+  // Mount / unmount POI markers whenever (a) the map is ready,
+  // (b) data is loaded, or (c) the user toggles a layer.
+  useEffect(() => {
+    const map = mapRef.current;
+    if (!map || !mapReady) return;
+    for (const layer of POI_LAYERS) {
+      const wantVisible = showPoi[layer.kind];
+      const features = poiData[layer.kind];
+      const existing = poiMarkerRefs.current[layer.kind];
+
+      // Always tear down existing markers for this kind first; we'll
+      // re-add only the ones for the current toggle state. This is O(n)
+      // per toggle but the kinds are small (≤460), and it's simpler
+      // than tracking per-marker diffs.
+      existing.forEach((m) => m.remove());
+      poiMarkerRefs.current[layer.kind] = [];
+
+      if (!wantVisible || !features) continue;
+
+      for (const feat of features) {
+        const el = document.createElement("button");
+        el.type = "button";
+        el.className = `bkkx-poi-marker bkkx-poi-${layer.kind}`;
+        el.setAttribute("aria-label", `${layer.label}: ${feat.properties.name_th}`);
+        el.title = feat.properties.name_th;
+        el.innerHTML = `<span class="poi-icon" aria-hidden="true">${layer.icon}</span><span class="poi-label">${layer.label.split(" ")[0]}</span>`;
+        el.addEventListener("click", (event) => {
+          event.preventDefault();
+          event.stopPropagation();
+          setSelectedPoi(feat);
+          map.flyTo({
+            center: feat.geometry.coordinates as [number, number],
+            zoom: 16.4,
+            pitch: 60,
+            speed: 0.8,
+            essential: true,
+          });
+        });
+        const marker = new maplibregl.Marker({ element: el, anchor: "bottom" })
+          .setLngLat(feat.geometry.coordinates as [number, number])
+          .addTo(map);
+        poiMarkerRefs.current[layer.kind].push(marker);
+      }
+    }
+  }, [showPoi, poiData, mapReady]);
 
   // Synchronize Zoning Layer visibility
   useEffect(() => {
@@ -969,6 +1183,39 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
 
             {hasHistoricContext && (
               <div className="control-row">
+                <small className="control-label">Data.go.th POI Layers</small>
+                <div className="btn-group-layers" role="group" aria-label="Data.go.th POI Layers">
+                  {POI_LAYERS.map((layer) => (
+                    <button
+                      key={layer.kind}
+                      type="button"
+                      onClick={() =>
+                        setShowPoi((prev) => ({ ...prev, [layer.kind]: !prev[layer.kind] }))
+                      }
+                      className={`layer-toggle-btn bkkx-poi-chip ${showPoi[layer.kind] ? "active" : ""}`}
+                      aria-pressed={showPoi[layer.kind]}
+                      aria-label={`Toggle ${layer.label} layer (${poiCounts[layer.kind]} pins)`}
+                      style={
+                        {
+                          ["--poi-color" as string]: layer.color,
+                        } as React.CSSProperties
+                      }
+                    >
+                      <span className="poi-chip-dot" aria-hidden="true" />
+                      {layer.icon} {layer.label} ({poiCounts[layer.kind]})
+                    </button>
+                  ))}
+                </div>
+                <small className="control-source-note">
+                  From data.go.th &amp; data.bangkok.go.th open-data registries. BKK
+                  bbox only (lng 100.2–101.0, lat 13.4–14.2).{" "}
+                  <a href="https://data.go.th" target="_blank" rel="noreferrer">data.go.th</a>
+                </small>
+              </div>
+            )}
+
+            {hasHistoricContext && (
+              <div className="control-row">
                 <small className="control-label">Walks</small>
                 <div className="btn-group-walks" role="group" aria-label="Show a walk's route">
                   {historicCoreWalks.map((walk) => (
@@ -1045,6 +1292,66 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
             </p>
           </div>
         )}
+
+        {/* Data.go.th POI Inspector Card */}
+        {hasHistoricContext && selectedPoi && (() => {
+          const p = selectedPoi.properties;
+          const layer = POI_LAYERS.find((l) => l.kind === p.kind);
+          // Build a kind-aware meta grid.  Empty fields are simply omitted.
+          const meta: Array<[string, string | null | undefined]> = [];
+          if (p.district) meta.push(["District / เขต", p.district]);
+          if (p.sub_district) meta.push(["Sub-district / แขวง", p.sub_district]);
+          if (p.province) meta.push(["Province / จังหวัด", p.province]);
+          if (p.postal_code) meta.push(["Postal code", p.postal_code]);
+          if (p.sect) meta.push(["Sect", p.sect]);
+          if (p.temple_class) meta.push(["Class", p.temple_class]);
+          if (p.established_be) meta.push(["Established (B.E.)", p.established_be]);
+          if (p.kathin_type) meta.push(["Royal kathin", p.kathin_type]);
+          if (p.museum_type) meta.push(["Type", p.museum_type]);
+          if (p.museum_branch) meta.push(["Branch", p.museum_branch]);
+          if (p.is_ancient_site && p.is_ancient_site !== "-")
+            meta.push(["Is ancient site", p.is_ancient_site]);
+          return (
+            <div
+              className={`heritage-inspector-card bkkx-poi-card bkkx-poi-card-${p.kind}`}
+              role="dialog"
+              aria-modal="false"
+              aria-label={`${layer?.label}: ${p.name_th}`}
+            >
+              <div className="heritage-card-header">
+                <div className="heritage-badge-group">
+                  <span className="heritage-reg-badge" lang="th">{layer?.icon} {layer?.labelTh}</span>
+                  {p.id ? <span className="heritage-era-badge">{p.id}</span> : null}
+                </div>
+                <button
+                  type="button"
+                  className="heritage-close-btn"
+                  onClick={() => setSelectedPoi(null)}
+                  aria-label="Close POI details"
+                >
+                  ✕
+                </button>
+              </div>
+              <h4 lang="th">{p.name_th}</h4>
+              {p.address ? <p className="heritage-thai" lang="th">{p.address}</p> : null}
+              {meta.length > 0 && (
+                <div className="heritage-meta-grid">
+                  {meta.map(([label, value]) => (
+                    <div key={label}>
+                      <span>{label}</span>
+                      <strong lang={/[\u0E00-\u0E7F]/.test(value ?? "") ? "th" : undefined}>{value}</strong>
+                    </div>
+                  ))}
+                </div>
+              )}
+              <p className="heritage-source-note">
+                <a href={p.source_url} target="_blank" rel="noreferrer">{p.source}</a>
+                {" · "}BKK-bbox subset
+                {p.kind === "royal-temple" ? " · Geocoded via OpenStreetMap Nominatim, ODbL" : null}
+              </p>
+            </div>
+          );
+        })()}
       </div>
 
       {!embedded && <aside className="atlas-panel" aria-live="polite">

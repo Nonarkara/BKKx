@@ -56,6 +56,13 @@ export const DICTIONARY = {
     walk_from_stop: "m from stop",
     walk_min_walk: "min walk",
 
+    // data.go.th POI layers (5 toggles in the atlas GIS panel)
+    poi_legend_label: "Data.go.th POI Layers",
+    poi_legend_caption:
+      "From data.go.th & data.bangkok.go.th open-data registries. BKK bbox only (lng 100.2–101.0, lat 13.4–14.2).",
+    poi_pin_label: "pin",
+    poi_pins_label: "pins",
+
     lang_toggle_label: "Language",
   },
   th: {
@@ -109,6 +116,12 @@ export const DICTIONARY = {
     walk_min_walk: "นาทีเดิน",
     walk_nearby_eyebrow: "ใกล้เคียง · เศรษฐกิจริมถนน",
     walk_nearby_source: "OpenStreetMap (ODbL) · เรียงตามระยะทางจากจุด",
+
+    poi_legend_label: "ชั้นข้อมูล POI จาก data.go.th",
+    poi_legend_caption:
+      "จากทะเบียนข้อมูลเปิด data.go.th และ data.bangkok.go.th กรองเฉพาะในกรุงเทพมหานคร (lng 100.2–101.0, lat 13.4–14.2)",
+    poi_pin_label: "จุด",
+    poi_pins_label: "จุด",
 
     lang_toggle_label: "ภาษา",
   },

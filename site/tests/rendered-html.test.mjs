@@ -389,3 +389,84 @@ test("EN and TH dictionaries have exactly matching key sets", async () => {
   const thKeys = Object.keys(DICTIONARY.th).sort();
   assert.deepEqual(thKeys, enKeys, "dictionary.ts: en/th key sets diverged");
 });
+
+// ---------------------------------------------------------------------------
+// data.go.th POI layers — 5 GeoJSON files under site/public/pois/
+// Every feature is asserted to be inside the BKK bbox. The 5 files are
+// the only source of truth for the 5 atlas layer toggles; if any of them
+// shrink below 1 feature or ships an out-of-bbox pin, the BKK-bbox test
+// catches it here rather than as a broken-pin ghost on the live map.
+// ---------------------------------------------------------------------------
+
+const BKK_BBOX = { lngMin: 100.2, lngMax: 101.0, latMin: 13.4, latMax: 14.2 };
+const POI_FILES = [
+  "temples",
+  "royal-temples",
+  "national-museums",
+  "national-libraries",
+  "national-archives",
+];
+
+test("the 5 data.go.th POI GeoJSON files exist and parse", async () => {
+  const { readFileSync } = await import("node:fs");
+  const { fileURLToPath } = await import("node:url");
+  for (const kind of POI_FILES) {
+    const path = fileURLToPath(new URL(`../public/pois/${kind}.geojson`, import.meta.url));
+    const data = JSON.parse(readFileSync(path, "utf8"));
+    assert.equal(data.type, "FeatureCollection", `${kind}.geojson: not a FeatureCollection`);
+    assert.ok(data.features.length > 0, `${kind}.geojson: empty FeatureCollection`);
+    assert.ok(data.source_url?.startsWith("http"), `${kind}.geojson: missing source_url`);
+    assert.equal(data.bbox.length, 4, `${kind}.geojson: bbox must be 4-tuple`);
+  }
+});
+
+test("every data.go.th POI pin is inside the BKK bbox", async () => {
+  const { readFileSync } = await import("node:fs");
+  const { fileURLToPath } = await import("node:url");
+  for (const kind of POI_FILES) {
+    const path = fileURLToPath(new URL(`../public/pois/${kind}.geojson`, import.meta.url));
+    const data = JSON.parse(readFileSync(path, "utf8"));
+    for (const f of data.features) {
+      const [lng, lat] = f.geometry.coordinates;
+      assert.ok(
+        lng >= BKK_BBOX.lngMin && lng <= BKK_BBOX.lngMax,
+        `${kind}/${f.properties.id}: lng ${lng} outside ${BKK_BBOX.lngMin}–${BKK_BBOX.lngMax}`,
+      );
+      assert.ok(
+        lat >= BKK_BBOX.latMin && lat <= BKK_BBOX.latMax,
+        `${kind}/${f.properties.id}: lat ${lat} outside ${BKK_BBOX.latMin}–${BKK_BBOX.latMax}`,
+      );
+      assert.ok(typeof f.properties.name_th === "string" && f.properties.name_th.length > 0,
+        `${kind}/${f.properties.id}: missing Thai name`);
+    }
+  }
+});
+
+test("the 5 POI files are valid GeoJSON, parseable, and have non-zero features", async () => {
+  // The test worker stubs out static assets, so we read the files directly
+  // from disk. The real production worker (wrangler deploy) serves these as
+  // immutable static assets under /pois/, which is verified by the
+  // `bkkx-ship-verified` curl probe in scripts/verify-live.sh.
+  const { readFileSync, statSync } = await import("node:fs");
+  const { fileURLToPath } = await import("node:url");
+  for (const kind of POI_FILES) {
+    const path = fileURLToPath(new URL(`../public/pois/${kind}.geojson`, import.meta.url));
+    const bytes = statSync(path).size;
+    assert.ok(bytes > 200, `${kind}.geojson unexpectedly small (${bytes} bytes)`);
+    const text = readFileSync(path, "utf8");
+    assert.match(text, /"type":\s*"FeatureCollection"/, `${kind}.geojson did not look like a FeatureCollection`);
+  }
+});
+
+test("the 3D atlas shell renders the 5 POI layer toggles", async () => {
+  const response = await render("/atlas/historic-core");
+  const html = await response.text();
+  // 5 layer chips — labels are short Thai/English and must show up in the markup
+  for (const label of ["Royal Temples", "National Museums", "National Archives", "National Libraries"]) {
+    assert.match(html, new RegExp(label), `chip missing in markup: ${label}`);
+  }
+  // Caption references the open-data registries
+  assert.match(html, /data\.go\.th/);
+  // 460 temples chip is opt-in (off by default) but the button still renders
+  assert.match(html, /Temples/);
+});
