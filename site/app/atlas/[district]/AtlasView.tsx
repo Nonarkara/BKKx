@@ -15,6 +15,7 @@ import {
   BKK_URBAN_ZONING_NOTE,
 } from "../../data/zoning-planning";
 import { WALKS, photoFor } from "../../data/heritage-content";
+import { OLDTOWN_SPOTS } from "../../data/oldtown-spots";
 
 // The walks that geographically belong to Historic Core — everything except
 // bang-krachao-loop, a disconnected bike loop far south of the old town.
@@ -243,10 +244,10 @@ function isLiveRain(weatherCode: number | null, precipitation: number | null): b
 }
 
 // ---------------------------------------------------------------------------
-// 5 data.go.th POI layers — see site/public/pois/<kind>.geojson
+// 6 POI layers — 5 from data.go.th, 1 sourced BKKx rowhouse atlas.
 // ---------------------------------------------------------------------------
 
-type PoiKind = "temple" | "royal-temple" | "national-museum" | "national-library" | "national-archive";
+type PoiKind = "temple" | "royal-temple" | "national-museum" | "national-library" | "national-archive" | "oldtown";
 
 type PoiFeature = {
   type: "Feature";
@@ -269,6 +270,18 @@ type PoiFeature = {
     museum_type?: string | null;
     museum_branch?: string | null;
     is_ancient_site?: string | null;
+    // oldtown (BKKx hand-curated)
+    callout?: string | null;
+    calloutTh?: string | null;
+    note?: string | null;
+    noteTh?: string | null;
+    photo?: string | null;
+    period?: string | null;
+    typology?: string | null;
+    evidence?: string | null;
+    explorer_tip?: string | null;
+    register_id?: string | null;
+    units?: number | null;
     source: string;
     source_url: string;
   };
@@ -286,7 +299,7 @@ type PoiFeatureCollection = {
 
 type PoiLayerSpec = {
   kind: PoiKind;
-  file: string;
+  file?: string;
   label: string;
   labelTh: string;
   icon: string;
@@ -314,7 +327,7 @@ const POI_LAYERS: PoiLayerSpec[] = [
     labelTh: "พระอารามหลวง",
     icon: "👑",
     color: "#6b4f8c",
-    defaultOn: true,
+    defaultOn: false,
   },
   {
     kind: "national-museum",
@@ -323,7 +336,7 @@ const POI_LAYERS: PoiLayerSpec[] = [
     labelTh: "พิพิธภัณฑสถานแห่งชาติ",
     icon: "🏛️",
     color: "#3a3a3a",
-    defaultOn: true,
+    defaultOn: false,
   },
   {
     kind: "national-archive",
@@ -332,7 +345,7 @@ const POI_LAYERS: PoiLayerSpec[] = [
     labelTh: "หอจดหมายเหตุแห่งชาติ",
     icon: "📜",
     color: "#5f8a26",
-    defaultOn: true,
+    defaultOn: false,
   },
   {
     kind: "national-library",
@@ -341,9 +354,41 @@ const POI_LAYERS: PoiLayerSpec[] = [
     labelTh: "หอสมุดแห่งชาติ",
     icon: "📚",
     color: "#2c5f7c",
+    defaultOn: false,
+  },
+  {
+    kind: "oldtown",
+    label: "Rowhouse fabric",
+    labelTh: "แผนที่ตึกแถว",
+    icon: "▥",
+    color: "#e0a23a",
     defaultOn: true,
   },
 ];
+
+const OLDTOWN_POI_FEATURES: PoiFeature[] = OLDTOWN_SPOTS.map((spot) => ({
+  type: "Feature",
+  geometry: { type: "Point", coordinates: spot.center },
+  properties: {
+    id: spot.slug,
+    kind: "oldtown",
+    name_th: spot.thai,
+    name_en: spot.name,
+    callout: spot.callout,
+    calloutTh: spot.calloutTh,
+    note: spot.note,
+    noteTh: spot.noteTh,
+    photo: spot.photo,
+    period: spot.period,
+    typology: spot.typology,
+    evidence: spot.evidence,
+    explorer_tip: spot.explorerTip,
+    register_id: spot.registerId ?? null,
+    units: spot.units ?? null,
+    source: spot.source,
+    source_url: spot.sourceUrl,
+  },
+}));
 
 export function AtlasView({ world, embedded = false, initialView }: Props) {
   const containerRef = useRef<HTMLDivElement | null>(null);
@@ -388,12 +433,12 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
   });
   const [poiData, setPoiData] = useState<Record<PoiKind, PoiFeature[] | null>>(() => {
     const init = {} as Record<PoiKind, PoiFeature[] | null>;
-    for (const l of POI_LAYERS) init[l.kind] = null;
+    for (const l of POI_LAYERS) init[l.kind] = l.kind === "oldtown" ? OLDTOWN_POI_FEATURES : null;
     return init;
   });
   const [poiCounts, setPoiCounts] = useState<Record<PoiKind, number>>(() => {
     const init = {} as Record<PoiKind, number>;
-    for (const l of POI_LAYERS) init[l.kind] = 0;
+    for (const l of POI_LAYERS) init[l.kind] = l.kind === "oldtown" ? OLDTOWN_POI_FEATURES.length : 0;
     return init;
   });
   const [selectedPoi, setSelectedPoi] = useState<PoiFeature | null>(null);
@@ -403,6 +448,7 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
     "national-museum": [],
     "national-archive": [],
     "national-library": [],
+    oldtown: [],
   });
 
   // Command Copy State
@@ -503,6 +549,7 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
     let cancelled = false;
     (async () => {
       for (const layer of POI_LAYERS) {
+        if (!layer.file) continue;
         try {
           const res = await fetch(layer.file);
           if (!res.ok) {
@@ -566,6 +613,7 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
       "national-museum": [...poiMarkerRefs.current["national-museum"]],
       "national-archive": [...poiMarkerRefs.current["national-archive"]],
       "national-library": [...poiMarkerRefs.current["national-library"]],
+      oldtown: [...poiMarkerRefs.current.oldtown],
     };
 
     import("maplibre-gl").then((MapLibreModule) => {
@@ -873,6 +921,7 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
         const el = document.createElement("button");
         el.type = "button";
         el.className = `bkkx-poi-marker bkkx-poi-${layer.kind}`;
+        el.style.setProperty("--poi-color", layer.color);
         el.setAttribute("aria-label", `${layer.label}: ${feat.properties.name_th}`);
         el.title = feat.properties.name_th;
         el.innerHTML = `<span class="poi-icon" aria-hidden="true">${layer.icon}</span><span class="poi-label">${layer.label.split(" ")[0]}</span>`;
@@ -1083,8 +1132,39 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
           <div className="weather-haze-overlay" style={{ opacity: hazeOpacity }} />
         )}
 
-        {/* Floating Atmosphere & Tour control deck */}
-        <div className="atlas-control-overlay">
+        {embedded && hasHistoricContext && (
+          <div className="atlas-embed-tools" aria-label="Map layers">
+            <span className="atlas-embed-tools-label">Explore</span>
+            <button
+              type="button"
+              className={showPoi.oldtown ? "active" : ""}
+              onClick={() => setShowPoi((prev) => ({ ...prev, oldtown: !prev.oldtown }))}
+              aria-pressed={showPoi.oldtown}
+            >
+              ▥ Rowhouses {poiCounts.oldtown}
+            </button>
+            <button
+              type="button"
+              className={showHeritage ? "active" : ""}
+              onClick={() => setShowHeritage((prev) => !prev)}
+              aria-pressed={showHeritage}
+            >
+              🏛 Register {FINEARTS_HERITAGE_SITES.length}
+            </button>
+            <button
+              type="button"
+              className={showZoning ? "active" : ""}
+              onClick={() => setShowZoning((prev) => !prev)}
+              aria-pressed={showZoning}
+            >
+              ⌁ Context
+            </button>
+            <Link href="/atlas/historic-core" target="_top">Full controls ↗</Link>
+          </div>
+        )}
+
+        {/* Full Atmosphere & Tour deck belongs to the standalone atlas. */}
+        {!embedded && <div className="atlas-control-overlay">
           <div className="control-section">
             <div className="control-header">
               <span>ATMOSPHERE ENGINE</span>
@@ -1241,7 +1321,7 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
               </div>
             )}
           </div>
-        </div>
+        </div>}
 
         {/* Heritage Inspector Card Popup */}
         {hasHistoricContext && selectedHeritage && (
@@ -1317,6 +1397,13 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
           if (p.museum_branch) meta.push(["Branch", p.museum_branch]);
           if (p.is_ancient_site && p.is_ancient_site !== "-")
             meta.push(["Is ancient site", p.is_ancient_site]);
+          if (p.kind === "oldtown") {
+            if (p.period) meta.push(["Period", p.period]);
+            if (p.typology) meta.push(["Typology", p.typology]);
+            if (p.evidence) meta.push(["Evidence", p.evidence]);
+            if (p.units) meta.push(["Documented units", String(p.units)]);
+            if (p.register_id) meta.push(["Register / award", p.register_id]);
+          }
           return (
             <div
               className={`heritage-inspector-card bkkx-poi-card bkkx-poi-card-${p.kind}`}
@@ -1338,8 +1425,35 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
                   ✕
                 </button>
               </div>
-              <h4 lang="th">{p.name_th}</h4>
+              {p.kind === "oldtown" && p.photo ? (
+                <figure className="heritage-card-photo">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={`/heritage/photos/${p.photo}.jpg`} alt={p.name_th} loading="lazy" />
+                  {photoFor(p.photo) ? (
+                    <figcaption>
+                      Photo: {photoFor(p.photo)!.artist} ·{" "}
+                      <a href={photoFor(p.photo)!.descriptionUrl} target="_blank" rel="noreferrer">
+                        Wikimedia Commons
+                      </a>{" "}
+                      · {photoFor(p.photo)!.licence}
+                    </figcaption>
+                  ) : null}
+                </figure>
+              ) : null}
+              <h4>{p.name_en ?? p.name_th}</h4>
+              {p.name_en ? <p className="heritage-thai" lang="th">{p.name_th}</p> : null}
+              {p.kind === "oldtown" && p.callout ? (
+                <p className="heritage-thai">
+                  <strong lang="th">{p.calloutTh ?? p.callout}</strong>
+                </p>
+              ) : null}
               {p.address ? <p className="heritage-thai" lang="th">{p.address}</p> : null}
+              {p.kind === "oldtown" && p.note ? (
+                <p className="heritage-desc">{p.note}</p>
+              ) : null}
+              {p.kind === "oldtown" && p.explorer_tip ? (
+                <p className="bkkx-explorer-tip"><strong>Explorer note</strong>{p.explorer_tip}</p>
+              ) : null}
               {meta.length > 0 && (
                 <div className="heritage-meta-grid">
                   {meta.map(([label, value]) => (
@@ -1354,6 +1468,7 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
                 <a href={p.source_url} target="_blank" rel="noreferrer">{p.source}</a>
                 {" · "}BKK-bbox subset
                 {p.kind === "royal-temple" ? " · Geocoded via OpenStreetMap Nominatim, ODbL" : null}
+                {p.kind === "oldtown" ? " · BKKx hand-curated · Photo: Wikimedia Commons, ODbL" : null}
               </p>
             </div>
           );

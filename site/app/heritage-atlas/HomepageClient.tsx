@@ -5,6 +5,7 @@ import { useRef, useState } from "react";
 import { useLocale } from "../i18n/LocaleContext";
 import { LangToggle } from "../i18n/LangToggle";
 import { AREA_TH } from "../data/heritage-translations-th";
+import { OldTownPicks } from "./OldTownPicks";
 
 type Quarter = {
   slug: string;
@@ -32,6 +33,7 @@ export function HomepageClient({ quarters, initialQuarter }: Props) {
   const { t, locale } = useLocale();
   const th = locale === "th";
   const [activeSlug, setActiveSlug] = useState<string | null>(initialQuarter ?? null);
+  const [railView, setRailView] = useState<"rowhouses" | "quarters">("rowhouses");
   const [iframeKey, setIframeKey] = useState(0);
   const iframeRef = useRef<HTMLIFrameElement | null>(null);
 
@@ -61,6 +63,7 @@ export function HomepageClient({ quarters, initialQuarter }: Props) {
           <small>{t("front_door_tagline")}</small>
         </div>
         <nav className="atlas-shell-nav" aria-label="Heritage navigation">
+          <Link href="/rowhouses">Rowhouses</Link>
           <Link href="/heritage#register">{t("nav_register")}</Link>
           <Link href="/heritage#walks">{t("nav_walks")}</Link>
           <Link href="/about">{t("nav_about")}</Link>
@@ -70,12 +73,34 @@ export function HomepageClient({ quarters, initialQuarter }: Props) {
 
       <div className="atlas-shell-body">
         <aside className="atlas-shell-quarters" aria-label="Heritage quarters">
-          <p className="register-eyebrow">{t("nav_quarters")}</p>
-          <h2 className="register-section-title atlas-shell-quarters-title">
-            {t("home_quarters_heading")}
-          </h2>
-          <p className="atlas-shell-quarters-lede">{t("quarters_lede")}</p>
-          <ol className="atlas-shell-quarter-chips">
+          <div className="atlas-shell-rail-tabs" role="tablist" aria-label="Explore Bangkok heritage">
+            <button
+              type="button"
+              role="tab"
+              aria-selected={railView === "rowhouses"}
+              className={railView === "rowhouses" ? "is-active" : ""}
+              onClick={() => setRailView("rowhouses")}
+            >
+              {th ? "ตึกแถว 15" : "Rowhouses 15"}
+            </button>
+            <button
+              type="button"
+              role="tab"
+              aria-selected={railView === "quarters"}
+              className={railView === "quarters" ? "is-active" : ""}
+              onClick={() => setRailView("quarters")}
+            >
+              {th ? "ย่าน 9" : "Quarters 9"}
+            </button>
+          </div>
+
+          {railView === "rowhouses" ? <OldTownPicks iframeRef={iframeRef} /> : <section className="atlas-shell-quarter-view">
+            <p className="register-eyebrow">{t("nav_quarters")}</p>
+            <h2 className="register-section-title atlas-shell-quarters-title">
+              {t("home_quarters_heading")}
+            </h2>
+            <p className="atlas-shell-quarters-lede">{t("quarters_lede")}</p>
+            <ol className="atlas-shell-quarter-chips">
             {quarters.map((q) => {
               const isActive = q.slug === activeSlug;
               const tag = th ? AREA_TH[q.slug]?.tagline ?? q.tagline : q.tagline;
@@ -117,7 +142,8 @@ export function HomepageClient({ quarters, initialQuarter }: Props) {
                 </li>
               );
             })}
-          </ol>
+            </ol>
+          </section>}
 
           <p className="register-eyebrow atlas-shell-quarters-after">{t("home_source_label")}</p>
           <p className="atlas-shell-side">

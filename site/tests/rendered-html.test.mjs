@@ -72,8 +72,8 @@ test("returns 404 for an unknown atlas district", async () => {
 test("serves the 3D map heritage atlas as the front door", async () => {
   // The 3D map is the homepage (2026-08-11 redesign). The Editorial
   // register content moved to /heritage; BKK's own heritage map iframe
-  // fills the page, with a 9-quarter quick-jump
-  // panel in the side. No "choose your district" gate.
+  // fills the page, with the sourced rowhouse atlas first and the nine
+  // quarter jumps one tab away. No "choose your district" gate.
   const response = await render("/");
   assert.equal(response.status, 200);
   assert.match(response.headers.get("content-type") ?? "", /^text\/html\b/i);
@@ -84,11 +84,12 @@ test("serves the 3D map heritage atlas as the front door", async () => {
   assert.match(html, /atlas-shell-map/);
   assert.match(html, /src="\/atlas\/historic-core\?embed=1"/);
   assert.doesNotMatch(html, /src="https:\/\/atlas\.nonarkara\.org/i);
-  // 9 quarters as quick-jumps
-  assert.match(html, /atlas-shell-quarter-chips/);
-  assert.match(html, /Rattanakosin/);
-  assert.match(html, /Bang Krachao/);
-  assert.match(html, /Kudi Chin/);
+  // Rowhouses are the useful default; quarters remain in the client tab.
+  assert.match(html, /Bangkok rowhouse atlas/);
+  assert.match(html, /Rowhouses 15/);
+  assert.match(html, /Quarters 9/);
+  assert.match(html, /Na Phra Lan shophouses/);
+  assert.match(html, /Hua Takhe old canal market/);
   // Register/Walks nav connects to the real anchors on /heritage, not a
   // dead #register on this page or a bare /heritage top scroll.
   assert.match(html, /href="\/heritage#register"/);
@@ -103,6 +104,33 @@ test("serves the 3D map heritage atlas as the front door", async () => {
   // Editorial register chrome (the shell) is here, the actual
   // register moved to /heritage.
   assert.match(html, /block by block/);
+  assert.match(html, /application\/ld\+json/);
+});
+
+test("rowhouse atlas entries are sourced, geolocated, and evidence-labelled", async () => {
+  const { OLDTOWN_SPOTS } = await import("../app/data/oldtown-spots.ts");
+  assert.ok(OLDTOWN_SPOTS.length >= 15, "rowhouse atlas must cover at least 15 clusters");
+  const slugs = new Set();
+  for (const spot of OLDTOWN_SPOTS) {
+    assert.ok(!slugs.has(spot.slug), `duplicate rowhouse slug: ${spot.slug}`);
+    slugs.add(spot.slug);
+    assert.ok(spot.sourceUrl.startsWith("https://"), `${spot.slug}: source must be HTTPS`);
+    assert.ok(["registered", "published inventory", "mapped corridor"].includes(spot.evidence), `${spot.slug}: invalid evidence label`);
+    const [lng, lat] = spot.center;
+    assert.ok(lng >= 100.2 && lng <= 101.0 && lat >= 13.4 && lat <= 14.2, `${spot.slug}: outside Bangkok bbox`);
+    assert.ok(spot.note.length > 60, `${spot.slug}: note is too thin`);
+    assert.ok(spot.explorerTip.length > 30, `${spot.slug}: explorer tip is too thin`);
+  }
+});
+
+test("serves the rowhouse research directory", async () => {
+  const response = await render("/rowhouses");
+  assert.equal(response.status, 200);
+  const html = await response.text();
+  assert.match(html, /Bangkok is a city of rows/);
+  assert.match(html, /Evidence, not aesthetic guesswork/);
+  assert.match(html, /Na Phra Lan shophouses/);
+  assert.match(html, /Talat Phlu railway-market rows/);
   assert.match(html, /application\/ld\+json/);
 });
 

@@ -1,4 +1,28 @@
 {
+ "na-phra-lan": {
+  "slot": "na-phra-lan",
+  "title": "File:(2023) ตึกแถวริมถนนหน้าพระลาน เขตพระนคร กรุงเทพมหานคร (1).jpg",
+  "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0f/%282023%29_%E0%B8%95%E0%B8%B6%E0%B8%81%E0%B9%81%E0%B8%96%E0%B8%A7%E0%B8%A3%E0%B8%B4%E0%B8%A1%E0%B8%96%E0%B8%99%E0%B8%99%E0%B8%AB%E0%B8%99%E0%B9%89%E0%B8%B2%E0%B8%9E%E0%B8%A3%E0%B8%B0%E0%B8%A5%E0%B8%B2%E0%B8%99_%E0%B9%80%E0%B8%82%E0%B8%95%E0%B8%9E%E0%B8%A3%E0%B8%B0%E0%B8%99%E0%B8%84%E0%B8%A3_%E0%B8%81%E0%B8%A3%E0%B8%B8%E0%B8%87%E0%B9%80%E0%B8%97%E0%B8%9E%E0%B8%A1%E0%B8%AB%E0%B8%B2%E0%B8%99%E0%B8%84%E0%B8%A3_%281%29.jpg/1280px-%282023%29_%E0%B8%95%E0%B8%B6%E0%B8%81%E0%B9%81%E0%B8%96%E0%B8%A7%E0%B8%A3%E0%B8%B4%E0%B8%A1%E0%B8%96%E0%B8%99%E0%B8%99%E0%B8%AB%E0%B8%99%E0%B9%89%E0%B8%B2%E0%B8%9E%E0%B8%A3%E0%B8%B0%E0%B8%A5%E0%B8%B2%E0%B8%99_%E0%B9%80%E0%B8%82%E0%B8%95%E0%B8%9E%E0%B8%A3%E0%B8%B0%E0%B8%99%E0%B8%84%E0%B8%A3_%E0%B8%81%E0%B8%A3%E0%B8%B8%E0%B8%87%E0%B9%80%E0%B8%97%E0%B8%9E%E0%B8%A1%E0%B8%AB%E0%B8%B2%E0%B8%99%E0%B8%84%E0%B8%A3_%281%29.jpg",
+  "descriptionUrl": "https://commons.wikimedia.org/wiki/File:%282023%29_%E0%B8%95%E0%B8%B6%E0%B8%81%E0%B9%81%E0%B8%96%E0%B8%A7%E0%B8%A3%E0%B8%B4%E0%B8%A1%E0%B8%96%E0%B8%99%E0%B8%99%E0%B8%AB%E0%B8%99%E0%B9%89%E0%B8%B2%E0%B8%9E%E0%B8%A3%E0%B8%B0%E0%B8%A5%E0%B8%B2%E0%B8%99_%E0%B9%80%E0%B8%82%E0%B8%95%E0%B8%9E%E0%B8%A3%E0%B8%B0%E0%B8%99%E0%B8%84%E0%B8%A3_%E0%B8%81%E0%B8%A3%E0%B8%B8%E0%B8%87%E0%B9%80%E0%B8%97%E0%B8%9E%E0%B8%A1%E0%B8%AB%E0%B8%B2%E0%B8%99%E0%B8%84%E0%B8%A3_%281%29.jpg",
+  "licence": "CC BY-SA 4.0",
+  "artist": "กสิณธร ราชโอรส",
+  "width": 1280,
+  "height": 961,
+  "file": "/heritage/photos/na-phra-lan.jpg",
+  "bytes": 420353
+ },
+ "tha-tien": {
+  "slot": "tha-tien",
+  "title": "File:ตึกแถวท่าเตียน.jpg",
+  "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/84/%E0%B8%95%E0%B8%B6%E0%B8%81%E0%B9%81%E0%B8%96%E0%B8%A7%E0%B8%97%E0%B9%88%E0%B8%B2%E0%B9%80%E0%B8%95%E0%B8%B5%E0%B8%A2%E0%B8%99.jpg/1280px-%E0%B8%95%E0%B8%B6%E0%B8%81%E0%B9%81%E0%B8%96%E0%B8%A7%E0%B8%97%E0%B9%88%E0%B8%B2%E0%B9%80%E0%B8%95%E0%B8%B5%E0%B8%A2%E0%B8%99.jpg",
+  "descriptionUrl": "https://commons.wikimedia.org/wiki/File:%E0%B8%95%E0%B8%B6%E0%B8%81%E0%B9%81%E0%B8%96%E0%B8%A7%E0%B8%97%E0%B9%88%E0%B8%B2%E0%B9%80%E0%B8%95%E0%B8%B5%E0%B8%A2%E0%B8%99.jpg",
+  "licence": "CC BY-SA 4.0",
+  "artist": "I3LACK1CE",
+  "width": 1280,
+  "height": 960,
+  "file": "/heritage/photos/tha-tien.jpg",
+  "bytes": 264495
+ },
  "rattanakosin": {
   "slot": "rattanakosin",
   "title": "File:Chakra Maha Prasat Throne Hall Grand Palace Bangkok aerial photo by Don Ramey Logan.jpg",
