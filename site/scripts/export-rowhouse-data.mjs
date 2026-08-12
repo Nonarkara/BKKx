@@ -2,11 +2,13 @@ import { mkdir, writeFile } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { OLDTOWN_SPOTS } from "../app/data/oldtown-spots.ts";
+import { onepRecordsForSlug } from "../app/data/onep-rowhouse-register.ts";
 
 const here = dirname(fileURLToPath(import.meta.url));
 const output = resolve(here, "../public/data/bangkok-rowhouse-atlas.geojson");
 
 const features = OLDTOWN_SPOTS.flatMap((spot) => {
+  const onepRecords = onepRecordsForSlug(spot.slug);
   const properties = {
     slug: spot.slug,
     name_en: spot.name,
@@ -17,6 +19,8 @@ const features = OLDTOWN_SPOTS.flatMap((spot) => {
     evidence: spot.evidence,
     documented_units: spot.units ?? null,
     register_id: spot.registerId ?? null,
+    onep_survey_ids: onepRecords.map((record) => record.id),
+    onep_conservation_priorities: [...new Set(onepRecords.map((record) => record.priority))],
     note: spot.note,
     explorer_tip: spot.explorerTip,
     source: spot.source,
@@ -43,7 +47,7 @@ const features = OLDTOWN_SPOTS.flatMap((spot) => {
 const collection = {
   type: "FeatureCollection",
   name: "Bangkok Rowhouse Atlas",
-  dataset_version: "2026-08-12",
+  dataset_version: "2026-08-13.2",
   license: "CC BY 4.0 for BKKx curation; underlying OpenStreetMap geometry is ODbL",
   attribution: "BKKx / Non Arkara; OpenStreetMap contributors; linked institutional and scholarly sources per feature",
   caveat: "Cultural corridors and explorer anchors, not cadastral parcels, statutory conservation zones, or a complete building inventory.",

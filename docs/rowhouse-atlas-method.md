@@ -7,7 +7,7 @@ GeoJSON used outside the application.
 
 ## What one record means
 
-Each of the 22 records represents a documented rowhouse ensemble or cultural corridor, not a single building.
+Each of the 29 records represents a documented rowhouse ensemble or cultural corridor, not a single building.
 It combines:
 
 - an explorer anchor (`Point`) for navigation and map inspection;
@@ -16,7 +16,19 @@ It combines:
 - typology, period, evidence class and a short field-reading prompt;
 - a geometry method and confidence level.
 
-The public file contains 44 features: one point and one line for every record. Record slugs join the two.
+The public file contains 58 features: one point and one line for every record. Record slugs join the two.
+
+## Official Rattanakosin coverage spine
+
+`site/app/data/onep-rowhouse-register.ts` transcribes and crosswalks all 46 category-E records in ONEP's
+*Rattanakosin conservation survey: buildings worthy of conservation and restoration*. The report groups them
+with rowhouse/commercial fabric, but the records themselves comprise 41 rowhouse ensembles, four standalone
+commercial buildings and one related structure. The atlas preserves those distinctions.
+
+Each record retains its official ID, Thai name, five published evaluation scores, total, conservation priority,
+survey zone and zero or more atlas corridor links. A linked record is **located**, not footprint-verified. The
+unlinked records remain visible in a mapping queue rather than disappearing from the interface. This is a source
+reconciliation layer, not a new statutory register.
 
 ## Evidence classes
 

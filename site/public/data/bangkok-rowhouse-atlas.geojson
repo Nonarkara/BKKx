@@ -1,7 +1,7 @@
 {
   "type": "FeatureCollection",
   "name": "Bangkok Rowhouse Atlas",
-  "dataset_version": "2026-08-12",
+  "dataset_version": "2026-08-13.2",
   "license": "CC BY 4.0 for BKKx curation; underlying OpenStreetMap geometry is ODbL",
   "attribution": "BKKx / Non Arkara; OpenStreetMap contributors; linked institutional and scholarly sources per feature",
   "caveat": "Cultural corridors and explorer anchors, not cadastral parcels, statutory conservation zones, or a complete building inventory.",
@@ -19,6 +19,12 @@
         "evidence": "registered",
         "documented_units": null,
         "register_id": "UNESCO Asia-Pacific Award 2011",
+        "onep_survey_ids": [
+          "1E1-063"
+        ],
+        "onep_conservation_priorities": [
+          3
+        ],
         "note": "The Grand Palace is the postcard. This disciplined, tenant-occupied edge is the city-making architecture. Its restoration kept the people and repaired the whole façade as one civic room.",
         "explorer_tip": "Walk the opposite pavement at opening time; the repeated bays read best before tour traffic fills the curb.",
         "source": "UNESCO Asia-Pacific Heritage Awards",
@@ -66,6 +72,12 @@
         "evidence": "registered",
         "documented_units": null,
         "register_id": "UNESCO Asia-Pacific Award 2011",
+        "onep_survey_ids": [
+          "1E1-063"
+        ],
+        "onep_conservation_priorities": [
+          3
+        ],
         "note": "The Grand Palace is the postcard. This disciplined, tenant-occupied edge is the city-making architecture. Its restoration kept the people and repaired the whole façade as one civic room.",
         "explorer_tip": "Walk the opposite pavement at opening time; the repeated bays read best before tour traffic fills the curb.",
         "source": "UNESCO Asia-Pacific Heritage Awards",
@@ -95,6 +107,12 @@
         "evidence": "published inventory",
         "documented_units": 490,
         "register_id": null,
+        "onep_survey_ids": [
+          "1E1-061"
+        ],
+        "onep_conservation_priorities": [
+          3
+        ],
         "note": "Not one building: 490 shop units, a market and a river landing working as a single urban instrument. The smell, wholesale trade and ferry rhythm are part of the heritage—not noise around it.",
         "explorer_tip": "Enter from Maha Rat, cross the market, then look back from the Wat Arun ferry queue.",
         "source": "Journal of Cultural Geography / Tha Tien study",
@@ -138,6 +156,12 @@
         "evidence": "published inventory",
         "documented_units": 490,
         "register_id": null,
+        "onep_survey_ids": [
+          "1E1-061"
+        ],
+        "onep_conservation_priorities": [
+          3
+        ],
         "note": "Not one building: 490 shop units, a market and a river landing working as a single urban instrument. The smell, wholesale trade and ferry rhythm are part of the heritage—not noise around it.",
         "explorer_tip": "Enter from Maha Rat, cross the market, then look back from the Wat Arun ferry queue.",
         "source": "Journal of Cultural Geography / Tha Tien study",
@@ -167,6 +191,12 @@
         "evidence": "registered",
         "documented_units": null,
         "register_id": "FAD-68",
+        "onep_survey_ids": [
+          "1E1-060"
+        ],
+        "onep_conservation_priorities": [
+          3
+        ],
         "note": "A working seam between palace wall, university, amulet trade and river pier. Heritage here is measured by how many different Bangkok lives can still share one short frontage.",
         "explorer_tip": "Take the cross-river boat once. The row is easier to understand from the water than from the pavement.",
         "source": "Fine Arts Department GIS register",
@@ -206,6 +236,12 @@
         "evidence": "registered",
         "documented_units": null,
         "register_id": "FAD-68",
+        "onep_survey_ids": [
+          "1E1-060"
+        ],
+        "onep_conservation_priorities": [
+          3
+        ],
         "note": "A working seam between palace wall, university, amulet trade and river pier. Heritage here is measured by how many different Bangkok lives can still share one short frontage.",
         "explorer_tip": "Take the cross-river boat once. The row is easier to understand from the water than from the pavement.",
         "source": "Fine Arts Department GIS register",
@@ -235,6 +271,13 @@
         "evidence": "published inventory",
         "documented_units": 119,
         "register_id": null,
+        "onep_survey_ids": [
+          "1E1-057",
+          "1E1-062"
+        ],
+        "onep_conservation_priorities": [
+          3
+        ],
         "note": "Three former palace compounds became 119 commercial units and a rare interior square. Bangkok did not copy a colonial port here; it converted royal land into a compact mercantile neighbourhood.",
         "explorer_tip": "Start at Phraeng Phuthon before breakfast, then cut through Phraeng Nara rather than circling the arterial roads.",
         "source": "Nakhara: Evolving Urban Landscape of Sam Phraeng",
@@ -282,6 +325,13 @@
         "evidence": "published inventory",
         "documented_units": 119,
         "register_id": null,
+        "onep_survey_ids": [
+          "1E1-057",
+          "1E1-062"
+        ],
+        "onep_conservation_priorities": [
+          3
+        ],
         "note": "Three former palace compounds became 119 commercial units and a rare interior square. Bangkok did not copy a colonial port here; it converted royal land into a compact mercantile neighbourhood.",
         "explorer_tip": "Start at Phraeng Phuthon before breakfast, then cut through Phraeng Nara rather than circling the arterial roads.",
         "source": "Nakhara: Evolving Urban Landscape of Sam Phraeng",
@@ -311,6 +361,13 @@
         "evidence": "registered",
         "documented_units": null,
         "register_id": "FAD-5604 / FAD-5386",
+        "onep_survey_ids": [
+          "1E1-058",
+          "2E1-068"
+        ],
+        "onep_conservation_priorities": [
+          3
+        ],
         "note": "The curve does the work. These rows turn the Giant Swing from an object into a place, holding the street wall while temple, city hall and specialist shops face one another.",
         "explorer_tip": "Look above the signs. The useful evidence is in parapets, bay widths and the corner turn.",
         "source": "Fine Arts Department GIS register",
@@ -354,6 +411,13 @@
         "evidence": "registered",
         "documented_units": null,
         "register_id": "FAD-5604 / FAD-5386",
+        "onep_survey_ids": [
+          "1E1-058",
+          "2E1-068"
+        ],
+        "onep_conservation_priorities": [
+          3
+        ],
         "note": "The curve does the work. These rows turn the Giant Swing from an object into a place, holding the street wall while temple, city hall and specialist shops face one another.",
         "explorer_tip": "Look above the signs. The useful evidence is in parapets, bay widths and the corner turn.",
         "source": "Fine Arts Department GIS register",
@@ -372,6 +436,348 @@
     },
     {
       "type": "Feature",
+      "id": "bowonniwet-temple-rows-corridor",
+      "properties": {
+        "slug": "bowonniwet-temple-rows",
+        "name_en": "Bowonniwet Temple rows",
+        "name_th": "ตึกแถวหน้าวัดบวรนิเวศวิหาร",
+        "kind": "royal frontage",
+        "period": "1851–1868; later Rama V layers",
+        "typology": "L-shaped one- and two-storey temple-frontage row",
+        "evidence": "published inventory",
+        "documented_units": 46,
+        "register_id": null,
+        "onep_survey_ids": [
+          "2E1-066",
+          "2E1-069"
+        ],
+        "onep_conservation_priorities": [
+          3,
+          4
+        ],
+        "note": "Bangkok's oldest surviving Rattanakosin rowhouse group began as dwellings for Grand Palace officers, then learned to trade without losing its long civic edge. The corner rises, the ordinary bays repeat, and the temple street becomes a room rather than leftover traffic space.",
+        "explorer_tip": "Begin on Phra Sumen Road, turn the corner into Dinso, and watch how the row changes height without breaking its street wall.",
+        "source": "Journal of Architecture and Planning: Rattanakosin shophouse transformation",
+        "source_url": "https://www.jstage.jst.go.jp/article/aija/69/586/69_KJ00004229492/_article/-char/en",
+        "geometry_method": "documented block extent",
+        "geometry_confidence": "high",
+        "feature_role": "cultural corridor"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            100.49892,
+            13.7607
+          ],
+          [
+            100.50018,
+            13.76012
+          ],
+          [
+            100.50039,
+            13.75943
+          ],
+          [
+            100.50053,
+            13.75873
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "bowonniwet-temple-rows-anchor",
+      "properties": {
+        "slug": "bowonniwet-temple-rows",
+        "name_en": "Bowonniwet Temple rows",
+        "name_th": "ตึกแถวหน้าวัดบวรนิเวศวิหาร",
+        "kind": "royal frontage",
+        "period": "1851–1868; later Rama V layers",
+        "typology": "L-shaped one- and two-storey temple-frontage row",
+        "evidence": "published inventory",
+        "documented_units": 46,
+        "register_id": null,
+        "onep_survey_ids": [
+          "2E1-066",
+          "2E1-069"
+        ],
+        "onep_conservation_priorities": [
+          3,
+          4
+        ],
+        "note": "Bangkok's oldest surviving Rattanakosin rowhouse group began as dwellings for Grand Palace officers, then learned to trade without losing its long civic edge. The corner rises, the ordinary bays repeat, and the temple street becomes a room rather than leftover traffic space.",
+        "explorer_tip": "Begin on Phra Sumen Road, turn the corner into Dinso, and watch how the row changes height without breaking its street wall.",
+        "source": "Journal of Architecture and Planning: Rattanakosin shophouse transformation",
+        "source_url": "https://www.jstage.jst.go.jp/article/aija/69/586/69_KJ00004229492/_article/-char/en",
+        "geometry_method": "documented block extent",
+        "geometry_confidence": "high",
+        "feature_role": "explorer anchor"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          100.5002,
+          13.76012
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "tanao-road-rows-corridor",
+      "properties": {
+        "slug": "tanao-road-rows",
+        "name_en": "Tanao Road rows",
+        "name_th": "ตึกแถวริมถนนตะนาว",
+        "kind": "commercial street",
+        "period": "Rama V era",
+        "typology": "Long two-storey masonry street rows in three survey sections",
+        "evidence": "registered",
+        "documented_units": null,
+        "register_id": null,
+        "onep_survey_ids": [
+          "1E1-059",
+          "2E1-067"
+        ],
+        "onep_conservation_priorities": [
+          3
+        ],
+        "note": "Tanao is the quiet north–south stitch of the old city. Its plain early rows do not compete with monuments; they connect Bowonniwet, Khok Wua, Sam Phraeng and the Giant Swing into one walkable sequence of trade, dwelling and worship.",
+        "explorer_tip": "Walk south from the Bowonniwet corner and keep to one pavement; the changing shop signs reveal how much of the repeated upper façade survives.",
+        "source": "ONEP Rattanakosin conservation building survey",
+        "source_url": "https://nced.onep.go.th/knowledge/E_BOOK_Publish_SURVEY.pdf",
+        "geometry_method": "OSM street axis",
+        "geometry_confidence": "high",
+        "feature_role": "cultural corridor"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            100.4983,
+            13.76014
+          ],
+          [
+            100.49854,
+            13.75846
+          ],
+          [
+            100.49882,
+            13.75641
+          ],
+          [
+            100.49888,
+            13.75405
+          ],
+          [
+            100.4985,
+            13.75186
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "tanao-road-rows-anchor",
+      "properties": {
+        "slug": "tanao-road-rows",
+        "name_en": "Tanao Road rows",
+        "name_th": "ตึกแถวริมถนนตะนาว",
+        "kind": "commercial street",
+        "period": "Rama V era",
+        "typology": "Long two-storey masonry street rows in three survey sections",
+        "evidence": "registered",
+        "documented_units": null,
+        "register_id": null,
+        "onep_survey_ids": [
+          "1E1-059",
+          "2E1-067"
+        ],
+        "onep_conservation_priorities": [
+          3
+        ],
+        "note": "Tanao is the quiet north–south stitch of the old city. Its plain early rows do not compete with monuments; they connect Bowonniwet, Khok Wua, Sam Phraeng and the Giant Swing into one walkable sequence of trade, dwelling and worship.",
+        "explorer_tip": "Walk south from the Bowonniwet corner and keep to one pavement; the changing shop signs reveal how much of the repeated upper façade survives.",
+        "source": "ONEP Rattanakosin conservation building survey",
+        "source_url": "https://nced.onep.go.th/knowledge/E_BOOK_Publish_SURVEY.pdf",
+        "geometry_method": "OSM street axis",
+        "geometry_confidence": "high",
+        "feature_role": "explorer anchor"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          100.49882,
+          13.75641
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "tani-road-rows-corridor",
+      "properties": {
+        "slug": "tani-road-rows",
+        "name_en": "Tani Road rows",
+        "name_th": "ตึกแถวถนนตานีและอาคารวรพจน์",
+        "kind": "commercial street",
+        "period": "Rama V–VI era",
+        "typology": "Short east–west lodging and market row",
+        "evidence": "registered",
+        "documented_units": null,
+        "register_id": null,
+        "onep_survey_ids": [
+          "2E1-073"
+        ],
+        "onep_conservation_priorities": [
+          4
+        ],
+        "note": "Tani is easy to dismiss as Khao San's service edge. The official survey asks us to read it differently: as a surviving rowhouse street anchored by Woraphot Building, where small rooms, food and travel have shared a compact frontage for generations.",
+        "explorer_tip": "Arrive before the evening crowd and compare the upper floors at both ends; this is a working street, not an isolated façade.",
+        "source": "ONEP Rattanakosin conservation building survey",
+        "source_url": "https://nced.onep.go.th/knowledge/E_BOOK_Publish_SURVEY.pdf",
+        "geometry_method": "OSM street axis",
+        "geometry_confidence": "high",
+        "feature_role": "cultural corridor"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            100.49688,
+            13.76047
+          ],
+          [
+            100.49794,
+            13.76049
+          ],
+          [
+            100.49907,
+            13.76053
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "tani-road-rows-anchor",
+      "properties": {
+        "slug": "tani-road-rows",
+        "name_en": "Tani Road rows",
+        "name_th": "ตึกแถวถนนตานีและอาคารวรพจน์",
+        "kind": "commercial street",
+        "period": "Rama V–VI era",
+        "typology": "Short east–west lodging and market row",
+        "evidence": "registered",
+        "documented_units": null,
+        "register_id": null,
+        "onep_survey_ids": [
+          "2E1-073"
+        ],
+        "onep_conservation_priorities": [
+          4
+        ],
+        "note": "Tani is easy to dismiss as Khao San's service edge. The official survey asks us to read it differently: as a surviving rowhouse street anchored by Woraphot Building, where small rooms, food and travel have shared a compact frontage for generations.",
+        "explorer_tip": "Arrive before the evening crowd and compare the upper floors at both ends; this is a working street, not an isolated façade.",
+        "source": "ONEP Rattanakosin conservation building survey",
+        "source_url": "https://nced.onep.go.th/knowledge/E_BOOK_Publish_SURVEY.pdf",
+        "geometry_method": "OSM street axis",
+        "geometry_confidence": "high",
+        "feature_role": "explorer anchor"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          100.49794,
+          13.76049
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ban-phan-thom-rows-corridor",
+      "properties": {
+        "slug": "ban-phan-thom-rows",
+        "name_en": "Ban Phan Thom rows",
+        "name_th": "ตึกแถวบ้านพานถม–ถนนพระสุเมรุ",
+        "kind": "community conservation",
+        "period": "Rama V era onward",
+        "typology": "Alley-and-arterial rows at a craft-community edge",
+        "evidence": "registered",
+        "documented_units": null,
+        "register_id": null,
+        "onep_survey_ids": [
+          "2E1-079"
+        ],
+        "onep_conservation_priorities": [
+          4
+        ],
+        "note": "The official record catches the seam between a neighbourhood named for beaten-metal craft and the larger Phra Sumen road. Heritage here is not a decorative strip: it is the small lane, shop depth and domestic life that let a specialised community meet the city.",
+        "explorer_tip": "Turn off Phra Sumen into the smaller lanes; the cultural evidence sits in the change of scale, not in a single landmark.",
+        "source": "ONEP Rattanakosin conservation building survey",
+        "source_url": "https://nced.onep.go.th/knowledge/E_BOOK_Publish_SURVEY.pdf",
+        "geometry_method": "documented block extent",
+        "geometry_confidence": "medium",
+        "feature_role": "cultural corridor"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            100.50098,
+            13.76123
+          ],
+          [
+            100.50164,
+            13.76156
+          ],
+          [
+            100.5021,
+            13.76163
+          ],
+          [
+            100.50305,
+            13.7615
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ban-phan-thom-rows-anchor",
+      "properties": {
+        "slug": "ban-phan-thom-rows",
+        "name_en": "Ban Phan Thom rows",
+        "name_th": "ตึกแถวบ้านพานถม–ถนนพระสุเมรุ",
+        "kind": "community conservation",
+        "period": "Rama V era onward",
+        "typology": "Alley-and-arterial rows at a craft-community edge",
+        "evidence": "registered",
+        "documented_units": null,
+        "register_id": null,
+        "onep_survey_ids": [
+          "2E1-079"
+        ],
+        "onep_conservation_priorities": [
+          4
+        ],
+        "note": "The official record catches the seam between a neighbourhood named for beaten-metal craft and the larger Phra Sumen road. Heritage here is not a decorative strip: it is the small lane, shop depth and domestic life that let a specialised community meet the city.",
+        "explorer_tip": "Turn off Phra Sumen into the smaller lanes; the cultural evidence sits in the change of scale, not in a single landmark.",
+        "source": "ONEP Rattanakosin conservation building survey",
+        "source_url": "https://nced.onep.go.th/knowledge/E_BOOK_Publish_SURVEY.pdf",
+        "geometry_method": "documented block extent",
+        "geometry_confidence": "medium",
+        "feature_role": "explorer anchor"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          100.5021,
+          13.76163
+        ]
+      }
+    },
+    {
+      "type": "Feature",
       "id": "phra-athit-khao-hong-corridor",
       "properties": {
         "slug": "phra-athit-khao-hong",
@@ -383,6 +789,12 @@
         "evidence": "published inventory",
         "documented_units": 9,
         "register_id": null,
+        "onep_survey_ids": [
+          "2E1-072"
+        ],
+        "onep_conservation_priorities": [
+          4
+        ],
         "note": "Only nine bays, but a complete urban sentence: fort, river road, shade trees, homes above trade. Small ensembles like this are where citywide databases usually fail.",
         "explorer_tip": "Pair it with the fort at dusk, then use the river path—not Khao San—as your exit.",
         "source": "Journal of the Siam Society: Old Bangkok shophouses",
@@ -422,6 +834,12 @@
         "evidence": "published inventory",
         "documented_units": 9,
         "register_id": null,
+        "onep_survey_ids": [
+          "2E1-072"
+        ],
+        "onep_conservation_priorities": [
+          4
+        ],
         "note": "Only nine bays, but a complete urban sentence: fort, river road, shade trees, homes above trade. Small ensembles like this are where citywide databases usually fail.",
         "explorer_tip": "Pair it with the fort at dusk, then use the river path—not Khao San—as your exit.",
         "source": "Journal of the Siam Society: Old Bangkok shophouses",
@@ -451,6 +869,12 @@
         "evidence": "published inventory",
         "documented_units": null,
         "register_id": null,
+        "onep_survey_ids": [
+          "3E6-047"
+        ],
+        "onep_conservation_priorities": [
+          4
+        ],
         "note": "Tenants stopped demolition, organised, financed and reopened the restored block in 2022. This is Bangkok's strongest answer to the idea that conservation must arrive from outside the community.",
         "explorer_tip": "Read the whole block before entering a café; the collective project matters more than any single tenancy.",
         "source": "ICCROM Cultural Heritage for Inclusive Growth",
@@ -490,6 +914,12 @@
         "evidence": "published inventory",
         "documented_units": null,
         "register_id": null,
+        "onep_survey_ids": [
+          "3E6-047"
+        ],
+        "onep_conservation_priorities": [
+          4
+        ],
         "note": "Tenants stopped demolition, organised, financed and reopened the restored block in 2022. This is Bangkok's strongest answer to the idea that conservation must arrive from outside the community.",
         "explorer_tip": "Read the whole block before entering a café; the collective project matters more than any single tenancy.",
         "source": "ICCROM Cultural Heritage for Inclusive Growth",
@@ -519,6 +949,8 @@
         "evidence": "mapped corridor",
         "documented_units": null,
         "register_id": null,
+        "onep_survey_ids": [],
+        "onep_conservation_priorities": [],
         "note": "A living supply chain for Chinese ceremonies: paper offerings, calendars, printing, family memory. Its heritage is a network of knowledge held behind ordinary shutters—not a façade treatment.",
         "explorer_tip": "Ask before photographing interiors. Visit ahead of major Chinese festivals when the trade becomes legible.",
         "source": "Asian Journal of Environment-Behaviour Studies",
@@ -558,6 +990,8 @@
         "evidence": "mapped corridor",
         "documented_units": null,
         "register_id": null,
+        "onep_survey_ids": [],
+        "onep_conservation_priorities": [],
         "note": "A living supply chain for Chinese ceremonies: paper offerings, calendars, printing, family memory. Its heritage is a network of knowledge held behind ordinary shutters—not a façade treatment.",
         "explorer_tip": "Ask before photographing interiors. Visit ahead of major Chinese festivals when the trade becomes legible.",
         "source": "Asian Journal of Environment-Behaviour Studies",
@@ -587,6 +1021,12 @@
         "evidence": "registered",
         "documented_units": null,
         "register_id": "FAD-5646",
+        "onep_survey_ids": [
+          "2E6-083"
+        ],
+        "onep_conservation_priorities": [
+          4
+        ],
         "note": "The new cafés are a thin layer. The street's real intelligence is its river-to-warehouse grain: narrow fronts, deep plots, loading alleys and families living over trade.",
         "explorer_tip": "Walk west to east in the morning. Notice where goods—not visitors—still set the rhythm.",
         "source": "Fine Arts Department register + Bangkok cultural reporting",
@@ -634,6 +1074,12 @@
         "evidence": "registered",
         "documented_units": null,
         "register_id": "FAD-5646",
+        "onep_survey_ids": [
+          "2E6-083"
+        ],
+        "onep_conservation_priorities": [
+          4
+        ],
         "note": "The new cafés are a thin layer. The street's real intelligence is its river-to-warehouse grain: narrow fronts, deep plots, loading alleys and families living over trade.",
         "explorer_tip": "Walk west to east in the morning. Notice where goods—not visitors—still set the rhythm.",
         "source": "Fine Arts Department register + Bangkok cultural reporting",
@@ -663,6 +1109,12 @@
         "evidence": "registered",
         "documented_units": null,
         "register_id": "FAD-5648",
+        "onep_survey_ids": [
+          "2E6-082"
+        ],
+        "onep_conservation_priorities": [
+          4
+        ],
         "note": "This is density before towers: tiny frontages, deep stock rooms, handcarts and upper-floor households. It works because the block is porous, not because the buildings are individually grand.",
         "explorer_tip": "Go before 10am and turn into the narrowest passage that is clearly public; the main street hides the system.",
         "source": "Fine Arts Department GIS register",
@@ -706,6 +1158,12 @@
         "evidence": "registered",
         "documented_units": null,
         "register_id": "FAD-5648",
+        "onep_survey_ids": [
+          "2E6-082"
+        ],
+        "onep_conservation_priorities": [
+          4
+        ],
         "note": "This is density before towers: tiny frontages, deep stock rooms, handcarts and upper-floor households. It works because the block is porous, not because the buildings are individually grand.",
         "explorer_tip": "Go before 10am and turn into the narrowest passage that is clearly public; the main street hides the system.",
         "source": "Fine Arts Department GIS register",
@@ -735,6 +1193,8 @@
         "evidence": "mapped corridor",
         "documented_units": null,
         "register_id": null,
+        "onep_survey_ids": [],
+        "onep_conservation_priorities": [],
         "note": "Half masonry, half timber; shrines, repair shops, reused warehouses and homes sharing lanes too narrow for a curated masterplan. The district is valuable because productive mess survives beside new culture.",
         "explorer_tip": "Community tip: go before 9am or after 4pm; midday heat erases the slow details.",
         "source": "Bangkok News / Around Online neighbourhood guide",
@@ -778,6 +1238,8 @@
         "evidence": "mapped corridor",
         "documented_units": null,
         "register_id": null,
+        "onep_survey_ids": [],
+        "onep_conservation_priorities": [],
         "note": "Half masonry, half timber; shrines, repair shops, reused warehouses and homes sharing lanes too narrow for a curated masterplan. The district is valuable because productive mess survives beside new culture.",
         "explorer_tip": "Community tip: go before 9am or after 4pm; midday heat erases the slow details.",
         "source": "Bangkok News / Around Online neighbourhood guide",
@@ -807,6 +1269,12 @@
         "evidence": "mapped corridor",
         "documented_units": null,
         "register_id": null,
+        "onep_survey_ids": [
+          "2E6-081"
+        ],
+        "onep_conservation_priorities": [
+          4
+        ],
         "note": "Barely one hundred metres, yet it joins Charoen Krung and Yaowarat as a complete cultural cross-section. Small streets often carry more city memory per metre than monumental avenues.",
         "explorer_tip": "Treat it as a connector, not a destination: enter from the temple end and leave into the night market.",
         "source": "Bangkok News / Around Online neighbourhood guide",
@@ -846,6 +1314,12 @@
         "evidence": "mapped corridor",
         "documented_units": null,
         "register_id": null,
+        "onep_survey_ids": [
+          "2E6-081"
+        ],
+        "onep_conservation_priorities": [
+          4
+        ],
         "note": "Barely one hundred metres, yet it joins Charoen Krung and Yaowarat as a complete cultural cross-section. Small streets often carry more city memory per metre than monumental avenues.",
         "explorer_tip": "Treat it as a connector, not a destination: enter from the temple end and leave into the night market.",
         "source": "Bangkok News / Around Online neighbourhood guide",
@@ -875,6 +1349,8 @@
         "evidence": "mapped corridor",
         "documented_units": null,
         "register_id": null,
+        "onep_survey_ids": [],
+        "onep_conservation_priorities": [],
         "note": "Food is the entry point, not the whole story. Behind the market are performance histories, artists' houses, a Vietnamese temple and rows where domestic and commercial life never fully separated.",
         "explorer_tip": "Arrive for breakfast, then stay after the food crowd leaves and walk the lanes behind the market hall.",
         "source": "Bangkok News / Around Online neighbourhood guide",
@@ -914,6 +1390,8 @@
         "evidence": "mapped corridor",
         "documented_units": null,
         "register_id": null,
+        "onep_survey_ids": [],
+        "onep_conservation_priorities": [],
         "note": "Food is the entry point, not the whole story. Behind the market are performance histories, artists' houses, a Vietnamese temple and rows where domestic and commercial life never fully separated.",
         "explorer_tip": "Arrive for breakfast, then stay after the food crowd leaves and walk the lanes behind the market hall.",
         "source": "Bangkok News / Around Online neighbourhood guide",
@@ -943,6 +1421,8 @@
         "evidence": "mapped corridor",
         "documented_units": null,
         "register_id": null,
+        "onep_survey_ids": [],
+        "onep_conservation_priorities": [],
         "note": "Bangkok's rowhouse story does not end at the old city wall. Here the frontage faces water: timber rooms, workshops and groceries form a long inhabited section through the canal landscape.",
         "explorer_tip": "Visit on a weekday if you want the architecture; weekends tell the visitor-economy story instead.",
         "source": "Bangkok News / Around Online neighbourhood guide",
@@ -982,6 +1462,8 @@
         "evidence": "mapped corridor",
         "documented_units": null,
         "register_id": null,
+        "onep_survey_ids": [],
+        "onep_conservation_priorities": [],
         "note": "Bangkok's rowhouse story does not end at the old city wall. Here the frontage faces water: timber rooms, workshops and groceries form a long inhabited section through the canal landscape.",
         "explorer_tip": "Visit on a weekday if you want the architecture; weekends tell the visitor-economy story instead.",
         "source": "Bangkok News / Around Online neighbourhood guide",
@@ -1011,6 +1493,8 @@
         "evidence": "mapped corridor",
         "documented_units": null,
         "register_id": null,
+        "onep_survey_ids": [],
+        "onep_conservation_priorities": [],
         "note": "A useful correction to palace-centred heritage: rail, canal, food trade and ordinary rowhouses made a second old Bangkok on the Thonburi side. The network matters more than a single trophy building.",
         "explorer_tip": "Trace one loop from railway to market to canal. Each infrastructure leaves a different rowhouse edge.",
         "source": "Bangkok News / Around Online neighbourhood guide",
@@ -1050,6 +1534,8 @@
         "evidence": "mapped corridor",
         "documented_units": null,
         "register_id": null,
+        "onep_survey_ids": [],
+        "onep_conservation_priorities": [],
         "note": "A useful correction to palace-centred heritage: rail, canal, food trade and ordinary rowhouses made a second old Bangkok on the Thonburi side. The network matters more than a single trophy building.",
         "explorer_tip": "Trace one loop from railway to market to canal. Each infrastructure leaves a different rowhouse edge.",
         "source": "Bangkok News / Around Online neighbourhood guide",
@@ -1079,6 +1565,8 @@
         "evidence": "published inventory",
         "documented_units": null,
         "register_id": null,
+        "onep_survey_ids": [],
+        "onep_conservation_priorities": [],
         "note": "Between the palace-university wall and the river, books, amulets, food and ferry traffic compress into one inhabited edge. Conservation here has already shown its political question: repair the façade, but who gets to remain behind it?",
         "explorer_tip": "Walk from the pier toward Thammasat at opening time; read the upper floors before the pavement becomes a market.",
         "source": "Journal of the Siam Society: CPB heritage inventory",
@@ -1118,6 +1606,8 @@
         "evidence": "published inventory",
         "documented_units": null,
         "register_id": null,
+        "onep_survey_ids": [],
+        "onep_conservation_priorities": [],
         "note": "Between the palace-university wall and the river, books, amulets, food and ferry traffic compress into one inhabited edge. Conservation here has already shown its political question: repair the façade, but who gets to remain behind it?",
         "explorer_tip": "Walk from the pier toward Thammasat at opening time; read the upper floors before the pavement becomes a market.",
         "source": "Journal of the Siam Society: CPB heritage inventory",
@@ -1139,18 +1629,26 @@
       "id": "ban-mo-old-moat-corridor",
       "properties": {
         "slug": "ban-mo-old-moat",
-        "name_en": "Ban Mo–Old City Moat rows",
-        "name_th": "ตึกแถวบ้านหม้อ–คลองคูเมืองเดิม",
+        "name_en": "Asdang–Ban Mo rowhouse block",
+        "name_th": "กลุ่มตึกแถวอัษฎางค์–พระพิทักษ์–บ้านหม้อ",
         "kind": "commercial street",
         "period": "Rama V era onward",
-        "typology": "Western-influenced roadside and canal-edge shophouses",
+        "typology": "Roadside and interior rows organised by canal, street and backlane",
         "evidence": "published inventory",
-        "documented_units": null,
+        "documented_units": 108,
         "register_id": null,
-        "note": "Bangkok's western ornament did not arrive as a colonial masterplan. Along the old moat it was borrowed bay by bay—pilasters, arches and parapets attached to a Thai capital reorganising commerce around roads while the canal still carried memory.",
-        "explorer_tip": "Use the canal as your compass. Compare the upper-storey ornament before following the electronics trade into Ban Mo.",
-        "source": "Damrong Journal: Khlong Khu Mueang Doem shophouses",
-        "source_url": "https://so01.tci-thaijo.org/index.php/damrong/article/view/282766",
+        "onep_survey_ids": [
+          "1E1-065",
+          "3E1-036"
+        ],
+        "onep_conservation_priorities": [
+          3,
+          4
+        ],
+        "note": "A published spatial survey counted 108 roadside units: 45 on Ban Mo, 16 on Phra Phitak and 47 on Asdang, with later rows inside the block. The canalside superblock shows Bangkok making a commercial quarter through incremental streets and backlanes—not a colonial masterplan.",
+        "explorer_tip": "Use Khlong Khu Mueang Doem as your compass, then loop Ban Mo, Phra Phitak and Asdang to read the three different street edges.",
+        "source": "Journal of Architecture and Planning: Rattanakosin shophouse transformation",
+        "source_url": "https://www.jstage.jst.go.jp/article/aija/69/586/69_KJ00004229492/_article/-char/en",
         "geometry_method": "documented block extent",
         "geometry_confidence": "medium",
         "feature_role": "cultural corridor"
@@ -1178,18 +1676,26 @@
       "id": "ban-mo-old-moat-anchor",
       "properties": {
         "slug": "ban-mo-old-moat",
-        "name_en": "Ban Mo–Old City Moat rows",
-        "name_th": "ตึกแถวบ้านหม้อ–คลองคูเมืองเดิม",
+        "name_en": "Asdang–Ban Mo rowhouse block",
+        "name_th": "กลุ่มตึกแถวอัษฎางค์–พระพิทักษ์–บ้านหม้อ",
         "kind": "commercial street",
         "period": "Rama V era onward",
-        "typology": "Western-influenced roadside and canal-edge shophouses",
+        "typology": "Roadside and interior rows organised by canal, street and backlane",
         "evidence": "published inventory",
-        "documented_units": null,
+        "documented_units": 108,
         "register_id": null,
-        "note": "Bangkok's western ornament did not arrive as a colonial masterplan. Along the old moat it was borrowed bay by bay—pilasters, arches and parapets attached to a Thai capital reorganising commerce around roads while the canal still carried memory.",
-        "explorer_tip": "Use the canal as your compass. Compare the upper-storey ornament before following the electronics trade into Ban Mo.",
-        "source": "Damrong Journal: Khlong Khu Mueang Doem shophouses",
-        "source_url": "https://so01.tci-thaijo.org/index.php/damrong/article/view/282766",
+        "onep_survey_ids": [
+          "1E1-065",
+          "3E1-036"
+        ],
+        "onep_conservation_priorities": [
+          3,
+          4
+        ],
+        "note": "A published spatial survey counted 108 roadside units: 45 on Ban Mo, 16 on Phra Phitak and 47 on Asdang, with later rows inside the block. The canalside superblock shows Bangkok making a commercial quarter through incremental streets and backlanes—not a colonial masterplan.",
+        "explorer_tip": "Use Khlong Khu Mueang Doem as your compass, then loop Ban Mo, Phra Phitak and Asdang to read the three different street edges.",
+        "source": "Journal of Architecture and Planning: Rattanakosin shophouse transformation",
+        "source_url": "https://www.jstage.jst.go.jp/article/aija/69/586/69_KJ00004229492/_article/-char/en",
         "geometry_method": "documented block extent",
         "geometry_confidence": "medium",
         "feature_role": "explorer anchor"
@@ -1199,6 +1705,258 @@
         "coordinates": [
           100.4975,
           13.74586
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "srasong-longtha-corridor",
+      "properties": {
+        "slug": "srasong-longtha",
+        "name_en": "Srasong–Longtha rows",
+        "name_th": "ตึกแถวตรอกสระสรง–ลงท่า",
+        "kind": "market row",
+        "period": "Built 1910",
+        "typology": "Privy Purse rental rows aligned with Khlong Lod and backlanes",
+        "evidence": "published inventory",
+        "documented_units": 98,
+        "register_id": null,
+        "onep_survey_ids": [
+          "2E1-075"
+        ],
+        "onep_conservation_priorities": [
+          4
+        ],
+        "note": "Ninety-eight rental shophouses were laid out in 1910 between Wat Suthat and the Khlong Lod edge near Wat Ratchabophit. Parallel rows and service lanes make an urban machine from rent, water access and temple traffic—dense, practical and unmistakably Bangkok.",
+        "explorer_tip": "Enter from the Wat Suthat side and leave toward Khlong Lod; the backlanes explain the block better than a single façade photograph.",
+        "source": "Journal of Architecture and Planning: Rattanakosin shophouse transformation",
+        "source_url": "https://www.jstage.jst.go.jp/article/aija/69/586/69_KJ00004229492/_article/-char/en",
+        "geometry_method": "documented block extent",
+        "geometry_confidence": "medium",
+        "feature_role": "cultural corridor"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            100.4997,
+            13.75003
+          ],
+          [
+            100.50008,
+            13.74949
+          ],
+          [
+            100.50034,
+            13.74908
+          ],
+          [
+            100.50073,
+            13.74848
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "srasong-longtha-anchor",
+      "properties": {
+        "slug": "srasong-longtha",
+        "name_en": "Srasong–Longtha rows",
+        "name_th": "ตึกแถวตรอกสระสรง–ลงท่า",
+        "kind": "market row",
+        "period": "Built 1910",
+        "typology": "Privy Purse rental rows aligned with Khlong Lod and backlanes",
+        "evidence": "published inventory",
+        "documented_units": 98,
+        "register_id": null,
+        "onep_survey_ids": [
+          "2E1-075"
+        ],
+        "onep_conservation_priorities": [
+          4
+        ],
+        "note": "Ninety-eight rental shophouses were laid out in 1910 between Wat Suthat and the Khlong Lod edge near Wat Ratchabophit. Parallel rows and service lanes make an urban machine from rent, water access and temple traffic—dense, practical and unmistakably Bangkok.",
+        "explorer_tip": "Enter from the Wat Suthat side and leave toward Khlong Lod; the backlanes explain the block better than a single façade photograph.",
+        "source": "Journal of Architecture and Planning: Rattanakosin shophouse transformation",
+        "source_url": "https://www.jstage.jst.go.jp/article/aija/69/586/69_KJ00004229492/_article/-char/en",
+        "geometry_method": "documented block extent",
+        "geometry_confidence": "medium",
+        "feature_role": "explorer anchor"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          100.50034,
+          13.74908
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "phraya-si-rows-corridor",
+      "properties": {
+        "slug": "phraya-si-rows",
+        "name_en": "Phraya Si–Si Kak rows",
+        "name_th": "ตึกแถวถนนพระยาศรี–สี่กั๊กพระยาศรี",
+        "kind": "commercial street",
+        "period": "Early Charoen Krung road era onward",
+        "typology": "Intersection rows linking Charoen Krung, Fueang Nakhon and Ban Mo",
+        "evidence": "published inventory",
+        "documented_units": null,
+        "register_id": null,
+        "onep_survey_ids": [
+          "2E1-076",
+          "3E1-038"
+        ],
+        "onep_conservation_priorities": [
+          4
+        ],
+        "note": "At one of old Bangkok's great four-way junctions, the rows reveal how the first modern roads met an older Mon community and specialist trade. The result is not imported colonial order but a Bangkok hinge—royal city, port street and mercantile lane turning around one another.",
+        "explorer_tip": "Stand at Si Kak Phraya Si and rotate slowly: each street carries a different period and trade, but the rowhouse scale holds the junction together.",
+        "source": "Journal of the Siam Society: CPB heritage inventory",
+        "source_url": "https://so06.tci-thaijo.org/index.php/pub_jss/article/download/158293/114676/433613",
+        "geometry_method": "OSM street axis",
+        "geometry_confidence": "high",
+        "feature_role": "cultural corridor"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            100.49686,
+            13.74854
+          ],
+          [
+            100.49755,
+            13.74818
+          ],
+          [
+            100.49829,
+            13.74779
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "phraya-si-rows-anchor",
+      "properties": {
+        "slug": "phraya-si-rows",
+        "name_en": "Phraya Si–Si Kak rows",
+        "name_th": "ตึกแถวถนนพระยาศรี–สี่กั๊กพระยาศรี",
+        "kind": "commercial street",
+        "period": "Early Charoen Krung road era onward",
+        "typology": "Intersection rows linking Charoen Krung, Fueang Nakhon and Ban Mo",
+        "evidence": "published inventory",
+        "documented_units": null,
+        "register_id": null,
+        "onep_survey_ids": [
+          "2E1-076",
+          "3E1-038"
+        ],
+        "onep_conservation_priorities": [
+          4
+        ],
+        "note": "At one of old Bangkok's great four-way junctions, the rows reveal how the first modern roads met an older Mon community and specialist trade. The result is not imported colonial order but a Bangkok hinge—royal city, port street and mercantile lane turning around one another.",
+        "explorer_tip": "Stand at Si Kak Phraya Si and rotate slowly: each street carries a different period and trade, but the rowhouse scale holds the junction together.",
+        "source": "Journal of the Siam Society: CPB heritage inventory",
+        "source_url": "https://so06.tci-thaijo.org/index.php/pub_jss/article/download/158293/114676/433613",
+        "geometry_method": "OSM street axis",
+        "geometry_confidence": "high",
+        "feature_role": "explorer anchor"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          100.49755,
+          13.74818
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "memorial-bridge-rows-corridor",
+      "properties": {
+        "slug": "memorial-bridge-rows",
+        "name_en": "Memorial Bridge bridgehead rows",
+        "name_th": "ตึกแถวเชิงสะพานพระพุทธยอดฟ้า–จักรเพชร",
+        "kind": "market row",
+        "period": "Early 20th century",
+        "typology": "Bridgehead and market-front rows on the Phra Nakhon bank",
+        "evidence": "registered",
+        "documented_units": null,
+        "register_id": null,
+        "onep_survey_ids": [
+          "2E1-077",
+          "2E1-078"
+        ],
+        "onep_conservation_priorities": [
+          4
+        ],
+        "note": "The bridge is usually read as infrastructure and Pak Khlong Talat as spectacle. The surveyed rows between them are the missing urban tissue: small commercial bays absorbing flowers, ferries, road traffic and the daily transfer between Thonburi and the old capital.",
+        "explorer_tip": "Walk from Pak Khlong Talat toward the bridge and look inland before crossing; the edge works as an exchange, not a monument forecourt.",
+        "source": "ONEP Rattanakosin conservation building survey",
+        "source_url": "https://nced.onep.go.th/knowledge/E_BOOK_Publish_SURVEY.pdf",
+        "geometry_method": "documented block extent",
+        "geometry_confidence": "medium",
+        "feature_role": "cultural corridor"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            100.49672,
+            13.74
+          ],
+          [
+            100.4972,
+            13.73957
+          ],
+          [
+            100.49758,
+            13.73928
+          ],
+          [
+            100.49808,
+            13.73886
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "memorial-bridge-rows-anchor",
+      "properties": {
+        "slug": "memorial-bridge-rows",
+        "name_en": "Memorial Bridge bridgehead rows",
+        "name_th": "ตึกแถวเชิงสะพานพระพุทธยอดฟ้า–จักรเพชร",
+        "kind": "market row",
+        "period": "Early 20th century",
+        "typology": "Bridgehead and market-front rows on the Phra Nakhon bank",
+        "evidence": "registered",
+        "documented_units": null,
+        "register_id": null,
+        "onep_survey_ids": [
+          "2E1-077",
+          "2E1-078"
+        ],
+        "onep_conservation_priorities": [
+          4
+        ],
+        "note": "The bridge is usually read as infrastructure and Pak Khlong Talat as spectacle. The surveyed rows between them are the missing urban tissue: small commercial bays absorbing flowers, ferries, road traffic and the daily transfer between Thonburi and the old capital.",
+        "explorer_tip": "Walk from Pak Khlong Talat toward the bridge and look inland before crossing; the edge works as an exchange, not a monument forecourt.",
+        "source": "ONEP Rattanakosin conservation building survey",
+        "source_url": "https://nced.onep.go.th/knowledge/E_BOOK_Publish_SURVEY.pdf",
+        "geometry_method": "documented block extent",
+        "geometry_confidence": "medium",
+        "feature_role": "explorer anchor"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          100.49758,
+          13.73928
         ]
       }
     },
@@ -1215,6 +1973,12 @@
         "evidence": "published inventory",
         "documented_units": null,
         "register_id": null,
+        "onep_survey_ids": [
+          "2E5-080"
+        ],
+        "onep_conservation_priorities": [
+          4
+        ],
         "note": "Bang Rak is the argument in miniature: Chinese shop signs, South Asian tailoring, western-company streets and Thai alleys occupy the same commercial spine. The heritage is not one approved style; it is difference that learned to share an address.",
         "explorer_tip": "Walk Charoen Krung from Si Phraya toward Silom and count languages, upstairs access and shop-depth changes—not cafés.",
         "source": "Nakhara: Ordinary Urban Heritage in Bang Rak",
@@ -1258,6 +2022,12 @@
         "evidence": "published inventory",
         "documented_units": null,
         "register_id": null,
+        "onep_survey_ids": [
+          "2E5-080"
+        ],
+        "onep_conservation_priorities": [
+          4
+        ],
         "note": "Bang Rak is the argument in miniature: Chinese shop signs, South Asian tailoring, western-company streets and Thai alleys occupy the same commercial spine. The heritage is not one approved style; it is difference that learned to share an address.",
         "explorer_tip": "Walk Charoen Krung from Si Phraya toward Silom and count languages, upstairs access and shop-depth changes—not cafés.",
         "source": "Nakhara: Ordinary Urban Heritage in Bang Rak",
@@ -1287,6 +2057,8 @@
         "evidence": "published inventory",
         "documented_units": null,
         "register_id": null,
+        "onep_survey_ids": [],
+        "onep_conservation_priorities": [],
         "note": "Heritage does not stop at 1932. Patpong's rows record Bangkok becoming a global service economy: daytime shutters, night businesses and separate stairs that turned upper floors into independent commercial territory.",
         "explorer_tip": "Visit once by day and once after dark; the same row operates as two different pieces of city.",
         "source": "Nakhara: Ordinary Urban Heritage in Bang Rak",
@@ -1326,6 +2098,8 @@
         "evidence": "published inventory",
         "documented_units": null,
         "register_id": null,
+        "onep_survey_ids": [],
+        "onep_conservation_priorities": [],
         "note": "Heritage does not stop at 1932. Patpong's rows record Bangkok becoming a global service economy: daytime shutters, night businesses and separate stairs that turned upper floors into independent commercial territory.",
         "explorer_tip": "Visit once by day and once after dark; the same row operates as two different pieces of city.",
         "source": "Nakhara: Ordinary Urban Heritage in Bang Rak",
@@ -1355,6 +2129,8 @@
         "evidence": "published inventory",
         "documented_units": null,
         "register_id": null,
+        "onep_survey_ids": [],
+        "onep_conservation_priorities": [],
         "note": "At the meeting of canals twelve, thirteen and Saen Saep, Chinese timber shops served a largely Muslim agricultural landscape. This is Bangkok too: not fringe, but the eastern half of the capital explaining how water, trade and coexistence built one another.",
         "explorer_tip": "Stand on the newer market side and look across the canal; the old commercial frontage makes sense from its former transport route.",
         "source": "Silpakorn University: Nong Chok timber-row study",
@@ -1394,6 +2170,8 @@
         "evidence": "published inventory",
         "documented_units": null,
         "register_id": null,
+        "onep_survey_ids": [],
+        "onep_conservation_priorities": [],
         "note": "At the meeting of canals twelve, thirteen and Saen Saep, Chinese timber shops served a largely Muslim agricultural landscape. This is Bangkok too: not fringe, but the eastern half of the capital explaining how water, trade and coexistence built one another.",
         "explorer_tip": "Stand on the newer market side and look across the canal; the old commercial frontage makes sense from its former transport route.",
         "source": "Silpakorn University: Nong Chok timber-row study",
@@ -1423,6 +2201,8 @@
         "evidence": "mapped corridor",
         "documented_units": null,
         "register_id": null,
+        "onep_survey_ids": [],
+        "onep_conservation_priorities": [],
         "note": "The green-and-cream row is a threshold, not the destination. Pass through it and the arterial city gives way to a small weekend halal market, Buddhist–Muslim neighbourliness and a canal landscape hidden behind Charoen Krung.",
         "explorer_tip": "The canal market opens only on the first Saturday and Sunday of each month; the rowhouse approach is legible every day.",
         "source": "Bangkok News / Around Online neighbourhood guide",
@@ -1462,6 +2242,8 @@
         "evidence": "mapped corridor",
         "documented_units": null,
         "register_id": null,
+        "onep_survey_ids": [],
+        "onep_conservation_priorities": [],
         "note": "The green-and-cream row is a threshold, not the destination. Pass through it and the arterial city gives way to a small weekend halal market, Buddhist–Muslim neighbourliness and a canal landscape hidden behind Charoen Krung.",
         "explorer_tip": "The canal market opens only on the first Saturday and Sunday of each month; the rowhouse approach is legible every day.",
         "source": "Bangkok News / Around Online neighbourhood guide",
@@ -1491,6 +2273,8 @@
         "evidence": "mapped corridor",
         "documented_units": null,
         "register_id": null,
+        "onep_survey_ids": [],
+        "onep_conservation_priorities": [],
         "note": "A tiny lane holds the afterimage of a larger port economy—salt sheds, fish-sauce works, export trade and the Guan Yu shrine. The important space is not a monument but the narrow public room made by rowhouses around collective memory.",
         "explorer_tip": "Enter from Princess Mother Memorial Park and keep walking toward the Guan Yu shrine; the lane reveals its river logic gradually.",
         "source": "Bangkok News / Around Online neighbourhood guide",
@@ -1530,6 +2314,8 @@
         "evidence": "mapped corridor",
         "documented_units": null,
         "register_id": null,
+        "onep_survey_ids": [],
+        "onep_conservation_priorities": [],
         "note": "A tiny lane holds the afterimage of a larger port economy—salt sheds, fish-sauce works, export trade and the Guan Yu shrine. The important space is not a monument but the narrow public room made by rowhouses around collective memory.",
         "explorer_tip": "Enter from Princess Mother Memorial Park and keep walking toward the Guan Yu shrine; the lane reveals its river logic gradually.",
         "source": "Bangkok News / Around Online neighbourhood guide",

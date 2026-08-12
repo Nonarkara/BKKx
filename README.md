@@ -66,7 +66,7 @@ walking distances and times from OSRM's foot profile (not straight-line estimate
 walk (gazetted/awaiting split, oldest gazette entry and its age, walking pace), and — for the 125 stops that fall
 inside a generated Minecraft world — the exact `/tp` command to stand on them.
 
-**The rowhouse atlas.** `/rowhouses` documents 22 ensembles across royal frontages, market rows, commercial
+**The rowhouse atlas.** `/rowhouses` documents 29 ensembles across royal frontages, market rows, commercial
 streets, canal markets and community-led conservation. Each record carries its source, explorer note, geometry
 method and confidence. The same data appears as clickable corridors in the 3D map and as an open
 [`GeoJSON download`](https://bkk.nonarkara.org/data/bangkok-rowhouse-atlas.geojson). Solid map lines follow
@@ -74,7 +74,9 @@ high-confidence street axes or documented extents; dashed lines are interpretive
 not cadastral parcels or legal conservation boundaries. A second, opt-in
 [`candidate-footprint download`](https://bkk.nonarkara.org/data/bangkok-rowhouse-footprint-candidates.geojson)
 screens current Overture building shapes for field review. It explicitly does **not** confirm rowhouses, age or
-heritage status. See [`docs/rowhouse-atlas-method.md`](docs/rowhouse-atlas-method.md) for the reproducible method.
+heritage status. The directory also crosswalks all 46 category-E records in ONEP's Rattanakosin conservation
+survey: 26 are linked to mapped corridors and 20 remain visibly queued. See
+[`docs/rowhouse-atlas-method.md`](docs/rowhouse-atlas-method.md) for the reproducible method.
 
 **The Bangkok case.** `/case-for-bangkok` compares the emerging evidence with UNESCO's own descriptions of
 George Town and Melaka, Vigan, Hoi An, Luang Prabang and Galle. It is deliberately a claim register, not a

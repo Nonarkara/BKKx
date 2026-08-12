@@ -6,6 +6,14 @@ import {
   OLDTOWN_KIND_LABEL,
   OLDTOWN_SPOTS,
 } from "../data/oldtown-spots";
+import {
+  ONEP_MAPPING_QUEUE,
+  ONEP_MAPPED_RECORDS,
+  ONEP_ROWHOUSE_RECORDS,
+  ONEP_ROWHOUSE_SURVEY,
+  onepRecordsForSlug,
+  type OnepSurveyZone,
+} from "../data/onep-rowhouse-register";
 import footprintSummary from "../data/rowhouse-footprint-summary.json";
 import { photoFor } from "../data/heritage-content";
 
@@ -37,8 +45,12 @@ const structuredData = {
 };
 
 export default function RowhouseAtlasPage() {
-  const registered = OLDTOWN_SPOTS.filter((spot) => spot.evidence === "registered").length;
   const countedUnits = OLDTOWN_SPOTS.reduce((sum, spot) => sum + (spot.units ?? 0), 0);
+  const zoneLabels: Record<OnepSurveyZone, string> = {
+    inner: "Inner Rattanakosin",
+    intermediate: "Intermediate conservation area",
+    outer: "Outer Rattanakosin",
+  };
 
   return (
     <>
@@ -56,7 +68,7 @@ export default function RowhouseAtlasPage() {
           </p>
           <div className="rowhouse-directory-stats" aria-label="Rowhouse atlas summary">
             <div><strong>{OLDTOWN_SPOTS.length}</strong><span>mapped corridors</span></div>
-            <div><strong>{registered}</strong><span>register-linked</span></div>
+            <div><strong>{ONEP_MAPPED_RECORDS.length}/{ONEP_ROWHOUSE_RECORDS.length}</strong><span>ONEP records located</span></div>
             <div><strong>{countedUnits}+</strong><span>published units</span></div>
             <div><strong>{footprintSummary.candidate_count.toLocaleString()}</strong><span>footprints to review</span></div>
           </div>
@@ -79,6 +91,59 @@ export default function RowhouseAtlasPage() {
             <p><strong>Curated corridor</strong> locates a documented community or street, but does not claim cadastral precision.</p>
             <p><strong>Map geometry</strong> uses solid lines for high-confidence axes and dashed lines for interpretive connections.</p>
           </div>
+        </section>
+
+        <section className="onep-coverage" aria-labelledby="onep-coverage-title">
+          <div className="onep-coverage-intro">
+            <div>
+              <p className="register-eyebrow">Official coverage spine · 46 records</p>
+              <h2 id="onep-coverage-title">A source register with its gaps left visible.</h2>
+            </div>
+            <div>
+              <p>
+                The official Rattanakosin survey&apos;s category E is the closest thing Bangkok has to a
+                rowhouse-fabric baseline. It contains 41 rowhouse ensembles, four standalone commercial
+                buildings and one related structure—not 46 interchangeable rows.
+              </p>
+              <a href={ONEP_ROWHOUSE_SURVEY.url} target="_blank" rel="noreferrer">Open the 388-page ONEP survey ↗</a>
+            </div>
+          </div>
+          <div className="onep-coverage-stats" aria-label="ONEP source reconciliation status">
+            <div><strong>{ONEP_MAPPED_RECORDS.length}</strong><span>records linked to a mapped corridor</span></div>
+            <div><strong>{ONEP_MAPPING_QUEUE.length}</strong><span>records still in the mapping queue</span></div>
+            <div><strong>41 + 4 + 1</strong><span>ensembles · buildings · related structure</span></div>
+          </div>
+          <div className="onep-ledger">
+            {(["inner", "intermediate", "outer"] as OnepSurveyZone[]).map((zone) => {
+              const records = ONEP_ROWHOUSE_RECORDS.filter((record) => record.zone === zone);
+              const mapped = records.filter((record) => record.mappedSlugs.length > 0).length;
+              return (
+                <details key={zone} open={zone === "inner"}>
+                  <summary><span>{zoneLabels[zone]}</span><small>{mapped}/{records.length} located</small></summary>
+                  <div className="onep-ledger-table" role="table" aria-label={`${zoneLabels[zone]} official records`}>
+                    {records.map((record) => (
+                      <div className="onep-ledger-row" role="row" key={record.id}>
+                        <code role="cell">{record.id}</code>
+                        <div role="cell"><strong>{record.english}</strong><small lang="th">{record.thai}</small></div>
+                        <span role="cell">{record.recordType}</span>
+                        <span role="cell">P{record.priority} · {record.total}/15</span>
+                        <div role="cell" className={record.mappedSlugs.length ? "is-mapped" : "is-queue"}>
+                          {record.mappedSlugs.length ? record.mappedSlugs.map((slug) => {
+                            const spot = OLDTOWN_SPOTS.find((candidate) => candidate.slug === slug);
+                            return <a key={slug} href={`#${slug}`}>{spot?.name ?? slug}</a>;
+                          }) : "Mapping queue"}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </details>
+              );
+            })}
+          </div>
+          <p className="onep-coverage-note">
+            “Located” means this atlas has linked the official record to a sourced explorer corridor. It does
+            not mean a cadastral footprint, present condition or legal protection has been verified.
+          </p>
         </section>
 
         <section id="candidate-method" className="rowhouse-candidate-method" aria-labelledby="candidate-method-title">
@@ -110,6 +175,7 @@ export default function RowhouseAtlasPage() {
             const kind = OLDTOWN_KIND_LABEL[spot.kind];
             const photo = spot.photo ? photoFor(spot.photo) : undefined;
             const [lng, lat] = spot.center;
+            const onepRecords = onepRecordsForSlug(spot.slug);
             return (
               <article key={spot.slug} id={spot.slug} className="rowhouse-directory-card">
                 <div className="rowhouse-directory-index">{String(index + 1).padStart(2, "0")}</div>
@@ -136,6 +202,7 @@ export default function RowhouseAtlasPage() {
                     <div><dt>Evidence</dt><dd>{OLDTOWN_EVIDENCE_LABEL[spot.evidence]}</dd></div>
                     {spot.units ? <div><dt>Published count</dt><dd>{spot.units} units</dd></div> : null}
                     {spot.registerId ? <div><dt>Register / award</dt><dd>{spot.registerId}</dd></div> : null}
+                    {onepRecords.length ? <div><dt>ONEP survey</dt><dd>{onepRecords.map((record) => record.id).join(" · ")}</dd></div> : null}
                     <div><dt>Shapes to review</dt><dd>{footprintSummary.by_cluster[spot.slug as keyof typeof footprintSummary.by_cluster] ?? 0} unverified candidates</dd></div>
                     <div><dt>Map geometry</dt><dd>{spot.fabric.method} · {spot.fabric.geometryConfidence} confidence</dd></div>
                   </dl>

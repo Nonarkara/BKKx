@@ -87,7 +87,7 @@ test("serves the 3D map heritage atlas as the front door", async () => {
   assert.doesNotMatch(html, /src="https:\/\/atlas\.nonarkara\.org/i);
   // Rowhouses are the useful default; quarters remain in the client tab.
   assert.match(html, /Bangkok rowhouse atlas/);
-  assert.match(html, /Rowhouses 22/);
+  assert.match(html, /Rowhouses 29/);
   assert.match(html, /Quarters 9/);
   assert.match(html, /Na Phra Lan shophouses/);
   assert.match(html, /Hua Takhe old canal market/);
@@ -110,7 +110,7 @@ test("serves the 3D map heritage atlas as the front door", async () => {
 
 test("rowhouse atlas entries are sourced, geolocated, and evidence-labelled", async () => {
   const { OLDTOWN_SPOTS } = await import("../app/data/oldtown-spots.ts");
-  assert.ok(OLDTOWN_SPOTS.length >= 22, "rowhouse atlas must cover at least 22 clusters");
+  assert.ok(OLDTOWN_SPOTS.length >= 29, "rowhouse atlas must cover at least 29 clusters");
   const slugs = new Set();
   for (const spot of OLDTOWN_SPOTS) {
     assert.ok(!slugs.has(spot.slug), `duplicate rowhouse slug: ${spot.slug}`);
@@ -129,6 +129,32 @@ test("rowhouse atlas entries are sourced, geolocated, and evidence-labelled", as
   }
 });
 
+test("reconciles the complete ONEP Rattanakosin category-E survey", async () => {
+  const { OLDTOWN_SPOTS } = await import("../app/data/oldtown-spots.ts");
+  const {
+    ONEP_MAPPING_QUEUE,
+    ONEP_MAPPED_RECORDS,
+    ONEP_ROWHOUSE_RECORDS,
+    ONEP_ROWHOUSE_SURVEY,
+  } = await import("../app/data/onep-rowhouse-register.ts");
+  assert.equal(ONEP_ROWHOUSE_RECORDS.length, 46);
+  assert.equal(ONEP_ROWHOUSE_SURVEY.recordCount, 46);
+  assert.equal(ONEP_MAPPED_RECORDS.length + ONEP_MAPPING_QUEUE.length, 46);
+  assert.ok(ONEP_MAPPED_RECORDS.length >= 26);
+  const recordIds = new Set();
+  const knownSlugs = new Set(OLDTOWN_SPOTS.map((spot) => spot.slug));
+  for (const record of ONEP_ROWHOUSE_RECORDS) {
+    assert.ok(!recordIds.has(record.id), `duplicate ONEP record: ${record.id}`);
+    recordIds.add(record.id);
+    assert.equal(record.scores.reduce((sum, score) => sum + score, 0), record.total, `${record.id}: score total mismatch`);
+    assert.ok([3, 4, 5].includes(record.priority), `${record.id}: invalid conservation priority`);
+    for (const slug of record.mappedSlugs) assert.ok(knownSlugs.has(slug), `${record.id}: unknown mapped corridor ${slug}`);
+  }
+  assert.equal(ONEP_ROWHOUSE_RECORDS.filter((record) => record.recordType === "rowhouse ensemble").length, 41);
+  assert.equal(ONEP_ROWHOUSE_RECORDS.filter((record) => record.recordType === "commercial building").length, 4);
+  assert.equal(ONEP_ROWHOUSE_RECORDS.filter((record) => record.recordType === "related structure").length, 1);
+});
+
 test("serves the rowhouse research directory", async () => {
   const response = await render("/rowhouses");
   assert.equal(response.status, 200);
@@ -138,6 +164,10 @@ test("serves the rowhouse research directory", async () => {
   assert.match(html, /Na Phra Lan shophouses/);
   assert.match(html, /Talat Phlu railway-market rows/);
   assert.match(html, /Patpong modern shophouse rows/);
+  assert.match(html, /Bowonniwet Temple rows/);
+  assert.match(html, /Srasong–Longtha rows/);
+  assert.match(html, /Official coverage spine · 46 records/);
+  assert.match(html, /20<!-- -->.*mapping queue|20.*mapping queue/i);
   assert.match(html, /shapes worth looking at—not/);
   assert.match(html, /heritage claims/i);
   assert.match(html, /not confirmed rowhouses/i);
