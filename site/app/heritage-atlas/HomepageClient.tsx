@@ -6,6 +6,7 @@ import { useLocale } from "../i18n/LocaleContext";
 import { LangToggle } from "../i18n/LangToggle";
 import { AREA_TH } from "../data/heritage-translations-th";
 import { OldTownPicks } from "./OldTownPicks";
+import { OLDTOWN_SPOTS } from "../data/oldtown-spots";
 
 type Quarter = {
   slug: string;
@@ -82,7 +83,7 @@ export function HomepageClient({ quarters, initialQuarter }: Props) {
               className={railView === "rowhouses" ? "is-active" : ""}
               onClick={() => setRailView("rowhouses")}
             >
-              {th ? "ตึกแถว 15" : "Rowhouses 15"}
+              {th ? `ตึกแถว ${OLDTOWN_SPOTS.length}` : `Rowhouses ${OLDTOWN_SPOTS.length}`}
             </button>
             <button
               type="button"

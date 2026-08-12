@@ -16,6 +16,7 @@ import {
 } from "../../data/zoning-planning";
 import { WALKS, photoFor } from "../../data/heritage-content";
 import { OLDTOWN_SPOTS } from "../../data/oldtown-spots";
+import ROWHOUSE_CANDIDATE_SUMMARY from "../../data/rowhouse-footprint-summary.json";
 
 // The walks that geographically belong to Historic Core — everything except
 // bang-krachao-loop, a disconnected bike loop far south of the old town.
@@ -299,6 +300,20 @@ type PoiFeatureCollection = {
   features: PoiFeature[];
 };
 
+type RowhouseCandidate = {
+  overture_id: string;
+  overture_release: string;
+  cluster_slug: string;
+  cluster_name: string;
+  candidate_strength: string;
+  morphology_score: number;
+  area_m2: number;
+  shape_ratio: number;
+  aligned_neighbours_32m: number;
+  corridor_distance_m: number;
+  review_status: string;
+};
+
 type PoiLayerSpec = {
   kind: PoiKind;
   file?: string;
@@ -438,7 +453,9 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
   // GIS Layer & Heritage Inspection States
   const [showHeritage, setShowHeritage] = useState(true);
   const [showZoning, setShowZoning] = useState(true);
+  const [showRowhouseCandidates, setShowRowhouseCandidates] = useState(false);
   const [selectedHeritage, setSelectedHeritage] = useState<HeritageSite | null>(null);
+  const [selectedCandidate, setSelectedCandidate] = useState<RowhouseCandidate | null>(null);
   const heritageMarkerRefs = useRef<maplibregl.Marker[]>([]);
   const [selectedWalkSlug, setSelectedWalkSlug] = useState<string | null>(null);
   const [walkGeometry, setWalkGeometry] = useState<Record<string, { line: LngLat[] }> | null>(null);
@@ -462,6 +479,11 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
     return init;
   });
   const [selectedPoi, setSelectedPoi] = useState<PoiFeature | null>(null);
+
+  function toggleRowhouseCandidates() {
+    if (showRowhouseCandidates) setSelectedCandidate(null);
+    setShowRowhouseCandidates((visible) => !visible);
+  }
   const poiMarkerRefs = useRef<Record<PoiKind, maplibregl.Marker[]>>({
     temple: [],
     "royal-temple": [],
@@ -887,6 +909,59 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
           }
         }
 
+        // Present-day Overture roofprints/footprints screened by morphology.
+        // Deliberately opt-in: these are a field-review queue, not confirmed
+        // rowhouses, age estimates or statutory heritage designations.
+        if (hasHistoricContext && !map.getSource("bkkx-rowhouse-candidates-src")) {
+          try {
+            map.addSource("bkkx-rowhouse-candidates-src", {
+              type: "geojson",
+              data: "/data/bangkok-rowhouse-footprint-candidates.geojson",
+            });
+            map.addLayer({
+              id: "bkkx-rowhouse-candidates-possible",
+              type: "fill",
+              source: "bkkx-rowhouse-candidates-src",
+              minzoom: 13.5,
+              filter: ["==", ["get", "candidate_strength"], "possible morphology"],
+              layout: { visibility: "none" },
+              paint: { "fill-color": "#f4d492", "fill-opacity": 0.24 },
+            });
+            map.addLayer({
+              id: "bkkx-rowhouse-candidates-strong",
+              type: "fill",
+              source: "bkkx-rowhouse-candidates-src",
+              minzoom: 13.5,
+              filter: ["==", ["get", "candidate_strength"], "strong morphology"],
+              layout: { visibility: "none" },
+              paint: { "fill-color": "#ffb52b", "fill-opacity": 0.48 },
+            });
+            map.addLayer({
+              id: "bkkx-rowhouse-candidates-outline",
+              type: "line",
+              source: "bkkx-rowhouse-candidates-src",
+              minzoom: 13.5,
+              layout: { visibility: "none" },
+              paint: { "line-color": "#fff0c7", "line-width": 1, "line-opacity": 0.72 },
+            });
+
+            const inspectCandidate = (event: maplibregl.MapLayerMouseEvent) => {
+              const properties = event.features?.[0]?.properties;
+              if (!properties) return;
+              setSelectedCandidate(properties as unknown as RowhouseCandidate);
+              setSelectedPoi(null);
+              setSelectedHeritage(null);
+            };
+            for (const layerId of ["bkkx-rowhouse-candidates-possible", "bkkx-rowhouse-candidates-strong"]) {
+              map.on("click", layerId, inspectCandidate);
+              map.on("mouseenter", layerId, () => { map.getCanvas().style.cursor = "pointer"; });
+              map.on("mouseleave", layerId, () => { map.getCanvas().style.cursor = ""; });
+            }
+          } catch (err) {
+            console.warn("bkkx: rowhouse candidate layer failed", err);
+          }
+        }
+
         setMapReady(true);
       });
 
@@ -1030,6 +1105,19 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
       if (map.getLayer(layerId)) map.setLayoutProperty(layerId, "visibility", visibility);
     }
   }, [showPoi.oldtown, mapReady]);
+
+  useEffect(() => {
+    const map = mapRef.current;
+    if (!map || !mapReady) return;
+    const visibility = showRowhouseCandidates ? "visible" : "none";
+    for (const layerId of [
+      "bkkx-rowhouse-candidates-possible",
+      "bkkx-rowhouse-candidates-strong",
+      "bkkx-rowhouse-candidates-outline",
+    ]) {
+      if (map.getLayer(layerId)) map.setLayoutProperty(layerId, "visibility", visibility);
+    }
+  }, [showRowhouseCandidates, mapReady]);
 
   // Synchronize Zoning Layer visibility
   useEffect(() => {
@@ -1240,6 +1328,15 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
             </button>
             <button
               type="button"
+              className={showRowhouseCandidates ? "active" : ""}
+              onClick={toggleRowhouseCandidates}
+              aria-pressed={showRowhouseCandidates}
+              title="Machine-screened present-day footprints for field review; not heritage designations."
+            >
+              ◫ Candidates {ROWHOUSE_CANDIDATE_SUMMARY.candidate_count.toLocaleString()}
+            </button>
+            <button
+              type="button"
               className={showZoning ? "active" : ""}
               onClick={() => setShowZoning((prev) => !prev)}
               aria-pressed={showZoning}
@@ -1349,8 +1446,20 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
                   >
                     📐 Historic context
                   </button>
+                  <button
+                    type="button"
+                    onClick={toggleRowhouseCandidates}
+                    className={`layer-toggle-btn ${showRowhouseCandidates ? "active" : ""}`}
+                    aria-pressed={showRowhouseCandidates}
+                    aria-label="Toggle machine-screened rowhouse footprint candidates"
+                    title="Present-day Overture geometry screened for field review; not a heritage designation."
+                  >
+                    ◫ Candidates ({ROWHOUSE_CANDIDATE_SUMMARY.candidate_count.toLocaleString()})
+                  </button>
                 </div>
-                <small className="control-source-note">{BKK_URBAN_ZONING_NOTE}</small>
+                <small className="control-source-note">
+                  {BKK_URBAN_ZONING_NOTE} Candidate footprints are opt-in and unverified.
+                </small>
               </div>
             )}
 
@@ -1412,6 +1521,35 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
             )}
           </div>
         </div>}
+
+        {/* Machine-review inspector; visually related to the heritage card but
+            explicit that this evidence has not crossed the heritage threshold. */}
+        {hasHistoricContext && selectedCandidate && (
+          <div className="heritage-inspector-card rowhouse-candidate-card" role="dialog" aria-modal="false" aria-label={`Rowhouse candidate: ${selectedCandidate.cluster_name}`}>
+            <div className="heritage-card-header">
+              <div className="heritage-badge-group">
+                <span className="heritage-reg-badge">◫ {selectedCandidate.candidate_strength}</span>
+                <span className="heritage-era-badge">score {Number(selectedCandidate.morphology_score).toFixed(3)}</span>
+              </div>
+              <button type="button" className="heritage-close-btn" onClick={() => setSelectedCandidate(null)} aria-label="Close candidate details">✕</button>
+            </div>
+            <h4>{selectedCandidate.cluster_name}</h4>
+            <p className="heritage-desc">
+              A present-day building shape queued for human review near a documented cultural corridor.
+              It is not a confirmed rowhouse, an age estimate or a heritage designation.
+            </p>
+            <div className="heritage-meta-grid">
+              <div><span>Footprint area</span><strong>{selectedCandidate.area_m2} m²</strong></div>
+              <div><span>Depth / width</span><strong>{selectedCandidate.shape_ratio}</strong></div>
+              <div><span>Aligned neighbours</span><strong>{selectedCandidate.aligned_neighbours_32m}</strong></div>
+              <div><span>From corridor</span><strong>{selectedCandidate.corridor_distance_m} m</strong></div>
+            </div>
+            <p className="heritage-source-note">
+              Overture Maps buildings {selectedCandidate.overture_release} · ID {selectedCandidate.overture_id}<br />
+              <a href="/rowhouses#candidate-method">Read the method and caveat</a>
+            </p>
+          </div>
+        )}
 
         {/* Heritage Inspector Card Popup */}
         {hasHistoricContext && selectedHeritage && (

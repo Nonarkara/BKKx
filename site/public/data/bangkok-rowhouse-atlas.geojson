@@ -1065,6 +1065,486 @@
           13.720819
         ]
       }
+    },
+    {
+      "type": "Feature",
+      "id": "tha-phrachan-corridor",
+      "properties": {
+        "slug": "tha-phrachan",
+        "name_en": "Tha Phrachan riverfront rows",
+        "name_th": "ตึกแถวท่าพระจันทร์",
+        "kind": "royal frontage",
+        "period": "Late 19th–early 20th century",
+        "typology": "University-and-pier shophouse frontage",
+        "evidence": "published inventory",
+        "documented_units": null,
+        "register_id": null,
+        "note": "Between the palace-university wall and the river, books, amulets, food and ferry traffic compress into one inhabited edge. Conservation here has already shown its political question: repair the façade, but who gets to remain behind it?",
+        "explorer_tip": "Walk from the pier toward Thammasat at opening time; read the upper floors before the pavement becomes a market.",
+        "source": "Journal of the Siam Society: CPB heritage inventory",
+        "source_url": "https://so06.tci-thaijo.org/index.php/pub_jss/article/download/158293/114676/433613",
+        "geometry_method": "documented block extent",
+        "geometry_confidence": "high",
+        "feature_role": "cultural corridor"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            100.489119,
+            13.754666
+          ],
+          [
+            100.48943,
+            13.75522
+          ],
+          [
+            100.48965,
+            13.755786
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "tha-phrachan-anchor",
+      "properties": {
+        "slug": "tha-phrachan",
+        "name_en": "Tha Phrachan riverfront rows",
+        "name_th": "ตึกแถวท่าพระจันทร์",
+        "kind": "royal frontage",
+        "period": "Late 19th–early 20th century",
+        "typology": "University-and-pier shophouse frontage",
+        "evidence": "published inventory",
+        "documented_units": null,
+        "register_id": null,
+        "note": "Between the palace-university wall and the river, books, amulets, food and ferry traffic compress into one inhabited edge. Conservation here has already shown its political question: repair the façade, but who gets to remain behind it?",
+        "explorer_tip": "Walk from the pier toward Thammasat at opening time; read the upper floors before the pavement becomes a market.",
+        "source": "Journal of the Siam Society: CPB heritage inventory",
+        "source_url": "https://so06.tci-thaijo.org/index.php/pub_jss/article/download/158293/114676/433613",
+        "geometry_method": "documented block extent",
+        "geometry_confidence": "high",
+        "feature_role": "explorer anchor"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          100.48943,
+          13.75522
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ban-mo-old-moat-corridor",
+      "properties": {
+        "slug": "ban-mo-old-moat",
+        "name_en": "Ban Mo–Old City Moat rows",
+        "name_th": "ตึกแถวบ้านหม้อ–คลองคูเมืองเดิม",
+        "kind": "commercial street",
+        "period": "Rama V era onward",
+        "typology": "Western-influenced roadside and canal-edge shophouses",
+        "evidence": "published inventory",
+        "documented_units": null,
+        "register_id": null,
+        "note": "Bangkok's western ornament did not arrive as a colonial masterplan. Along the old moat it was borrowed bay by bay—pilasters, arches and parapets attached to a Thai capital reorganising commerce around roads while the canal still carried memory.",
+        "explorer_tip": "Use the canal as your compass. Compare the upper-storey ornament before following the electronics trade into Ban Mo.",
+        "source": "Damrong Journal: Khlong Khu Mueang Doem shophouses",
+        "source_url": "https://so01.tci-thaijo.org/index.php/damrong/article/view/282766",
+        "geometry_method": "documented block extent",
+        "geometry_confidence": "medium",
+        "feature_role": "cultural corridor"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            100.496815,
+            13.745369
+          ],
+          [
+            100.497502,
+            13.745864
+          ],
+          [
+            100.498152,
+            13.746324
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ban-mo-old-moat-anchor",
+      "properties": {
+        "slug": "ban-mo-old-moat",
+        "name_en": "Ban Mo–Old City Moat rows",
+        "name_th": "ตึกแถวบ้านหม้อ–คลองคูเมืองเดิม",
+        "kind": "commercial street",
+        "period": "Rama V era onward",
+        "typology": "Western-influenced roadside and canal-edge shophouses",
+        "evidence": "published inventory",
+        "documented_units": null,
+        "register_id": null,
+        "note": "Bangkok's western ornament did not arrive as a colonial masterplan. Along the old moat it was borrowed bay by bay—pilasters, arches and parapets attached to a Thai capital reorganising commerce around roads while the canal still carried memory.",
+        "explorer_tip": "Use the canal as your compass. Compare the upper-storey ornament before following the electronics trade into Ban Mo.",
+        "source": "Damrong Journal: Khlong Khu Mueang Doem shophouses",
+        "source_url": "https://so01.tci-thaijo.org/index.php/damrong/article/view/282766",
+        "geometry_method": "documented block extent",
+        "geometry_confidence": "medium",
+        "feature_role": "explorer anchor"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          100.4975,
+          13.74586
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "bang-rak-charoen-krung-corridor",
+      "properties": {
+        "slug": "bang-rak-charoen-krung",
+        "name_en": "Bang Rak multicultural rows",
+        "name_th": "ตึกแถวพหุวัฒนธรรมบางรัก",
+        "kind": "commercial street",
+        "period": "19th–20th century layers",
+        "typology": "Chinese, South Asian, Western and Thai shophouse corridor",
+        "evidence": "published inventory",
+        "documented_units": null,
+        "register_id": null,
+        "note": "Bang Rak is the argument in miniature: Chinese shop signs, South Asian tailoring, western-company streets and Thai alleys occupy the same commercial spine. The heritage is not one approved style; it is difference that learned to share an address.",
+        "explorer_tip": "Walk Charoen Krung from Si Phraya toward Silom and count languages, upstairs access and shop-depth changes—not cafés.",
+        "source": "Nakhara: Ordinary Urban Heritage in Bang Rak",
+        "source_url": "https://digital.car.chula.ac.th/nakhara/vol21/iss2/1/",
+        "geometry_method": "documented block extent",
+        "geometry_confidence": "medium",
+        "feature_role": "cultural corridor"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            100.514785,
+            13.728537
+          ],
+          [
+            100.515551,
+            13.727006
+          ],
+          [
+            100.5162,
+            13.7258
+          ],
+          [
+            100.517417,
+            13.723262
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "bang-rak-charoen-krung-anchor",
+      "properties": {
+        "slug": "bang-rak-charoen-krung",
+        "name_en": "Bang Rak multicultural rows",
+        "name_th": "ตึกแถวพหุวัฒนธรรมบางรัก",
+        "kind": "commercial street",
+        "period": "19th–20th century layers",
+        "typology": "Chinese, South Asian, Western and Thai shophouse corridor",
+        "evidence": "published inventory",
+        "documented_units": null,
+        "register_id": null,
+        "note": "Bang Rak is the argument in miniature: Chinese shop signs, South Asian tailoring, western-company streets and Thai alleys occupy the same commercial spine. The heritage is not one approved style; it is difference that learned to share an address.",
+        "explorer_tip": "Walk Charoen Krung from Si Phraya toward Silom and count languages, upstairs access and shop-depth changes—not cafés.",
+        "source": "Nakhara: Ordinary Urban Heritage in Bang Rak",
+        "source_url": "https://digital.car.chula.ac.th/nakhara/vol21/iss2/1/",
+        "geometry_method": "documented block extent",
+        "geometry_confidence": "medium",
+        "feature_role": "explorer anchor"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          100.5162,
+          13.7258
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "patpong-modern-rows-corridor",
+      "properties": {
+        "slug": "patpong-modern-rows",
+        "name_en": "Patpong modern shophouse rows",
+        "name_th": "ตึกแถวสมัยใหม่พัฒน์พงศ์",
+        "kind": "commercial street",
+        "period": "1950s onward",
+        "typology": "Two-to-six-storey postwar commercial rows",
+        "evidence": "published inventory",
+        "documented_units": null,
+        "register_id": null,
+        "note": "Heritage does not stop at 1932. Patpong's rows record Bangkok becoming a global service economy: daytime shutters, night businesses and separate stairs that turned upper floors into independent commercial territory.",
+        "explorer_tip": "Visit once by day and once after dark; the same row operates as two different pieces of city.",
+        "source": "Nakhara: Ordinary Urban Heritage in Bang Rak",
+        "source_url": "https://digital.car.chula.ac.th/nakhara/vol21/iss2/1/",
+        "geometry_method": "documented block extent",
+        "geometry_confidence": "high",
+        "feature_role": "cultural corridor"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            100.530041,
+            13.729326
+          ],
+          [
+            100.531749,
+            13.728853
+          ],
+          [
+            100.533424,
+            13.72839
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "patpong-modern-rows-anchor",
+      "properties": {
+        "slug": "patpong-modern-rows",
+        "name_en": "Patpong modern shophouse rows",
+        "name_th": "ตึกแถวสมัยใหม่พัฒน์พงศ์",
+        "kind": "commercial street",
+        "period": "1950s onward",
+        "typology": "Two-to-six-storey postwar commercial rows",
+        "evidence": "published inventory",
+        "documented_units": null,
+        "register_id": null,
+        "note": "Heritage does not stop at 1932. Patpong's rows record Bangkok becoming a global service economy: daytime shutters, night businesses and separate stairs that turned upper floors into independent commercial territory.",
+        "explorer_tip": "Visit once by day and once after dark; the same row operates as two different pieces of city.",
+        "source": "Nakhara: Ordinary Urban Heritage in Bang Rak",
+        "source_url": "https://digital.car.chula.ac.th/nakhara/vol21/iss2/1/",
+        "geometry_method": "documented block extent",
+        "geometry_confidence": "high",
+        "feature_role": "explorer anchor"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          100.53175,
+          13.72885
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "nong-chok-old-market-corridor",
+      "properties": {
+        "slug": "nong-chok-old-market",
+        "name_en": "Nong Chok old market",
+        "name_th": "ตลาดเก่าหนองจอก",
+        "kind": "canal market",
+        "period": "19th-century canal settlement",
+        "typology": "Timber shophouse rows along Khlong Saen Saep",
+        "evidence": "published inventory",
+        "documented_units": null,
+        "register_id": null,
+        "note": "At the meeting of canals twelve, thirteen and Saen Saep, Chinese timber shops served a largely Muslim agricultural landscape. This is Bangkok too: not fringe, but the eastern half of the capital explaining how water, trade and coexistence built one another.",
+        "explorer_tip": "Stand on the newer market side and look across the canal; the old commercial frontage makes sense from its former transport route.",
+        "source": "Silpakorn University: Nong Chok timber-row study",
+        "source_url": "https://sure.su.ac.th/xmlui/handle/123456789/11214",
+        "geometry_method": "curated connection",
+        "geometry_confidence": "medium",
+        "feature_role": "cultural corridor"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            100.864683,
+            13.857574
+          ],
+          [
+            100.865469,
+            13.857182
+          ],
+          [
+            100.866238,
+            13.856789
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "nong-chok-old-market-anchor",
+      "properties": {
+        "slug": "nong-chok-old-market",
+        "name_en": "Nong Chok old market",
+        "name_th": "ตลาดเก่าหนองจอก",
+        "kind": "canal market",
+        "period": "19th-century canal settlement",
+        "typology": "Timber shophouse rows along Khlong Saen Saep",
+        "evidence": "published inventory",
+        "documented_units": null,
+        "register_id": null,
+        "note": "At the meeting of canals twelve, thirteen and Saen Saep, Chinese timber shops served a largely Muslim agricultural landscape. This is Bangkok too: not fringe, but the eastern half of the capital explaining how water, trade and coexistence built one another.",
+        "explorer_tip": "Stand on the newer market side and look across the canal; the old commercial frontage makes sense from its former transport route.",
+        "source": "Silpakorn University: Nong Chok timber-row study",
+        "source_url": "https://sure.su.ac.th/xmlui/handle/123456789/11214",
+        "geometry_method": "curated connection",
+        "geometry_confidence": "medium",
+        "feature_role": "explorer anchor"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          100.865469,
+          13.857182
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "charoen-krung-103-corridor",
+      "properties": {
+        "slug": "charoen-krung-103",
+        "name_en": "Charoen Krung 103 canal-market approach",
+        "name_th": "ตึกแถวทางเข้าชุมชนเจริญกรุง 103",
+        "kind": "community conservation",
+        "period": "Historic mixed-faith canal community",
+        "typology": "Roadside rowhouses leading to a Muslim canal market",
+        "evidence": "mapped corridor",
+        "documented_units": null,
+        "register_id": null,
+        "note": "The green-and-cream row is a threshold, not the destination. Pass through it and the arterial city gives way to a small weekend halal market, Buddhist–Muslim neighbourliness and a canal landscape hidden behind Charoen Krung.",
+        "explorer_tip": "The canal market opens only on the first Saturday and Sunday of each month; the rowhouse approach is legible every day.",
+        "source": "Bangkok News / Around Online neighbourhood guide",
+        "source_url": "https://www.aroundonline.com/bangkok-news-43/",
+        "geometry_method": "curated connection",
+        "geometry_confidence": "medium",
+        "feature_role": "cultural corridor"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            100.50291,
+            13.700744
+          ],
+          [
+            100.50339,
+            13.7005
+          ],
+          [
+            100.503882,
+            13.700258
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "charoen-krung-103-anchor",
+      "properties": {
+        "slug": "charoen-krung-103",
+        "name_en": "Charoen Krung 103 canal-market approach",
+        "name_th": "ตึกแถวทางเข้าชุมชนเจริญกรุง 103",
+        "kind": "community conservation",
+        "period": "Historic mixed-faith canal community",
+        "typology": "Roadside rowhouses leading to a Muslim canal market",
+        "evidence": "mapped corridor",
+        "documented_units": null,
+        "register_id": null,
+        "note": "The green-and-cream row is a threshold, not the destination. Pass through it and the arterial city gives way to a small weekend halal market, Buddhist–Muslim neighbourliness and a canal landscape hidden behind Charoen Krung.",
+        "explorer_tip": "The canal market opens only on the first Saturday and Sunday of each month; the rowhouse approach is legible every day.",
+        "source": "Bangkok News / Around Online neighbourhood guide",
+        "source_url": "https://www.aroundonline.com/bangkok-news-43/",
+        "geometry_method": "curated connection",
+        "geometry_confidence": "medium",
+        "feature_role": "explorer anchor"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          100.50339,
+          13.7005
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "dilok-chan-corridor",
+      "properties": {
+        "slug": "dilok-chan",
+        "name_en": "Dilok Chan lane",
+        "name_th": "ตรอกดิลกจันทร์–ชุมชนสมเด็จย่า",
+        "kind": "community conservation",
+        "period": "Historic Khlong San trading community",
+        "typology": "River-trade lane enclosed by ordinary rowhouses",
+        "evidence": "mapped corridor",
+        "documented_units": null,
+        "register_id": null,
+        "note": "A tiny lane holds the afterimage of a larger port economy—salt sheds, fish-sauce works, export trade and the Guan Yu shrine. The important space is not a monument but the narrow public room made by rowhouses around collective memory.",
+        "explorer_tip": "Enter from Princess Mother Memorial Park and keep walking toward the Guan Yu shrine; the lane reveals its river logic gradually.",
+        "source": "Bangkok News / Around Online neighbourhood guide",
+        "source_url": "https://www.aroundonline.com/bangkok-news-43/",
+        "geometry_method": "curated connection",
+        "geometry_confidence": "medium",
+        "feature_role": "cultural corridor"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            100.495791,
+            13.736936
+          ],
+          [
+            100.496299,
+            13.736642
+          ],
+          [
+            100.496893,
+            13.736296
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "dilok-chan-anchor",
+      "properties": {
+        "slug": "dilok-chan",
+        "name_en": "Dilok Chan lane",
+        "name_th": "ตรอกดิลกจันทร์–ชุมชนสมเด็จย่า",
+        "kind": "community conservation",
+        "period": "Historic Khlong San trading community",
+        "typology": "River-trade lane enclosed by ordinary rowhouses",
+        "evidence": "mapped corridor",
+        "documented_units": null,
+        "register_id": null,
+        "note": "A tiny lane holds the afterimage of a larger port economy—salt sheds, fish-sauce works, export trade and the Guan Yu shrine. The important space is not a monument but the narrow public room made by rowhouses around collective memory.",
+        "explorer_tip": "Enter from Princess Mother Memorial Park and keep walking toward the Guan Yu shrine; the lane reveals its river logic gradually.",
+        "source": "Bangkok News / Around Online neighbourhood guide",
+        "source_url": "https://www.aroundonline.com/bangkok-news-43/",
+        "geometry_method": "curated connection",
+        "geometry_confidence": "medium",
+        "feature_role": "explorer anchor"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          100.496299,
+          13.736642
+        ]
+      }
     }
   ]
 }

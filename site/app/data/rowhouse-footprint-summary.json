@@ -1,0 +1,42 @@
+{
+  "dataset_version": "2026-08-13.1",
+  "generated_at": "2026-08-12T18:57:21.303220+00:00",
+  "overture_release": "2026-07-22.0",
+  "candidate_count": 1609,
+  "strong_count": 677,
+  "possible_count": 932,
+  "source_url": "https://docs.overturemaps.org/guides/buildings/",
+  "calibration": {
+    "source": "A Study on the Composition of Shophouses in the Central Part of Bangkok",
+    "url": "https://www.jstage.jst.go.jp/article/journalcpij/23/0/23_319/_article/-char/en",
+    "sample_units": 14421,
+    "mean_frontage_m": 3.8,
+    "mean_depth_to_width_ratio": 2.93,
+    "note": "The 1988 study calibrates morphology only. It does not establish the age, use, condition or heritage value of any present-day footprint."
+  },
+  "by_cluster": {
+    "na-phra-lan": 30,
+    "tha-tien": 5,
+    "tha-chang": 9,
+    "sam-phraeng": 184,
+    "bamrung-mueang": 38,
+    "phra-athit-khao-hong": 22,
+    "luenrit": 22,
+    "charoen-chai": 18,
+    "song-wat": 208,
+    "wanit-sampheng": 262,
+    "talad-noi": 188,
+    "plaeng-nam": 43,
+    "nang-loeng": 41,
+    "hua-takhe": 41,
+    "talat-phlu": 51,
+    "tha-phrachan": 150,
+    "ban-mo-old-moat": 56,
+    "bang-rak-charoen-krung": 130,
+    "patpong-modern-rows": 23,
+    "nong-chok-old-market": 24,
+    "charoen-krung-103": 56,
+    "dilok-chan": 8
+  },
+  "caveat": "Machine-screened present-day building roofprints/footprints near documented cultural corridors. These polygons are not confirmed rowhouses, age estimates, cadastral parcels, statutory conservation zones or heritage designations. Field and archival verification are required."
+}

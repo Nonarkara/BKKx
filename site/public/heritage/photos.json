@@ -323,6 +323,18 @@
   "file": "/heritage/photos/saranrom-palace.jpg",
   "bytes": 476307
  },
+ "patpong": {
+  "slot": "patpong",
+  "title": "File:Patpong.JPG",
+  "url": "https://upload.wikimedia.org/wikipedia/commons/b/bc/Patpong.JPG",
+  "descriptionUrl": "https://commons.wikimedia.org/wiki/File:Patpong.JPG",
+  "licence": "Public domain",
+  "artist": "Adam Carr",
+  "width": 1280,
+  "height": 960,
+  "file": "/heritage/photos/patpong.jpg",
+  "bytes": 264672
+ },
  "bang-khun-phrom": {
   "slot": "bang-khun-phrom",
   "title": "File:Bang Khun Phrom Palace from Rama VIII Bridge.jpg",

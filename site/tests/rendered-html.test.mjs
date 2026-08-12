@@ -61,6 +61,7 @@ test("limits Old Town context layers to Historic Core", async () => {
   const html = await response.text();
   assert.match(html, /Heritage\s*\([^)]*16/);
   assert.match(html, /Historic context/);
+  assert.match(html, /Candidates\s*\(/);
   assert.match(html, /orientation only/i);
 });
 
@@ -86,7 +87,7 @@ test("serves the 3D map heritage atlas as the front door", async () => {
   assert.doesNotMatch(html, /src="https:\/\/atlas\.nonarkara\.org/i);
   // Rowhouses are the useful default; quarters remain in the client tab.
   assert.match(html, /Bangkok rowhouse atlas/);
-  assert.match(html, /Rowhouses 15/);
+  assert.match(html, /Rowhouses 22/);
   assert.match(html, /Quarters 9/);
   assert.match(html, /Na Phra Lan shophouses/);
   assert.match(html, /Hua Takhe old canal market/);
@@ -109,7 +110,7 @@ test("serves the 3D map heritage atlas as the front door", async () => {
 
 test("rowhouse atlas entries are sourced, geolocated, and evidence-labelled", async () => {
   const { OLDTOWN_SPOTS } = await import("../app/data/oldtown-spots.ts");
-  assert.ok(OLDTOWN_SPOTS.length >= 15, "rowhouse atlas must cover at least 15 clusters");
+  assert.ok(OLDTOWN_SPOTS.length >= 22, "rowhouse atlas must cover at least 22 clusters");
   const slugs = new Set();
   for (const spot of OLDTOWN_SPOTS) {
     assert.ok(!slugs.has(spot.slug), `duplicate rowhouse slug: ${spot.slug}`);
@@ -136,6 +137,11 @@ test("serves the rowhouse research directory", async () => {
   assert.match(html, /Evidence, not aesthetic guesswork/);
   assert.match(html, /Na Phra Lan shophouses/);
   assert.match(html, /Talat Phlu railway-market rows/);
+  assert.match(html, /Patpong modern shophouse rows/);
+  assert.match(html, /shapes worth looking at—not/);
+  assert.match(html, /heritage claims/i);
+  assert.match(html, /not confirmed rowhouses/i);
+  assert.match(html, /Candidate footprints/);
   assert.match(html, /application\/ld\+json/);
   assert.match(html, /GeoJSON/);
   assert.match(html, /solid lines for high-confidence axes/i);
@@ -149,14 +155,47 @@ test("exports the rowhouse atlas as open confidence-labelled GeoJSON", async () 
   const data = JSON.parse(readFileSync(path, "utf8"));
   assert.equal(data.type, "FeatureCollection");
   assert.match(data.caveat, /not cadastral parcels/i);
-  assert.equal(data.features.length, 30);
-  assert.equal(data.features.filter((feature) => feature.geometry.type === "LineString").length, 15);
-  assert.equal(data.features.filter((feature) => feature.geometry.type === "Point").length, 15);
+  assert.equal(data.features.length, OLDTOWN_SPOTS.length * 2);
+  assert.equal(data.features.filter((feature) => feature.geometry.type === "LineString").length, OLDTOWN_SPOTS.length);
+  assert.equal(data.features.filter((feature) => feature.geometry.type === "Point").length, OLDTOWN_SPOTS.length);
   const exportedSlugs = [...new Set(data.features.map((feature) => feature.properties.slug))].sort();
   assert.deepEqual(exportedSlugs, OLDTOWN_SPOTS.map((spot) => spot.slug).sort(), "GeoJSON export is stale");
   for (const feature of data.features) {
     assert.ok(feature.properties.source_url.startsWith("https://"));
     assert.ok(["high", "medium", "low"].includes(feature.properties.geometry_confidence));
+  }
+});
+
+test("exports a transparent Overture footprint review queue", async () => {
+  const { readFileSync } = await import("node:fs");
+  const { fileURLToPath } = await import("node:url");
+  const { OLDTOWN_SPOTS } = await import("../app/data/oldtown-spots.ts");
+  const candidatePath = fileURLToPath(new URL("../public/data/bangkok-rowhouse-footprint-candidates.geojson", import.meta.url));
+  const summaryPath = fileURLToPath(new URL("../app/data/rowhouse-footprint-summary.json", import.meta.url));
+  const data = JSON.parse(readFileSync(candidatePath, "utf8"));
+  const summary = JSON.parse(readFileSync(summaryPath, "utf8"));
+  const knownSlugs = new Set(OLDTOWN_SPOTS.map((spot) => spot.slug));
+  assert.equal(data.type, "FeatureCollection");
+  assert.match(data.source, /Overture Maps buildings release/);
+  assert.match(data.caveat, /not confirmed rowhouses/i);
+  assert.match(data.caveat, /not.*heritage designations/i);
+  assert.ok(data.features.length > 500, "candidate queue is unexpectedly thin");
+  assert.equal(data.candidate_count, data.features.length);
+  assert.equal(summary.candidate_count, data.features.length);
+  assert.equal(summary.strong_count + summary.possible_count, data.features.length);
+  assert.equal(summary.overture_release, data.features[0].properties.overture_release);
+  const ids = new Set();
+  for (const feature of data.features) {
+    assert.ok(["Polygon", "MultiPolygon"].includes(feature.geometry.type));
+    assert.ok(!ids.has(feature.properties.overture_id), `duplicate Overture ID: ${feature.properties.overture_id}`);
+    ids.add(feature.properties.overture_id);
+    assert.ok(knownSlugs.has(feature.properties.cluster_slug), `unknown corridor: ${feature.properties.cluster_slug}`);
+    assert.ok(feature.properties.morphology_score >= data.method.score_threshold && feature.properties.morphology_score <= 1);
+    assert.equal(feature.properties.review_status, "unverified candidate");
+    assert.equal(feature.properties.not_heritage_designation, true);
+  }
+  for (const slug of knownSlugs) {
+    assert.ok(summary.by_cluster[slug] > 0, `${slug}: no building candidates returned`);
   }
 });
 

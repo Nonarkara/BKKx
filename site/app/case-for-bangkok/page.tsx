@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { PlaceMasthead } from "../PlaceMasthead";
 import { BANGKOK_CLAIMS, COMPARISON_SITES } from "../data/heritage-comparison";
+import footprintSummary from "../data/rowhouse-footprint-summary.json";
 
 export const metadata: Metadata = {
   title: "The case for Old Bangkok",
@@ -31,6 +32,7 @@ export default function CaseForBangkokPage() {
         <div className="bangkok-case-actions">
           <Link href="/rowhouses">Read the rowhouse evidence</Link>
           <a href="/data/bangkok-rowhouse-atlas.geojson" download>Download open GeoJSON ↓</a>
+          <a href="/data/bangkok-rowhouse-footprint-candidates.geojson" download>Review {footprintSummary.candidate_count.toLocaleString()} footprints ↓</a>
         </div>
       </header>
 
@@ -44,6 +46,8 @@ export default function CaseForBangkokPage() {
           integrity, authenticity, protection and management. Bangkok cannot honestly claim those
           conditions citywide yet. It can test a stronger proposition: nowhere else in the comparison
           combines this breadth of rowhouse types, infrastructures, communities and active metropolitan use.
+          The current machine screen adds {footprintSummary.candidate_count.toLocaleString()} present-day building
+          shapes to inspect, but none enters the evidence column until archival or field review confirms it.
         </p>
       </section>
 

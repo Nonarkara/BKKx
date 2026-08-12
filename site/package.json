@@ -12,7 +12,8 @@
     "test": "npm run build && node --test tests/rendered-html.test.mjs",
     "lint": "eslint . --ignore-pattern dist --ignore-pattern .next",
     "db:generate": "drizzle-kit generate",
-    "data:rowhouses": "node --experimental-strip-types scripts/export-rowhouse-data.mjs"
+    "data:rowhouses": "node --experimental-strip-types scripts/export-rowhouse-data.mjs",
+    "data:rowhouse-footprints": "npm run data:rowhouses && python3 scripts/build-rowhouse-footprints.py"
   },
   "dependencies": {
     "drizzle-orm": "0.45.2",

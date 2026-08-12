@@ -67,8 +67,8 @@ export function OldTownPicks({ iframeRef }: Props) {
                 <span
                   className="atlas-shell-oldtown-photo"
                   aria-hidden="true"
-                  style={{ backgroundImage: `url(/heritage/photos/${spot.photo}.jpg)` }}
-                />
+                  style={spot.photo ? { backgroundImage: `url(/heritage/photos/${spot.photo}.jpg)` } : undefined}
+                >{spot.photo ? null : kind.icon}</span>
                 <span className="atlas-shell-oldtown-body">
                   <span className="atlas-shell-oldtown-name">
                     {spot.name}

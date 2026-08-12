@@ -7,7 +7,7 @@ GeoJSON used outside the application.
 
 ## What one record means
 
-Each of the 15 records represents a documented rowhouse ensemble or cultural corridor, not a single building.
+Each of the 22 records represents a documented rowhouse ensemble or cultural corridor, not a single building.
 It combines:
 
 - an explorer anchor (`Point`) for navigation and map inspection;
@@ -16,7 +16,7 @@ It combines:
 - typology, period, evidence class and a short field-reading prompt;
 - a geometry method and confidence level.
 
-The public file contains 30 features: one point and one line for every record. Record slugs join the two.
+The public file contains 44 features: one point and one line for every record. Record slugs join the two.
 
 ## Evidence classes
 
@@ -46,21 +46,45 @@ The lines are not building footprints, land parcels, statutory conservation zone
 complete inventory of Bangkok rowhouses. They must not be used for regulation, height control, ownership,
 valuation or demolition decisions. The map is an orientation and research layer.
 
+## Building-footprint review queue
+
+`bangkok-rowhouse-footprint-candidates.geojson` adds one deliberately separate layer: present-day Overture Maps
+building roofprints/footprints near the sourced corridors, ranked for human review. It is opt-in in the 3D map.
+Every polygon retains its Overture/GERS ID and release, joins to one corridor slug, and publishes the factors that
+caused it to surface:
+
+- distance from the documented corridor (within 58 metres);
+- narrow/deep footprint shape;
+- similarly aligned neighbours within 32 metres;
+- plausible footprint area.
+
+Morphology is calibrated against the 1988 study *A Study on the Composition of Shophouses in the Central Part of
+Bangkok*, which measured 14,421 units and reported a 3.80 m mean frontage and 2.93 mean depth-to-width ratio.
+Those aggregate figures calibrate shape only. They do not date, identify or confer value on any current building.
+
+The output is **not** a set of confirmed rowhouses, age estimates, cadastral parcels, statutory conservation zones
+or heritage designations. A high score means “inspect this shape first,” never “protect this building on the
+algorithm's authority.” Archival research, façade inspection and community review remain mandatory.
+
 ## Rebuilding the public file
 
 ```bash
 cd site
 npm run data:rowhouses
+npm run data:rowhouse-footprints
 ```
 
-This writes `site/public/data/bangkok-rowhouse-atlas.geojson`. The site build runs the same export first, so the
-download cannot silently drift from the TypeScript dataset. Tests verify feature counts, geometry validity,
-source links and confidence fields.
+The first command writes `site/public/data/bangkok-rowhouse-atlas.geojson`. The second fetches the current Overture
+building release and writes `site/public/data/bangkok-rowhouse-footprint-candidates.geojson` plus the small summary
+consumed by the interface. The ordinary site build refreshes the corridor export but does not make a multi-gigabyte
+remote Overture query; maintainers run the candidate command intentionally when corridors or source releases change.
+Tests verify feature counts, geometry validity, source links, confidence fields and candidate caveats.
 
 ## Licence and attribution
 
-BKKx curation is CC BY 4.0. Underlying OpenStreetMap geometry remains ODbL and requires OpenStreetMap
-attribution. Institutional and scholarly evidence is linked per feature; those sources retain their own rights.
+BKKx curation and generated morphology metrics are CC BY 4.0. Underlying OpenStreetMap geometry remains ODbL and
+requires OpenStreetMap attribution. Overture features retain the source references and licences shipped with each
+record under the Overture Data License. Institutional and scholarly evidence is linked per feature; those sources retain their own rights.
 Photographs are licensed and attributed separately in the site's photo metadata.
 
 ## Next evidence threshold

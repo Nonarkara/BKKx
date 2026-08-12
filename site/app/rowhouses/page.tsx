@@ -6,6 +6,8 @@ import {
   OLDTOWN_KIND_LABEL,
   OLDTOWN_SPOTS,
 } from "../data/oldtown-spots";
+import footprintSummary from "../data/rowhouse-footprint-summary.json";
+import { photoFor } from "../data/heritage-content";
 
 export const metadata: Metadata = {
   title: "Bangkok rowhouse atlas",
@@ -28,6 +30,10 @@ const structuredData = {
   url: "https://bkk.nonarkara.org/rowhouses",
   creator: { "@type": "Person", name: "Non Arkara", url: "https://nonarkara.org" },
   variableMeasured: ["location", "period", "typology", "evidence status", "documented unit count"],
+  distribution: [
+    { "@type": "DataDownload", encodingFormat: "application/geo+json", contentUrl: "https://bkk.nonarkara.org/data/bangkok-rowhouse-atlas.geojson" },
+    { "@type": "DataDownload", encodingFormat: "application/geo+json", contentUrl: "https://bkk.nonarkara.org/data/bangkok-rowhouse-footprint-candidates.geojson" },
+  ],
 };
 
 export default function RowhouseAtlasPage() {
@@ -52,12 +58,13 @@ export default function RowhouseAtlasPage() {
             <div><strong>{OLDTOWN_SPOTS.length}</strong><span>mapped corridors</span></div>
             <div><strong>{registered}</strong><span>register-linked</span></div>
             <div><strong>{countedUnits}+</strong><span>published units</span></div>
-            <div><strong>3</strong><span>evidence levels</span></div>
+            <div><strong>{footprintSummary.candidate_count.toLocaleString()}</strong><span>footprints to review</span></div>
           </div>
           <div className="rowhouse-directory-actions">
             <Link href="/?view=rowhouses">Open the 3D map</Link>
             <a href="#directory">Read the directory ↓</a>
             <a href="/data/bangkok-rowhouse-atlas.geojson" download>GeoJSON ↓</a>
+            <a href="/data/bangkok-rowhouse-footprint-candidates.geojson" download>Candidate footprints ↓</a>
           </div>
         </header>
 
@@ -74,16 +81,46 @@ export default function RowhouseAtlasPage() {
           </div>
         </section>
 
+        <section id="candidate-method" className="rowhouse-candidate-method" aria-labelledby="candidate-method-title">
+          <div>
+            <p className="register-eyebrow">Machine review queue · Overture {footprintSummary.overture_release}</p>
+            <h2 id="candidate-method-title">{footprintSummary.candidate_count.toLocaleString()} shapes worth looking at—not {footprintSummary.candidate_count.toLocaleString()} heritage claims.</h2>
+            <p>
+              We screened present-day Overture building roofprints and footprints near the {OLDTOWN_SPOTS.length} sourced corridors.
+              The result is a transparent fieldwork queue: turn it on in the 3D map, click a building, and see why it surfaced.
+            </p>
+          </div>
+          <div className="rowhouse-candidate-numbers" aria-label="Candidate review summary">
+            <div><strong>{footprintSummary.strong_count.toLocaleString()}</strong><span>strong morphology</span></div>
+            <div><strong>{footprintSummary.possible_count.toLocaleString()}</strong><span>possible morphology</span></div>
+            <div><strong>{footprintSummary.calibration.sample_units.toLocaleString()}</strong><span>historic survey units used only to calibrate shape</span></div>
+          </div>
+          <div className="rowhouse-candidate-caveat">
+            <strong>Hard boundary:</strong> {footprintSummary.caveat}
+          </div>
+          <p className="rowhouse-candidate-sources">
+            Method calibration: <a href={footprintSummary.calibration.url} target="_blank" rel="noreferrer">1988 Bangkok shophouse composition study ↗</a>
+            {" · "}Geometry: <a href={footprintSummary.source_url} target="_blank" rel="noreferrer">Overture Maps buildings guide ↗</a>
+            {" · "}<a href="https://github.com/Nonarkara/BKKx/blob/main/docs/rowhouse-atlas-method.md" target="_blank" rel="noreferrer">Full reproducible method ↗</a>
+          </p>
+        </section>
+
         <main id="directory" className="rowhouse-directory-list">
           {OLDTOWN_SPOTS.map((spot, index) => {
             const kind = OLDTOWN_KIND_LABEL[spot.kind];
+            const photo = spot.photo ? photoFor(spot.photo) : undefined;
             const [lng, lat] = spot.center;
             return (
               <article key={spot.slug} id={spot.slug} className="rowhouse-directory-card">
                 <div className="rowhouse-directory-index">{String(index + 1).padStart(2, "0")}</div>
                 <figure>
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={`/heritage/photos/${spot.photo}.jpg`} alt="" loading="lazy" />
+                  {photo ? <>
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={photo.file} alt={spot.name} loading="lazy" />
+                    <figcaption>
+                      {photo.artist} · <a href={photo.descriptionUrl} target="_blank" rel="noreferrer">Wikimedia Commons</a> · {photo.licence}
+                    </figcaption>
+                  </> : <span className="rowhouse-photo-pending" aria-label="Field photograph needed">Field photo<br />needed</span>}
                 </figure>
                 <div className="rowhouse-directory-copy">
                   <div className="rowhouse-directory-kicker">
@@ -99,6 +136,7 @@ export default function RowhouseAtlasPage() {
                     <div><dt>Evidence</dt><dd>{OLDTOWN_EVIDENCE_LABEL[spot.evidence]}</dd></div>
                     {spot.units ? <div><dt>Published count</dt><dd>{spot.units} units</dd></div> : null}
                     {spot.registerId ? <div><dt>Register / award</dt><dd>{spot.registerId}</dd></div> : null}
+                    <div><dt>Shapes to review</dt><dd>{footprintSummary.by_cluster[spot.slug as keyof typeof footprintSummary.by_cluster] ?? 0} unverified candidates</dd></div>
                     <div><dt>Map geometry</dt><dd>{spot.fabric.method} · {spot.fabric.geometryConfidence} confidence</dd></div>
                   </dl>
                   <p className="rowhouse-directory-tip"><strong>Explorer note</strong>{spot.explorerTip}</p>
