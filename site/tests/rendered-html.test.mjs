@@ -120,6 +120,11 @@ test("rowhouse atlas entries are sourced, geolocated, and evidence-labelled", as
     assert.ok(lng >= 100.2 && lng <= 101.0 && lat >= 13.4 && lat <= 14.2, `${spot.slug}: outside Bangkok bbox`);
     assert.ok(spot.note.length > 60, `${spot.slug}: note is too thin`);
     assert.ok(spot.explorerTip.length > 30, `${spot.slug}: explorer tip is too thin`);
+    assert.ok(spot.fabric.coordinates.length >= 2, `${spot.slug}: corridor needs at least two coordinates`);
+    assert.ok(["high", "medium", "low"].includes(spot.fabric.geometryConfidence), `${spot.slug}: invalid geometry confidence`);
+    for (const [fabricLng, fabricLat] of spot.fabric.coordinates) {
+      assert.ok(fabricLng >= 100.2 && fabricLng <= 101.0 && fabricLat >= 13.4 && fabricLat <= 14.2, `${spot.slug}: fabric coordinate outside Bangkok bbox`);
+    }
   }
 });
 
@@ -132,6 +137,41 @@ test("serves the rowhouse research directory", async () => {
   assert.match(html, /Na Phra Lan shophouses/);
   assert.match(html, /Talat Phlu railway-market rows/);
   assert.match(html, /application\/ld\+json/);
+  assert.match(html, /GeoJSON/);
+  assert.match(html, /solid lines for high-confidence axes/i);
+});
+
+test("exports the rowhouse atlas as open confidence-labelled GeoJSON", async () => {
+  const { readFileSync } = await import("node:fs");
+  const { fileURLToPath } = await import("node:url");
+  const { OLDTOWN_SPOTS } = await import("../app/data/oldtown-spots.ts");
+  const path = fileURLToPath(new URL("../public/data/bangkok-rowhouse-atlas.geojson", import.meta.url));
+  const data = JSON.parse(readFileSync(path, "utf8"));
+  assert.equal(data.type, "FeatureCollection");
+  assert.match(data.caveat, /not cadastral parcels/i);
+  assert.equal(data.features.length, 30);
+  assert.equal(data.features.filter((feature) => feature.geometry.type === "LineString").length, 15);
+  assert.equal(data.features.filter((feature) => feature.geometry.type === "Point").length, 15);
+  const exportedSlugs = [...new Set(data.features.map((feature) => feature.properties.slug))].sort();
+  assert.deepEqual(exportedSlugs, OLDTOWN_SPOTS.map((spot) => spot.slug).sort(), "GeoJSON export is stale");
+  for (const feature of data.features) {
+    assert.ok(feature.properties.source_url.startsWith("https://"));
+    assert.ok(["high", "medium", "low"].includes(feature.properties.geometry_confidence));
+  }
+});
+
+test("serves an evidence-led comparative case for Old Bangkok", async () => {
+  const response = await render("/case-for-bangkok");
+  assert.equal(response.status, 200);
+  const html = await response.text();
+  assert.match(html, /Bangkok is not one old town/);
+  assert.match(html, /Better is the wrong first word\. Richer is testable/);
+  assert.match(html, /What the evidence can—and cannot—say/);
+  for (const comparator of ["George Town", "Vigan", "Hoi An", "Luang Prabang", "Galle Fort"]) {
+    assert.match(html, new RegExp(comparator), `comparison missing: ${comparator}`);
+  }
+  assert.match(html, /Not proved/);
+  assert.match(html, /Download open GeoJSON/);
 });
 
 test("keeps the editorial heritage register at /heritage", async () => {
@@ -497,4 +537,5 @@ test("the 3D atlas shell renders the 5 POI layer toggles", async () => {
   assert.match(html, /data\.go\.th/);
   // 460 temples chip is opt-in (off by default) but the button still renders
   assert.match(html, /Temples/);
+  assert.match(html, /Solid lines: high-confidence documented axes/);
 });

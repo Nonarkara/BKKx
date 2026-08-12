@@ -1,0 +1,1070 @@
+{
+  "type": "FeatureCollection",
+  "name": "Bangkok Rowhouse Atlas",
+  "dataset_version": "2026-08-12",
+  "license": "CC BY 4.0 for BKKx curation; underlying OpenStreetMap geometry is ODbL",
+  "attribution": "BKKx / Non Arkara; OpenStreetMap contributors; linked institutional and scholarly sources per feature",
+  "caveat": "Cultural corridors and explorer anchors, not cadastral parcels, statutory conservation zones, or a complete building inventory.",
+  "features": [
+    {
+      "type": "Feature",
+      "id": "na-phra-lan-corridor",
+      "properties": {
+        "slug": "na-phra-lan",
+        "name_en": "Na Phra Lan shophouses",
+        "name_th": "ตึกแถวหน้าพระลาน",
+        "kind": "royal frontage",
+        "period": "Early 20th century",
+        "typology": "Continuous two-storey royal-frontage row",
+        "evidence": "registered",
+        "documented_units": null,
+        "register_id": "UNESCO Asia-Pacific Award 2011",
+        "note": "The Grand Palace is the postcard. This disciplined, tenant-occupied edge is the city-making architecture. Its restoration kept the people and repaired the whole façade as one civic room.",
+        "explorer_tip": "Walk the opposite pavement at opening time; the repeated bays read best before tour traffic fills the curb.",
+        "source": "UNESCO Asia-Pacific Heritage Awards",
+        "source_url": "https://articles.unesco.org/sites/default/files/medias/fichiers/2023/06/2011-winners.pdf",
+        "geometry_method": "OSM street axis",
+        "geometry_confidence": "high",
+        "feature_role": "cultural corridor"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            100.489428,
+            13.752391
+          ],
+          [
+            100.489691,
+            13.752395
+          ],
+          [
+            100.490195,
+            13.752405
+          ],
+          [
+            100.491099,
+            13.75242
+          ],
+          [
+            100.491255,
+            13.752425
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "na-phra-lan-anchor",
+      "properties": {
+        "slug": "na-phra-lan",
+        "name_en": "Na Phra Lan shophouses",
+        "name_th": "ตึกแถวหน้าพระลาน",
+        "kind": "royal frontage",
+        "period": "Early 20th century",
+        "typology": "Continuous two-storey royal-frontage row",
+        "evidence": "registered",
+        "documented_units": null,
+        "register_id": "UNESCO Asia-Pacific Award 2011",
+        "note": "The Grand Palace is the postcard. This disciplined, tenant-occupied edge is the city-making architecture. Its restoration kept the people and repaired the whole façade as one civic room.",
+        "explorer_tip": "Walk the opposite pavement at opening time; the repeated bays read best before tour traffic fills the curb.",
+        "source": "UNESCO Asia-Pacific Heritage Awards",
+        "source_url": "https://articles.unesco.org/sites/default/files/medias/fichiers/2023/06/2011-winners.pdf",
+        "geometry_method": "OSM street axis",
+        "geometry_confidence": "high",
+        "feature_role": "explorer anchor"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          100.490342,
+          13.752407
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "tha-tien-corridor",
+      "properties": {
+        "slug": "tha-tien",
+        "name_en": "Tha Tien market blocks",
+        "name_th": "กลุ่มตึกแถวท่าเตียน",
+        "kind": "market row",
+        "period": "Late 19th century onward",
+        "typology": "Market-and-pier shophouse ensemble",
+        "evidence": "published inventory",
+        "documented_units": 490,
+        "register_id": null,
+        "note": "Not one building: 490 shop units, a market and a river landing working as a single urban instrument. The smell, wholesale trade and ferry rhythm are part of the heritage—not noise around it.",
+        "explorer_tip": "Enter from Maha Rat, cross the market, then look back from the Wat Arun ferry queue.",
+        "source": "Journal of Cultural Geography / Tha Tien study",
+        "source_url": "https://www.tandfonline.com/doi/abs/10.1080/08873631.2018.1506545",
+        "geometry_method": "documented block extent",
+        "geometry_confidence": "high",
+        "feature_role": "cultural corridor"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            100.490224,
+            13.745551
+          ],
+          [
+            100.49033,
+            13.746091
+          ],
+          [
+            100.490541,
+            13.746807
+          ],
+          [
+            100.4907,
+            13.74735
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "tha-tien-anchor",
+      "properties": {
+        "slug": "tha-tien",
+        "name_en": "Tha Tien market blocks",
+        "name_th": "กลุ่มตึกแถวท่าเตียน",
+        "kind": "market row",
+        "period": "Late 19th century onward",
+        "typology": "Market-and-pier shophouse ensemble",
+        "evidence": "published inventory",
+        "documented_units": 490,
+        "register_id": null,
+        "note": "Not one building: 490 shop units, a market and a river landing working as a single urban instrument. The smell, wholesale trade and ferry rhythm are part of the heritage—not noise around it.",
+        "explorer_tip": "Enter from Maha Rat, cross the market, then look back from the Wat Arun ferry queue.",
+        "source": "Journal of Cultural Geography / Tha Tien study",
+        "source_url": "https://www.tandfonline.com/doi/abs/10.1080/08873631.2018.1506545",
+        "geometry_method": "documented block extent",
+        "geometry_confidence": "high",
+        "feature_role": "explorer anchor"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          100.490557,
+          13.746481
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "tha-chang-corridor",
+      "properties": {
+        "slug": "tha-chang",
+        "name_en": "Tha Chang–Maha Rat frontage",
+        "name_th": "ตึกแถวท่าช้าง–ถนนมหาราช",
+        "kind": "royal frontage",
+        "period": "Rama V–VI era",
+        "typology": "Pier-facing masonry row",
+        "evidence": "registered",
+        "documented_units": null,
+        "register_id": "FAD-68",
+        "note": "A working seam between palace wall, university, amulet trade and river pier. Heritage here is measured by how many different Bangkok lives can still share one short frontage.",
+        "explorer_tip": "Take the cross-river boat once. The row is easier to understand from the water than from the pavement.",
+        "source": "Fine Arts Department GIS register",
+        "source_url": "https://data.go.th/dataset/gis-finearts",
+        "geometry_method": "OSM street axis",
+        "geometry_confidence": "high",
+        "feature_role": "cultural corridor"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            100.48882,
+            13.75178
+          ],
+          [
+            100.489006,
+            13.752377
+          ],
+          [
+            100.48933,
+            13.75303
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "tha-chang-anchor",
+      "properties": {
+        "slug": "tha-chang",
+        "name_en": "Tha Chang–Maha Rat frontage",
+        "name_th": "ตึกแถวท่าช้าง–ถนนมหาราช",
+        "kind": "royal frontage",
+        "period": "Rama V–VI era",
+        "typology": "Pier-facing masonry row",
+        "evidence": "registered",
+        "documented_units": null,
+        "register_id": "FAD-68",
+        "note": "A working seam between palace wall, university, amulet trade and river pier. Heritage here is measured by how many different Bangkok lives can still share one short frontage.",
+        "explorer_tip": "Take the cross-river boat once. The row is easier to understand from the water than from the pavement.",
+        "source": "Fine Arts Department GIS register",
+        "source_url": "https://data.go.th/dataset/gis-finearts",
+        "geometry_method": "OSM street axis",
+        "geometry_confidence": "high",
+        "feature_role": "explorer anchor"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          100.489006,
+          13.752377
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "sam-phraeng-corridor",
+      "properties": {
+        "slug": "sam-phraeng",
+        "name_en": "Sam Phraeng",
+        "name_th": "สามแพร่ง",
+        "kind": "market row",
+        "period": "Late 19th–early 20th century",
+        "typology": "Three palace-land shophouse enclaves",
+        "evidence": "published inventory",
+        "documented_units": 119,
+        "register_id": null,
+        "note": "Three former palace compounds became 119 commercial units and a rare interior square. Bangkok did not copy a colonial port here; it converted royal land into a compact mercantile neighbourhood.",
+        "explorer_tip": "Start at Phraeng Phuthon before breakfast, then cut through Phraeng Nara rather than circling the arterial roads.",
+        "source": "Nakhara: Evolving Urban Landscape of Sam Phraeng",
+        "source_url": "https://digital.car.chula.ac.th/nakhara/vol23/iss3/3/",
+        "geometry_method": "documented block extent",
+        "geometry_confidence": "high",
+        "feature_role": "cultural corridor"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            100.496706,
+            13.75165
+          ],
+          [
+            100.497108,
+            13.752031
+          ],
+          [
+            100.497415,
+            13.751924
+          ],
+          [
+            100.497815,
+            13.751592
+          ],
+          [
+            100.498235,
+            13.75105
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "sam-phraeng-anchor",
+      "properties": {
+        "slug": "sam-phraeng",
+        "name_en": "Sam Phraeng",
+        "name_th": "สามแพร่ง",
+        "kind": "market row",
+        "period": "Late 19th–early 20th century",
+        "typology": "Three palace-land shophouse enclaves",
+        "evidence": "published inventory",
+        "documented_units": 119,
+        "register_id": null,
+        "note": "Three former palace compounds became 119 commercial units and a rare interior square. Bangkok did not copy a colonial port here; it converted royal land into a compact mercantile neighbourhood.",
+        "explorer_tip": "Start at Phraeng Phuthon before breakfast, then cut through Phraeng Nara rather than circling the arterial roads.",
+        "source": "Nakhara: Evolving Urban Landscape of Sam Phraeng",
+        "source_url": "https://digital.car.chula.ac.th/nakhara/vol23/iss3/3/",
+        "geometry_method": "documented block extent",
+        "geometry_confidence": "high",
+        "feature_role": "explorer anchor"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          100.497415,
+          13.751924
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "bamrung-mueang-corridor",
+      "properties": {
+        "slug": "bamrung-mueang",
+        "name_en": "Bamrung Mueang–Giant Swing rows",
+        "name_th": "ตึกแถวบำรุงเมือง–เสาชิงช้า",
+        "kind": "commercial street",
+        "period": "Rama V era",
+        "typology": "Civic-axis corner and curved masonry rows",
+        "evidence": "registered",
+        "documented_units": null,
+        "register_id": "FAD-5604 / FAD-5386",
+        "note": "The curve does the work. These rows turn the Giant Swing from an object into a place, holding the street wall while temple, city hall and specialist shops face one another.",
+        "explorer_tip": "Look above the signs. The useful evidence is in parapets, bay widths and the corner turn.",
+        "source": "Fine Arts Department GIS register",
+        "source_url": "https://data.go.th/dataset/gis-finearts",
+        "geometry_method": "OSM street axis",
+        "geometry_confidence": "high",
+        "feature_role": "cultural corridor"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            100.49552,
+            13.751286
+          ],
+          [
+            100.49613,
+            13.751371
+          ],
+          [
+            100.496599,
+            13.751445
+          ],
+          [
+            100.49721,
+            13.751506
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "bamrung-mueang-anchor",
+      "properties": {
+        "slug": "bamrung-mueang",
+        "name_en": "Bamrung Mueang–Giant Swing rows",
+        "name_th": "ตึกแถวบำรุงเมือง–เสาชิงช้า",
+        "kind": "commercial street",
+        "period": "Rama V era",
+        "typology": "Civic-axis corner and curved masonry rows",
+        "evidence": "registered",
+        "documented_units": null,
+        "register_id": "FAD-5604 / FAD-5386",
+        "note": "The curve does the work. These rows turn the Giant Swing from an object into a place, holding the street wall while temple, city hall and specialist shops face one another.",
+        "explorer_tip": "Look above the signs. The useful evidence is in parapets, bay widths and the corner turn.",
+        "source": "Fine Arts Department GIS register",
+        "source_url": "https://data.go.th/dataset/gis-finearts",
+        "geometry_method": "OSM street axis",
+        "geometry_confidence": "high",
+        "feature_role": "explorer anchor"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          100.496599,
+          13.751445
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "phra-athit-khao-hong-corridor",
+      "properties": {
+        "slug": "phra-athit-khao-hong",
+        "name_en": "Phra Athit Khao Hong row",
+        "name_th": "ตึกแถวเก้าห้อง ถนนพระอาทิตย์",
+        "kind": "royal frontage",
+        "period": "Early 20th century",
+        "typology": "Nine-bay river-road shophouse row",
+        "evidence": "published inventory",
+        "documented_units": 9,
+        "register_id": null,
+        "note": "Only nine bays, but a complete urban sentence: fort, river road, shade trees, homes above trade. Small ensembles like this are where citywide databases usually fail.",
+        "explorer_tip": "Pair it with the fort at dusk, then use the river path—not Khao San—as your exit.",
+        "source": "Journal of the Siam Society: Old Bangkok shophouses",
+        "source_url": "https://so06.tci-thaijo.org/index.php/pub_jss/article/view/158147",
+        "geometry_method": "documented block extent",
+        "geometry_confidence": "high",
+        "feature_role": "cultural corridor"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            100.49341,
+            13.761922
+          ],
+          [
+            100.49385,
+            13.762323
+          ],
+          [
+            100.494215,
+            13.762612
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "phra-athit-khao-hong-anchor",
+      "properties": {
+        "slug": "phra-athit-khao-hong",
+        "name_en": "Phra Athit Khao Hong row",
+        "name_th": "ตึกแถวเก้าห้อง ถนนพระอาทิตย์",
+        "kind": "royal frontage",
+        "period": "Early 20th century",
+        "typology": "Nine-bay river-road shophouse row",
+        "evidence": "published inventory",
+        "documented_units": 9,
+        "register_id": null,
+        "note": "Only nine bays, but a complete urban sentence: fort, river road, shade trees, homes above trade. Small ensembles like this are where citywide databases usually fail.",
+        "explorer_tip": "Pair it with the fort at dusk, then use the river path—not Khao San—as your exit.",
+        "source": "Journal of the Siam Society: Old Bangkok shophouses",
+        "source_url": "https://so06.tci-thaijo.org/index.php/pub_jss/article/view/158147",
+        "geometry_method": "documented block extent",
+        "geometry_confidence": "high",
+        "feature_role": "explorer anchor"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          100.49385,
+          13.762323
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "luenrit-corridor",
+      "properties": {
+        "slug": "luenrit",
+        "name_en": "Luenrit community",
+        "name_th": "ชุมชนเลื่อนฤทธิ์",
+        "kind": "community conservation",
+        "period": "Early 20th century",
+        "typology": "Neoclassical Chinatown shophouse block",
+        "evidence": "published inventory",
+        "documented_units": null,
+        "register_id": null,
+        "note": "Tenants stopped demolition, organised, financed and reopened the restored block in 2022. This is Bangkok's strongest answer to the idea that conservation must arrive from outside the community.",
+        "explorer_tip": "Read the whole block before entering a café; the collective project matters more than any single tenancy.",
+        "source": "ICCROM Cultural Heritage for Inclusive Growth",
+        "source_url": "https://ch4igrowth.iccrom.org/case-studies/luenrit-community-conservation-and-rehabilitation-project",
+        "geometry_method": "documented block extent",
+        "geometry_confidence": "high",
+        "feature_role": "cultural corridor"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            100.50523,
+            13.744189
+          ],
+          [
+            100.50565,
+            13.74446
+          ],
+          [
+            100.506048,
+            13.744748
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "luenrit-anchor",
+      "properties": {
+        "slug": "luenrit",
+        "name_en": "Luenrit community",
+        "name_th": "ชุมชนเลื่อนฤทธิ์",
+        "kind": "community conservation",
+        "period": "Early 20th century",
+        "typology": "Neoclassical Chinatown shophouse block",
+        "evidence": "published inventory",
+        "documented_units": null,
+        "register_id": null,
+        "note": "Tenants stopped demolition, organised, financed and reopened the restored block in 2022. This is Bangkok's strongest answer to the idea that conservation must arrive from outside the community.",
+        "explorer_tip": "Read the whole block before entering a café; the collective project matters more than any single tenancy.",
+        "source": "ICCROM Cultural Heritage for Inclusive Growth",
+        "source_url": "https://ch4igrowth.iccrom.org/case-studies/luenrit-community-conservation-and-rehabilitation-project",
+        "geometry_method": "documented block extent",
+        "geometry_confidence": "high",
+        "feature_role": "explorer anchor"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          100.50565,
+          13.74446
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "charoen-chai-corridor",
+      "properties": {
+        "slug": "charoen-chai",
+        "name_en": "Charoen Chai paper-goods quarter",
+        "name_th": "ชุมชนเจริญไชย",
+        "kind": "community conservation",
+        "period": "Late 19th–early 20th century",
+        "typology": "Ritual-goods shophouse community",
+        "evidence": "mapped corridor",
+        "documented_units": null,
+        "register_id": null,
+        "note": "A living supply chain for Chinese ceremonies: paper offerings, calendars, printing, family memory. Its heritage is a network of knowledge held behind ordinary shutters—not a façade treatment.",
+        "explorer_tip": "Ask before photographing interiors. Visit ahead of major Chinese festivals when the trade becomes legible.",
+        "source": "Asian Journal of Environment-Behaviour Studies",
+        "source_url": "https://aje-bs.e-iph.co.uk/index.php/ajE-Bs/article/view/229",
+        "geometry_method": "OSM street axis",
+        "geometry_confidence": "medium",
+        "feature_role": "cultural corridor"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            100.510821,
+            13.742703
+          ],
+          [
+            100.51117,
+            13.74298
+          ],
+          [
+            100.511522,
+            13.743262
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "charoen-chai-anchor",
+      "properties": {
+        "slug": "charoen-chai",
+        "name_en": "Charoen Chai paper-goods quarter",
+        "name_th": "ชุมชนเจริญไชย",
+        "kind": "community conservation",
+        "period": "Late 19th–early 20th century",
+        "typology": "Ritual-goods shophouse community",
+        "evidence": "mapped corridor",
+        "documented_units": null,
+        "register_id": null,
+        "note": "A living supply chain for Chinese ceremonies: paper offerings, calendars, printing, family memory. Its heritage is a network of knowledge held behind ordinary shutters—not a façade treatment.",
+        "explorer_tip": "Ask before photographing interiors. Visit ahead of major Chinese festivals when the trade becomes legible.",
+        "source": "Asian Journal of Environment-Behaviour Studies",
+        "source_url": "https://aje-bs.e-iph.co.uk/index.php/ajE-Bs/article/view/229",
+        "geometry_method": "OSM street axis",
+        "geometry_confidence": "medium",
+        "feature_role": "explorer anchor"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          100.51117,
+          13.74298
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "song-wat-corridor",
+      "properties": {
+        "slug": "song-wat",
+        "name_en": "Song Wat trade street",
+        "name_th": "ถนนทรงวาด",
+        "kind": "commercial street",
+        "period": "Road laid out in the 1890s",
+        "typology": "River-trade shophouse and warehouse corridor",
+        "evidence": "registered",
+        "documented_units": null,
+        "register_id": "FAD-5646",
+        "note": "The new cafés are a thin layer. The street's real intelligence is its river-to-warehouse grain: narrow fronts, deep plots, loading alleys and families living over trade.",
+        "explorer_tip": "Walk west to east in the morning. Notice where goods—not visitors—still set the rhythm.",
+        "source": "Fine Arts Department register + Bangkok cultural reporting",
+        "source_url": "https://data.go.th/dataset/gis-finearts",
+        "geometry_method": "OSM street axis",
+        "geometry_confidence": "high",
+        "feature_role": "cultural corridor"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            100.502344,
+            13.740515
+          ],
+          [
+            100.503576,
+            13.739731
+          ],
+          [
+            100.505464,
+            13.739495
+          ],
+          [
+            100.507278,
+            13.738633
+          ],
+          [
+            100.509975,
+            13.736866
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "song-wat-anchor",
+      "properties": {
+        "slug": "song-wat",
+        "name_en": "Song Wat trade street",
+        "name_th": "ถนนทรงวาด",
+        "kind": "commercial street",
+        "period": "Road laid out in the 1890s",
+        "typology": "River-trade shophouse and warehouse corridor",
+        "evidence": "registered",
+        "documented_units": null,
+        "register_id": "FAD-5646",
+        "note": "The new cafés are a thin layer. The street's real intelligence is its river-to-warehouse grain: narrow fronts, deep plots, loading alleys and families living over trade.",
+        "explorer_tip": "Walk west to east in the morning. Notice where goods—not visitors—still set the rhythm.",
+        "source": "Fine Arts Department register + Bangkok cultural reporting",
+        "source_url": "https://data.go.th/dataset/gis-finearts",
+        "geometry_method": "OSM street axis",
+        "geometry_confidence": "high",
+        "feature_role": "explorer anchor"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          100.505464,
+          13.739495
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "wanit-sampheng-corridor",
+      "properties": {
+        "slug": "wanit-sampheng",
+        "name_en": "Wanit 1–Sampheng fabric",
+        "name_th": "ตึกแถววานิช 1–สำเพ็ง",
+        "kind": "market row",
+        "period": "19th century onward",
+        "typology": "Ultra-fine-grain wholesale shophouse rows",
+        "evidence": "registered",
+        "documented_units": null,
+        "register_id": "FAD-5648",
+        "note": "This is density before towers: tiny frontages, deep stock rooms, handcarts and upper-floor households. It works because the block is porous, not because the buildings are individually grand.",
+        "explorer_tip": "Go before 10am and turn into the narrowest passage that is clearly public; the main street hides the system.",
+        "source": "Fine Arts Department GIS register",
+        "source_url": "https://data.go.th/dataset/gis-finearts",
+        "geometry_method": "OSM street axis",
+        "geometry_confidence": "high",
+        "feature_role": "cultural corridor"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            100.503299,
+            13.74366
+          ],
+          [
+            100.505211,
+            13.741865
+          ],
+          [
+            100.507561,
+            13.740495
+          ],
+          [
+            100.50908,
+            13.739637
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "wanit-sampheng-anchor",
+      "properties": {
+        "slug": "wanit-sampheng",
+        "name_en": "Wanit 1–Sampheng fabric",
+        "name_th": "ตึกแถววานิช 1–สำเพ็ง",
+        "kind": "market row",
+        "period": "19th century onward",
+        "typology": "Ultra-fine-grain wholesale shophouse rows",
+        "evidence": "registered",
+        "documented_units": null,
+        "register_id": "FAD-5648",
+        "note": "This is density before towers: tiny frontages, deep stock rooms, handcarts and upper-floor households. It works because the block is porous, not because the buildings are individually grand.",
+        "explorer_tip": "Go before 10am and turn into the narrowest passage that is clearly public; the main street hides the system.",
+        "source": "Fine Arts Department GIS register",
+        "source_url": "https://data.go.th/dataset/gis-finearts",
+        "geometry_method": "OSM street axis",
+        "geometry_confidence": "high",
+        "feature_role": "explorer anchor"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          100.507561,
+          13.740495
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "talad-noi-corridor",
+      "properties": {
+        "slug": "talad-noi",
+        "name_en": "Talad Noi back lanes",
+        "name_th": "ตรอกตลาดน้อย",
+        "kind": "commercial street",
+        "period": "Early Chinese river settlement",
+        "typology": "Masonry-and-timber shophouse lanes",
+        "evidence": "mapped corridor",
+        "documented_units": null,
+        "register_id": null,
+        "note": "Half masonry, half timber; shrines, repair shops, reused warehouses and homes sharing lanes too narrow for a curated masterplan. The district is valuable because productive mess survives beside new culture.",
+        "explorer_tip": "Community tip: go before 9am or after 4pm; midday heat erases the slow details.",
+        "source": "Bangkok News / Around Online neighbourhood guide",
+        "source_url": "https://www.aroundonline.com/bangkok-news-43/",
+        "geometry_method": "curated connection",
+        "geometry_confidence": "medium",
+        "feature_role": "cultural corridor"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            100.511652,
+            13.735407
+          ],
+          [
+            100.512314,
+            13.734561
+          ],
+          [
+            100.512967,
+            13.733452
+          ],
+          [
+            100.513618,
+            13.732437
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "talad-noi-anchor",
+      "properties": {
+        "slug": "talad-noi",
+        "name_en": "Talad Noi back lanes",
+        "name_th": "ตรอกตลาดน้อย",
+        "kind": "commercial street",
+        "period": "Early Chinese river settlement",
+        "typology": "Masonry-and-timber shophouse lanes",
+        "evidence": "mapped corridor",
+        "documented_units": null,
+        "register_id": null,
+        "note": "Half masonry, half timber; shrines, repair shops, reused warehouses and homes sharing lanes too narrow for a curated masterplan. The district is valuable because productive mess survives beside new culture.",
+        "explorer_tip": "Community tip: go before 9am or after 4pm; midday heat erases the slow details.",
+        "source": "Bangkok News / Around Online neighbourhood guide",
+        "source_url": "https://www.aroundonline.com/bangkok-news-43/",
+        "geometry_method": "curated connection",
+        "geometry_confidence": "medium",
+        "feature_role": "explorer anchor"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          100.512967,
+          13.733452
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "plaeng-nam-corridor",
+      "properties": {
+        "slug": "plaeng-nam",
+        "name_en": "Plaeng Nam micro-street",
+        "name_th": "ถนนแปลงนาม",
+        "kind": "commercial street",
+        "period": "Historic Chinatown trade street",
+        "typology": "Short food-and-trade shophouse street",
+        "evidence": "mapped corridor",
+        "documented_units": null,
+        "register_id": null,
+        "note": "Barely one hundred metres, yet it joins Charoen Krung and Yaowarat as a complete cultural cross-section. Small streets often carry more city memory per metre than monumental avenues.",
+        "explorer_tip": "Treat it as a connector, not a destination: enter from the temple end and leave into the night market.",
+        "source": "Bangkok News / Around Online neighbourhood guide",
+        "source_url": "https://www.aroundonline.com/bangkok-news-43/",
+        "geometry_method": "OSM street axis",
+        "geometry_confidence": "high",
+        "feature_role": "cultural corridor"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            100.509669,
+            13.741629
+          ],
+          [
+            100.509992,
+            13.741209
+          ],
+          [
+            100.510244,
+            13.740823
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "plaeng-nam-anchor",
+      "properties": {
+        "slug": "plaeng-nam",
+        "name_en": "Plaeng Nam micro-street",
+        "name_th": "ถนนแปลงนาม",
+        "kind": "commercial street",
+        "period": "Historic Chinatown trade street",
+        "typology": "Short food-and-trade shophouse street",
+        "evidence": "mapped corridor",
+        "documented_units": null,
+        "register_id": null,
+        "note": "Barely one hundred metres, yet it joins Charoen Krung and Yaowarat as a complete cultural cross-section. Small streets often carry more city memory per metre than monumental avenues.",
+        "explorer_tip": "Treat it as a connector, not a destination: enter from the temple end and leave into the night market.",
+        "source": "Bangkok News / Around Online neighbourhood guide",
+        "source_url": "https://www.aroundonline.com/bangkok-news-43/",
+        "geometry_method": "OSM street axis",
+        "geometry_confidence": "high",
+        "feature_role": "explorer anchor"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          100.509992,
+          13.741209
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "nang-loeng-corridor",
+      "properties": {
+        "slug": "nang-loeng",
+        "name_en": "Nang Loeng market quarter",
+        "name_th": "ย่านตลาดนางเลิ้ง",
+        "kind": "market row",
+        "period": "Early 20th-century market quarter",
+        "typology": "Market shophouses and timber community lanes",
+        "evidence": "mapped corridor",
+        "documented_units": null,
+        "register_id": null,
+        "note": "Food is the entry point, not the whole story. Behind the market are performance histories, artists' houses, a Vietnamese temple and rows where domestic and commercial life never fully separated.",
+        "explorer_tip": "Arrive for breakfast, then stay after the food crowd leaves and walk the lanes behind the market hall.",
+        "source": "Bangkok News / Around Online neighbourhood guide",
+        "source_url": "https://www.aroundonline.com/bangkok-news-43/",
+        "geometry_method": "documented block extent",
+        "geometry_confidence": "medium",
+        "feature_role": "cultural corridor"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            100.50511,
+            13.759914
+          ],
+          [
+            100.50557,
+            13.75953
+          ],
+          [
+            100.506055,
+            13.759192
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "nang-loeng-anchor",
+      "properties": {
+        "slug": "nang-loeng",
+        "name_en": "Nang Loeng market quarter",
+        "name_th": "ย่านตลาดนางเลิ้ง",
+        "kind": "market row",
+        "period": "Early 20th-century market quarter",
+        "typology": "Market shophouses and timber community lanes",
+        "evidence": "mapped corridor",
+        "documented_units": null,
+        "register_id": null,
+        "note": "Food is the entry point, not the whole story. Behind the market are performance histories, artists' houses, a Vietnamese temple and rows where domestic and commercial life never fully separated.",
+        "explorer_tip": "Arrive for breakfast, then stay after the food crowd leaves and walk the lanes behind the market hall.",
+        "source": "Bangkok News / Around Online neighbourhood guide",
+        "source_url": "https://www.aroundonline.com/bangkok-news-43/",
+        "geometry_method": "documented block extent",
+        "geometry_confidence": "medium",
+        "feature_role": "explorer anchor"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          100.50557,
+          13.75953
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "hua-takhe-corridor",
+      "properties": {
+        "slug": "hua-takhe",
+        "name_en": "Hua Takhe old canal market",
+        "name_th": "ตลาดเก่าหัวตะเข้",
+        "kind": "canal market",
+        "period": "Historic eastern canal settlement",
+        "typology": "Timber rowhouses lining a canal market",
+        "evidence": "mapped corridor",
+        "documented_units": null,
+        "register_id": null,
+        "note": "Bangkok's rowhouse story does not end at the old city wall. Here the frontage faces water: timber rooms, workshops and groceries form a long inhabited section through the canal landscape.",
+        "explorer_tip": "Visit on a weekday if you want the architecture; weekends tell the visitor-economy story instead.",
+        "source": "Bangkok News / Around Online neighbourhood guide",
+        "source_url": "https://www.aroundonline.com/bangkok-news-43/",
+        "geometry_method": "curated connection",
+        "geometry_confidence": "medium",
+        "feature_role": "cultural corridor"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            100.787706,
+            13.724527
+          ],
+          [
+            100.788404,
+            13.724212
+          ],
+          [
+            100.789175,
+            13.723914
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "hua-takhe-anchor",
+      "properties": {
+        "slug": "hua-takhe",
+        "name_en": "Hua Takhe old canal market",
+        "name_th": "ตลาดเก่าหัวตะเข้",
+        "kind": "canal market",
+        "period": "Historic eastern canal settlement",
+        "typology": "Timber rowhouses lining a canal market",
+        "evidence": "mapped corridor",
+        "documented_units": null,
+        "register_id": null,
+        "note": "Bangkok's rowhouse story does not end at the old city wall. Here the frontage faces water: timber rooms, workshops and groceries form a long inhabited section through the canal landscape.",
+        "explorer_tip": "Visit on a weekday if you want the architecture; weekends tell the visitor-economy story instead.",
+        "source": "Bangkok News / Around Online neighbourhood guide",
+        "source_url": "https://www.aroundonline.com/bangkok-news-43/",
+        "geometry_method": "curated connection",
+        "geometry_confidence": "medium",
+        "feature_role": "explorer anchor"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          100.788404,
+          13.724212
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "talat-phlu-corridor",
+      "properties": {
+        "slug": "talat-phlu",
+        "name_en": "Talat Phlu railway-market rows",
+        "name_th": "ตึกแถวย่านตลาดพลู",
+        "kind": "market row",
+        "period": "Thonburi market settlement",
+        "typology": "Rail, road and canal market shophouses",
+        "evidence": "mapped corridor",
+        "documented_units": null,
+        "register_id": null,
+        "note": "A useful correction to palace-centred heritage: rail, canal, food trade and ordinary rowhouses made a second old Bangkok on the Thonburi side. The network matters more than a single trophy building.",
+        "explorer_tip": "Trace one loop from railway to market to canal. Each infrastructure leaves a different rowhouse edge.",
+        "source": "Bangkok News / Around Online neighbourhood guide",
+        "source_url": "https://www.aroundonline.com/bangkok-news-43/",
+        "geometry_method": "OSM street axis",
+        "geometry_confidence": "medium",
+        "feature_role": "cultural corridor"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            100.477337,
+            13.721276
+          ],
+          [
+            100.478018,
+            13.720819
+          ],
+          [
+            100.478777,
+            13.720316
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "talat-phlu-anchor",
+      "properties": {
+        "slug": "talat-phlu",
+        "name_en": "Talat Phlu railway-market rows",
+        "name_th": "ตึกแถวย่านตลาดพลู",
+        "kind": "market row",
+        "period": "Thonburi market settlement",
+        "typology": "Rail, road and canal market shophouses",
+        "evidence": "mapped corridor",
+        "documented_units": null,
+        "register_id": null,
+        "note": "A useful correction to palace-centred heritage: rail, canal, food trade and ordinary rowhouses made a second old Bangkok on the Thonburi side. The network matters more than a single trophy building.",
+        "explorer_tip": "Trace one loop from railway to market to canal. Each infrastructure leaves a different rowhouse edge.",
+        "source": "Bangkok News / Around Online neighbourhood guide",
+        "source_url": "https://www.aroundonline.com/bangkok-news-43/",
+        "geometry_method": "OSM street axis",
+        "geometry_confidence": "medium",
+        "feature_role": "explorer anchor"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          100.478018,
+          13.720819
+        ]
+      }
+    }
+  ]
+}

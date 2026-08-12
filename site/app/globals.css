@@ -3388,7 +3388,7 @@ footer small { grid-column: 1 / -1; margin-top: 60px; padding-top: 24px; border-
   border-bottom: 1px solid var(--ink);
 }
 .rowhouse-method h2 { margin: 6px 0 0; font: 700 25px/1.05 var(--font-display); }
-.rowhouse-method-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; }
+.rowhouse-method-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; }
 .rowhouse-method-grid p { margin: 0; padding: 0 18px; border-left: 1px solid rgba(17,18,15,.28); font: 400 12px/1.5 var(--font-body); }
 .rowhouse-method-grid strong { display: block; margin-bottom: 4px; }
 
@@ -3419,6 +3419,107 @@ footer small { grid-column: 1 / -1; margin-top: 60px; padding-top: 24px; border-
 .rowhouse-directory-foot { padding: 40px var(--gutter, 5vw) 70px; font-family: var(--font-body); }
 .rowhouse-directory-foot strong { font: 700 24px/1.1 var(--font-display); }
 
+/* ── Comparative case for Bangkok ───────────────────────────────────── */
+.bangkok-case { background: var(--paper); color: var(--ink); }
+.bangkok-case-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(300px, .8fr);
+  gap: 24px clamp(36px, 8vw, 120px);
+  padding: clamp(46px, 8vw, 116px) var(--gutter, 5vw) 48px;
+  border-bottom: 1px solid var(--ink);
+}
+.bangkok-case-hero > .register-eyebrow,
+.bangkok-case-hero > h1,
+.bangkok-case-hero > .bangkok-case-th { grid-column: 1; }
+.bangkok-case-hero h1 {
+  margin: 10px 0 0;
+  max-width: 10ch;
+  font: 700 clamp(48px, 7vw, 98px)/.9 var(--font-display);
+  letter-spacing: -.055em;
+}
+.bangkok-case-th { margin: -16px 0 0; color: var(--seal, #8c2f23); font: 600 17px/1.35 var(--font-body); }
+.bangkok-case-standfirst {
+  grid-column: 2;
+  grid-row: 1 / span 3;
+  align-self: end;
+  margin: 0;
+  font: 600 clamp(18px, 1.85vw, 27px)/1.38 var(--font-body);
+  letter-spacing: -.015em;
+}
+.bangkok-case-actions { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: 8px; margin-top: 26px; }
+.bangkok-case-actions a,
+.bangkok-case-footer a {
+  padding: 10px 13px;
+  border: 1px solid var(--ink);
+  color: var(--ink);
+  font: 700 10px/1 var(--font-mono);
+  letter-spacing: .05em;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+.bangkok-case-actions a:first-child { background: var(--ink); color: var(--signal); }
+
+.bangkok-case-thesis {
+  display: grid;
+  grid-template-columns: minmax(250px, .8fr) minmax(0, 1.2fr);
+  gap: clamp(30px, 8vw, 120px);
+  padding: clamp(34px, 6vw, 78px) var(--gutter, 5vw);
+  background: var(--ink);
+  color: var(--paper-strong);
+}
+.bangkok-case-thesis h2,
+.bangkok-case-section-head h2,
+.bangkok-case-roadmap h2 { margin: 7px 0 0; font: 700 clamp(28px, 4vw, 50px)/1 var(--font-display); letter-spacing: -.03em; }
+.bangkok-case-thesis > p { margin: 0; font: 400 clamp(16px, 1.6vw, 22px)/1.55 var(--font-body); }
+
+.bangkok-claim-register,
+.bangkok-comparison,
+.bangkok-case-roadmap { padding: clamp(40px, 7vw, 90px) var(--gutter, 5vw); border-bottom: 1px solid var(--ink); }
+.bangkok-case-section-head { display: grid; grid-template-columns: minmax(240px, .7fr) minmax(0, 1.3fr); gap: 8px 40px; margin-bottom: 30px; }
+.bangkok-case-section-head .register-eyebrow { grid-column: 1; }
+.bangkok-case-section-head h2 { grid-column: 1; max-width: 15ch; }
+.bangkok-case-section-head > p { grid-column: 2; grid-row: 1 / span 2; align-self: end; margin: 0; max-width: 54ch; font: 500 15px/1.5 var(--font-body); }
+
+.bangkok-claim-grid { display: grid; grid-template-columns: repeat(4, 1fr); border: 1px solid var(--ink); }
+.bangkok-claim { min-height: 280px; padding: 18px; border-right: 1px solid var(--ink); }
+.bangkok-claim:last-child { border-right: 0; }
+.bangkok-claim > span { display: inline-block; padding: 4px 6px; background: var(--ink); color: var(--paper); font: 700 8px/1 var(--font-mono); letter-spacing: .08em; text-transform: uppercase; }
+.bangkok-claim.is-proved > span { background: #3c6627; }
+.bangkok-claim.is-promising > span { background: #9a6d1d; }
+.bangkok-claim.is-not-yet > span { background: var(--seal, #8c2f23); }
+.bangkok-claim h3 { margin: 18px 0 10px; font: 700 22px/1.05 var(--font-display); }
+.bangkok-claim p { margin: 0; font: 400 12.5px/1.55 var(--font-body); }
+.bangkok-claim small { display: block; margin-top: 22px; padding-top: 10px; border-top: 1px solid rgba(17,18,15,.2); font: 700 9px/1.35 var(--font-mono); color: rgba(17,18,15,.6); }
+
+.bangkok-comparison { padding-left: 0; padding-right: 0; }
+.bangkok-comparison > .bangkok-case-section-head { padding: 0 var(--gutter, 5vw); }
+.bangkok-comparison-table { border-top: 1px solid var(--ink); }
+.bangkok-comparison-row {
+  display: grid;
+  grid-template-columns: .72fr 1.2fr 1.15fr 1.4fr;
+  border-bottom: 1px solid rgba(17,18,15,.3);
+  padding: 0 var(--gutter, 5vw);
+}
+.bangkok-comparison-row > * { padding: 15px 18px 16px 0; border-right: 1px solid rgba(17,18,15,.2); }
+.bangkok-comparison-row > * + * { padding-left: 18px; }
+.bangkok-comparison-row > *:last-child { border-right: 0; }
+.bangkok-comparison-header { background: var(--ink); color: var(--paper-strong); }
+.bangkok-comparison-header span { padding-top: 9px; padding-bottom: 9px; font: 700 8px/1 var(--font-mono); letter-spacing: .09em; text-transform: uppercase; }
+.bangkok-comparison-row.is-bangkok { background: rgba(201,255,56,.14); border-top: 3px solid var(--ink); }
+.bangkok-comparison-row div > strong { display: block; font: 700 19px/1 var(--font-display); }
+.bangkok-comparison-row div > small,
+.bangkok-comparison-row div > em { display: block; margin-top: 4px; font: 600 9px/1.35 var(--font-mono); color: rgba(17,18,15,.58); font-style: normal; }
+.bangkok-comparison-row p { margin: 0 0 6px; font: 400 11.5px/1.45 var(--font-body); }
+.bangkok-comparison-row a { color: var(--seal, #8c2f23); font: 700 9px/1 var(--font-mono); text-underline-offset: 3px; }
+
+.bangkok-case-roadmap ol { list-style: none; margin: 30px 0 0; padding: 0; border-top: 1px solid var(--ink); counter-reset: roadmap; }
+.bangkok-case-roadmap li { counter-increment: roadmap; display: grid; grid-template-columns: 42px minmax(200px, .7fr) minmax(0, 1.3fr); gap: 18px; padding: 15px 0; border-bottom: 1px solid rgba(17,18,15,.25); }
+.bangkok-case-roadmap li::before { content: counter(roadmap, decimal-leading-zero); font: 700 10px/1.4 var(--font-mono); color: var(--seal, #8c2f23); }
+.bangkok-case-roadmap li strong { font: 700 17px/1.2 var(--font-display); }
+.bangkok-case-roadmap li span { font: 400 13px/1.45 var(--font-body); }
+.bangkok-case-footer { display: flex; justify-content: space-between; align-items: end; gap: 30px; padding: 44px var(--gutter, 5vw) 72px; }
+.bangkok-case-footer p { max-width: 780px; margin: 0; font: 500 19px/1.45 var(--font-body); }
+
 @media (max-width: 760px) {
   .rowhouse-directory-hero { grid-template-columns: 1fr; }
   .rowhouse-directory-dek { grid-column: 1; grid-row: auto; margin-top: 24px; }
@@ -3432,6 +3533,24 @@ footer small { grid-column: 1 / -1; margin-top: 60px; padding-top: 24px; border-
   .rowhouse-directory-card figure { grid-column: 2; }
   .rowhouse-directory-copy { grid-column: 2; }
   .rowhouse-directory-copy dl { grid-template-columns: 1fr; }
+  .bangkok-case-hero,
+  .bangkok-case-thesis,
+  .bangkok-case-section-head { grid-template-columns: 1fr; }
+  .bangkok-case-standfirst { grid-column: 1; grid-row: auto; margin-top: 24px; }
+  .bangkok-case-th { margin-top: 0; }
+  .bangkok-case-section-head h2,
+  .bangkok-case-section-head > p { grid-column: 1; grid-row: auto; }
+  .bangkok-claim-grid { grid-template-columns: 1fr; }
+  .bangkok-claim { min-height: 0; border-right: 0; border-bottom: 1px solid var(--ink); }
+  .bangkok-claim:last-child { border-bottom: 0; }
+  .bangkok-comparison-header { display: none; }
+  .bangkok-comparison-row { grid-template-columns: 1fr; padding-top: 8px; padding-bottom: 8px; }
+  .bangkok-comparison-row > * { padding: 10px 0; border-right: 0; border-bottom: 1px solid rgba(17,18,15,.12); }
+  .bangkok-comparison-row > * + * { padding-left: 0; }
+  .bangkok-comparison-row > *:last-child { border-bottom: 0; }
+  .bangkok-case-roadmap li { grid-template-columns: 28px 1fr; }
+  .bangkok-case-roadmap li span { grid-column: 2; }
+  .bangkok-case-footer { flex-direction: column; align-items: start; }
 }
 
 .lang-toggle {

@@ -282,6 +282,8 @@ type PoiFeature = {
     explorer_tip?: string | null;
     register_id?: string | null;
     units?: number | null;
+    geometry_method?: string | null;
+    geometry_confidence?: string | null;
     source: string;
     source_url: string;
   };
@@ -385,10 +387,28 @@ const OLDTOWN_POI_FEATURES: PoiFeature[] = OLDTOWN_SPOTS.map((spot) => ({
     explorer_tip: spot.explorerTip,
     register_id: spot.registerId ?? null,
     units: spot.units ?? null,
+    geometry_method: spot.fabric.method,
+    geometry_confidence: spot.fabric.geometryConfidence,
     source: spot.source,
     source_url: spot.sourceUrl,
   },
 }));
+
+const ROWHOUSE_FABRIC_GEOJSON = {
+  type: "FeatureCollection" as const,
+  features: OLDTOWN_SPOTS.map((spot) => ({
+    type: "Feature" as const,
+    properties: {
+      slug: spot.slug,
+      name: spot.name,
+      thai: spot.thai,
+      evidence: spot.evidence,
+      geometry_method: spot.fabric.method,
+      geometry_confidence: spot.fabric.geometryConfidence,
+    },
+    geometry: { type: "LineString" as const, coordinates: spot.fabric.coordinates },
+  })),
+};
 
 export function AtlasView({ world, embedded = false, initialView }: Props) {
   const containerRef = useRef<HTMLDivElement | null>(null);
@@ -815,6 +835,58 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
           }
         }
 
+        // Cultural-fabric corridors: documented street/block axes, not legal
+        // parcel boundaries. High-confidence records render solid; interpretive
+        // connections render dashed so the map never disguises inference as fact.
+        if (hasHistoricContext && !map.getSource("bkkx-rowhouse-fabric-src")) {
+          try {
+            map.addSource("bkkx-rowhouse-fabric-src", {
+              type: "geojson",
+              data: ROWHOUSE_FABRIC_GEOJSON,
+            });
+            map.addLayer({
+              id: "bkkx-rowhouse-fabric-casing",
+              type: "line",
+              source: "bkkx-rowhouse-fabric-src",
+              paint: { "line-color": "#15110b", "line-width": 8, "line-opacity": 0.78 },
+            });
+            map.addLayer({
+              id: "bkkx-rowhouse-fabric-solid",
+              type: "line",
+              source: "bkkx-rowhouse-fabric-src",
+              filter: ["==", ["get", "geometry_confidence"], "high"],
+              paint: { "line-color": "#e0a23a", "line-width": 4, "line-opacity": 0.95 },
+            });
+            map.addLayer({
+              id: "bkkx-rowhouse-fabric-inferred",
+              type: "line",
+              source: "bkkx-rowhouse-fabric-src",
+              filter: ["!=", ["get", "geometry_confidence"], "high"],
+              paint: {
+                "line-color": "#f4d492",
+                "line-width": 3,
+                "line-opacity": 0.9,
+                "line-dasharray": [2, 2],
+              },
+            });
+
+            const inspectFabric = (event: maplibregl.MapLayerMouseEvent) => {
+              const slug = event.features?.[0]?.properties?.slug as string | undefined;
+              const feature = OLDTOWN_POI_FEATURES.find((candidate) => candidate.properties.id === slug);
+              if (!feature) return;
+              setSelectedPoi(feature);
+              map.flyTo({ center: feature.geometry.coordinates, zoom: 16.7, pitch: 60, speed: 0.8, essential: true });
+            };
+            for (const layerId of ["bkkx-rowhouse-fabric-solid", "bkkx-rowhouse-fabric-inferred"]) {
+              map.on("click", layerId, inspectFabric);
+              map.on("mouseenter", layerId, () => { map.getCanvas().style.cursor = "pointer"; });
+              map.on("mouseleave", layerId, () => { map.getCanvas().style.cursor = ""; });
+            }
+          } catch (err) {
+            console.warn("bkkx: rowhouse fabric layer failed", err);
+          }
+        }
+
         setMapReady(true);
       });
 
@@ -944,6 +1016,20 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
       }
     }
   }, [showPoi, poiData, mapReady]);
+
+  // Keep the corridor geometry and its point markers under one toggle.
+  useEffect(() => {
+    const map = mapRef.current;
+    if (!map || !mapReady) return;
+    const visibility = showPoi.oldtown ? "visible" : "none";
+    for (const layerId of [
+      "bkkx-rowhouse-fabric-casing",
+      "bkkx-rowhouse-fabric-solid",
+      "bkkx-rowhouse-fabric-inferred",
+    ]) {
+      if (map.getLayer(layerId)) map.setLayoutProperty(layerId, "visibility", visibility);
+    }
+  }, [showPoi.oldtown, mapReady]);
 
   // Synchronize Zoning Layer visibility
   useEffect(() => {
@@ -1140,6 +1226,7 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
               className={showPoi.oldtown ? "active" : ""}
               onClick={() => setShowPoi((prev) => ({ ...prev, oldtown: !prev.oldtown }))}
               aria-pressed={showPoi.oldtown}
+              title="Solid lines: high-confidence documented axes. Dashed lines: curated connections."
             >
               ▥ Rowhouses {poiCounts.oldtown}
             </button>
@@ -1269,8 +1356,8 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
 
             {hasHistoricContext && (
               <div className="control-row">
-                <small className="control-label">Data.go.th POI Layers</small>
-                <div className="btn-group-layers" role="group" aria-label="Data.go.th POI Layers">
+                <small className="control-label">Cultural &amp; Open-data Layers</small>
+                <div className="btn-group-layers" role="group" aria-label="Cultural and open-data layers">
                   {POI_LAYERS.map((layer) => (
                     <button
                       key={layer.kind}
@@ -1281,6 +1368,9 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
                       className={`layer-toggle-btn bkkx-poi-chip ${showPoi[layer.kind] ? "active" : ""}`}
                       aria-pressed={showPoi[layer.kind]}
                       aria-label={`Toggle ${layer.label} layer (${poiCounts[layer.kind]} pins)`}
+                      title={layer.kind === "oldtown"
+                        ? "Solid lines: high-confidence documented axes. Dashed lines: curated connections."
+                        : undefined}
                       style={
                         {
                           ["--poi-color" as string]: layer.color,
@@ -1293,8 +1383,8 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
                   ))}
                 </div>
                 <small className="control-source-note">
-                  From data.go.th &amp; data.bangkok.go.th open-data registries. BKK
-                  bbox only (lng 100.2–101.0, lat 13.4–14.2).{" "}
+                  Rowhouse fabric: BKKx field research with confidence-labelled
+                  street axes. Institutional POIs: data.go.th &amp; data.bangkok.go.th. {" "}
                   <a href="https://data.go.th" target="_blank" rel="noreferrer">data.go.th</a>
                 </small>
               </div>
@@ -1403,6 +1493,8 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
             if (p.evidence) meta.push(["Evidence", p.evidence]);
             if (p.units) meta.push(["Documented units", String(p.units)]);
             if (p.register_id) meta.push(["Register / award", p.register_id]);
+            if (p.geometry_method) meta.push(["Map geometry", p.geometry_method]);
+            if (p.geometry_confidence) meta.push(["Geometry confidence", p.geometry_confidence]);
           }
           return (
             <div

@@ -17,6 +17,7 @@ export function PlaceMasthead() {
       </Link>
       <nav className="register-nav" aria-label="Primary navigation">
         <Link href="/rowhouses">Rowhouses</Link>
+        <Link href="/case-for-bangkok">The case</Link>
         <Link href="/heritage#quarters">{t("nav_quarters")}</Link>
         <Link href="/heritage#walks">{t("nav_walks")}</Link>
         <Link href="/heritage#register">{t("nav_register")}</Link>

@@ -4,7 +4,8 @@
 
 **[bkk.nonarkara.org](https://bkk.nonarkara.org)** — **BKKxC(ulture)**, this repo. A cultural heritage system for
 Bangkok: the Fine Arts Department's own register of 571 protected monuments, mapped honestly; nine heritage
-quarters with authored histories and a licensed photo each; seven walking routes with real street-following
+quarters with authored histories and a licensed photo each; a sourced atlas of 15 rowhouse clusters and their
+cultural corridors; seven walking routes with real street-following
 geometry and Minecraft coordinates where a monument falls inside a generated world; an English/Thai toggle
 across all of it; and a personal essay on why the project exists at all. The 3D map is the front door — pick a
 quarter, fly there, drill into the register.
@@ -32,14 +33,18 @@ graph TD
         Areas["/areas/:slug — nine quarters<br/>authored history + licensed photo"]
         Walks["/walks/:slug — seven walks<br/>real OSRM street geometry"]
         About["/about — the essay<br/>why this exists"]
+        Rowhouses["/rowhouses — 15 sourced clusters<br/>open points + cultural corridors"]
+        Case["/case-for-bangkok — comparative dossier<br/>claims, gaps and Asian comparators"]
         Worlds["/worlds, /atlas/:district<br/>the Minecraft walkthrough"]
     end
     FrontDoor --> Areas
     FrontDoor --> Register
+    FrontDoor --> Rowhouses
     Register --> Areas
     Register --> Walks
     Areas --> Walks
     Walks --> Worlds
+    Rowhouses --> Case
     FrontDoor -.iframe, same origin.-> Worlds
 
     Culture["BKKxC(ulture)<br/>this repo<br/>Editorial register"] -.sibling, separate repo/Worker.-> Atlas["atlas.nonarkara.org<br/>Nonarkara/bkk-3d-atlas<br/>Console register"]
@@ -60,6 +65,19 @@ Nang Loeng, Charoen Krung, Bang Krachao — each an authored page, not a databas
 walking distances and times from OSRM's foot profile (not straight-line estimates), a "by the numbers" block per
 walk (gazetted/awaiting split, oldest gazette entry and its age, walking pace), and — for the 125 stops that fall
 inside a generated Minecraft world — the exact `/tp` command to stand on them.
+
+**The rowhouse atlas.** `/rowhouses` documents 15 ensembles across royal frontages, market rows, commercial
+streets, canal markets and community-led conservation. Each record carries its source, explorer note, geometry
+method and confidence. The same data appears as clickable corridors in the 3D map and as an open
+[`GeoJSON download`](https://bkk.nonarkara.org/data/bangkok-rowhouse-atlas.geojson). Solid map lines follow
+high-confidence street axes or documented extents; dashed lines are interpretive. They are cultural corridors,
+not cadastral parcels or legal conservation boundaries. See [`docs/rowhouse-atlas-method.md`](docs/rowhouse-atlas-method.md)
+for the reproducible method.
+
+**The Bangkok case.** `/case-for-bangkok` compares the emerging evidence with UNESCO's own descriptions of
+George Town and Melaka, Vigan, Hoi An, Luang Prabang and Galle. It is deliberately a claim register, not a
+campaign slogan: what is already supported, what is promising, and what cannot be claimed until Bangkok has a
+building-level inventory, defensible boundary, integrity assessment and management system.
 
 **Bilingual.** Every quarter, every walk, and the essay toggle between English and Thai. The long-form content was
 translated by seven parallel agent passes, each given the exact source text and told to translate naturally
@@ -98,7 +116,7 @@ The installer uses a local generated world when present; otherwise it downloads 
 site/       the Next.js/vinext app — everything at bkk.nonarkara.org
 edge-proxy/ custom-domain binding for bkk.nonarkara.org ONLY (see context.md)
 scripts/    build-heritage-register.py, build-heritage-places.py, fetch-heritage-photos.py,
-            plus the Minecraft installer and Anvil integrity validator
+            export-rowhouse-data.mjs, plus the Minecraft installer and Anvil integrity validator
 worlds/     generation manifests + tiny level.dat spawn headers (not the world binaries)
 public/     banners/, photos/ — source assets for docs and the About essay
 previews/   validated top-down world maps
@@ -138,6 +156,7 @@ stay outside the website bundle and are distributed through GitHub Releases.
 python3 scripts/build-heritage-register.py            # the 571-monument register
 python3 scripts/build-heritage-places.py               # 9 quarters + 7 walks + real route legs
 python3 scripts/fetch-heritage-photos.py                # Commons photos, machine-checked to free licences
+cd site && npm run data:rowhouses                      # 15 points + 15 corridors as public GeoJSON
 ```
 
 Source pulls cache in `.cache/` (gitignored); `--refresh`/`--reroute`/`--refetch` re-fetch. Photos: Wikimedia
@@ -159,6 +178,7 @@ inferred heights, roads, water, vegetation and selected 3D assets depend on sour
 ## Roadmap
 
 - Translate the register's own raw Fine Arts Department text (571 monuments) for full EN/TH parity.
+- Replace corridor-scale rowhouse mapping with a building-by-building footprint, age, condition and use survey.
 - Add the remaining Bangkok districts as independent world chapters.
 - Layer live civic data onto the heritage quarters — that's what the sibling atlas project already does city-wide.
 - Add community-submitted stories and landmark corrections.

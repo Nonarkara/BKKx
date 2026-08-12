@@ -49,7 +49,7 @@ export default function RowhouseAtlasPage() {
             eastern canal settlement—without confusing a curated corridor with a legal boundary.
           </p>
           <div className="rowhouse-directory-stats" aria-label="Rowhouse atlas summary">
-            <div><strong>{OLDTOWN_SPOTS.length}</strong><span>mapped clusters</span></div>
+            <div><strong>{OLDTOWN_SPOTS.length}</strong><span>mapped corridors</span></div>
             <div><strong>{registered}</strong><span>register-linked</span></div>
             <div><strong>{countedUnits}+</strong><span>published units</span></div>
             <div><strong>3</strong><span>evidence levels</span></div>
@@ -57,6 +57,7 @@ export default function RowhouseAtlasPage() {
           <div className="rowhouse-directory-actions">
             <Link href="/?view=rowhouses">Open the 3D map</Link>
             <a href="#directory">Read the directory ↓</a>
+            <a href="/data/bangkok-rowhouse-atlas.geojson" download>GeoJSON ↓</a>
           </div>
         </header>
 
@@ -69,6 +70,7 @@ export default function RowhouseAtlasPage() {
             <p><strong>Fine Arts register</strong> links to a published monument record or conservation award.</p>
             <p><strong>Published count</strong> uses a scholarly or institutional inventory, including unit numbers where reported.</p>
             <p><strong>Curated corridor</strong> locates a documented community or street, but does not claim cadastral precision.</p>
+            <p><strong>Map geometry</strong> uses solid lines for high-confidence axes and dashed lines for interpretive connections.</p>
           </div>
         </section>
 
@@ -97,6 +99,7 @@ export default function RowhouseAtlasPage() {
                     <div><dt>Evidence</dt><dd>{OLDTOWN_EVIDENCE_LABEL[spot.evidence]}</dd></div>
                     {spot.units ? <div><dt>Published count</dt><dd>{spot.units} units</dd></div> : null}
                     {spot.registerId ? <div><dt>Register / award</dt><dd>{spot.registerId}</dd></div> : null}
+                    <div><dt>Map geometry</dt><dd>{spot.fabric.method} · {spot.fabric.geometryConfidence} confidence</dd></div>
                   </dl>
                   <p className="rowhouse-directory-tip"><strong>Explorer note</strong>{spot.explorerTip}</p>
                   <div className="rowhouse-directory-links">

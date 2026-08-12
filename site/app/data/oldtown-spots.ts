@@ -26,6 +26,14 @@ export type OldtownSpot = {
   calloutTh: string;
   source: string;
   sourceUrl: string;
+  // Real street/canal axes from OpenStreetMap or short interpretive links
+  // between documented anchors. These are cultural corridors, never parcel
+  // boundaries. Map rendering makes that distinction explicit.
+  fabric: {
+    method: "OSM street axis" | "documented block extent" | "curated connection";
+    geometryConfidence: "high" | "medium" | "low";
+    coordinates: Array<[number, number]>;
+  };
 };
 
 export const OLDTOWN_KIND_LABEL: Record<OldtownKind, { en: string; th: string; icon: string }> = {
@@ -62,6 +70,11 @@ export const OLDTOWN_SPOTS: OldtownSpot[] = [
     calloutTh: "อนุรักษ์โดยไม่ทำให้ถนนกลายเป็นพิพิธภัณฑ์ร้าง",
     source: "UNESCO Asia-Pacific Heritage Awards",
     sourceUrl: "https://articles.unesco.org/sites/default/files/medias/fichiers/2023/06/2011-winners.pdf",
+    fabric: {
+      method: "OSM street axis",
+      geometryConfidence: "high",
+      coordinates: [[100.489428, 13.752391], [100.489691, 13.752395], [100.490195, 13.752405], [100.491099, 13.752420], [100.491255, 13.752425]],
+    },
   },
   {
     slug: "tha-tien",
@@ -82,6 +95,11 @@ export const OLDTOWN_SPOTS: OldtownSpot[] = [
     calloutTh: "490 คูหา—มรดกในระดับย่าน",
     source: "Journal of Cultural Geography / Tha Tien study",
     sourceUrl: "https://www.tandfonline.com/doi/abs/10.1080/08873631.2018.1506545",
+    fabric: {
+      method: "documented block extent",
+      geometryConfidence: "high",
+      coordinates: [[100.490224, 13.745551], [100.490330, 13.746091], [100.490541, 13.746807], [100.490700, 13.747350]],
+    },
   },
   {
     slug: "tha-chang",
@@ -102,6 +120,11 @@ export const OLDTOWN_SPOTS: OldtownSpot[] = [
     calloutTh: "ขอบวังที่ยังเป็นพื้นที่ชีวิตสาธารณะ",
     source: "Fine Arts Department GIS register",
     sourceUrl: "https://data.go.th/dataset/gis-finearts",
+    fabric: {
+      method: "OSM street axis",
+      geometryConfidence: "high",
+      coordinates: [[100.488820, 13.751780], [100.489006, 13.752377], [100.489330, 13.753030]],
+    },
   },
   {
     slug: "sam-phraeng",
@@ -122,6 +145,11 @@ export const OLDTOWN_SPOTS: OldtownSpot[] = [
     calloutTh: "119 คูหาที่เติบโตจากพื้นที่วังสามแห่ง",
     source: "Nakhara: Evolving Urban Landscape of Sam Phraeng",
     sourceUrl: "https://digital.car.chula.ac.th/nakhara/vol23/iss3/3/",
+    fabric: {
+      method: "documented block extent",
+      geometryConfidence: "high",
+      coordinates: [[100.496706, 13.751650], [100.497108, 13.752031], [100.497415, 13.751924], [100.497815, 13.751592], [100.498235, 13.751050]],
+    },
   },
   {
     slug: "bamrung-mueang",
@@ -142,6 +170,11 @@ export const OLDTOWN_SPOTS: OldtownSpot[] = [
     calloutTh: "แนวถนนที่ทำให้อนุสาวรีย์มีพื้นที่",
     source: "Fine Arts Department GIS register",
     sourceUrl: "https://data.go.th/dataset/gis-finearts",
+    fabric: {
+      method: "OSM street axis",
+      geometryConfidence: "high",
+      coordinates: [[100.495520, 13.751286], [100.496130, 13.751371], [100.496599, 13.751445], [100.497210, 13.751506]],
+    },
   },
   {
     slug: "phra-athit-khao-hong",
@@ -162,6 +195,11 @@ export const OLDTOWN_SPOTS: OldtownSpot[] = [
     calloutTh: "เก้าคูหา หนึ่งขอบเมืองที่สมบูรณ์",
     source: "Journal of the Siam Society: Old Bangkok shophouses",
     sourceUrl: "https://so06.tci-thaijo.org/index.php/pub_jss/article/view/158147",
+    fabric: {
+      method: "documented block extent",
+      geometryConfidence: "high",
+      coordinates: [[100.493410, 13.761922], [100.493850, 13.762323], [100.494215, 13.762612]],
+    },
   },
   {
     slug: "luenrit",
@@ -181,6 +219,11 @@ export const OLDTOWN_SPOTS: OldtownSpot[] = [
     calloutTh: "ผู้เช่าคือคนที่รักษาทั้งบล็อก",
     source: "ICCROM Cultural Heritage for Inclusive Growth",
     sourceUrl: "https://ch4igrowth.iccrom.org/case-studies/luenrit-community-conservation-and-rehabilitation-project",
+    fabric: {
+      method: "documented block extent",
+      geometryConfidence: "high",
+      coordinates: [[100.505230, 13.744189], [100.505650, 13.744460], [100.506048, 13.744748]],
+    },
   },
   {
     slug: "charoen-chai",
@@ -200,6 +243,11 @@ export const OLDTOWN_SPOTS: OldtownSpot[] = [
     calloutTh: "หอจดหมายเหตุที่ยังเป็นร้านค้า",
     source: "Asian Journal of Environment-Behaviour Studies",
     sourceUrl: "https://aje-bs.e-iph.co.uk/index.php/ajE-Bs/article/view/229",
+    fabric: {
+      method: "OSM street axis",
+      geometryConfidence: "medium",
+      coordinates: [[100.510821, 13.742703], [100.511170, 13.742980], [100.511522, 13.743262]],
+    },
   },
   {
     slug: "song-wat",
@@ -220,6 +268,11 @@ export const OLDTOWN_SPOTS: OldtownSpot[] = [
     calloutTh: "มองโกดังที่อยู่หลังคาเฟ่",
     source: "Fine Arts Department register + Bangkok cultural reporting",
     sourceUrl: "https://data.go.th/dataset/gis-finearts",
+    fabric: {
+      method: "OSM street axis",
+      geometryConfidence: "high",
+      coordinates: [[100.502344, 13.740515], [100.503576, 13.739731], [100.505464, 13.739495], [100.507278, 13.738633], [100.509975, 13.736866]],
+    },
   },
   {
     slug: "wanit-sampheng",
@@ -240,6 +293,11 @@ export const OLDTOWN_SPOTS: OldtownSpot[] = [
     calloutTh: "ความหนาแน่นแบบกรุงเทพฯ ก่อนยุคตึกสูง",
     source: "Fine Arts Department GIS register",
     sourceUrl: "https://data.go.th/dataset/gis-finearts",
+    fabric: {
+      method: "OSM street axis",
+      geometryConfidence: "high",
+      coordinates: [[100.503299, 13.743660], [100.505211, 13.741865], [100.507561, 13.740495], [100.509080, 13.739637]],
+    },
   },
   {
     slug: "talad-noi",
@@ -259,6 +317,11 @@ export const OLDTOWN_SPOTS: OldtownSpot[] = [
     calloutTh: "ความยุ่งเหยิงที่ยังทำงานคือมรดก",
     source: "Bangkok News / Around Online neighbourhood guide",
     sourceUrl: "https://www.aroundonline.com/bangkok-news-43/",
+    fabric: {
+      method: "curated connection",
+      geometryConfidence: "medium",
+      coordinates: [[100.511652, 13.735407], [100.512314, 13.734561], [100.512967, 13.733452], [100.513618, 13.732437]],
+    },
   },
   {
     slug: "plaeng-nam",
@@ -278,6 +341,11 @@ export const OLDTOWN_SPOTS: OldtownSpot[] = [
     calloutTh: "หนึ่งร้อยเมตรของเมืองที่ครบถ้วน",
     source: "Bangkok News / Around Online neighbourhood guide",
     sourceUrl: "https://www.aroundonline.com/bangkok-news-43/",
+    fabric: {
+      method: "OSM street axis",
+      geometryConfidence: "high",
+      coordinates: [[100.509669, 13.741629], [100.509992, 13.741209], [100.510244, 13.740823]],
+    },
   },
   {
     slug: "nang-loeng",
@@ -297,6 +365,11 @@ export const OLDTOWN_SPOTS: OldtownSpot[] = [
     calloutTh: "อยู่ต่อหลังมื้อเช้า",
     source: "Bangkok News / Around Online neighbourhood guide",
     sourceUrl: "https://www.aroundonline.com/bangkok-news-43/",
+    fabric: {
+      method: "documented block extent",
+      geometryConfidence: "medium",
+      coordinates: [[100.505110, 13.759914], [100.505570, 13.759530], [100.506055, 13.759192]],
+    },
   },
   {
     slug: "hua-takhe",
@@ -316,6 +389,11 @@ export const OLDTOWN_SPOTS: OldtownSpot[] = [
     calloutTh: "ถนนของที่นี่คือสายน้ำ",
     source: "Bangkok News / Around Online neighbourhood guide",
     sourceUrl: "https://www.aroundonline.com/bangkok-news-43/",
+    fabric: {
+      method: "curated connection",
+      geometryConfidence: "medium",
+      coordinates: [[100.787706, 13.724527], [100.788404, 13.724212], [100.789175, 13.723914]],
+    },
   },
   {
     slug: "talat-phlu",
@@ -335,6 +413,11 @@ export const OLDTOWN_SPOTS: OldtownSpot[] = [
     calloutTh: "กรุงเทพฯ เก่าอีกชุดทางฝั่งธนบุรี",
     source: "Bangkok News / Around Online neighbourhood guide",
     sourceUrl: "https://www.aroundonline.com/bangkok-news-43/",
+    fabric: {
+      method: "OSM street axis",
+      geometryConfidence: "medium",
+      coordinates: [[100.477337, 13.721276], [100.478018, 13.720819], [100.478777, 13.720316]],
+    },
   },
 ];
 
