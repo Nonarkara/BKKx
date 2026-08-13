@@ -545,7 +545,7 @@ const POI_FILES = [
   "oldtown",
 ];
 
-test("the 5 data.go.th POI GeoJSON files exist and parse", async () => {
+test("the 6 POI GeoJSON files exist and parse (5 data.go.th + 1 BKKx rowhouse atlas)", async () => {
   const { readFileSync } = await import("node:fs");
   const { fileURLToPath } = await import("node:url");
   for (const kind of POI_FILES) {
@@ -580,7 +580,7 @@ test("every data.go.th POI pin is inside the BKK bbox", async () => {
   }
 });
 
-test("the 5 POI files are valid GeoJSON, parseable, and have non-zero features", async () => {
+test("the 6 POI files are valid GeoJSON, parseable, and have non-zero features", async () => {
   // The test worker stubs out static assets, so we read the files directly
   // from disk. The real production worker (wrangler deploy) serves these as
   // immutable static assets under /pois/, which is verified by the
