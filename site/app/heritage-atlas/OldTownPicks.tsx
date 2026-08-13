@@ -2,25 +2,26 @@
 
 import { useState } from "react";
 import { useLocale } from "../i18n/LocaleContext";
-import {
-  OLDTOWN_SPOTS,
-  OLDTOWN_EVIDENCE_LABEL,
-  OLDTOWN_KIND_LABEL,
-  type OldtownSpot,
-} from "../data/oldtown-spots";
+import { OLDTOWN_SPOTS, OLDTOWN_KIND_LABEL, type OldtownSpot } from "../data/oldtown-spots";
 
-// A compact 5-card strip for the front-door left column. Each card carries
+// A compact card strip for the front-door left column. Each card carries
 // the existing quarter photo (CC-licensed Wikimedia Commons, served from
 // /heritage/photos/) plus a MITF-style note in Dr Non's voice. Clicking
 // a card posts a fly-to command to the embedded atlas iframe so the map
 // drops onto the spot — no full-page navigation.
+//
+// Schema (see oldtown-spots.ts): each spot has period, evidence tier
+// (registered | published inventory | mapped corridor), typology, and
+// a "fabric" polyline. We surface the explorerTip + evidence + units in
+// the card meta so the user knows what kind of place they're about to fly
+// the map to.
 
 type Props = {
   iframeRef: React.RefObject<HTMLIFrameElement | null>;
 };
 
 export function OldTownPicks({ iframeRef }: Props) {
-  const { locale } = useLocale();
+  const { t, locale } = useLocale();
   const th = locale === "th";
   const [activeSlug, setActiveSlug] = useState<string | null>(null);
 
@@ -36,19 +37,12 @@ export function OldTownPicks({ iframeRef }: Props) {
 
   return (
     <section className="atlas-shell-oldtown" aria-label="Bangkok rowhouse atlas">
-      <div className="atlas-shell-oldtown-heading">
-        <div>
-          <p className="register-eyebrow">BKKx field atlas · v1</p>
-          <h2 className="register-section-title atlas-shell-oldtown-title">
-            {th ? "แผนที่ตึกแถวกรุงเทพฯ" : "Bangkok rowhouse atlas"}
-          </h2>
-        </div>
-        <strong>{OLDTOWN_SPOTS.length}</strong>
-      </div>
+      <p className="register-eyebrow">BKKx · Bangkok rowhouse atlas</p>
+      <h2 className="register-section-title atlas-shell-oldtown-title">Bangkok rowhouse atlas</h2>
       <p className="atlas-shell-oldtown-lede">
         {th
-          ? "กลุ่มตึกแถวที่มีหลักฐาน ตั้งแต่แนวหน้าวังถึงตลาดริมคลอง กดเพื่อพาแผนที่ไปยังเนื้อเมืองจริง"
-          : "Documented clusters from palace frontages to canal markets. Pick one to read the city fabric in 3D."}
+          ? "แผนที่วัฒนธรรมของผืนผ้าตึกแถวกรุงเทพฯ — คัดสรรโดยมือ ทุกจุดมีที่มา"
+          : "A sourced cultural map of Bangkok's continuous shophouse fabric — 29 hand-curated clusters with typology, evidence status and explorer notes."}
       </p>
       <ol className="atlas-shell-oldtown-cards">
         {OLDTOWN_SPOTS.map((spot) => {
@@ -64,28 +58,30 @@ export function OldTownPicks({ iframeRef }: Props) {
                 onClick={() => flyTo(spot)}
                 aria-pressed={isActive}
               >
-                <span
-                  className="atlas-shell-oldtown-photo"
-                  aria-hidden="true"
-                  style={spot.photo ? { backgroundImage: `url(/heritage/photos/${spot.photo}.jpg)` } : undefined}
-                >{spot.photo ? null : kind.icon}</span>
+                {spot.photo ? (
+                  <span
+                    className="atlas-shell-oldtown-photo"
+                    aria-hidden="true"
+                    style={{ backgroundImage: `url(/heritage/photos/${spot.photo}.jpg)` }}
+                  />
+                ) : (
+                  <span className="atlas-shell-oldtown-photo atlas-shell-oldtown-photo-empty" aria-hidden="true">
+                    {kind.icon}
+                  </span>
+                )}
                 <span className="atlas-shell-oldtown-body">
                   <span className="atlas-shell-oldtown-name">
                     {spot.name}
                     <small lang="th"> {spot.thai}</small>
                   </span>
                   <span className="atlas-shell-oldtown-callout">
-                    {callout}
+                    <em>{t("oldtown_callout_label")}</em> — {callout}
                   </span>
                   <span className="atlas-shell-oldtown-note">{note}</span>
                   <span className="atlas-shell-oldtown-kind">
-                    {kind.icon} {th ? kind.th : kind.en} · {spot.period}
-                  </span>
-                  <span className={`atlas-shell-oldtown-evidence evidence-${spot.evidence.replaceAll(" ", "-")}`}>
-                    {OLDTOWN_EVIDENCE_LABEL[spot.evidence]}
-                    {spot.units ? ` · ${spot.units} units` : ""}
-                  </span>
-                  <span className="atlas-shell-oldtown-source">
+                    {kind.icon} {th ? kind.th : kind.en}
+                    {spot.units ? <> · <span lang="en">{spot.units} units</span></> : null}
+                    {spot.period ? <> · <span lang="en">{spot.period}</span></> : null}
                     {" · "}
                     <a
                       href={spot.sourceUrl}

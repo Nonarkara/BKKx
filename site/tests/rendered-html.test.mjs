@@ -542,6 +542,7 @@ const POI_FILES = [
   "national-museums",
   "national-libraries",
   "national-archives",
+  "oldtown",
 ];
 
 test("the 5 data.go.th POI GeoJSON files exist and parse", async () => {
