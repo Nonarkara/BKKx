@@ -78,10 +78,10 @@ export function OldTownPicks({ iframeRef }: Props) {
                     <em>{t("oldtown_callout_label")}</em> — {callout}
                   </span>
                   <span className="atlas-shell-oldtown-note">{note}</span>
-                  <span className="atlas-shell-oldtown-kind">
+                  <span className="atlas-shell-oldtown-meta">
                     {kind.icon} {th ? kind.th : kind.en}
-                    {spot.units ? <> · <span lang="en">{spot.units} units</span></> : null}
-                    {spot.period ? <> · <span lang="en">{spot.period}</span></> : null}
+                    {spot.units ? <> · {spot.units} units</> : null}
+                    {spot.period ? <> · {spot.period}</> : null}
                     {" · "}
                     <a
                       href={spot.sourceUrl}

@@ -2943,7 +2943,7 @@ footer small { grid-column: 1 / -1; margin-top: 60px; padding-top: 24px; border-
 
 .atlas-shell-body {
   display: grid;
-  grid-template-columns: clamp(300px, 22vw, 348px) 1fr;
+  grid-template-columns: clamp(360px, 26vw, 420px) 1fr;
   min-height: 0;
 }
 
@@ -3011,7 +3011,7 @@ footer small { grid-column: 1 / -1; margin-top: 60px; padding-top: 24px; border-
 }
 .atlas-shell-quarter-chips button {
   display: grid;
-  grid-template-columns: 22px 48px 1fr;
+  grid-template-columns: 22px 48px minmax(0, 1fr);
   align-items: center;
   column-gap: 10px;
   width: 100%;
@@ -3130,14 +3130,14 @@ footer small { grid-column: 1 / -1; margin-top: 60px; padding-top: 24px; border-
 
 .atlas-shell-oldtown-cards button {
   display: grid;
-  grid-template-columns: 60px 1fr;
+  grid-template-columns: 44px minmax(0, 1fr);
   align-items: start;
-  column-gap: 10px;
+  column-gap: 8px;
   width: 100%;
   text-align: left;
   background: transparent;
   border: 0;
-  padding: 7px 2px;
+  padding: 5px 2px;
   font-family: var(--font-body);
   color: var(--ink);
   cursor: pointer;
@@ -3153,8 +3153,8 @@ footer small { grid-column: 1 / -1; margin-top: 60px; padding-top: 24px; border-
 
 .atlas-shell-oldtown-photo {
   display: block;
-  width: 60px;
-  height: 64px;
+  width: 44px;
+  height: 44px;
   background-color: rgba(17, 18, 15, 0.06);
   background-size: cover;
   background-position: center;
@@ -3164,7 +3164,7 @@ footer small { grid-column: 1 / -1; margin-top: 60px; padding-top: 24px; border-
 .atlas-shell-oldtown-body {
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 1px;
   min-width: 0;
 }
 
@@ -3174,13 +3174,21 @@ footer small { grid-column: 1 / -1; margin-top: 60px; padding-top: 24px; border-
   font-weight: 700;
   line-height: 1.25;
   color: var(--ink);
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 .atlas-shell-oldtown-name small {
   display: block;
-  font-size: 11px;
+  font-size: 10.5px;
   font-weight: 400;
   color: rgba(17, 18, 15, 0.7);
-  margin-top: 1px;
+  margin-top: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 .atlas-shell-oldtown-callout {
@@ -3192,12 +3200,16 @@ footer small { grid-column: 1 / -1; margin-top: 60px; padding-top: 24px; border-
   color: var(--seal, #8c2f23);
   margin-top: 2px;
   letter-spacing: 0.01em;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 .atlas-shell-oldtown-callout em {
   font-style: normal;
   font-weight: 700;
   font-family: var(--font-mono);
-  font-size: 9px;
+  font-size: 8.5px;
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--signal);
@@ -3212,21 +3224,23 @@ footer small { grid-column: 1 / -1; margin-top: 60px; padding-top: 24px; border-
   font-family: var(--font-body);
   margin-top: 2px;
   display: -webkit-box;
-  -webkit-line-clamp: 1;
+  -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
-.atlas-shell-oldtown-cards button.is-active .atlas-shell-oldtown-note { -webkit-line-clamp: 3; }
+.atlas-shell-oldtown-cards button.is-active .atlas-shell-oldtown-note { -webkit-line-clamp: 2; }
 
-.atlas-shell-oldtown-kind,
-.atlas-shell-oldtown-source {
+.atlas-shell-oldtown-meta {
   display: block;
-  font-size: 9px;
+  font-size: 8.5px;
   line-height: 1.3;
   font-family: var(--font-mono);
-  letter-spacing: 0.04em;
+  letter-spacing: 0.02em;
   color: rgba(17, 18, 15, 0.55);
-  margin-top: 3px;
+  margin-top: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .atlas-shell-oldtown-source { margin-top: 0; }
 .atlas-shell-oldtown-source a {
@@ -3985,8 +3999,8 @@ footer small { grid-column: 1 / -1; margin-top: 60px; padding-top: 24px; border-
 }
 .atlas-shell-quarter-thumb {
   display: block;
-  width: 48px;
-  height: 48px;
+  width: 44px;
+  height: 44px;
   background-color: rgba(17, 18, 15, 0.06);
   background-size: cover;
   background-position: center;
