@@ -3038,19 +3038,23 @@ footer small { grid-column: 1 / -1; margin-top: 60px; padding-top: 24px; border-
   font-size: 14px;
   font-weight: 600;
   line-height: 1.2;
-  white-space: nowrap;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
   overflow: hidden;
-  text-overflow: ellipsis;
+  word-break: break-word;
 }
 .atlas-shell-quarter-name small {
   display: block;
   font-size: 11px;
   font-weight: 400;
-  opacity: 0.7;
+  opacity: 0.72;
   margin-top: 1px;
-  white-space: nowrap;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
   overflow: hidden;
-  text-overflow: ellipsis;
+  word-break: break-word;
 }
 
 /* Old-town featured picks — compact 5-card strip at the top of the
@@ -3234,14 +3238,16 @@ footer small { grid-column: 1 / -1; margin-top: 60px; padding-top: 24px; border-
   display: block;
   font-size: 11px;
   line-height: 1.35;
-  opacity: 0.7;
+  opacity: 0.72;
   margin-top: 3px;
-  white-space: nowrap;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
   overflow: hidden;
-  text-overflow: ellipsis;
+  word-break: break-word;
 }
 .atlas-shell-quarter-chips button.is-active .atlas-shell-quarter-tag {
-  opacity: 0.85;
+  opacity: 0.88;
 }
 
 .atlas-shell-side {

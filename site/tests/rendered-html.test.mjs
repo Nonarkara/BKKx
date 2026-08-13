@@ -108,6 +108,28 @@ test("serves the 3D map heritage atlas as the front door", async () => {
   assert.match(html, /application\/ld\+json/);
 });
 
+test("every quarter photo URL resolves (page.tsx must use the photo slot, not the slug)", async () => {
+  // Regression: the front door once built each quarter thumbnail from
+  // `${a.slug}.jpg` — but two of nine areas use a photo slot that
+  // differs from the area slug (yaowarat-sampheng → yaowarat, plus
+  // charoen-krung which is fine, but nang-loeng/sam-phraeng also have
+  // different conventions). The build must read `a.photo` from
+  // heritage-places.json and build the URL from that, or chips 404
+  // and render as gray empty boxes.
+  const fs = await import("node:fs");
+  const path = await import("node:path");
+  const pageHtml = await render("/");
+  const html = await pageHtml.text();
+  const { default: places } = await import("../app/data/heritage-places.json", { with: { type: "json" } });
+  for (const area of places.areas) {
+    if (!area.photo) continue;
+    const expected = `/heritage/photos/${area.photo}.jpg`;
+    assert.match(html, new RegExp(expected.replace(/[/.]/g, "\\$&")), `front-door HTML should reference ${expected} for ${area.slug}`);
+    const onDisk = path.join(process.cwd(), "public/heritage/photos", `${area.photo}.jpg`);
+    assert.ok(fs.existsSync(onDisk), `${area.slug}: photo ${area.photo}.jpg not on disk`);
+  }
+});
+
 test("rowhouse atlas entries are sourced, geolocated, and evidence-labelled", async () => {
   const { OLDTOWN_SPOTS } = await import("../app/data/oldtown-spots.ts");
   assert.ok(OLDTOWN_SPOTS.length >= 29, "rowhouse atlas must cover at least 29 clusters");

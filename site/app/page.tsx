@@ -54,11 +54,14 @@ export default function Home() {
     tagline: a.tagline,
     center: a.center,
     zoom: a.zoom,
-    // Photo: every quarter has a licensed Commons photo in the
-    // attribution manifest at /public/heritage/photos/{slug}.jpg.
-    // The chip's thumbnail surfaces the photo as a small visual
-    // hook, so the heritage list is not just a wall of text.
-    photo: `/heritage/photos/${a.slug}.jpg`,
+    // Photo: every quarter has a licensed Commons photo in the attribution
+    // manifest at /public/heritage/photos/{slot}.jpg — the photo slot
+    // is keyed by the photo's own slug, which is shorter than the area
+    // slug in two cases (yaowarat-sampheng → yaowarat, charoen-krung
+    // maps to itself). Build the URL from the photo slot, not the area
+    // slug, or the two mismatches 404 silently and the chip renders as
+    // a gray empty box.
+    photo: a.photo ? `/heritage/photos/${a.photo}.jpg` : undefined,
   }));
 
   return (
