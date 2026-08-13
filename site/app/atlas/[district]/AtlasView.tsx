@@ -1394,6 +1394,8 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
               </div>
             </div>
 
+            <div className="control-section-divider" />
+
             <div className="control-row">
               <small className="control-label">Weather Mode</small>
               <div className="btn-group-weather" role="group" aria-label="Weather Mode Select">
@@ -1423,6 +1425,8 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
                 <span>Bangkok PM2.5: {pm25Status.text}</span>
               </div>
             )}
+
+            <div className="control-section-divider" />
 
             {hasHistoricContext && (
               <div className="control-row">
@@ -1463,6 +1467,8 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
               </div>
             )}
 
+            <div className="control-section-divider" />
+
             {hasHistoricContext && (
               <div className="control-row">
                 <small className="control-label">Cultural &amp; Open-data Layers</small>
@@ -1498,6 +1504,8 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
                 </small>
               </div>
             )}
+
+            <div className="control-section-divider" />
 
             {hasHistoricContext && (
               <div className="control-row">
