@@ -26,6 +26,7 @@ export default function PrintPage() {
         <p className="sh-print-sub">{SHORT_META.subtitle}</p>
         <p className="sh-print-by">{SHORT_META.byline}</p>
         <p className="sh-print-context">{SHORT_META.context}</p>
+        <p className="sh-print-dedication">{SHORT_META.dedication}</p>
         <p className="sh-print-note">{SHORT_META.note}</p>
         <p className="sh-print-meta">
           ≈{words.toLocaleString()} words · revised {SHORT_META.updated}

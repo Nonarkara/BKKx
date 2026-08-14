@@ -343,6 +343,14 @@ export const QUEST_SPOTS: Record<string, QuestSpot[]> = {
       address: "357 Charoen Krung Road (Soi 43)",
     },
     {
+      name: "The House on Sathorn",
+      thai: "เดอะ เฮาส์ ออน สาทร",
+      theme: "explore",
+      note: "A colonial mansion of about 1890 — once royal, later the Russian embassy, now restored inside the W hotel compound. It reads as a building that fell out of its own time, with towers on every side of it. Walk into the courtyard; the contrast is the point.",
+      noteTh: "คฤหาสน์สไตล์โคโลเนียลอายุราวปี 1890 เคยเป็นวังเจ้านาย ต่อมาเป็นสถานทูตรัสเซีย ปัจจุบันได้รับการบูรณะอยู่ในพื้นที่โรงแรม W อาคารนี้เหมือนหลุดออกมาจากเวลาของตัวเอง ท่ามกลางตึกสูงรอบด้าน ลองเดินเข้าไปที่ลานกลางบ้าน ความขัดแย้งตรงนั้นคือประเด็น",
+      address: "106 North Sathorn Road, Bang Rak",
+    },
+    {
       name: "Warehouse 30",
       thai: "โกดัง 30",
       theme: "create",

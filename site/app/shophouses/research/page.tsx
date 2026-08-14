@@ -35,6 +35,7 @@ export default function ResearchPage() {
         </Link>
         <nav aria-label="Research">
           <Link href="/shophouses">The essay</Link>
+          <Link href="/shophouses/bible">The Bible</Link>
           <a href="#facts">Did you know</a>
           <a href="#bibliography">Bibliography</a>
         </nav>

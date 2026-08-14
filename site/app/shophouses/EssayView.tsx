@@ -21,6 +21,8 @@ export function EssayView() {
         <nav aria-label="Essay">
           <a href="#essay">Essay</a>
           <a href="#figures-corridor">The corridor</a>
+          <Link href="/shophouses/bible">The Bible</Link>
+          <Link href="/shophouses/research">Sources</Link>
           <Link href="/shophouses/manuscript">Manuscript</Link>
           <a href="https://bkk.nonarkara.org" target="_blank" rel="noreferrer">
             BKKx
@@ -35,6 +37,7 @@ export function EssayView() {
         <p className="sh-byline">
           {ESSAY_META.byline} — {ESSAY_META.context}
         </p>
+        <p className="sh-dedication-line">{ESSAY_META.dedication}</p>
 
         <button
           type="button"

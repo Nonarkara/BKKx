@@ -21,6 +21,8 @@ export const SHORT_META = {
     "The third essay in Shophouse Metropolis (Harvard University Graduate School of Design), following Chatpong Chuenrudeemol's title essay and Bangkok Bastards.",
   note:
     "An extended version, with an interactive survey of the Sukhumvit 71 corridor, a sourced reuse-versus-demolition carbon model and a catalogue of 57 theses, is at shophouses.nonarkara.org",
+  dedication:
+    "For the late Dr Chamnarn Tirapas of the School of Architecture and Design, King Mongkut's University of Technology Thonburi — a leading expert on the shophouse, whom I came to know during my first year as senior expert at depa, when we found ourselves working the same smart-city problem from opposite ends. Energetic, down to earth, funny and caring. None of us knew how little time there would be. The anatomy this essay leans on is his, and so is the proposal to move the stair.",
   updated: "2026-08-14",
 } as const;
 
