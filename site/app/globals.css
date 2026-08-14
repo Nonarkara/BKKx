@@ -4782,3 +4782,185 @@ body:has(.shophouse-essay) {
   margin: 1.2em 0 0; padding-left: .9em; border-left: 1.5pt solid var(--sh-seal);
   font-size: 9pt; line-height: 1.5; font-style: italic; color: #44443d;
 }
+
+/* ================================================================
+   shophouses — CYBERPUNK EDITORIAL (2026-08-14)
+   Axiom Design Core §XIV rule 6: the cyberpunk palette is correct
+   for dense dark surfaces. Near-black with a blue undertone, data
+   text #e6edf3, and ONE accent — rule 1 still holds, so the signal
+   lime does all the work and the photographs supply the colour.
+   Overrides the light Editorial tokens declared earlier; the print
+   surface (.sh-print) is re-lightened at the bottom, because a book
+   page is not a screen.
+   ================================================================ */
+
+.shophouse-essay {
+  --sh-ink: #e6edf3;            /* was near-black; now the text */
+  --sh-paper: #0a0e14;          /* AKIRA near-black, blue undertone */
+  --sh-panel: #10161f;
+  --sh-seal: #c9ff38;           /* the one accent — house Console signal */
+  --sh-quiet: #8b93a1;
+  --sh-rule: rgba(230, 237, 243, 0.18);
+  --sh-hairline: rgba(230, 237, 243, 0.10);
+  color-scheme: dark;
+}
+
+body:has(.shophouse-essay) { background: #0a0e14; color: #e6edf3; }
+
+.shophouse-essay a { color: var(--sh-seal); }
+.sh-masthead { border-bottom-color: var(--sh-rule); }
+.sh-wordmark { color: var(--sh-ink) !important; }
+.sh-prose h2, .sh-section-prose h2 { border-top-color: var(--sh-rule); }
+.sh-footer, .sh-biblio-section h3, .sh-dim-table th, .sh-tenure th,
+.sh-carbon-result, .sh-fig, .sh-ms-meta { border-color: var(--sh-rule); }
+.sh-figure figcaption, .sh-fig-note, .sh-note, .sh-byline { color: var(--sh-quiet); }
+
+/* the accent is bright on dark — pull it back from pure signal for prose */
+.sh-eyebrow, .sh-project-system, .sh-sources h4,
+.sh-el-code, .sh-rule-clause, .sh-era-period { color: var(--sh-seal); }
+.sh-el-code { background: var(--sh-seal); color: #0a0e14; }
+.sh-stock-fill, .sh-carbon-seg.is-reuse { background: var(--sh-seal); }
+.sh-carbon-seg.is-demo, .sh-carbon-seg.is-new { background: #e6edf3; }
+.sh-carbon-seg.is-demo { opacity: .35; }
+.sh-pattern li.is-intact { background: rgba(201, 255, 56, .10); }
+.sh-land-m2, .sh-dim-value, .sh-carbon-result strong { color: var(--sh-seal); }
+.sh-section-svg { background: var(--sh-panel); }
+.sh-svg-tag { fill: #e6edf3; }
+.sh-svg-tag.is-muted { fill: #8b93a1; }
+.sh-svg-dim { fill: #8b93a1; }
+.sh-abstract-toggle, .sh-sources-toggle, .sh-carbon-toggle button,
+.sh-map-controls button, .sh-section-controls button { color: var(--sh-ink); }
+.sh-carbon-toggle button.is-active, .sh-map-controls button.is-active,
+.sh-section-controls button.is-active {
+  border-color: var(--sh-seal); background: rgba(201,255,56,.12); color: var(--sh-seal);
+}
+.sh-project > button, .sh-era > button, .sh-findings > li > button { color: var(--sh-ink); }
+.sh-tenure tr.is-empty td:last-child, .sh-finding-caveat,
+.sh-rule-consequence, .sh-consensus-fix, .sh-conflict-verdict { color: var(--sh-seal); }
+.sh-rule-consequence, .sh-consensus-fix, .sh-conflict-verdict,
+.sh-finding-caveat, .sh-dedication, .sh-pull, .sh-dedication-line,
+.sh-abstract { border-color: var(--sh-seal); }
+
+/* ---- contents strip (replaces the sticky rail; the rail is now content) ---- */
+.sh-contents-strip {
+  max-width: 1184px; margin: 0 auto; padding: 0 var(--sh-page);
+  border-bottom: 1px solid var(--sh-rule);
+}
+.sh-contents-strip ol {
+  display: flex; flex-wrap: wrap; gap: var(--sh-cap) var(--sh-base);
+  margin: 0; padding: var(--sh-base) 0; list-style: none; counter-reset: cs;
+}
+.sh-contents-strip li { counter-increment: cs; }
+.sh-contents-strip a {
+  font-family: var(--font-display); font-size: 12px; font-weight: 600;
+  color: var(--sh-quiet) !important; text-decoration: none !important;
+  display: inline-flex; align-items: center; min-height: 32px;
+}
+.sh-contents-strip a::before { content: counter(cs,decimal-leading-zero); color: var(--sh-seal); margin-right: 5px; }
+.sh-contents-strip a:hover { color: var(--sh-ink) !important; }
+
+/* ---- the 60 / 40 split ---- */
+.sh-sections { max-width: 1184px; margin: 0 auto; padding: 0 var(--sh-page); }
+.sh-section { padding: calc(var(--sh-page) * 1.2) 0; border-bottom: 1px solid var(--sh-hairline); }
+.sh-section-prose { min-width: 0; }
+.sh-section-prose > p { max-width: var(--sh-measure); margin: 0 0 var(--sh-base); }
+.sh-section-prose h2 {
+  font-family: var(--font-display);
+  font-size: clamp(24px, 3vw, 33px); font-weight: 800;
+  letter-spacing: -.035em; line-height: 1.12; text-wrap: balance;
+  max-width: 24ch; margin: 0 0 var(--sh-base); padding-top: var(--sh-base);
+  border-top: 1px solid var(--sh-rule);
+}
+@media (min-width: 1080px) {
+  .sh-section {
+    display: grid;
+    grid-template-columns: minmax(0, 6fr) minmax(0, 4fr);
+    gap: calc(var(--sh-page) * 1.6);
+    align-items: start;
+  }
+  .sh-rail { position: sticky; top: var(--sh-page); }
+}
+
+/* ---- rail ---- */
+.sh-rail { display: grid; gap: var(--sh-page); min-width: 0; }
+@media (max-width: 1079px) {
+  .sh-rail { margin-top: var(--sh-page); padding-top: var(--sh-base); border-top: 1px solid var(--sh-hairline); }
+}
+.sh-rail figure, .sh-rail-fact, .sh-rail-project { margin: 0; }
+.sh-rail img { width: 100%; height: auto; display: block; border: 1px solid var(--sh-rule); }
+.sh-rail figcaption {
+  margin-top: var(--sh-cap); font-family: var(--font-display);
+  font-size: 13px; line-height: 1.45; color: var(--sh-quiet);
+}
+.sh-rail figcaption em { font-style: normal; color: rgba(139,147,161,.75); }
+
+.sh-rail-fact {
+  padding: var(--sh-base); background: var(--sh-panel);
+  border-left: 3px solid var(--sh-seal);
+}
+.sh-rail-fact p {
+  margin: 0 0 var(--sh-cap) !important; font-family: var(--font-display);
+  font-size: 17px; font-weight: 600; line-height: 1.35; letter-spacing: -.02em;
+  color: var(--sh-ink);
+}
+.sh-rail-fact small { font-family: var(--font-display); font-size: 12px; color: var(--sh-quiet); }
+
+.sh-rail-diagram > button {
+  display: block; width: 100%; padding: 0; background: none; border: 0;
+  cursor: zoom-in; position: relative;
+}
+.sh-rail-zoom {
+  position: absolute; right: 8px; bottom: 8px;
+  background: rgba(10,14,20,.85); color: var(--sh-seal);
+  font-family: var(--font-display); font-size: 11px; font-weight: 700;
+  letter-spacing: .1em; text-transform: uppercase; padding: 5px 9px;
+  border: 1px solid var(--sh-seal);
+}
+.sh-rail-generated { display: block; margin-top: 4px; font-style: italic; font-size: 12px; color: rgba(139,147,161,.8); }
+.sh-rail-diagram figcaption strong { color: var(--sh-ink); font-weight: 700; }
+
+.sh-lightbox {
+  position: fixed; inset: 0; z-index: 200; background: rgba(6,9,13,.96);
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: var(--sh-base); padding: var(--sh-page); overflow: auto; cursor: zoom-out;
+}
+.sh-lightbox img { max-width: min(1100px, 96vw); max-height: 76vh; width: auto; border: 1px solid var(--sh-rule); }
+.sh-lightbox p { max-width: 68ch; font-size: 14px; color: var(--sh-quiet); text-align: left; }
+.sh-lightbox button {
+  min-height: 44px; padding: 0 var(--sh-base); background: none;
+  border: 1px solid var(--sh-seal); color: var(--sh-seal);
+  font-family: var(--font-display); font-size: 13px; font-weight: 600; cursor: pointer;
+}
+
+.sh-rail-project { border: 1px solid var(--sh-rule); }
+.sh-rail-project > button {
+  width: 100%; display: grid; gap: 2px; text-align: left; cursor: pointer;
+  background: none; border: 0; padding: var(--sh-base); min-height: 44px; color: var(--sh-ink);
+}
+.sh-rail-project.is-open { border-color: var(--sh-seal); }
+.sh-rail-project-system {
+  font-family: var(--font-display); font-size: 11px; font-weight: 700;
+  letter-spacing: .1em; text-transform: uppercase; color: var(--sh-seal);
+}
+.sh-rail-project-title { font-family: var(--font-display); font-size: 17px; font-weight: 700; letter-spacing: -.02em; }
+.sh-rail-project-student { font-family: var(--font-display); font-size: 12px; color: var(--sh-quiet); }
+.sh-rail-project-body { padding: 0 var(--sh-base) var(--sh-base); font-size: 15px; line-height: 1.55; }
+.sh-rail-project-body p { margin: 0 0 var(--sh-cap) !important; }
+.sh-rail-project-precedent, .sh-rail-project-figure { color: var(--sh-quiet); font-size: 14px; }
+.sh-rail-project-precedent strong { color: var(--sh-seal); font-family: var(--font-display); font-size: 11px; text-transform: uppercase; letter-spacing: .1em; }
+
+/* ---- support logos ---- */
+.sh-support { padding-bottom: var(--sh-base); margin-bottom: var(--sh-base); border-bottom: 1px solid var(--sh-hairline); }
+.sh-support-logos { display: flex; flex-wrap: wrap; gap: var(--sh-base); align-items: center; margin-top: var(--sh-base); }
+.sh-support-logos img {
+  height: 54px; width: auto; background: #fff; padding: 7px;
+  border: 1px solid var(--sh-rule);
+}
+
+/* ---- the print surface stays light: a book page is not a screen ---- */
+.sh-print, body:has(.sh-print) { background: #fff !important; color: #14140f !important; }
+.sh-print {
+  --sh-ink: #14140f; --sh-paper: #fff; --sh-seal: #8c2f23;
+  --sh-quiet: #6b6a60; --sh-rule: rgba(20,20,15,.16); --sh-hairline: rgba(20,20,15,.09);
+  color-scheme: light;
+}

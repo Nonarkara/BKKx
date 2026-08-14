@@ -1,16 +1,36 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
-import { ESSAY, ESSAY_META } from "../data/shophouse-essay";
+import { useMemo, useState } from "react";
+import { ESSAY, ESSAY_META, type Block } from "../data/shophouse-essay";
 import { STUDIO } from "../data/shophouse-studio";
+import { SUPPORT } from "../data/shophouse-rail";
 import { Figure } from "./figures";
+import { Rail } from "./Rail";
+
+// The essay is grouped into sections so each one can carry its own side
+// rail. On a wide screen: argument in the left 60%, evidence in the right
+// 40%, both scrolling together. On a phone the rail falls in after the
+// section's prose — the essay still reads top to bottom either way.
+
+type Section = { slug: string; heading: string | null; blocks: Block[] };
+
+function toSections(blocks: Block[]): Section[] {
+  const out: Section[] = [{ slug: "", heading: null, blocks: [] }];
+  for (const b of blocks) {
+    if (b.kind === "h2") {
+      out.push({ slug: slugify(b.text), heading: b.text, blocks: [] });
+    } else {
+      out[out.length - 1].blocks.push(b);
+    }
+  }
+  return out.filter((s) => s.blocks.length || s.heading);
+}
 
 export function EssayView() {
   const [showAbstract, setShowAbstract] = useState(false);
-
-  // Section headings, for the running contents rail.
-  const headings = ESSAY.flatMap((b) => (b.kind === "h2" ? [b.text] : []));
+  const sections = useMemo(() => toSections(ESSAY), []);
+  const headings = sections.filter((s) => s.heading).map((s) => s.heading!);
 
   return (
     <div className="shophouse-essay">
@@ -20,7 +40,6 @@ export function EssayView() {
         </Link>
         <nav aria-label="Essay">
           <a href="#essay">Essay</a>
-          <a href="#figures-corridor">The corridor</a>
           <Link href="/shophouses/bible">The Bible</Link>
           <Link href="/shophouses/research">Sources</Link>
           <Link href="/shophouses/manuscript">Manuscript</Link>
@@ -31,7 +50,9 @@ export function EssayView() {
       </header>
 
       <article className="sh-lede" id="essay">
-        <p className="sh-eyebrow">{STUDIO.institution} · {STUDIO.sponsor}</p>
+        <p className="sh-eyebrow">
+          {STUDIO.institution} · {STUDIO.sponsor}
+        </p>
         <h1>{ESSAY_META.title}</h1>
         <p className="sh-subtitle">{ESSAY_META.subtitle}</p>
         <p className="sh-byline">
@@ -54,56 +75,67 @@ export function EssayView() {
         )}
       </article>
 
-      <div className="sh-body">
-        <aside className="sh-contents" aria-label="Contents">
-          <p className="sh-eyebrow">Contents</p>
-          <ol>
-            {headings.map((h) => (
-              <li key={h}>
-                <a href={`#${slug(h)}`}>{h}</a>
-              </li>
-            ))}
-          </ol>
-        </aside>
+      <nav className="sh-contents-strip" aria-label="Contents">
+        <ol>
+          {headings.map((h) => (
+            <li key={h}>
+              <a href={`#${slugify(h)}`}>{h}</a>
+            </li>
+          ))}
+        </ol>
+      </nav>
 
-        <div className="sh-prose">
-          {ESSAY.map((block, i) => {
-            switch (block.kind) {
-              case "h2":
-                return (
-                  <h2 key={i} id={slug(block.text)}>
-                    {block.text}
-                  </h2>
-                );
-              case "p":
-                return <p key={i}>{block.text}</p>;
-              case "pull":
-                return (
-                  <blockquote key={i} className="sh-pull">
-                    {block.text}
-                  </blockquote>
-                );
-              case "note":
-                return (
-                  <p key={i} className="sh-note">
-                    {block.text}
-                  </p>
-                );
-              case "figure":
-                return (
-                  <figure key={i} className="sh-figure" id={`figures-${block.id}`}>
-                    <Figure id={block.id} />
-                    <figcaption>{block.caption}</figcaption>
-                  </figure>
-                );
-              default:
-                return null;
-            }
-          })}
-        </div>
+      <div className="sh-sections">
+        {sections.map((s) => (
+          <section className="sh-section" key={s.slug || "opening"} id={s.slug || undefined}>
+            <div className="sh-section-prose">
+              {s.heading && <h2>{s.heading}</h2>}
+              {s.blocks.map((block, i) => {
+                switch (block.kind) {
+                  case "p":
+                    return <p key={i}>{block.text}</p>;
+                  case "pull":
+                    return (
+                      <blockquote key={i} className="sh-pull">
+                        {block.text}
+                      </blockquote>
+                    );
+                  case "note":
+                    return (
+                      <p key={i} className="sh-note">
+                        {block.text}
+                      </p>
+                    );
+                  case "figure":
+                    return (
+                      <figure key={i} className="sh-figure" id={`figures-${block.id}`}>
+                        <Figure id={block.id} />
+                        <figcaption>{block.caption}</figcaption>
+                      </figure>
+                    );
+                  default:
+                    return null;
+                }
+              })}
+            </div>
+            <Rail section={s.slug} />
+          </section>
+        ))}
       </div>
 
       <footer className="sh-footer">
+        <div className="sh-support">
+          <p className="sh-eyebrow">Supported by</p>
+          <p>{SUPPORT.intro}</p>
+          <div className="sh-support-logos">
+            {SUPPORT.logos.map((l) => (
+              <a key={l.file} href={l.url} target="_blank" rel="noreferrer" title={l.name}>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={l.file} alt={l.name} loading="lazy" />
+              </a>
+            ))}
+          </div>
+        </div>
         <p>
           <strong>{STUDIO.name}</strong> — {STUDIO.critic}, with {STUDIO.institution}. Chair:{" "}
           {STUDIO.chair}. Sponsor: {STUDIO.sponsor}. Site: {STUDIO.site}.
@@ -126,7 +158,7 @@ export function EssayView() {
   );
 }
 
-function slug(s: string): string {
+function slugify(s: string): string {
   return s
     .toLowerCase()
     .replace(/[^a-z0-9\s-]/g, "")

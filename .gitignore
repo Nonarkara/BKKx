@@ -24,3 +24,8 @@ public/photos/
 # students' unpublished draft projects. Shared privately for the essay; not
 # ours to republish. The essay cites them; the files stay local.
 public/studio references/
+
+# Source photo/diagram originals — resized copies ship in site/public/shophouses/
+public/non in bangkok/
+public/shophouses bangkok/
+public/diagrams/
