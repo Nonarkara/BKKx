@@ -4617,3 +4617,81 @@ body:has(.shophouse-essay) {
 .sh-biblio-meta { margin: var(--sh-cap) 0 0 !important; font-family: var(--font-display); font-size: 13px; color: var(--sh-quiet); }
 .sh-biblio-links { display: flex; flex-wrap: wrap; gap: var(--sh-base); margin: 4px 0 0 !important; }
 .sh-biblio-links a { font-family: var(--font-display); font-size: 12px; }
+
+/* ---- shophouses: land value under a unit ---- */
+.sh-land { margin-bottom: calc(var(--sh-page) * 1.2); }
+.sh-land-lede { margin: 0 0 var(--sh-base); max-width: var(--sh-measure); }
+.sh-land-bands { margin: 0; padding: 0; list-style: none; border-top: 1px solid var(--sh-ink); }
+.sh-land-bands li {
+  display: grid; gap: 2px; padding: var(--sh-base) 0;
+  border-bottom: 1px solid var(--sh-hairline);
+}
+@media (min-width: 720px) {
+  .sh-land-bands li {
+    grid-template-columns: 20ch 11ch 17ch 1fr;
+    align-items: baseline; gap: var(--sh-base);
+  }
+  .sh-land-note { grid-column: 4; }
+}
+.sh-land-label { font-family: var(--font-display); font-size: 15px; font-weight: 700; }
+.sh-land-m2 {
+  font-family: var(--font-display); font-size: 20px; font-weight: 700;
+  color: var(--sh-seal); font-variant-numeric: tabular-nums; letter-spacing: -.03em;
+}
+.sh-land-m2 small { font-size: 12px; font-weight: 400; color: var(--sh-quiet); }
+.sh-land-unit { font-family: var(--font-mono); font-size: 13px; color: var(--sh-ink); }
+.sh-land-note { font-family: var(--font-display); font-size: 13px; color: var(--sh-quiet); line-height: 1.45; }
+
+/* ---- shophouses: the print / PDF surface ----
+   Typeset for A4 via headless Chrome. Institutional register discipline:
+   must survive greyscale, no colour carries meaning on its own, motion
+   irrelevant. Page margins come from @page, not from the element. */
+.sh-print { background: #fff; }
+.sh-print .sh-print-cover,
+.sh-print .sh-print-body { max-width: 34em; margin: 0 auto; }
+
+.sh-print-cover { padding: 0 0 2.4em; border-bottom: 1.5pt solid var(--sh-ink); margin-bottom: 2em; }
+.sh-print-series {
+  font-family: var(--font-display); font-size: 8.5pt; font-weight: 700;
+  letter-spacing: .2em; text-transform: uppercase; color: var(--sh-seal);
+  margin: 0 0 1.6em;
+}
+.sh-print-cover h1 {
+  font-family: var(--font-display); font-size: 30pt; font-weight: 800;
+  line-height: 1.03; letter-spacing: -.04em; margin: 0; text-wrap: balance;
+}
+.sh-print-sub {
+  font-family: var(--font-display); font-size: 14pt; font-weight: 400;
+  line-height: 1.25; color: #4a4a42; margin: .5em 0 0;
+}
+.sh-print-by {
+  font-family: var(--font-display); font-size: 11pt; font-weight: 700;
+  margin: 1.6em 0 0;
+}
+.sh-print-context, .sh-print-note, .sh-print-meta {
+  font-size: 9pt; line-height: 1.45; color: #55554d; margin: .5em 0 0; font-style: italic;
+}
+.sh-print-meta { font-family: var(--font-mono); font-style: normal; font-size: 8pt; color: #77776e; }
+
+.sh-print-body { font-size: 10.5pt; line-height: 1.62; }
+.sh-print-body p { margin: 0 0 .85em; text-align: justify; hyphens: auto; }
+.sh-print-body h2 {
+  font-family: var(--font-display); font-size: 13pt; font-weight: 800;
+  letter-spacing: -.02em; margin: 1.8em 0 .7em; padding-top: .5em;
+  border-top: .5pt solid var(--sh-ink); break-after: avoid; page-break-after: avoid;
+}
+.sh-print-pull {
+  font-family: var(--font-display); font-size: 12.5pt; font-weight: 600;
+  line-height: 1.3; letter-spacing: -.015em; text-align: left !important;
+  margin: 1.2em 0 !important; padding-left: .9em;
+  border-left: 2pt solid var(--sh-seal); break-inside: avoid;
+}
+
+@page {
+  size: A4;
+  margin: 20mm 18mm 18mm;
+}
+@media print {
+  .sh-print-cover { break-after: avoid; }
+  .sh-print-body p, .sh-print-body h2 { orphans: 3; widows: 3; }
+}

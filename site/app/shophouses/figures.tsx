@@ -5,6 +5,7 @@ import { SHOPHOUSE_STOCK, SUKHUMVIT_PATTERN, PROJECTS, DOCUMENTED_OF_TOTAL } fro
 import { COEFFICIENTS, PAYBACK, COST, GAPS, UNIT, compare } from "../data/reuse-carbon";
 import { ERAS, FINDINGS, READ_IN_FULL, MAP_1907 } from "../data/shophouse-research";
 import { THESES } from "../data/shophouse-theses";
+import { CORRIDOR_BANDS, LAND_PRICE_SOURCE, bahtPerM2, landValueUnderUnit } from "../data/land-price";
 import type { FigureId } from "../data/shophouse-essay";
 import { CorridorMap } from "./CorridorMap";
 
@@ -305,8 +306,47 @@ const TENURE_FIELDS = [
 
 function TenureFigure() {
   const have = TENURE_FIELDS.filter((f) => f.have).length;
+  const footprint = UNIT.frontageM * UNIT.depthM;
+  const baht = (n: number) =>
+    n >= 1_000_000 ? `฿${(n / 1_000_000).toFixed(2)}M` : `฿${Math.round(n).toLocaleString()}`;
+
   return (
     <div className="sh-fig sh-tenure">
+      <div className="sh-land">
+        <p className="sh-eyebrow">The one commercial number that is public</p>
+        <p className="sh-land-lede">
+          Rent and tenure are unpublished. Land value is not — and it is the number the
+          demolition case actually rests on. A developer arguing to clear a shophouse is not
+          really arguing about the building. He is arguing that the {footprint.toFixed(0)} m² of
+          ground under it is worth more empty.
+        </p>
+        <ul className="sh-land-bands">
+          {CORRIDOR_BANDS.map((b) => (
+            <li key={b.id}>
+              <span className="sh-land-label">{b.label}</span>
+              <span className="sh-land-m2">
+                {baht(bahtPerM2(b))}<small>/m²</small>
+              </span>
+              <span className="sh-land-unit">
+                {baht(landValueUnderUnit(b, footprint))} under one unit
+              </span>
+              <span className="sh-land-note">{b.note}</span>
+            </li>
+          ))}
+        </ul>
+        <p className="sh-fig-note">
+          {LAND_PRICE_SOURCE.dataset} — {LAND_PRICE_SOURCE.via}.{" "}
+          <a href={LAND_PRICE_SOURCE.url} target="_blank" rel="noreferrer">
+            Source
+          </a>
+          . Same dataset as the land-price layer on{" "}
+          <a href="https://atlas.nonarkara.org" target="_blank" rel="noreferrer">
+            atlas.nonarkara.org
+          </a>
+          . {LAND_PRICE_SOURCE.caveats.join(" ")}
+        </p>
+      </div>
+
       <table>
         <thead>
           <tr>

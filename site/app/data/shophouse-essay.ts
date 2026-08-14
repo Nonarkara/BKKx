@@ -322,6 +322,10 @@ export const ESSAY: Block[] = [
     kind: "p",
     text: "The second is tenure. Chatpong's collaborator asked me a question I have not stopped thinking about: could you see which shophouses are occupied, which are for sale, which are for rent — from both ends, so a developer can find stock and a family can find a home? That system does not exist and I cannot build it from open data, because tenure is not published anywhere. What I can do is build the frame and leave the fields visibly empty, which is what I have done here. An empty field with a known shape is a specification. It tells you exactly what survey to commission.",
   },
+  {
+    kind: "p",
+    text: "One commercial number is public, though, and it happens to be the decisive one. The Treasury appraises land, and those figures are open. Around Sukhumvit 71 the appraised range runs from about 47,500 baht per square metre on an inner soi to roughly 150,000 on the nearest documented main-road band — which puts somewhere between 2.7 and 8.5 million baht of ground under a single shophouse footprint. Bear in mind that appraised value is the base for transfer tax and sits below what a plot actually trades for. So the number is a floor, and it is already several times what the building on top of it is insured for. The demolition argument was never really about the building.",
+  },
   { kind: "figure", id: "tenure", caption: "The tenure question, as a schema with nothing in it. Every field is real; no field has data. This is a specification, not a product." },
   {
     kind: "p",
