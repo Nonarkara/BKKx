@@ -479,7 +479,74 @@ const SECTION_SHORT: Record<string, string> = {
   E: "open-access papers",
 };
 
+/* --------------------------------------------------------- samphanthawong */
+
+function SamphanthawongFigure() {
+  const rows = [
+    { label: "1907 cadastre, 16 design types", value: 2430 },
+    { label: "Standing today", value: 310 },
+  ];
+  const max = rows[0].value;
+  return (
+    <div className="sh-fig sh-stock">
+      <div className="sh-stock-bars">
+        {rows.map((r, i) => (
+          <div className="sh-stock-row" key={i}>
+            <span className="sh-stock-label">{r.label}</span>
+            <div className="sh-stock-track">
+              <div
+                className={`sh-stock-fill${i === 0 ? " is-peak" : ""}`}
+                style={{ width: `${(r.value / max) * 100}%` }}
+              />
+            </div>
+            <span className="sh-stock-value">{fmt(r.value)}</span>
+          </div>
+        ))}
+      </div>
+      <p className="sh-fig-note">
+        One district, Samphanthawong, one century. 87% of the counted shophouses are gone. Source:
+        Quin Limp, MArch thesis, Chulalongkorn University (2010).
+      </p>
+    </div>
+  );
+}
+
+/* ------------------------------------------------------------------ asset */
+
+function AssetFigure() {
+  const footprint = UNIT.frontageM * UNIT.depthM;
+  const rows = CORRIDOR_BANDS.map((b) => ({
+    label: b.label,
+    value: Math.round(landValueUnderUnit(b, footprint)),
+  }));
+  const max = Math.max(...rows.map((r) => r.value));
+  return (
+    <div className="sh-fig sh-stock">
+      <div className="sh-stock-bars">
+        {rows.map((r, i) => (
+          <div className="sh-stock-row" key={r.label}>
+            <span className="sh-stock-label">{r.label}</span>
+            <div className="sh-stock-track">
+              <div
+                className={`sh-stock-fill${i === rows.length - 1 ? " is-peak" : ""}`}
+                style={{ width: `${(r.value / max) * 100}%` }}
+              />
+            </div>
+            <span className="sh-stock-value">฿{fmt(r.value / 1_000_000)}M</span>
+          </div>
+        ))}
+      </div>
+      <p className="sh-fig-note">
+        Appraised land value under one shophouse footprint ({UNIT.frontageM}×{UNIT.depthM} m),
+        by price band. Appraisal sits below market — this is a floor, not a ceiling. Source:{" "}
+        {LAND_PRICE_SOURCE.dataset}, via {LAND_PRICE_SOURCE.via}.
+      </p>
+    </div>
+  );
+}
+
 /* ---------------------------------------------------------------- index */
+
 
 export function Figure({ id }: { id: FigureId }) {
   switch (id) {
@@ -499,6 +566,10 @@ export function Figure({ id }: { id: FigureId }) {
       return <TenureFigure />;
     case "research":
       return <ResearchFigure />;
+    case "samphanthawong":
+      return <SamphanthawongFigure />;
+    case "asset":
+      return <AssetFigure />;
     default:
       return null;
   }

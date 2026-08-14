@@ -30,7 +30,9 @@ export type FigureId =
   | "corridor"
   | "projects"
   | "tenure"
-  | "research";
+  | "research"
+  | "samphanthawong"
+  | "asset";
 
 export const ESSAY_META = {
   title: "Bangkok Doesn't Need a Smart City",
@@ -105,15 +107,16 @@ export const ESSAY: Block[] = [
   { kind: "figure", id: "stock", caption: "Bangkok's shophouse stock, from Chatpong Chuenrudeemol's measured account. The slope, not the total." },
   {
     kind: "p",
-    text: "There is a sharper version of that slope, and it comes from a thesis almost nobody has read. In 2010 a Chulalongkorn master's student named Quin Limp took the 1907 cadastral survey of Bangkok — a 1:1,000 map made to issue land title deeds, which is why it records individual buildings — and counted every shophouse in Samphanthawong district. There were 2,430. He reconstructed sixteen original design types from them, including a run of 63 identical units across Songsawat, Charoen Krung and Yaowarat. Then he counted what was left. Around 310. One district, one century, roughly 87% gone.[[2]]",
+    text: "There is a sharper version of that slope, and it comes from a thesis almost nobody has read. In 2010 a Chulalongkorn master's student named Quin Limp took the 1907 cadastral survey of Bangkok — a 1:1,000 map made to issue land title deeds, which is why it records individual buildings — and counted every shophouse in Samphanthawong district. There were 2,430, in sixteen reconstructable design types, including a run of 63 identical units across Songsawat, Charoen Krung and Yaowarat. Then he counted what was left.[[2]]",
+  },
+  { kind: "figure", id: "samphanthawong", caption: "One district, one century. Quin Limp's 2010 count from the 1907 cadastral survey, against what remains today." },
+  {
+    kind: "p",
+    text: "Each transaction makes sense on its own terms. Hold a plot on a main road with a three-storey building on it, where zoning and the market will support thirty, and the difference between three and thirty is the return. Clearing the low-rise is the shortest path to it. For a long time we called this progress, and for a long time it was — the city needed density, offices, hotel rooms, tax base. Nobody was wrong.",
   },
   {
     kind: "p",
-    text: "And each transaction does make sense. If you hold a plot on a main road with a three-storey building on it, and the zoning and the market will support thirty storeys, the difference between three and thirty is the return. Clearing the low-rise is the shortest path to it. For a long time we called this progress, and for a long time it was: the city needed density, needed offices, needed hotel rooms, needed the tax base. Nobody was wrong.",
-  },
-  {
-    kind: "p",
-    text: "It is worth saying what this type actually was before we discuss what to do with it, because the history is not decoration. Charoen Krung was cut in 1862 because the foreign consuls petitioned the King that they were falling ill with nowhere to ride, and masonry rows followed along it. Rama V drew the line of Song Wat himself in 1892, and ordered Yaowarat through the 1890s, and the Privy Purse built and leased rows to merchant tenants — which means the shophouse was, for a while, an instrument of royal property income. Siam Cement was founded in 1913 and the frame went from load-bearing wall to concrete skeleton somewhere in the decades after. By the 1960s more than half of everything built in Thai cities was shophouses, and by the mid-1970s about seventy per cent of Bangkok lived in one.[[3]]",
+    text: "The history is not decoration. Charoen Krung was cut in 1862 because the foreign consuls petitioned the King that they were falling ill with nowhere to ride, and masonry rows followed along it. Rama V drew the line of Song Wat himself in 1892, and ordered Yaowarat through the 1890s, and the Privy Purse built and leased rows to merchant tenants — which means the shophouse was, for a while, an instrument of royal property income. Siam Cement was founded in 1913 and the frame went from load-bearing wall to concrete skeleton somewhere in the decades after. By the 1960s more than half of everything built in Thai cities was shophouses, and by the mid-1970s about seventy per cent of Bangkok lived in one.[[3]]",
   },
   { kind: "figure", id: "timeline", caption: "How the type developed — and where the scholarship has a hole in it." },
   {
@@ -151,7 +154,7 @@ export const ESSAY: Block[] = [
   { kind: "h2", text: "So: the ones that are fine" },
   {
     kind: "p",
-    text: "Set aside the dangerous ones. What about the shophouses in decent structural condition, on good land, that are coming down anyway because the arithmetic says so? This is where I want to be careful, because there is a version of this essay that is sentimental and I do not want to write it.",
+    text: "Set aside the dangerous ones. What about the shophouses in decent structural condition, on good land, coming down anyway because the arithmetic says so? There is a sentimental version of this argument and I do not want to write it.",
   },
   {
     kind: "p",
@@ -159,7 +162,7 @@ export const ESSAY: Block[] = [
   },
   {
     kind: "p",
-    text: "Although before either — there is a legal fact I did not know until I went reading, and it is the strangest and strongest thing in this essay. On a great many shophouse plots, you are not allowed to rebuild what you tear down. Setback rules require a building over two storeys to stand six metres back from the centreline of a road narrower than ten metres.[[4]] An old shophouse already occupies its entire plot, right up to the pavement, because it was built before that rule existed. Demolish it and the replacement has to step back — onto land that, on a twelve-metre-deep plot, is most of the site. So for a whole class of buildings, reuse is not the sentimental option and not even the economical one. It is the only lawful thing you can do with the plot, and the alternative is to hold an empty lot.",
+    text: "Before money or carbon, though: there is a legal fact I did not know until I went reading, and it is the strangest and strongest thing in this essay. On a great many shophouse plots, you are not allowed to rebuild what you tear down. Setback rules require a building over two storeys to stand six metres back from the centreline of a road narrower than ten metres.[[4]] An old shophouse already occupies its entire plot, right up to the pavement, because it was built before that rule existed. Demolish it and the replacement has to step back — onto land that, on a twelve-metre-deep plot, is most of the site. So for a whole class of buildings, reuse is not the sentimental option and not even the economical one. It is the only lawful thing you can do with the plot, and the alternative is to hold an empty lot.",
   },
   {
     kind: "pull",
@@ -186,7 +189,7 @@ export const ESSAY: Block[] = [
   { kind: "h2", text: "What I actually cannot tell you" },
   {
     kind: "p",
-    text: "Here is where I have to be honest about the state of the evidence, because I went looking for it and it is not there.",
+    text: "I went looking for the evidence on this and it is not there.",
   },
   {
     kind: "p",
@@ -194,7 +197,7 @@ export const ESSAY: Block[] = [
   },
   {
     kind: "p",
-    text: "It is worse than that. There is no institutional benchmark anywhere for whole-building deep retrofit. The GLA, RICS, RIBA and LETI all publish new-build benchmarks; none publishes the retrofit equivalent. Which means every reuse-versus-rebuild comparison in circulation, including mine, has a well-measured demolition side and an estimated reuse side. That asymmetry quietly favours knocking things down, in every assessment that does not say so out loud.",
+    text: "There is no institutional benchmark anywhere for whole-building deep retrofit. The GLA, RICS, RIBA and LETI all publish new-build benchmarks; none publishes the retrofit equivalent. Which means every reuse-versus-rebuild comparison in circulation, including mine, has a well-measured demolition side and an estimated reuse side. That asymmetry quietly favours knocking things down, in every assessment that does not say so out loud.",
   },
   {
     kind: "pull",
@@ -269,7 +272,7 @@ export const ESSAY: Block[] = [
   { kind: "h2", text: "The elephant" },
   {
     kind: "p",
-    text: "I have to name the thing everyone in Bangkok is thinking about, because pretending otherwise would make this essay useless.",
+    text: "I have to name the thing everyone in Bangkok is already thinking about.",
   },
   {
     kind: "p",
@@ -287,7 +290,7 @@ export const ESSAY: Block[] = [
   { kind: "h2", text: "What the students found" },
   {
     kind: "p",
-    text: "Which brings me to the studio, and to why I think this particular group of drawings matters more than its author probably intends.",
+    text: "Which brings me to the studio, and why this particular set of drawings matters more than its author probably intends.",
   },
   {
     kind: "p",
@@ -309,10 +312,6 @@ export const ESSAY: Block[] = [
 
   { kind: "h2", text: "The smart city we already have" },
   {
-    kind: "p",
-    text: "Here is my actual position, and it is not the one people invite me to give.",
-  },
-  {
     kind: "pull",
     text: "Bangkok does not have a smart city deficit. It has a legitimacy deficit. The systems are running. They are simply not written down, not measured, and not permitted.",
   },
@@ -332,7 +331,7 @@ export const ESSAY: Block[] = [
   { kind: "h2", text: "What that looks like when you build it" },
   {
     kind: "p",
-    text: "I should show my work rather than assert this, so here is what I have been doing for the last six months, which is going rogue.",
+    text: "So here is what I have been doing for the last six months, which is going rogue.",
   },
   {
     kind: "p",
@@ -340,11 +339,7 @@ export const ESSAY: Block[] = [
   },
   {
     kind: "p",
-    text: "I built another one to help my mother find a massage therapist, which sounds trivial and turned out not to be. It gathered eighty-six thousand records in thirty-eight hours and classified them, and once mapped against public-health data it showed a geography that nobody had drawn — where a particular kind of establishment clusters, and where that clustering coincides with HIV prevalence. I did not go looking for that. The system found it because the data had never been put on one map before.",
-  },
-  {
-    kind: "p",
-    text: "The part that matters for this essay is what happened next. Turning that system from one that maps massage parlours into one that maps and matches motorcycle-taxi supply and demand is roughly seven lines of code. The hard part was never the technology. The hard part was two weeks of looking at what came back and fixing how the data was collected, which is a discipline problem, not an engineering one.",
+    text: "The corridor screen on this site is the same story at smaller scale: an afternoon of code against eleven thousand building footprints, rotating calipers to find each one's short side and long side, to see which shapes read as a shophouse from geometry alone. Building that took longer to write this paragraph explaining it than it took to run. The two weeks I actually spent went into checking the output against buildings I could verify by eye, because a screening tool that is fast and wrong is worse than no tool. That is the part that does not compress: the technology is cheap, and the discipline of trusting your own result is not.",
   },
   {
     kind: "p",
@@ -412,7 +407,7 @@ export const ESSAY: Block[] = [
   { kind: "h2", text: "Why this is a business, not a charity" },
   {
     kind: "p",
-    text: "A word for the sponsor, since this studio has one and I would rather address that directly than pretend a research book is disinterested.",
+    text: "This studio has a sponsor, and I would rather address that directly than pretend a research book is disinterested.",
   },
   {
     kind: "p",
@@ -424,7 +419,12 @@ export const ESSAY: Block[] = [
   },
   {
     kind: "p",
-    text: "Start with the asset. Four hundred thousand units of infrastructure-rich, transit-adjacent, structurally-serviceable floor area. At the studio's measured dimensions that is on the order of 20 million square metres of existing structure — held by owners who mostly believe it is worth only the dirt beneath it. Around Sukhumvit 71 that dirt appraises between roughly ฿47,500 and ฿150,000 per square metre, and appraisal sits below market. So the land under a single shophouse is worth ฿2.7 to ฿8.5 million while the building on it is carried at close to nothing.",
+    text: "Start with the asset. Four hundred thousand units of infrastructure-rich, transit-adjacent, structurally-serviceable floor area — on the order of 20 million square metres of existing structure at the studio's measured dimensions, held by owners who mostly believe it is worth only the dirt beneath it.",
+  },
+  { kind: "figure", id: "asset", caption: "What the dirt under one shophouse is worth, by price band, along the corridor the studio measured." },
+  {
+    kind: "p",
+    text: "The land under a single shophouse footprint appraises between roughly ฿2.7 and ฿8.5 million around Sukhumvit 71, and appraisal sits below market. The building standing on that land is carried at close to nothing.",
   },
   {
     kind: "p",
@@ -443,10 +443,36 @@ export const ESSAY: Block[] = [
     text: "That is the opportunity. It is not a preservation argument dressed up in commercial language. It is a commercial argument that happens to preserve things.",
   },
 
+  { kind: "h2", text: "The short version" },
+  {
+    kind: "p",
+    text: "If you are the one deciding what happens to one of these buildings, four things are true regardless of which building it is.",
+  },
+  {
+    kind: "p",
+    text: "First: the land is worth more than the building, and that gap is no longer a feeling. It is an appraisal, a setback calculation, a carbon position — numbers a spreadsheet can hold.",
+  },
+  {
+    kind: "p",
+    text: "Second: on a great many plots, reuse is not the sentimental choice. It is the only lawful one, because a demolished building cannot legally be rebuilt to the footprint it had.",
+  },
+  {
+    kind: "p",
+    text: "Third: a retrofit starts more than half paid for, in carbon a demolition throws away — and a demolition may not break even on that debt inside a normal investment horizon.",
+  },
+  {
+    kind: "p",
+    text: "Fourth: the thing actually blocking reuse is not money. It is a stair, and a 1985 definition that calls moving it a demolition. Regulation made that problem, and regulation can unmake it.",
+  },
+  {
+    kind: "pull",
+    text: "Everything else in this book is what becomes possible once those four things are taken seriously — a market instead of a mausoleum, several hundred thousand buildings doing something other than waiting to be worth more empty.",
+  },
+
   { kind: "h2", text: "What I still walk to" },
   {
     kind: "p",
-    text: "I go back to the old town most weeks. Temples to food stalls to cafés to bookshops, the same loop, which after four decades is less research than habit.",
+    text: "I go back to the old town most weeks — temples, food stalls, cafés, bookshops, the same loop, which after four decades is less research than habit.",
   },
   {
     kind: "p",

@@ -4525,6 +4525,19 @@ body:has(.shophouse-essay) {
   padding-left: var(--sh-base);
 }
 .sh-ms-figure span { color: var(--sh-quiet); }
+.sh-ms-photo { margin: var(--sh-base) 0 calc(var(--sh-page) * 1.4); max-width: var(--sh-measure); }
+.sh-ms-photo img { width: 100%; height: auto; display: block; border: 1px solid var(--sh-rule); }
+.sh-ms-photo figcaption {
+  margin-top: var(--sh-cap); font-family: var(--font-display); font-size: 13px;
+  line-height: 1.45; color: var(--sh-quiet);
+}
+.sh-ms-photo figcaption em { font-style: normal; opacity: .8; }
+.sh-ms-photo-file {
+  display: block; margin-top: 3px; font-family: var(--font-mono); font-size: 11px; color: var(--sh-seal);
+}
+.sh-ms-notes { margin: 0; padding-left: 2.4ch; max-width: var(--sh-measure); }
+.sh-ms-notes li { margin-bottom: var(--sh-cap); font-size: 14px; line-height: 1.5; color: var(--sh-quiet); }
+.sh-ms-notes li::marker { color: var(--sh-seal); font-family: var(--font-display); font-weight: 700; }
 
 @media print {
   .sh-masthead, .sh-contents { display: none; }

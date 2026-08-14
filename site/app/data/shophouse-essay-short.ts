@@ -187,7 +187,7 @@ export const SHORT: ShortBlock[] = [
   },
   {
     kind: "p",
-    text: "I should show my work. I built a national flood monitoring system that, judging by comparable procurement, would have tendered at ten to twenty million baht and arrived after the water had come and gone four times. It took about two weeks, ingests some two million data points, and runs on a server in my house that occasionally goes down because my mother thinks I am using too much data. I built another to help my mother find a massage therapist; it gathered eighty-six thousand records in thirty-eight hours and, mapped against public-health data, showed a geography nobody had drawn. Turning that system into one that matches motorcycle-taxi supply and demand is about seven lines of code. The hard part was never the technology — it was two weeks of looking at what came back and fixing how the data was collected, which is a discipline problem. So when someone asks what a bottom-up smart city would cost, the cost is not the obstacle and never was. What has been missing is the decision that these systems are worth building for.",
+    text: "I should show my work. I built a national flood monitoring system that, judging by comparable procurement, would have tendered at ten to twenty million baht and arrived after the water had come and gone four times. It took about two weeks, ingests some two million data points, and runs on a server in my house that occasionally goes down because my mother thinks I am using too much data. The corridor screen in this book is the same story at smaller scale — an afternoon of code against eleven thousand building footprints, checked by hand for two weeks afterward against buildings I could verify by eye, because a fast tool that is wrong is worse than no tool. So when someone asks what a bottom-up smart city would cost, the cost is not the obstacle and never was. What has been missing is the decision that these systems are worth building for.",
   },
 
   { kind: "h2", text: "Three systems, and one question" },
@@ -214,6 +214,16 @@ export const SHORT: ShortBlock[] = [
   {
     kind: "p",
     text: "For a sponsor, the commercial logic follows directly. There are 400,000 units of infrastructure-rich, transit-adjacent, structurally-serviceable floor area whose owners believe they are worth only the land beneath them. If reuse can be made cheap and legible enough to beat demolition on an ordinary spreadsheet, that stock is not urban trash — it is the largest under-priced asset class in the city, and the first firm to build the tools to assess it at scale is the firm everyone else has to hire. That is not a preservation argument in commercial clothing. It is a commercial argument that happens to preserve things.",
+  },
+
+  { kind: "h2", text: "The short version" },
+  {
+    kind: "p",
+    text: "If you are the one deciding what happens to one of these buildings, four things are true regardless of which building it is. The land is worth more than the building, and that gap is no longer a feeling — it is an appraisal, a setback calculation, a carbon position. On a great many plots, reuse is not the sentimental choice; it is the only lawful one, because a demolished building cannot legally be rebuilt to the footprint it had. A retrofit starts more than half paid for, in carbon a demolition throws away, and a demolition may not break even on that debt inside a normal investment horizon. And the thing actually blocking reuse is not money — it is a stair, and a 1985 definition that calls moving it a demolition. Regulation made that problem, and regulation can unmake it.",
+  },
+  {
+    kind: "pull",
+    text: "Everything else in this book is what becomes possible once those four things are taken seriously — a market instead of a mausoleum, several hundred thousand buildings doing something other than waiting to be worth more empty.",
   },
 
   { kind: "h2", text: "What I still walk to" },
