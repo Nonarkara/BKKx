@@ -414,3 +414,97 @@ export const CONFLICTS = [
     verdict: "It depends on the building. Any source claiming otherwise is selling something.",
   },
 ] as const;
+
+/* ---------------------------------------------------------------- culture */
+
+/**
+ * The shophouse as a social institution, not only a building type. This is
+ * the part the architecture literature keeps separate from the anthropology
+ * literature, which is exactly why neither reaches a developer.
+ */
+export const CULTURE = [
+  {
+    id: "land-law",
+    title: "It is a product of land law, not of Chinese architecture",
+    detail:
+      "Chinese immigrants were legally restricted from owning land, so landowners built rows to lease to them. That single fact explains the form. A tenant cannot buy the plot next door, so the building expands upward — rooftop chambers, added storeys — rather than sideways into a courtyard. Bangkok's shophouse has no skywell, unlike its Fujian, Taiwanese and Singaporean relatives, and its uniformity is the uniformity of a rental product.",
+    source: "Lin Sheng-Man, Regeneration of Chinese Urban Heritage: Tha Tien (MArch, Chulalongkorn, 2014)",
+  },
+  {
+    id: "royal-developer",
+    title: "The Crown was the original developer",
+    detail:
+      "Rama V drew the line of Song Wat himself in 1892 and ordered Yaowarat through the 1890s; the Privy Purse built and leased rows to merchant tenants. At Tha Tien, Wat Pho built 45 single-storey, 11 two-storey and 40 mixed units in 1902, and about 50 more for leasing in 1909. The shophouse was, for decades, an instrument of institutional property income — which is why it is disciplined, repetitive and everywhere.",
+    source: "Lin (2014); Royal Gazette records; Quin Limp (2010)",
+  },
+  {
+    id: "double-identity",
+    title: "It carries a double identity rather than an assimilation",
+    detail:
+      "Siriyananthorn's Chinatown study argues the shophouse sustains a Sino-Thai double identity — residents holding Thai nationality while keeping Chinese architecture, festivals and shrines — rather than dissolving one into the other. The building is the instrument of that: a shop that faces the Thai street, a house above that does not.",
+    source: "Siriyanee Siriyananthorn (MA, Chulalongkorn, 2005)",
+  },
+  {
+    id: "family-scale",
+    title: "It was sized for a family plus its workers",
+    detail:
+      "In Siriyananthorn's Chinatown survey, average family size was six to twelve; workers sleeping in the building averaged five and reached fifteen. Seventy-six per cent of families ran their business in the same building. The type is not a house with a shop attached — it is a small enterprise with beds in it.",
+    source: "Siriyananthorn (2005), n=60",
+  },
+  {
+    id: "service-added",
+    title: "The kitchen and bathroom were never in the original",
+    detail:
+      "Tirapas's survey finds Service — kitchen, bathroom, washing, drying — absent from the shophouse as built and added by every occupant afterwards, in the middle, at the back, or on the roof. Almost every pathology blamed on the type (damp, leaking slabs from relocated bathrooms, blocked ventilation) descends from that one omission, and from Thai practice keeping service and private space away from the street.",
+    source: "Chamnarn Tirapas, KMUTT (2011), survey of 100 shophouses",
+  },
+  {
+    id: "street-economy",
+    title: "The ground floor is a public institution",
+    detail:
+      "Street food began on boats; when the canals were filled in and the city turned to face the road, vendors moved onto the pavement in front of the shophouse. Win motorcycle taxis emerged in the 1980s because the sois run a kilometre deep and neighbours with motorbikes started giving women safe lifts home. Both systems are hosted by the shophouse ground floor and its five-foot way, and neither has ever been given a legal address.",
+    source: "Chuenrudeemol, Shophouse Metropolis (2026)",
+  },
+  {
+    id: "fire",
+    title: "Fire wrote the rules",
+    detail:
+      "The row cap of ten units and forty metres, the firewall every five units, and the requirement for fire-resistant party walls all descend from the fire risk of a continuous timber row. The rhythm you can read along any shophouse street from the pavement is a fire rule made visible. Its predecessor legislation is literally titled the Act on Construction Control in Fire Zones (พ.ศ. 2476).",
+    source: "Ministerial Regulation No. 55 B.E. 2543; Building Control Act B.E. 2522, s.3",
+  },
+  {
+    id: "loss-mechanism",
+    title: "The loss is not neglect — it is a rational hold",
+    detail:
+      "Every owner in Imam's forty-property survey said they would keep a shophouse empty rather than let it below their price, and at the time Thailand had no vacant-property tax to make that expensive. Two-thirds of the buildings were over thirty years old; upper floors had been empty between three and ten years. Vacancy here is a decision, not a decay.",
+    source: "Nabila Imam (MSc, Chulalongkorn, 2021), n=40, Punnawithi",
+  },
+] as const;
+
+/**
+ * Where the corpus stops. Naming the holes is the point of a springboard —
+ * these are the studies somebody should do next, and the reason this
+ * document exists rather than another literature review.
+ */
+export const OPEN_QUESTIONS = [
+  {
+    q: "What is the embodied carbon of one ordinary Bangkok shophouse?",
+    why: "No LCA of the type exists anywhere. Every carbon figure in this document is imported from UK or US benchmarks. One measured Thai shophouse would change every reuse-versus-demolition argument in the country.",
+  },
+  {
+    q: "How many shophouses are there, and where?",
+    why: "A 400,000-unit asset class with no inventory, no condition survey and no tenure layer. The corridor screen on this site found 2,193 candidates along one road in an afternoon from open data; nobody has run it citywide.",
+  },
+  {
+    q: "What does a compliant stair relocation actually cost?",
+    why: "Every source agrees the stair is the binding constraint and that moving it is legally a demolition. Nobody has costed the permitted route, so nobody knows whether the obstacle is the money or the paperwork.",
+  },
+  {
+    q: "Did the 2016 small-hotel conversion relief work, and where did it go?",
+    why: "It grandfathered setbacks and parking, was extended three times, and reportedly lapsed in 2024. If it worked it is the template for a general adaptive-reuse instrument; if it did not, that is worth knowing before anyone drafts one.",
+  },
+  {
+    q: "What happened to the 1896–1936 interval?",
+    why: "The standard periodisation jumps from the load-bearing masonry row straight to the concrete frame with nothing in between, and Siam Cement starts production in 1915 somewhere inside the hole. The transition from wall to frame is undocumented.",
+  },
+] as const;

@@ -13,6 +13,8 @@ export type ShortBlock =
   | { kind: "p"; text: string }
   | { kind: "pull"; text: string };
 
+export type Footnote = { n: number; text: string };
+
 export const SHORT_META = {
   title: "Bangkok Doesn't Need a Smart City",
   subtitle: "It needs to legitimise the one it already built.",
@@ -29,15 +31,33 @@ export const SHORT_META = {
 export const SHORT: ShortBlock[] = [
   {
     kind: "p",
-    text: "We left our shophouse because it was too small. There were four of us and the woman who raised me, three floors above a shop in the old town, and by the early 1980s my parents had done the arithmetic that every Bangkok family of that decade eventually did. We moved to the suburbs. I remember the specific quality of what we left: noise at all hours, food on every corner, neighbours who were not a category but people whose names I knew. The building was cramped and my mother was right about the arithmetic. But I have spent the forty years since watching that texture get thinner across the city, and I have come to think we are losing it for reasons that are not as good as our reasons for leaving.",
+    text: "Let's cut to the chase. Preserving cultural heritage sounds like an obviously good thing. The hard part is how.",
   },
   {
     kind: "p",
-    text: "I work on smart cities, so when people invite me to write something they expect sensors and dashboards. This essay starts with land instead. And it starts with a disclosure that determines how the rest should be read: I am not a preservationist. I have no attachment to old things on the grounds that they are old. I think technology can make this city safer, cleaner in its air and water, less lethal on its roads and more economically viable for more people than it currently is, and I want all of that faster than it is arriving.",
+    text: "Picture the first option: a historic-looking quarter built entirely from the ground up to resemble old shophouse alleys, every unit a luxury store. Now the second: a genuinely preserved alley where people live at squatter density in a building nobody has surveyed, and nobody in it knows what happens when a fire starts. My guess is you want neither. Those are broadly the two directions on offer.",
   },
   {
     kind: "p",
-    text: "What I think we get wrong is the speed at which people absorb a new environment. Humans do not adapt to a rebuilt city as quickly as a city can be rebuilt. We need remnants — enough of the familiar left standing to orient by, so that the new reads as a change to something rather than a replacement of everything. Continuity is not nostalgia. It is the condition under which change is survivable. That is a futurist's argument for keeping things, and it produces different conclusions from a conservationist's.",
+    text: "Three reasons the yes came easily when Chatpong asked me to write this. My day job is designing policy and implementation protocols for smart cities — cities that use technology to benefit the people in them, a lower bar than it sounds and one we clear less often than we claim. I grew up in the shophouses of central Bangkok; my father worked in the Old Town and I spent childhood running around his office, so this is not a case study to me. And I wrote a doctoral thesis on the globalisation of the shophouse in Shanghai, in the course of which I accidentally talked myself out of believing that gentrification means one thing, and that the one thing is bad.",
+  },
+  {
+    kind: "p",
+    text: "So: I am not a preservationist. I have no attachment to old things on the grounds that they are old. I think technology can make this city safer, cleaner in its air and water, less lethal on its roads and more economically viable for more people than it currently is, and I want that faster than it is arriving. What I think we get wrong is how fast people absorb a new environment. Humans do not adapt to a rebuilt city as quickly as a city can be rebuilt. We need remnants — enough of the familiar left standing to orient by, so the new reads as a change to something rather than a replacement of everything. Continuity is not nostalgia. It is the condition under which change is survivable.",
+  },
+
+  { kind: "h2", text: "Why the bastards work" },
+  {
+    kind: "p",
+    text: "Chatpong calls these buildings bastards, and the affection in the word is doing real work. A bastard has no pedigree, no recorded lineage, no design theory to justify it — and turns out to be more inventive than the legitimate children. I recognised the argument immediately, because I have watched the same pattern from the government side of the table for years.",
+  },
+  {
+    kind: "p",
+    text: "I have seen comprehensive policies that cost a fortune fail completely, while the thing locals rigged up for themselves works perfectly for the people using it. A city I worked with wanted a problem-reporting system; the citizens wanted one too, and between them they built something that fit what people actually needed — instead of procuring an expensive, policy-backed platform that would have arrived late and fitted nobody. Long procurement cycles, bureaucratic process, distance from the facts on the ground, and often a plain lack of capacity: that is how both policies and projects fail.",
+  },
+  {
+    kind: "p",
+    text: "So I look for clues from citizens — their pain points, and the ingenious circumstantial solutions they have already built. We have to understand where the problem actually is before we can design anything meaningful. That sounds obvious; it is routinely skipped, because understanding a problem takes longer than specifying a platform, and only one of the two can go in a procurement document. A bastard building is that same intelligence in concrete: somebody had a problem, no budget and no permission, and solved it anyway.",
   },
 
   { kind: "h2", text: "The arithmetic that eats a street" },
@@ -47,11 +67,11 @@ export const SHORT: ShortBlock[] = [
   },
   {
     kind: "p",
-    text: "There are roughly 400,000 left. There were about 750,000 at the peak in the 1960s and 70s, when more than half of everything built in Thai cities was shophouses and some seventy per cent of Bangkok lived in one. The number that should stop you is not the total but the slope: we are a quarter of a million units into a demolition nobody ever decided to carry out.",
+    text: "There are roughly 400,000 left. There were about 750,000 at the peak in the 1960s and 70s, when more than half of everything built in Thai cities was shophouses and some seventy per cent of Bangkok lived in one.[[1]] The number that should stop you is not the total but the slope: we are a quarter of a million units into a demolition nobody ever decided to carry out.",
   },
   {
     kind: "p",
-    text: "There is a sharper version of that slope in a thesis almost nobody has read. In 2010 a Chulalongkorn master's student, Quin Limp, took the 1907 cadastral survey of Bangkok — a 1:1,000 map made to issue land title deeds, which is why it records individual buildings — and counted every shophouse in Samphanthawong. There were 2,430, in sixteen reconstructable design types, including a run of 63 identical units across Songsawat, Charoen Krung and Yaowarat. Then he counted what survived. Around 310. One district, one century, roughly 87 per cent gone.",
+    text: "There is a sharper version of that slope in a thesis almost nobody has read. In 2010 a Chulalongkorn master's student, Quin Limp, took the 1907 cadastral survey of Bangkok — a 1:1,000 map made to issue land title deeds, which is why it records individual buildings — and counted every shophouse in Samphanthawong. There were 2,430, in sixteen reconstructable design types, including a run of 63 identical units across Songsawat, Charoen Krung and Yaowarat. Then he counted what survived. Around 310. One district, one century, roughly 87 per cent gone.[[2]]",
   },
   {
     kind: "p",
@@ -77,7 +97,7 @@ export const SHORT: ShortBlock[] = [
   },
   {
     kind: "p",
-    text: "So before any of that — a legal fact I did not know until I went reading, and the strangest thing in this essay. On a great many shophouse plots you are not permitted to rebuild what you tear down. Setback rules require a building over two storeys to stand six metres back from the centreline of a road narrower than ten metres. An old shophouse occupies its entire plot, right up to the pavement, because it was built before that rule existed. Demolish it and the replacement must step back — onto land that, on a twelve-metre-deep plot, is most of the site.",
+    text: "So before any of that — a legal fact I did not know until I went reading, and the strangest thing in this essay. On a great many shophouse plots you are not permitted to rebuild what you tear down. Setback rules require a building over two storeys to stand six metres back from the centreline of a road narrower than ten metres.[[3]] An old shophouse occupies its entire plot, right up to the pavement, because it was built before that rule existed. Demolish it and the replacement must step back — onto land that, on a twelve-metre-deep plot, is most of the site.",
   },
   {
     kind: "pull",
@@ -87,11 +107,11 @@ export const SHORT: ShortBlock[] = [
   { kind: "h2", text: "The carbon case, and what we cannot say" },
   {
     kind: "p",
-    text: "Every demolition spends carbon twice: the carbon already embodied in the building, thrown away, and the carbon of making its replacement. Roughly 55 per cent of a building's embodied carbon sits in its substructure and superstructure — the foundations and frame, the part a retrofit keeps and a demolition puts in a truck. So a reuse project starts with more than half the carbon already banked, before anyone mentions character.",
+    text: "Every demolition spends carbon twice: the carbon already embodied in the building, thrown away, and the carbon of making its replacement. Roughly 55 per cent of a building's embodied carbon sits in its substructure and superstructure[[4]] — the foundations and frame, the part a retrofit keeps and a demolition puts in a truck. So a reuse project starts with more than half the carbon already banked, before anyone mentions character.",
   },
   {
     kind: "p",
-    text: "The classic study is The Greenest Building, from the Preservation Green Lab in 2011. Across six building types and four cities on a seventy-five-year horizon, it found that a new energy-efficient building takes between ten and eighty years to overcome, through better performance, the climate impact of its own construction — for most types and climates, twenty to thirty. If your city has a 2050 target, a building you demolish in 2026 may not break even until after the target has passed. That same study also found a case where reuse lost: a warehouse-to-apartment conversion that replaced so much it spent more than it saved. I include it because it is the boundary of my own argument. A retrofit that guts a building to its frame and rebuilds everything in aluminium and glass is a demolition with better manners.",
+    text: "The classic study is The Greenest Building, from the Preservation Green Lab in 2011. Across six building types and four cities on a seventy-five-year horizon, it found that a new energy-efficient building takes between ten and eighty years to overcome, through better performance, the climate impact of its own construction — for most types and climates, twenty to thirty.[[5]] If your city has a 2050 target, a building you demolish in 2026 may not break even until after the target has passed. That same study also found a case where reuse lost: a warehouse-to-apartment conversion that replaced so much it spent more than it saved. I include it because it is the boundary of my own argument. A retrofit that guts a building to its frame and rebuilds everything in aluminium and glass is a demolition with better manners.",
   },
   {
     kind: "p",
@@ -149,7 +169,7 @@ export const SHORT: ShortBlock[] = [
   },
   {
     kind: "p",
-    text: "None of these are technology projects. All of them are infrastructure projects for systems that already exist and are not recognised as infrastructure.",
+    text: "None of these are technology projects — and none is really a repurposing project either. Adaptive reuse is the technique, not the ambition. What each student is actually drawing is a piece of social and economic infrastructure: a mega-complex for micro-mobility, a hybrid marketplace, a building that trades day-shift for night-shift. Not intervention for its own sake, but an ecosystem a neighbourhood can run on and keep running on. That distinction is commercial as well as intellectual: a repurposing project is a one-off transaction with a fixed return, while an ecosystem project builds the thing that keeps a place worth investing in.",
   },
 
   { kind: "h2", text: "The smart city we already have" },
@@ -181,7 +201,7 @@ export const SHORT: ShortBlock[] = [
   },
   {
     kind: "p",
-    text: "The third would actually unlock reuse. The obstacle to adapting a shophouse is not space, it is circulation: the stair sits at the front on the ground floor, so whoever rents the shop controls access to everything above. Let the ground floor to a coffee chain and you have land-locked three storeys. I assumed this was an architect's observation until I read the research and found it is a measured cause — a 2021 survey of forty owners lists the placement of the stair among the root causes of upper-floor vacancy, with one owner's recorded reason being simply that there are no stairs outside. And here the law closes the circle in a way that would be funny if it were not expensive: Ministerial Regulation No. 11 defines removing a reinforced-concrete stair as demolition rather than modification, so the one change that would unlock the upper floors of several hundred thousand buildings triggers full compliance with a code the building cannot meet, because it is old. Thailand has already shown it knows how to write the exception — a 2016 regulation let existing buildings become small hotels under relaxed standards, grandfathering setbacks and parking to the rules in force when they were first permitted. It worked, it was extended three times, and it appears to have been allowed to lapse.",
+    text: "The third would actually unlock reuse. The obstacle to adapting a shophouse is not space, it is circulation: the stair sits at the front on the ground floor, so whoever rents the shop controls access to everything above. Let the ground floor to a coffee chain and you have land-locked three storeys. I assumed this was an architect's observation until I read the research and found it is a measured cause — a 2021 survey of forty owners lists the placement of the stair among the root causes of upper-floor vacancy[[6]], with one owner's recorded reason being simply that there are no stairs outside. And here the law closes the circle in a way that would be funny if it were not expensive: Ministerial Regulation No. 11 defines removing a reinforced-concrete stair as demolition rather than modification[[7]], so the one change that would unlock the upper floors of several hundred thousand buildings triggers full compliance with a code the building cannot meet, because it is old. Thailand has already shown it knows how to write the exception — a 2016 regulation let existing buildings become small hotels under relaxed standards, grandfathering setbacks and parking to the rules in force when they were first permitted. It worked, it was extended three times, and it appears to have been allowed to lapse.",
   },
   {
     kind: "p",
@@ -209,4 +229,14 @@ export const SHORT: ShortBlock[] = [
     kind: "p",
     text: "I do not know how many we will keep. I know the number is falling and that nobody decided it should. And I have noticed that every time I explain the win motorcycle system to someone from a city without one, they are impressed — genuinely, not politely — and then they ask who runs it, and I have to say that nobody does, and that officially it is not there at all. That is the gap I would like us to close. Not by building something clever on top of the city, but by writing down what the city already built, and admitting that it counts.",
   },
+];
+
+export const SHORT_FOOTNOTES: Footnote[] = [
+  { n: 1, text: "Chatpong Chuenrudeemol, “Shophouse Metropolis,” in Shophouse Metropolis (Cambridge, MA: Harvard University Graduate School of Design, 2026); Chomchon Fusinpaiboon, “Modernisation of Building,” Journal of Asian Architecture and Building Engineering 21, no. 5 (2022): 1697–1718." },
+  { n: 2, text: "Quin Limp, “A Study of Shophouses During the Period of King Rama the Fifth Based on a 1907 Bangkok Map: Case Study of Samphanthawong District” (MArch thesis, Chulalongkorn University, 2010)." },
+  { n: 3, text: "Ministerial Regulation No. 55 B.E. 2543 (2000), ข้อ 41, issued under the Building Control Act B.E. 2522 (1979); see also Attachai Luangamornlert, “Adaptive Reuse of Old Shophouses in Bangkok” (MArch thesis, Chulalongkorn University, 2015)." },
+  { n: 4, text: "Greater London Authority, London Plan Guidance: Whole Life-Cycle Carbon Assessments (London: GLA, 2022), table A2.1." },
+  { n: 5, text: "Preservation Green Lab, The Greenest Building: Quantifying the Environmental Value of Building Reuse (Washington, DC: National Trust for Historic Preservation, 2011)." },
+  { n: 6, text: "Nabila Imam, “Vacant Shophouse Buildings in Bangkok: The Root Causes and Strategic Options” (MSc thesis, Chulalongkorn University, 2021), 59, 94." },
+  { n: 7, text: "Ministerial Regulation No. 11 B.E. 2528 (1985), ข้อ 2, issued under the Building Control Act B.E. 2522." },
 ];

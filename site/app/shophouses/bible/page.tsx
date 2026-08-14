@@ -10,6 +10,8 @@ import {
   STOCK_RECORD,
   CONSENSUS,
   CONFLICTS,
+  CULTURE,
+  OPEN_QUESTIONS,
 } from "../../data/shophouse-bible";
 import { THESES } from "../../data/shophouse-theses";
 
@@ -37,7 +39,8 @@ export default function BiblePage() {
           <a href="#anatomy">Anatomy</a>
           <a href="#dimensions">Dimensions</a>
           <a href="#law">The law</a>
-          <a href="#consensus">Findings</a>
+          <a href="#culture">Culture</a>
+          <a href="#open">Open questions</a>
           <Link href="/shophouses/research">Sources</Link>
         </nav>
       </header>
@@ -189,7 +192,24 @@ export default function BiblePage() {
           </table>
 
           {/* ---- consensus ---- */}
-          <h2 id="consensus">5 · What the sources agree on</h2>
+          <h2 id="culture">5 · The shophouse as an institution</h2>
+          <p>
+            The architecture literature and the anthropology literature have studied this building
+            separately for forty years, which is one reason neither reaches a developer. What
+            follows is the social and economic account, without which the dimensions above are
+            just a box.
+          </p>
+          <ol className="sh-consensus">
+            {CULTURE.map((c) => (
+              <li key={c.id}>
+                <p className="sh-consensus-claim">{c.title}</p>
+                <p>{c.detail}</p>
+                <p className="sh-fig-note">{c.source}</p>
+              </li>
+            ))}
+          </ol>
+
+          <h2 id="consensus">6 · What the sources agree on</h2>
           <p>
             Findings that recur across independent studies, by different methods. This is the
             load-bearing consensus — the part you can build policy on.
@@ -206,7 +226,7 @@ export default function BiblePage() {
           </ol>
 
           {/* ---- conflicts ---- */}
-          <h2 id="conflicts">6 · What the sources disagree on</h2>
+          <h2 id="conflicts">7 · What the sources disagree on</h2>
           <p>
             Stated rather than resolved. Anyone citing a single figure for these should know they
             are picking a side.
@@ -225,7 +245,22 @@ export default function BiblePage() {
             ))}
           </ol>
 
-          <h2 id="sources">7 · The corpus</h2>
+          <h2 id="open">8 · What nobody has answered</h2>
+          <p>
+            The point of a springboard is to name where it ends. These are the studies that would
+            change something, and the reason this document exists rather than another literature
+            review.
+          </p>
+          <ol className="sh-conflicts">
+            {OPEN_QUESTIONS.map((o) => (
+              <li key={o.q}>
+                <p className="sh-conflict-topic">{o.q}</p>
+                <p className="sh-conflict-verdict">{o.why}</p>
+              </li>
+            ))}
+          </ol>
+
+          <h2 id="sources">9 · The corpus</h2>
           <p>
             {THESES.length} theses and papers, catalogued with every working link found.{" "}
             <Link href="/shophouses/research">The full bibliography →</Link>

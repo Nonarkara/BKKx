@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
-import { SHORT, SHORT_META } from "../../data/shophouse-essay-short";
+import { SHORT, SHORT_META, SHORT_FOOTNOTES } from "../../data/shophouse-essay-short";
+import { withNotes, stripNotes } from "../footnotes";
 
 // The PDF source. Rendered by headless Chrome at A4 via
 // scripts/build-shophouse-pdf.sh — so this page is typeset for paper, not
@@ -14,7 +15,7 @@ export const metadata: Metadata = {
 
 export default function PrintPage() {
   const words = SHORT.reduce(
-    (n, b) => (b.kind === "p" || b.kind === "pull" ? n + b.text.split(/\s+/).length : n),
+    (n, b) => (b.kind === "p" || b.kind === "pull" ? n + stripNotes(b.text).split(/\s+/).length : n),
     0,
   );
 
@@ -41,13 +42,23 @@ export default function PrintPage() {
             case "pull":
               return (
                 <p key={i} className="sh-print-pull">
-                  {b.text}
+                  {withNotes(b.text)}
                 </p>
               );
             default:
-              return <p key={i}>{b.text}</p>;
+              return <p key={i}>{withNotes(b.text)}</p>;
           }
         })}
+        <div className="sh-notes">
+          <h2 id="notes">Notes</h2>
+          <ol>
+            {SHORT_FOOTNOTES.map((f) => (
+              <li key={f.n} id={`note-${f.n}`} value={f.n}>
+                {f.text}
+              </li>
+            ))}
+          </ol>
+        </div>
       </div>
     </div>
   );

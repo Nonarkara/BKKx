@@ -4784,67 +4784,111 @@ body:has(.shophouse-essay) {
 }
 
 /* ================================================================
-   shophouses — CYBERPUNK EDITORIAL (2026-08-14)
-   Axiom Design Core §XIV rule 6: the cyberpunk palette is correct
-   for dense dark surfaces. Near-black with a blue undertone, data
-   text #e6edf3, and ONE accent — rule 1 still holds, so the signal
-   lime does all the work and the photographs supply the colour.
-   Overrides the light Editorial tokens declared earlier; the print
-   surface (.sh-print) is re-lightened at the bottom, because a book
-   page is not a screen.
+   shophouses — POSTER (2026-08-15)
+   White, pink, black, yellow. Deliberately NOT atlas.nonarkara.org,
+   which owns dark-ground + amber; this had drifted too close to it.
+   Roles are fixed so the two accents never blur into decoration:
+     PINK   — the argument. Links, accents, rules, the seal.
+     YELLOW — the highlighter. Marks the thing worth stealing:
+              pull quotes, live numbers, selected state.
+     BLACK  — type and structure. WHITE — ground.
+   The magenta is picked off the studio book's own cover.
    ================================================================ */
 
 .shophouse-essay {
-  --sh-ink: #e6edf3;            /* was near-black; now the text */
-  --sh-paper: #0a0e14;          /* AKIRA near-black, blue undertone */
-  --sh-panel: #10161f;
-  --sh-seal: #c9ff38;           /* the one accent — house Console signal */
-  --sh-quiet: #8b93a1;
-  --sh-rule: rgba(230, 237, 243, 0.18);
-  --sh-hairline: rgba(230, 237, 243, 0.10);
-  color-scheme: dark;
+  --sh-ink: #111014;
+  --sh-paper: #ffffff;
+  --sh-panel: #fbf7f9;
+  --sh-seal: #e5007d;           /* pink — the argument */
+  --sh-mark: #ffe94a;           /* yellow — the highlighter */
+  --sh-quiet: #5f5b66;
+  --sh-rule: rgba(17, 16, 20, 0.20);
+  --sh-hairline: rgba(17, 16, 20, 0.10);
+  color-scheme: light;
 }
 
-body:has(.shophouse-essay) { background: #0a0e14; color: #e6edf3; }
+body:has(.shophouse-essay) { background: #ffffff; color: #111014; }
 
 .shophouse-essay a { color: var(--sh-seal); }
-.sh-masthead { border-bottom-color: var(--sh-rule); }
 .sh-wordmark { color: var(--sh-ink) !important; }
-.sh-prose h2, .sh-section-prose h2 { border-top-color: var(--sh-rule); }
-.sh-footer, .sh-biblio-section h3, .sh-dim-table th, .sh-tenure th,
-.sh-carbon-result, .sh-fig, .sh-ms-meta { border-color: var(--sh-rule); }
-.sh-figure figcaption, .sh-fig-note, .sh-note, .sh-byline { color: var(--sh-quiet); }
+.sh-wordmark em { color: var(--sh-seal); }
+.sh-masthead { border-bottom: 2px solid var(--sh-ink); }
+.sh-eyebrow, .sh-project-system, .sh-sources h4, .sh-rule-clause,
+.sh-era-period, .sh-rail-project-system { color: var(--sh-seal); }
 
-/* the accent is bright on dark — pull it back from pure signal for prose */
-.sh-eyebrow, .sh-project-system, .sh-sources h4,
-.sh-el-code, .sh-rule-clause, .sh-era-period { color: var(--sh-seal); }
-.sh-el-code { background: var(--sh-seal); color: #0a0e14; }
+/* yellow does highlighter work only */
+.sh-pull {
+  background: var(--sh-mark);
+  border-left: 4px solid var(--sh-ink);
+  padding: var(--sh-base) var(--sh-base) var(--sh-base) var(--sh-base);
+  color: var(--sh-ink);
+}
+.sh-contents-strip a::before { color: var(--sh-ink); background: var(--sh-mark); padding: 1px 4px; }
+.sh-rail-fact { background: var(--sh-mark); border-left: 4px solid var(--sh-ink); }
+.sh-rail-fact p, .sh-rail-fact small { color: var(--sh-ink); }
+.sh-carbon-result strong, .sh-land-m2, .sh-dim-value { color: var(--sh-seal); }
 .sh-stock-fill, .sh-carbon-seg.is-reuse { background: var(--sh-seal); }
-.sh-carbon-seg.is-demo, .sh-carbon-seg.is-new { background: #e6edf3; }
+.sh-carbon-seg.is-demo, .sh-carbon-seg.is-new { background: var(--sh-ink); }
 .sh-carbon-seg.is-demo { opacity: .35; }
-.sh-pattern li.is-intact { background: rgba(201, 255, 56, .10); }
-.sh-land-m2, .sh-dim-value, .sh-carbon-result strong { color: var(--sh-seal); }
+.sh-pattern li.is-intact { background: var(--sh-mark); }
+.sh-pattern li.is-intact .sh-pattern-status { color: var(--sh-ink); }
+.sh-el-code { background: var(--sh-seal); color: #fff; }
 .sh-section-svg { background: var(--sh-panel); }
-.sh-svg-tag { fill: #e6edf3; }
-.sh-svg-tag.is-muted { fill: #8b93a1; }
-.sh-svg-dim { fill: #8b93a1; }
-.sh-abstract-toggle, .sh-sources-toggle, .sh-carbon-toggle button,
-.sh-map-controls button, .sh-section-controls button { color: var(--sh-ink); }
+.sh-svg-tag { fill: #111014; }
+.sh-svg-tag.is-muted { fill: #5f5b66; }
+.sh-svg-dim { fill: #5f5b66; }
 .sh-carbon-toggle button.is-active, .sh-map-controls button.is-active,
 .sh-section-controls button.is-active {
-  border-color: var(--sh-seal); background: rgba(201,255,56,.12); color: var(--sh-seal);
+  border-color: var(--sh-ink); background: var(--sh-mark); color: var(--sh-ink);
 }
-.sh-project > button, .sh-era > button, .sh-findings > li > button { color: var(--sh-ink); }
-.sh-tenure tr.is-empty td:last-child, .sh-finding-caveat,
-.sh-rule-consequence, .sh-consensus-fix, .sh-conflict-verdict { color: var(--sh-seal); }
+.sh-rail-project.is-open { border-color: var(--sh-seal); }
+.sh-rail-zoom { background: var(--sh-ink); color: #fff; border-color: var(--sh-ink); }
+.sh-lightbox { background: rgba(255,255,255,.97); }
+.sh-lightbox p { color: var(--sh-quiet); }
+.sh-lightbox button, .sh-lightbox img { border-color: var(--sh-ink); }
+.sh-lightbox button { color: var(--sh-ink); }
+.sh-dedication, .sh-dedication-line, .sh-abstract,
 .sh-rule-consequence, .sh-consensus-fix, .sh-conflict-verdict,
-.sh-finding-caveat, .sh-dedication, .sh-pull, .sh-dedication-line,
-.sh-abstract { border-color: var(--sh-seal); }
+.sh-finding-caveat { border-color: var(--sh-seal); }
+.sh-rule-consequence, .sh-consensus-fix, .sh-conflict-verdict,
+.sh-finding-caveat, .sh-tenure tr.is-empty td:last-child { color: var(--sh-seal); }
+.sh-section-prose h2 { border-top: 2px solid var(--sh-ink); }
+.sh-support-logos img { background: #fff; }
 
-/* ---- contents strip (replaces the sticky rail; the rail is now content) ---- */
+/* footnotes */
+.sh-noteref { font-size: .62em; line-height: 0; }
+.sh-noteref a {
+  text-decoration: none; padding: 0 .1em; font-family: var(--font-display);
+  font-weight: 700; color: var(--sh-seal);
+}
+.sh-notes { border-top: 2px solid var(--sh-ink); padding-top: var(--sh-base); }
+.sh-notes h2 {
+  font-family: var(--font-display); font-size: 15px; font-weight: 800;
+  letter-spacing: .12em; text-transform: uppercase; margin: 0 0 var(--sh-base);
+  border: 0 !important; padding: 0 !important;
+}
+.sh-notes ol { margin: 0; padding-left: 2.4ch; }
+.sh-notes li {
+  margin-bottom: var(--sh-cap); font-size: 15px; line-height: 1.5;
+  color: var(--sh-quiet); max-width: var(--sh-measure);
+}
+.sh-notes li::marker { color: var(--sh-seal); font-family: var(--font-display); font-weight: 700; }
+.sh-notes a { word-break: break-word; }
+
+/* ---- the print surface: same palette, print-safe ---- */
+.sh-print, body:has(.sh-print) { background: #fff !important; color: #111014 !important; }
+.sh-print {
+  --sh-ink: #111014; --sh-paper: #fff; --sh-seal: #e5007d; --sh-mark: #ffe94a;
+  --sh-quiet: #5f5b66; --sh-rule: rgba(17,16,20,.20); --sh-hairline: rgba(17,16,20,.10);
+  color-scheme: light;
+}
+.sh-print .sh-print-pull { background: var(--sh-mark); border-left: 2pt solid var(--sh-ink); padding: .6em .8em; }
+
+/* ---- layout: contents strip, 60/40 sections, rail ----
+   (restored — these were structural, not palette, and belong after it) */
 .sh-contents-strip {
   max-width: 1184px; margin: 0 auto; padding: 0 var(--sh-page);
-  border-bottom: 1px solid var(--sh-rule);
+  border-bottom: 2px solid var(--sh-ink);
 }
 .sh-contents-strip ol {
   display: flex; flex-wrap: wrap; gap: var(--sh-cap) var(--sh-base);
@@ -4853,23 +4897,24 @@ body:has(.shophouse-essay) { background: #0a0e14; color: #e6edf3; }
 .sh-contents-strip li { counter-increment: cs; }
 .sh-contents-strip a {
   font-family: var(--font-display); font-size: 12px; font-weight: 600;
-  color: var(--sh-quiet) !important; text-decoration: none !important;
-  display: inline-flex; align-items: center; min-height: 32px;
+  color: var(--sh-ink) !important; text-decoration: none !important;
+  display: inline-flex; align-items: center; gap: 5px; min-height: 32px;
 }
-.sh-contents-strip a::before { content: counter(cs,decimal-leading-zero); color: var(--sh-seal); margin-right: 5px; }
-.sh-contents-strip a:hover { color: var(--sh-ink) !important; }
+.sh-contents-strip a::before {
+  content: counter(cs, decimal-leading-zero);
+  background: var(--sh-mark); color: var(--sh-ink); padding: 2px 5px; font-weight: 700;
+}
+.sh-contents-strip a:hover { color: var(--sh-seal) !important; }
 
-/* ---- the 60 / 40 split ---- */
 .sh-sections { max-width: 1184px; margin: 0 auto; padding: 0 var(--sh-page); }
-.sh-section { padding: calc(var(--sh-page) * 1.2) 0; border-bottom: 1px solid var(--sh-hairline); }
+.sh-section { padding: calc(var(--sh-page) * 1.4) 0; border-bottom: 1px solid var(--sh-hairline); }
 .sh-section-prose { min-width: 0; }
 .sh-section-prose > p { max-width: var(--sh-measure); margin: 0 0 var(--sh-base); }
 .sh-section-prose h2 {
   font-family: var(--font-display);
-  font-size: clamp(24px, 3vw, 33px); font-weight: 800;
-  letter-spacing: -.035em; line-height: 1.12; text-wrap: balance;
+  font-size: clamp(24px, 3vw, 34px); font-weight: 800;
+  letter-spacing: -.035em; line-height: 1.1; text-wrap: balance;
   max-width: 24ch; margin: 0 0 var(--sh-base); padding-top: var(--sh-base);
-  border-top: 1px solid var(--sh-rule);
 }
 @media (min-width: 1080px) {
   .sh-section {
@@ -4881,7 +4926,6 @@ body:has(.shophouse-essay) { background: #0a0e14; color: #e6edf3; }
   .sh-rail { position: sticky; top: var(--sh-page); }
 }
 
-/* ---- rail ---- */
 .sh-rail { display: grid; gap: var(--sh-page); min-width: 0; }
 @media (max-width: 1079px) {
   .sh-rail { margin-top: var(--sh-page); padding-top: var(--sh-base); border-top: 1px solid var(--sh-hairline); }
@@ -4892,75 +4936,54 @@ body:has(.shophouse-essay) { background: #0a0e14; color: #e6edf3; }
   margin-top: var(--sh-cap); font-family: var(--font-display);
   font-size: 13px; line-height: 1.45; color: var(--sh-quiet);
 }
-.sh-rail figcaption em { font-style: normal; color: rgba(139,147,161,.75); }
-
-.sh-rail-fact {
-  padding: var(--sh-base); background: var(--sh-panel);
-  border-left: 3px solid var(--sh-seal);
-}
+.sh-rail figcaption em { font-style: normal; opacity: .8; }
+.sh-rail-fact { padding: var(--sh-base); }
 .sh-rail-fact p {
   margin: 0 0 var(--sh-cap) !important; font-family: var(--font-display);
-  font-size: 17px; font-weight: 600; line-height: 1.35; letter-spacing: -.02em;
-  color: var(--sh-ink);
+  font-size: 17px; font-weight: 700; line-height: 1.3; letter-spacing: -.02em;
 }
-.sh-rail-fact small { font-family: var(--font-display); font-size: 12px; color: var(--sh-quiet); }
-
+.sh-rail-fact small { font-family: var(--font-display); font-size: 12px; }
 .sh-rail-diagram > button {
   display: block; width: 100%; padding: 0; background: none; border: 0;
   cursor: zoom-in; position: relative;
 }
 .sh-rail-zoom {
   position: absolute; right: 8px; bottom: 8px;
-  background: rgba(10,14,20,.85); color: var(--sh-seal);
   font-family: var(--font-display); font-size: 11px; font-weight: 700;
-  letter-spacing: .1em; text-transform: uppercase; padding: 5px 9px;
-  border: 1px solid var(--sh-seal);
+  letter-spacing: .1em; text-transform: uppercase; padding: 5px 9px; border: 1px solid;
 }
-.sh-rail-generated { display: block; margin-top: 4px; font-style: italic; font-size: 12px; color: rgba(139,147,161,.8); }
+.sh-rail-generated { display: block; margin-top: 4px; font-style: italic; font-size: 12px; opacity: .8; }
 .sh-rail-diagram figcaption strong { color: var(--sh-ink); font-weight: 700; }
-
 .sh-lightbox {
-  position: fixed; inset: 0; z-index: 200; background: rgba(6,9,13,.96);
+  position: fixed; inset: 0; z-index: 200;
   display: flex; flex-direction: column; align-items: center; justify-content: center;
   gap: var(--sh-base); padding: var(--sh-page); overflow: auto; cursor: zoom-out;
 }
-.sh-lightbox img { max-width: min(1100px, 96vw); max-height: 76vh; width: auto; border: 1px solid var(--sh-rule); }
-.sh-lightbox p { max-width: 68ch; font-size: 14px; color: var(--sh-quiet); text-align: left; }
+.sh-lightbox img { max-width: min(1100px, 96vw); max-height: 76vh; width: auto; border: 1px solid; }
+.sh-lightbox p { max-width: 68ch; font-size: 14px; text-align: left; }
 .sh-lightbox button {
   min-height: 44px; padding: 0 var(--sh-base); background: none;
-  border: 1px solid var(--sh-seal); color: var(--sh-seal);
-  font-family: var(--font-display); font-size: 13px; font-weight: 600; cursor: pointer;
+  border: 1px solid; font-family: var(--font-display); font-size: 13px; font-weight: 600; cursor: pointer;
 }
-
 .sh-rail-project { border: 1px solid var(--sh-rule); }
 .sh-rail-project > button {
   width: 100%; display: grid; gap: 2px; text-align: left; cursor: pointer;
   background: none; border: 0; padding: var(--sh-base); min-height: 44px; color: var(--sh-ink);
 }
-.sh-rail-project.is-open { border-color: var(--sh-seal); }
 .sh-rail-project-system {
   font-family: var(--font-display); font-size: 11px; font-weight: 700;
-  letter-spacing: .1em; text-transform: uppercase; color: var(--sh-seal);
+  letter-spacing: .1em; text-transform: uppercase;
 }
 .sh-rail-project-title { font-family: var(--font-display); font-size: 17px; font-weight: 700; letter-spacing: -.02em; }
 .sh-rail-project-student { font-family: var(--font-display); font-size: 12px; color: var(--sh-quiet); }
 .sh-rail-project-body { padding: 0 var(--sh-base) var(--sh-base); font-size: 15px; line-height: 1.55; }
 .sh-rail-project-body p { margin: 0 0 var(--sh-cap) !important; }
 .sh-rail-project-precedent, .sh-rail-project-figure { color: var(--sh-quiet); font-size: 14px; }
-.sh-rail-project-precedent strong { color: var(--sh-seal); font-family: var(--font-display); font-size: 11px; text-transform: uppercase; letter-spacing: .1em; }
-
-/* ---- support logos ---- */
+.sh-rail-project-precedent strong {
+  color: var(--sh-seal); font-family: var(--font-display); font-size: 11px;
+  text-transform: uppercase; letter-spacing: .1em;
+}
+.sh-notes-wrap { padding-top: calc(var(--sh-page) * 1.5); padding-bottom: var(--sh-page); }
 .sh-support { padding-bottom: var(--sh-base); margin-bottom: var(--sh-base); border-bottom: 1px solid var(--sh-hairline); }
 .sh-support-logos { display: flex; flex-wrap: wrap; gap: var(--sh-base); align-items: center; margin-top: var(--sh-base); }
-.sh-support-logos img {
-  height: 54px; width: auto; background: #fff; padding: 7px;
-  border: 1px solid var(--sh-rule);
-}
-
-/* ---- the print surface stays light: a book page is not a screen ---- */
-.sh-print, body:has(.sh-print) { background: #fff !important; color: #14140f !important; }
-.sh-print {
-  --sh-ink: #14140f; --sh-paper: #fff; --sh-seal: #8c2f23;
-  --sh-quiet: #6b6a60; --sh-rule: rgba(20,20,15,.16); --sh-hairline: rgba(20,20,15,.09);
-  color-scheme: light;
-}
+.sh-support-logos img { height: 54px; width: auto; padding: 7px; border: 1px solid var(--sh-rule); }

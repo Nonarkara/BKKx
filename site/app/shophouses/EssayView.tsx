@@ -2,11 +2,12 @@
 
 import Link from "next/link";
 import { useMemo, useState } from "react";
-import { ESSAY, ESSAY_META, type Block } from "../data/shophouse-essay";
+import { ESSAY, ESSAY_META, FOOTNOTES, type Block } from "../data/shophouse-essay";
 import { STUDIO } from "../data/shophouse-studio";
 import { SUPPORT } from "../data/shophouse-rail";
 import { Figure } from "./figures";
 import { Rail } from "./Rail";
+import { withNotes } from "./footnotes";
 
 // The essay is grouped into sections so each one can carry its own side
 // rail. On a wide screen: argument in the left 60%, evidence in the right
@@ -93,11 +94,11 @@ export function EssayView() {
               {s.blocks.map((block, i) => {
                 switch (block.kind) {
                   case "p":
-                    return <p key={i}>{block.text}</p>;
+                    return <p key={i}>{withNotes(block.text)}</p>;
                   case "pull":
                     return (
                       <blockquote key={i} className="sh-pull">
-                        {block.text}
+                        {withNotes(block.text)}
                       </blockquote>
                     );
                   case "note":
@@ -122,6 +123,19 @@ export function EssayView() {
           </section>
         ))}
       </div>
+
+      <section className="sh-sections sh-notes-wrap">
+        <div className="sh-notes">
+          <h2 id="notes">Notes</h2>
+          <ol>
+            {FOOTNOTES.map((f) => (
+              <li key={f.n} id={`note-${f.n}`} value={f.n}>
+                {f.text} <a href={`#ref-${f.n}`} aria-label={`Back to note ${f.n}`}>↩</a>
+              </li>
+            ))}
+          </ol>
+        </div>
+      </section>
 
       <footer className="sh-footer">
         <div className="sh-support">
