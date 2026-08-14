@@ -19,3 +19,8 @@ edge-proxy/.wrangler/
 # Resized, renamed, web-ready copies are committed at site/public/about/ —
 # these originals stay local as the source, not duplicated into git history.
 public/photos/
+
+# Studio source material — Chatpong's pre-publication book essays and the
+# students' unpublished draft projects. Shared privately for the essay; not
+# ours to republish. The essay cites them; the files stay local.
+public/studio references/

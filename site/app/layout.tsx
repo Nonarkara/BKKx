@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { IBM_Plex_Sans_Thai, JetBrains_Mono } from "next/font/google";
+import { IBM_Plex_Sans_Thai, JetBrains_Mono, Source_Serif_4 } from "next/font/google";
 import { LocaleProvider } from "./i18n/LocaleContext";
 import "./globals.css";
 
@@ -18,6 +18,20 @@ const plexThai = IBM_Plex_Sans_Thai({
 const mono = JetBrains_Mono({
   variable: "--font-jetbrains",
   subsets: ["latin"],
+  display: "swap",
+});
+
+// The essay body on /shophouses only. Axiom Design Core §XV Editorial calls
+// for a serif "for the body of the piece", which the rest of this site
+// cannot use — its reading matter is ~90% Thai and every serif-adjacent Thai
+// face carries the looped head banned workspace-wide. The studio essay is
+// English, so the register's own rule is available here and taken. Sao
+// Chingcha still carries every heading, label and number.
+const serif = Source_Serif_4({
+  variable: "--font-serif",
+  subsets: ["latin"],
+  weight: ["400", "600"],
+  style: ["normal", "italic"],
   display: "swap",
 });
 
@@ -69,7 +83,7 @@ export default function RootLayout({
     // substituted using the element it is declared on — so a --font-* living
     // one level down on <body> is invisible to it, the whole chain computes
     // to nothing, and everything silently falls back to system-ui.
-    <html lang="en" className={`${plexThai.variable} ${mono.variable}`}>
+    <html lang="en" className={`${plexThai.variable} ${mono.variable} ${serif.variable}`}>
       <body>
         <LocaleProvider>{children}</LocaleProvider>
       </body>

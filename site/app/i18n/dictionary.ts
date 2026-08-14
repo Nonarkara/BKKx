@@ -68,6 +68,8 @@ export const DICTIONARY = {
     quests_address_label: "Where",
     quests_map_link: "Open in Maps",
 
+    oldtown_callout_label: "Why it matters",
+
     lang_toggle_label: "Language",
   },
   th: {
@@ -132,6 +134,8 @@ export const DICTIONARY = {
     quests_lede: "สถานที่จริงที่ยังเปิดอยู่ ไม่ใช่ลิสต์ท็อปเทน ตรวจสอบก่อนเผยแพร่แล้ว แต่ควรโทรเช็คก่อนไปอยู่ดี",
     quests_address_label: "ที่ตั้ง",
     quests_map_link: "เปิดในแผนที่",
+
+    oldtown_callout_label: "ทำไมจึงสำคัญ",
 
     lang_toggle_label: "ภาษา",
   },

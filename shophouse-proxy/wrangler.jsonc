@@ -1,0 +1,21 @@
+{
+  "$schema": "../site/node_modules/wrangler/config-schema.json",
+  "name": "bkkx-shophouse-proxy",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-08-14",
+  // shophouses.nonarkara.org ONLY.
+  //
+  // bkk.nonarkara.org belongs to edge-proxy/ and atlas.nonarkara.org belongs
+  // to the separate bkk-3d-atlas Worker. Adding either of those here would
+  // take the domain away from its own deploy and serve the wrong site — which
+  // has already happened once on this project. Never widen this list.
+  "routes": [
+    {
+      "pattern": "shophouses.nonarkara.org",
+      "custom_domain": true
+    }
+  ],
+  "observability": {
+    "enabled": true
+  }
+}

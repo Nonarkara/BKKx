@@ -4155,3 +4155,465 @@ footer small { grid-column: 1 / -1; margin-top: 60px; padding-top: 24px; border-
   font-style: italic;
   color: rgba(17, 18, 15, 0.5);
 }
+
+/* ================================================================
+   shophouses.nonarkara.org — Shophouse Metropolis
+   Axiom Design Core §XV EDITORIAL + §XX MoMA Grid.
+   Ground: paper. Accent: one, the oxide seal. Serif for the read,
+   Sao Chingcha for every heading, label and number.
+   Spacing in three currencies only: page-unit, baseline, cap.
+   ================================================================ */
+
+/* The site body is the dark Console ground. This page is Editorial, so the
+   ground has to change with it — otherwise ink shows through at any gap and
+   on print. :has() scopes it to this page without touching any other. */
+body:has(.shophouse-essay) {
+  background: #f4f2ec;
+  color: #14140f;
+}
+
+.shophouse-essay {
+  --sh-ink: #14140f;
+  --sh-paper: #f4f2ec;
+  --sh-seal: #8c2f23;
+  --sh-quiet: #6b6a60;
+  --sh-rule: rgba(20, 20, 15, 0.16);
+  --sh-hairline: rgba(20, 20, 15, 0.09);
+  --sh-page: 24px;
+  --sh-base: 1.7rem;
+  --sh-cap: 0.75em;
+  --sh-measure: 68ch;
+
+  background: var(--sh-paper);
+  color: var(--sh-ink);
+  font-family: var(--font-serif), Georgia, serif;
+  font-size: 19px;
+  line-height: 1.7;
+  min-height: 100vh;
+}
+
+@media (min-width: 768px) {
+  .shophouse-essay { --sh-page: 32px; }
+}
+
+.shophouse-essay a { color: var(--sh-seal); text-decoration: underline; text-underline-offset: 2px; }
+
+/* ---- masthead ---- */
+.sh-masthead {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sh-cap) var(--sh-base);
+  align-items: baseline;
+  justify-content: space-between;
+  max-width: 1184px;
+  margin: 0 auto;
+  padding: var(--sh-page);
+  border-bottom: 1px solid var(--sh-ink);
+}
+.sh-wordmark {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 17px;
+  letter-spacing: -0.03em;
+  color: var(--sh-ink) !important;
+  text-decoration: none !important;
+}
+.sh-wordmark em { font-style: normal; color: var(--sh-seal); }
+.sh-masthead nav { display: flex; flex-wrap: wrap; gap: var(--sh-base); }
+.sh-masthead nav a {
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+}
+
+/* ---- lede ---- */
+.sh-lede {
+  max-width: 1184px;
+  margin: 0 auto;
+  padding: calc(var(--sh-page) * 2) var(--sh-page) var(--sh-page);
+}
+.sh-eyebrow {
+  margin: 0 0 var(--sh-cap);
+  font-family: var(--font-display);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--sh-seal);
+}
+.sh-lede h1 {
+  font-family: var(--font-display);
+  font-size: clamp(38px, 6vw, 76px);
+  font-weight: 800;
+  line-height: 1.02;
+  letter-spacing: -0.045em;
+  text-wrap: balance;
+  margin: 0;
+  max-width: 20ch;
+}
+.sh-subtitle {
+  font-family: var(--font-display);
+  font-size: clamp(19px, 2.2vw, 26px);
+  font-weight: 400;
+  line-height: 1.3;
+  color: var(--sh-quiet);
+  margin: var(--sh-cap) 0 0;
+  max-width: 44ch;
+}
+.sh-byline {
+  margin: var(--sh-base) 0 0;
+  max-width: var(--sh-measure);
+  font-size: 16px;
+  color: var(--sh-quiet);
+}
+.sh-abstract-toggle,
+.sh-sources-toggle {
+  margin-top: var(--sh-base);
+  background: none;
+  border: 1px solid var(--sh-rule);
+  color: var(--sh-ink);
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-weight: 600;
+  padding: 0 var(--sh-base);
+  min-height: 44px;
+  cursor: pointer;
+}
+.sh-abstract-toggle:hover,
+.sh-sources-toggle:hover { border-color: var(--sh-ink); }
+.sh-abstract {
+  margin: var(--sh-base) 0 0;
+  max-width: var(--sh-measure);
+  font-family: var(--font-body);
+  font-size: 17px;
+  line-height: 1.85;
+  padding-left: var(--sh-base);
+  border-left: 2px solid var(--sh-seal);
+}
+
+/* ---- body: 2/3 + 1/3, the only asymmetric split §XX rule 2 ---- */
+.sh-body {
+  max-width: 1184px;
+  margin: 0 auto;
+  padding: var(--sh-page);
+  display: grid;
+  gap: calc(var(--sh-page) * 2);
+}
+@media (min-width: 1024px) {
+  .sh-body { grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); }
+  .sh-contents { order: 2; }
+}
+.sh-contents { position: sticky; top: var(--sh-page); align-self: start; }
+.sh-contents ol { margin: 0; padding: 0; list-style: none; counter-reset: sh; }
+.sh-contents li { counter-increment: sh; border-bottom: 1px solid var(--sh-hairline); }
+.sh-contents li a {
+  display: block;
+  padding: var(--sh-cap) 0;
+  font-family: var(--font-display);
+  font-size: 13px;
+  line-height: 1.4;
+  color: var(--sh-ink) !important;
+  text-decoration: none !important;
+}
+.sh-contents li a::before {
+  content: counter(sh, decimal-leading-zero) " ";
+  color: var(--sh-seal);
+  font-weight: 700;
+}
+.sh-contents li a:hover { color: var(--sh-seal) !important; }
+
+/* ---- prose ---- */
+.sh-prose { min-width: 0; }
+.sh-prose > p { max-width: var(--sh-measure); margin: 0 0 var(--sh-base); }
+.sh-prose h2 {
+  font-family: var(--font-display);
+  font-size: clamp(24px, 3vw, 33px);
+  font-weight: 800;
+  letter-spacing: -0.035em;
+  line-height: 1.12;
+  text-wrap: balance;
+  max-width: 24ch;
+  margin: calc(var(--sh-page) * 2.2) 0 var(--sh-base);
+  padding-top: var(--sh-base);
+  border-top: 1px solid var(--sh-ink);
+}
+.sh-pull {
+  margin: calc(var(--sh-page) * 1.4) 0;
+  padding: 0 0 0 var(--sh-base);
+  border-left: 3px solid var(--sh-seal);
+  font-family: var(--font-display);
+  font-size: clamp(20px, 2.4vw, 27px);
+  font-weight: 600;
+  line-height: 1.28;
+  letter-spacing: -0.02em;
+  max-width: 32ch;
+}
+.sh-note { color: var(--sh-quiet); font-size: 16px; max-width: var(--sh-measure); }
+
+/* §XX rule 7 — 1 baseline above, 3 below. Asymmetry is what stops a figure
+   reading as an uninvited guest between two paragraphs. */
+.sh-figure {
+  margin: var(--sh-base) 0 calc(var(--sh-base) * 3);
+  padding: 0;
+}
+.sh-figure figcaption {
+  margin-top: var(--sh-base);
+  font-family: var(--font-display);
+  font-size: 14px;
+  line-height: 1.45;
+  color: var(--sh-quiet);
+  max-width: var(--sh-measure);
+}
+.sh-fig-note {
+  margin: var(--sh-base) 0 0;
+  font-family: var(--font-display);
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--sh-quiet);
+}
+.sh-fig { border-top: 1px solid var(--sh-ink); padding-top: var(--sh-base); }
+
+/* ---- figure: stock ---- */
+.sh-stock-row { display: grid; grid-template-columns: 1fr; gap: 4px; margin-bottom: var(--sh-cap); }
+@media (min-width: 640px) {
+  .sh-stock-row { grid-template-columns: 15ch 1fr 9ch; align-items: center; gap: var(--sh-base); }
+}
+.sh-stock-label, .sh-stock-value {
+  font-family: var(--font-display); font-size: 13px; color: var(--sh-quiet);
+}
+.sh-stock-value { font-variant-numeric: tabular-nums; font-weight: 700; color: var(--sh-ink); }
+.sh-stock-track { height: 18px; background: var(--sh-hairline); }
+.sh-stock-fill { height: 100%; background: var(--sh-seal); opacity: 0.55; }
+.sh-stock-fill.is-peak { opacity: 1; }
+
+/* ---- figure: sukhumvit pattern ---- */
+.sh-pattern { margin: 0; padding: 0; list-style: none; }
+.sh-pattern li {
+  display: grid; gap: 2px;
+  padding: var(--sh-cap) 0;
+  border-bottom: 1px solid var(--sh-hairline);
+}
+@media (min-width: 640px) {
+  .sh-pattern li { grid-template-columns: 14ch 1fr 22ch; align-items: baseline; gap: var(--sh-base); }
+}
+.sh-pattern strong { font-family: var(--font-display); font-size: 15px; }
+.sh-pattern-became { font-size: 16px; }
+.sh-pattern-status { font-family: var(--font-display); font-size: 13px; color: var(--sh-quiet); }
+.sh-pattern li.is-intact { background: rgba(140, 47, 35, 0.06); }
+.sh-pattern li.is-intact .sh-pattern-status { color: var(--sh-seal); font-weight: 700; }
+
+/* ---- figure: carbon ---- */
+.sh-carbon-controls { display: grid; gap: var(--sh-base); margin-bottom: var(--sh-base); }
+.sh-carbon-controls label { display: grid; gap: 6px; font-family: var(--font-display); font-size: 13px; }
+.sh-carbon-controls input[type="range"] { width: 100%; accent-color: var(--sh-seal); min-height: 44px; }
+.sh-carbon-controls output { font-weight: 700; font-size: 15px; }
+.sh-carbon-controls output small { font-weight: 400; color: var(--sh-quiet); }
+.sh-carbon-toggle { display: flex; flex-wrap: wrap; gap: 6px; }
+.sh-carbon-toggle button {
+  flex: 1 1 auto; min-height: 44px; padding: 0 var(--sh-base);
+  background: none; border: 1px solid var(--sh-rule);
+  font-family: var(--font-display); font-size: 13px; font-weight: 600;
+  color: var(--sh-ink); cursor: pointer;
+}
+.sh-carbon-toggle button.is-active { border-color: var(--sh-seal); background: rgba(140,47,35,.08); color: var(--sh-seal); }
+.sh-carbon-bar { margin-bottom: var(--sh-base); }
+.sh-carbon-head {
+  display: flex; justify-content: space-between; align-items: baseline; gap: var(--sh-base);
+  font-family: var(--font-display); font-size: 14px; margin-bottom: 4px;
+}
+.sh-carbon-head strong { font-size: 17px; font-variant-numeric: tabular-nums; }
+.sh-carbon-track { display: flex; height: 26px; background: var(--sh-hairline); }
+.sh-carbon-seg.is-demo { background: var(--sh-ink); opacity: .45; }
+.sh-carbon-seg.is-new { background: var(--sh-ink); }
+.sh-carbon-seg.is-reuse { background: var(--sh-seal); }
+.sh-carbon-bar small { display: block; margin-top: 4px; font-family: var(--font-display); font-size: 12px; color: var(--sh-quiet); }
+.sh-carbon-result {
+  margin: var(--sh-base) 0 0; padding-top: var(--sh-base);
+  border-top: 1px solid var(--sh-ink);
+  font-family: var(--font-display); font-size: 17px;
+}
+.sh-carbon-result strong { color: var(--sh-seal); font-size: 22px; }
+.sh-sources { margin-top: var(--sh-base); font-size: 15px; }
+.sh-sources h4 {
+  font-family: var(--font-display); font-size: 13px; font-weight: 700;
+  letter-spacing: .12em; text-transform: uppercase; color: var(--sh-seal);
+  margin: var(--sh-base) 0 var(--sh-cap);
+}
+.sh-sources dl { margin: 0; }
+.sh-sources dl > div { padding: var(--sh-cap) 0; border-bottom: 1px solid var(--sh-hairline); }
+.sh-sources dt { font-family: var(--font-display); font-size: 14px; }
+.sh-sources dd { margin: 4px 0 0; font-size: 14px; color: var(--sh-quiet); line-height: 1.55; }
+.sh-sources ul { margin: 0; padding-left: 1.1em; font-size: 14px; color: var(--sh-quiet); }
+.sh-sources li { margin-bottom: var(--sh-cap); line-height: 1.55; }
+.sh-gaps strong { display: block; color: var(--sh-ink); font-family: var(--font-display); font-size: 14px; }
+
+/* ---- figure: projects ---- */
+.sh-project { border-bottom: 1px solid var(--sh-hairline); }
+.sh-project > button {
+  width: 100%; display: grid; gap: 2px; text-align: left;
+  background: none; border: 0; cursor: pointer; padding: var(--sh-base) 0;
+  color: var(--sh-ink); min-height: 44px;
+}
+@media (min-width: 640px) {
+  .sh-project > button { grid-template-columns: 22ch 1fr 14ch; align-items: baseline; gap: var(--sh-base); }
+}
+.sh-project-system { font-family: var(--font-display); font-size: 12px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--sh-seal); }
+.sh-project-title { font-family: var(--font-display); font-size: 18px; font-weight: 700; letter-spacing: -.02em; }
+.sh-project-student { font-family: var(--font-display); font-size: 13px; color: var(--sh-quiet); }
+.sh-project-body { padding: 0 0 var(--sh-base); max-width: var(--sh-measure); }
+.sh-project-body > p { margin: 0 0 var(--sh-base); }
+.sh-project-body dl { margin: 0; }
+.sh-project-body dl > div { padding: var(--sh-cap) 0; border-top: 1px solid var(--sh-hairline); }
+.sh-project-body dt { font-family: var(--font-display); font-size: 11px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--sh-quiet); }
+.sh-project-body dd { margin: 3px 0 0; font-size: 16px; }
+
+/* ---- figure: tenure ---- */
+.sh-tenure table { width: 100%; border-collapse: collapse; font-size: 14px; }
+.sh-tenure th {
+  text-align: left; font-family: var(--font-display); font-size: 11px;
+  letter-spacing: .12em; text-transform: uppercase; color: var(--sh-quiet);
+  padding: var(--sh-cap) var(--sh-cap) var(--sh-cap) 0; border-bottom: 1px solid var(--sh-ink);
+}
+.sh-tenure td { padding: var(--sh-cap) var(--sh-cap) var(--sh-cap) 0; border-bottom: 1px solid var(--sh-hairline); vertical-align: top; }
+.sh-tenure code { font-family: var(--font-mono); font-size: 12px; }
+.sh-tenure tr.is-empty td:last-child { color: var(--sh-seal); font-family: var(--font-display); font-size: 12px; }
+.sh-tenure tr.is-have td:last-child { color: var(--sh-quiet); font-family: var(--font-display); font-size: 12px; }
+.sh-tenure tr.is-empty td:first-child { opacity: .55; }
+
+/* ---- figure: map ---- */
+.sh-map-canvas { width: 100%; height: min(72vh, 620px); border: 1px solid var(--sh-rule); }
+.sh-map-controls {
+  display: flex; flex-wrap: wrap; align-items: center; gap: var(--sh-base);
+  margin-top: var(--sh-cap);
+}
+.sh-map-controls button {
+  min-height: 44px; padding: 0 var(--sh-base);
+  background: none; border: 1px solid var(--sh-rule);
+  font-family: var(--font-display); font-size: 13px; font-weight: 600;
+  color: var(--sh-ink); cursor: pointer;
+}
+.sh-map-controls button.is-active { border-color: var(--sh-seal); color: var(--sh-seal); background: rgba(140,47,35,.08); }
+.sh-map-count { font-family: var(--font-display); font-size: 13px; color: var(--sh-quiet); font-variant-numeric: tabular-nums; }
+
+/* ---- footer ---- */
+.sh-footer {
+  max-width: 1184px; margin: calc(var(--sh-page) * 2) auto 0;
+  padding: var(--sh-base) var(--sh-page) calc(var(--sh-page) * 3);
+  border-top: 1px solid var(--sh-ink);
+  font-size: 15px; color: var(--sh-quiet);
+}
+.sh-footer p { max-width: var(--sh-measure); margin: 0 0 var(--sh-cap); }
+.sh-footer strong { color: var(--sh-ink); font-family: var(--font-display); }
+
+/* ---- manuscript ---- */
+.sh-ms-head, .sh-ms-body { max-width: 1184px; margin: 0 auto; padding: 0 var(--sh-page); }
+.sh-ms-head { padding-top: calc(var(--sh-page) * 2); }
+.sh-ms-head h1 { font-family: var(--font-display); font-size: clamp(30px, 4vw, 48px); font-weight: 800; letter-spacing: -.04em; margin: 0; }
+.sh-ms-meta { display: flex; flex-wrap: wrap; gap: var(--sh-base); margin: var(--sh-base) 0; padding: var(--sh-base) 0; border-top: 1px solid var(--sh-ink); border-bottom: 1px solid var(--sh-hairline); }
+.sh-ms-meta dt { font-family: var(--font-display); font-size: 11px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--sh-quiet); }
+.sh-ms-meta dd { margin: 2px 0 0; font-family: var(--font-display); font-size: 15px; font-weight: 600; }
+.sh-ms-body { padding-bottom: calc(var(--sh-page) * 3); }
+.sh-ms-body p { max-width: var(--sh-measure); margin: 0 0 var(--sh-base); }
+.sh-ms-body h2 { font-family: var(--font-display); font-size: 24px; font-weight: 800; letter-spacing: -.03em; margin: calc(var(--sh-page) * 1.6) 0 var(--sh-base); }
+.sh-ms-pull, .sh-ms-figure {
+  font-family: var(--font-mono); font-size: 13px; line-height: 1.6;
+  color: var(--sh-seal); border-left: 2px solid var(--sh-seal);
+  padding-left: var(--sh-base);
+}
+.sh-ms-figure span { color: var(--sh-quiet); }
+
+@media print {
+  .sh-masthead, .sh-contents { display: none; }
+  .shophouse-essay { font-size: 11pt; }
+}
+
+/* ---- shophouses: timeline, research, bibliography ---- */
+.sh-era { border-bottom: 1px solid var(--sh-hairline); }
+.sh-era > button {
+  width: 100%; display: grid; gap: 2px; text-align: left;
+  background: none; border: 0; cursor: pointer; padding: var(--sh-base) 0;
+  color: var(--sh-ink); min-height: 44px;
+}
+@media (min-width: 640px) {
+  .sh-era > button { grid-template-columns: 13ch 1fr 11ch; align-items: baseline; gap: var(--sh-base); }
+}
+.sh-era-period { font-family: var(--font-mono); font-size: 13px; color: var(--sh-seal); font-weight: 600; }
+.sh-era-label { font-family: var(--font-display); font-size: 18px; font-weight: 700; letter-spacing: -.02em; }
+.sh-era-storeys { font-family: var(--font-display); font-size: 13px; color: var(--sh-quiet); }
+.sh-era-body { padding: 0 0 var(--sh-base); max-width: var(--sh-measure); }
+.sh-era-body > p { margin: 0 0 var(--sh-cap); }
+.sh-era-structure { font-size: 16px; color: var(--sh-quiet); }
+.sh-era-structure strong {
+  display: block; font-family: var(--font-display); font-size: 11px; font-weight: 700;
+  letter-spacing: .12em; text-transform: uppercase; color: var(--sh-ink);
+}
+.sh-era.is-gap { background: repeating-linear-gradient(135deg, transparent, transparent 6px, rgba(140,47,35,.05) 6px, rgba(140,47,35,.05) 12px); }
+.sh-era.is-gap .sh-era-label { color: var(--sh-seal); font-style: italic; }
+
+.sh-research-counts { display: flex; flex-wrap: wrap; gap: var(--sh-base); margin-bottom: var(--sh-base); }
+.sh-research-counts span { font-family: var(--font-display); font-size: 13px; color: var(--sh-quiet); }
+.sh-research-counts strong { color: var(--sh-seal); font-size: 19px; font-variant-numeric: tabular-nums; }
+
+.sh-findings { margin: 0; padding: 0; list-style: none; counter-reset: fnd; }
+.sh-findings > li { counter-increment: fnd; border-bottom: 1px solid var(--sh-hairline); }
+.sh-findings > li > button {
+  width: 100%; text-align: left; background: none; border: 0; cursor: pointer;
+  padding: var(--sh-base) 0; min-height: 44px; color: var(--sh-ink);
+  font-family: var(--font-display); font-size: 17px; font-weight: 600; line-height: 1.3;
+  letter-spacing: -.02em;
+}
+.sh-findings > li > button::before {
+  content: counter(fnd, decimal-leading-zero) "  "; color: var(--sh-seal); font-weight: 700; font-size: 13px;
+}
+.sh-finding-body { padding: 0 0 var(--sh-base); max-width: var(--sh-measure); }
+.sh-finding-body > p { margin: 0 0 var(--sh-cap); }
+.sh-finding-caveat {
+  font-family: var(--font-display); font-size: 14px; color: var(--sh-seal);
+  border-left: 2px solid var(--sh-seal); padding-left: var(--sh-cap);
+}
+.sh-findings.is-static > li { padding: var(--sh-base) 0; }
+.sh-finding-claim {
+  font-family: var(--font-display); font-size: 18px; font-weight: 700;
+  letter-spacing: -.02em; line-height: 1.3; margin: 0 0 var(--sh-cap) !important;
+}
+.sh-findings.is-static > li::before {
+  content: counter(fnd, decimal-leading-zero); color: var(--sh-seal);
+  font-family: var(--font-display); font-weight: 700; font-size: 13px;
+}
+
+.sh-read-list { margin: 0 0 var(--sh-base); padding: 0; list-style: none; }
+.sh-read-list li { padding: var(--sh-cap) 0; border-bottom: 1px solid var(--sh-hairline); }
+.sh-read-list a { font-family: var(--font-display); font-size: 16px; font-weight: 600; }
+.sh-read-list small { display: block; margin-top: 2px; font-family: var(--font-display); font-size: 13px; color: var(--sh-quiet); }
+
+.sh-facts { margin: 0 0 var(--sh-base); padding: 0; list-style: none; }
+.sh-facts li {
+  padding: var(--sh-base) 0; border-bottom: 1px solid var(--sh-hairline);
+  max-width: var(--sh-measure);
+}
+.sh-facts span { display: block; font-family: var(--font-display); font-size: 18px; font-weight: 600; line-height: 1.35; letter-spacing: -.02em; }
+.sh-facts small { display: block; margin-top: 4px; font-family: var(--font-display); font-size: 13px; color: var(--sh-quiet); }
+
+/* The research page has no contents rail, so it must not inherit the
+   2/3 + 1/3 split — otherwise the bibliography reads in a narrow gutter
+   with a third of the page empty beside it. */
+.sh-body.sh-research-page { display: block; }
+.sh-research-page .sh-prose { max-width: none; }
+.sh-biblio-section { margin-top: calc(var(--sh-page) * 1.5); }
+.sh-biblio-section h3 {
+  font-family: var(--font-display); font-size: 15px; font-weight: 700;
+  letter-spacing: .1em; text-transform: uppercase; color: var(--sh-seal);
+  padding-bottom: var(--sh-cap); border-bottom: 1px solid var(--sh-ink); margin: 0 0 var(--sh-cap);
+}
+.sh-biblio-section h3 small { color: var(--sh-quiet); letter-spacing: 0; }
+.sh-biblio { margin: 0; padding: 0 0 0 3ch; }
+.sh-biblio li { padding: var(--sh-base) 0; border-bottom: 1px solid var(--sh-hairline); }
+.sh-biblio-title { font-family: var(--font-display); font-size: 16px; font-weight: 600; line-height: 1.35; margin: 0 !important; max-width: 70ch; }
+.sh-biblio-th { margin: 2px 0 0 !important; font-family: var(--font-body); font-size: 15px; color: var(--sh-quiet); max-width: 70ch; }
+.sh-biblio-meta { margin: var(--sh-cap) 0 0 !important; font-family: var(--font-display); font-size: 13px; color: var(--sh-quiet); }
+.sh-biblio-links { display: flex; flex-wrap: wrap; gap: var(--sh-base); margin: 4px 0 0 !important; }
+.sh-biblio-links a { font-family: var(--font-display); font-size: 12px; }
