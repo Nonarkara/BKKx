@@ -14,6 +14,9 @@ import { withNotes } from "./footnotes";
 // 40%, both scrolling together. On a phone the rail falls in after the
 // section's prose — the essay still reads top to bottom either way.
 
+import { PressureMap } from "./PressureMap";
+import { QUADRANTS, PRESSURE_TOTAL } from "../data/shophouse-pressure";
+
 type Section = { slug: string; heading: string | null; blocks: Block[] };
 
 function toSections(blocks: Block[]): Section[] {
@@ -81,6 +84,38 @@ export function EssayView() {
           </p>
         )}
       </article>
+
+      <section className="sh-atlas" id="atlas">
+        <div className="sh-atlas-head">
+          <p className="sh-eyebrow">The map this argument needed</p>
+          <h2>Where they are, and what the ground beneath them is worth</h2>
+          <p>
+            Every candidate shophouse the screen could find in Bangkok — {PRESSURE_TOTAL.toLocaleString()}{" "}
+            of them — laid over the Treasury appraisal that decides each one&apos;s fate. Two
+            questions per building: is the ground under it worth more than the median, and is the
+            plot shallow enough that a compliant rebuild would lose a serious share of its
+            footprint to the setback?
+          </p>
+          <p>
+            The four answers are the four colours. One of them is the whole essay.
+          </p>
+        </div>
+        <PressureMap />
+        <ol className="sh-quadrants">
+          {QUADRANTS.map((q) => (
+            <li key={q.id}>
+              <span className="sh-swatch" style={{ background: q.colour }} aria-hidden="true" />
+              <div>
+                <p className="sh-quadrant-label">
+                  {q.label} <small>{q.count.toLocaleString()} footprints</small>
+                </p>
+                <p className="sh-quadrant-what">{q.what}</p>
+                <p>{q.why}</p>
+              </div>
+            </li>
+          ))}
+        </ol>
+      </section>
 
       <nav className="sh-contents-strip" aria-label="Contents">
         <ol>

@@ -14,6 +14,9 @@ import {
   OPEN_QUESTIONS,
 } from "../../data/shophouse-bible";
 import { THESES } from "../../data/shophouse-theses";
+import { DimensionalSignature, QuickReference, Gazetteer } from "./BibleArtifacts";
+import { CLUSTERS } from "../../data/shophouse-gazetteer";
+import { PRESSURE_TOTAL } from "../../data/shophouse-pressure";
 
 export const metadata: Metadata = {
   title: "The Shophouse Bible · Shophouse Metropolis",
@@ -40,6 +43,7 @@ export default function BiblePage() {
           <a href="#dimensions">Dimensions</a>
           <a href="#law">The law</a>
           <a href="#culture">Culture</a>
+          <a href="#gazetteer">Gazetteer</a>
           <a href="#open">Open questions</a>
           <Link href="/shophouses/research">Sources</Link>
         </nav>
@@ -63,6 +67,7 @@ export default function BiblePage() {
 
       <div className="sh-body sh-research-page">
         <div className="sh-prose">
+          <QuickReference />
           {/* ---- dedication ---- */}
           <section className="sh-dedication">
             <p className="sh-eyebrow">In memoriam</p>
@@ -124,11 +129,22 @@ export default function BiblePage() {
           {/* ---- dimensions ---- */}
           <h2 id="dimensions">2 · The measured record</h2>
           <p>
+            Start with what the type actually measures, because almost every study re-derives this
+            and the numbers drift each time. The two distributions below are not a survey — they
+            are every candidate footprint open data could find, measured the same way.
+          </p>
+          <DimensionalSignature />
+          <p>
+            The table that follows is the published record, source by source. Where a study
+            disagrees with the measured distribution, that is worth more than either figure alone.
+          </p>
+          <p>
             Every dimension anyone has published, with its sample size. Note the disagreements —
             they are the most useful thing in the table. There is no single canonical shophouse
             dimension, and a thesis that states one without a sample is repeating somebody
             else&apos;s.
           </p>
+          <div className="sh-tablewrap">
           <table className="sh-dim-table">
             <thead>
               <tr>
@@ -150,6 +166,7 @@ export default function BiblePage() {
               ))}
             </tbody>
           </table>
+          </div>
 
           {/* ---- law ---- */}
           <h2 id="law">3 · The legal cage</h2>
@@ -170,6 +187,7 @@ export default function BiblePage() {
 
           {/* ---- stock ---- */}
           <h2 id="stock">4 · The stock record</h2>
+          <div className="sh-tablewrap">
           <table className="sh-dim-table">
             <thead>
               <tr>
@@ -190,6 +208,7 @@ export default function BiblePage() {
               ))}
             </tbody>
           </table>
+          </div>
 
           {/* ---- consensus ---- */}
           <h2 id="culture">5 · The shophouse as an institution</h2>
@@ -260,7 +279,21 @@ export default function BiblePage() {
             ))}
           </ol>
 
-          <h2 id="sources">9 · The corpus</h2>
+          <h2 id="gazetteer">9 · The gazetteer</h2>
+          <p>
+            Twenty-nine rows and quarters that somebody has actually documented, grouped by what
+            kind of place they are. The evidence tier on each is the important column: whether a
+            cluster is <em>registered</em>, merely <em>counted</em>, or only <em>mapped</em> is the
+            difference between a building that is protected and one that is simply known about.
+          </p>
+          <p>
+            Set that against the {PRESSURE_TOTAL.toLocaleString()} candidates on{" "}
+            <a href="/shophouses#atlas">the pressure map</a>: {CLUSTERS.length} documented clusters
+            against several thousand buildings nobody has looked at is the size of the gap.
+          </p>
+          <Gazetteer />
+
+          <h2 id="sources">10 · The corpus</h2>
           <p>
             {THESES.length} theses and papers, catalogued with every working link found.{" "}
             <Link href="/shophouses/research">The full bibliography →</Link>
