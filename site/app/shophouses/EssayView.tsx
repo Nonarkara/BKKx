@@ -43,7 +43,6 @@ export function EssayView() {
           <a href="#essay">Essay</a>
           <Link href="/shophouses/bible">The Bible</Link>
           <Link href="/shophouses/research">Sources</Link>
-          <Link href="/shophouses/manuscript">Manuscript</Link>
           <a href="https://bkk.nonarkara.org" target="_blank" rel="noreferrer">
             BKKx
           </a>
@@ -58,6 +57,13 @@ export function EssayView() {
         <p className="sh-subtitle">{ESSAY_META.subtitle}</p>
         <p className="sh-byline">
           {ESSAY_META.byline} — {ESSAY_META.context}
+        </p>
+        <p className="sh-companion">
+          <strong>This is the companion, not the chapter.</strong> The essay is published as a
+          printed chapter in <em>Shophouse Metropolis</em> (Harvard University Graduate School of
+          Design). What is here is the long version, with the survey, the sourced models, the
+          anatomy and the full bibliography — built for anyone researching this building type
+          rather than for a reader who has ten minutes.
         </p>
         <p className="sh-dedication-line">{ESSAY_META.dedication}</p>
 

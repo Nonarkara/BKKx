@@ -5,8 +5,9 @@
 // Written first-person as Dr Non. Blocks rather than one markdown string so
 // the interactive figures can sit inside the argument at the point the
 // argument needs them, instead of being decoration bolted to the end.
-// The manuscript export at /shophouses/manuscript renders the same source
-// as continuous prose for the printed book.
+// The printed chapter is a separate, shorter text (shophouse-essay-short.ts)
+// exported to DOCX for the Harvard GSD booklet. This long version is the
+// companion for researchers and stays on the web.
 
 export type Block =
   | { kind: "h2"; text: string }
@@ -32,7 +33,10 @@ export type FigureId =
   | "tenure"
   | "research"
   | "samphanthawong"
-  | "asset";
+  | "asset"
+  | "setback"
+  | "stair"
+  | "topdown";
 
 export const ESSAY_META = {
   title: "Bangkok Doesn't Need a Smart City",
@@ -164,6 +168,7 @@ export const ESSAY: Block[] = [
     kind: "p",
     text: "Before money or carbon, though: there is a legal fact I did not know until I went reading, and it is the strangest and strongest thing in this essay. On a great many shophouse plots, you are not allowed to rebuild what you tear down. Setback rules require a building over two storeys to stand six metres back from the centreline of a road narrower than ten metres.[[4]] An old shophouse already occupies its entire plot, right up to the pavement, because it was built before that rule existed. Demolish it and the replacement has to step back — onto land that, on a twelve-metre-deep plot, is most of the site. So for a whole class of buildings, reuse is not the sentimental option and not even the economical one. It is the only lawful thing you can do with the plot, and the alternative is to hold an empty lot.",
   },
+  { kind: "figure", id: "setback", caption: "The setback trap. The building that stands could not be built today, and what may lawfully replace it is smaller than what was demolished." },
   {
     kind: "pull",
     text: "Reuse is not the sentimental option on these plots. It is the only lawful one, and most owners do not know it.",
@@ -327,6 +332,11 @@ export const ESSAY: Block[] = [
     kind: "p",
     text: "A smart city, as it is usually sold, would install sensors to measure the congestion these vendors cause. I am proposing the opposite: that the technology's job is to give these systems the status the city has been withholding, and that this is both cheaper and more useful than anything in the standard catalogue.",
   },
+  {
+    kind: "p",
+    text: "This is where I part company with the model currently being sold across this region. The Singapore template — sensors first, platform second, citizens as data sources — works in Singapore because Singapore built the formal city first and the data layer second. Bangkok did it the other way round. The systems are already running; what is missing is not the technology but the permission. Buying the Singapore product for a Southeast Asian city is therefore not merely expensive. It is a category error: you pay to instrument a formal city you do not have, while the informal one that actually moves your workforce stays illegal, and therefore stays unmeasurable.",
+  },
+  { kind: "figure", id: "topdown", caption: "Two ways to build a smart city. One installs a layer over the formal city; the other legitimises the working city already there." },
 
   { kind: "h2", text: "What that looks like when you build it" },
   {
@@ -373,6 +383,7 @@ export const ESSAY: Block[] = [
     kind: "p",
     text: "I assumed this was an architect's observation until I read the research, and it turns out to be a measured cause. Nabila Imam's 2021 study of forty shophouse owners lists the placement of the stair among the root causes of upper-floor vacancy[[7]] — tenants will not take the upper floors because the stair runs through the middle of the building and there is no separate way up. One owner's answer, recorded verbatim in her appendix, is simply: no stairs outside. Attachai Luangamornlert reached the same conclusion from the drawings six years earlier, identifying the staircase as the fixed element that governs everything a shophouse can become.",
   },
+  { kind: "figure", id: "stair", caption: "Why the upper floors are dark. One stair through the shop ties three storeys to a single tenant; a second line of circulation lets the same building be let four ways." },
   {
     kind: "p",
     text: "And here the law closes the circle in a way that would be funny if it were not so expensive. Ministerial Regulation No. 11 defines the removal of a reinforced-concrete stair as a demolition, not a modification.[[8]] The one change that would unlock the upper floors of several hundred thousand buildings is legally classified as knocking the building down, which triggers full compliance with current code, which the building cannot meet, because it is old. So the stair stays, the upper floors stay dark, and eventually somebody decides the whole thing is urban trash.",

@@ -8,6 +8,7 @@ import { THESES } from "../data/shophouse-theses";
 import { CORRIDOR_BANDS, LAND_PRICE_SOURCE, bahtPerM2, landValueUnderUnit } from "../data/land-price";
 import type { FigureId } from "../data/shophouse-essay";
 import { CorridorMap } from "./CorridorMap";
+import { SetbackFigure, StairFigure, TopDownFigure } from "./ArgumentDiagrams";
 
 const fmt = (n: number) => n.toLocaleString("en-US", { maximumFractionDigits: 0 });
 
@@ -570,6 +571,12 @@ export function Figure({ id }: { id: FigureId }) {
       return <SamphanthawongFigure />;
     case "asset":
       return <AssetFigure />;
+    case "setback":
+      return <SetbackFigure />;
+    case "stair":
+      return <StairFigure />;
+    case "topdown":
+      return <TopDownFigure />;
     default:
       return null;
   }

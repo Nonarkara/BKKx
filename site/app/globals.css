@@ -5000,3 +5000,38 @@ body:has(.shophouse-essay) { background: #ffffff; color: #111014; }
 .sh-support { padding-bottom: var(--sh-base); margin-bottom: var(--sh-base); border-bottom: 1px solid var(--sh-hairline); }
 .sh-support-logos { display: flex; flex-wrap: wrap; gap: var(--sh-base); align-items: center; margin-top: var(--sh-base); }
 .sh-support-logos img { height: 54px; width: auto; padding: 7px; border: 1px solid var(--sh-rule); }
+
+/* manuscript: real figures inline, sized for a print page */
+.sh-ms-fig { margin: var(--sh-base) 0 calc(var(--sh-page) * 1.3); max-width: var(--sh-measure); }
+.sh-ms-fig figcaption {
+  margin-top: var(--sh-cap); font-family: var(--font-display); font-size: 13px;
+  line-height: 1.45; color: var(--sh-quiet);
+}
+
+/* figure export route: one figure, white ground, fixed width for screenshotting */
+body:has(.sh-figexport) { background: #fff !important; }
+.sh-figexport { background: #fff; padding: 0; margin: 0; }
+.sh-figexport-inner { width: 900px; padding: 18px; background: #fff; }
+.sh-figexport-inner .sh-fig { border-top: 0; padding-top: 0; }
+
+/* the site is the booklet's companion — say so above the fold */
+.sh-companion {
+  max-width: var(--sh-measure); margin: var(--sh-base) 0;
+  padding: var(--sh-base); background: var(--sh-mark);
+  border-left: 4px solid var(--sh-ink);
+  font-size: 15px; line-height: 1.55; color: var(--sh-ink);
+}
+.sh-companion strong { font-family: var(--font-display); font-weight: 800; }
+
+/* wide content scrolls inside its own box — never the page (house rule) */
+.sh-tenure { overflow-x: auto; }
+.sh-tenure table { min-width: 320px; }
+.sh-section-svg { max-width: 100%; }
+
+/* tap targets: nothing interactive below 44px, and lazy images must not
+   collapse the button that wraps them before they load (house rule §11.8) */
+.sh-rail img { min-height: 120px; background: var(--sh-panel); }
+.sh-rail-diagram > button { min-height: 120px; }
+.sh-contents-strip a { min-height: 44px; }
+.sh-wordmark { display: inline-flex; align-items: center; min-height: 44px; }
+.sh-masthead nav a { display: inline-flex; align-items: center; min-height: 44px; }

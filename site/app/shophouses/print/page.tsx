@@ -15,7 +15,7 @@ export const metadata: Metadata = {
 
 export default function PrintPage() {
   const words = SHORT.reduce(
-    (n, b) => (b.kind === "p" || b.kind === "pull" ? n + stripNotes(b.text).split(/\s+/).length : n),
+    (n, b) => (b.kind === "p" ? n + stripNotes(b.text).split(/\s+/).length : n),
     0,
   );
 
@@ -39,10 +39,10 @@ export default function PrintPage() {
           switch (b.kind) {
             case "h2":
               return <h2 key={i}>{b.text}</h2>;
-            case "pull":
+            case "figure":
               return (
-                <p key={i} className="sh-print-pull">
-                  {withNotes(b.text)}
+                <p key={i} className="sh-print-figure">
+                  [FIGURE — {b.id}] {b.caption}
                 </p>
               );
             default:
