@@ -48,8 +48,10 @@ export default function AboutPage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
       />
-      <PlaceMasthead />
-      <AboutClient />
+      <div className="register">
+        <PlaceMasthead />
+        <AboutClient />
+      </div>
     </>
   );
 }

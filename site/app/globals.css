@@ -2056,6 +2056,36 @@ footer small { grid-column: 1 / -1; margin-top: 60px; padding-top: 24px; border-
   color: var(--quiet);
 }
 
+@media (max-width: 760px) {
+  .register-masthead {
+    display: block;
+    padding: 12px 0 8px;
+  }
+  .register-masthead > .register-wordmark {
+    margin-bottom: 6px;
+  }
+  .register-nav {
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    gap: 0 18px;
+    overflow-x: auto;
+    padding-top: 7px;
+    border-top: 1px solid var(--hairline);
+    font-size: 11px;
+    scrollbar-width: none;
+  }
+  .register-nav::-webkit-scrollbar {
+    display: none;
+  }
+  .register-nav a,
+  .register-nav .lang-toggle {
+    flex: 0 0 auto;
+  }
+  .register-nav a {
+    min-height: 34px;
+  }
+}
+
 /* ---- lede ---- */
 
 .register-lede {
@@ -4028,7 +4058,7 @@ footer small { grid-column: 1 / -1; margin-top: 60px; padding-top: 24px; border-
 
 .numbers-masthead {
   display: grid;
-  grid-template-columns: minmax(180px, 240px) 1fr auto;
+  grid-template-columns: minmax(0, 1fr) auto;
   align-items: start;
   gap: calc(var(--cap, 32px) * 0.75);
   padding: calc(var(--cap, 32px) * 1.1) clamp(20px, 4vw, 56px) calc(var(--cap, 32px) * 0.7);
@@ -4037,6 +4067,7 @@ footer small { grid-column: 1 / -1; margin-top: 60px; padding-top: 24px; border-
 }
 .numbers-masthead-meta h1 {
   margin: 0;
+  max-width: 16ch;
   font-family: var(--font-display);
   font-size: clamp(36px, 5.2vw, 64px);
   line-height: 1.02;
@@ -4196,6 +4227,76 @@ footer small { grid-column: 1 / -1; margin-top: 60px; padding-top: 24px; border-
   margin: calc(var(--cap, 32px) * 1.5) 0 0;
 }
 
+.numbers-disclosure {
+  margin: 0 0 calc(var(--cap, 32px) * 1.5);
+  border-top: 1px solid var(--ink);
+  border-bottom: 1px solid var(--ink);
+}
+.numbers-disclosure > summary {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 24px;
+  padding: 18px 0;
+  list-style: none;
+  cursor: pointer;
+}
+.numbers-disclosure > summary::-webkit-details-marker {
+  display: none;
+}
+.numbers-disclosure-copy {
+  display: grid;
+  gap: 5px;
+}
+.numbers-disclosure-copy small {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--seal, #8c2f23);
+}
+.numbers-disclosure-copy strong {
+  font-family: var(--font-display);
+  font-size: clamp(23px, 2.7vw, 34px);
+  line-height: 1.05;
+  letter-spacing: -0.01em;
+}
+.numbers-disclosure-action {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.numbers-disclosure-action b {
+  display: inline-block;
+  margin-left: 8px;
+  font-family: var(--font-body);
+  font-size: 19px;
+  line-height: 0;
+  transition: transform 120ms linear;
+}
+.numbers-disclosure[open] > summary .numbers-disclosure-action b {
+  transform: rotate(45deg);
+}
+.numbers-disclosure > summary:hover .numbers-disclosure-action,
+.numbers-disclosure > summary:focus-visible .numbers-disclosure-action {
+  color: var(--seal, #8c2f23);
+}
+.numbers-disclosure > summary:focus-visible {
+  outline: 2px solid var(--seal, #8c2f23);
+  outline-offset: 5px;
+}
+.numbers-disclosure-body {
+  padding-top: calc(var(--cap, 32px) * 1.15);
+  border-top: 1px solid rgba(17, 18, 15, 0.18);
+}
+.numbers-disclosure-body .numbers-section:last-child {
+  margin-bottom: calc(var(--cap, 32px) * 0.75);
+}
+
 .numbers-endnote {
   max-width: 72ch;
   margin-top: calc(var(--cap, 32px) * 1.2);
@@ -4240,16 +4341,22 @@ footer small { grid-column: 1 / -1; margin-top: 60px; padding-top: 24px; border-
 }
 
 .numbers-essay {
-  margin-top: calc(var(--cap, 32px) * 2.5);
   padding-top: calc(var(--cap, 32px) * 1.2);
-  border-top: 1px solid var(--ink);
+  border-top: 1px solid rgba(17, 18, 15, 0.18);
 }
-.numbers-essay-rule {
-  display: block;
-  height: 0;
-  border: 0;
-  border-top: 1px solid var(--ink);
-  margin: 0 0 calc(var(--cap, 32px) * 0.8);
+.numbers-essay-disclosure {
+  margin-top: calc(var(--cap, 32px) * 1.5);
+}
+.numbers-essay > .register-eyebrow,
+.numbers-essay > h2 {
+  max-width: 920px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.numbers-essay > h2 {
+  font-family: var(--font-display);
+  font-size: clamp(36px, 5vw, 64px);
+  line-height: 1.02;
 }
 
 /* Mobile: stat grid collapses to a single column with hairline
@@ -4273,6 +4380,13 @@ footer small { grid-column: 1 / -1; margin-top: 60px; padding-top: 24px; border-
   }
   .numbers-stat-value {
     font-size: 28px;
+  }
+  .numbers-disclosure > summary {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  .numbers-disclosure-action {
+    white-space: normal;
   }
 }
 

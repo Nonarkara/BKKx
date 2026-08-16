@@ -360,6 +360,7 @@ test("serves the Bangkok-by-the-numbers about page", async () => {
   const html = await response.text();
   // Numbers
   assert.match(html, /Bangkok by the numbers/);
+  assert.match(html, /<div class="register"><header class="register-masthead">/);
   assert.match(html, /numbers-page/);
   assert.match(html, /numbers-stat-grid/);
   // 10.54M population, 39.9M visitors, 571 monuments, 432,077 buildings
@@ -367,6 +368,14 @@ test("serves the Bangkok-by-the-numbers about page", async () => {
   assert.match(html, /39\.9/);
   assert.match(html, /571/);
   assert.match(html, /432,077/);
+  // The first read is intentionally short: four essential sections remain
+  // open, while the 30-measure ledger and personal essay use native,
+  // keyboard-accessible disclosure controls.
+  assert.match(html, /<details class="numbers-disclosure numbers-ledger" id="full-ledger">/);
+  assert.match(html, /Open 30 more measures/);
+  assert.match(html, /<details class="numbers-disclosure numbers-essay-disclosure" id="essay">/);
+  assert.match(html, /Read Dr Non(?:&#x27;|&apos;|')s Bangkok/);
+  assert.doesNotMatch(html, /<details[^>]+(?:full-ledger|essay)[^>]+open/);
   // The 8 section eyebrows are present (the middot renders fine in HTML)
   for (const eyebrow of [
     "People",

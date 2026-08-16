@@ -75,7 +75,7 @@ export function AboutEssay() {
   return (
     <>
       <p className="register-eyebrow">{th ? ABOUT_TH.eyebrow : EN.eyebrow}</p>
-      <h1>{th ? ABOUT_TH.title : EN.title}</h1>
+      <h2>{th ? ABOUT_TH.title : EN.title}</h2>
 
       <Figure
         src="/about/dr-non-siam-square.jpg"

@@ -148,14 +148,56 @@ const SECTIONS: Section[] = [
   },
 ];
 
+const CORE_SECTION_IDS = new Set(["people", "air", "heritage", "food"]);
+const CORE_SECTIONS = SECTIONS.filter((section) => CORE_SECTION_IDS.has(section.id));
+const LEDGER_SECTIONS = SECTIONS.filter((section) => !CORE_SECTION_IDS.has(section.id));
+
+function NumbersSection({ section, rule = true }: { section: Section; rule?: boolean }) {
+  return (
+    <section
+      id={section.id}
+      className="numbers-section"
+      aria-labelledby={`${section.id}-title`}
+    >
+      <div className="numbers-section-head">
+        <p className="numbers-section-eyebrow">{section.eyebrow}</p>
+        <h2 id={`${section.id}-title`} className="numbers-section-title">
+          {section.title}
+        </h2>
+        <p className="numbers-section-lede">{section.lede}</p>
+      </div>
+
+      <ul className="numbers-stat-grid">
+        {section.stats.map((stat, statIdx) => (
+          <li key={`${section.id}-${statIdx}`} className="numbers-stat">
+            <p className="numbers-stat-value">
+              <span>{stat.value}</span>
+              {stat.unit ? <small>{stat.unit}</small> : null}
+            </p>
+            <p className="numbers-stat-label">{stat.label}</p>
+            <p className="numbers-stat-source">
+              {stat.sourceUrl ? (
+                <a href={stat.sourceUrl} target="_blank" rel="noreferrer">
+                  {stat.source}
+                </a>
+              ) : (
+                <span>{stat.source}</span>
+              )}
+              {stat.year ? <span className="numbers-stat-year"> · {stat.year}</span> : null}
+            </p>
+          </li>
+        ))}
+      </ul>
+
+      {rule ? <hr className="numbers-section-rule" aria-hidden="true" /> : null}
+    </section>
+  );
+}
+
 export function AboutClient() {
   return (
     <div className="numbers-page">
       <header className="numbers-masthead">
-        <Link className="register-wordmark" href="/" aria-label="BKKx home">
-          <span>BKK</span>
-          <b>x</b>
-        </Link>
         <div className="numbers-masthead-meta">
           <span className="register-eyebrow">
             <span lang="th">กรุงเทพมหานครในตัวเลข · Bangkok in numbers</span>
@@ -166,68 +208,48 @@ export function AboutClient() {
             <em>Then read the city.</em>
           </h1>
           <p className="numbers-masthead-lede">
-            Bangkok is one of the largest, hottest, most-visited, most-complained-about
-            cities on Earth. None of those adjectives mean anything on their own. The
-            numbers below — population, GDP, PM2.5, visitor receipts, the full
-            register — are the dry frame. The qualitative part of the city is what
-            you walk through once the frame is in place.
+            Start with four things that shape a day in Bangkok: who is here, what is
+            in the air, what survives, and where the city eats. The complete city
+            ledger and the human story are one step deeper — present, but never in
+            the way of the first read.
           </p>
         </div>
         <nav className="numbers-masthead-nav" aria-label="Sections">
-          {SECTIONS.map((s) => (
+          {CORE_SECTIONS.map((s) => (
             <a key={s.id} href={`#${s.id}`}>
               {s.eyebrow}
             </a>
           ))}
+          <a href="#full-ledger">Full city ledger</a>
+          <a href="#essay">Dr Non&apos;s Bangkok</a>
         </nav>
       </header>
 
       <main className="numbers-body">
-        {SECTIONS.map((section, sectionIdx) => (
-          <section
-            key={section.id}
-            id={section.id}
-            className="numbers-section"
-            aria-labelledby={`${section.id}-title`}
-          >
-            <div className="numbers-section-head">
-              <p className="numbers-section-eyebrow">{section.eyebrow}</p>
-              <h2 id={`${section.id}-title`} className="numbers-section-title">
-                {section.title}
-              </h2>
-              <p className="numbers-section-lede">{section.lede}</p>
-            </div>
-
-            <ul className="numbers-stat-grid">
-              {section.stats.map((stat, statIdx) => (
-                <li
-                  key={`${section.id}-${statIdx}`}
-                  className="numbers-stat"
-                >
-                  <p className="numbers-stat-value">
-                    <span>{stat.value}</span>
-                    {stat.unit ? <small>{stat.unit}</small> : null}
-                  </p>
-                  <p className="numbers-stat-label">{stat.label}</p>
-                  <p className="numbers-stat-source">
-                    {stat.sourceUrl ? (
-                      <a href={stat.sourceUrl} target="_blank" rel="noreferrer">
-                        {stat.source}
-                      </a>
-                    ) : (
-                      <span>{stat.source}</span>
-                    )}
-                    {stat.year ? <span className="numbers-stat-year"> · {stat.year}</span> : null}
-                  </p>
-                </li>
-              ))}
-            </ul>
-
-            {sectionIdx < SECTIONS.length - 1 ? (
-              <hr className="numbers-section-rule" aria-hidden="true" />
-            ) : null}
-          </section>
+        {CORE_SECTIONS.map((section) => (
+          <NumbersSection key={section.id} section={section} />
         ))}
+
+        <details className="numbers-disclosure numbers-ledger" id="full-ledger">
+          <summary>
+            <span className="numbers-disclosure-copy">
+              <small>02–06 · Full city ledger</small>
+              <strong>Economy, visitors, sentiment and safety.</strong>
+            </span>
+            <span className="numbers-disclosure-action">
+              Open 30 more measures <b aria-hidden="true">+</b>
+            </span>
+          </summary>
+          <div className="numbers-disclosure-body">
+            {LEDGER_SECTIONS.map((section, index) => (
+              <NumbersSection
+                key={section.id}
+                section={section}
+                rule={index < LEDGER_SECTIONS.length - 1}
+              />
+            ))}
+          </div>
+        </details>
 
         <section className="numbers-endnote" aria-label="Reading order">
           <p className="numbers-endnote-eyebrow">After the numbers</p>
@@ -256,10 +278,20 @@ export function AboutClient() {
           </p>
         </section>
 
-        <section className="numbers-essay" aria-label="After the numbers: the essay">
-          <p className="numbers-essay-rule" aria-hidden="true" />
-          <AboutEssay />
-        </section>
+        <details className="numbers-disclosure numbers-essay-disclosure" id="essay">
+          <summary>
+            <span className="numbers-disclosure-copy">
+              <small>The human version</small>
+              <strong>The city that never got the plaque.</strong>
+            </span>
+            <span className="numbers-disclosure-action">
+              Read Dr Non&apos;s Bangkok <b aria-hidden="true">+</b>
+            </span>
+          </summary>
+          <div className="numbers-essay" aria-label="After the numbers: the essay">
+            <AboutEssay />
+          </div>
+        </details>
       </main>
     </div>
   );
