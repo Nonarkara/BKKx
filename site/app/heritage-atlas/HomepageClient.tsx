@@ -97,11 +97,13 @@ export function HomepageClient({ quarters, initialQuarter }: Props) {
           </div>
 
           {railView === "rowhouses" ? <OldTownPicks iframeRef={iframeRef} /> : <section className="atlas-shell-quarter-view">
-            <p className="register-eyebrow">{t("nav_quarters")}</p>
-            <h2 className="register-section-title atlas-shell-quarters-title">
-              {t("home_quarters_heading")}
-            </h2>
-            <p className="atlas-shell-quarters-lede">{t("quarters_lede")}</p>
+            <header className="atlas-shell-quarter-view-head">
+              <p className="register-eyebrow">Heritage · Bangkok</p>
+              <h2 className="register-section-title atlas-shell-quarters-title">
+                {t("home_quarters_heading")}
+              </h2>
+              <p className="atlas-shell-quarters-lede">{t("quarters_lede")}</p>
+            </header>
             <ol className="atlas-shell-quarter-chips">
             {quarters.map((q) => {
               const isActive = q.slug === activeSlug;
@@ -130,10 +132,12 @@ export function HomepageClient({ quarters, initialQuarter }: Props) {
                       </span>
                     )}
                     <span className="atlas-shell-quarter-body">
-                      <span className="atlas-shell-quarter-name">
-                        {q.name}
-                        {q.thai ? <small lang="th"> {q.thai}</small> : null}
-                      </span>
+                      <span className="atlas-shell-quarter-name">{q.name}</span>
+                      {q.thai ? (
+                        <span className="atlas-shell-quarter-thai" lang="th">
+                          {q.thai}
+                        </span>
+                      ) : null}
                       {tag ? (
                         <span className="atlas-shell-quarter-tag" lang={th ? "th" : undefined}>
                           {tag}

@@ -18,8 +18,8 @@ export const DICTIONARY = {
     section_quarters_title: "The quarters",
     section_walks_title: "The walks",
     section_register_title: "The register, mapped",
-    quarters_lede: "From the royal island to the green lung. Click a quarter to fly the map there. Each one is a hand-curated page with its monuments, its walks and its own history.",
-    home_quarters_heading: "Nine quarters of the old city",
+    quarters_lede: "From the royal island to the green lung. Click to fly the map.",
+    home_quarters_heading: "Nine quarters",
     home_source_label: "Source",
     home_source_github: "Source on GitHub",
     quarters_index_lede: "Heritage in Bangkok is not scattered evenly — it pools in quarters, each with its own founding story. Nine of them, from the royal island to the green lung, each with its monuments, its walks and its own page.",
@@ -84,7 +84,7 @@ export const DICTIONARY = {
 
     hero_eyebrow: "ที่มาของโครงการนี้",
     front_door_tagline: "แผนที่ 3 มิติคือหน้าบ้าน — เก้าย่าน เจ็ดเส้นทางเดิน โบราณสถาน 571 แห่ง เลือกย่านแล้วบินไปดูได้เลย",
-    home_quarters_heading: "เก้าย่านของเมืองเก่า",
+    home_quarters_heading: "เก้าย่าน",
     home_source_label: "แหล่งข้อมูล",
     home_source_github: "ซอร์สโค้ดบน GitHub",
     quarters_index_lede: "มรดกของกรุงเทพฯ ไม่ได้กระจายเท่ากันทั่วเมือง แต่รวมตัวอยู่เป็นย่านๆ แต่ละย่านมีเรื่องราวการก่อร่างสร้างตัวของตัวเอง เก้าย่านนี้ ตั้งแต่เกาะรัตนโกสินทร์ไปจนถึงปอดสีเขียว แต่ละแห่งมีโบราณสถาน เส้นทางเดิน และหน้าเพจของตัวเอง",
@@ -95,7 +95,7 @@ export const DICTIONARY = {
     section_quarters_title: "ย่านต่างๆ",
     section_walks_title: "เส้นทางเดิน",
     section_register_title: "ทะเบียนโบราณสถานบนแผนที่",
-    quarters_lede: "จากเกาะรัตนโกสินทร์ไปจนถึงปอดสีเขียวของเมือง คลิกเลือกย่านเพื่อบินแผนที่ไปยังจุดนั้น แต่ละย่านมีหน้าเพจที่เรียบเรียงเอง พร้อมโบราณสถาน เส้นทางเดิน และประวัติของตัวเอง",
+    quarters_lede: "จากเกาะรัตนโกสินทร์ไปจนถึงปอดสีเขียว คลิกเพื่อบินแผนที่",
 
     filter_all: "โบราณสถานทั้งหมดที่ระบุตำแหน่งได้",
     filter_registered: "ขึ้นทะเบียนแล้วเท่านั้น",
