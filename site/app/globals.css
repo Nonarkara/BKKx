@@ -1199,6 +1199,10 @@ footer small { grid-column: 1 / -1; margin-top: 60px; padding-top: 24px; border-
 }
 .key-fabric { background: #b99064; }
 .key-landmark { background: #ffd04d; }
+.key-hero {
+  background: linear-gradient(90deg, #e7d4aa 0 40%, #eee2c5 40% 72%, #f4c84d 72%);
+  border-color: #fff0c2;
+}
 .key-rowhouse { color: #e0a23a; }
 .key-rail { color: #2f9de2; }
 .key-boat { color: #54c7ec; }
@@ -1743,6 +1747,13 @@ footer small { grid-column: 1 / -1; margin-top: 60px; padding-top: 24px; border-
 .architecture-inspector-card .heritage-reg-badge {
   background: #efb739;
   color: #24180a;
+}
+.architecture-part-label {
+  margin: -4px 0 10px;
+  color: #f4c84d;
+  font: 700 9px/1.3 var(--font-mono);
+  letter-spacing: .08em;
+  text-transform: uppercase;
 }
 
 .heritage-card-photo {

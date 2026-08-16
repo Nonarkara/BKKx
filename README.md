@@ -66,7 +66,7 @@ walking distances and times from OSRM's foot profile (not straight-line estimate
 walk (gazetted/awaiting split, oldest gazette entry and its age, walking pace), and — for the 125 stops that fall
 inside a generated Minecraft world — the exact `/tp` command to stand on them.
 
-**The rowhouse atlas.** `/rowhouses` documents 29 ensembles across royal frontages, market rows, commercial
+**The rowhouse atlas.** `/rowhouses` documents 32 ensembles across royal frontages, market rows, commercial
 streets, canal markets and community-led conservation. Each record carries its source, explorer note, geometry
 method and confidence. The same data appears as clickable corridors in the 3D map and as an open
 [`GeoJSON download`](https://bkk.nonarkara.org/data/bangkok-rowhouse-atlas.geojson). Solid map lines follow
@@ -77,6 +77,14 @@ screens current Overture building shapes for field review. It explicitly does **
 heritage status. The directory also crosswalks all 46 category-E records in ONEP's Rattanakosin conservation
 survey: 26 are linked to mapped corridors and 20 remain visibly queued. See
 [`docs/rowhouse-atlas-method.md`](docs/rowhouse-atlas-method.md) for the reproducible method.
+
+**Heritage-specific 3D.** The Historic Core does not stop at the operational twin's generic building tiles.
+`bkk-heritage-detail.geojson` keeps 9,275 full-resolution Old Town footprints; `bkk-landmarks.geojson` supplies
+73 curated massing parts; and `bkk-hero-monuments.geojson` begins a higher-detail hero tier with Wat Arun. Its
+central 82 m envelope comes from a Fine Arts Department publication and its footprint from a checked-in OSM way
+snapshot. The stepped tiers and four satellite prangs are proportional interpretation, not a measured
+conservation model. `npm run data:heroes` rebuilds the transparent output and the release tests enforce the
+source disagreement and caveat rather than hiding either.
 
 **The Bangkok case.** `/case-for-bangkok` compares the emerging evidence with UNESCO's own descriptions of
 George Town and Melaka, Vigan, Hoi An, Luang Prabang and Galle. It is deliberately a claim register, not a

@@ -62,8 +62,9 @@ const NASA_AEROSOL_SOURCE =
 
 const HERITAGE_DETAIL_COUNT = 9_275;
 const HERITAGE_LANDMARK_PART_COUNT = 73;
+const HERO_MONUMENT_PART_COUNT = 23;
 const HERITAGE_DETAIL_NOTE =
-  "Full-resolution OpenStreetMap footprints with curated typology heights. Landmark heights are interpretive massing, not measured survey or conservation documentation.";
+  "Full-resolution OpenStreetMap footprints with curated typology heights. Hero monuments use official height envelopes and OSM footprints; tiering remains survey-informed schematic, not measured conservation documentation.";
 
 const HERITAGE_DETAIL_HEIGHT: maplibregl.ExpressionSpecification = [
   "case",
@@ -397,6 +398,13 @@ type ArchitecturalDetail = {
   building_type?: string;
   height?: number;
   source?: string;
+  source_url?: string;
+  source_note?: string;
+  model_status?: string;
+  part_label?: string;
+  height_source?: string;
+  height_confidence?: string;
+  not_measured_survey?: boolean;
   osm_id?: string | number;
 };
 
@@ -923,6 +931,11 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
               data: "/data/bkk-landmarks.geojson",
               attribution: "BKKx interpretive landmark massing",
             });
+            map.addSource("bkkx-hero-monuments-src", {
+              type: "geojson",
+              data: "/data/bkk-hero-monuments.geojson",
+              attribution: "Fine Arts Department envelope · © OpenStreetMap contributors · BKKx schematic tiering",
+            });
             map.addLayer({
               id: "bkkx-heritage-detail",
               type: "fill-extrusion",
@@ -960,6 +973,19 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
               },
             });
             map.addLayer({
+              id: "bkkx-hero-monuments",
+              type: "fill-extrusion",
+              source: "bkkx-hero-monuments-src",
+              minzoom: 12.8,
+              paint: {
+                "fill-extrusion-color": ["coalesce", ["get", "material_color"], "#f1c75b"],
+                "fill-extrusion-height": ["coalesce", ["get", "height"], 12],
+                "fill-extrusion-base": ["coalesce", ["get", "base_height"], 0],
+                "fill-extrusion-opacity": 1,
+                "fill-extrusion-vertical-gradient": true,
+              },
+            });
+            map.addLayer({
               id: "bkkx-heritage-landmark-labels",
               type: "symbol",
               source: "bkkx-heritage-landmarks-src",
@@ -978,6 +1004,25 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
                 "text-halo-width": 1.5,
               },
             });
+            map.addLayer({
+              id: "bkkx-hero-monument-labels",
+              type: "symbol",
+              source: "bkkx-hero-monuments-src",
+              minzoom: 14.2,
+              filter: ["==", ["get", "id"], "wat-arun-central-base"],
+              layout: {
+                "text-field": "Wat Arun · วัดอรุณ",
+                "text-size": 11,
+                "text-offset": [0, 1.4],
+                "text-anchor": "top",
+                "text-allow-overlap": false,
+              },
+              paint: {
+                "text-color": "#fff0c2",
+                "text-halo-color": "#17120c",
+                "text-halo-width": 1.6,
+              },
+            });
 
             const inspectArchitecture = (event: maplibregl.MapLayerMouseEvent) => {
               const properties = event.features?.[0]?.properties;
@@ -988,9 +1033,11 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
               setSelectedCandidate(null);
               setSelectedMobility(null);
             };
-            map.on("click", "bkkx-heritage-landmarks", inspectArchitecture);
-            map.on("mouseenter", "bkkx-heritage-landmarks", () => { map.getCanvas().style.cursor = "pointer"; });
-            map.on("mouseleave", "bkkx-heritage-landmarks", () => { map.getCanvas().style.cursor = ""; });
+            for (const layerId of ["bkkx-heritage-landmarks", "bkkx-hero-monuments"]) {
+              map.on("click", layerId, inspectArchitecture);
+              map.on("mouseenter", layerId, () => { map.getCanvas().style.cursor = "pointer"; });
+              map.on("mouseleave", layerId, () => { map.getCanvas().style.cursor = ""; });
+            }
           } catch (err) {
             console.warn("bkkx: architectural detail layer failed", err);
           }
@@ -1507,6 +1554,8 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
       "bkkx-heritage-detail",
       "bkkx-heritage-landmarks",
       "bkkx-heritage-landmark-labels",
+      "bkkx-hero-monuments",
+      "bkkx-hero-monument-labels",
     ]) {
       if (map.getLayer(layerId)) map.setLayoutProperty(layerId, "visibility", visibility);
     }
@@ -1794,6 +1843,7 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
             <div>
               {showArchitecturalDetail ? <span><i className="key-building key-fabric" />Old Town full footprints</span> : null}
               {showArchitecturalDetail ? <span><i className="key-building key-landmark" />Curated landmark massing</span> : null}
+              {showArchitecturalDetail ? <span><i className="key-building key-hero" />Survey-informed hero model</span> : null}
               {showPoi.oldtown ? <span><i className="key-line key-rowhouse" />Documented rowhouse</span> : null}
               {showPoi.oldtown ? <span><i className="key-line key-rowhouse key-dashed" />Interpretive corridor</span> : null}
               {showMobility ? <span><i className="key-line key-rail" />MRT / BTS</span> : null}
@@ -1960,7 +2010,7 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
                   </button>
                 </div>
                 <small className="control-source-note">
-                  Old Town 3D: {HERITAGE_DETAIL_COUNT.toLocaleString()} full-resolution OSM footprints + {HERITAGE_LANDMARK_PART_COUNT} curated landmark parts.
+                  Old Town 3D: {HERITAGE_DETAIL_COUNT.toLocaleString()} full-resolution OSM footprints + {HERITAGE_LANDMARK_PART_COUNT} curated landmark parts + {HERO_MONUMENT_PART_COUNT} Wat Arun hero parts.
                   {" "}{HERITAGE_DETAIL_NOTE}{" "}
                   Conservation geometry is off by default and illustrative. {BKK_URBAN_ZONING_NOTE}
                   {" "}{HERITAGE_MOBILITY_NOTE} NASA aerosol is a dated regional optical-depth
@@ -2085,9 +2135,9 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
           <div className="heritage-inspector-card architecture-inspector-card" role="dialog" aria-modal="false" aria-label={`Architectural detail: ${selectedArchitecture.name_en ?? selectedArchitecture.name ?? "Old Town landmark"}`}>
             <div className="heritage-card-header">
               <div className="heritage-badge-group">
-                <span className="heritage-reg-badge">◩ Interpretive 3D</span>
+                <span className="heritage-reg-badge">◩ {selectedArchitecture.model_status ?? "Interpretive 3D"}</span>
                 {selectedArchitecture.height ? (
-                  <span className="heritage-era-badge">{Number(selectedArchitecture.height)} m massing</span>
+                  <span className="heritage-era-badge">to {Number(selectedArchitecture.height)} m</span>
                 ) : null}
               </div>
               <button type="button" className="heritage-close-btn" onClick={() => setSelectedArchitecture(null)} aria-label="Close architectural details">✕</button>
@@ -2096,18 +2146,22 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
             {selectedArchitecture.name_en && selectedArchitecture.name ? (
               <p className="heritage-thai" lang="th">{selectedArchitecture.name}</p>
             ) : null}
+            {selectedArchitecture.part_label ? <p className="architecture-part-label">{selectedArchitecture.part_label}</p> : null}
             <p className="heritage-desc">
-              A map-scale part of Bangkok&apos;s heritage silhouette. The footprint is spatial evidence;
-              the height is a curated visual interpretation and must not be read as a measured building survey.
+              A map-scale part of Bangkok&apos;s heritage silhouette. The footprint and published overall envelope are spatial evidence;
+              proportional tiering is an interpretation and must not be read as a measured conservation model.
             </p>
             <div className="heritage-meta-grid">
               <div><span>Character</span><strong>{selectedArchitecture.kind ?? selectedArchitecture.building_type ?? "heritage fabric"}</strong></div>
-              <div><span>Geometry</span><strong>full footprint</strong></div>
+              <div><span>Evidence</span><strong>{selectedArchitecture.height_confidence ?? "curated massing"}</strong></div>
             </div>
             <p className="heritage-source-note">
               {selectedArchitecture.source ?? "OpenStreetMap footprint · BKKx typology-height model"}<br />
+              {selectedArchitecture.height_source ? <>{selectedArchitecture.height_source}<br /></> : null}
+              {selectedArchitecture.source_note ? <>{selectedArchitecture.source_note}<br /></> : null}
               {selectedArchitecture.osm_id ? <>OSM ID {selectedArchitecture.osm_id} · </> : null}
-              <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noreferrer">OpenStreetMap attribution ↗</a>
+              {selectedArchitecture.source_url ? <><a href={selectedArchitecture.source_url} target="_blank" rel="noreferrer">Official source ↗</a> · </> : null}
+              <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noreferrer">OSM attribution ↗</a>
             </p>
           </div>
         )}
