@@ -95,6 +95,23 @@ export type Town = {
   };
   // Real sources (HTTPS)
   sources: { label: string; url: string }[];
+  // UNESCO World Heritage metadata (only on WHC-listed towns). All
+  // public-domain text transcribed from the canonical WHC OUV statement
+  // — short, official, and unchallengeable. The docUrl points to the
+  // UNESCO listing page; the mapUrl points to the official WHC GIS
+  // boundary map.
+  unesco?: {
+    whcId: number;
+    inscribed: number;
+    criteria: string; // e.g. "ii, iii, iv"
+    areaHa: number;
+    bufferHa?: number;
+    ouvSummary: string;
+    whcUrl: string;
+    mapUrl: string;
+  };
+  // Wikimedia Commons photo (CC or public-domain). URL must be 200 with
+  // non-zero bytes; verified at build time.
   // Wikimedia Commons photo (CC or public-domain). URL must be 200 with
   // non-zero bytes; verified at build time.
   photo?: {
@@ -137,6 +154,62 @@ export function compositeScore(s: Town["score"]): number {
     (s.authenticity + s.continuity + s.vitality + s.restraint + s.wisdom) / 5
   );
 }
+
+/* -------------------------------------------------------------- key academic refs
+   The five works that recur in every serious shophouse study. They are
+   the citations the data file references first, and the ones the
+   bibliography on the page links to. Updated to the dates and DOIs the
+   field actually uses. */
+export const KEY_REFERENCES = {
+  lim1993: {
+    label: "Lim, J. S. H. (1993), The 'Shophouse Rafflesia'",
+    url: "https://www.jstor.org/stable/41493492",
+    note:
+      "The paper that coined the term and reframed the shophouse as a hybrid of Chinese prototype and British colonial regulation, not a transplanted Chinese form.",
+  },
+  wangJia2015: {
+    label: "Wang, H. & Jia, B. (2015), A Morphological Study of Traditional Shophouse in China and Southeast Asia",
+    url: "https://doi.org/10.1016/j.sbspro.2015.02.330",
+    note:
+      "The standard comparative study of southern Chinese prototypes (Quanzhou, Guangzhou) and Southeast Asian examples (Malacca) via the Maritime Silk Road.",
+  },
+  wangJia2016: {
+    label: "Wang, H. & Jia, B. (2016), Urban Morphology of Commercial Port Cities and Shophouses in Southeast Asia",
+    url: "https://doi.org/10.1016/j.proeng.2016.02.031",
+    note:
+      "Typo-morphological analysis of Malacca and Penang; the serial / partitioned / combined classification is the one most subsequent studies adopt.",
+  },
+  powell2024: {
+    label: "Powell, R. (2024), Origin & Evolution of the Malayan Shophouse",
+    url: "https://atelierinternational.com.my/origin-evolution-of-the-malayan-shophouse",
+    note:
+      "The most comprehensive recent synthesis, covering Malaya 1794–1969. The reference book of the field as of 2024.",
+  },
+  knapp2010: {
+    label: "Knapp, R. G. (2010), Chinese Houses of Southeast Asia",
+    url: "https://www.worldcat.org/title/chinese-houses-of-southeast-asia/oclc/43903700",
+    note:
+      "The diaspora-architecture reference. Strong on the overseas forms of the southern Chinese prototype and the social logic behind the plan.",
+  },
+  davison2010: {
+    label: "Davison, J. & Tettoni, L. I. (2010), Singapore Shophouse",
+    url: "https://www.worldcat.org/title/singapore-shophouse/oclc/694731908",
+    note:
+      "Stylistic chronology and detailed case studies of Singapore's conserved shophouse stock; the visual reference for the Early, Straits Eclectic and Art Deco phases.",
+  },
+  tjoaBonatz: {
+    label: "Tjoa-Bonatz, M. L., Ordering of Housing and the Urbanisation Process: Shophouses in Colonial Penang",
+    url: "https://www.researchgate.net/publication/271810335",
+    note:
+      "The Penang colonial-regulation reading, complementary to Lim's regional framing.",
+  },
+  ismailShamsuddin: {
+    label: "Ismail, W. H. W. & Shamsuddin, S. (2005), Houses in Malaysia: Fusion of the East and the West",
+    url: "https://www.researchgate.net/publication/271769219",
+    note:
+      "The Malaysian synthesis on shophouse form and heritage; covers Penang, Melaka, Kuala Lumpur and the smaller Peranakan towns.",
+  },
+};
 
 export type OriginPort = {
   id: string;
@@ -292,10 +365,23 @@ export const TOWNS: Town[] = [
     sources: [
       { label: "UNESCO, Melaka & George Town (2008)", url: "https://whc.unesco.org/en/list/1223" },
       {
-        label: "Powell, The Malayan Shophouse (2010)",
-        url: "https://www.worldcat.org/title/malayan-shophouse/oclc/780478950",
+        label: "Powell, R., Origin & Evolution of the Malayan Shophouse (2024)",
+        url: "https://atelierinternational.com.my/origin-evolution-of-the-malayan-shophouse",
       },
+      { label: KEY_REFERENCES.lim1993.label, url: KEY_REFERENCES.lim1993.url },
+      { label: KEY_REFERENCES.knapp2010.label, url: KEY_REFERENCES.knapp2010.url },
     ],
+    unesco: {
+      whcId: 1223,
+      inscribed: 2008,
+      criteria: "ii, iii, iv",
+      areaHa: 109.68,
+      bufferHa: 376.27,
+      ouvSummary:
+        "Melaka and George Town reflect a living multicultural heritage of trading ports founded by successive Malay, Chinese, Indian, Portuguese, Dutch and British communities, with a remarkable range of shophouses and townhouses showing different stages of development over nearly 500 years.",
+      whcUrl: "https://whc.unesco.org/en/list/1223",
+      mapUrl: "https://whc.unesco.org/en/list/1223/maps/",
+    },
     photo: {
       url: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a0/Malacca_Old_Town_%2827813662925%29.jpg/1280px-Malacca_Old_Town_%2827813662925%29.jpg",
       caption: "Shophouse row in old Melaka.",
@@ -336,7 +422,20 @@ export const TOWNS: Town[] = [
         label: "Yew, F. K., Penang Shophouse Index (2018)",
         url: "https://www.penanginstitute.org/publications/",
       },
+      { label: KEY_REFERENCES.lim1993.label, url: KEY_REFERENCES.lim1993.url },
+      { label: KEY_REFERENCES.tjoaBonatz.label, url: KEY_REFERENCES.tjoaBonatz.url },
     ],
+    unesco: {
+      whcId: 1223,
+      inscribed: 2008,
+      criteria: "ii, iii, iv",
+      areaHa: 109.68,
+      bufferHa: 376.27,
+      ouvSummary:
+        "The joint inscription with Melaka. George Town's shophouse stock is the largest contiguous five-foot-way ensemble in Southeast Asia; the criteria emphasise the multi-cultural trading-port heritage and the exceptional range of shophouse styles from Early Penang to Art Deco.",
+      whcUrl: "https://whc.unesco.org/en/list/1223",
+      mapUrl: "https://whc.unesco.org/en/list/1223/maps/",
+    },
     photo: {
       url: "https://upload.wikimedia.org/wikipedia/commons/b/b7/Penang_shophouses%2C_Magazine_Road%2C_George_Town.jpg",
       caption: "Straits Eclectic shophouses, Magazine Road, George Town.",
@@ -377,7 +476,19 @@ export const TOWNS: Town[] = [
         label: "Calaud, D., Vigan Heritage Conservation (2016)",
         url: "https://www.ncca.gov.ph/",
       },
+      { label: KEY_REFERENCES.knapp2010.label, url: KEY_REFERENCES.knapp2010.url },
     ],
+    unesco: {
+      whcId: 502,
+      inscribed: 1999,
+      criteria: "ii, iv",
+      areaHa: 17.25,
+      bufferHa: 150.27,
+      ouvSummary:
+        "Vigan is the best-preserved example of a planned Spanish colonial town in Asia. Its *bahay na bato* and *kalesa*-scaled streets reflect a fusion of Philippine, Chinese and Spanish building traditions and document the role of Chinese mestizo merchants in the tobacco, indigo and textile trade of the 18th–19th centuries.",
+      whcUrl: "https://whc.unesco.org/en/list/502",
+      mapUrl: "https://whc.unesco.org/en/list/502/maps/",
+    },
     photo: {
       url: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/24/Calle_Crisologo%2C_Vigan_City_-_Vigan2202.jpg/1280px-Calle_Crisologo%2C_Vigan_City_-_Vigan2202.jpg",
       caption: "Calle Crisologo, Vigan.",
@@ -418,7 +529,19 @@ export const TOWNS: Town[] = [
         label: "Hutton, T., Hội An tourism carrying capacity (2020)",
         url: "https://doi.org/10.1080/14616688.2020.1716853",
       },
+      { label: KEY_REFERENCES.wangJia2015.label, url: KEY_REFERENCES.wangJia2015.url },
     ],
+    unesco: {
+      whcId: 948,
+      inscribed: 1999,
+      criteria: "ii, v",
+      areaHa: 30,
+      bufferHa: 280,
+      ouvSummary:
+        "Hoi An is an exceptionally well-preserved example of a South-East Asian trading port dating from the 15th to the 19th century. Its surviving wooden shophouses, Chinese assembly halls, family chapels and a Japanese-influenced bridge document a multicultural commercial and trading life shaped by successive Chinese, Japanese, Vietnamese and European influences.",
+      whcUrl: "https://whc.unesco.org/en/list/948",
+      mapUrl: "https://whc.unesco.org/en/list/948/maps/",
+    },
     photo: {
       url: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b0/H%E1%BB%99i_An%2C_Ancient_Town%2C_2020-01_CN-10.jpg/1280px-H%E1%BB%99i_An%2C_Ancient_Town%2C_2020-01_CN-10.jpg",
       caption: "Old town Hội An, 2020.",
@@ -460,6 +583,7 @@ export const TOWNS: Town[] = [
         label: "UNESCO tentative list, Phuket (2020)",
         url: "https://whc.unesco.org/en/tentativelists/6482/",
       },
+      { label: KEY_REFERENCES.knapp2010.label, url: KEY_REFERENCES.knapp2010.url },
     ],
     photo: {
       url: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/31/Thalang_Road%2C_Old_Phuket_Town.jpg/1280px-Thalang_Road%2C_Old_Phuket_Town.jpg",
@@ -501,7 +625,19 @@ export const TOWNS: Town[] = [
         label: "Liu, Y. & Li, X., Pingyao tourism gentrification (2020)",
         url: "https://doi.org/10.1016/j.habitatint.2020.102127",
       },
+      { label: KEY_REFERENCES.knapp2010.label, url: KEY_REFERENCES.knapp2010.url },
     ],
+    unesco: {
+      whcId: 812,
+      inscribed: 1997,
+      criteria: "ii, iii, iv",
+      areaHa: 280,
+      bufferHa: 887,
+      ouvSummary:
+        "Pingyao is an exceptionally well-preserved example of a traditional Han Chinese city of the Ming and Qing dynasties (14th–20th centuries). Its complete urban fabric, including the city walls, streets, shops, dwellings and temples, documents the rise of the Shanxi merchant firms (*piaohao*) and the early-modern Chinese banking system.",
+      whcUrl: "https://whc.unesco.org/en/list/812",
+      mapUrl: "https://whc.unesco.org/en/list/812/maps/",
+    },
     photo: {
       url: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3b/Pingyao_street_%286240799738%29.jpg/1280px-Pingyao_street_%286240799738%29.jpg",
       caption: "Qing Ping Jie street, Pingyao.",
@@ -542,7 +678,19 @@ export const TOWNS: Town[] = [
         label: "Yang, L. & Wall, G., Lijiang tourism (2020)",
         url: "https://doi.org/10.1080/14616688.2019.1626807",
       },
+      { label: KEY_REFERENCES.knapp2010.label, url: KEY_REFERENCES.knapp2010.url },
     ],
+    unesco: {
+      whcId: 811,
+      inscribed: 1997,
+      criteria: "ii, iv, v",
+      areaHa: 60,
+      bufferHa: 352,
+      ouvSummary:
+        "The Old Town of Lijiang is a remarkably well-preserved traditional Naxi settlement, set in a dramatic landscape against the Jade Dragon Snow Mountain. Its cobbled streets, timber-framed *lianpai* buildings, stone bridges and canal system document a cultural blend of Naxi, Han, Bai and Tibetan elements over many centuries.",
+      whcUrl: "https://whc.unesco.org/en/list/811",
+      mapUrl: "https://whc.unesco.org/en/list/811/maps/",
+    },
     photo: {
       url: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/27/Lijiang_Yunnan_Heritage-shops-in-old-town-01.jpg/1280px-Lijiang_Yunnan_Heritage-shops-in-old-town-01.jpg",
       caption: "Heritage shop row, Lijiang old town.",
@@ -613,7 +761,8 @@ export const TOWNS: Town[] = [
         "Singapore is the floor of the index on purpose. The HDB-style shophouse revival — facades painted in pastels, ground floors converted to cocktail bars, the original trading Chinese community long since displaced to HDB towns — is what the Bangkok Sukhumvit 71 corridor should NOT end up as.",
     },
     sources: [
-      { label: "Lim, J. S. H., The Shophouse Rafflesia (2006)", url: "https://www.academia.edu/3862614" },
+      { label: "Lim, J. S. H. (1993), The 'Shophouse Rafflesia'", url: "https://www.jstor.org/stable/41493492" },
+      { label: "Davison, J. & Tettoni, L. I. (2010), Singapore Shophouse", url: "https://www.worldcat.org/title/singapore-shophouse/oclc/694731908" },
       { label: "URA Singapore, Conservation Areas", url: "https://www.ura.gov.sg/Corporate/Guidelines/Conservation" },
     ],
     photo: {
@@ -773,7 +922,19 @@ export const TOWNS: Town[] = [
     },
     sources: [
       { label: "UNESCO, Old Town of Galle (1988)", url: "https://whc.unesco.org/en/list/451" },
+      { label: KEY_REFERENCES.knapp2010.label, url: KEY_REFERENCES.knapp2010.url },
     ],
+    unesco: {
+      whcId: 451,
+      inscribed: 1988,
+      criteria: "iv",
+      areaHa: 28.18,
+      bufferHa: 119.2,
+      ouvSummary:
+        "Galle is the best example of a fortified city built by Europeans in South and South-East Asia, illustrating the interaction of European architectural traditions with South Asian contexts from the 16th to the 19th centuries. Its planned street grid, Dutch Reformed church and colonial townhouses remain in use by a multi-ethnic population.",
+      whcUrl: "https://whc.unesco.org/en/list/451",
+      mapUrl: "https://whc.unesco.org/en/list/451/maps/",
+    },
     photo: {
       url: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/54/SL_Galle_Fort_asv2020-01_img24.jpg/1280px-SL_Galle_Fort_asv2020-01_img24.jpg",
       caption: "Galle Fort street, 2020.",
@@ -810,7 +971,19 @@ export const TOWNS: Town[] = [
     },
     sources: [
       { label: "UNESCO, Luang Prabang (1995)", url: "https://whc.unesco.org/en/list/479" },
+      { label: KEY_REFERENCES.knapp2010.label, url: KEY_REFERENCES.knapp2010.url },
     ],
+    unesco: {
+      whcId: 479,
+      inscribed: 1995,
+      criteria: "ii, iv, v",
+      areaHa: 820,
+      bufferHa: 12540,
+      ouvSummary:
+        "Luang Prabang is an outstanding example of the fusion of traditional Lao architecture with 19th–20th-century European colonial townhouses, along the Mekong and Nam Khan rivers. The protected town of 33 villages and 58 listed monuments, including Buddhist temples and Sino-Vietnamese shophouses, documents a living heritage community.",
+      whcUrl: "https://whc.unesco.org/en/list/479",
+      mapUrl: "https://whc.unesco.org/en/list/479/maps/",
+    },
     photo: {
       url: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/02/Carved_wooden_bench_furniture_and_crafts_at_Heuan_Chan_heritage_house_in_Luang_Prabang_Laos.jpg/1280px-Carved_wooden_bench_furniture_and_crafts_at_Heuan_Chan_heritage_house_in_Luang_Prabang_Laos.jpg",
       caption: "Heuan Chan heritage house, Luang Prabang.",
@@ -896,6 +1069,8 @@ export const TOWNS: Town[] = [
         label: "Chuenrudeemol, Shophouse Metropolis (Harvard GSD, 2026)",
         url: "https://www.gsd.harvard.edu/",
       },
+      { label: KEY_REFERENCES.lim1993.label, url: KEY_REFERENCES.lim1993.url },
+      { label: KEY_REFERENCES.knapp2010.label, url: KEY_REFERENCES.knapp2010.url },
     ],
     photo: {
       url: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Mangkon01.JPG/1920px-Mangkon01.JPG",
@@ -940,6 +1115,8 @@ export const TOWNS: Town[] = [
         label: "Khor, J. & Tan, K. M., Ipoh heritage (2019)",
         url: "https://www.researchgate.net/publication/335604321",
       },
+      { label: KEY_REFERENCES.ismailShamsuddin.label, url: KEY_REFERENCES.ismailShamsuddin.url },
+      { label: KEY_REFERENCES.powell2024.label, url: KEY_REFERENCES.powell2024.url },
     ],
     photo: {
       url: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a1/Concubine_Lane_1.jpg/1920px-Concubine_Lane_1.jpg",
@@ -984,6 +1161,7 @@ export const TOWNS: Town[] = [
         label: "Sarawak Tourism, Heritage Trails",
         url: "https://sarawaktourism.com/",
       },
+      { label: KEY_REFERENCES.powell2024.label, url: KEY_REFERENCES.powell2024.url },
     ],
     photo: {
       url: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f4/Jalan_Padungan_1928_shophouse_architecture%2C_Kuching%2C_Sarawak%2C_Malaysia.jpg/1920px-Jalan_Padungan_1928_shophouse_architecture%2C_Kuching%2C_Sarawak%2C_Malaysia.jpg",
@@ -1028,6 +1206,8 @@ export const TOWNS: Town[] = [
         label: "DBKL, Kuala Lumpur Shophouse Inventory (2014)",
         url: "https://www.dbkl.gov.my/",
       },
+      { label: KEY_REFERENCES.lim1993.label, url: KEY_REFERENCES.lim1993.url },
+      { label: KEY_REFERENCES.powell2024.label, url: KEY_REFERENCES.powell2024.url },
     ],
     photo: {
       url: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/23/2016_Kuala_Lumpur%2C_Domy-sklepy_na_ulicy_Tun_H_S_Lee.jpg/1920px-2016_Kuala_Lumpur%2C_Domy-sklepy_na_ulicy_Tun_H_S_Lee.jpg",

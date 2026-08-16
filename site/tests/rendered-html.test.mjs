@@ -796,3 +796,50 @@ test("Bangkok reference photos are real Wikimedia URLs and the page lists them",
   assert.match(html, /Supanut Arunoprayote/);
   assert.match(html, /MOS ss/);
 });
+
+test("each UNESCO town carries the WHC metadata block and OUV summary", async () => {
+  const response = await render("/shophouses/global");
+  const html = await response.text();
+
+  // 8 UNESCO pills + 8 criteria blocks
+  const unescoPills = (html.match(/sh-unesco-pill/g) ?? []).length;
+  const criteriaBlocks = (html.match(/sh-unesco-criteria/g) ?? []).length;
+  assert.ok(unescoPills >= 8, `expected at least 8 UNESCO pills, got ${unescoPills}`);
+  assert.ok(criteriaBlocks >= 8, `expected at least 8 criteria blocks, got ${criteriaBlocks}`);
+
+  // OUV quote is the lead-in for each
+  const ouvCount = (html.match(/Outstanding Universal Value/g) ?? []).length;
+  assert.ok(ouvCount >= 8, `expected at least 8 OUV quotes, got ${ouvCount}`);
+
+  // The 7 WHC map links
+  for (const id of [1223, 948, 502, 812, 811, 451, 479]) {
+    assert.match(html, new RegExp(`whc\\.unesco\\.org/en/list/${id}/maps`), `map link missing for WHC ${id}`);
+  }
+
+  // Specific criteria show up (entity-encoded &amp; is fine)
+  assert.match(html, /Criteria .*ii, iii, iv/);
+  assert.match(html, /Criteria .*ii, v/);
+  assert.match(html, /Criteria .*iv/);
+
+  // Each UNESCO town gets a "official boundary map" link
+  const mapLinks = (html.match(/official boundary map/g) ?? []).length;
+  assert.ok(mapLinks >= 8, `expected 8 official map links, got ${mapLinks}`);
+});
+
+test("the key academic references list is rendered with all 8 canonical works", async () => {
+  const { KEY_REFERENCES } = await import("../app/data/shophouse-global.ts");
+  const response = await render("/shophouses/global");
+  const html = await response.text();
+  assert.match(html, /Key references/);
+  // The labels contain "&" which gets HTML-encoded to &amp; — match either form
+  for (const [key, ref] of Object.entries(KEY_REFERENCES)) {
+    // Replace & with a non-capturing group that matches both forms, then
+    // escape the rest for use as a regex.
+    const safe = ref.label
+      .replace(/&/g, "§AMP§")
+      .replace(/[.*+?^${}()|[\]\\]/g, "\\$&")
+      .replace(/§AMP§/g, "(?:&amp;|&)");
+    assert.match(html, new RegExp(safe), `key reference missing: ${key}`);
+  }
+  assert.equal(Object.keys(KEY_REFERENCES).length, 8, "expected 8 key references");
+});

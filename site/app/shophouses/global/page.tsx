@@ -11,6 +11,7 @@ import {
   compositeScore,
   BANGKOK_BASELINE_ID,
   SINGAPORE_ID,
+  KEY_REFERENCES,
   type Town,
 } from "../../data/shophouse-global";
 
@@ -95,6 +96,7 @@ export default function GlobalPage() {
           <a href="#routes">Routes</a>
           <a href="#places">Places</a>
           <a href="#verdicts">Verdicts</a>
+          <a href="#key-references">References</a>
           <Link href="/shophouses">Essay</Link>
           <Link href="/shophouses/bible">Bible</Link>
           <Link href="/shophouses/research">Sources</Link>
@@ -346,6 +348,30 @@ export default function GlobalPage() {
                     {t.community ? ` · ${t.community}` : ""}
                   </p>
                   <p>{t.description}</p>
+                  {t.unesco ? (
+                    <aside className="sh-unesco-block" aria-label="UNESCO World Heritage metadata">
+                      <header>
+                        <span className="sh-unesco-pill">UNESCO · {t.unesco.inscribed}</span>
+                        <span className="sh-unesco-criteria">Criteria {t.unesco.criteria}</span>
+                        <span className="sh-unesco-area">
+                          {t.unesco.areaHa} ha{t.unesco.bufferHa ? ` + ${t.unesco.bufferHa} ha buffer` : ""}
+                        </span>
+                      </header>
+                      <blockquote>
+                        <strong>Outstanding Universal Value (OUV).</strong>{" "}
+                        {t.unesco.ouvSummary}
+                      </blockquote>
+                      <p className="sh-fig-note">
+                        <a href={t.unesco.whcUrl} target="_blank" rel="noreferrer">
+                          UNESCO listing ↗
+                        </a>
+                        {" · "}
+                        <a href={t.unesco.mapUrl} target="_blank" rel="noreferrer">
+                          official boundary map ↗
+                        </a>
+                      </p>
+                    </aside>
+                  ) : null}
                   <p
                     className={`sh-global-town-verdict is-${t.impact.verdict}`}
                   >
@@ -393,6 +419,23 @@ export default function GlobalPage() {
           </ol>
 
           {/* ------------------ what this is not ------------------ */}
+          <h2 id="key-references">Key references</h2>
+          <p>
+            The works that recur in every serious shophouse study. Each is the
+            citation the data file defaults to; the DOI / publisher link
+            opens the canonical reference.
+          </p>
+          <ol className="sh-keyrefs">
+            {Object.values(KEY_REFERENCES).map((r) => (
+              <li key={r.url}>
+                <a href={r.url} target="_blank" rel="noreferrer">
+                  {r.label}
+                </a>
+                <p>{r.note}</p>
+              </li>
+            ))}
+          </ol>
+
           <h2 id="limits">What this is not</h2>
           <p>
             A travel guide. Every photo is Wikimedia Commons and every

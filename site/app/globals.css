@@ -5695,3 +5695,21 @@ body:has(.sh-figexport) { background: #fff !important; }
 /* baseline + singapore rows in the place list */
 .sh-global-town.is-baseline { border-top-color: var(--sh-seal); border-top-width: 4px; }
 .sh-global-town.is-singapore { border-top-color: var(--sh-ink); border-top-width: 4px; background: rgba(255, 107, 53, 0.04); }
+
+/* ============================================================ UNESCO block
+   Each UNESCO-listed town gets a metadata strip: inscription year,
+   criteria, area + buffer, and the OUV statement in a blockquote. */
+.sh-unesco-block { border: 1px solid var(--sh-ink); border-left: 4px solid var(--sh-mark); padding: 10px 12px; margin: var(--sh-cap) 0; background: #fffdf5; }
+.sh-unesco-block header { display: flex; flex-wrap: wrap; gap: 6px 12px; align-items: baseline; margin-bottom: 6px; }
+.sh-unesco-pill { font-family: var(--font-display); font-size: 11px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; background: var(--sh-ink); color: var(--sh-paper); padding: 2px 7px; }
+.sh-unesco-criteria { font-family: var(--font-mono); font-size: 11px; color: var(--sh-seal); font-weight: 700; letter-spacing: .04em; }
+.sh-unesco-area { font-family: var(--font-mono); font-size: 11px; color: var(--sh-quiet); }
+.sh-unesco-block blockquote { margin: 6px 0 !important; font-size: 13px; line-height: 1.5; color: var(--sh-ink); }
+.sh-unesco-block blockquote strong { color: var(--sh-seal); }
+.sh-unesco-block .sh-fig-note { font-size: 12px; }
+
+/* key references list */
+.sh-keyrefs { list-style: none; margin: 0 0 var(--sh-base); padding: 0; border-top: 1px solid var(--sh-ink); }
+.sh-keyrefs li { padding: var(--sh-cap) 0; border-bottom: 1px solid var(--sh-hairline); }
+.sh-keyrefs li a { font-family: var(--font-display); font-size: 14px; font-weight: 700; letter-spacing: -.01em; }
+.sh-keyrefs li p { margin: 4px 0 0 !important; font-size: 13px; color: var(--sh-quiet); line-height: 1.5; }
