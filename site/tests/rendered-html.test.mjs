@@ -60,7 +60,9 @@ test("limits Old Town context layers to Historic Core", async () => {
 
   const html = await response.text();
   assert.match(html, /Heritage\s*\([^)]*16/);
-  assert.match(html, /Historic context/);
+  assert.match(html, /Conservation zones/);
+  assert.match(html, /Public transport/);
+  assert.match(html, /Map key/);
   assert.match(html, /Candidates\s*\(/);
   assert.match(html, /orientation only/i);
 });
@@ -197,6 +199,32 @@ test("serves the rowhouse research directory", async () => {
   assert.match(html, /application\/ld\+json/);
   assert.match(html, /GeoJSON/);
   assert.match(html, /solid lines for high-confidence axes/i);
+  assert.match(html, /Old Bangkok without a car/);
+  assert.match(html, /Chao Phraya Tourist Boat/);
+  assert.match(html, /Nearest public transport/);
+});
+
+test("heritage mobility routes are sourced, connected, and inside Bangkok", async () => {
+  const {
+    HERITAGE_MOBILITY_SERVICES,
+    HERITAGE_MOBILITY_STOPS,
+  } = await import("../app/data/heritage-mobility.ts");
+  assert.ok(HERITAGE_MOBILITY_SERVICES.length >= 6);
+  assert.ok(HERITAGE_MOBILITY_STOPS.length >= 20);
+  const stopIds = new Set(HERITAGE_MOBILITY_STOPS.map((stop) => stop.id));
+  const serviceIds = new Set(HERITAGE_MOBILITY_SERVICES.map((service) => service.id));
+  assert.equal(stopIds.size, HERITAGE_MOBILITY_STOPS.length, "duplicate mobility stop ID");
+  assert.equal(serviceIds.size, HERITAGE_MOBILITY_SERVICES.length, "duplicate mobility service ID");
+  for (const service of HERITAGE_MOBILITY_SERVICES) {
+    assert.ok(service.sourceUrl.startsWith("https://"), `${service.id}: source must be HTTPS`);
+    assert.ok(service.geometry.length >= 2, `${service.id}: route needs at least two coordinates`);
+    for (const stopId of service.stopIds) assert.ok(stopIds.has(stopId), `${service.id}: unknown stop ${stopId}`);
+  }
+  for (const stop of HERITAGE_MOBILITY_STOPS) {
+    const [lng, lat] = stop.coordinates;
+    assert.ok(lng >= 100.2 && lng <= 101.0 && lat >= 13.4 && lat <= 14.2, `${stop.id}: outside Bangkok bbox`);
+    for (const serviceId of stop.serviceIds) assert.ok(serviceIds.has(serviceId), `${stop.id}: unknown service ${serviceId}`);
+  }
 });
 
 test("exports the rowhouse atlas as open confidence-labelled GeoJSON", async () => {

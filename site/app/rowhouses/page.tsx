@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import type { CSSProperties } from "react";
 import Link from "next/link";
 import { PlaceMasthead } from "../PlaceMasthead";
 import {
@@ -16,6 +17,11 @@ import {
 } from "../data/onep-rowhouse-register";
 import footprintSummary from "../data/rowhouse-footprint-summary.json";
 import { photoFor } from "../data/heritage-content";
+import {
+  HERITAGE_MOBILITY_NOTE,
+  HERITAGE_MOBILITY_SERVICES,
+  nearestHeritageMobilityStops,
+} from "../data/heritage-mobility";
 
 export const metadata: Metadata = {
   title: "Bangkok rowhouse atlas",
@@ -37,7 +43,7 @@ const structuredData = {
   spatialCoverage: { "@type": "Place", name: "Bangkok, Thailand" },
   url: "https://bkk.nonarkara.org/rowhouses",
   creator: { "@type": "Person", name: "Non Arkara", url: "https://nonarkara.org" },
-  variableMeasured: ["location", "period", "typology", "evidence status", "documented unit count"],
+  variableMeasured: ["location", "period", "typology", "evidence status", "documented unit count", "public transport access"],
   distribution: [
     { "@type": "DataDownload", encodingFormat: "application/geo+json", contentUrl: "https://bkk.nonarkara.org/data/bangkok-rowhouse-atlas.geojson" },
     { "@type": "DataDownload", encodingFormat: "application/geo+json", contentUrl: "https://bkk.nonarkara.org/data/bangkok-rowhouse-footprint-candidates.geojson" },
@@ -90,6 +96,41 @@ export default function RowhouseAtlasPage() {
             <p><strong>Published count</strong> uses a scholarly or institutional inventory, including unit numbers where reported.</p>
             <p><strong>Curated corridor</strong> locates a documented community or street, but does not claim cadastral precision.</p>
             <p><strong>Map geometry</strong> uses solid lines for high-confidence axes and dashed lines for interpretive connections.</p>
+          </div>
+        </section>
+
+        <section className="heritage-mobility-guide" aria-labelledby="mobility-guide-title">
+          <div className="heritage-mobility-intro">
+            <div>
+              <p className="register-eyebrow">Arrive by public transport</p>
+              <h2 id="mobility-guide-title">Old Bangkok without a car.</h2>
+            </div>
+            <p>
+              The old city is not one destination; it is a chain of river, canal and rail gateways.
+              Use the map to understand the network, then walk the last few blocks slowly. Boat routes
+              are dotted; rail lines are solid. Every service links to its operator because Bangkok moves.
+            </p>
+          </div>
+          <div className="heritage-mobility-grid">
+            {HERITAGE_MOBILITY_SERVICES.filter((service) => [
+              "mrt-blue-old-town",
+              "chao-phraya-express-old-town",
+              "chao-phraya-tourist",
+              "saen-saep-west",
+            ].includes(service.id)).map((service) => (
+              <article key={service.id} style={{ ["--mobility-color" as string]: service.color } as CSSProperties}>
+                <span className={`mobility-swatch ${service.mode === "mrt" ? "is-solid" : "is-dotted"}`} aria-hidden="true" />
+                <p>{service.shortName}</p>
+                <h3>{service.name}</h3>
+                <small lang="th">{service.thai}</small>
+                <p>{service.serviceNote}</p>
+                <a href={service.sourceUrl} target="_blank" rel="noreferrer">Official service information ↗</a>
+              </article>
+            ))}
+          </div>
+          <div className="heritage-mobility-note">
+            <strong>Read the map honestly.</strong> {HERITAGE_MOBILITY_NOTE}
+            <Link href="/?view=rowhouses">Open the transport map ↗</Link>
           </div>
         </section>
 
@@ -176,6 +217,7 @@ export default function RowhouseAtlasPage() {
             const photo = spot.photo ? photoFor(spot.photo) : undefined;
             const [lng, lat] = spot.center;
             const onepRecords = onepRecordsForSlug(spot.slug);
+            const nearbyMobility = nearestHeritageMobilityStops(spot.center, 2);
             return (
               <article key={spot.slug} id={spot.slug} className="rowhouse-directory-card">
                 <div className="rowhouse-directory-index">{String(index + 1).padStart(2, "0")}</div>
@@ -203,6 +245,10 @@ export default function RowhouseAtlasPage() {
                     {spot.units ? <div><dt>Published count</dt><dd>{spot.units} units</dd></div> : null}
                     {spot.registerId ? <div><dt>Register / award</dt><dd>{spot.registerId}</dd></div> : null}
                     {onepRecords.length ? <div><dt>ONEP survey</dt><dd>{onepRecords.map((record) => record.id).join(" · ")}</dd></div> : null}
+                    <div>
+                      <dt>Nearest public transport</dt>
+                      <dd>{nearbyMobility.map((stop) => `${stop.name} · ${Math.max(1, Math.round(stop.distanceKm * 1000))} m`).join(" / ")}</dd>
+                    </div>
                     <div><dt>Shapes to review</dt><dd>{footprintSummary.by_cluster[spot.slug as keyof typeof footprintSummary.by_cluster] ?? 0} unverified candidates</dd></div>
                     <div><dt>Map geometry</dt><dd>{spot.fabric.method} · {spot.fabric.geometryConfidence} confidence</dd></div>
                   </dl>

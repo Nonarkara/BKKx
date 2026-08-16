@@ -7,7 +7,6 @@ import {
   ORIGIN_PORTS,
   MIGRATION_ROUTES,
   GLOBAL_COUNTS,
-  RANKED_TOWNS,
   compositeScore,
   BANGKOK_BASELINE_ID,
   SINGAPORE_ID,
@@ -120,7 +119,7 @@ export default function GlobalPage() {
         <p className="sh-fig-note">
           Coordinates cross-checked against UNESCO listing data and the
           GeoNames database. Social-impact verdicts cite peer-reviewed work
-          where it exists; the "research-stage" label is honest about where
+          where it exists; the &ldquo;research-stage&rdquo; label is honest about where
           it does not. Photos are Wikimedia Commons (CC BY / BY-SA) and are
           linked, not hosted, so the file is yours to re-use.
         </p>
@@ -175,7 +174,7 @@ export default function GlobalPage() {
             ports in Fujian and Guangdong — the actual coastal cities the
             diaspora left from. The round markers are the receiving towns,
             colour-coded by protection tier. The dashed arcs are the dated
-            migration vectors, each one a real community's century of
+            migration vectors, each one a real community&apos;s century of
             movement.
           </p>
           <GlobalMap />
@@ -201,7 +200,7 @@ export default function GlobalPage() {
           <p>
             High-resolution Wikimedia Commons images of the Bangkok shophouse
             stock, for comparison against the curated towns above. Sukhumvit
-            71 is the studio's live case; Yaowarat (Chinatown), Talat Noi and
+            71 is the studio&apos;s live case; Yaowarat (Chinatown), Talat Noi and
             Banglamphu carry the older five-foot-way shophouse form.
           </p>
           <div className="sh-bkk-grid">

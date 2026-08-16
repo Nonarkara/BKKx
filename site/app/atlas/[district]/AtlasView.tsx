@@ -16,6 +16,13 @@ import {
 } from "../../data/zoning-planning";
 import { WALKS, photoFor } from "../../data/heritage-content";
 import { OLDTOWN_SPOTS } from "../../data/oldtown-spots";
+import {
+  HERITAGE_MOBILITY_NOTE,
+  HERITAGE_MOBILITY_ROUTE_GEOJSON,
+  HERITAGE_MOBILITY_SERVICES,
+  HERITAGE_MOBILITY_STOP_GEOJSON,
+  HERITAGE_MOBILITY_STOPS,
+} from "../../data/heritage-mobility";
 import ROWHOUSE_CANDIDATE_SUMMARY from "../../data/rowhouse-footprint-summary.json";
 
 // The walks that geographically belong to Historic Core — everything except
@@ -452,10 +459,12 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
 
   // GIS Layer & Heritage Inspection States
   const [showHeritage, setShowHeritage] = useState(true);
-  const [showZoning, setShowZoning] = useState(true);
+  const [showZoning, setShowZoning] = useState(false);
+  const [showMobility, setShowMobility] = useState(true);
   const [showRowhouseCandidates, setShowRowhouseCandidates] = useState(false);
   const [selectedHeritage, setSelectedHeritage] = useState<HeritageSite | null>(null);
   const [selectedCandidate, setSelectedCandidate] = useState<RowhouseCandidate | null>(null);
+  const [selectedMobility, setSelectedMobility] = useState<{ kind: "service" | "stop"; id: string } | null>(null);
   const heritageMarkerRefs = useRef<maplibregl.Marker[]>([]);
   const [selectedWalkSlug, setSelectedWalkSlug] = useState<string | null>(null);
   const [walkGeometry, setWalkGeometry] = useState<Record<string, { line: LngLat[] }> | null>(null);
@@ -828,6 +837,127 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
           }
         }
 
+        // Heritage mobility: rail is solid; scheduled water transport is dotted.
+        // The geometry is intentionally schematic and every inspector links back
+        // to the operator, so orientation never masquerades as live operations.
+        if (hasHistoricContext && !map.getSource("bkkx-mobility-routes-src")) {
+          try {
+            map.addSource("bkkx-mobility-routes-src", {
+              type: "geojson",
+              data: HERITAGE_MOBILITY_ROUTE_GEOJSON as unknown as maplibregl.GeoJSONSourceSpecification["data"],
+            });
+            map.addSource("bkkx-mobility-stops-src", {
+              type: "geojson",
+              data: HERITAGE_MOBILITY_STOP_GEOJSON as unknown as maplibregl.GeoJSONSourceSpecification["data"],
+            });
+            map.addLayer({
+              id: "bkkx-mobility-rail-casing",
+              type: "line",
+              source: "bkkx-mobility-routes-src",
+              filter: ["==", ["get", "family"], "rail"],
+              paint: { "line-color": "#0d1519", "line-width": 6, "line-opacity": 0.82 },
+            });
+            map.addLayer({
+              id: "bkkx-mobility-rail",
+              type: "line",
+              source: "bkkx-mobility-routes-src",
+              filter: ["==", ["get", "family"], "rail"],
+              layout: { "line-cap": "round", "line-join": "round" },
+              paint: { "line-color": ["get", "color"], "line-width": 3.1, "line-opacity": 0.95 },
+            });
+            map.addLayer({
+              id: "bkkx-mobility-water-casing",
+              type: "line",
+              source: "bkkx-mobility-routes-src",
+              filter: ["in", ["get", "family"], ["literal", ["boat", "ferry"]]],
+              paint: { "line-color": "#0d1519", "line-width": 5.5, "line-opacity": 0.76 },
+            });
+            map.addLayer({
+              id: "bkkx-mobility-boat",
+              type: "line",
+              source: "bkkx-mobility-routes-src",
+              filter: ["==", ["get", "family"], "boat"],
+              layout: { "line-cap": "round", "line-join": "round" },
+              paint: {
+                "line-color": ["get", "color"],
+                "line-width": 3,
+                "line-opacity": 0.96,
+                "line-dasharray": [0.8, 1.6],
+              },
+            });
+            map.addLayer({
+              id: "bkkx-mobility-ferry",
+              type: "line",
+              source: "bkkx-mobility-routes-src",
+              filter: ["==", ["get", "family"], "ferry"],
+              layout: { "line-cap": "round" },
+              paint: {
+                "line-color": ["get", "color"],
+                "line-width": 2.6,
+                "line-opacity": 0.96,
+                "line-dasharray": [0.35, 1.15],
+              },
+            });
+            map.addLayer({
+              id: "bkkx-mobility-stops",
+              type: "circle",
+              source: "bkkx-mobility-stops-src",
+              minzoom: 12.5,
+              paint: {
+                "circle-color": "#f5f0e6",
+                "circle-radius": ["interpolate", ["linear"], ["zoom"], 12.5, 2.8, 16, 5],
+                "circle-stroke-color": "#12202a",
+                "circle-stroke-width": 1.5,
+              },
+            });
+            map.addLayer({
+              id: "bkkx-mobility-stop-labels",
+              type: "symbol",
+              source: "bkkx-mobility-stops-src",
+              minzoom: 14.2,
+              layout: {
+                "text-field": ["get", "name"],
+                "text-size": 10,
+                "text-offset": [0, 1.15],
+                "text-anchor": "top",
+                "text-allow-overlap": false,
+              },
+              paint: {
+                "text-color": "#f7f2e9",
+                "text-halo-color": "#11120f",
+                "text-halo-width": 1.4,
+              },
+            });
+
+            const inspectMobilityService = (event: maplibregl.MapLayerMouseEvent) => {
+              const id = event.features?.[0]?.properties?.id as string | undefined;
+              if (!id) return;
+              setSelectedMobility({ kind: "service", id });
+              setSelectedPoi(null);
+              setSelectedHeritage(null);
+              setSelectedCandidate(null);
+            };
+            const inspectMobilityStop = (event: maplibregl.MapLayerMouseEvent) => {
+              const id = event.features?.[0]?.properties?.id as string | undefined;
+              if (!id) return;
+              setSelectedMobility({ kind: "stop", id });
+              setSelectedPoi(null);
+              setSelectedHeritage(null);
+              setSelectedCandidate(null);
+            };
+            for (const layerId of ["bkkx-mobility-rail", "bkkx-mobility-boat", "bkkx-mobility-ferry"]) {
+              map.on("click", layerId, inspectMobilityService);
+              map.on("mouseenter", layerId, () => { map.getCanvas().style.cursor = "pointer"; });
+              map.on("mouseleave", layerId, () => { map.getCanvas().style.cursor = ""; });
+            }
+            map.on("click", "bkkx-mobility-stops", inspectMobilityStop);
+            map.on("mouseenter", "bkkx-mobility-stops", () => { map.getCanvas().style.cursor = "pointer"; });
+            map.on("mouseleave", "bkkx-mobility-stops", () => { map.getCanvas().style.cursor = ""; });
+          } catch (err) {
+            console.warn("bkkx: heritage mobility layer failed", err);
+          }
+        }
+
         // Walk-route line, empty until a walk is picked from the GIS Layers
         // panel — real street-following geometry, filled in by the sync
         // effect below, same as /heritage-walk-geometry.json already draws
@@ -870,14 +1000,14 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
               id: "bkkx-rowhouse-fabric-casing",
               type: "line",
               source: "bkkx-rowhouse-fabric-src",
-              paint: { "line-color": "#15110b", "line-width": 8, "line-opacity": 0.78 },
+              paint: { "line-color": "#15110b", "line-width": 5.5, "line-opacity": 0.78 },
             });
             map.addLayer({
               id: "bkkx-rowhouse-fabric-solid",
               type: "line",
               source: "bkkx-rowhouse-fabric-src",
               filter: ["==", ["get", "geometry_confidence"], "high"],
-              paint: { "line-color": "#e0a23a", "line-width": 4, "line-opacity": 0.95 },
+              paint: { "line-color": "#e0a23a", "line-width": 2.7, "line-opacity": 0.95 },
             });
             map.addLayer({
               id: "bkkx-rowhouse-fabric-inferred",
@@ -886,9 +1016,28 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
               filter: ["!=", ["get", "geometry_confidence"], "high"],
               paint: {
                 "line-color": "#f4d492",
-                "line-width": 3,
+                "line-width": 2.3,
                 "line-opacity": 0.9,
                 "line-dasharray": [2, 2],
+              },
+            });
+            map.addLayer({
+              id: "bkkx-rowhouse-fabric-labels",
+              type: "symbol",
+              source: "bkkx-rowhouse-fabric-src",
+              minzoom: 15.2,
+              layout: {
+                "symbol-placement": "line",
+                "text-field": ["get", "name"],
+                "text-size": 10,
+                "text-letter-spacing": 0.03,
+                "text-max-angle": 35,
+                "text-allow-overlap": false,
+              },
+              paint: {
+                "text-color": "#ffd792",
+                "text-halo-color": "#17120c",
+                "text-halo-width": 1.4,
               },
             });
 
@@ -897,6 +1046,7 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
               const feature = OLDTOWN_POI_FEATURES.find((candidate) => candidate.properties.id === slug);
               if (!feature) return;
               setSelectedPoi(feature);
+              setSelectedMobility(null);
               map.flyTo({ center: feature.geometry.coordinates, zoom: 16.7, pitch: 60, speed: 0.8, essential: true });
             };
             for (const layerId of ["bkkx-rowhouse-fabric-solid", "bkkx-rowhouse-fabric-inferred"]) {
@@ -951,6 +1101,7 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
               setSelectedCandidate(properties as unknown as RowhouseCandidate);
               setSelectedPoi(null);
               setSelectedHeritage(null);
+              setSelectedMobility(null);
             };
             for (const layerId of ["bkkx-rowhouse-candidates-possible", "bkkx-rowhouse-candidates-strong"]) {
               map.on("click", layerId, inspectCandidate);
@@ -1002,6 +1153,9 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
             event.preventDefault();
             event.stopPropagation();
             setSelectedHeritage(site);
+            setSelectedMobility(null);
+            setSelectedPoi(null);
+            setSelectedCandidate(null);
             map.flyTo({
               center: site.coordinates,
               zoom: 17.2,
@@ -1076,6 +1230,7 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
           event.preventDefault();
           event.stopPropagation();
           setSelectedPoi(feat);
+          setSelectedMobility(null);
           map.flyTo({
             center: feat.geometry.coordinates as [number, number],
             zoom: 16.4,
@@ -1101,10 +1256,30 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
       "bkkx-rowhouse-fabric-casing",
       "bkkx-rowhouse-fabric-solid",
       "bkkx-rowhouse-fabric-inferred",
+      "bkkx-rowhouse-fabric-labels",
     ]) {
       if (map.getLayer(layerId)) map.setLayoutProperty(layerId, "visibility", visibility);
     }
   }, [showPoi.oldtown, mapReady]);
+
+  // Mobility is a separate orientation system: rail stays solid, boats use
+  // dotted strokes, and stop names only appear once the map is close enough.
+  useEffect(() => {
+    const map = mapRef.current;
+    if (!map || !mapReady) return;
+    const visibility = showMobility ? "visible" : "none";
+    for (const layerId of [
+      "bkkx-mobility-rail-casing",
+      "bkkx-mobility-rail",
+      "bkkx-mobility-water-casing",
+      "bkkx-mobility-boat",
+      "bkkx-mobility-ferry",
+      "bkkx-mobility-stops",
+      "bkkx-mobility-stop-labels",
+    ]) {
+      if (map.getLayer(layerId)) map.setLayoutProperty(layerId, "visibility", visibility);
+    }
+  }, [showMobility, mapReady]);
 
   useEffect(() => {
     const map = mapRef.current;
@@ -1320,6 +1495,18 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
             </button>
             <button
               type="button"
+              className={showMobility ? "active mobility-active" : ""}
+              onClick={() => {
+                if (showMobility) setSelectedMobility(null);
+                setShowMobility((prev) => !prev);
+              }}
+              aria-pressed={showMobility}
+              title="Solid lines are rail; dotted lines are scheduled boat and ferry services."
+            >
+              ⛴ Transit
+            </button>
+            <button
+              type="button"
               className={showHeritage ? "active" : ""}
               onClick={() => setShowHeritage((prev) => !prev)}
               aria-pressed={showHeritage}
@@ -1341,10 +1528,24 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
               onClick={() => setShowZoning((prev) => !prev)}
               aria-pressed={showZoning}
             >
-              ⌁ Context
+              ▧ Zones
             </button>
             <Link href="/atlas/historic-core" target="_top">Full controls ↗</Link>
           </div>
+        )}
+
+        {hasHistoricContext && (
+          <details className="atlas-map-key" open>
+            <summary>Map key</summary>
+            <div>
+              {showPoi.oldtown ? <span><i className="key-line key-rowhouse" />Documented rowhouse</span> : null}
+              {showPoi.oldtown ? <span><i className="key-line key-rowhouse key-dashed" />Interpretive corridor</span> : null}
+              {showMobility ? <span><i className="key-line key-rail" />MRT / BTS</span> : null}
+              {showMobility ? <span><i className="key-line key-boat key-dotted" />Boat / ferry</span> : null}
+              {selectedWalkSlug ? <span><i className="key-line key-walk" />Selected walk</span> : null}
+              {showZoning ? <span><i className="key-area" />Illustrative conservation context</span> : null}
+            </div>
+          </details>
         )}
 
         {/* Full Atmosphere & Tour deck belongs to the standalone atlas. */}
@@ -1446,9 +1647,21 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
                     onClick={() => setShowZoning((prev) => !prev)}
                     className={`layer-toggle-btn ${showZoning ? "active" : ""}`}
                     aria-pressed={showZoning}
-                    aria-label="Toggle illustrative historic context overlay"
+                    aria-label="Toggle illustrative conservation and planning overlay"
                   >
-                    📐 Historic context
+                    ▧ Conservation zones
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      if (showMobility) setSelectedMobility(null);
+                      setShowMobility((prev) => !prev);
+                    }}
+                    className={`layer-toggle-btn mobility-toggle ${showMobility ? "active" : ""}`}
+                    aria-pressed={showMobility}
+                    aria-label="Toggle public transport for heritage exploration"
+                  >
+                    ⛴ Public transport
                   </button>
                   <button
                     type="button"
@@ -1462,7 +1675,8 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
                   </button>
                 </div>
                 <small className="control-source-note">
-                  {BKK_URBAN_ZONING_NOTE} Candidate footprints are opt-in and unverified.
+                  Conservation geometry is off by default and illustrative. {BKK_URBAN_ZONING_NOTE}
+                  {" "}{HERITAGE_MOBILITY_NOTE} Candidate footprints are opt-in and unverified.
                 </small>
               </div>
             )}
@@ -1529,6 +1743,55 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
             )}
           </div>
         </div>}
+
+        {hasHistoricContext && selectedMobility && (() => {
+          const service = selectedMobility.kind === "service"
+            ? HERITAGE_MOBILITY_SERVICES.find((item) => item.id === selectedMobility.id)
+            : undefined;
+          const stop = selectedMobility.kind === "stop"
+            ? HERITAGE_MOBILITY_STOPS.find((item) => item.id === selectedMobility.id)
+            : undefined;
+          const stopServices = stop
+            ? HERITAGE_MOBILITY_SERVICES.filter((item) => stop.serviceIds.includes(item.id))
+            : [];
+          const primary = service ?? stopServices[0];
+          if (!primary) return null;
+          return (
+            <div
+              className="heritage-inspector-card mobility-inspector-card"
+              role="dialog"
+              aria-modal="false"
+              aria-label={`Public transport: ${service?.name ?? stop?.name}`}
+              style={{ ["--mobility-color" as string]: primary.color } as React.CSSProperties}
+            >
+              <div className="heritage-card-header">
+                <div className="heritage-badge-group">
+                  <span className="heritage-reg-badge">{primary.mode.includes("boat") || primary.mode.includes("ferry") ? "⛴" : "●"} Public transport</span>
+                  <span className="heritage-era-badge">{primary.shortName}</span>
+                </div>
+                <button type="button" className="heritage-close-btn" onClick={() => setSelectedMobility(null)} aria-label="Close transport details">✕</button>
+              </div>
+              <h4>{service?.name ?? stop?.name}</h4>
+              <p className="heritage-thai" lang="th">{service?.thai ?? stop?.thai}</p>
+              {service ? <p className="heritage-desc">{service.serviceNote}</p> : null}
+              {stop ? (
+                <div className="heritage-meta-grid">
+                  <div><span>Services</span><strong>{stopServices.map((item) => item.shortName).join(" · ")}</strong></div>
+                  <div><span>Heritage nearby</span><strong>{stop.nearby.join(" · ")}</strong></div>
+                </div>
+              ) : (
+                <div className="heritage-meta-grid">
+                  <div><span>Operator</span><strong>{service?.operator}</strong></div>
+                  <div><span>Map language</span><strong>{service?.mode === "mrt" || service?.mode === "bts" ? "Solid rail line" : "Dotted water route"}</strong></div>
+                </div>
+              )}
+              <p className="heritage-source-note">
+                {HERITAGE_MOBILITY_NOTE}<br />
+                <a href={primary.sourceUrl} target="_blank" rel="noreferrer">Check official service information ↗</a>
+              </p>
+            </div>
+          );
+        })()}
 
         {/* Machine-review inspector; visually related to the heritage card but
             explicit that this evidence has not crossed the heritage threshold. */}
