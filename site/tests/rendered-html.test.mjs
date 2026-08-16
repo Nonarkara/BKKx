@@ -202,6 +202,14 @@ test("serves the rowhouse research directory", async () => {
   assert.match(html, /Old Bangkok without a car/);
   assert.match(html, /Chao Phraya Tourist Boat/);
   assert.match(html, /Nearest public transport/);
+  assert.match(html, /Eight doors into the city/);
+  assert.match(html, /From (?:<!-- -->)?Tha Tien/);
+  assert.match(html, /rowhouse-explorer-arrival/);
+  assert.match(html, /Evidence room 01/);
+  assert.match(html, /Evidence room 02/);
+  assert.match(html, /Evidence room 03/);
+  assert.equal((html.match(/<details class="rowhouse-research-disclosure">/g) ?? []).length, 3);
+  assert.doesNotMatch(html, /<details class="rowhouse-research-disclosure" open/);
 });
 
 test("heritage mobility routes are sourced, connected, and inside Bangkok", async () => {

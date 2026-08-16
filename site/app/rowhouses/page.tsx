@@ -50,6 +50,17 @@ const structuredData = {
   ],
 };
 
+const EXPLORER_START_SLUGS = [
+  "tha-tien",
+  "sam-phraeng",
+  "luenrit",
+  "charoen-chai",
+  "song-wat",
+  "talad-noi",
+  "nang-loeng",
+  "hua-takhe",
+] as const;
+
 export default function RowhouseAtlasPage() {
   const countedUnits = OLDTOWN_SPOTS.reduce((sum, spot) => sum + (spot.units ?? 0), 0);
   const zoneLabels: Record<OnepSurveyZone, string> = {
@@ -80,24 +91,76 @@ export default function RowhouseAtlasPage() {
           </div>
           <div className="rowhouse-directory-actions">
             <Link href="/?view=rowhouses">Open the 3D map</Link>
-            <a href="#directory">Read the directory ↓</a>
+            <a href="#start-here">Choose a street ↓</a>
+            <a href="#directory">All {OLDTOWN_SPOTS.length} records ↓</a>
             <a href="/data/bangkok-rowhouse-atlas.geojson" download>GeoJSON ↓</a>
             <a href="/data/bangkok-rowhouse-footprint-candidates.geojson" download>Candidate footprints ↓</a>
           </div>
         </header>
 
-        <section className="rowhouse-method" aria-labelledby="method-title">
-          <div>
-            <p className="register-eyebrow">How to read the map</p>
-            <h2 id="method-title">Evidence, not aesthetic guesswork.</h2>
+        <section id="start-here" className="rowhouse-explorer-start" aria-labelledby="start-here-title">
+          <div className="rowhouse-explorer-start-head">
+            <div>
+              <p className="register-eyebrow">Start with a street</p>
+              <h2 id="start-here-title">Eight doors into the city.</h2>
+            </div>
+            <p>
+              Not a ranking: a field-ready mix of royal frontage, Chinatown trades,
+              neighbourhood markets and canal life. Each place has a photograph, a
+              sourced record, a nearby public-transport gateway and a direct 3D view.
+            </p>
           </div>
-          <div className="rowhouse-method-grid">
-            <p><strong>Fine Arts register</strong> links to a published monument record or conservation award.</p>
-            <p><strong>Published count</strong> uses a scholarly or institutional inventory, including unit numbers where reported.</p>
-            <p><strong>Curated corridor</strong> locates a documented community or street, but does not claim cadastral precision.</p>
-            <p><strong>Map geometry</strong> uses solid lines for high-confidence axes and dashed lines for interpretive connections.</p>
+          <div className="rowhouse-explorer-start-grid">
+            {EXPLORER_START_SLUGS.map((slug, index) => {
+              const spot = OLDTOWN_SPOTS.find((candidate) => candidate.slug === slug);
+              if (!spot) return null;
+              const photo = spot.photo ? photoFor(spot.photo) : undefined;
+              const nearest = nearestHeritageMobilityStops(spot.center, 1)[0];
+              const [lng, lat] = spot.center;
+              return (
+                <article key={spot.slug}>
+                  <a className="rowhouse-explorer-start-photo" href={`#${spot.slug}`}>
+                    {photo ? (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img src={photo.file} alt="" loading={index < 4 ? "eager" : "lazy"} />
+                    ) : null}
+                    <span>{String(index + 1).padStart(2, "0")}</span>
+                  </a>
+                  <div>
+                    <p>{OLDTOWN_KIND_LABEL[spot.kind].en}</p>
+                    <h3><a href={`#${spot.slug}`}>{spot.name}</a></h3>
+                    <small lang="th">{spot.thai}</small>
+                    <blockquote>{spot.callout}</blockquote>
+                    {nearest ? <p className="rowhouse-explorer-arrival">From {nearest.name} · {Math.max(1, Math.round(nearest.distanceKm * 1000))} m</p> : null}
+                    <div className="rowhouse-explorer-start-links">
+                      <a href={`#${spot.slug}`}>Field record ↓</a>
+                      <Link href={`/atlas/historic-core?at=${lng},${lat},${spot.zoom}`}>3D view ↗</Link>
+                    </div>
+                  </div>
+                </article>
+              );
+            })}
           </div>
         </section>
+
+        <details className="rowhouse-research-disclosure">
+          <summary>
+            <span><small>Evidence room 01</small><strong>How the map earns its claims.</strong></span>
+            <span>Open method <b aria-hidden="true">+</b></span>
+          </summary>
+          <section className="rowhouse-method" aria-labelledby="method-title">
+            <div>
+              <p className="register-eyebrow">How to read the map</p>
+              <h2 id="method-title">Evidence, not aesthetic guesswork.</h2>
+            </div>
+            <div className="rowhouse-method-grid">
+              <p><strong>Fine Arts register</strong> links to a published monument record or conservation award.</p>
+              <p><strong>Published count</strong> uses a scholarly or institutional inventory, including unit numbers where reported.</p>
+              <p><strong>Curated corridor</strong> locates a documented community or street, but does not claim cadastral precision.</p>
+              <p><strong>Map geometry</strong> uses solid lines for high-confidence axes and dashed lines for interpretive connections.</p>
+            </div>
+          </section>
+        </details>
 
         <section className="heritage-mobility-guide" aria-labelledby="mobility-guide-title">
           <div className="heritage-mobility-intro">
@@ -134,7 +197,12 @@ export default function RowhouseAtlasPage() {
           </div>
         </section>
 
-        <section className="onep-coverage" aria-labelledby="onep-coverage-title">
+        <details className="rowhouse-research-disclosure">
+          <summary>
+            <span><small>Evidence room 02</small><strong>The official 46-record baseline.</strong></span>
+            <span>Open ONEP ledger <b aria-hidden="true">+</b></span>
+          </summary>
+          <section className="onep-coverage" aria-labelledby="onep-coverage-title">
           <div className="onep-coverage-intro">
             <div>
               <p className="register-eyebrow">Official coverage spine · 46 records</p>
@@ -185,9 +253,15 @@ export default function RowhouseAtlasPage() {
             “Located” means this atlas has linked the official record to a sourced explorer corridor. It does
             not mean a cadastral footprint, present condition or legal protection has been verified.
           </p>
-        </section>
+          </section>
+        </details>
 
-        <section id="candidate-method" className="rowhouse-candidate-method" aria-labelledby="candidate-method-title">
+        <details className="rowhouse-research-disclosure">
+          <summary>
+            <span><small>Evidence room 03</small><strong>Buildings awaiting field review.</strong></span>
+            <span>Open machine queue <b aria-hidden="true">+</b></span>
+          </summary>
+          <section id="candidate-method" className="rowhouse-candidate-method" aria-labelledby="candidate-method-title">
           <div>
             <p className="register-eyebrow">Machine review queue · Overture {footprintSummary.overture_release}</p>
             <h2 id="candidate-method-title">{footprintSummary.candidate_count.toLocaleString()} shapes worth looking at—not {footprintSummary.candidate_count.toLocaleString()} heritage claims.</h2>
@@ -209,7 +283,8 @@ export default function RowhouseAtlasPage() {
             {" · "}Geometry: <a href={footprintSummary.source_url} target="_blank" rel="noreferrer">Overture Maps buildings guide ↗</a>
             {" · "}<a href="https://github.com/Nonarkara/BKKx/blob/main/docs/rowhouse-atlas-method.md" target="_blank" rel="noreferrer">Full reproducible method ↗</a>
           </p>
-        </section>
+          </section>
+        </details>
 
         <main id="directory" className="rowhouse-directory-list">
           {OLDTOWN_SPOTS.map((spot, index) => {
