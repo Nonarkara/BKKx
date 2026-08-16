@@ -667,7 +667,7 @@ test("ships the Old Town architectural-detail tier with explicit provenance", as
     "every landmark part must have a positive massing height");
 });
 
-test("builds Wat Arun and Wat Phra Kaew as sourced, evidence-labelled hero models", async () => {
+test("builds Wat Arun, Wat Phra Kaew and Wat Pho as sourced, evidence-labelled hero models", async () => {
   const { readFileSync } = await import("node:fs");
   const { fileURLToPath } = await import("node:url");
   const heroPath = fileURLToPath(new URL("../public/data/bkk-hero-monuments.geojson", import.meta.url));
@@ -678,11 +678,12 @@ test("builds Wat Arun and Wat Phra Kaew as sourced, evidence-labelled hero model
   assert.equal(source.elements.length, 5, "Wat Arun source snapshot must carry one central and four satellite footprints");
   assert.match(source.attribution, /OpenStreetMap contributors/);
   assert.equal(source.retrieved_at, "2026-08-17");
-  assert.equal(hero.featureCount, 43);
+  assert.equal(hero.featureCount, 67);
   assert.equal(hero.features.length, hero.featureCount);
   assert.deepEqual(hero.complexes, {
     "wat-arun-prang-group": 23,
     "wat-phra-kaew-hero-structures": 20,
+    "wat-pho-four-great-chedis": 24,
   });
   assert.match(hero.modelStatus, /not a measured conservation model/i);
   assert.match(hero.sourceConflict, /Fine Arts: 82 m/);
@@ -691,6 +692,8 @@ test("builds Wat Arun and Wat Phra Kaew as sourced, evidence-labelled hero model
   assert.equal(hero.features.filter((feature) => feature.properties.kind === "hero_prang").length, 7);
   assert.equal(hero.features.filter((feature) => feature.properties.kind === "satellite_prang").length, 16);
   assert.equal(hero.features.filter((feature) => feature.properties.model_status === "official-plan matched schematic").length, 20);
+  assert.equal(hero.features.filter((feature) => feature.properties.kind === "hero_wat_pho_chedi").length, 24);
+  assert.equal(new Set(hero.features.filter((feature) => feature.properties.kind === "hero_wat_pho_chedi").map((feature) => feature.properties.hero_id)).size, 4);
   assert.ok(hero.features.some((feature) => feature.properties.id === "grand-palace-phra-mondop-roof-7"),
     "Phra Mondop must carry the Fine Arts-documented seventh roof tier");
   for (const feature of hero.features) {
@@ -720,7 +723,7 @@ test("the 3D atlas shell renders the 5 POI layer toggles", async () => {
   assert.match(html, /9,275/);
   assert.match(html, /full-resolution OSM footprints/);
   assert.match(html, /evidence-labelled schematic, not measured conservation documentation/);
-  assert.match(html, /43(?:<!-- -->)? hero parts across Wat Arun and Wat Phra Kaew/);
+  assert.match(html, /67(?:<!-- -->)? hero parts across Wat Arun, Wat Phra Kaew and Wat Pho/);
   assert.match(html, /Evidence-labelled hero model/);
 });
 

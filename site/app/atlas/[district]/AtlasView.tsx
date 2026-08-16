@@ -62,7 +62,7 @@ const NASA_AEROSOL_SOURCE =
 
 const HERITAGE_DETAIL_COUNT = 9_275;
 const HERITAGE_LANDMARK_PART_COUNT = 73;
-const HERO_MONUMENT_PART_COUNT = 43;
+const HERO_MONUMENT_PART_COUNT = 67;
 const HERITAGE_DETAIL_NOTE =
   "Full-resolution OpenStreetMap footprints with curated typology heights. Hero monuments use official records and OSM footprints; tiering remains evidence-labelled schematic, not measured conservation documentation.";
 
@@ -2022,7 +2022,7 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
                   </button>
                 </div>
                 <small className="control-source-note">
-                  Old Town 3D: {HERITAGE_DETAIL_COUNT.toLocaleString()} full-resolution OSM footprints + {HERITAGE_LANDMARK_PART_COUNT} curated landmark parts + {HERO_MONUMENT_PART_COUNT} hero parts across Wat Arun and Wat Phra Kaew.
+                  Old Town 3D: {HERITAGE_DETAIL_COUNT.toLocaleString()} full-resolution OSM footprints + {HERITAGE_LANDMARK_PART_COUNT} curated landmark parts + {HERO_MONUMENT_PART_COUNT} hero parts across Wat Arun, Wat Phra Kaew and Wat Pho.
                   {" "}{HERITAGE_DETAIL_NOTE}{" "}
                   Conservation geometry is off by default and illustrative. {BKK_URBAN_ZONING_NOTE}
                   {" "}{HERITAGE_MOBILITY_NOTE} NASA aerosol is a dated regional optical-depth

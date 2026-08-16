@@ -28,6 +28,17 @@ FINE_ARTS_PALACE_SOURCE = (
     "https://www.finearts.go.th/storage/contents/2020/09/file/"
     "7HyIvuwwlVMUPue5a0kEH4vEkgJdLKZRhQBNH1A3.pdf"
 )
+WAT_PHO_SOURCE = "https://watpho.com/en/architecture/detail/262"
+FINE_ARTS_RAMA_III_SOURCE = (
+    "https://www.finearts.go.th/main/view/29960-"
+    "%E0%B8%AB%E0%B8%99%E0%B8%B1%E0%B8%87%E0%B8%AA%E0%B8%B7%E0%B8%AD%E0%B9%80%E0%B8%A3%E0%B8%B7%E0%B9%88%E0%B8%AD%E0%B8%87--"
+    "%E0%B8%95%E0%B8%B3%E0%B8%99%E0%B8%B2%E0%B8%99%E0%B9%80%E0%B8%A3%E0%B8%B7%E0%B9%88%E0%B8%AD%E0%B8%87%E0%B8%A7%E0%B8%B1%E0%B8%95%E0%B8%96%E0%B8%B8%E0%B8%AA%E0%B8%96%E0%B8%B2%E0%B8%99%E0%B8%95%E0%B9%88%E0%B8%B2%E0%B8%87-%E0%B9%86-"
+    "%E0%B8%8B%E0%B8%B6%E0%B9%88%E0%B8%87%E0%B8%9E%E0%B8%A3%E0%B8%B0%E0%B8%9A%E0%B8%B2%E0%B8%97%E0%B8%AA%E0%B8%A1%E0%B9%80%E0%B8%94%E0%B9%87%E0%B8%88%E0%B8%9E%E0%B8%A3%E0%B8%B0%E0%B8%99%E0%B8%B1%E0%B9%88%E0%B8%87%E0%B9%80%E0%B8%81%E0%B8%A5%E0%B9%89%E0%B8%B2%E0%B9%80%E0%B8%88%E0%B9%89%E0%B8%B2%E0%B8%AD%E0%B8%A2%E0%B8%B9%E0%B9%88%E0%B8%AB%E0%B8%B1%E0%B8%A7%E0%B8%97%E0%B8%A3%E0%B8%87%E0%B8%AA%E0%B8%96%E0%B8%B2%E0%B8%9B%E0%B8%99%E0%B8%B2--"
+    "%E0%B8%88%E0%B8%B1%E0%B8%94%E0%B8%9E%E0%B8%B4%E0%B8%A1%E0%B8%9E%E0%B9%8C%E0%B9%83%E0%B8%99%E0%B8%87%E0%B8%B2%E0%B8%99%E0%B8%9E%E0%B8%A3%E0%B8%B0%E0%B8%A8%E0%B8%9E-"
+    "%E0%B8%9E%E0%B8%A3%E0%B8%B0%E0%B8%A7%E0%B8%B4%E0%B8%A1%E0%B8%B2%E0%B8%94%E0%B8%B2%E0%B9%80%E0%B8%98%E0%B8%AD-%E0%B8%81%E0%B8%A3%E0%B8%A1%E0%B8%9E%E0%B8%A3%E0%B8%B0%E0%B8%AA%E0%B8%B8%E0%B8%97%E0%B8%98%E0%B8%B2%E0%B8%AA%E0%B8%B4%E0%B8%99%E0%B8%B5%E0%B8%99%E0%B8%B2%E0%B8%8E-"
+    "%E0%B8%9B%E0%B8%B4%E0%B8%A2%E0%B8%A1%E0%B8%AB%E0%B8%B2%E0%B8%A3%E0%B8%B2%E0%B8%8A%E0%B8%9B%E0%B8%94%E0%B8%B4%E0%B8%A7%E0%B8%A3%E0%B8%B1%E0%B8%94%E0%B8%B2-%E0%B8%84%E0%B8%A3%E0%B8%9A%E0%B8%A8%E0%B8%95%E0%B8%A1%E0%B8%B2%E0%B8%AB--%E0%B8%93--"
+    "%E0%B8%A7%E0%B8%B1%E0%B8%99%E0%B8%97%E0%B8%B5%E0%B9%88-12-%E0%B8%95%E0%B8%B8%E0%B8%A5%E0%B8%B2%E0%B8%84%E0%B8%A1-%E0%B8%9E-%E0%B8%A8---2472?type1=10"
+)
 
 
 def ring_for(element: dict) -> list[list[float]]:
@@ -143,6 +154,42 @@ def palace_part(
             "source_note": (
                 "The official Grand Palace plan confirms this structure's identity. "
                 "The stacked envelope is interpretive and is not a measured survey, BIM or conservation record."
+            ),
+            "not_measured_survey": True,
+        },
+    }
+
+
+def wat_pho_part(
+    *, source_feature: dict, hero_id: str, name: str, name_en: str,
+    part_id: str, part_label: str, base: float, height: float,
+    scale: float, color: str,
+) -> dict:
+    """Create a source-identified, explicitly interpretive Great Chedi tier."""
+    ring = source_feature["geometry"]["coordinates"][0]
+    return {
+        "type": "Feature",
+        "geometry": {"type": "Polygon", "coordinates": [scale_ring(ring, scale)]},
+        "properties": {
+            "id": part_id,
+            "hero_id": hero_id,
+            "name": name,
+            "name_en": name_en,
+            "part_label": part_label,
+            "kind": "hero_wat_pho_chedi",
+            "height": height,
+            "base_height": base,
+            "material_color": color,
+            "osm_id": source_feature["properties"]["id"].removeprefix("bkk-building-"),
+            "footprint_source": "OpenStreetMap footprint · BKKx landmark extract 2026-08-10",
+            "height_source": "BKKx curated 40 m silhouette envelope · not an official dimension",
+            "height_confidence": "interpretive-envelope",
+            "model_status": "official-source identified schematic",
+            "source": "Wat Pho official architecture record + Fine Arts Department royal chronology",
+            "source_url": WAT_PHO_SOURCE,
+            "source_note": (
+                "Wat Pho identifies the four-pagoda group; Fine Arts documents its royal chronology. "
+                "The stacked envelope and colour palette are interpretive, not a measured survey or tile record."
             ),
             "not_measured_survey": True,
         },
@@ -279,14 +326,45 @@ def main() -> None:
                 )
             )
 
+    wat_pho_chedis = [
+        ("bkk-building-783589708", "wat-pho-srisanphetdayan", "พระมหาเจดีย์ศรีสรรเพชดาญาณ", "Phra Maha Chedi Si Sanphetdayan", "#4f8a68"),
+        ("bkk-building-783589706", "wat-pho-dilok", "พระมหาเจดีย์ดิลกธรรมนิทาน", "Phra Maha Chedi Dilok Thammanithan", "#eee7d5"),
+        ("bkk-building-783589709", "wat-pho-munibat", "พระมหาเจดีย์มุนีปัตตบริขาร", "Phra Maha Chedi Muni Bat Borikhan", "#e4bd47"),
+        ("bkk-building-783589707", "wat-pho-srisuriyothai", "พระมหาเจดีย์ทรงพระศรีสุริโยทัย", "Phra Maha Chedi Song Phra Srisuriyothai", "#5279a5"),
+    ]
+    wat_pho_tiers = [
+        ("plinth", "tiled plinth", 0, 5, 1.00),
+        ("terrace", "stepped terrace", 5, 10, 0.88),
+        ("body", "bell-form body envelope", 10, 26, 0.63),
+        ("shoulder", "upper shoulder", 26, 32, 0.40),
+        ("spire", "spire", 32, 38, 0.18),
+        ("finial", "finial", 38, 40, 0.07),
+    ]
+    for source_id, hero_id, name, name_en, color in wat_pho_chedis:
+        source_feature = landmark_by_id[source_id]
+        for tier_id, label, base, height, scale in wat_pho_tiers:
+            features.append(wat_pho_part(
+                source_feature=source_feature,
+                hero_id=hero_id,
+                name=name,
+                name_en=name_en,
+                part_id=f"{hero_id}-{tier_id}",
+                part_label=label,
+                base=base,
+                height=height,
+                scale=scale,
+                color=color,
+            ))
+
     payload = {
         "type": "FeatureCollection",
         "name": "bkk-hero-monuments",
-        "version": "2026-08-17.2",
+        "version": "2026-08-17.3",
         "description": (
             "Survey-informed procedural monument parts. Wat Arun uses current OSM footprints "
             "and the Fine Arts Department's published 82 m central envelope. Wat Phra Kaew hero "
-            "structures are matched to the official Grand Palace plan. All tiering remains interpretive."
+            "structures are matched to the official Grand Palace plan. Wat Pho's Four Great Chedis are "
+            "identified from Wat Pho and Fine Arts records. All tiering remains interpretive."
         ),
         "modelStatus": "survey-informed schematic · not a measured conservation model",
         "sourceConflict": (
@@ -299,10 +377,13 @@ def main() -> None:
             {"label": "OpenStreetMap attribution", "url": OSM_ATTRIBUTION},
             {"label": "Bureau of the Royal Household official plan", "url": GRAND_PALACE_PLAN},
             {"label": "Fine Arts Department palace reference", "url": FINE_ARTS_PALACE_SOURCE},
+            {"label": "Wat Pho official architecture record", "url": WAT_PHO_SOURCE},
+            {"label": "Fine Arts Department Rama III record", "url": FINE_ARTS_RAMA_III_SOURCE},
         ],
         "complexes": {
             "wat-arun-prang-group": 23,
             "wat-phra-kaew-hero-structures": 20,
+            "wat-pho-four-great-chedis": 24,
         },
         "featureCount": len(features),
         "features": features,
