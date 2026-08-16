@@ -1,7 +1,7 @@
 {
   "type": "FeatureCollection",
   "name": "Bangkok Rowhouse Atlas",
-  "dataset_version": "2026-08-13.2",
+  "dataset_version": "2026-08-17.1",
   "license": "CC BY 4.0 for BKKx curation; underlying OpenStreetMap geometry is ODbL",
   "attribution": "BKKx / Non Arkara; OpenStreetMap contributors; linked institutional and scholarly sources per feature",
   "caveat": "Cultural corridors and explorer anchors, not cadastral parcels, statutory conservation zones, or a complete building inventory.",
@@ -2329,6 +2329,238 @@
         "coordinates": [
           100.496299,
           13.736642
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "pak-khlong-talat-corridor",
+      "properties": {
+        "slug": "pak-khlong-talat",
+        "name_en": "Pak Khlong Talat night market rows",
+        "name_th": "แนวตลาดปากคลองตลาด",
+        "kind": "market row",
+        "period": "Rama V market history; later masonry market fabric",
+        "typology": "Wholesale flower-market shophouses and covered market edge",
+        "evidence": "mapped corridor",
+        "documented_units": null,
+        "register_id": null,
+        "onep_survey_ids": [],
+        "onep_conservation_priorities": [],
+        "note": "The flowers are not decoration added to an old quarter; they are the machine that keeps it awake. Pak Khlong Talat still receives produce from across the country, sorts it through deep commercial rooms and turns an ordinary curb into a night economy.",
+        "explorer_tip": "Go after 22:00, enter from Chak Phet Road and follow the handcarts rather than the camera crowd. The working section explains the architecture.",
+        "source": "Phra Nakhon District, Bangkok Metropolitan Administration",
+        "source_url": "https://webportal.bangkok.go.th/pranakorn/page/sub/22136/%E0%B8%9B%E0%B8%B2%E0%B8%81%E0%B8%84%E0%B8%A5%E0%B8%AD%E0%B8%87%E0%B8%95%E0%B8%A5%E0%B8%B2%E0%B8%94",
+        "geometry_method": "OSM street axis",
+        "geometry_confidence": "high",
+        "feature_role": "cultural corridor"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            100.49553,
+            13.74072
+          ],
+          [
+            100.49598,
+            13.74131
+          ],
+          [
+            100.49633,
+            13.74171
+          ],
+          [
+            100.49699,
+            13.74255
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "pak-khlong-talat-anchor",
+      "properties": {
+        "slug": "pak-khlong-talat",
+        "name_en": "Pak Khlong Talat night market rows",
+        "name_th": "แนวตลาดปากคลองตลาด",
+        "kind": "market row",
+        "period": "Rama V market history; later masonry market fabric",
+        "typology": "Wholesale flower-market shophouses and covered market edge",
+        "evidence": "mapped corridor",
+        "documented_units": null,
+        "register_id": null,
+        "onep_survey_ids": [],
+        "onep_conservation_priorities": [],
+        "note": "The flowers are not decoration added to an old quarter; they are the machine that keeps it awake. Pak Khlong Talat still receives produce from across the country, sorts it through deep commercial rooms and turns an ordinary curb into a night economy.",
+        "explorer_tip": "Go after 22:00, enter from Chak Phet Road and follow the handcarts rather than the camera crowd. The working section explains the architecture.",
+        "source": "Phra Nakhon District, Bangkok Metropolitan Administration",
+        "source_url": "https://webportal.bangkok.go.th/pranakorn/page/sub/22136/%E0%B8%9B%E0%B8%B2%E0%B8%81%E0%B8%84%E0%B8%A5%E0%B8%AD%E0%B8%87%E0%B8%95%E0%B8%A5%E0%B8%B2%E0%B8%94",
+        "geometry_method": "OSM street axis",
+        "geometry_confidence": "high",
+        "feature_role": "explorer anchor"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          100.49633,
+          13.74171
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "woeng-nakhon-khasem-corridor",
+      "properties": {
+        "slug": "woeng-nakhon-khasem",
+        "name_en": "Woeng Nakhon Khasem",
+        "name_th": "เวิ้งนครเกษม",
+        "kind": "market row",
+        "period": "Established late 19th century; redevelopment era",
+        "typology": "Chinese commercial courtyard and perimeter shophouse block",
+        "evidence": "published inventory",
+        "documented_units": null,
+        "register_id": null,
+        "onep_survey_ids": [],
+        "onep_conservation_priorities": [],
+        "note": "This is the uncomfortable entry. Four generations made a specialist market here; land assembly and rail-led development then made continuity negotiable. Read the block as evidence of what Bangkok loses when conservation arrives after the transaction.",
+        "explorer_tip": "Walk the full perimeter and compare the remaining street grain with the development footprint. This stop is about loss and negotiation, not nostalgia.",
+        "source": "JARS: Design Process for Development and Conservation of Chinatown",
+        "source_url": "https://doi.org/10.56261/jars.v11i2.30384",
+        "geometry_method": "documented block extent",
+        "geometry_confidence": "medium",
+        "feature_role": "cultural corridor"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            100.50347,
+            13.74418
+          ],
+          [
+            100.50562,
+            13.74418
+          ],
+          [
+            100.50562,
+            13.74619
+          ],
+          [
+            100.50347,
+            13.74619
+          ],
+          [
+            100.50347,
+            13.74418
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "woeng-nakhon-khasem-anchor",
+      "properties": {
+        "slug": "woeng-nakhon-khasem",
+        "name_en": "Woeng Nakhon Khasem",
+        "name_th": "เวิ้งนครเกษม",
+        "kind": "market row",
+        "period": "Established late 19th century; redevelopment era",
+        "typology": "Chinese commercial courtyard and perimeter shophouse block",
+        "evidence": "published inventory",
+        "documented_units": null,
+        "register_id": null,
+        "onep_survey_ids": [],
+        "onep_conservation_priorities": [],
+        "note": "This is the uncomfortable entry. Four generations made a specialist market here; land assembly and rail-led development then made continuity negotiable. Read the block as evidence of what Bangkok loses when conservation arrives after the transaction.",
+        "explorer_tip": "Walk the full perimeter and compare the remaining street grain with the development footprint. This stop is about loss and negotiation, not nostalgia.",
+        "source": "JARS: Design Process for Development and Conservation of Chinatown",
+        "source_url": "https://doi.org/10.56261/jars.v11i2.30384",
+        "geometry_method": "documented block extent",
+        "geometry_confidence": "medium",
+        "feature_role": "explorer anchor"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          100.50445,
+          13.7451
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "khlong-bang-luang-corridor",
+      "properties": {
+        "slug": "khlong-bang-luang",
+        "name_en": "Khlong Bang Luang artist-house row",
+        "name_th": "ชุมชนริมน้ำคลองบางหลวง–บ้านศิลปิน",
+        "kind": "canal market",
+        "period": "Historic canal settlement; century-old timber fabric",
+        "typology": "Two-storey timber waterfront rooms and narrow canal-side walk",
+        "evidence": "mapped corridor",
+        "documented_units": null,
+        "register_id": null,
+        "onep_survey_ids": [],
+        "onep_conservation_priorities": [],
+        "note": "Here the shopfront faces a footpath barely wider than a conversation and the back of the building belongs to the water. The Artist's House is the known door; the real work is the ordinary inhabited row around it.",
+        "explorer_tip": "Arrive on foot from Wat Kamphaeng, keep your voice low and continue beyond the famous house; the useful details are in thresholds, bridges and service edges.",
+        "source": "Ministry of Foreign Affairs, Bangkok visitor guide",
+        "source_url": "https://image.mfa.go.th/mfa/0/uK8Kxy2oDV/Bangkok_2019.pdf",
+        "geometry_method": "curated connection",
+        "geometry_confidence": "medium",
+        "feature_role": "cultural corridor"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            100.4619,
+            13.72578
+          ],
+          [
+            100.46248,
+            13.72562
+          ],
+          [
+            100.46302,
+            13.72543
+          ],
+          [
+            100.46398,
+            13.72496
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "khlong-bang-luang-anchor",
+      "properties": {
+        "slug": "khlong-bang-luang",
+        "name_en": "Khlong Bang Luang artist-house row",
+        "name_th": "ชุมชนริมน้ำคลองบางหลวง–บ้านศิลปิน",
+        "kind": "canal market",
+        "period": "Historic canal settlement; century-old timber fabric",
+        "typology": "Two-storey timber waterfront rooms and narrow canal-side walk",
+        "evidence": "mapped corridor",
+        "documented_units": null,
+        "register_id": null,
+        "onep_survey_ids": [],
+        "onep_conservation_priorities": [],
+        "note": "Here the shopfront faces a footpath barely wider than a conversation and the back of the building belongs to the water. The Artist's House is the known door; the real work is the ordinary inhabited row around it.",
+        "explorer_tip": "Arrive on foot from Wat Kamphaeng, keep your voice low and continue beyond the famous house; the useful details are in thresholds, bridges and service edges.",
+        "source": "Ministry of Foreign Affairs, Bangkok visitor guide",
+        "source_url": "https://image.mfa.go.th/mfa/0/uK8Kxy2oDV/Bangkok_2019.pdf",
+        "geometry_method": "curated connection",
+        "geometry_confidence": "medium",
+        "feature_role": "explorer anchor"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          100.46302,
+          13.72543
         ]
       }
     }

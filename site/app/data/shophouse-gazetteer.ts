@@ -7,7 +7,7 @@
 // data can currently give, and it lands within a decimetre of what the studio
 // measured by hand on Sukhumvit 71.
 //
-// CLUSTERS — 29 documented rows and quarters, each carrying its own evidence
+// CLUSTERS — 32 documented rows and quarters, each carrying its own evidence
 // tier: 'registered' (on the Fine Arts Department register), 'published
 // inventory' (counted in a survey someone published), or 'mapped corridor'
 // (geometry only). The tier is shown because it is the difference between a
@@ -45,6 +45,48 @@ export type DocumentedCluster = {
 };
 
 export const CLUSTERS: DocumentedCluster[] = [
+  {
+    slug: "pak-khlong-talat",
+    nameEn: "Pak Khlong Talat night market rows",
+    nameTh: "แนวตลาดปากคลองตลาด",
+    kind: "market row",
+    period: "Rama V market history; later masonry market fabric",
+    typology: "Wholesale flower-market shophouses and covered market edge",
+    evidence: "mapped corridor",
+    documentedUnits: null,
+    registerId: null,
+    note: "The flowers are the machine that keeps this quarter awake: a working wholesale corridor, not a heritage stage set.",
+    source: "Phra Nakhon District, Bangkok Metropolitan Administration",
+    sourceUrl: "https://webportal.bangkok.go.th/pranakorn/page/sub/22136/%E0%B8%9B%E0%B8%B2%E0%B8%81%E0%B8%84%E0%B8%A5%E0%B8%AD%E0%B8%87%E0%B8%95%E0%B8%A5%E0%B8%B2%E0%B8%94",
+  },
+  {
+    slug: "woeng-nakhon-khasem",
+    nameEn: "Woeng Nakhon Khasem",
+    nameTh: "เวิ้งนครเกษม",
+    kind: "market row",
+    period: "Established late 19th century; redevelopment era",
+    typology: "Chinese commercial courtyard and perimeter shophouse block",
+    evidence: "published inventory",
+    documentedUnits: null,
+    registerId: null,
+    note: "Four generations of specialist trade met land assembly and rail-led redevelopment. It belongs in the record because loss is evidence too.",
+    source: "JARS: Design Process for Development and Conservation of Chinatown",
+    sourceUrl: "https://doi.org/10.56261/jars.v11i2.30384",
+  },
+  {
+    slug: "khlong-bang-luang",
+    nameEn: "Khlong Bang Luang artist-house row",
+    nameTh: "ชุมชนริมน้ำคลองบางหลวง–บ้านศิลปิน",
+    kind: "canal market",
+    period: "Historic canal settlement; century-old timber fabric",
+    typology: "Two-storey timber waterfront rooms and narrow canal-side walk",
+    evidence: "mapped corridor",
+    documentedUnits: null,
+    registerId: null,
+    note: "The Artist's House is the known door; the inhabited timber row and its water-facing service edge are the neighbourhood.",
+    source: "Ministry of Foreign Affairs, Bangkok visitor guide",
+    sourceUrl: "https://image.mfa.go.th/mfa/0/uK8Kxy2oDV/Bangkok_2019.pdf",
+  },
   {
     slug: "hua-takhe",
     nameEn: "Hua Takhe old canal market",

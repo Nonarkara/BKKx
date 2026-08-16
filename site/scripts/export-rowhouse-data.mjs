@@ -47,7 +47,7 @@ const features = OLDTOWN_SPOTS.flatMap((spot) => {
 const collection = {
   type: "FeatureCollection",
   name: "Bangkok Rowhouse Atlas",
-  dataset_version: "2026-08-13.2",
+  dataset_version: "2026-08-17.1",
   license: "CC BY 4.0 for BKKx curation; underlying OpenStreetMap geometry is ODbL",
   attribution: "BKKx / Non Arkara; OpenStreetMap contributors; linked institutional and scholarly sources per feature",
   caveat: "Cultural corridors and explorer anchors, not cadastral parcels, statutory conservation zones, or a complete building inventory.",

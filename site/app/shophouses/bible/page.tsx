@@ -39,13 +39,10 @@ export default function BiblePage() {
           Shophouse<em>Metropolis</em>
         </Link>
         <nav aria-label="Bible">
-          <a href="#anatomy">Anatomy</a>
-          <a href="#dimensions">Dimensions</a>
-          <a href="#law">The law</a>
-          <a href="#culture">Culture</a>
-          <a href="#gazetteer">Gazetteer</a>
-          <a href="#open">Open questions</a>
+          <a href="#quick-reference">Quick reference</a>
+          <a href="#full-reference">Full evidence book</a>
           <Link href="/shophouses/research">Sources</Link>
+          <Link href="/shophouses">Essay</Link>
         </nav>
       </header>
 
@@ -67,7 +64,16 @@ export default function BiblePage() {
 
       <div className="sh-body sh-research-page">
         <div className="sh-prose">
-          <QuickReference />
+          <div id="quick-reference">
+            <QuickReference />
+          </div>
+          <details className="sh-reference-depth" id="full-reference">
+            <summary>
+              <span>Full evidence book · 10 chapters</span>
+              <strong>Anatomy, dimensions, law, culture, conflicts and the gazetteer</strong>
+              <small>Open the deep reference ↓</small>
+            </summary>
+            <div className="sh-reference-depth-body">
           {/* ---- dedication ---- */}
           <section className="sh-dedication">
             <p className="sh-eyebrow">In memoriam</p>
@@ -281,7 +287,7 @@ export default function BiblePage() {
 
           <h2 id="gazetteer">9 · The gazetteer</h2>
           <p>
-            Twenty-nine rows and quarters that somebody has actually documented, grouped by what
+            {CLUSTERS.length} rows and quarters that somebody has actually documented, grouped by what
             kind of place they are. The evidence tier on each is the important column: whether a
             cluster is <em>registered</em>, merely <em>counted</em>, or only <em>mapped</em> is the
             difference between a building that is protected and one that is simply known about.
@@ -298,6 +304,8 @@ export default function BiblePage() {
             {THESES.length} theses and papers, catalogued with every working link found.{" "}
             <Link href="/shophouses/research">The full bibliography →</Link>
           </p>
+            </div>
+          </details>
         </div>
       </div>
 

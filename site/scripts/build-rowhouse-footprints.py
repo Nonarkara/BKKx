@@ -11,8 +11,10 @@ from __future__ import annotations
 import concurrent.futures
 import json
 import math
+import re
 import sys
 import urllib.request
+from urllib.error import HTTPError, URLError
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -31,6 +33,7 @@ OUTPUT = SITE / "public/data/bangkok-rowhouse-footprint-candidates.geojson"
 SUMMARY = SITE / "app/data/rowhouse-footprint-summary.json"
 CACHE = SITE / ".cache/overture"
 CATALOG_URL = "https://stac.overturemaps.org/catalog.json"
+RELEASE_CALENDAR_URL = "https://docs.overturemaps.org/release-calendar/"
 SEARCH_RADIUS_M = 58
 MIN_AREA_M2 = 16
 MAX_AREA_M2 = 1600
@@ -65,7 +68,26 @@ def load_corridors() -> list[dict]:
 
 
 def latest_release() -> str:
-    return read_json(CATALOG_URL)["latest"]
+    try:
+        return read_json(CATALOG_URL)["latest"]
+    except (HTTPError, URLError, KeyError, json.JSONDecodeError):
+        # The root STAC pointer has occasionally returned a transient 404
+        # while release-scoped collections remain healthy. The official
+        # release calendar publishes the same value and is the safe fallback.
+        request = urllib.request.Request(
+            RELEASE_CALENDAR_URL,
+            headers={"User-Agent": "BKKx cultural atlas research; https://bkk.nonarkara.org"},
+        )
+        with urllib.request.urlopen(request, timeout=45) as response:
+            page = response.read().decode("utf-8", errors="replace")
+        match = re.search(
+            r"latest Overture data release is:.*?(20\d{2}-\d{2}-\d{2}\.\d+)",
+            page,
+            flags=re.IGNORECASE | re.DOTALL,
+        )
+        if not match:
+            raise SystemExit("Could not determine the current Overture release from STAC or the official calendar.")
+        return match.group(1)
 
 
 def intersecting_shards(release: str, bounds: tuple[float, float, float, float]) -> list[str]:
@@ -296,7 +318,7 @@ def main() -> None:
     output = {
         "type": "FeatureCollection",
         "name": "Bangkok Rowhouse Footprint Candidates",
-        "dataset_version": "2026-08-13.1",
+        "dataset_version": "2026-08-17.1",
         "generated_at": datetime.now(timezone.utc).isoformat(),
         "source": f"Overture Maps buildings release {release}",
         "source_url": "https://docs.overturemaps.org/guides/buildings/",

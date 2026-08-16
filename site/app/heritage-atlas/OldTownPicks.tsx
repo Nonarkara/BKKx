@@ -42,7 +42,7 @@ export function OldTownPicks({ iframeRef }: Props) {
       <p className="atlas-shell-oldtown-lede">
         {th
           ? "แผนที่วัฒนธรรมของผืนผ้าตึกแถวกรุงเทพฯ — คัดสรรโดยมือ ทุกจุดมีที่มา"
-          : "A sourced cultural map of Bangkok's continuous shophouse fabric — 29 hand-curated clusters with typology, evidence status and explorer notes."}
+          : `A sourced cultural map of Bangkok's continuous shophouse fabric — ${OLDTOWN_SPOTS.length} hand-curated clusters with typology, evidence status and explorer notes.`}
       </p>
       <ol className="atlas-shell-oldtown-cards">
         {OLDTOWN_SPOTS.map((spot) => {

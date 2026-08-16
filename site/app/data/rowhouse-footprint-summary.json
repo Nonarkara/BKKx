@@ -1,10 +1,10 @@
 {
-  "dataset_version": "2026-08-13.1",
-  "generated_at": "2026-08-12T20:19:35.410539+00:00",
+  "dataset_version": "2026-08-17.1",
+  "generated_at": "2026-08-16T19:41:53.400366+00:00",
   "overture_release": "2026-07-22.0",
-  "candidate_count": 2311,
-  "strong_count": 1001,
-  "possible_count": 1310,
+  "candidate_count": 2433,
+  "strong_count": 1025,
+  "possible_count": 1408,
   "source_url": "https://docs.overturemaps.org/guides/buildings/",
   "calibration": {
     "source": "A Study on the Composition of Shophouses in the Central Part of Bangkok",
@@ -25,10 +25,10 @@
     "tani-road-rows": 36,
     "ban-phan-thom-rows": 49,
     "phra-athit-khao-hong": 22,
-    "luenrit": 22,
+    "luenrit": 7,
     "charoen-chai": 18,
     "song-wat": 208,
-    "wanit-sampheng": 262,
+    "wanit-sampheng": 260,
     "talad-noi": 188,
     "plaeng-nam": 43,
     "nang-loeng": 41,
@@ -43,7 +43,10 @@
     "patpong-modern-rows": 23,
     "nong-chok-old-market": 24,
     "charoen-krung-103": 56,
-    "dilok-chan": 8
+    "dilok-chan": 8,
+    "pak-khlong-talat": 37,
+    "woeng-nakhon-khasem": 63,
+    "khlong-bang-luang": 39
   },
   "caveat": "Machine-screened present-day building roofprints/footprints near documented cultural corridors. These polygons are not confirmed rowhouses, age estimates, cadastral parcels, statutory conservation zones or heritage designations. Field and archival verification are required."
 }

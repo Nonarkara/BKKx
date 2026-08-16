@@ -91,11 +91,7 @@ export default function GlobalPage() {
         <nav aria-label="Global">
           <a href="#map">Map</a>
           <a href="#ranking">Index</a>
-          <a href="#origins">Origins</a>
-          <a href="#routes">Routes</a>
-          <a href="#places">Places</a>
-          <a href="#verdicts">Verdicts</a>
-          <a href="#key-references">References</a>
+          <a href="#global-dossiers">Town dossiers</a>
           <Link href="/shophouses">Essay</Link>
           <Link href="/shophouses/bible">Bible</Link>
           <Link href="/shophouses/research">Sources</Link>
@@ -195,6 +191,14 @@ export default function GlobalPage() {
             Bangkok Sukhumvit 71 corridor should not end up as.
           </p>
           <RankingBoard />
+
+          <details className="sh-reference-depth" id="global-dossiers">
+            <summary>
+              <span>Comparative field book · {TOWNS.length} towns</span>
+              <strong>Bangkok photographs, origin ports, migration routes and every town dossier</strong>
+              <small>Open the deep research ↓</small>
+            </summary>
+            <div className="sh-reference-depth-body">
 
           <h2 id="bangkok-baseline">Bangkok reference</h2>
           <p>
@@ -448,6 +452,8 @@ export default function GlobalPage() {
             because the primary records for each are harder to verify in one
             sitting. They are the next page.
           </p>
+            </div>
+          </details>
         </div>
       </div>
 

@@ -89,7 +89,7 @@ test("serves the 3D map heritage atlas as the front door", async () => {
   assert.doesNotMatch(html, /src="https:\/\/atlas\.nonarkara\.org/i);
   // Rowhouses are the useful default; quarters remain in the client tab.
   assert.match(html, /Bangkok rowhouse atlas/);
-  assert.match(html, /Rowhouses 29/);
+  assert.match(html, /Rowhouses 32/);
   assert.match(html, /Quarters 9/);
   assert.match(html, /Na Phra Lan shophouses/);
   assert.match(html, /Hua Takhe old canal market/);
