@@ -1108,6 +1108,7 @@ footer small { grid-column: 1 / -1; margin-top: 60px; padding-top: 24px; border-
 .atlas-embed-tools button { cursor: pointer; }
 .atlas-embed-tools button.active { background: var(--signal); color: var(--ink); }
 .atlas-embed-tools button.mobility-active { background: #dff6ff; color: #10202a; }
+.atlas-embed-tools button.detail-active { background: #efb739; color: #24180a; }
 .atlas-embed-tools a { border-right: 0; color: var(--signal); }
 
 .atlas-embed-more { position: relative; }
@@ -1189,6 +1190,15 @@ footer small { grid-column: 1 / -1; margin-top: 60px; padding-top: 24px; border-
 }
 
 .key-line { display: block; height: 0; border-top: 3px solid currentColor; }
+.key-building {
+  display: block;
+  width: 21px;
+  height: 11px;
+  border: 1px solid rgba(255, 255, 255, .55);
+  box-shadow: inset -4px -3px 0 rgba(0, 0, 0, .22);
+}
+.key-fabric { background: #b99064; }
+.key-landmark { background: #ffd04d; }
 .key-rowhouse { color: #e0a23a; }
 .key-rail { color: #2f9de2; }
 .key-boat { color: #54c7ec; }
@@ -1696,6 +1706,12 @@ footer small { grid-column: 1 / -1; margin-top: 60px; padding-top: 24px; border-
   color: #ffc168;
 }
 
+.layer-toggle-btn.detail-toggle.active {
+  background: rgba(239, 183, 57, 0.22);
+  border-color: #efb739;
+  color: #ffd77a;
+}
+
 /* Fine Arts Heritage Inspector Popup Card */
 .heritage-inspector-card {
   position: absolute;
@@ -1719,6 +1735,15 @@ footer small { grid-column: 1 / -1; margin-top: 60px; padding-top: 24px; border-
 .mobility-inspector-card .heritage-reg-badge { background: var(--mobility-color); }
 .mobility-inspector-card .heritage-thai,
 .mobility-inspector-card .heritage-source-note a { color: var(--mobility-color); }
+
+.architecture-inspector-card {
+  border-color: rgba(239, 183, 57, .58);
+  border-left-color: #efb739;
+}
+.architecture-inspector-card .heritage-reg-badge {
+  background: #efb739;
+  color: #24180a;
+}
 
 .heritage-card-photo {
   margin: -20px -20px 12px;

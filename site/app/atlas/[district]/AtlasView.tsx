@@ -60,6 +60,63 @@ const NASA_AEROSOL_LAYER = "MODIS_Combined_MAIAC_L2G_AerosolOpticalDepth";
 const NASA_AEROSOL_SOURCE =
   "https://gibs.earthdata.nasa.gov/layer-metadata/v1.0/MODIS_Combined_MAIAC_L2G_AerosolOpticalDepth.json";
 
+const HERITAGE_DETAIL_COUNT = 9_275;
+const HERITAGE_LANDMARK_PART_COUNT = 73;
+const HERITAGE_DETAIL_NOTE =
+  "Full-resolution OpenStreetMap footprints with curated typology heights. Landmark heights are interpretive massing, not measured survey or conservation documentation.";
+
+const HERITAGE_DETAIL_HEIGHT: maplibregl.ExpressionSpecification = [
+  "case",
+  ["!=", ["coalesce", ["get", "render_height"], ["get", "height"], 9], 9],
+  ["coalesce", ["get", "render_height"], ["get", "height"], 9],
+  [
+    "match",
+    ["coalesce", ["get", "building"], ["get", "building_type"], ""],
+    "temple", 18,
+    "pagoda", 36,
+    "shrine", 14,
+    "chapel", 14,
+    "monastery", 16,
+    "commercial", 12,
+    "retail", 12,
+    "terrace", 12,
+    "house", 10,
+    "residential", 10,
+    9,
+  ],
+];
+
+const HERITAGE_DETAIL_COLOR: maplibregl.ExpressionSpecification = [
+  "match",
+  ["coalesce", ["get", "building"], ["get", "building_type"], ""],
+  "temple", "#efb739",
+  "pagoda", "#f0c24a",
+  "shrine", "#d6a13a",
+  "chapel", "#c99b55",
+  "monastery", "#bd9346",
+  "commercial", "#d8b072",
+  "retail", "#d8b072",
+  "terrace", "#c99a5d",
+  "house", "#ad8a62",
+  "residential", "#ad8a62",
+  "#92785d",
+];
+
+const HERITAGE_LANDMARK_COLOR: maplibregl.ExpressionSpecification = [
+  "match",
+  ["get", "kind"],
+  "monument", "#eee1bd",
+  "chedi", "#ffd04d",
+  "golden_mount", "#f0c24a",
+  "prasat", "#f6c84f",
+  "mondop", "#f6c84f",
+  "throne", "#dca52d",
+  "ubosot", "#f7bb2f",
+  "viharn", "#dca52d",
+  "heritage", "#efb739",
+  "#efb739",
+];
+
 function nasaObservationDate() {
   // The combined Terra/Aqua NRT composite generally trails Bangkok by two
   // calendar days. A fixed lag avoids asking GIBS for a tile that does not yet
@@ -332,6 +389,17 @@ type RowhouseCandidate = {
   review_status: string;
 };
 
+type ArchitecturalDetail = {
+  id: string;
+  name?: string;
+  name_en?: string;
+  kind?: string;
+  building_type?: string;
+  height?: number;
+  source?: string;
+  osm_id?: string | number;
+};
+
 type PoiLayerSpec = {
   kind: PoiKind;
   file?: string;
@@ -474,8 +542,10 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
   const [showMobility, setShowMobility] = useState(true);
   const [showAerosol, setShowAerosol] = useState(false);
   const [aerosolDate] = useState(nasaObservationDate);
+  const [showArchitecturalDetail, setShowArchitecturalDetail] = useState(true);
   const [showRowhouseCandidates, setShowRowhouseCandidates] = useState(false);
   const [selectedHeritage, setSelectedHeritage] = useState<HeritageSite | null>(null);
+  const [selectedArchitecture, setSelectedArchitecture] = useState<ArchitecturalDetail | null>(null);
   const [selectedCandidate, setSelectedCandidate] = useState<RowhouseCandidate | null>(null);
   const [selectedMobility, setSelectedMobility] = useState<{ kind: "service" | "stop"; id: string } | null>(null);
   const heritageMarkerRefs = useRef<maplibregl.Marker[]>([]);
@@ -505,6 +575,11 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
   function toggleRowhouseCandidates() {
     if (showRowhouseCandidates) setSelectedCandidate(null);
     setShowRowhouseCandidates((visible) => !visible);
+  }
+
+  function toggleArchitecturalDetail() {
+    if (showArchitecturalDetail) setSelectedArchitecture(null);
+    setShowArchitecturalDetail((visible) => !visible);
   }
   const poiMarkerRefs = useRef<Record<PoiKind, maplibregl.Marker[]>>({
     temple: [],
@@ -831,6 +906,96 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
           }
         }
 
+        // A heritage atlas needs more than the city's generic extrusion tile.
+        // This first architectural-detail tier keeps full Old Town footprints,
+        // restores culturally meaningful height defaults and adds separately
+        // inspectable landmark parts. It is interpretive massing, never a BIM
+        // model or a substitute for a measured conservation survey.
+        if (hasHistoricContext && !map.getSource("bkkx-heritage-detail-src")) {
+          try {
+            map.addSource("bkkx-heritage-detail-src", {
+              type: "geojson",
+              data: "/data/bkk-heritage-detail.geojson",
+              attribution: "© OpenStreetMap contributors (ODbL-1.0) · BKKx heritage detail",
+            });
+            map.addSource("bkkx-heritage-landmarks-src", {
+              type: "geojson",
+              data: "/data/bkk-landmarks.geojson",
+              attribution: "BKKx interpretive landmark massing",
+            });
+            map.addLayer({
+              id: "bkkx-heritage-detail",
+              type: "fill-extrusion",
+              source: "bkkx-heritage-detail-src",
+              minzoom: 13.5,
+              filter: ["all", ["!=", ["get", "hide_3d"], true], [">", HERITAGE_DETAIL_HEIGHT, 0]],
+              paint: {
+                "fill-extrusion-color": HERITAGE_DETAIL_COLOR,
+                "fill-extrusion-height": HERITAGE_DETAIL_HEIGHT,
+                "fill-extrusion-base": [
+                  "case",
+                  [
+                    ">=",
+                    ["coalesce", ["get", "render_min_height"], ["get", "min_height"], ["get", "base_height"], 0],
+                    HERITAGE_DETAIL_HEIGHT,
+                  ],
+                  0,
+                  ["coalesce", ["get", "render_min_height"], ["get", "min_height"], ["get", "base_height"], 0],
+                ],
+                "fill-extrusion-opacity": 1,
+                "fill-extrusion-vertical-gradient": true,
+              },
+            });
+            map.addLayer({
+              id: "bkkx-heritage-landmarks",
+              type: "fill-extrusion",
+              source: "bkkx-heritage-landmarks-src",
+              minzoom: 13,
+              paint: {
+                "fill-extrusion-color": HERITAGE_LANDMARK_COLOR,
+                "fill-extrusion-height": ["coalesce", ["get", "height"], 12],
+                "fill-extrusion-base": ["coalesce", ["get", "base_height"], 0],
+                "fill-extrusion-opacity": 1,
+                "fill-extrusion-vertical-gradient": true,
+              },
+            });
+            map.addLayer({
+              id: "bkkx-heritage-landmark-labels",
+              type: "symbol",
+              source: "bkkx-heritage-landmarks-src",
+              minzoom: 15.8,
+              filter: ["has", "name"],
+              layout: {
+                "text-field": ["coalesce", ["get", "name_en"], ["get", "name"]],
+                "text-size": 10,
+                "text-offset": [0, 1],
+                "text-anchor": "top",
+                "text-allow-overlap": false,
+              },
+              paint: {
+                "text-color": "#ffe3a0",
+                "text-halo-color": "#17120c",
+                "text-halo-width": 1.5,
+              },
+            });
+
+            const inspectArchitecture = (event: maplibregl.MapLayerMouseEvent) => {
+              const properties = event.features?.[0]?.properties;
+              if (!properties) return;
+              setSelectedArchitecture(properties as unknown as ArchitecturalDetail);
+              setSelectedHeritage(null);
+              setSelectedPoi(null);
+              setSelectedCandidate(null);
+              setSelectedMobility(null);
+            };
+            map.on("click", "bkkx-heritage-landmarks", inspectArchitecture);
+            map.on("mouseenter", "bkkx-heritage-landmarks", () => { map.getCanvas().style.cursor = "pointer"; });
+            map.on("mouseleave", "bkkx-heritage-landmarks", () => { map.getCanvas().style.cursor = ""; });
+          } catch (err) {
+            console.warn("bkkx: architectural detail layer failed", err);
+          }
+        }
+
         // Add BMA Urban Planning & Cultural Conservation Zoning GeoJSON
         if (hasHistoricContext && !map.getSource("bkkx-zoning-src")) {
           try {
@@ -977,6 +1142,7 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
               setSelectedPoi(null);
               setSelectedHeritage(null);
               setSelectedCandidate(null);
+              setSelectedArchitecture(null);
             };
             const inspectMobilityStop = (event: maplibregl.MapLayerMouseEvent) => {
               const id = event.features?.[0]?.properties?.id as string | undefined;
@@ -985,6 +1151,7 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
               setSelectedPoi(null);
               setSelectedHeritage(null);
               setSelectedCandidate(null);
+              setSelectedArchitecture(null);
             };
             for (const layerId of ["bkkx-mobility-rail", "bkkx-mobility-boat", "bkkx-mobility-ferry"]) {
               map.on("click", layerId, inspectMobilityService);
@@ -1088,6 +1255,7 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
               if (!feature) return;
               setSelectedPoi(feature);
               setSelectedMobility(null);
+              setSelectedArchitecture(null);
               map.flyTo({ center: feature.geometry.coordinates, zoom: 16.7, pitch: 60, speed: 0.8, essential: true });
             };
             for (const layerId of ["bkkx-rowhouse-fabric-solid", "bkkx-rowhouse-fabric-inferred"]) {
@@ -1143,6 +1311,7 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
               setSelectedPoi(null);
               setSelectedHeritage(null);
               setSelectedMobility(null);
+              setSelectedArchitecture(null);
             };
             for (const layerId of ["bkkx-rowhouse-candidates-possible", "bkkx-rowhouse-candidates-strong"]) {
               map.on("click", layerId, inspectCandidate);
@@ -1197,6 +1366,7 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
             setSelectedMobility(null);
             setSelectedPoi(null);
             setSelectedCandidate(null);
+            setSelectedArchitecture(null);
             map.flyTo({
               center: site.coordinates,
               zoom: 17.2,
@@ -1272,6 +1442,7 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
           event.stopPropagation();
           setSelectedPoi(feat);
           setSelectedMobility(null);
+          setSelectedArchitecture(null);
           map.flyTo({
             center: feat.geometry.coordinates as [number, number],
             zoom: 16.4,
@@ -1327,6 +1498,19 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
     if (!map || !mapReady || !map.getLayer("bkkx-aerosol")) return;
     map.setLayoutProperty("bkkx-aerosol", "visibility", showAerosol ? "visible" : "none");
   }, [showAerosol, mapReady]);
+
+  useEffect(() => {
+    const map = mapRef.current;
+    if (!map || !mapReady) return;
+    const visibility = showArchitecturalDetail ? "visible" : "none";
+    for (const layerId of [
+      "bkkx-heritage-detail",
+      "bkkx-heritage-landmarks",
+      "bkkx-heritage-landmark-labels",
+    ]) {
+      if (map.getLayer(layerId)) map.setLayoutProperty(layerId, "visibility", visibility);
+    }
+  }, [showArchitecturalDetail, mapReady]);
 
   useEffect(() => {
     const map = mapRef.current;
@@ -1542,6 +1726,15 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
             </button>
             <button
               type="button"
+              className={showArchitecturalDetail ? "active detail-active" : ""}
+              onClick={toggleArchitecturalDetail}
+              aria-pressed={showArchitecturalDetail}
+              title={HERITAGE_DETAIL_NOTE}
+            >
+              ◩ Old Town 3D
+            </button>
+            <button
+              type="button"
               className={showMobility ? "active mobility-active" : ""}
               onClick={() => {
                 if (showMobility) setSelectedMobility(null);
@@ -1599,6 +1792,8 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
           <details className="atlas-map-key" open>
             <summary>Map key</summary>
             <div>
+              {showArchitecturalDetail ? <span><i className="key-building key-fabric" />Old Town full footprints</span> : null}
+              {showArchitecturalDetail ? <span><i className="key-building key-landmark" />Curated landmark massing</span> : null}
               {showPoi.oldtown ? <span><i className="key-line key-rowhouse" />Documented rowhouse</span> : null}
               {showPoi.oldtown ? <span><i className="key-line key-rowhouse key-dashed" />Interpretive corridor</span> : null}
               {showMobility ? <span><i className="key-line key-rail" />MRT / BTS</span> : null}
@@ -1705,6 +1900,16 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
                 <div className="btn-group-layers" role="group" aria-label="GIS Data Layers">
                   <button
                     type="button"
+                    onClick={toggleArchitecturalDetail}
+                    className={`layer-toggle-btn detail-toggle ${showArchitecturalDetail ? "active" : ""}`}
+                    aria-pressed={showArchitecturalDetail}
+                    aria-label="Toggle detailed Old Town building footprints and landmark massing"
+                    title={HERITAGE_DETAIL_NOTE}
+                  >
+                    ◩ Old Town 3D
+                  </button>
+                  <button
+                    type="button"
                     onClick={() => setShowHeritage((prev) => !prev)}
                     className={`layer-toggle-btn ${showHeritage ? "active" : ""}`}
                     aria-pressed={showHeritage}
@@ -1755,6 +1960,8 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
                   </button>
                 </div>
                 <small className="control-source-note">
+                  Old Town 3D: {HERITAGE_DETAIL_COUNT.toLocaleString()} full-resolution OSM footprints + {HERITAGE_LANDMARK_PART_COUNT} curated landmark parts.
+                  {" "}{HERITAGE_DETAIL_NOTE}{" "}
                   Conservation geometry is off by default and illustrative. {BKK_URBAN_ZONING_NOTE}
                   {" "}{HERITAGE_MOBILITY_NOTE} NASA aerosol is a dated regional optical-depth
                   composite, not street-level PM2.5. Candidate footprints are opt-in and unverified.
@@ -1873,6 +2080,37 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
             </div>
           );
         })()}
+
+        {hasHistoricContext && selectedArchitecture && (
+          <div className="heritage-inspector-card architecture-inspector-card" role="dialog" aria-modal="false" aria-label={`Architectural detail: ${selectedArchitecture.name_en ?? selectedArchitecture.name ?? "Old Town landmark"}`}>
+            <div className="heritage-card-header">
+              <div className="heritage-badge-group">
+                <span className="heritage-reg-badge">◩ Interpretive 3D</span>
+                {selectedArchitecture.height ? (
+                  <span className="heritage-era-badge">{Number(selectedArchitecture.height)} m massing</span>
+                ) : null}
+              </div>
+              <button type="button" className="heritage-close-btn" onClick={() => setSelectedArchitecture(null)} aria-label="Close architectural details">✕</button>
+            </div>
+            <h4>{selectedArchitecture.name_en ?? selectedArchitecture.name ?? "Old Town landmark part"}</h4>
+            {selectedArchitecture.name_en && selectedArchitecture.name ? (
+              <p className="heritage-thai" lang="th">{selectedArchitecture.name}</p>
+            ) : null}
+            <p className="heritage-desc">
+              A map-scale part of Bangkok&apos;s heritage silhouette. The footprint is spatial evidence;
+              the height is a curated visual interpretation and must not be read as a measured building survey.
+            </p>
+            <div className="heritage-meta-grid">
+              <div><span>Character</span><strong>{selectedArchitecture.kind ?? selectedArchitecture.building_type ?? "heritage fabric"}</strong></div>
+              <div><span>Geometry</span><strong>full footprint</strong></div>
+            </div>
+            <p className="heritage-source-note">
+              {selectedArchitecture.source ?? "OpenStreetMap footprint · BKKx typology-height model"}<br />
+              {selectedArchitecture.osm_id ? <>OSM ID {selectedArchitecture.osm_id} · </> : null}
+              <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noreferrer">OpenStreetMap attribution ↗</a>
+            </p>
+          </div>
+        )}
 
         {/* Machine-review inspector; visually related to the heritage card but
             explicit that this evidence has not crossed the heritage threshold. */}

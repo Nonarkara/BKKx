@@ -646,6 +646,27 @@ test("the 6 POI files are valid GeoJSON, parseable, and have non-zero features",
   }
 });
 
+test("ships the Old Town architectural-detail tier with explicit provenance", async () => {
+  const { readFileSync } = await import("node:fs");
+  const { fileURLToPath } = await import("node:url");
+  const detailPath = fileURLToPath(new URL("../public/data/bkk-heritage-detail.geojson", import.meta.url));
+  const landmarksPath = fileURLToPath(new URL("../public/data/bkk-landmarks.geojson", import.meta.url));
+  const detail = JSON.parse(readFileSync(detailPath, "utf8"));
+  const landmarks = JSON.parse(readFileSync(landmarksPath, "utf8"));
+
+  assert.equal(detail.type, "FeatureCollection");
+  assert.equal(detail.featureCount, 9_275);
+  assert.equal(detail.features.length, detail.featureCount);
+  assert.match(detail.description, /full OSM footprints/i);
+  assert.match(detail.description, /no roof meshes/i);
+  assert.equal(landmarks.featureCount, 73);
+  assert.equal(landmarks.features.length, landmarks.featureCount);
+  assert.ok(landmarks.features.every((feature) => feature.properties.source),
+    "every landmark part must describe its height source");
+  assert.ok(landmarks.features.every((feature) => Number(feature.properties.height) > 0),
+    "every landmark part must have a positive massing height");
+});
+
 test("the 3D atlas shell renders the 5 POI layer toggles", async () => {
   const response = await render("/atlas/historic-core");
   const html = await response.text();
@@ -660,6 +681,10 @@ test("the 3D atlas shell renders the 5 POI layer toggles", async () => {
   assert.match(html, /Solid lines: high-confidence documented axes/);
   assert.match(html, /Satellite aerosol/);
   assert.match(html, /NASA aerosol is a dated regional optical-depth composite/);
+  assert.match(html, /Old Town 3D/);
+  assert.match(html, /9,275/);
+  assert.match(html, /full-resolution OSM footprints/);
+  assert.match(html, /interpretive massing, not measured survey/);
 });
 
 test("the shophouse essay defaults to a short argument without deleting the research", async () => {
