@@ -62,9 +62,9 @@ const NASA_AEROSOL_SOURCE =
 
 const HERITAGE_DETAIL_COUNT = 9_275;
 const HERITAGE_LANDMARK_PART_COUNT = 73;
-const HERO_MONUMENT_PART_COUNT = 23;
+const HERO_MONUMENT_PART_COUNT = 43;
 const HERITAGE_DETAIL_NOTE =
-  "Full-resolution OpenStreetMap footprints with curated typology heights. Hero monuments use official height envelopes and OSM footprints; tiering remains survey-informed schematic, not measured conservation documentation.";
+  "Full-resolution OpenStreetMap footprints with curated typology heights. Hero monuments use official records and OSM footprints; tiering remains evidence-labelled schematic, not measured conservation documentation.";
 
 const HERITAGE_DETAIL_HEIGHT: maplibregl.ExpressionSpecification = [
   "case",
@@ -1009,9 +1009,21 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
               type: "symbol",
               source: "bkkx-hero-monuments-src",
               minzoom: 14.2,
-              filter: ["==", ["get", "id"], "wat-arun-central-base"],
+              filter: [
+                "in",
+                ["get", "id"],
+                [
+                  "literal",
+                  [
+                    "wat-arun-central-base",
+                    "grand-palace-siratana-chedi-base",
+                    "grand-palace-phra-mondop-body",
+                    "grand-palace-thepbidorn-body",
+                  ],
+                ],
+              ],
               layout: {
-                "text-field": "Wat Arun · วัดอรุณ",
+                "text-field": ["coalesce", ["get", "name_en"], ["get", "name"]],
                 "text-size": 11,
                 "text-offset": [0, 1.4],
                 "text-anchor": "top",
@@ -1843,7 +1855,7 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
             <div>
               {showArchitecturalDetail ? <span><i className="key-building key-fabric" />Old Town full footprints</span> : null}
               {showArchitecturalDetail ? <span><i className="key-building key-landmark" />Curated landmark massing</span> : null}
-              {showArchitecturalDetail ? <span><i className="key-building key-hero" />Survey-informed hero model</span> : null}
+              {showArchitecturalDetail ? <span><i className="key-building key-hero" />Evidence-labelled hero model</span> : null}
               {showPoi.oldtown ? <span><i className="key-line key-rowhouse" />Documented rowhouse</span> : null}
               {showPoi.oldtown ? <span><i className="key-line key-rowhouse key-dashed" />Interpretive corridor</span> : null}
               {showMobility ? <span><i className="key-line key-rail" />MRT / BTS</span> : null}
@@ -2010,7 +2022,7 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
                   </button>
                 </div>
                 <small className="control-source-note">
-                  Old Town 3D: {HERITAGE_DETAIL_COUNT.toLocaleString()} full-resolution OSM footprints + {HERITAGE_LANDMARK_PART_COUNT} curated landmark parts + {HERO_MONUMENT_PART_COUNT} Wat Arun hero parts.
+                  Old Town 3D: {HERITAGE_DETAIL_COUNT.toLocaleString()} full-resolution OSM footprints + {HERITAGE_LANDMARK_PART_COUNT} curated landmark parts + {HERO_MONUMENT_PART_COUNT} hero parts across Wat Arun and Wat Phra Kaew.
                   {" "}{HERITAGE_DETAIL_NOTE}{" "}
                   Conservation geometry is off by default and illustrative. {BKK_URBAN_ZONING_NOTE}
                   {" "}{HERITAGE_MOBILITY_NOTE} NASA aerosol is a dated regional optical-depth

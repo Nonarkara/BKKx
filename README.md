@@ -80,11 +80,12 @@ survey: 26 are linked to mapped corridors and 20 remain visibly queued. See
 
 **Heritage-specific 3D.** The Historic Core does not stop at the operational twin's generic building tiles.
 `bkk-heritage-detail.geojson` keeps 9,275 full-resolution Old Town footprints; `bkk-landmarks.geojson` supplies
-73 curated massing parts; and `bkk-hero-monuments.geojson` begins a higher-detail hero tier with Wat Arun. Its
-central 82 m envelope comes from a Fine Arts Department publication and its footprint from a checked-in OSM way
-snapshot. The stepped tiers and four satellite prangs are proportional interpretation, not a measured
-conservation model. `npm run data:heroes` rebuilds the transparent output and the release tests enforce the
-source disagreement and caveat rather than hiding either.
+73 curated massing parts; and `bkk-hero-monuments.geojson` now carries 43 higher-detail parts across Wat Arun,
+Phra Siratana Chedi, Phra Mondop and Prasat Phra Dhepbidorn. Wat Arun's central 82 m envelope comes from a Fine
+Arts Department publication and its footprint from a checked-in OSM way snapshot. The three Wat Phra Kaew
+structures are matched to the Bureau of the Royal Household's official plan; Phra Mondop's seven roof tiers are
+also documented by Fine Arts. Heights without an official dimension remain labelled interpretive.
+`npm run data:heroes` rebuilds the transparent output and the release tests enforce the evidence and caveats.
 
 **The Bangkok case.** `/case-for-bangkok` compares the emerging evidence with UNESCO's own descriptions of
 George Town and Melaka, Vigan, Hoi An, Luang Prabang and Galle. It is deliberately a claim register, not a

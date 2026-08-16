@@ -35,6 +35,7 @@ npm test
 
 The site deploys as a Cloudflare Worker through OpenAI Sites. `.openai/hosting.json` is the authoritative Sites binding; D1 stores pageview analytics. Geographic datasets and confidence caveats live under `app/data` and `public/data`. Generated Minecraft worlds remain GitHub Release assets rather than part of the website bundle.
 
-`npm run data:heroes` regenerates the survey-informed monument tier from checked-in OSM source geometry. Overall
-height envelopes may use official publications, but every procedural tier is labelled as interpretation and is
-never presented as BIM, photogrammetry or measured conservation documentation.
+`npm run data:heroes` regenerates the evidence-labelled monument tier from checked-in OSM source geometry and
+official-plan-matched landmark footprints. Overall height envelopes may use official publications, but every
+procedural tier is labelled as interpretation and is never presented as BIM, photogrammetry or measured
+conservation documentation.

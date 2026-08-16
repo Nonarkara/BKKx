@@ -14,6 +14,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 SOURCE = ROOT / "public/data/sources/wat-arun-osm-way-snapshot.json"
+LANDMARKS = ROOT / "public/data/bkk-landmarks.geojson"
 OUTPUT = ROOT / "public/data/bkk-hero-monuments.geojson"
 
 FINE_ARTS_SOURCE = (
@@ -22,6 +23,11 @@ FINE_ARTS_SOURCE = (
 )
 BMA_SOURCE = "https://webportal.bangkok.go.th/public/bangkokyai/page/sub/1492"
 OSM_ATTRIBUTION = "https://www.openstreetmap.org/copyright"
+GRAND_PALACE_PLAN = "https://www.royalgrandpalace.th/download/plan_eng.pdf"
+FINE_ARTS_PALACE_SOURCE = (
+    "https://www.finearts.go.th/storage/contents/2020/09/file/"
+    "7HyIvuwwlVMUPue5a0kEH4vEkgJdLKZRhQBNH1A3.pdf"
+)
 
 
 def ring_for(element: dict) -> list[list[float]]:
@@ -96,9 +102,58 @@ def part(
     }
 
 
+def palace_part(
+    *,
+    source_feature: dict,
+    hero_id: str,
+    name: str,
+    name_en: str,
+    kind: str,
+    part_id: str,
+    part_label: str,
+    base: float,
+    height: float,
+    scale: float,
+    color: str,
+    morphology_source: str,
+    morphology_url: str,
+) -> dict:
+    """Create an official-plan-matched but explicitly interpretive palace tier."""
+    ring = source_feature["geometry"]["coordinates"][0]
+    return {
+        "type": "Feature",
+        "geometry": {"type": "Polygon", "coordinates": [scale_ring(ring, scale)]},
+        "properties": {
+            "id": part_id,
+            "hero_id": hero_id,
+            "name": name,
+            "name_en": name_en,
+            "part_label": part_label,
+            "kind": kind,
+            "height": height,
+            "base_height": base,
+            "material_color": color,
+            "osm_id": source_feature["properties"]["id"].removeprefix("bkk-building-"),
+            "footprint_source": "OpenStreetMap footprint · BKKx landmark extract 2026-08-10",
+            "height_source": "BKKx curated interpretive envelope · not an official dimension",
+            "height_confidence": "interpretive-envelope",
+            "model_status": "official-plan matched schematic",
+            "source": morphology_source,
+            "source_url": morphology_url,
+            "source_note": (
+                "The official Grand Palace plan confirms this structure's identity. "
+                "The stacked envelope is interpretive and is not a measured survey, BIM or conservation record."
+            ),
+            "not_measured_survey": True,
+        },
+    }
+
+
 def main() -> None:
     source = json.loads(SOURCE.read_text())
     by_id = {element["id"]: element for element in source["elements"]}
+    landmark_source = json.loads(LANDMARKS.read_text())
+    landmark_by_id = {feature["properties"]["id"]: feature for feature in landmark_source["features"]}
 
     main_ring = ring_for(by_id[23482275])
     central_tiers = [
@@ -148,13 +203,90 @@ def main() -> None:
                 )
             )
 
+    palace_models = [
+        {
+            "source_id": "bkk-building-23482988",
+            "hero_id": "grand-palace-siratana-chedi",
+            "name": "พระศรีรัตนเจดีย์",
+            "name_en": "Phra Siratana Chedi",
+            "kind": "hero_chedi",
+            "source": "Bureau of the Royal Household official plan · structure 3",
+            "source_url": GRAND_PALACE_PLAN,
+            "tiers": [
+                ("base", "square plinth", 0, 4, 1.00, "#d9b75e"),
+                ("terrace", "stepped terrace", 4, 9, 0.88, "#ebca6e"),
+                ("drum", "circular drum massing", 9, 18, 0.72, "#dcb445"),
+                ("bell", "bell-form envelope", 18, 32, 0.56, "#f0cf66"),
+                ("crown", "upper crown", 32, 37, 0.32, "#d6a932"),
+                ("spire", "spire", 37, 40, 0.14, "#f1d579"),
+                ("finial", "finial", 40, 42, 0.06, "#f7df83"),
+            ],
+        },
+        {
+            "source_id": "bkk-building-23482989",
+            "hero_id": "grand-palace-phra-mondop",
+            "name": "พระมณฑป",
+            "name_en": "Phra Mondop",
+            "kind": "hero_mondop",
+            "source": "Fine Arts Department publication · seven-tier roof; official plan structure 7",
+            "source_url": FINE_ARTS_PALACE_SOURCE,
+            "tiers": [
+                ("body", "scripture-hall body", 0, 12, 1.00, "#bf7e32"),
+                ("roof-1", "roof tier 1 of 7", 12, 15, 0.92, "#3f7c62"),
+                ("roof-2", "roof tier 2 of 7", 15, 18, 0.82, "#d5a53e"),
+                ("roof-3", "roof tier 3 of 7", 18, 20.5, 0.70, "#3f7c62"),
+                ("roof-4", "roof tier 4 of 7", 20.5, 22.5, 0.58, "#d5a53e"),
+                ("roof-5", "roof tier 5 of 7", 22.5, 24.5, 0.46, "#3f7c62"),
+                ("roof-6", "roof tier 6 of 7", 24.5, 26.5, 0.34, "#d5a53e"),
+                ("roof-7", "roof tier 7 of 7", 26.5, 28, 0.18, "#f0c95a"),
+            ],
+        },
+        {
+            "source_id": "bkk-building-23482990",
+            "hero_id": "grand-palace-thepbidorn",
+            "name": "ปราสาทพระเทพบิดร",
+            "name_en": "Prasat Phra Dhepbidorn",
+            "kind": "hero_prasat",
+            "source": "Bureau of the Royal Household official plan · structure 9",
+            "source_url": GRAND_PALACE_PLAN,
+            "tiers": [
+                ("body", "pantheon body", 0, 12, 1.00, "#a95536"),
+                ("lower-roof", "lower roof envelope", 12, 18, 0.88, "#3f6b55"),
+                ("upper-roof", "upper roof envelope", 18, 24, 0.62, "#c89236"),
+                ("spire", "central spire envelope", 24, 29, 0.28, "#42745a"),
+                ("finial", "finial", 29, 32, 0.09, "#efc757"),
+            ],
+        },
+    ]
+    for model in palace_models:
+        source_feature = landmark_by_id[model["source_id"]]
+        for tier_id, label, base, height, scale, color in model["tiers"]:
+            features.append(
+                palace_part(
+                    source_feature=source_feature,
+                    hero_id=model["hero_id"],
+                    name=model["name"],
+                    name_en=model["name_en"],
+                    kind=model["kind"],
+                    part_id=f"{model['hero_id']}-{tier_id}",
+                    part_label=label,
+                    base=base,
+                    height=height,
+                    scale=scale,
+                    color=color,
+                    morphology_source=model["source"],
+                    morphology_url=model["source_url"],
+                )
+            )
+
     payload = {
         "type": "FeatureCollection",
         "name": "bkk-hero-monuments",
-        "version": "2026-08-17.1",
+        "version": "2026-08-17.2",
         "description": (
             "Survey-informed procedural monument parts. Wat Arun uses current OSM footprints "
-            "and the Fine Arts Department's published 82 m central envelope; tiering is interpretive."
+            "and the Fine Arts Department's published 82 m central envelope. Wat Phra Kaew hero "
+            "structures are matched to the official Grand Palace plan. All tiering remains interpretive."
         ),
         "modelStatus": "survey-informed schematic · not a measured conservation model",
         "sourceConflict": (
@@ -165,7 +297,13 @@ def main() -> None:
             {"label": "Fine Arts Department publication", "url": FINE_ARTS_SOURCE},
             {"label": "BMA Bangkok Yai record", "url": BMA_SOURCE},
             {"label": "OpenStreetMap attribution", "url": OSM_ATTRIBUTION},
+            {"label": "Bureau of the Royal Household official plan", "url": GRAND_PALACE_PLAN},
+            {"label": "Fine Arts Department palace reference", "url": FINE_ARTS_PALACE_SOURCE},
         ],
+        "complexes": {
+            "wat-arun-prang-group": 23,
+            "wat-phra-kaew-hero-structures": 20,
+        },
         "featureCount": len(features),
         "features": features,
     }

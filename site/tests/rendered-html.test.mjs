@@ -667,7 +667,7 @@ test("ships the Old Town architectural-detail tier with explicit provenance", as
     "every landmark part must have a positive massing height");
 });
 
-test("builds Wat Arun as a sourced, survey-informed hero model", async () => {
+test("builds Wat Arun and Wat Phra Kaew as sourced, evidence-labelled hero models", async () => {
   const { readFileSync } = await import("node:fs");
   const { fileURLToPath } = await import("node:url");
   const heroPath = fileURLToPath(new URL("../public/data/bkk-hero-monuments.geojson", import.meta.url));
@@ -678,17 +678,24 @@ test("builds Wat Arun as a sourced, survey-informed hero model", async () => {
   assert.equal(source.elements.length, 5, "Wat Arun source snapshot must carry one central and four satellite footprints");
   assert.match(source.attribution, /OpenStreetMap contributors/);
   assert.equal(source.retrieved_at, "2026-08-17");
-  assert.equal(hero.featureCount, 23);
+  assert.equal(hero.featureCount, 43);
   assert.equal(hero.features.length, hero.featureCount);
+  assert.deepEqual(hero.complexes, {
+    "wat-arun-prang-group": 23,
+    "wat-phra-kaew-hero-structures": 20,
+  });
   assert.match(hero.modelStatus, /not a measured conservation model/i);
   assert.match(hero.sourceConflict, /Fine Arts: 82 m/);
   assert.match(hero.sourceConflict, /BMA Bangkok Yai: 67 m/);
   assert.equal(Math.max(...hero.features.map((feature) => feature.properties.height)), 82);
   assert.equal(hero.features.filter((feature) => feature.properties.kind === "hero_prang").length, 7);
   assert.equal(hero.features.filter((feature) => feature.properties.kind === "satellite_prang").length, 16);
+  assert.equal(hero.features.filter((feature) => feature.properties.model_status === "official-plan matched schematic").length, 20);
+  assert.ok(hero.features.some((feature) => feature.properties.id === "grand-palace-phra-mondop-roof-7"),
+    "Phra Mondop must carry the Fine Arts-documented seventh roof tier");
   for (const feature of hero.features) {
     assert.equal(feature.properties.not_measured_survey, true);
-    assert.ok(feature.properties.source_url?.startsWith("https://www.finearts.go.th/"));
+    assert.ok(feature.properties.source_url?.startsWith("https://"));
     assert.ok(feature.properties.base_height < feature.properties.height, `${feature.properties.id}: collapsed tier`);
     const ring = feature.geometry.coordinates[0];
     assert.deepEqual(ring[0], ring.at(-1), `${feature.properties.id}: footprint is not closed`);
@@ -712,9 +719,9 @@ test("the 3D atlas shell renders the 5 POI layer toggles", async () => {
   assert.match(html, /Old Town 3D/);
   assert.match(html, /9,275/);
   assert.match(html, /full-resolution OSM footprints/);
-  assert.match(html, /survey-informed schematic, not measured conservation documentation/);
-  assert.match(html, /23(?:<!-- -->)? Wat Arun hero parts/);
-  assert.match(html, /Survey-informed hero model/);
+  assert.match(html, /evidence-labelled schematic, not measured conservation documentation/);
+  assert.match(html, /43(?:<!-- -->)? hero parts across Wat Arun and Wat Phra Kaew/);
+  assert.match(html, /Evidence-labelled hero model/);
 });
 
 test("the shophouse essay defaults to a short argument without deleting the research", async () => {
