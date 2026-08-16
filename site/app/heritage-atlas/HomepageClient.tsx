@@ -65,6 +65,7 @@ export function HomepageClient({ quarters, initialQuarter }: Props) {
         </div>
         <nav className="atlas-shell-nav" aria-label="Heritage navigation">
           <Link href="/rowhouses">Rowhouses</Link>
+          <a href="https://shophouses.nonarkara.org" title="Shophouse Metropolis — the essay, the Bible, the citywide pressure map">Shophouses</a>
           <Link href="/case-for-bangkok">The case</Link>
           <Link href="/heritage#register">{t("nav_register")}</Link>
           <Link href="/heritage#walks">{t("nav_walks")}</Link>

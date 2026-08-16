@@ -34,11 +34,18 @@ export default {
       }
     }
 
-    // HTML must revalidate, or a deploy can leave someone reading a stale copy
-    // with no way to tell. Hashed assets keep whatever caching they arrive with.
+    // HTML: serve from the edge, refresh in the background. `max-age=0` was
+    // forcing every request to wake the upstream Worker — an 8–10 s cold
+    // start on the first hit per isolate, measured, on pages that change
+    // once a day. `stale-while-revalidate` keeps a deploy visible within a
+    // minute while the edge answers instantly. Hashed assets keep whatever
+    // caching they arrive with.
     const type = headers.get("content-type") ?? "";
     if (type.includes("text/html") && !headers.has("cache-control")) {
-      headers.set("cache-control", "public, max-age=0, must-revalidate");
+      headers.set(
+        "cache-control",
+        "public, max-age=60, s-maxage=60, stale-while-revalidate=300",
+      );
     }
     headers.set("x-bkkx-edge", "shophouses");
 

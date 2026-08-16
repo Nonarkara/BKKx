@@ -40,7 +40,14 @@ export default {
     // immutable by construction and keep whatever caching they arrive with.
     const type = headers.get("content-type") ?? "";
     if (type.includes("text/html") && !headers.has("cache-control")) {
-      headers.set("cache-control", "public, max-age=0, must-revalidate");
+      // Was max-age=0, which woke the upstream Worker on every request — an
+      // 8–10 s cold start on the first hit per isolate, measured. These pages
+      // change daily at most; stale-while-revalidate keeps a deploy visible
+      // within a minute while the edge answers instantly.
+      headers.set(
+        "cache-control",
+        "public, max-age=60, s-maxage=60, stale-while-revalidate=300",
+      );
     }
 
     headers.set("x-bkkx-edge", "bkk-heritage");
