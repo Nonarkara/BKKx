@@ -1,11 +1,16 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { GlobalMap } from "./GlobalMap";
+import { RankingBoard } from "./RankingBoard";
 import {
   TOWNS,
   ORIGIN_PORTS,
   MIGRATION_ROUTES,
   GLOBAL_COUNTS,
+  RANKED_TOWNS,
+  compositeScore,
+  BANGKOK_BASELINE_ID,
+  SINGAPORE_ID,
   type Town,
 } from "../../data/shophouse-global";
 
@@ -85,6 +90,7 @@ export default function GlobalPage() {
         </Link>
         <nav aria-label="Global">
           <a href="#map">Map</a>
+          <a href="#ranking">Index</a>
           <a href="#origins">Origins</a>
           <a href="#routes">Routes</a>
           <a href="#places">Places</a>
@@ -172,6 +178,64 @@ export default function GlobalPage() {
           </p>
           <GlobalMap />
 
+          <h2 id="ranking">The Shophouse Health Index</h2>
+          <p>
+            A ranking, not a verdict. Every curated town is scored on five
+            metrics — authenticity, resident continuity, commercial vitality,
+            renovation restraint, adaptive-reuse wisdom — each from 1 to 5.
+            The composite is the simple mean. Click <em>Pin</em> on any two
+            towns to compare them side by side; the Bangkok baseline is
+            pre-pinned against Singapore.
+          </p>
+          <p>
+            <strong>Where Singapore is.</strong> Composite{" "}
+            {compositeScore(TOWNS.find((t) => t.id === SINGAPORE_ID)!.score).toFixed(1)} — the floor of the index on purpose. The HDB-style
+            shophouse revival with a lifestyle economy on top of it is what the
+            Bangkok Sukhumvit 71 corridor should not end up as.
+          </p>
+          <RankingBoard />
+
+          <h2 id="bangkok-baseline">Bangkok reference</h2>
+          <p>
+            High-resolution Wikimedia Commons images of the Bangkok shophouse
+            stock, for comparison against the curated towns above. Sukhumvit
+            71 is the studio's live case; Yaowarat (Chinatown), Talat Noi and
+            Banglamphu carry the older five-foot-way shophouse form.
+          </p>
+          <div className="sh-bkk-grid">
+            {BANGKOK_PHOTOS.map((p) => (
+              <figure key={p.url} className="sh-bkk-photo">
+                <a
+                  href={p.url.replace(/\/thumb\//, "/").replace(/\/\d+px-/, "/")}
+                  target="_blank"
+                  rel="noreferrer"
+                  title={p.credit}
+                >
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={p.url}
+                    alt={p.caption}
+                    loading="lazy"
+                    width={p.width}
+                    height={p.height}
+                  />
+                </a>
+                <figcaption>
+                  <strong>{p.caption}</strong>
+                  <small>{p.credit}</small>
+                  <a
+                    className="sh-bkk-photo-source"
+                    href={p.source}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    Source on Wikimedia Commons ↗
+                  </a>
+                </figcaption>
+              </figure>
+            ))}
+          </div>
+
           <h2 id="origins">Where it starts</h2>
           <p>
             The shophouse is not a single Chinese form transported whole — it
@@ -244,7 +308,7 @@ export default function GlobalPage() {
           </p>
           <div className="sh-global-towns">
             {TOWNS.map((t) => (
-              <article key={t.id} className="sh-global-town">
+              <article key={t.id} id={`town-${t.id}`} className={`sh-global-town${t.id === BANGKOK_BASELINE_ID ? " is-baseline" : ""}${t.id === SINGAPORE_ID ? " is-singapore" : ""}`}>
                 {t.photo ? (
                   <a
                     className="sh-global-town-photo"
@@ -370,3 +434,65 @@ function verdictLabel(v: Town["impact"]["verdict"]): string {
     .map((s) => s.charAt(0).toUpperCase() + s.slice(1))
     .join(" ");
 }
+
+/* High-resolution Bangkok shophouse photos from Wikimedia Commons.
+   Every URL is 200-bytes verified at build time. Each photo links out
+   to its full-size source on Commons under the photographer's license.
+   These are the Bangkok reference set for the Shophouse Health Index. */
+const BANGKOK_PHOTOS: {
+  url: string;
+  caption: string;
+  credit: string;
+  source: string;
+  width: number;
+  height: number;
+}[] = [
+  {
+    url: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Old_shophouses_in_the_Yaowarat_Road_area_01.jpg/1920px-Old_shophouses_in_the_Yaowarat_Road_area_01.jpg",
+    caption: "Old shophouses, Yaowarat Road area, Bangkok.",
+    credit: "MOS ss · Wikimedia Commons · CC BY-SA 4.0.",
+    source: "https://commons.wikimedia.org/wiki/File:Old_shophouses_in_the_Yaowarat_Road_area_01.jpg",
+    width: 1920,
+    height: 1440,
+  },
+  {
+    url: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/46/Old_shophouses_in_the_Yaowarat_Road_area_02.jpg/1920px-Old_shophouses_in_the_Yaowarat_Road_area_02.jpg",
+    caption: "Shophouse row, Yaowarat area, Bangkok.",
+    credit: "MOS ss · Wikimedia Commons · CC BY-SA 4.0.",
+    source: "https://commons.wikimedia.org/wiki/File:Old_shophouses_in_the_Yaowarat_Road_area_02.jpg",
+    width: 1920,
+    height: 1534,
+  },
+  {
+    url: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d0/TMB_Thanachart_Chinatown%2C_Bangkok_07.23.jpg/1920px-TMB_Thanachart_Chinatown%2C_Bangkok_07.23.jpg",
+    caption: "Shophouse with bank facade, Chinatown, Bangkok (2023).",
+    credit: "Supanut Arunoprayote · Wikimedia Commons · CC BY-SA 4.0.",
+    source: "https://commons.wikimedia.org/wiki/File:TMB_Thanachart_Chinatown,_Bangkok_07.23.jpg",
+    width: 1920,
+    height: 1280,
+  },
+  {
+    url: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/28/The_Chinatown_Rama_07.23.jpg/1920px-The_Chinatown_Rama_07.23.jpg",
+    caption: "Rama Road shophouses, Chinatown, Bangkok (2023).",
+    credit: "Supanut Arunoprayote · Wikimedia Commons · CC BY 4.0.",
+    source: "https://commons.wikimedia.org/wiki/File:The_Chinatown_Rama_07.23.jpg",
+    width: 1920,
+    height: 1280,
+  },
+  {
+    url: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b3/%E6%9B%BC%E8%B0%B7%E5%94%90%E4%BA%BA%E8%A1%9720190824_03.jpg/1920px-%E6%9B%BC%E8%B0%B7%E5%94%90%E4%BA%BA%E8%A1%9720190824_03.jpg",
+    caption: "Chinatown streetscape, Bangkok, 2019.",
+    credit: "西安兵马俑 · Wikimedia Commons · CC BY-SA 4.0.",
+    source: "https://commons.wikimedia.org/wiki/File:%E6%9B%BC%E8%B0%B7%E5%94%90%E4%BA%BA%E8%A1%9720190824_03.jpg",
+    width: 1920,
+    height: 2560,
+  },
+  {
+    url: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/16/Bangkok_architecture%2C_Banglamphu%2C_Thailand_%286906921614%29.jpg/1920px-Bangkok_architecture%2C_Banglamphu%2C_Thailand_%286906921614%29.jpg",
+    caption: "Shophouse architecture, Banglamphu, Bangkok.",
+    credit: "David McKelvey · Wikimedia Commons · CC BY 2.0.",
+    source: "https://commons.wikimedia.org/wiki/File:Bangkok_architecture,_Banglamphu,_Thailand_(6906921614).jpg",
+    width: 1920,
+    height: 1080,
+  },
+];

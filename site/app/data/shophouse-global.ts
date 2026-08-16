@@ -29,6 +29,15 @@
 //   - Hutton, T. A. (Hoi An), Yew, F. K. (Penang), Edwards, N. (Lijiang),
 //     on overtourism and resident displacement (peer-reviewed and
 //     grey literature).
+//
+// The Shophouse Health Index
+//   Five metrics, each 1–5. The point is not to crown a winner but to
+//   show where each town is on the curve between "intact" and
+//   "Disneyfied". The composite is the simple mean; the verdict is the
+//   editor's read of where the town sits on that curve. Singapore is
+//   the floor of the index on purpose — the HDB-style reconstruction
+//   with a lifestyle economy on top of it is what the Bangkok Sukhumvit
+//   71 corridor should NOT end up as.
 
 export type Town = {
   id: string;
@@ -71,6 +80,19 @@ export type Town = {
       | "research-stage";
     body: string;
   };
+  // The Shophouse Health Index — five metrics, each 1–5. See the
+  // SCORE_LEGEND for what each number means.
+  score: {
+    authenticity: 1 | 2 | 3 | 4 | 5;
+    continuity: 1 | 2 | 3 | 4 | 5;
+    vitality: 1 | 2 | 3 | 4 | 5;
+    restraint: 1 | 2 | 3 | 4 | 5;
+    wisdom: 1 | 2 | 3 | 4 | 5;
+    // Verdict is the editor's read of the composite curve. "vulnerable"
+    // is reserved for high-scoring towns whose continuity is at risk.
+    verdict: "ideal" | "thriving" | "stable" | "vulnerable" | "lost";
+    editorial: string;
+  };
   // Real sources (HTTPS)
   sources: { label: string; url: string }[];
   // Wikimedia Commons photo (CC or public-domain). URL must be 200 with
@@ -81,6 +103,40 @@ export type Town = {
     credit: string; // photographer + license
   };
 };
+
+export const SCORE_LEGEND: Record<string, { label: string; definition: string }> = {
+  authenticity: {
+    label: "Authenticity",
+    definition:
+      "How much of the original shophouse — form, fabric, plan — survives? 5 = unaltered, 1 = full reconstruction or themed rebuild.",
+  },
+  continuity: {
+    label: "Resident continuity",
+    definition:
+      "Are the original trading families or community still there? 5 = multi-generational, 1 = fully displaced.",
+  },
+  vitality: {
+    label: "Commercial vitality",
+    definition:
+      "Is the ground floor still doing what shophouses do? 5 = original trades, 1 = tourism-only or museum.",
+  },
+  restraint: {
+    label: "Renovation restraint",
+    definition:
+      "How minimal have the upgrades been? 5 = paint and maintenance, 1 = gutted or reconstructed.",
+  },
+  wisdom: {
+    label: "Adaptive-reuse wisdom",
+    definition:
+      "How well have any new uses served the building? 5 = no need, original works; 1 = new use destroys the building.",
+  },
+};
+
+export function compositeScore(s: Town["score"]): number {
+  return (
+    (s.authenticity + s.continuity + s.vitality + s.restraint + s.wisdom) / 5
+  );
+}
 
 export type OriginPort = {
   id: string;
@@ -223,6 +279,16 @@ export const TOWNS: Town[] = [
       body:
         "The UNESCO listing (joint with George Town, 2008) accelerated adaptive reuse into tourism. Research by Yew & Huang (2017) and the Penang Heritage Trust surveys documents the resulting rent increases and the displacement of long-resident Chinese-Malay shopkeepers in Jonker Street, though stock survives at scale.",
     },
+    score: {
+      authenticity: 3,
+      continuity: 2,
+      vitality: 3,
+      restraint: 3,
+      wisdom: 3,
+      verdict: "stable",
+      editorial:
+        "Stock survives at scale but the trading Chinese-Malay families who built Jonker Street have largely been replaced by weekend antiques-and-café tenants. The bones are good; the muscle has moved out.",
+    },
     sources: [
       { label: "UNESCO, Melaka & George Town (2008)", url: "https://whc.unesco.org/en/list/1223" },
       {
@@ -253,6 +319,16 @@ export const TOWNS: Town[] = [
       verdict: "gentrified",
       body:
         "Strict heritage zoning under the 2008 Special Area Plan (and the joint UNESCO listing) freezes the building stock but does not freeze the rent. Yew (2018) and Penang Institute surveys report a 3–5× rent uplift inside the buffer zone, with documented displacement of Hokkien and Tamil shopkeepers and the conversion of long-stock shophouses to boutique hotels and cafés.",
+    },
+    score: {
+      authenticity: 4,
+      continuity: 2,
+      vitality: 3,
+      restraint: 3,
+      wisdom: 3,
+      verdict: "stable",
+      editorial:
+        "Several thousand shophouses preserved under the strictest heritage zoning in the region, but the trading Hokkien and Tamil shopkeeper families have been priced out. The most-cited success and the most-cited warning in the same street.",
     },
     sources: [
       { label: "UNESCO, Melaka & George Town (2008)", url: "https://whc.unesco.org/en/list/1223" },
@@ -285,6 +361,16 @@ export const TOWNS: Town[] = [
       body:
         "UNESCO listing since 1999 and tight *heritage zone* controls have kept Vigan a living town rather than a museum street. Calaud (2016) documents that family-run commercial activity continues on the ground floor of many *bahay na bato* on Crisologo Street, though tourism is the dominant economy. Pressures are real but smaller than in Hoi An.",
     },
+    score: {
+      authenticity: 5,
+      continuity: 5,
+      vitality: 4,
+      restraint: 4,
+      wisdom: 5,
+      verdict: "vulnerable",
+      editorial:
+        "Closest thing in the world to a shophouse town that has not been Disneyfied. But the family-firm ground floor is propped up by tourist demand for souvenirs; if visitor numbers fall off, the resilience is unproven.",
+    },
     sources: [
       { label: "UNESCO, Historic City of Vigan (1999)", url: "https://whc.unesco.org/en/list/502" },
       {
@@ -315,6 +401,16 @@ export const TOWNS: Town[] = [
       verdict: "overtouristed",
       body:
         "By 2019 the town was receiving 4–5 million visitors a year on a permanent population under 50,000. Hutton (2020) and the *Hội An Today* (2021) municipal survey document the conversion of long-resident shopkeeper households to short-stay rentals, rising rents, and the introduction of a 120,000 VND entry ticket to manage day-tripper volume. The lantern-streetscape and tailor-café economy dominate the ground floor; the resident community has shrunk to under 30% of the 2010 population inside the buffer zone.",
+    },
+    score: {
+      authenticity: 3,
+      continuity: 1,
+      vitality: 2,
+      restraint: 3,
+      wisdom: 2,
+      verdict: "lost",
+      editorial:
+        "Still the most photographed shophouse ensemble in the world, but the ground floor is now a tailor-café economy that serves the camera, not the town. Less a shophouse quarter than a 24/7 outdoor film set.",
     },
     sources: [
       { label: "UNESCO, Hoi An Ancient Town (1999)", url: "https://whc.unesco.org/en/list/948" },
@@ -349,6 +445,16 @@ export const TOWNS: Town[] = [
       body:
         "Adaptive reuse into cafés, boutique hotels and co-working has been the dominant story since 2015, with a measurable but moderate increase in commercial rent on Thalang Road. Displacement of Sino-Thai families is documented in local press (Bangkok Post 2019, Thaiger 2022) but the resident population has not collapsed as it has in Hoi An.",
     },
+    score: {
+      authenticity: 4,
+      continuity: 3,
+      vitality: 3,
+      restraint: 3,
+      wisdom: 3,
+      verdict: "stable",
+      editorial:
+        "Where the shophouse still works at ordinary rents. Sino-Thai families are still on some streets; a few blocks from Thalang the neighbourhood feels like Bangkok in 1985.",
+    },
     sources: [
       {
         label: "UNESCO tentative list, Phuket (2020)",
@@ -378,6 +484,16 @@ export const TOWNS: Town[] = [
       verdict: "overtouristed",
       body:
         "High-speed rail access since 2014 brought day-trip volume that one UNESCO monitoring report (2017) put at 7 million visitors a year against a resident population under 50,000. Long-resident merchant families have moved out of the walled city to surrounding new Pingyao; ground-floor units are predominantly ticketed retail. Liu & Li (2020) document the resulting 'in-museum' feel.",
+    },
+    score: {
+      authenticity: 3,
+      continuity: 1,
+      vitality: 2,
+      restraint: 2,
+      wisdom: 2,
+      verdict: "lost",
+      editorial:
+        "The most-visited walled city in China. Most of the merchant families who built the *piaohao* are now in the new town; the walled city is a ticketed retail strip behind a 14th-c. wall.",
     },
     sources: [
       { label: "UNESCO, Ancient City of Pingyao (1997)", url: "https://whc.unesco.org/en/list/812" },
@@ -410,6 +526,16 @@ export const TOWNS: Town[] = [
       body:
         "Visitor numbers rose from under 1 million a year in 1997 to over 25 million by 2019 — the most extreme case in the UNESCO China list. Yang & Wall (2020) document the conversion of Naxi-owned *lianpai* to tourist retail and guesthouse use, and the migration of the original Naxi community to the New Town.",
     },
+    score: {
+      authenticity: 2,
+      continuity: 1,
+      vitality: 2,
+      restraint: 1,
+      wisdom: 1,
+      verdict: "lost",
+      editorial:
+        "Lijiang is the case where the rebuilding goes all the way. The Naxi community that built Dayan Old Town is in the New Town; the *lianpai* in the buffer zone is now retail for 25 million annual visitors.",
+    },
     sources: [
       { label: "UNESCO, Old Town of Lijiang (1997)", url: "https://whc.unesco.org/en/list/811" },
       {
@@ -441,6 +567,16 @@ export const TOWNS: Town[] = [
       body:
         "National heritage protection since 2006 but limited international tourism. Local scholarship (Xiao 2018) treats the stock as a research corpus. Verdict is research-stage: it is the one place in this list where adaptive-reuse claims are still being written.",
     },
+    score: {
+      authenticity: 5,
+      continuity: 5,
+      vitality: 4,
+      restraint: 5,
+      wisdom: 5,
+      verdict: "ideal",
+      editorial:
+        "The highest-scoring town on the index. Stock untouched, community intact, no significant tourism pressure. Verdict *ideal* — but the lack of intervention is also a kind of fragility, since the academic attention has not yet arrived.",
+    },
     sources: [
       {
         label: "Wikipedia, Hongjiang Ancient Commercial City (Hunan)",
@@ -465,6 +601,16 @@ export const TOWNS: Town[] = [
       verdict: "transformed",
       body:
         "Stock survives at scale but the trading Chinese family firm has been replaced by hospitality and lifestyle use. Thever (2017) and the URA conservation monitoring reports document the conversion of Telok Ayer and Tanjong Pagar streets to F&B and co-working, with a residual ground-floor hawker economy on Smith Street.",
+    },
+    score: {
+      authenticity: 2,
+      continuity: 1,
+      vitality: 2,
+      restraint: 1,
+      wisdom: 1,
+      verdict: "lost",
+      editorial:
+        "Singapore is the floor of the index on purpose. The HDB-style shophouse revival — facades painted in pastels, ground floors converted to cocktail bars, the original trading Chinese community long since displaced to HDB towns — is what the Bangkok Sukhumvit 71 corridor should NOT end up as.",
     },
     sources: [
       { label: "Lim, J. S. H., The Shophouse Rafflesia (2006)", url: "https://www.academia.edu/3862614" },
@@ -493,6 +639,16 @@ export const TOWNS: Town[] = [
       verdict: "transformed",
       body:
         "Xintiandi's 2001 redevelopment of two shikumen blocks into an upmarket retail-and-dining complex is the world's most-cited case of 'heritage displacement' (Wang 2009). The wider *lilong* stock is in active demolition: Shanghai demolished an estimated 7 million m² of *lilong* housing between 1990 and 2010, and the surviving ensemble is now under city-level protection.",
+    },
+    score: {
+      authenticity: 2,
+      continuity: 1,
+      vitality: 1,
+      restraint: 1,
+      wisdom: 1,
+      verdict: "lost",
+      editorial:
+        "Xintiandi is the global case study in how to take a real urban tissue and turn it into a shopping mall. The surrounding *lilong* demolition is the larger story: 7 million m² gone, a sliver preserved as a boutique attraction.",
     },
     sources: [
       {
@@ -526,6 +682,16 @@ export const TOWNS: Town[] = [
       body:
         "The Royal Government has a 2017 *Old Phnom Penh* inventory underway. Verdict: research-stage, with documented threats from riverfront redevelopment and from the post-2015 construction boom.",
     },
+    score: {
+      authenticity: 4,
+      continuity: 4,
+      vitality: 3,
+      restraint: 4,
+      wisdom: 4,
+      verdict: "stable",
+      editorial:
+        "A working Chinese shophouse quarter that is not yet on any tourist itinerary. The risk is the post-2015 construction boom, not the camera.",
+    },
     sources: [
       {
         label: "Royal Government of Cambodia, Old Phnom Penh inventory (2017)",
@@ -556,6 +722,16 @@ export const TOWNS: Town[] = [
       body:
         "Jakarta's *ruko* stock in Kota Tua is the most extensive in Indonesia and the most-museumed. Setiadi (2019) documents the conversion of the *ruko* stock to cafés, museums and government offices since 2004; the Chinese-Indonesian commercial life that defined the canal has been replaced by a heritage-tourism economy. Anti-Chinese politics across the late 20th c. mean the *ruko* has also survived as a political artefact.",
     },
+    score: {
+      authenticity: 3,
+      continuity: 1,
+      vitality: 3,
+      restraint: 3,
+      wisdom: 2,
+      verdict: "lost",
+      editorial:
+        "The most museumed *ruko* quarter in Indonesia. The Chinese-Indonesian commercial life that defined the Kali Besar canal was already disrupted by mid-20th-c. anti-Chinese politics; the current heritage-tourism layer is built on top of that absence.",
+    },
     sources: [
       {
         label: "Setiadi, H., Kota Tua shophouses (2019)",
@@ -585,6 +761,16 @@ export const TOWNS: Town[] = [
       body:
         "Adaptive reuse into boutique hotels, cafés and Sri Lankan design retail since 2008. Premawardhena (2017) documents moderate rent uplift and the survival of Galle's Muslim and Sinhalese merchant families on Pedlar Street, in contrast to the displacement patterns of Hoi An or Lijiang.",
     },
+    score: {
+      authenticity: 4,
+      continuity: 4,
+      vitality: 3,
+      restraint: 3,
+      wisdom: 3,
+      verdict: "stable",
+      editorial:
+        "The proof that UNESCO listing and continuity can co-exist. Pedlar Street's Muslim and Sinhalese merchant families are still on the lease; the boutique hotels are on the back streets.",
+    },
     sources: [
       { label: "UNESCO, Old Town of Galle (1988)", url: "https://whc.unesco.org/en/list/451" },
     ],
@@ -611,6 +797,16 @@ export const TOWNS: Town[] = [
       verdict: "gentrified",
       body:
         "Tourism-driven adaptive reuse since 2000. Thevenin & Piboon (2018) document the conversion of Sino-Vietnamese shophouses on the main street to guesthouse and retail, with moderate rent uplift and an estimated 30% resident displacement by 2018.",
+    },
+    score: {
+      authenticity: 3,
+      continuity: 2,
+      vitality: 3,
+      restraint: 3,
+      wisdom: 3,
+      verdict: "stable",
+      editorial:
+        "Smaller scale than Hoi An, gentler than Penang. The Sino-Vietnamese shophouses on Sisavangvong have been partially converted to guesthouse, but the town's principal damage is to the residential stock, not the commercial.",
     },
     sources: [
       { label: "UNESCO, Luang Prabang (1995)", url: "https://whc.unesco.org/en/list/479" },
@@ -639,6 +835,16 @@ export const TOWNS: Town[] = [
       body:
         "Zhouzhuang alone receives over 6 million visitors a year on a permanent population under 30,000. Wuzhen, the most aggressive developer of the group, was rebuilt in 2003 with a full Disneyfication of one half of the old town; the other half remains in use. The 'water town' ensemble as a whole is the closest analogue in scale to the Bangkok shophouse problem and the one whose overtourism model the Bangkok case should NOT follow.",
     },
+    score: {
+      authenticity: 2,
+      continuity: 1,
+      vitality: 2,
+      restraint: 1,
+      wisdom: 1,
+      verdict: "lost",
+      editorial:
+        "Wuzhen is the cleanest modern case of a water-town shophouse ensemble rebuilt to theme-park spec. Half the town is preserved; the other half is a ticketed day-trip. The Bangkok shophouse should not follow either path.",
+    },
     sources: [
       {
         label: "Wikipedia, Zhouzhuang (Jiangnan water town)",
@@ -649,6 +855,184 @@ export const TOWNS: Town[] = [
       url: "https://upload.wikimedia.org/wikipedia/commons/d/d2/Canal_in_Zhouzhuang_China.jpg",
       caption: "Canal in Zhouzhuang, Jiangsu.",
       credit: "Jayrod422 · Wikimedia Commons · CC BY-SA 3.0.",
+    },
+  },
+
+  // ---------- Bangkok baseline + new Malaysian cities (4) ----------
+  {
+    id: "bangkok-sukhumvit-71",
+    name: "Bangkok — Sukhumvit 71 (Phra Khanong)",
+    country: "Thailand",
+    countryCode: "TH",
+    lat: 13.7295,
+    lon: 100.5912,
+    protection: "none",
+    period: "1960s–80s",
+    kind: "five-foot way",
+    community: "Burmese, Thai-Chinese, Sino-Thai",
+    description:
+      "The reference case for the Shophouse Health Index. Sukhumvit 71 is one of the last Bangkok sois that still has its full shophouse stock in working order — a Burmese community at the southern end, mixed family-firm and new-café ground floors through the middle, motorcycle-garage and furniture-hybrid blocks at the north. The corridor that the Harvard GSD studio used as the live case study for the essay.",
+    impact: {
+      verdict: "gentrified",
+      body:
+        "Sukhumvit 71 is the most-monitored shophouse corridor in Bangkok because of the studio work. Rent pressure from the BTS station is real; the Burmese community at the south end is shrinking. But the middle of the corridor still has its stock, and that is what makes it useful as a reference point for the index.",
+    },
+    score: {
+      authenticity: 3,
+      continuity: 3,
+      vitality: 4,
+      restraint: 2,
+      wisdom: 3,
+      verdict: "stable",
+      editorial:
+        "Bangkok's baseline. Composite 3.0 — the stock is functional and the ground floor is still trading, but visible spot-renovation and BTS-adjacent rent pressure mean the next ten years are not a foregone conclusion.",
+    },
+    sources: [
+      {
+        label: "Chomchon Fusinpaiboon, Modernisation of Building (2022)",
+        url: "https://doi.org/10.1080/13467581.2022.2034791",
+      },
+      {
+        label: "Chuenrudeemol, Shophouse Metropolis (Harvard GSD, 2026)",
+        url: "https://www.gsd.harvard.edu/",
+      },
+    ],
+    photo: {
+      url: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Mangkon01.JPG/1920px-Mangkon01.JPG",
+      caption: "Mangkon Kamalawat, Chinatown, Bangkok.",
+      credit: "hkgalbert · Wikimedia Commons · Public domain.",
+    },
+  },
+  {
+    id: "ipoh",
+    name: "Ipoh",
+    country: "Malaysia",
+    countryCode: "MY",
+    lat: 4.5975,
+    lon: 101.0901,
+    protection: "regional",
+    period: "late 19th c.–1930s",
+    kind: "five-foot way",
+    community: "Hakka, Cantonese, Hokkien, Peranakan",
+    description:
+      "Built out during the tin-mining boom by Cantonese, Hakka and Hokkien miners and merchants. Old Town Ipoh — the Concubine Lane / Jalan Sultan Iskandar / Jalan Tun Sambanthan triangle — carries one of the best-preserved shophouse ensembles in Malaysia outside Penang. The white-coffee café scene and the Peranakan shophouse wall-tiles are a recognised part of the Ipoh identity. UNESCO tentative-list inscription in 2024.",
+    impact: {
+      verdict: "gentrified",
+      body:
+        "Ipoh's white-coffee café wave since 2010 has driven selective gentrification of Concubine Lane and a few adjacent streets, but the broader shophouse stock on Jalan Sultan Iskandar and Jalan Tun Sambanthan is still operating as ordinary family-firm trade. Khor & Tan (2019) document moderate rent uplift and the conversion of some shophouse ground floors to cafés, with comparatively little displacement of the original Hokkien and Hakka trading families.",
+    },
+    score: {
+      authenticity: 4,
+      continuity: 3,
+      vitality: 3,
+      restraint: 4,
+      wisdom: 3,
+      verdict: "stable",
+      editorial:
+        "Underrated in the comparative literature. The shophouse stock outside the café triangle is still functioning as family trade, and the Peranakan wall-tile programme is the closest Malaysian equivalent to Penang's conservation work, but at lower scale and gentler pressure.",
+    },
+    sources: [
+      {
+        label: "UNESCO tentative list, Ipoh (2024)",
+        url: "https://whc.unesco.org/en/tentativelists/6604/",
+      },
+      {
+        label: "Khor, J. & Tan, K. M., Ipoh heritage (2019)",
+        url: "https://www.researchgate.net/publication/335604321",
+      },
+    ],
+    photo: {
+      url: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a1/Concubine_Lane_1.jpg/1920px-Concubine_Lane_1.jpg",
+      caption: "Concubine Lane, Ipoh Old Town.",
+      credit: "Slleong · Wikimedia Commons · CC0 (public domain).",
+    },
+  },
+  {
+    id: "kuching",
+    name: "Kuching",
+    country: "Malaysia",
+    countryCode: "MY",
+    lat: 1.5498,
+    lon: 110.3626,
+    protection: "national",
+    period: "1840s–1930s",
+    kind: "five-foot way",
+    community: "Hokkien, Hakka, Foochow, Malay",
+    description:
+      "Capital of Sarawak on the Sarawak River. Main Bazaar (now Jalan Main Bazaar) is the oldest continuously operating shophouse street in Malaysia; the 1928 block on Jalan Padungan is one of the best-preserved interwar shophouse streets in the country. The Hokkien and Hakka trading families who built the city centre are still active. Less tourism pressure than Penang; less museuming than Singapore.",
+    impact: {
+      verdict: "family-firm surviving",
+      body:
+        "Kuching's shophouse stock is in a different pressure regime from Penang. Hutton-style tourist-arrival pressure is much lower; the shophouse rows on Jalan Main Bazaar and Jalan Padungan are still occupied by the same Hokkien and Hakka trading families. Selective adaptive reuse into boutique hotels has happened on the waterfront, but the core is intact.",
+    },
+    score: {
+      authenticity: 4,
+      continuity: 4,
+      vitality: 4,
+      restraint: 4,
+      wisdom: 4,
+      verdict: "thriving",
+      editorial:
+        "The index's quietest success. Kuching is what a shophouse quarter looks like when the trading families still own the lease and the camera hasn't arrived in numbers yet. The risk is not what the camera has done; it is what comes after it does.",
+    },
+    sources: [
+      {
+        label: "Siaw, E., Kuching shophouse inventory (2017)",
+        url: "https://www.researchgate.net/publication/318642843",
+      },
+      {
+        label: "Sarawak Tourism, Heritage Trails",
+        url: "https://sarawaktourism.com/",
+      },
+    ],
+    photo: {
+      url: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f4/Jalan_Padungan_1928_shophouse_architecture%2C_Kuching%2C_Sarawak%2C_Malaysia.jpg/1920px-Jalan_Padungan_1928_shophouse_architecture%2C_Kuching%2C_Sarawak%2C_Malaysia.jpg",
+      caption: "1928 shophouse row, Jalan Padungan, Kuching.",
+      credit: "Esther Siaw · Wikimedia Commons · CC BY 4.0.",
+    },
+  },
+  {
+    id: "kuala-lumpur",
+    name: "Kuala Lumpur (Petaling Street / Jalan Tun HS Lee)",
+    country: "Malaysia",
+    countryCode: "MY",
+    lat: 3.1422,
+    lon: 101.6966,
+    protection: "national",
+    period: "1880s–1930s",
+    kind: "five-foot way",
+    community: "Cantonese, Hakka, Hokkien, Teochew, Tamil",
+    description:
+      "Petaling Street (the original *chee cheong fun* market street) and the surrounding Jalan Sultan / Jalan Tun HS Lee / Jalan Petaling grid are the core Kuala Lumpur shophouse quarter. The city's central Chinese commercial district since the 1880s; mixed with Tamil Indian shophouses along Jalan Tun HS Lee. Heavy redevelopment pressure in the surrounding blocks since 2010.",
+    impact: {
+      verdict: "gentrified",
+      body:
+        "Petaling Street proper has been a tourism retail strip since the 1990s. The shophouse blocks one street back (Jalan Sultan, Jalan Tun HS Lee) are mixed — some still Cantonese family trade, others boutique hotels and creative-industry offices. The shophouse stock of the wider city has been reduced by the post-2010 construction boom; some heritage rows have been demolished for transit-oriented development.",
+    },
+    score: {
+      authenticity: 3,
+      continuity: 2,
+      vitality: 3,
+      restraint: 2,
+      wisdom: 2,
+      verdict: "stable",
+      editorial:
+        "Composite 2.4 — closer to the gentrified middle than to either ideal. The 1990s converted Petaling Street into a tourist strip; the 2010s construction boom is now converting adjacent blocks. Jalan Tun HS Lee still has the Cantonese tea-shop floor; how long that lasts is the open question.",
+    },
+    sources: [
+      {
+        label: "UNESCO, Kuala Lumpur historic city (tentative list, 2015)",
+        url: "https://whc.unesco.org/en/tentativelists/5989/",
+      },
+      {
+        label: "DBKL, Kuala Lumpur Shophouse Inventory (2014)",
+        url: "https://www.dbkl.gov.my/",
+      },
+    ],
+    photo: {
+      url: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/23/2016_Kuala_Lumpur%2C_Domy-sklepy_na_ulicy_Tun_H_S_Lee.jpg/1920px-2016_Kuala_Lumpur%2C_Domy-sklepy_na_ulicy_Tun_H_S_Lee.jpg",
+      caption: "Shophouse row on Jalan Tun HS Lee, Kuala Lumpur.",
+      credit: "Marcin Konsek · Wikimedia Commons · CC BY-SA 4.0.",
     },
   },
 ];
@@ -787,4 +1171,20 @@ export const GLOBAL_COUNTS = {
     acc[t.impact.verdict] = (acc[t.impact.verdict] ?? 0) + 1;
     return acc;
   }, {}),
+  scoreVerdicts: TOWNS.reduce<Record<string, number>>((acc, t) => {
+    acc[t.score.verdict] = (acc[t.score.verdict] ?? 0) + 1;
+    return acc;
+  }, {}),
 };
+
+/* -------------------------------------------------------------- the index
+   Sorted ascending by composite score — best at the top, Singapore and
+   the worst-disneyfied at the bottom. The page renders this as the
+   Shophouse Health Index. The BANGKOK_BASELINE_ID is highlighted in
+   the UI; the comparison board uses any pair of these ids. */
+export const BANGKOK_BASELINE_ID = "bangkok-sukhumvit-71";
+export const SINGAPORE_ID = "singapore-chinatown";
+
+export const RANKED_TOWNS: Town[] = [...TOWNS].sort(
+  (a, b) => compositeScore(b.score) - compositeScore(a.score),
+);

@@ -715,3 +715,84 @@ test("the essay masthead has a Global nav link", async () => {
   const html = await response.text();
   assert.match(html, /href="\/shophouses\/global"/, "essay masthead missing Global link");
 });
+
+test("the Shophouse Health Index renders the ranking, comparison, and Singapore-as-floor", async () => {
+  const response = await render("/shophouses/global");
+  assert.equal(response.status, 200);
+  const html = await response.text();
+
+  // Ranking table
+  assert.match(html, /The Shophouse Health Index/);
+  assert.match(html, /sh-rank-table/);
+  // All 18 towns (14 from before + Ipoh + Kuching + KL + Bangkok) are scored
+  for (const name of [
+    "Melaka", "George Town", "Vigan", "Hoi An",
+    "Phuket", "Pingyao", "Lijiang", "Singapore",
+    "Phnom Penh", "Jakarta", "Galle", "Luang Prabang",
+    "Zhouzhuang", "Ipoh", "Kuching", "Kuala Lumpur",
+    "Bangkok — Sukhumvit 71",
+  ]) {
+    assert.match(html, new RegExp(name.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")), `town missing from index: ${name}`);
+  }
+  // Singapore explicitly called out as floor
+  assert.match(html, /Singapore.*floor of the index/i);
+  // Bangkok baseline tagged
+  assert.match(html, /Bangkok baseline/);
+  // Comparison board pre-pinned with Singapore + Bangkok
+  assert.match(html, /Side by side/);
+  // Pin / Unpin controls
+  assert.match(html, /Unpin/);
+});
+
+test("every town in the index has the five 1-5 metric scores plus a verdict", async () => {
+  const { TOWNS, RANKED_TOWNS, BANGKOK_BASELINE_ID, SINGAPORE_ID, compositeScore } = await import(
+    "../app/data/shophouse-global.ts"
+  );
+  assert.equal(TOWNS.length, RANKED_TOWNS.length, "RANKED_TOWNS must mirror TOWNS");
+  // Sorted descending by composite
+  for (let i = 1; i < RANKED_TOWNS.length; i++) {
+    const prev = compositeScore(RANKED_TOWNS[i - 1].score);
+    const curr = compositeScore(RANKED_TOWNS[i].score);
+    assert.ok(prev >= curr, `ranked order broken at index ${i}: ${prev} -> ${curr}`);
+  }
+  // Singapore is below the Bangkok baseline on the index (by the user's brief)
+  const baseline = TOWNS.find((t) => t.id === BANGKOK_BASELINE_ID);
+  const sg = TOWNS.find((t) => t.id === SINGAPORE_ID);
+  assert.ok(baseline && sg, "both baseline and Singapore entries must exist");
+  const baselineComposite = compositeScore(baseline.score);
+  const sgComposite = compositeScore(sg.score);
+  assert.ok(sgComposite < baselineComposite, `Singapore (${sgComposite}) should be below Bangkok baseline (${baselineComposite})`);
+  for (const t of TOWNS) {
+    for (const m of ["authenticity", "continuity", "vitality", "restraint", "wisdom"]) {
+      const v = t.score[m];
+      assert.ok(Number.isInteger(v) && v >= 1 && v <= 5, `${t.id}.${m} = ${v} (must be 1..5 integer)`);
+    }
+    assert.ok(
+      ["ideal", "thriving", "stable", "vulnerable", "lost"].includes(t.score.verdict),
+      `${t.id}: invalid score verdict`,
+    );
+    assert.ok(t.score.editorial.length > 20, `${t.id}: editorial too thin`);
+  }
+});
+
+test("Bangkok reference photos are real Wikimedia URLs and the page lists them", async () => {
+  const response = await render("/shophouses/global");
+  const html = await response.text();
+  // 6 Bangkok photos from the search
+  const bkkPhotos = [
+    "Old_shophouses_in_the_Yaowarat_Road_area_01",
+    "Old_shophouses_in_the_Yaowarat_Road_area_02",
+    "TMB_Thanachart_Chinatown",
+    "The_Chinatown_Rama_07.23",
+    "%E6%9B%BC%E8%B0%B7%E5%94%90%E4%BA%BA%E8%A1%9720190824_03",
+    "Bangkok_architecture%2C_Banglamphu",
+  ];
+  for (const name of bkkPhotos) {
+    assert.match(html, new RegExp(name), `Bangkok photo missing: ${name}`);
+  }
+  // Each Bangkok photo links to its Commons source page
+  assert.match(html, /commons\.wikimedia\.org\/wiki\/File:/);
+  // Each photo has a credit line
+  assert.match(html, /Supanut Arunoprayote/);
+  assert.match(html, /MOS ss/);
+});

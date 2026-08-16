@@ -5600,3 +5600,98 @@ body:has(.sh-figexport) { background: #fff !important; }
 .sh-global-verdicts li { padding: var(--sh-cap) 0; border-bottom: 1px solid var(--sh-hairline); }
 .sh-global-verdict-label { font-family: var(--font-display); font-weight: 700; font-size: 15px; margin: 0 0 4px !important; }
 .sh-global-verdict-label small { font-weight: 400; color: var(--sh-quiet); font-family: var(--font-mono); font-size: 11px; margin-left: 6px; }
+
+/* ============================================================ ranking
+   The Shophouse Health Index. Paper register. Tables scroll in their
+   own box. Pip visualisation rather than numeric badge because a
+   1–5 metric is easier to scan as a row of dots than a digit. */
+
+.sh-rank { margin: 0 0 var(--sh-page); }
+.sh-rank-tablewrap { overflow-x: auto; -webkit-overflow-scrolling: touch; max-width: 100%; min-width: 0; border: 1px solid var(--sh-ink); }
+.sh-rank-table { border-collapse: collapse; width: 100%; min-width: 920px; font-family: var(--font-display); font-size: 13px; background: var(--sh-paper); }
+.sh-rank-table thead th {
+  text-align: left; font-weight: 700; font-size: 11px; letter-spacing: .08em; text-transform: uppercase;
+  color: var(--sh-quiet); padding: 12px 10px; border-bottom: 2px solid var(--sh-ink); background: var(--sh-paper); white-space: nowrap;
+}
+.sh-rank-table thead th small { display: block; font-weight: 400; text-transform: none; letter-spacing: 0; color: var(--sh-quiet); opacity: .7; margin-top: 2px; }
+.sh-rank-table tbody td { padding: 12px 10px; border-bottom: 1px solid var(--sh-hairline); vertical-align: middle; }
+.sh-rank-table tbody tr:last-child td { border-bottom: none; }
+.sh-rank-table tbody tr.is-baseline { background: rgba(229, 0, 125, 0.06); }
+.sh-rank-table tbody tr.is-baseline td { border-bottom-color: var(--sh-seal); }
+.sh-rank-table tbody tr.is-singapore { background: rgba(255, 107, 53, 0.10); }
+.sh-rank-table tbody tr.is-singapore td { border-bottom-color: var(--sh-ink); }
+.sh-rank-table tbody tr.is-pinned { box-shadow: inset 3px 0 0 var(--sh-mark); }
+
+.sh-rank-rank { font-family: var(--font-mono); font-size: 14px; color: var(--sh-quiet); font-weight: 700; text-align: right; width: 36px; }
+.sh-rank-rank-n { display: inline-block; min-width: 22px; }
+.sh-rank-name strong { display: block; font-family: var(--font-display); font-size: 14px; font-weight: 800; letter-spacing: -.01em; }
+.sh-rank-name small { display: block; color: var(--sh-quiet); font-family: var(--font-mono); font-size: 10px; letter-spacing: .04em; margin-top: 2px; }
+
+.sh-rank-score { width: 140px; }
+.sh-rank-score-cell { display: flex; align-items: center; gap: 8px; }
+.sh-rank-score-bar { flex: 1; height: 8px; background: var(--sh-hairline); position: relative; min-width: 70px; }
+.sh-rank-score-fill { height: 100%; display: block; }
+.sh-rank-score-num { font-family: var(--font-mono); font-weight: 700; font-size: 13px; font-variant-numeric: tabular-nums; }
+
+.sh-rank-metric { width: 90px; }
+.sh-rank-pips { display: inline-flex; gap: 3px; }
+.sh-rank-pip { width: 11px; height: 11px; display: inline-block; background: var(--sh-hairline); }
+.sh-rank-pip.is-on { background: var(--sh-ink); }
+
+.sh-rank-verdict { width: 130px; }
+.sh-rank-verdict-pill { display: inline-block; font-size: 11px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; padding: 3px 7px; border: 1px solid var(--sh-ink); }
+.sh-rank-baseline-tag { display: block; margin-top: 4px; font-family: var(--font-display); font-size: 10px; color: var(--sh-seal); font-weight: 700; letter-spacing: .08em; }
+
+.sh-rank-pin { width: 72px; text-align: right; }
+.sh-rank-pin-btn { background: transparent; border: 1px solid var(--sh-ink); padding: 6px 10px; font-family: var(--font-display); font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; cursor: pointer; min-height: 32px; }
+.sh-rank-pin-btn[aria-pressed="true"] { background: var(--sh-mark); border-color: var(--sh-ink); }
+.sh-rank-pin-btn:hover { background: var(--sh-mark); }
+
+.sh-rank-legend { margin: var(--sh-base) 0 0; font-size: 13px; color: var(--sh-quiet); }
+.sh-rank-legend strong { color: var(--sh-ink); }
+
+/* comparison board */
+.sh-rank-compare { margin: var(--sh-base) 0; padding: var(--sh-base); border: 2px solid var(--sh-ink); background: var(--sh-paper-strong); }
+.sh-rank-compare.is-empty { padding: var(--sh-base); color: var(--sh-quiet); text-align: center; }
+.sh-rank-compare-head h3 { font-family: var(--font-display); font-size: 20px; font-weight: 800; letter-spacing: -.03em; margin: 0 0 4px; }
+.sh-rank-compare-head p { margin: 0 0 var(--sh-base); color: var(--sh-quiet); font-size: 14px; }
+.sh-rank-compare-grid { display: grid; gap: var(--sh-base); grid-template-columns: 1fr; }
+@media (min-width: 760px) { .sh-rank-compare-grid { grid-template-columns: 1fr 1fr; gap: var(--sh-page); } }
+.sh-rank-compare-card { border: 1px solid var(--sh-ink); padding: var(--sh-base); background: var(--sh-paper); }
+.sh-rank-compare-card header { display: grid; grid-template-columns: 1fr auto; gap: 6px; margin-bottom: 8px; align-items: start; }
+.sh-rank-compare-card-eyebrow { grid-column: 1 / -1; margin: 0 0 4px !important; font-family: var(--font-display); font-size: 11px; color: var(--sh-seal); letter-spacing: .08em; text-transform: uppercase; }
+.sh-rank-compare-card h4 { margin: 0 !important; font-family: var(--font-display); font-size: 18px; font-weight: 800; letter-spacing: -.02em; }
+.sh-rank-compare-card-anchor { font-size: 14px; color: var(--sh-seal); text-decoration: none; margin-left: 4px; }
+.sh-rank-compare-card-anchor:hover { color: var(--sh-ink); }
+.sh-rank-compare-clear { background: transparent; border: 1px solid var(--sh-ink); padding: 4px 8px; font-family: var(--font-display); font-size: 10px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; cursor: pointer; }
+.sh-rank-compare-card-score { display: flex; align-items: baseline; gap: 8px; margin: 8px 0 12px; padding: 6px 0; border-top: 1px solid var(--sh-ink); border-bottom: 1px solid var(--sh-hairline); }
+.sh-rank-compare-card-score strong { font-family: var(--font-display); font-size: 32px; font-weight: 800; letter-spacing: -.03em; }
+.sh-rank-compare-card-score span { color: var(--sh-quiet); font-family: var(--font-display); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; }
+.sh-rank-compare-card-metrics { display: grid; gap: 4px var(--sh-base); margin: 0 0 10px; grid-template-columns: 1fr; }
+@media (min-width: 560px) { .sh-rank-compare-card-metrics { grid-template-columns: 1fr 1fr; } }
+.sh-rank-compare-card-metrics div { display: grid; grid-template-columns: 110px 1fr; gap: 6px; align-items: center; }
+.sh-rank-compare-card-metrics dt { font-family: var(--font-display); font-size: 11px; color: var(--sh-quiet); letter-spacing: .04em; text-transform: uppercase; }
+.sh-rank-compare-card-metrics dd { margin: 0; }
+.sh-rank-compare-card-editorial { font-size: 13px; line-height: 1.5; color: var(--sh-ink); border-top: 1px solid var(--sh-hairline); padding-top: 8px; margin: 0 !important; }
+
+.sh-rank-compare-empty { border: 1px dashed var(--sh-hairline); padding: var(--sh-base); color: var(--sh-quiet); text-align: center; }
+.sh-rank-compare-delta { margin: var(--sh-base) 0 0; padding: 10px; background: var(--sh-mark); border: 1px solid var(--sh-ink); }
+.sh-rank-compare-delta p { margin: 0 !important; font-family: var(--font-display); font-size: 13px; }
+.sh-rank-compare-delta-chip { display: inline-block; margin-left: 8px; padding: 1px 6px; font-family: var(--font-mono); font-size: 11px; font-weight: 700; border: 1px solid var(--sh-ink); }
+.sh-rank-compare-delta-chip.is-ahead { background: var(--sh-paper); }
+.sh-rank-compare-delta-chip.is-behind { background: var(--sh-seal); color: #fffdf5; border-color: var(--sh-seal); }
+
+/* Bangkok baseline photo gallery */
+.sh-bkk-grid { display: grid; gap: var(--sh-base); grid-template-columns: 1fr; margin: 0 0 var(--sh-base); }
+@media (min-width: 720px) { .sh-bkk-grid { grid-template-columns: 1fr 1fr; } }
+@media (min-width: 1000px) { .sh-bkk-grid { grid-template-columns: 1fr 1fr 1fr; } }
+.sh-bkk-photo { margin: 0; border: 1px solid var(--sh-ink); background: var(--sh-paper); }
+.sh-bkk-photo img { width: 100%; height: 220px; object-fit: cover; display: block; border-bottom: 1px solid var(--sh-ink); }
+.sh-bkk-photo figcaption { padding: 10px 12px; }
+.sh-bkk-photo figcaption strong { display: block; font-family: var(--font-display); font-size: 13px; font-weight: 700; line-height: 1.3; }
+.sh-bkk-photo figcaption small { display: block; color: var(--sh-quiet); font-size: 11px; font-family: var(--font-mono); margin-top: 4px; line-height: 1.4; }
+.sh-bkk-photo-source { display: inline-block; margin-top: 6px; font-family: var(--font-display); font-size: 11px; font-weight: 700; letter-spacing: .04em; }
+
+/* baseline + singapore rows in the place list */
+.sh-global-town.is-baseline { border-top-color: var(--sh-seal); border-top-width: 4px; }
+.sh-global-town.is-singapore { border-top-color: var(--sh-ink); border-top-width: 4px; background: rgba(255, 107, 53, 0.04); }
