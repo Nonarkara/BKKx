@@ -56,6 +56,17 @@ const ESRI_IMAGERY_TILES = [
 const ESRI_IMAGERY_ATTRIBUTION =
   "Imagery © Esri, Maxar, Earthstar Geographics, and the GIS User Community";
 
+const NASA_AEROSOL_LAYER = "MODIS_Combined_MAIAC_L2G_AerosolOpticalDepth";
+const NASA_AEROSOL_SOURCE =
+  "https://gibs.earthdata.nasa.gov/layer-metadata/v1.0/MODIS_Combined_MAIAC_L2G_AerosolOpticalDepth.json";
+
+function nasaObservationDate() {
+  // The combined Terra/Aqua NRT composite generally trails Bangkok by two
+  // calendar days. A fixed lag avoids asking GIBS for a tile that does not yet
+  // exist while keeping the date explicit in the interface.
+  return new Date(Date.now() - 2 * 86_400_000).toISOString().slice(0, 10);
+}
+
 const BKKX_BUILDING_PAINT: maplibregl.FillExtrusionLayerSpecification["paint"] = {
   "fill-extrusion-color": "#c9ff38",
   "fill-extrusion-height": [
@@ -461,6 +472,8 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
   const [showHeritage, setShowHeritage] = useState(true);
   const [showZoning, setShowZoning] = useState(false);
   const [showMobility, setShowMobility] = useState(true);
+  const [showAerosol, setShowAerosol] = useState(false);
+  const [aerosolDate] = useState(nasaObservationDate);
   const [showRowhouseCandidates, setShowRowhouseCandidates] = useState(false);
   const [selectedHeritage, setSelectedHeritage] = useState<HeritageSite | null>(null);
   const [selectedCandidate, setSelectedCandidate] = useState<RowhouseCandidate | null>(null);
@@ -740,6 +753,34 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
             });
           } catch (err) {
             console.warn("bkkx: satellite layer failed", err);
+          }
+        }
+
+        if (hasHistoricContext && !map.getSource("bkkx-nasa-aerosol")) {
+          try {
+            map.addSource("bkkx-nasa-aerosol", {
+              type: "raster",
+              tiles: [
+                `https://gibs.earthdata.nasa.gov/wmts/epsg3857/best/${NASA_AEROSOL_LAYER}/default/${aerosolDate}/GoogleMapsCompatible_Level7/{z}/{y}/{x}.png`,
+              ],
+              tileSize: 256,
+              minzoom: 0,
+              maxzoom: 7,
+              attribution: "NASA EOSDIS GIBS · Terra + Aqua MODIS MAIAC",
+            });
+            map.addLayer({
+              id: "bkkx-aerosol",
+              type: "raster",
+              source: "bkkx-nasa-aerosol",
+              layout: { visibility: "none" },
+              paint: {
+                "raster-opacity": 0.68,
+                "raster-resampling": "linear",
+                "raster-fade-duration": 180,
+              },
+            });
+          } catch (err) {
+            console.warn("bkkx: NASA aerosol layer failed", err);
           }
         }
 
@@ -1196,7 +1237,7 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
       }
       mapRef.current = null;
     };
-  }, [world, hasHistoricContext, initialView]);
+  }, [world, hasHistoricContext, initialView, aerosolDate]);
 
   // Mount / unmount POI markers whenever (a) the map is ready,
   // (b) data is loaded, or (c) the user toggles a layer.
@@ -1280,6 +1321,12 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
       if (map.getLayer(layerId)) map.setLayoutProperty(layerId, "visibility", visibility);
     }
   }, [showMobility, mapReady]);
+
+  useEffect(() => {
+    const map = mapRef.current;
+    if (!map || !mapReady || !map.getLayer("bkkx-aerosol")) return;
+    map.setLayoutProperty("bkkx-aerosol", "visibility", showAerosol ? "visible" : "none");
+  }, [showAerosol, mapReady]);
 
   useEffect(() => {
     const map = mapRef.current;
@@ -1513,24 +1560,38 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
             >
               🏛 Register {FINEARTS_HERITAGE_SITES.length}
             </button>
-            <button
-              type="button"
-              className={showRowhouseCandidates ? "active" : ""}
-              onClick={toggleRowhouseCandidates}
-              aria-pressed={showRowhouseCandidates}
-              title="Machine-screened present-day footprints for field review; not heritage designations."
-            >
-              ◫ Candidates {ROWHOUSE_CANDIDATE_SUMMARY.candidate_count.toLocaleString()}
-            </button>
-            <button
-              type="button"
-              className={showZoning ? "active" : ""}
-              onClick={() => setShowZoning((prev) => !prev)}
-              aria-pressed={showZoning}
-            >
-              ▧ Zones
-            </button>
-            <Link href="/atlas/historic-core" target="_top">Full controls ↗</Link>
+            <details className="atlas-embed-more">
+              <summary>More layers +</summary>
+              <div>
+                <button
+                  type="button"
+                  className={showRowhouseCandidates ? "active" : ""}
+                  onClick={toggleRowhouseCandidates}
+                  aria-pressed={showRowhouseCandidates}
+                  title="Machine-screened present-day footprints for field review; not heritage designations."
+                >
+                  ◫ Candidate screen · {ROWHOUSE_CANDIDATE_SUMMARY.candidate_count.toLocaleString()}
+                </button>
+                <button
+                  type="button"
+                  className={showZoning ? "active" : ""}
+                  onClick={() => setShowZoning((prev) => !prev)}
+                  aria-pressed={showZoning}
+                >
+                  ▧ Conservation context
+                </button>
+                <button
+                  type="button"
+                  className={showAerosol ? "active aerosol-active" : ""}
+                  onClick={() => setShowAerosol((prev) => !prev)}
+                  aria-pressed={showAerosol}
+                  title="NASA Terra + Aqua satellite aerosol optical depth; regional composite, not a street sensor."
+                >
+                  ◉ Satellite aerosol · {aerosolDate}
+                </button>
+                <Link href="/atlas/historic-core" target="_top">Full controls ↗</Link>
+              </div>
+            </details>
           </div>
         )}
 
@@ -1542,10 +1603,19 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
               {showPoi.oldtown ? <span><i className="key-line key-rowhouse key-dashed" />Interpretive corridor</span> : null}
               {showMobility ? <span><i className="key-line key-rail" />MRT / BTS</span> : null}
               {showMobility ? <span><i className="key-line key-boat key-dotted" />Boat / ferry</span> : null}
+              {showAerosol ? <span><i className="key-aerosol" />Satellite aerosol depth</span> : null}
               {selectedWalkSlug ? <span><i className="key-line key-walk" />Selected walk</span> : null}
               {showZoning ? <span><i className="key-area" />Illustrative conservation context</span> : null}
             </div>
           </details>
+        )}
+
+        {hasHistoricContext && showAerosol && (
+          <div className="atlas-aerosol-note" role="status">
+            <strong>Air from space · {aerosolDate}</strong>
+            <span>Terra + Aqua MODIS MAIAC · regional aerosol optical depth, not street-level PM2.5.</span>
+            <a href={NASA_AEROSOL_SOURCE} target="_blank" rel="noreferrer">NASA layer record ↗</a>
+          </div>
         )}
 
         {/* Full Atmosphere & Tour deck belongs to the standalone atlas. */}
@@ -1665,6 +1735,16 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
                   </button>
                   <button
                     type="button"
+                    onClick={() => setShowAerosol((prev) => !prev)}
+                    className={`layer-toggle-btn aerosol-toggle ${showAerosol ? "active" : ""}`}
+                    aria-pressed={showAerosol}
+                    aria-label="Toggle NASA satellite aerosol optical depth"
+                    title="Regional Terra + Aqua composite; not a street-level pollution sensor."
+                  >
+                    ◉ Satellite aerosol · {aerosolDate}
+                  </button>
+                  <button
+                    type="button"
                     onClick={toggleRowhouseCandidates}
                     className={`layer-toggle-btn ${showRowhouseCandidates ? "active" : ""}`}
                     aria-pressed={showRowhouseCandidates}
@@ -1676,7 +1756,8 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
                 </div>
                 <small className="control-source-note">
                   Conservation geometry is off by default and illustrative. {BKK_URBAN_ZONING_NOTE}
-                  {" "}{HERITAGE_MOBILITY_NOTE} Candidate footprints are opt-in and unverified.
+                  {" "}{HERITAGE_MOBILITY_NOTE} NASA aerosol is a dated regional optical-depth
+                  composite, not street-level PM2.5. Candidate footprints are opt-in and unverified.
                 </small>
               </div>
             )}

@@ -658,6 +658,35 @@ test("the 3D atlas shell renders the 5 POI layer toggles", async () => {
   // 460 temples chip is opt-in (off by default) but the button still renders
   assert.match(html, /Temples/);
   assert.match(html, /Solid lines: high-confidence documented axes/);
+  assert.match(html, /Satellite aerosol/);
+  assert.match(html, /NASA aerosol is a dated regional optical-depth composite/);
+});
+
+test("the shophouse essay defaults to a short argument without deleting the research", async () => {
+  const response = await render("/shophouses");
+  assert.equal(response.status, 200);
+  const html = await response.text();
+  assert.match(html, /The ten-minute version/);
+  assert.match(html, /run out of excuses for not counting them/);
+  assert.match(html, /Full research companion/);
+  assert.match(html, /Open the long read/);
+  assert.match(html, /documented clusters/);
+  assert.match(html, /candidate footprints/);
+  assert.match(html, /Open Bangkok(?:&#x27;|')s rowhouse register/);
+  assert.match(html, /<details[^>]+sh-research-companion/);
+});
+
+test("every primary public route renders successfully", async () => {
+  for (const route of [
+    "/", "/about", "/heritage", "/rowhouses", "/case-for-bangkok", "/worlds",
+    "/atlas/historic-core", "/areas/kudi-chin", "/walks/six-faiths",
+    "/shophouses", "/shophouses/bible", "/shophouses/global",
+    "/shophouses/print", "/shophouses/research",
+  ]) {
+    const response = await render(route);
+    assert.equal(response.status, 200, `${route} is not shippable`);
+    assert.match(response.headers.get("content-type") ?? "", /^text\/html\b/i, `${route} is not HTML`);
+  }
 });
 
 test("serves the global shophouse research page with map, origins, and verdicts", async () => {

@@ -2,8 +2,12 @@ name: Site checks
 
 on:
   push:
-    branches: [main]
+    branches: ["**"]
   pull_request:
+
+concurrency:
+  group: site-checks-${{ github.ref }}
+  cancel-in-progress: true
 
 permissions:
   contents: read

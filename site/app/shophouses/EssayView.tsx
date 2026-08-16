@@ -15,7 +15,8 @@ import { withNotes } from "./footnotes";
 // section's prose — the essay still reads top to bottom either way.
 
 import { PressureMap } from "./PressureMap";
-import { QUADRANTS, PRESSURE_TOTAL } from "../data/shophouse-pressure";
+import { PRESSURE_DISTRICTS, QUADRANTS, PRESSURE_TOTAL } from "../data/shophouse-pressure";
+import { CLUSTERS, SIGNATURE } from "../data/shophouse-gazetteer";
 
 type Section = { slug: string; heading: string | null; blocks: Block[] };
 
@@ -44,6 +45,7 @@ export function EssayView() {
         </Link>
         <nav aria-label="Essay">
           <a href="#essay">Essay</a>
+          <a href="#research">Long read</a>
           <Link href="/shophouses/bible">The Bible</Link>
           <Link href="/shophouses/global">Global</Link>
           <Link href="/shophouses/research">Sources</Link>
@@ -65,9 +67,8 @@ export function EssayView() {
         <p className="sh-companion">
           <strong>This is the companion, not the chapter.</strong> The essay is published as a
           printed chapter in <em>Shophouse Metropolis</em> (Harvard University Graduate School of
-          Design). What is here is the long version, with the survey, the sourced models, the
-          anatomy and the full bibliography — built for anyone researching this building type
-          rather than for a reader who has ten minutes.
+          Design). Here you can read the map and the ten-minute argument first, then open the long
+          version only when you need the survey, sourced models, anatomy and full bibliography.
         </p>
         <p className="sh-dedication-line">{ESSAY_META.dedication}</p>
 
@@ -118,7 +119,40 @@ export function EssayView() {
         </ol>
       </section>
 
-      <nav className="sh-contents-strip" aria-label="Contents">
+      <section className="sh-brief" aria-labelledby="sh-brief-title">
+        <div className="sh-brief-copy">
+          <p className="sh-eyebrow">The ten-minute version</p>
+          <h2 id="sh-brief-title">Bangkok has not run out of shophouses. It has run out of excuses for not counting them.</h2>
+          <p>
+            The map does not prove that every narrow building is historic. It proves something
+            harder to dismiss: the city can find the places worth checking, name the pressure on
+            them, and talk to an owner before demolition becomes the only conversation left.
+          </p>
+        </div>
+        <dl className="sh-brief-numbers">
+          <div><dt>On the record</dt><dd>{CLUSTERS.length}<small>documented clusters</small></dd></div>
+          <div><dt>Visible to the screen</dt><dd>{PRESSURE_TOTAL.toLocaleString()}<small>candidate footprints</small></dd></div>
+          <div><dt>Talk to the owner</dt><dd>{QUADRANTS[0].count}<small>shallow plots on valuable ground</small></dd></div>
+          <div><dt>The ordinary module</dt><dd>{SIGNATURE.frontage.p50} × {SIGNATURE.depth.p50} m<small>median frontage × depth</small></dd></div>
+        </dl>
+        <p className="sh-brief-verdict">
+          <strong>{PRESSURE_DISTRICTS[0].tellTheOwner + PRESSURE_DISTRICTS[1].tellTheOwner} of {QUADRANTS[0].count}</strong>{" "}
+          buildings in the most self-defeating demolition quadrant sit in Phra Nakhon and
+          Samphanthawong. The old city is where an owner conversation can do the most work first.
+        </p>
+        <div className="sh-brief-actions">
+          <a href="https://bkk.nonarkara.org/rowhouses" target="_blank" rel="noreferrer">Open Bangkok&apos;s rowhouse register ↗</a>
+          <Link href="/shophouses/bible">Use the field Bible →</Link>
+        </div>
+      </section>
+
+      <details className="sh-research-companion" id="research">
+        <summary>
+          <span>Full research companion</span>
+          <strong>The argument, measured drawings, studio evidence and {FOOTNOTES.length} notes</strong>
+          <small>Open the long read ↓</small>
+        </summary>
+        <nav className="sh-contents-strip" aria-label="Contents">
         <ol>
           {headings.map((h) => (
             <li key={h}>
@@ -126,9 +160,9 @@ export function EssayView() {
             </li>
           ))}
         </ol>
-      </nav>
+        </nav>
 
-      <div className="sh-sections">
+        <div className="sh-sections">
         {sections.map((s) => (
           <section className="sh-section" key={s.slug || "opening"} id={s.slug || undefined}>
             <div className="sh-section-prose">
@@ -164,9 +198,9 @@ export function EssayView() {
             <Rail section={s.slug} />
           </section>
         ))}
-      </div>
+        </div>
 
-      <section className="sh-sections sh-notes-wrap">
+        <section className="sh-sections sh-notes-wrap">
         <div className="sh-notes">
           <h2 id="notes">Notes</h2>
           <ol>
@@ -177,7 +211,8 @@ export function EssayView() {
             ))}
           </ol>
         </div>
-      </section>
+        </section>
+      </details>
 
       <footer className="sh-footer">
         <div className="sh-support">

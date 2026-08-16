@@ -1110,6 +1110,44 @@ footer small { grid-column: 1 / -1; margin-top: 60px; padding-top: 24px; border-
 .atlas-embed-tools button.mobility-active { background: #dff6ff; color: #10202a; }
 .atlas-embed-tools a { border-right: 0; color: var(--signal); }
 
+.atlas-embed-more { position: relative; }
+.atlas-embed-more > summary {
+  display: inline-flex;
+  align-items: center;
+  min-height: 34px;
+  padding: 0 10px;
+  cursor: pointer;
+  list-style: none;
+  color: inherit;
+  font: 700 9px/1 var(--font-mono);
+  letter-spacing: .04em;
+  white-space: nowrap;
+}
+.atlas-embed-more > summary::-webkit-details-marker { display: none; }
+.atlas-embed-more[open] > summary { background: rgba(255,255,255,.1); color: var(--signal); }
+.atlas-embed-more > div {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  z-index: 40;
+  display: grid;
+  width: 238px;
+  border: 1px solid rgba(255,255,255,.25);
+  background: rgba(17,18,15,.96);
+  box-shadow: 0 12px 30px rgba(0,0,0,.45);
+  backdrop-filter: blur(12px);
+}
+.atlas-embed-more > div button,
+.atlas-embed-more > div a {
+  justify-content: flex-start;
+  width: 100%;
+  border-right: 0;
+  border-bottom: 1px solid rgba(255,255,255,.12);
+  text-align: left;
+}
+.atlas-embed-more > div a:last-child { border-bottom: 0; }
+.atlas-embed-more > div button.aerosol-active { background: #6d426d; color: #fff; }
+
 .atlas-map-key {
   position: absolute;
   right: 10px;
@@ -1158,6 +1196,32 @@ footer small { grid-column: 1 / -1; margin-top: 60px; padding-top: 24px; border-
 .key-dashed { border-top-style: dashed; color: #f4d492; }
 .key-dotted { border-top-style: dotted; }
 .key-area { display: block; width: 26px; height: 8px; border: 1px dashed #d2a56a; background: rgba(178, 132, 74, .32); }
+.key-aerosol { display: block; width: 26px; height: 8px; background: linear-gradient(90deg, #6a52a3, #cf5b8f, #f5b63e); }
+
+.atlas-aerosol-note {
+  position: absolute;
+  left: 10px;
+  bottom: 34px;
+  z-index: 24;
+  display: grid;
+  gap: 3px;
+  width: min(300px, calc(100% - 240px));
+  padding: 9px 10px;
+  border-left: 3px solid #cf5b8f;
+  background: rgba(17,18,15,.92);
+  color: rgba(255,255,255,.76);
+  backdrop-filter: blur(10px);
+  font: 500 8px/1.35 var(--font-mono);
+}
+.atlas-aerosol-note strong { color: #fff; font-size: 9px; letter-spacing: .05em; text-transform: uppercase; }
+.atlas-aerosol-note a { color: #ffb8da; text-underline-offset: 2px; }
+
+@media (max-width: 680px) {
+  .atlas-aerosol-note { right: 10px; bottom: 176px; width: auto; }
+  .atlas-embed-tools { max-width: calc(100% - 20px); overflow: visible; }
+  .atlas-embed-tools > button,
+  .atlas-embed-more > summary { padding-left: 8px; padding-right: 8px; font-size: 8px; }
+}
 
 .bkkx-explorer-tip {
   margin: 8px 0 0;
@@ -3452,7 +3516,7 @@ footer small { grid-column: 1 / -1; margin-top: 60px; padding-top: 24px; border-
   }
   .atlas-embed-tools {
     right: 10px;
-    overflow-x: auto;
+    overflow: visible;
   }
   .atlas-embed-tools-label { display: none; }
 }
@@ -5237,6 +5301,113 @@ body:has(.sh-figexport) { background: #fff !important; }
 .sh-quadrant-label { font-family: var(--font-display); font-size: 17px; font-weight: 700; letter-spacing: -.02em; }
 .sh-quadrant-label small { font-family: var(--font-mono); font-size: 11px; font-weight: 400; color: var(--sh-quiet); margin-left: 6px; }
 .sh-quadrant-what { color: var(--sh-seal); font-family: var(--font-display); font-size: 13px; font-weight: 600; }
+
+/* The public page makes its argument in ten minutes. The chapter-length
+   apparatus remains in the document, searchable and printable, but opens only
+   when a reader asks for it. */
+.sh-brief {
+  max-width: 1184px;
+  margin: 0 auto;
+  padding: calc(var(--sh-page) * 1.5) var(--sh-page);
+  border-bottom: 2px solid var(--sh-ink);
+}
+.sh-brief-copy {
+  display: grid;
+  grid-template-columns: minmax(240px, .9fr) minmax(280px, 1.1fr);
+  gap: var(--sh-page);
+  align-items: end;
+}
+.sh-brief-copy .sh-eyebrow { grid-column: 1; margin-bottom: 0; }
+.sh-brief-copy h2 {
+  grid-column: 1;
+  max-width: 18ch;
+  margin: 8px 0 0;
+  font-family: var(--font-display);
+  font-size: clamp(28px, 4vw, 48px);
+  font-weight: 800;
+  line-height: .98;
+  letter-spacing: -.045em;
+  text-wrap: balance;
+}
+.sh-brief-copy > p:last-child { grid-column: 2; grid-row: 1 / span 2; margin: 0; max-width: 54ch; }
+.sh-brief-numbers {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  margin: var(--sh-page) 0 0;
+  border: 1px solid var(--sh-ink);
+}
+.sh-brief-numbers div { min-width: 0; padding: var(--sh-cap); border-right: 1px solid var(--sh-ink); }
+.sh-brief-numbers div:last-child { border-right: 0; }
+.sh-brief-numbers dt {
+  font-family: var(--font-display);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .09em;
+  text-transform: uppercase;
+  color: var(--sh-quiet);
+}
+.sh-brief-numbers dd {
+  margin: 6px 0 0;
+  font-family: var(--font-display);
+  font-size: clamp(24px, 3vw, 38px);
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -.04em;
+  font-variant-numeric: tabular-nums;
+}
+.sh-brief-numbers small { display: block; margin-top: 7px; font-size: 11px; font-weight: 500; line-height: 1.3; letter-spacing: 0; color: var(--sh-quiet); }
+.sh-brief-verdict { max-width: 72ch; margin: var(--sh-base) 0 0; font-size: 16px; }
+.sh-brief-verdict strong { padding: 2px 5px; background: var(--sh-mark); font-family: var(--font-display); font-weight: 800; }
+.sh-brief-actions { display: flex; flex-wrap: wrap; gap: var(--sh-cap); margin-top: var(--sh-base); }
+.sh-brief-actions a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 var(--sh-cap);
+  border: 1px solid var(--sh-ink);
+  color: var(--sh-ink);
+  font-family: var(--font-display);
+  font-size: 12px;
+  font-weight: 700;
+  text-decoration: none;
+}
+.sh-brief-actions a:first-child { background: var(--sh-ink); color: #fff; }
+
+.sh-research-companion { max-width: 1184px; margin: 0 auto; }
+.sh-research-companion > summary {
+  display: grid;
+  grid-template-columns: minmax(180px, .7fr) minmax(260px, 1.3fr) auto;
+  gap: var(--sh-base);
+  align-items: center;
+  min-height: 92px;
+  padding: var(--sh-base) var(--sh-page);
+  border-bottom: 2px solid var(--sh-ink);
+  cursor: pointer;
+  list-style: none;
+  font-family: var(--font-display);
+}
+.sh-research-companion > summary::-webkit-details-marker { display: none; }
+.sh-research-companion > summary span { color: var(--sh-seal); font-size: 11px; font-weight: 800; letter-spacing: .11em; text-transform: uppercase; }
+.sh-research-companion > summary strong { font-size: 18px; line-height: 1.25; }
+.sh-research-companion > summary small { font-size: 11px; font-weight: 700; white-space: nowrap; }
+.sh-research-companion > summary:hover { background: var(--sh-mark); }
+.sh-research-companion[open] > summary small { font-size: 0; }
+.sh-research-companion[open] > summary small::after { content: "Close the long read ↑"; font-size: 11px; }
+.sh-research-companion .sh-contents-strip,
+.sh-research-companion .sh-sections { max-width: none; }
+
+@media (max-width: 720px) {
+  .sh-brief-copy { grid-template-columns: 1fr; gap: var(--sh-base); }
+  .sh-brief-copy .sh-eyebrow,
+  .sh-brief-copy h2,
+  .sh-brief-copy > p:last-child { grid-column: 1; grid-row: auto; }
+  .sh-brief-numbers { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .sh-brief-numbers div:nth-child(2) { border-right: 0; }
+  .sh-brief-numbers div:nth-child(-n + 2) { border-bottom: 1px solid var(--sh-ink); }
+  .sh-research-companion > summary { grid-template-columns: 1fr auto; gap: 6px var(--sh-base); }
+  .sh-research-companion > summary strong { grid-column: 1 / -1; grid-row: 2; }
+  .sh-research-companion > summary small { grid-column: 2; grid-row: 1; }
+}
 
 /* ---- Bible: quick reference, signature histograms, gazetteer ---- */
 .sh-quickref {
