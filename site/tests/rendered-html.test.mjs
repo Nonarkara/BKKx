@@ -631,3 +631,87 @@ test("the 3D atlas shell renders the 5 POI layer toggles", async () => {
   assert.match(html, /Temples/);
   assert.match(html, /Solid lines: high-confidence documented axes/);
 });
+
+test("serves the global shophouse research page with map, origins, and verdicts", async () => {
+  const response = await render("/shophouses/global");
+  assert.equal(response.status, 200);
+  assert.match(response.headers.get("content-type") ?? "", /^text\/html\b/i);
+  const html = await response.text();
+
+  // Lede
+  assert.match(html, /The shophouse outside Bangkok/);
+  assert.match(html, /Four UNESCO World Heritage towns/);
+  // Page map renders the schematic SVG
+  assert.match(html, /sh-globalmap/);
+  // Origin ports — all five
+  for (const port of ["Quanzhou", "Xiamen", "Guangzhou", "Chaozhou", "Fuzhou"]) {
+    assert.match(html, new RegExp(port), `origin port missing: ${port}`);
+  }
+  // UNESCO towns (4) all rendered
+  for (const town of ["Melaka", "George Town", "Hoi An", "Vigan"]) {
+    assert.match(html, new RegExp(town), `UNESCO town missing: ${town}`);
+  }
+  // Migration routes — at least 3 of the 9 vector names
+  for (const vec of ["Hokkien", "Cantonese", "Teochew"]) {
+    assert.match(html, new RegExp(vec), `migration community missing: ${vec}`);
+  }
+  // Verdict tags appear
+  assert.match(html, /overtouristed/);
+  assert.match(html, /gentrified/);
+  // All sources are HTTPS
+  const hrefs = [...html.matchAll(/href="(https:\/\/[^"]+)"/g)].map((m) => m[1]);
+  assert.ok(hrefs.length > 5, `expected multiple HTTPS sources, got ${hrefs.length}`);
+  for (const h of hrefs) {
+    assert.ok(h.startsWith("https://"), `non-HTTPS source: ${h}`);
+  }
+  // Application/ld+json
+  assert.match(html, /application\/ld\+json/);
+  // Photos link out, not host
+  assert.match(html, /upload\.wikimedia\.org/);
+});
+
+test("every global shophouse town has a real source URL and a verdict", async () => {
+  const { TOWNS, MIGRATION_ROUTES } = await import("../app/data/shophouse-global.ts");
+  assert.ok(TOWNS.length >= 14, `expected at least 14 towns, got ${TOWNS.length}`);
+  for (const t of TOWNS) {
+    assert.ok(t.name.length > 1, `${t.id}: missing name`);
+    assert.ok(t.countryCode.length === 2, `${t.id}: countryCode must be ISO-2`);
+    assert.ok(t.lat >= -8 && t.lat <= 42 && t.lon >= 78 && t.lon <= 125, `${t.id}: outside the map bbox (${t.lat},${t.lon})`);
+    assert.ok(
+      ["UNESCO", "national", "regional", "precinct", "none"].includes(t.protection),
+      `${t.id}: invalid protection`,
+    );
+    assert.ok(
+      [
+        "five-foot way", "tubular Chinese", "qilou", "bahay na bato",
+        "shikumen", "lianpai", "store-residence", "riverside shop",
+        "ruko", "colonial townhouse",
+      ].includes(t.kind),
+      `${t.id}: invalid kind`,
+    );
+    assert.ok(
+      [
+        "family-firm surviving", "gentrified", "overtouristed",
+        "transformed", "frozen", "abandoned", "research-stage",
+      ].includes(t.impact.verdict),
+      `${t.id}: invalid impact verdict`,
+    );
+    assert.ok(t.impact.body.length > 50, `${t.id}: impact body is too thin`);
+    assert.ok(t.sources.length >= 1, `${t.id}: no sources`);
+    for (const s of t.sources) {
+      assert.ok(s.url.startsWith("https://"), `${t.id}: non-HTTPS source ${s.url}`);
+    }
+  }
+  // Migration routes are consistent (from + to must exist)
+  for (const r of MIGRATION_ROUTES) {
+    const to = TOWNS.find((t) => t.id === r.to);
+    assert.ok(to, `migration route ${r.id} points at unknown town: ${r.to}`);
+    assert.ok(r.source.url.startsWith("https://"), `route ${r.id}: non-HTTPS source`);
+  }
+});
+
+test("the essay masthead has a Global nav link", async () => {
+  const response = await render("/shophouses");
+  const html = await response.text();
+  assert.match(html, /href="\/shophouses\/global"/, "essay masthead missing Global link");
+});

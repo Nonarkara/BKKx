@@ -70,6 +70,8 @@ export const DICTIONARY = {
 
     oldtown_callout_label: "Why it matters",
 
+    nav_global: "Global",
+
     lang_toggle_label: "Language",
   },
   th: {
@@ -136,6 +138,8 @@ export const DICTIONARY = {
     quests_map_link: "เปิดในแผนที่",
 
     oldtown_callout_label: "ทำไมจึงสำคัญ",
+
+    nav_global: "ทั่วโลก",
 
     lang_toggle_label: "ภาษา",
   },

@@ -45,6 +45,7 @@ export function EssayView() {
         <nav aria-label="Essay">
           <a href="#essay">Essay</a>
           <Link href="/shophouses/bible">The Bible</Link>
+          <Link href="/shophouses/global">Global</Link>
           <Link href="/shophouses/research">Sources</Link>
           <a href="https://bkk.nonarkara.org" target="_blank" rel="noreferrer">
             BKKx

@@ -5524,3 +5524,79 @@ body:has(.sh-figexport) { background: #fff !important; }
    The wrapper does the scrolling — a <table> is not a reliable scroll box. */
 .sh-tablewrap { overflow-x: auto; -webkit-overflow-scrolling: touch; max-width: 100%; min-width: 0; }
 .sh-tablewrap .sh-dim-table { min-width: 460px; }
+
+/* ============================================================ global
+   The Global Research page. Same paper register as the rest of the
+   site — sharp edges, IBM Plex Sans Thai + Sao Chingcha, seal pink only
+   for the one verdict that earns it. The map is a static SVG, the photos
+   are external (Wikimedia Commons), and the page does not lean on
+   JavaScript for the layout. */
+
+.sh-global-stats {
+  list-style: none; margin: 0; padding: 0;
+  display: grid; gap: var(--sh-base);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  border-top: 1px solid var(--sh-ink); border-bottom: 1px solid var(--sh-hairline);
+  padding: var(--sh-base) 0;
+}
+@media (min-width: 720px) { .sh-global-stats { grid-template-columns: repeat(4, minmax(0,1fr)); } }
+@media (min-width: 1000px) { .sh-global-stats { grid-template-columns: repeat(8, minmax(0,1fr)); } }
+.sh-global-stats li { display: flex; flex-direction: column; gap: 2px; padding: 0 8px; border-left: 1px solid var(--sh-hairline); }
+.sh-global-stats strong { font-family: var(--font-display); font-size: clamp(22px, 2.6vw, 30px); font-weight: 800; letter-spacing: -.03em; color: var(--sh-ink); font-variant-numeric: tabular-nums; }
+.sh-global-stats span { font-family: var(--font-display); font-size: 11px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--sh-quiet); }
+
+.sh-globalmap { margin: 0 0 var(--sh-base); }
+.sh-globalmap .sh-section-svg { width: 100%; height: auto; display: block; background: #fffdf5; border: 1px solid var(--sh-ink); }
+.sh-globalmap-cap {
+  display: flex; flex-wrap: wrap; gap: 6px var(--sh-base); align-items: baseline;
+  padding: var(--sh-cap) 0 0; font-size: 14px;
+}
+.sh-globalmap-cap strong { font-family: var(--font-display); font-size: 14px; font-weight: 700; }
+.sh-globalmap-cap small { color: var(--sh-quiet); font-family: var(--font-mono); font-size: 11px; }
+.sh-globalmap-verdict {
+  font-family: var(--font-display); font-weight: 700; letter-spacing: .04em;
+  padding: 1px 6px; border: 1px solid var(--sh-ink); background: var(--sh-mark);
+}
+.sh-globalmap-verdict.is-overtouristed { background: #ff6b35; color: #fffdf5; border-color: #111014; }
+.sh-globalmap-verdict.is-gentrified { background: var(--sh-seal); color: #fffdf5; border-color: var(--sh-seal); }
+.sh-globalmap-verdict.is-transformed { background: var(--sh-ink); color: var(--sh-paper); border-color: var(--sh-ink); }
+.sh-globalmap-verdict.is-research-stage { background: var(--sh-paper); color: var(--sh-ink); border-style: dashed; }
+.sh-globalmap-verdict.is-family-firm-surviving { background: #fffdf5; color: var(--sh-ink); }
+
+.sh-global-origins { margin: var(--sh-base) 0; padding: 0; border-top: 1px solid var(--sh-ink); }
+.sh-global-origins > div {
+  display: grid; grid-template-columns: 1fr; gap: 6px;
+  padding: var(--sh-cap) 0; border-bottom: 1px solid var(--sh-hairline);
+}
+@media (min-width: 720px) { .sh-global-origins > div { grid-template-columns: 200px 1fr; gap: var(--sh-base); } }
+.sh-global-origins dt { font-family: var(--font-display); font-weight: 700; font-size: 16px; }
+.sh-global-origins dt small { color: var(--sh-quiet); font-weight: 400; font-size: 13px; }
+.sh-global-origin-square { display: inline-block; width: 10px; height: 10px; background: #fffdf5; border: 2px solid #8c2f23; margin-right: 8px; vertical-align: middle; }
+.sh-global-origin-community { font-family: var(--font-mono); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--sh-seal); margin: 0 0 4px !important; }
+
+.sh-global-routes { list-style: none; margin: var(--sh-base) 0; padding: 0; border-top: 1px solid var(--sh-ink); }
+.sh-global-routes li { padding: var(--sh-cap) 0; border-bottom: 1px solid var(--sh-hairline); }
+.sh-global-route-arc { font-family: var(--font-display); font-size: 15px; font-weight: 700; margin: 0 0 4px !important; }
+.sh-global-route-arc small { font-weight: 400; color: var(--sh-quiet); font-family: var(--font-mono); font-size: 11px; letter-spacing: .04em; margin-left: 6px; }
+
+.sh-global-towns { display: grid; gap: calc(var(--sh-page) * 1.4); margin: var(--sh-base) 0 calc(var(--sh-page) * 1.6); }
+.sh-global-town { display: grid; grid-template-columns: 1fr; gap: var(--sh-base); border-top: 2px solid var(--sh-ink); padding-top: var(--sh-base); }
+@media (min-width: 760px) { .sh-global-town { grid-template-columns: 240px 1fr; gap: var(--sh-page); } }
+.sh-global-town-photo { display: block; position: relative; }
+.sh-global-town-photo img { width: 100%; height: auto; display: block; border: 1px solid var(--sh-rule); aspect-ratio: 4/3; object-fit: cover; }
+.sh-global-town-photo.is-empty { display: flex; align-items: center; justify-content: center; border: 1px dashed var(--sh-hairline); aspect-ratio: 4/3; color: var(--sh-quiet); font-family: var(--font-display); font-size: 12px; }
+.sh-global-town-photo-credit { display: block; font-size: 10px; color: var(--sh-quiet); line-height: 1.35; margin-top: 4px; }
+.sh-global-town h3 { font-family: var(--font-display); font-size: 22px; font-weight: 800; letter-spacing: -.03em; margin: 0 0 4px; }
+.sh-global-town-meta { font-family: var(--font-mono); font-size: 11px; color: var(--sh-quiet); margin: 0 0 6px !important; letter-spacing: .04em; }
+.sh-global-town-kind { font-family: var(--font-display); font-size: 12px; color: var(--sh-quiet); margin: 0 0 var(--sh-cap) !important; }
+.sh-global-town-verdict { border-left: 3px solid var(--sh-ink); padding: 4px 0 4px 10px; margin: var(--sh-cap) 0 !important; font-size: 14px; line-height: 1.5; }
+.sh-global-town-verdict.is-overtouristed { border-left-color: #ff6b35; }
+.sh-global-town-verdict.is-gentrified { border-left-color: var(--sh-seal); }
+.sh-global-town-verdict.is-transformed { border-left-color: var(--sh-ink); background: rgba(20,20,15,0.04); }
+.sh-global-town-verdict.is-research-stage { border-left-style: dashed; border-left-color: var(--sh-quiet); }
+.sh-global-town-verdict.is-family-firm-surviving { border-left-color: #2c5f7c; }
+
+.sh-global-verdicts { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--sh-ink); }
+.sh-global-verdicts li { padding: var(--sh-cap) 0; border-bottom: 1px solid var(--sh-hairline); }
+.sh-global-verdict-label { font-family: var(--font-display); font-weight: 700; font-size: 15px; margin: 0 0 4px !important; }
+.sh-global-verdict-label small { font-weight: 400; color: var(--sh-quiet); font-family: var(--font-mono); font-size: 11px; margin-left: 6px; }
