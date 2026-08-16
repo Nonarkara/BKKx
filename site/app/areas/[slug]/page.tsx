@@ -13,6 +13,10 @@ import {
   walkBySlug,
   walkDistance,
 } from "../../data/heritage-content";
+import {
+  HERITAGE_MOBILITY_SERVICES,
+  nearestHeritageMobilityStops,
+} from "../../data/heritage-mobility";
 
 type Params = { slug: string };
 type Props = { params: Promise<Params> };
@@ -48,6 +52,12 @@ export default async function AreaPage({ params }: Props) {
     .map((w) => walkBySlug(w))
     .filter((w): w is NonNullable<typeof w> => Boolean(w));
   const pinned = area.monuments.filter((m) => m.lat && m.lon);
+  const nearbyMobility = nearestHeritageMobilityStops(area.center, 2);
+
+  const formatDistance = (distanceKm: number) => {
+    if (distanceKm < 1) return `${Math.round(distanceKm * 1000)} m`;
+    return `${distanceKm.toFixed(1)} km`;
+  };
 
   return (
     <div className="register">
@@ -97,6 +107,37 @@ export default async function AreaPage({ params }: Props) {
           relocated where needed as documented on the{" "}
           <Link href="/heritage#register">register page</Link>.
         </p>
+
+        <aside className="place-arrival" aria-labelledby="place-arrival-title">
+          <div className="place-arrival-heading">
+            <p className="register-eyebrow">Arrive without a car</p>
+            <h2 id="place-arrival-title">The nearest useful stops.</h2>
+            <Link href="/atlas/historic-core">See every route in 3D ↗</Link>
+          </div>
+          <ol>
+            {nearbyMobility.map((stop) => {
+              const services = stop.serviceIds
+                .map((serviceId) => HERITAGE_MOBILITY_SERVICES.find((service) => service.id === serviceId))
+                .filter((service): service is NonNullable<typeof service> => Boolean(service));
+              return (
+                <li key={stop.id}>
+                  <span className="place-arrival-distance">{formatDistance(stop.distanceKm)}</span>
+                  <strong>{stop.name}<small lang="th">{stop.thai}</small></strong>
+                  <span className="place-arrival-nearby">For {stop.nearby.join(" · ")}</span>
+                  <span className="place-arrival-services">
+                    {services.map((service, index) => (
+                      <span key={service.id}>
+                        {index ? " · " : ""}
+                        <a href={service.sourceUrl} target="_blank" rel="noreferrer">{service.shortName}</a>
+                      </span>
+                    ))}
+                  </span>
+                </li>
+              );
+            })}
+          </ol>
+          <p>Distances are straight-line orientation. Boat calls and service patterns change; check the operator link before setting out.</p>
+        </aside>
 
         {area.monuments.length ? (
           <div className="place-monuments">

@@ -2699,11 +2699,62 @@ footer small { grid-column: 1 / -1; margin-top: 60px; padding-top: 24px; border-
   min-height: 280px;
 }
 
+.place-arrival {
+  display: grid;
+  grid-template-columns: minmax(190px, .7fr) minmax(0, 1.3fr);
+  gap: var(--page-unit);
+  margin-top: var(--page-unit);
+  border: 1px solid var(--ink);
+  padding: var(--baseline);
+}
+
+.place-arrival-heading h2 {
+  margin: 2px 0 var(--cap);
+  font: 700 var(--size-up)/1.05 var(--font-display);
+  letter-spacing: -.02em;
+}
+
+.place-arrival-heading > a {
+  font: 800 9px/1.2 var(--font-mono);
+  text-transform: uppercase;
+  text-underline-offset: 3px;
+}
+
+.place-arrival ol {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.place-arrival li {
+  display: grid;
+  grid-template-columns: 54px minmax(130px, .8fr) minmax(150px, 1fr);
+  gap: 3px var(--cap);
+  border-bottom: 1px solid var(--hairline);
+  padding: 0 0 var(--cap);
+}
+
+.place-arrival li + li { padding-top: var(--cap); }
+.place-arrival li:last-child { border-bottom: 0; }
+.place-arrival-distance { grid-row: 1 / span 2; font: 800 10px/1.4 var(--font-mono); color: var(--seal, #8c2f23); }
+.place-arrival strong { font: 700 15px/1.1 var(--font-display); }
+.place-arrival strong small { display: block; margin-top: 2px; font: 500 11px/1.2 var(--font-body); color: var(--quiet); }
+.place-arrival-nearby { font: 500 11px/1.35 var(--font-body); color: var(--quiet); }
+.place-arrival-services { grid-column: 2 / -1; font: 800 9px/1.3 var(--font-mono); text-transform: uppercase; }
+.place-arrival-services a { text-underline-offset: 3px; }
+.place-arrival > p { grid-column: 1 / -1; margin: 0; border-top: 1px solid var(--hairline); padding-top: var(--cap); color: var(--quiet); font: 500 10px/1.45 var(--font-body); }
+
 .place-monuments,
 .place-walks {
   margin-top: calc(var(--page-unit) * 1.5);
   border-top: 1px solid var(--ink);
   padding-top: var(--baseline);
+}
+
+@media (max-width: 760px) {
+  .place-arrival { grid-template-columns: 1fr; }
+  .place-arrival li { grid-template-columns: 48px 1fr; }
+  .place-arrival-nearby { grid-column: 2; }
 }
 
 .place-monuments h2,

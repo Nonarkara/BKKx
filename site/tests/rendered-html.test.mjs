@@ -400,6 +400,10 @@ test("renders a heritage quarter page with photo attribution", async () => {
   assert.match(html, /Wikimedia Commons/);
   assert.match(html, /CC BY/i);
   assert.match(html, /In the Fine Arts register/);
+  assert.match(html, /Arrive without a car/);
+  assert.match(html, /The nearest useful stops/);
+  assert.match(html, /See every route in 3D/);
+  assert.match(html, /Cross-river ferry|MRT Blue|Express Boat|Tourist Boat/);
 });
 
 test("renders a heritage walk page with numbered stops", async () => {
