@@ -6075,3 +6075,185 @@ body:has(.sh-figexport) { background: #fff !important; }
 .sh-keyrefs li { padding: var(--sh-cap) 0; border-bottom: 1px solid var(--sh-hairline); }
 .sh-keyrefs li a { font-family: var(--font-display); font-size: 14px; font-weight: 700; letter-spacing: -.01em; }
 .sh-keyrefs li p { margin: 4px 0 0 !important; font-size: 13px; color: var(--sh-quiet); line-height: 1.5; }
+
+/* ================================================================
+   shophouses — DENSITY PASS (2026-08-18)
+   Measured before: first body paragraph at 3,679 px on a 1280×900
+   desktop; lede 930 px; contents strip 275 px; --sh-page multiplied
+   by eight ad-hoc factors. A research companion should put the
+   argument on screen one, not screen four.
+   Four spacing steps and nothing else: s1 12 · s2 20 · s3 32 · s4 52.
+   ================================================================ */
+.shophouse-essay {
+  --sh-page: 20px;
+  --sh-base: 1.25rem;
+  --sh-cap: 0.6em;
+  --s1: 12px; --s2: 20px; --s3: 32px; --s4: 52px;
+  font-size: 17px;
+  line-height: 1.65;
+}
+@media (min-width: 768px) { .shophouse-essay { --sh-page: 24px; } }
+
+/* masthead: was 110 px */
+.sh-masthead { padding: var(--s1) var(--sh-page); gap: 6px var(--s2); }
+.sh-wordmark, .sh-masthead nav a { min-height: 40px; }
+.sh-masthead nav { gap: var(--s2); }
+
+/* lede: was 930 px, h1 76 px */
+.sh-lede { padding: var(--s3) var(--sh-page) var(--s2); }
+.sh-lede h1 { font-size: clamp(34px, 4.4vw, 56px); line-height: 1.02; margin: 0 0 var(--s1); }
+.sh-subtitle { font-size: 19px; margin: 0 0 var(--s1); }
+.sh-byline { font-size: 14px; margin: 0 0 var(--s1); }
+.sh-companion { margin: var(--s2) 0 var(--s1); padding: var(--s1) var(--s2); font-size: 14px; line-height: 1.5; }
+.sh-dedication-line { margin: var(--s1) 0 0; font-size: 14px; line-height: 1.5; max-width: 60ch; }
+.sh-abstract-toggle { margin-top: var(--s1); min-height: 40px; }
+
+/* contents strip: was 275 px — chips wrap tighter, smaller counters */
+.sh-contents-strip ol { gap: 4px var(--s1); padding: var(--s1) 0; }
+.sh-contents-strip a { min-height: 34px; font-size: 12px; gap: 4px; }
+.sh-contents-strip a::before { padding: 1px 4px; }
+
+/* sections: was 45 px top+bottom, h2 27 px pad + 27 px margin */
+.sh-section { padding: var(--s3) 0; }
+.sh-section-prose h2 { font-size: clamp(22px, 2.6vw, 30px); padding-top: var(--s2); margin-bottom: var(--s2); }
+.sh-section-prose > p { margin-bottom: var(--s2); }
+.sh-figure { margin: var(--s2) 0; }
+.sh-figure figcaption { font-size: 12.5px; }
+.sh-pull { padding: var(--s2); margin: var(--s2) 0; font-size: 20px; line-height: 1.35; }
+.sh-rail { gap: var(--s2); }
+.sh-rail figcaption, .sh-rail-fact small { font-size: 12px; }
+.sh-rail-fact p { font-size: 15px; }
+.sh-rail-project > button, .sh-rail-fact { padding: var(--s1) var(--s2); }
+
+/* atlas block: was 1,556 px tall before the essay — head tighter, quadrants
+   two-up on desktop, map a fixed 460 px */
+.sh-atlas { padding: var(--s3) var(--sh-page); }
+.sh-atlas-head h2 { font-size: clamp(22px, 2.6vw, 30px); margin-bottom: var(--s1); }
+.sh-atlas-head p { margin-bottom: var(--s1); font-size: 15px; }
+.sh-pressure .sh-map-canvas { height: clamp(320px, 50vh, 460px); }
+.sh-pressure-controls { gap: 6px; margin-bottom: var(--s1); }
+.sh-pressure-controls button { min-height: 36px; font-size: 12px; padding: 0 10px; }
+.sh-quadrants { margin-top: var(--s2); gap: var(--s2); }
+.sh-quadrants p { font-size: 14px; line-height: 1.45; }
+.sh-quadrant-label { font-size: 15px; }
+
+/* notes + footer */
+.sh-notes-wrap { padding-top: var(--s3); padding-bottom: var(--s2); }
+.sh-notes li { font-size: 13.5px; line-height: 1.45; }
+.sh-footer { padding: var(--s3) var(--sh-page); font-size: 13.5px; }
+.sh-support-logos img { height: 44px; }
+
+/* the Bible + research pages share the register */
+.sh-quickref { padding: var(--s2); margin-bottom: var(--s3); }
+.sh-quickref dd { font-size: 19px; }
+.sh-prose h2 { font-size: clamp(22px, 2.6vw, 30px); margin: var(--s3) 0 var(--s2); }
+.sh-prose > p, .sh-prose li p { margin-bottom: var(--s2); }
+.sh-gazetteer section { margin-bottom: var(--s3); }
+.sh-gazetteer ul { gap: var(--s2); }
+.sh-gazetteer li p { font-size: 13.5px; }
+.sh-biblio li { margin-bottom: var(--s1); }
+.sh-biblio-title { font-size: 15px; }
+.sh-consensus li, .sh-conflicts li, .sh-findings li { margin-bottom: var(--s2); }
+.sh-contents-strip a.is-atlas::before { content: "◉"; background: var(--sh-seal); color: #fff; }
+
+/* ================================================================
+   bkk register — DENSITY PASS (2026-08-18)
+   Measured before: /heritage was 20,125 px tall; lede 1,496 px with a
+   230 px h1; the monument list rendered 200 rows into the page. A
+   register is a tool for finding one thing among 571 — it needs a
+   search box, a district filter and a list that scrolls in its own
+   box, not a column the reader falls down.
+   ================================================================ */
+.register-masthead { padding: 14px var(--page-unit); }
+.register-masthead .register-wordmark { min-height: 40px; }
+.register-lede { padding-top: 32px; }
+.register-lede h1 { font-size: clamp(32px, 4.4vw, 56px); line-height: 1.02; }
+.register-lede p { font-size: 15px; line-height: 1.55; }
+.register-body { margin-top: 28px; padding-top: 24px; gap: 24px; }
+
+.register-search { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 8px; margin-bottom: 10px; }
+.register-search input, .register-search select {
+  min-height: 40px; padding: 0 12px;
+  border: 1px solid var(--ink); background: var(--paper, #f4f2ec); color: var(--ink);
+  font: 600 13px/1 var(--font-display); letter-spacing: 0.01em; border-radius: 0;
+}
+.register-search input::placeholder { color: var(--muted, #6b6a60); font-weight: 500; }
+.register-search select { max-width: 200px; cursor: pointer; }
+.register-search input:focus-visible, .register-search select:focus-visible { outline: 2px solid var(--seal, #8c2f23); outline-offset: 1px; }
+
+.register-filters { gap: 6px; }
+.register-filters button { min-height: 36px; font-size: 12px; padding: 0 10px; }
+.register-showing { display: flex; align-items: center; gap: 10px; font-size: 12.5px; margin: 8px 0 6px; }
+.register-clear { background: none; border: 0; padding: 0; min-height: 28px; font: 700 11px/1 var(--font-display); letter-spacing: 0.08em; text-transform: uppercase; color: var(--seal, #8c2f23); cursor: pointer; }
+
+/* the list scrolls in its own box; the page does not grow with it */
+.register-list { max-height: min(62vh, 640px); overflow-y: auto; overscroll-behavior: contain; margin-top: 8px; padding-right: 2px; }
+.register-list button { min-height: 40px; padding: 7px 2px; }
+.register-list-name { font-size: 14px; }
+.register-list-meta { font-size: 11.5px; }
+
+@media (min-width: 900px) {
+  .register-body { grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); }
+  .register-index { position: sticky; top: 16px; align-self: start; }
+}
+
+/* quarters + walks indexes on the same page */
+.register-quarters, .register-walks-index { padding-top: 24px; }
+.register-quarters h2, .register-walks-index h2 { font-size: clamp(22px, 2.6vw, 30px); margin-bottom: 14px; }
+
+/* catalogue figures fold at a readable height; the reader opens the rest */
+.sh-fold { position: relative; }
+.sh-fold:not(.is-open) .sh-fold-body { max-height: 420px; overflow: hidden; }
+.sh-fold-fade {
+  position: absolute; left: 0; right: 0; bottom: 40px; height: 90px; pointer-events: none;
+  background: linear-gradient(to bottom, transparent, var(--sh-paper)); /* legibility fade only — §11.6 exception */
+}
+.sh-fold-toggle {
+  display: block; width: 100%; min-height: 40px; margin-top: 2px;
+  background: var(--sh-paper); border: 1px solid var(--sh-ink); border-radius: 0;
+  font: 700 12px/1 var(--font-display); letter-spacing: .08em; text-transform: uppercase;
+  color: var(--sh-ink); cursor: pointer;
+}
+.sh-fold-toggle:hover { background: var(--sh-mark, #ffe94a); }
+
+/* lede: title left, companion + dedication right — the empty half of a
+   1280 px screen was doing nothing */
+@media (min-width: 900px) {
+  .sh-lede-split { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: var(--s4); align-items: start; }
+  .sh-lede-aside { padding-top: 34px; }
+  .sh-lede-aside .sh-companion { margin-top: 0; }
+}
+
+/* the lede figure was 677 px; the quarters + walks indexes stacked to
+   1,491 px of single-column list before the register. Two-up on desktop,
+   hero capped: the register lands on screen two, not screen four. */
+.register-figure img { max-height: 46dvh; }
+.register-intro p { font-size: 15px; line-height: 1.55; }
+@media (min-width: 900px) {
+  .register-indexes { display: grid; grid-template-columns: 1fr 1fr; gap: 0 40px; align-items: start; }
+  .quarters-index a, .walks-index a { min-height: 40px; padding: 8px 0; }
+  .quarters-name, .walks-name { font-size: 15px; }
+}
+.register-indexes { padding-top: 24px; }
+.register-indexes > section { width: auto; margin: 0; padding-top: 0; }
+/* lede: h1 left, intro right on desktop — the empty right half of the
+   screen was doing nothing and pushed the hero below the fold */
+@media (min-width: 960px) {
+  .register-lede:has(> .register-figure) {
+    display: grid; grid-template-columns: minmax(0, 6fr) minmax(0, 6fr);
+    gap: 8px 48px; align-items: start;
+  }
+  .register-lede:has(> .register-figure) > .register-eyebrow { grid-column: 1 / -1; }
+  .register-lede:has(> .register-figure) > h1 { grid-column: 1; }
+  .register-lede:has(> .register-figure) > .register-intro { grid-column: 2; padding-top: 12px; }
+  .register-lede:has(> .register-figure) > .register-figure { grid-column: 1 / -1; }
+  .register-lede .register-intro p { max-width: 52ch; }
+}
+/* compact on desktop, still ≥44 px to the thumb on touch (§11.8) — the
+   visual box stays tight; the hit area grows via padding, not height */
+@media (hover: none), (pointer: coarse) {
+  .sh-contents-strip a { min-height: 44px; }
+  .sh-pressure-controls button, .register-filters button, .sh-fold-toggle,
+  .register-search input, .register-search select, .sh-abstract-toggle { min-height: 44px; }
+  .register-list button { min-height: 44px; }
+}

@@ -77,8 +77,10 @@ export default function HeritageRegister() {
           ) : null}
         </article>
 
-        <QuartersIndex areas={AREAS} />
-        <WalksIndex walks={WALKS} />
+        <div className="register-indexes register-lede">
+          <QuartersIndex areas={AREAS} />
+          <WalksIndex walks={WALKS} />
+        </div>
 
         <section id="register" aria-label="The register, mapped">
           <RegisterMappedHeading />

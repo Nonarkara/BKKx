@@ -6,6 +6,7 @@ import { ESSAY, ESSAY_META, FOOTNOTES, type Block } from "../data/shophouse-essa
 import { STUDIO } from "../data/shophouse-studio";
 import { SUPPORT } from "../data/shophouse-rail";
 import { Figure } from "./figures";
+import { FoldedFigure } from "./FoldedFigure";
 import { Rail } from "./Rail";
 import { withNotes } from "./footnotes";
 
@@ -55,7 +56,8 @@ export function EssayView() {
         </nav>
       </header>
 
-      <article className="sh-lede" id="essay">
+      <article className="sh-lede sh-lede-split" id="essay">
+        <div className="sh-lede-main">
         <p className="sh-eyebrow">
           {STUDIO.institution} · {STUDIO.sponsor}
         </p>
@@ -64,6 +66,8 @@ export function EssayView() {
         <p className="sh-byline">
           {ESSAY_META.byline} — {ESSAY_META.context}
         </p>
+        </div>
+        <div className="sh-lede-aside">
         <p className="sh-companion">
           <strong>This is the companion, not the chapter.</strong> The essay is published as a
           printed chapter in <em>Shophouse Metropolis</em> (Harvard University Graduate School of
@@ -85,9 +89,63 @@ export function EssayView() {
             {ESSAY_META.abstractTh}
           </p>
         )}
+        </div>
       </article>
 
-      <section className="sh-atlas" id="atlas">
+      <nav className="sh-contents-strip" aria-label="Contents">
+        <ol>
+          {headings.map((h) => (
+            <li key={h}>
+              <a href={`#${slugify(h)}`}>{h}</a>
+            </li>
+          ))}
+          <li>
+            <a href="#atlas" className="is-atlas">The pressure map</a>
+          </li>
+        </ol>
+        </nav>
+
+        <div className="sh-sections">
+        {sections.map((s) => (
+          <section className="sh-section" key={s.slug || "opening"} id={s.slug || undefined}>
+            <div className="sh-section-prose">
+              {s.heading && <h2>{s.heading}</h2>}
+              {s.blocks.map((block, i) => {
+                switch (block.kind) {
+                  case "p":
+                    return <p key={i}>{withNotes(block.text)}</p>;
+                  case "pull":
+                    return (
+                      <blockquote key={i} className="sh-pull">
+                        {withNotes(block.text)}
+                      </blockquote>
+                    );
+                  case "note":
+                    return (
+                      <p key={i} className="sh-note">
+                        {block.text}
+                      </p>
+                    );
+                  case "figure":
+                    return (
+                      <figure key={i} className="sh-figure" id={`figures-${block.id}`}>
+                        <FoldedFigure id={block.id}>
+                          <Figure id={block.id} />
+                        </FoldedFigure>
+                        <figcaption>{block.caption}</figcaption>
+                      </figure>
+                    );
+                  default:
+                    return null;
+                }
+              })}
+            </div>
+            <Rail section={s.slug} />
+          </section>
+        ))}
+        </div>
+
+        <section className="sh-atlas" id="atlas">
         <div className="sh-atlas-head">
           <p className="sh-eyebrow">The map this argument needed</p>
           <h2>Where they are, and what the ground beneath them is worth</h2>
@@ -152,54 +210,6 @@ export function EssayView() {
           <strong>The argument, measured drawings, studio evidence and {FOOTNOTES.length} notes</strong>
           <small>Open the long read ↓</small>
         </summary>
-        <nav className="sh-contents-strip" aria-label="Contents">
-        <ol>
-          {headings.map((h) => (
-            <li key={h}>
-              <a href={`#${slugify(h)}`}>{h}</a>
-            </li>
-          ))}
-        </ol>
-        </nav>
-
-        <div className="sh-sections">
-        {sections.map((s) => (
-          <section className="sh-section" key={s.slug || "opening"} id={s.slug || undefined}>
-            <div className="sh-section-prose">
-              {s.heading && <h2>{s.heading}</h2>}
-              {s.blocks.map((block, i) => {
-                switch (block.kind) {
-                  case "p":
-                    return <p key={i}>{withNotes(block.text)}</p>;
-                  case "pull":
-                    return (
-                      <blockquote key={i} className="sh-pull">
-                        {withNotes(block.text)}
-                      </blockquote>
-                    );
-                  case "note":
-                    return (
-                      <p key={i} className="sh-note">
-                        {block.text}
-                      </p>
-                    );
-                  case "figure":
-                    return (
-                      <figure key={i} className="sh-figure" id={`figures-${block.id}`}>
-                        <Figure id={block.id} />
-                        <figcaption>{block.caption}</figcaption>
-                      </figure>
-                    );
-                  default:
-                    return null;
-                }
-              })}
-            </div>
-            <Rail section={s.slug} />
-          </section>
-        ))}
-        </div>
-
         <section className="sh-sections sh-notes-wrap">
         <div className="sh-notes">
           <h2 id="notes">Notes</h2>

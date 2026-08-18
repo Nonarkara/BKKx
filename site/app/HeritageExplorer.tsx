@@ -117,6 +117,8 @@ export function HeritageExplorer() {
   const [register, setRegister] = useState<Register | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [filter, setFilter] = useState<Filter>("all");
+  const [query, setQuery] = useState("");
+  const [district, setDistrict] = useState<string>("");
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
   const [styleReady, setStyleReady] = useState(false);
@@ -145,7 +147,21 @@ export function HeritageExplorer() {
     [register],
   );
 
-  const visible = useMemo(() => located.filter((s) => matches(s, filter)), [located, filter]);
+  const districts = useMemo(() => {
+    const m = new Map<string, number>();
+    for (const s of located) m.set(s.district, (m.get(s.district) ?? 0) + 1);
+    return [...m.entries()].sort((a, b) => b[1] - a[1]);
+  }, [located]);
+
+  const visible = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    return located.filter((s) => {
+      if (!matches(s, filter)) return false;
+      if (district && s.district !== district) return false;
+      if (q && !(`${s.name} ${s.district} ${s.subDistrict} ${s.road}`.toLowerCase().includes(q))) return false;
+      return true;
+    });
+  }, [located, filter, query, district]);
 
   const selected = useMemo(
     () => (selectedId ? located.find((s) => s.id === selectedId) ?? null : null),
@@ -364,6 +380,28 @@ export function HeritageExplorer() {
 
       <div className="register-body">
         <div className="register-index">
+          <div className="register-search">
+            <input
+              type="search"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder="Search a monument, road or district…"
+              aria-label="Search monuments"
+              autoComplete="off"
+            />
+            <select
+              value={district}
+              onChange={(e) => setDistrict(e.target.value)}
+              aria-label="Filter by district"
+            >
+              <option value="">All districts</option>
+              {districts.map(([d, n]) => (
+                <option key={d} value={d}>
+                  {d} ({n})
+                </option>
+              ))}
+            </select>
+          </div>
           <div className="register-filters" role="group" aria-label="Filter monuments">
             {FILTERS.map((f) => (
               <button
@@ -380,12 +418,16 @@ export function HeritageExplorer() {
           </div>
 
           <p className="register-showing">
-            Showing <b>{visible.length}</b>
-            {visible.length > 200 ? " — first 200 listed; the map holds them all" : null}
+            Showing <b>{visible.length}</b> of {located.length}
+            {query || district ? (
+              <button type="button" className="register-clear" onClick={() => { setQuery(""); setDistrict(""); }}>
+                clear
+              </button>
+            ) : null}
           </p>
 
           <ol className="register-list">
-            {visible.slice(0, 200).map((site) => (
+            {visible.map((site) => (
               <li key={site.id} className={selectedId === site.id ? "is-selected" : undefined}>
                 <button type="button" onClick={() => focus(site)}>
                   <span
