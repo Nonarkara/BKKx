@@ -29,22 +29,20 @@ export async function recordPageview(
     referrer: string | null;
     country: string | null;
     language: string | null;
-    userAgent: string | null;
   },
 ) {
   await initialize(db);
   await db
     .prepare(
       `INSERT INTO pageviews
-        (path, referrer, country, language, user_agent, created_at)
-       VALUES (?, ?, ?, ?, ?, ?)`,
+        (path, referrer, country, language, created_at)
+       VALUES (?, ?, ?, ?, ?)`,
     )
     .bind(
       input.path.slice(0, 512),
       input.referrer?.slice(0, 512) ?? null,
       input.country?.slice(0, 8) ?? null,
       input.language?.slice(0, 64) ?? null,
-      input.userAgent?.slice(0, 512) ?? null,
       Date.now(),
     )
     .run();

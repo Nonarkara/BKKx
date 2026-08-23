@@ -41,7 +41,6 @@ const COLOUR_TOWN: Record<Town["protection"], string> = {
   UNESCO: "#e5007d",
   national: "#111014",
   regional: "#5f5b66",
-  precinct: "#8c2f23",
   none: "#a4a69b",
 };
 

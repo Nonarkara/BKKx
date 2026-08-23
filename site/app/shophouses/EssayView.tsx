@@ -159,6 +159,11 @@ export function EssayView() {
           <p>
             The four answers are the four colours. One of them is the whole essay.
           </p>
+          <p className="sh-fig-note">
+            The map has an address of its own for citation and email:{" "}
+            <Link href="/shophouses/atlas">/shophouses/atlas</Link> — with the
+            full per-district table the embed leaves out.
+          </p>
         </div>
         <PressureMap />
         <ol className="sh-quadrants">

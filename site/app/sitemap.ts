@@ -20,6 +20,25 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "monthly" as const,
       priority: 0.8,
     },
+    // The Editorial register and the research surfaces were never in the
+    // sitemap — only the home page, worlds, areas, walks and atlas were.
+    ...[
+      "/heritage",
+      "/rowhouses",
+      "/about",
+      "/case-for-bangkok",
+      "/datasets",
+      "/shophouses",
+      "/shophouses/atlas",
+      "/shophouses/bible",
+      "/shophouses/global",
+      "/shophouses/research",
+    ].map((path) => ({
+      url: `${siteUrl}${path}`,
+      lastModified,
+      changeFrequency: "weekly" as const,
+      priority: 0.9,
+    })),
     ...AREAS.map((area) => ({
       url: `${siteUrl}/areas/${area.slug}`,
       lastModified,

@@ -1149,6 +1149,29 @@ footer small { grid-column: 1 / -1; margin-top: 60px; padding-top: 24px; border-
 .atlas-embed-more > div a:last-child { border-bottom: 0; }
 .atlas-embed-more > div button.aerosol-active { background: #6d426d; color: #fff; }
 
+/* Cite this view — the camera position as a copyable URL. Sits in the
+   same floating stack as the map key; signal colour only on the copied
+   confirmation, per the accent rule (signals and selected state). */
+.atlas-viewlink {
+  position: absolute;
+  left: 10px;
+  bottom: 44px; /* clear of the maplibre scale bar in the same corner */
+  z-index: 24;
+  padding: 6px 12px;
+  border: 1px solid var(--line);
+  background: rgba(10, 12, 9, 0.82);
+  color: var(--paper);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  min-height: 32px;
+}
+.atlas-viewlink:hover:not(:disabled) { border-color: var(--paper); }
+.atlas-viewlink:focus-visible { outline: 2px solid var(--signal); outline-offset: 2px; }
+.atlas-viewlink:disabled { opacity: 0.5; cursor: default; }
+.atlas-viewlink.is-copied { color: var(--signal); border-color: var(--signal); }
+
 .atlas-map-key {
   position: absolute;
   right: 10px;
@@ -5676,6 +5699,37 @@ body:has(.sh-figexport) { background: #fff !important; }
 .sh-quadrant-label small { font-family: var(--font-mono); font-size: 11px; font-weight: 400; color: var(--sh-quiet); margin-left: 6px; }
 .sh-quadrant-what { color: var(--sh-seal); font-family: var(--font-display); font-size: 13px; font-weight: 600; }
 
+/* ---- The pressure atlas at its own address (/shophouses/atlas) ----
+   Same register as the essay's embedded section, but the map leads and
+   the apparatus (district table, method, caveats) follows in the prose
+   column. The table is the page's one new artifact: mono numerals, the
+   pink "reconsider" column carrying the essay's signal colour, and a
+   scroll container so the page never scrolls sideways. */
+.sh-atlas.is-standalone { border-bottom: none; padding-top: var(--sh-base); }
+.sh-district-scroll { overflow-x: auto; margin: var(--sh-base) 0; border: 1px solid var(--sh-hairline); }
+.sh-district-table { border-collapse: collapse; width: 100%; min-width: 760px; font-size: 14px; }
+.sh-district-table th, .sh-district-table td { padding: 8px 12px; text-align: left; border-bottom: 1px solid var(--sh-hairline); }
+.sh-district-table thead th { font-family: var(--font-display); font-size: 12px; letter-spacing: .04em; text-transform: uppercase; color: var(--sh-quiet); border-bottom: 2px solid var(--sh-ink); }
+.sh-district-table tbody th { font-weight: 600; }
+.sh-district-table tbody th small { display: block; font-weight: 400; color: var(--sh-quiet); font-size: 12px; }
+.sh-district-table .is-num { text-align: right; font-family: var(--font-mono); font-size: 13px; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.sh-district-table .is-tell { color: #e5007d; font-weight: 700; }
+.sh-district-table tfoot th, .sh-district-table tfoot td { border-top: 2px solid var(--sh-ink); border-bottom: none; font-weight: 700; }
+.sh-caveats { margin: 0; padding-left: 1.2em; }
+.sh-caveats li { margin-bottom: 10px; }
+
+/* ---- The manuscript's forwarding address (/shophouses/manuscript) ----
+   A single card of a page: the lede register carries the explanation, and
+   the list below it is the whole offer — destination first, one quiet line
+   of what it is. No map, no figures; this page exists to hand you onward. */
+.sh-forwarding { padding-bottom: calc(var(--sh-page) * 2); }
+.sh-forwarding-list { list-style: none; margin: calc(var(--sh-base) * 1.5) 0 0; padding: 0; max-width: var(--sh-measure); }
+.sh-forwarding-list li { display: grid; grid-template-columns: minmax(150px, 220px) 1fr; gap: 6px 18px; padding: 12px 0; border-top: 1px solid var(--sh-hairline); align-items: baseline; }
+.sh-forwarding-list li:last-child { border-bottom: 1px solid var(--sh-hairline); }
+.sh-forwarding-list a { font-family: var(--font-display); font-weight: 700; letter-spacing: -.01em; text-decoration-color: #e5007d; text-decoration-thickness: 2px; }
+.sh-forwarding-list span { color: var(--sh-quiet); font-size: 14px; line-height: 1.5; }
+@media (max-width: 620px) { .sh-forwarding-list li { grid-template-columns: 1fr; } }
+
 /* The public page makes its argument in ten minutes. The chapter-length
    apparatus remains in the document, searchable and printable, but opens only
    when a reader asks for it. */
@@ -6256,4 +6310,143 @@ body:has(.sh-figexport) { background: #fff !important; }
   .sh-pressure-controls button, .register-filters button, .sh-fold-toggle,
   .register-search input, .register-search select, .sh-abstract-toggle { min-height: 44px; }
   .register-list button { min-height: 44px; }
+}
+
+/* =======================================================================
+   /datasets — the evidence shelf (Editorial register)
+   One ledger of every public dataset. Ink and hairlines only: the oxide
+   seal keeps its single meaning (gazetted) and appears nowhere here.
+   Checksums, byte counts and feature counts are mono; the provenance
+   rows are a definition list so a screen reader gets label → value in
+   order. No cards, no shadows — a shelf, not a shop.
+   ======================================================================= */
+.datasets-lede {
+  max-width: 880px;
+  margin: 0 auto;
+  padding: 72px 28px 40px;
+}
+.datasets-lede h1 {
+  font-family: var(--font-display);
+  font-size: clamp(40px, 7vw, 64px);
+  line-height: 1.02;
+  letter-spacing: -0.03em;
+  margin: 10px 0 18px;
+}
+.datasets-standfirst {
+  font-size: 19px;
+  line-height: 1.6;
+  max-width: 40em;
+  margin: 0 0 26px;
+}
+.datasets-tally {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0;
+  margin: 0 0 20px;
+  border-top: 2px solid var(--ink);
+  border-bottom: 1px solid var(--rule);
+}
+.datasets-tally div {
+  flex: 1 1 120px;
+  padding: 12px 16px 14px 0;
+}
+.datasets-tally div + div { border-left: 1px solid var(--rule); padding-left: 16px; }
+.datasets-tally dt {
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--quiet);
+}
+.datasets-tally dd {
+  margin: 2px 0 0;
+  font-family: var(--font-mono);
+  font-size: 22px;
+  font-variant-numeric: tabular-nums;
+}
+.datasets-note { font-size: 14px; line-height: 1.6; color: var(--quiet); max-width: 44em; }
+
+.datasets-shelf {
+  max-width: 880px;
+  margin: 0 auto;
+  padding: 0 28px 40px;
+}
+.datasets-entry {
+  border-top: 2px solid var(--ink);
+  padding: 20px 0 30px;
+}
+.datasets-entry header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px 20px;
+}
+.datasets-entry h2 {
+  font-family: var(--font-display);
+  font-size: 24px;
+  letter-spacing: -0.02em;
+  margin: 0;
+}
+.datasets-entry h2 a { text-decoration-thickness: 2px; text-underline-offset: 3px; }
+.datasets-measure {
+  display: flex;
+  gap: 14px;
+  align-items: baseline;
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  color: var(--quiet);
+  font-variant-numeric: tabular-nums;
+}
+.datasets-measure code {
+  background: var(--paper-raised);
+  border: 1px solid var(--rule);
+  padding: 1px 6px;
+  letter-spacing: 0.03em;
+}
+.datasets-what { max-width: 46em; font-size: 15.5px; line-height: 1.6; margin: 10px 0 14px; }
+.datasets-provenance { margin: 0; }
+.datasets-provenance > div {
+  display: grid;
+  grid-template-columns: 130px 1fr;
+  gap: 14px;
+  padding: 7px 0;
+  border-top: 1px solid var(--rule);
+  font-size: 14px;
+  line-height: 1.55;
+}
+.datasets-provenance dt {
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--quiet);
+  padding-top: 2px;
+}
+.datasets-provenance dd { margin: 0; max-width: 52em; }
+.datasets-provenance code { font-size: 12.5px; }
+.datasets-usedby { display: flex; flex-wrap: wrap; gap: 6px 10px; }
+.datasets-usedby code {
+  background: var(--paper-raised);
+  border: 1px solid var(--rule);
+  padding: 1px 7px;
+}
+.datasets-citation {
+  display: block;
+  background: var(--paper-raised);
+  border: 1px solid var(--rule);
+  padding: 6px 10px;
+  font-size: 12.5px;
+  overflow-x: auto;
+  white-space: nowrap;
+}
+.datasets-foot {
+  max-width: 880px;
+  margin: 0 auto;
+  padding: 6px 28px 80px;
+  border-top: 2px solid var(--ink);
+}
+.datasets-foot p { max-width: 46em; font-size: 14px; line-height: 1.6; color: var(--quiet); padding-top: 14px; }
+@media (max-width: 560px) {
+  .datasets-provenance > div { grid-template-columns: 1fr; gap: 2px; }
+  .datasets-entry header { flex-direction: column; }
 }

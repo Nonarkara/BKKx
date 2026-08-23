@@ -12,7 +12,9 @@
   fallback; JetBrains Mono carries coordinates and block numbers. Never
   Inter/Roboto/Poppins/Montserrat/Open Sans/Lato.
 - Preserve keyboard access and reduced-motion behavior when adding interactions.
-- D1 stores aggregate pageviews only; never collect IP addresses or credentials.
+- D1 stores pageview events only — path, referrer, country, language,
+  timestamp. Never IP addresses, user-agent strings or credentials, and
+  nothing that identifies a person across requests.
 
 ## The new front door (2026-08-11)
 

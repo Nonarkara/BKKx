@@ -47,7 +47,7 @@ export type Town = {
   lat: number;
   lon: number;
   // UNESCO World Heritage Site | national register | regional | none
-  protection: "UNESCO" | "national" | "regional" | "precinct" | "none";
+  protection: "UNESCO" | "national" | "regional" | "none";
   // When the shophouse (or its local equivalent) was built at scale
   period: string;
   // What kind of place it is, in the type's own right
@@ -88,8 +88,13 @@ export type Town = {
     vitality: 1 | 2 | 3 | 4 | 5;
     restraint: 1 | 2 | 3 | 4 | 5;
     wisdom: 1 | 2 | 3 | 4 | 5;
-    // Verdict is the editor's read of the composite curve. "vulnerable"
-    // is reserved for high-scoring towns whose continuity is at risk.
+    // Verdict is the editor's read of the composite curve. Two rules keep
+    // it honest. "lost" tracks continuity: once the resident families are
+    // gone (continuity 1) no amount of standing fabric scores it back —
+    // every continuity-1 town below carries it, and no town above
+    // continuity 1 does. "vulnerable" is reserved for high-scoring towns
+    // whose continuity depends on something that could break: the metrics
+    // record today, the verdict records the trajectory (see Vigan).
     verdict: "ideal" | "thriving" | "stable" | "vulnerable" | "lost";
     editorial: string;
   };
@@ -104,14 +109,17 @@ export type Town = {
     whcId: number;
     inscribed: number;
     criteria: string; // e.g. "ii, iii, iv"
+    // For a serial listing (one WHC id covering more than one town) the
+    // WHC publishes one property total — areaHa/bufferHa are then the
+    // whole listing's figures, not this component's own. serialWith names
+    // the other component so the card can say so.
     areaHa: number;
     bufferHa?: number;
+    serialWith?: string;
     ouvSummary: string;
     whcUrl: string;
     mapUrl: string;
   };
-  // Wikimedia Commons photo (CC or public-domain). URL must be 200 with
-  // non-zero bytes; verified at build time.
   // Wikimedia Commons photo (CC or public-domain). URL must be 200 with
   // non-zero bytes; verified at build time.
   photo?: {
@@ -377,6 +385,7 @@ export const TOWNS: Town[] = [
       criteria: "ii, iii, iv",
       areaHa: 109.68,
       bufferHa: 376.27,
+      serialWith: "George Town",
       ouvSummary:
         "Melaka and George Town reflect a living multicultural heritage of trading ports founded by successive Malay, Chinese, Indian, Portuguese, Dutch and British communities, with a remarkable range of shophouses and townhouses showing different stages of development over nearly 500 years.",
       whcUrl: "https://whc.unesco.org/en/list/1223",
@@ -431,6 +440,7 @@ export const TOWNS: Town[] = [
       criteria: "ii, iii, iv",
       areaHa: 109.68,
       bufferHa: 376.27,
+      serialWith: "Melaka",
       ouvSummary:
         "The joint inscription with Melaka. George Town's shophouse stock is the largest contiguous five-foot-way ensemble in Southeast Asia; the criteria emphasise the multi-cultural trading-port heritage and the exceptional range of shophouse styles from Early Penang to Art Deco.",
       whcUrl: "https://whc.unesco.org/en/list/1223",
@@ -549,7 +559,7 @@ export const TOWNS: Town[] = [
     },
   },
 
-  // ---------- National register (5) ----------
+  // ---------- National register (6) ----------
   {
     id: "phuket-old-town",
     name: "Phuket Old Town",
@@ -1358,8 +1368,8 @@ export const GLOBAL_COUNTS = {
 };
 
 /* -------------------------------------------------------------- the index
-   Sorted ascending by composite score — best at the top, Singapore and
-   the worst-disneyfied at the bottom. The page renders this as the
+   Sorted descending by composite score — best at the top, the
+   worst-disneyfied at the bottom. The page renders this as the
    Shophouse Health Index. The BANGKOK_BASELINE_ID is highlighted in
    the UI; the comparison board uses any pair of these ids. */
 export const BANGKOK_BASELINE_ID = "bangkok-sukhumvit-71";

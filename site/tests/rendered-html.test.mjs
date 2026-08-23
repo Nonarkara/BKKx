@@ -783,7 +783,8 @@ test("serves the global shophouse research page with map, origins, and verdicts"
 
   // Lede
   assert.match(html, /The shophouse outside Bangkok/);
-  assert.match(html, /Four UNESCO World Heritage towns/);
+  // Subtitle counts are derived from the data now (8 UNESCO among 19)
+  assert.match(html, /UNESCO World Heritage towns among the(?:\s|<!-- -->)*\d+/);
   // Page map renders the schematic SVG
   assert.match(html, /sh-globalmap/);
   // Origin ports — all five
@@ -985,4 +986,198 @@ test("the key academic references list is rendered with all 8 canonical works", 
     assert.match(html, new RegExp(safe), `key reference missing: ${key}`);
   }
   assert.equal(Object.keys(KEY_REFERENCES).length, 8, "expected 8 key references");
+});
+
+test("the Health Index bottom-of-table sentence is derived, not asserted", async () => {
+  const { RANKED_TOWNS, TOWNS, SINGAPORE_ID, compositeScore } = await import(
+    "../app/data/shophouse-global.ts"
+  );
+  const response = await render("/shophouses/global");
+  const html = await response.text();
+
+  const sg = TOWNS.find((t) => t.id === SINGAPORE_ID);
+  const sgComposite = compositeScore(sg.score);
+  const below = RANKED_TOWNS.filter((t) => compositeScore(t.score) < sgComposite);
+
+  // The sentence must name every town actually ranked below Singapore …
+  for (const t of below) {
+    const short = t.name.replace(/\s*\(.*\)$/, "");
+    assert.match(
+      html,
+      new RegExp(`above only [^<]*${short}`),
+      `the Singapore sentence must name ${short}, which ranks below it`,
+    );
+  }
+  // … and may claim "the floor of the index" only when Singapore truly is it.
+  // An earlier revision asserted the floor while the table showed Shanghai lower.
+  if (below.length > 0) {
+    assert.doesNotMatch(html, /Composite [\d.]+ — the floor of the index/);
+  }
+});
+
+test("a serial UNESCO listing says its area is the whole listing's total", async () => {
+  const { TOWNS } = await import("../app/data/shophouse-global.ts");
+  const response = await render("/shophouses/global");
+  const html = await response.text();
+
+  // Towns sharing one WHC id are components of a serial listing (Melaka &
+  // George Town, WHC 1223). The WHC publishes one property total for the
+  // pair, so each component's card must say the figures are shared.
+  const byId = new Map();
+  for (const t of TOWNS) {
+    if (t.unesco) byId.set(t.unesco.whcId, (byId.get(t.unesco.whcId) ?? 0) + 1);
+  }
+  let serialComponents = 0;
+  for (const t of TOWNS) {
+    if (t.unesco && byId.get(t.unesco.whcId) > 1) {
+      serialComponents += 1;
+      assert.ok(
+        t.unesco.serialWith,
+        `${t.id} shares WHC ${t.unesco.whcId} but declares no serialWith`,
+      );
+    }
+  }
+  // Rendered strings appear in the DOM and again in the RSC flight payload,
+  // so count >= (the pill test above uses the same convention).
+  const labels = (html.match(/serial listing total, shared with/g) ?? []).length;
+  assert.ok(
+    labels >= serialComponents,
+    `expected at least ${serialComponents} serial-listing labels rendered, got ${labels}`,
+  );
+});
+
+test("every count in the global page prose is derived from the data", async () => {
+  const { TOWNS } = await import("../app/data/shophouse-global.ts");
+  const response = await render("/shophouses/global");
+  const html = await response.text();
+  // The hand-written counts of an earlier revision must not return
+  assert.doesNotMatch(html, /Fourteen towns/);
+  assert.doesNotMatch(html, /Four UNESCO World Heritage towns/);
+  assert.match(html, new RegExp(`${TOWNS.length}(?:<!-- -->)? towns, each with a photo`));
+});
+
+test("the score verdict follows its stated rules: lost ⇔ continuity 1", async () => {
+  const { TOWNS } = await import("../app/data/shophouse-global.ts");
+  for (const t of TOWNS) {
+    if (t.score.continuity === 1) {
+      assert.equal(t.score.verdict, "lost", `${t.id}: continuity 1 must read lost`);
+    }
+    if (t.score.verdict === "lost") {
+      assert.equal(t.score.continuity, 1, `${t.id}: lost requires continuity 1`);
+    }
+  }
+});
+
+test("the pressure atlas has an address of its own at /shophouses/atlas", async () => {
+  const { PRESSURE_TOTAL, PRESSURE_DISTRICTS, QUADRANTS } = await import(
+    "../app/data/shophouse-pressure.ts"
+  );
+  const response = await render("/shophouses/atlas");
+  assert.equal(response.status, 200);
+  const html = await response.text();
+
+  // The headline count and every quadrant, with their computed counts
+  assert.match(html, new RegExp(PRESSURE_TOTAL.toLocaleString("en-US")));
+  for (const q of QUADRANTS) {
+    assert.match(html, new RegExp(q.count.toLocaleString("en-US")), `quadrant count ${q.id}`);
+  }
+
+  // The full district table — the one thing the essay's embed leaves out —
+  // with every district named and the totals row summing to the whole set
+  for (const d of PRESSURE_DISTRICTS) {
+    assert.match(html, new RegExp(d.district), `district row ${d.district}`);
+  }
+  const sum = PRESSURE_DISTRICTS.reduce((n, d) => n + d.count, 0);
+  assert.equal(sum, PRESSURE_TOTAL, "district counts must sum to the total");
+
+  // Caveats are printed, not paraphrased away
+  assert.match(html, /Morphology is not proof/);
+  // Data downloads are offered from this domain
+  assert.match(html, /\/data\/shophouse-pressure\.geojson/);
+  assert.match(html, /\/data\/bkk-land-price\.geojson/);
+});
+
+test("the essay names the atlas's own address", async () => {
+  const response = await render("/shophouses");
+  const html = await response.text();
+  assert.match(html, /\/shophouses\/atlas/);
+});
+
+test("/shophouses/manuscript forwards instead of 404ing", async () => {
+  const response = await render("/shophouses/manuscript");
+  assert.equal(response.status, 200);
+  const html = await response.text();
+  assert.match(html, /The manuscript left this site/);
+  // It offers every surviving surface
+  for (const path of [
+    "/shophouses/print",
+    "/shophouses/atlas",
+    "/shophouses/bible",
+    "/shophouses/global",
+    "/shophouses/research",
+  ]) {
+    assert.match(html, new RegExp(path.replace(/\//g, "\\/")), `must offer ${path}`);
+  }
+  // And stays out of the index — it is a forwarding page, not content
+  assert.match(html, /noindex/);
+});
+
+test("/datasets renders the full catalogue with build-measured truth", async () => {
+  const { DATASETS } = await import("../app/data/datasets.ts");
+  const { default: manifest } = await import("../app/data/dataset-manifest.json", {
+    with: { type: "json" },
+  });
+  const response = await render("/datasets");
+  assert.equal(response.status, 200);
+  const html = await response.text();
+
+  // Every annotated dataset appears, with its download path and checksum
+  for (const d of DATASETS) {
+    assert.ok(html.includes(d.title), `catalogue entry missing: ${d.title}`);
+    assert.ok(html.includes(`href="${d.file}"`), `download link missing: ${d.file}`);
+    assert.ok(
+      html.includes(manifest[d.file].sha256.slice(0, 12)),
+      `checksum missing for ${d.file}`,
+    );
+  }
+  // The catalogue and the manifest cover exactly the same files
+  assert.deepEqual(
+    DATASETS.map((d) => d.file).sort(),
+    Object.keys(manifest).sort(),
+    "annotations and manifest must cover the same files",
+  );
+  // Machine-readable catalogue for harvesters
+  assert.match(html, /"@type":"DataCatalog"/);
+  // Citation lines render
+  assert.match(html, /Arkara, N\. \(2026\)\./);
+});
+
+test("the dataset manifest matches the files actually on disk", async () => {
+  const { createHash } = await import("node:crypto");
+  const { readFileSync } = await import("node:fs");
+  const { default: manifest } = await import("../app/data/dataset-manifest.json", {
+    with: { type: "json" },
+  });
+  // Spot-check three files end to end: a stale manifest is a lie with a
+  // checksum on it, which is worse than no manifest.
+  for (const file of [
+    "/heritage-register.json",
+    "/data/shophouse-pressure.geojson",
+    "/data/bkk-hero-monuments.geojson",
+  ]) {
+    const buf = readFileSync(new URL(`../public${file}`, import.meta.url));
+    assert.equal(buf.length, manifest[file].bytes, `${file}: bytes drifted — re-run data:manifest`);
+    assert.equal(
+      createHash("sha256").update(buf).digest("hex"),
+      manifest[file].sha256,
+      `${file}: checksum drifted — re-run data:manifest`,
+    );
+  }
+});
+
+test("the atlas offers a citable view link", async () => {
+  const response = await render("/atlas/historic-core");
+  assert.equal(response.status, 200);
+  const html = await response.text();
+  assert.match(html, /Cite this view/);
 });

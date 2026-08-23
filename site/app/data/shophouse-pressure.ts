@@ -191,3 +191,12 @@ export const QUADRANTS = [
 ] as const;
 
 export const PRESSURE_TOTAL = 2311;
+
+/** The caveats stated in this file's header, exported so the atlas page
+    can print them instead of paraphrasing them. Keep in step with the
+    header comment and with scripts/build-shophouse-pressure.py. */
+export const PRESSURE_CAVEATS = [
+  "Morphology is not proof. A narrow, deep footprint repeating along a street is the shophouse signature, but no field survey has confirmed that any individual building here is one, nor its age, condition or tenure.",
+  "Appraised value is the base for transfer tax and sits below market, so every land figure is a floor rather than an estimate.",
+  "The setback exposure assumes a road width, because per-plot road widths are not published — the assumption is stated in SPLITS and can be changed.",
+] as const;

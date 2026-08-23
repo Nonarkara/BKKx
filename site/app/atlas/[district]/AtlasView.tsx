@@ -600,6 +600,10 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
 
   // Command Copy State
   const [copied, setCopied] = useState(false);
+  // Citable-view state: every camera position is a URL (?at=lng,lat,zoom),
+  // so a researcher can put the exact view they mean into an email or a
+  // footnote. Mirrors the /tp copy pattern above.
+  const [viewLinkCopied, setViewLinkCopied] = useState(false);
 
   // Derived state to avoid synchronous state update in effect body
   const activeStopIdToUse = isTourPlaying ? (world.stops[tourIndex]?.id ?? activeStopId) : activeStopId;
@@ -743,6 +747,21 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
         setTimeout(() => setCopied(false), 2000);
       })
       .catch((err) => console.error("Could not copy command", err));
+  };
+
+  const copyViewLink = () => {
+    const map = mapRef.current;
+    if (!map) return;
+    const c = map.getCenter();
+    const at = `${c.lng.toFixed(5)},${c.lat.toFixed(5)},${map.getZoom().toFixed(2)}`;
+    const url = `${window.location.origin}/atlas/${world.id}?at=${at}`;
+    navigator.clipboard
+      .writeText(url)
+      .then(() => {
+        setViewLinkCopied(true);
+        setTimeout(() => setViewLinkCopied(false), 2000);
+      })
+      .catch((err) => console.error("Could not copy view link", err));
   };
 
   useEffect(() => {
@@ -1866,6 +1885,16 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
             </div>
           </details>
         )}
+
+        <button
+          type="button"
+          className={`atlas-viewlink${viewLinkCopied ? " is-copied" : ""}`}
+          onClick={copyViewLink}
+          disabled={!mapReady}
+          title="Copy a link that reopens this atlas at exactly the current view — same center, same zoom."
+        >
+          {viewLinkCopied ? "✓ View link copied" : "⧉ Cite this view"}
+        </button>
 
         {hasHistoricContext && showAerosol && (
           <div className="atlas-aerosol-note" role="status">

@@ -1,0 +1,128 @@
+{
+  "/data/bangkok-rowhouse-atlas.geojson": {
+    "bytes": 99871,
+    "sha256": "0ef6244d23a70cb6c61a03a70a92008c039b7529e488bb05a192bb38db7ecbcc",
+    "features": 64,
+    "kinds": [
+      "LineString",
+      "Point"
+    ]
+  },
+  "/data/bangkok-rowhouse-footprint-candidates.geojson": {
+    "bytes": 2561479,
+    "sha256": "5835b25cc271eeb4f7f06d9fd7d3c2811683ae482750410d485181cf432ad289",
+    "features": 2433,
+    "kinds": [
+      "Polygon"
+    ]
+  },
+  "/data/bkk-heritage-detail.geojson": {
+    "bytes": 3803043,
+    "sha256": "406311cbc48b55f47c6806bdc2f40d51ab3f61c381702e062dfd3ef0fe3e745a",
+    "features": 9275,
+    "kinds": [
+      "Polygon"
+    ]
+  },
+  "/data/bkk-hero-monuments.geojson": {
+    "bytes": 88971,
+    "sha256": "f24c666a766af2fe887299c8f1ece520963982fdd554303dae473a9a4145cd5e",
+    "features": 67,
+    "kinds": [
+      "Polygon"
+    ]
+  },
+  "/data/bkk-land-price.geojson": {
+    "bytes": 334703,
+    "sha256": "27d4eeb0646e3c0cc29bd7919189bbe50267a6f2d42755eb1e0f98894aefea73",
+    "features": 50,
+    "kinds": [
+      "Polygon"
+    ]
+  },
+  "/data/bkk-landmarks.geojson": {
+    "bytes": 42969,
+    "sha256": "564b696dddfa999a29b0211e9f7f34a1ad0fc61b668e0f6813aac494cde6f6e4",
+    "features": 73,
+    "kinds": [
+      "Polygon"
+    ]
+  },
+  "/data/shophouse-pressure.geojson": {
+    "bytes": 492534,
+    "sha256": "eb91c632ecbe530eb9cc20678d9ecc2255c5eb6d538253ade794e1cfe21b892c",
+    "features": 2311,
+    "kinds": [
+      "Point"
+    ]
+  },
+  "/data/sources/wat-arun-osm-way-snapshot.json": {
+    "bytes": 5643,
+    "sha256": "3bf7a5038ff553d7716fbe4b0c25381ed35cfa004091703135480c21f8e94ef7",
+    "features": 5,
+    "kinds": []
+  },
+  "/data/sukhumvit71-corridor.geojson": {
+    "bytes": 1542343,
+    "sha256": "51320f4a17ae1d8d1172a969f6fb9a8778f9824c6ef500ba968bfd1372c47846",
+    "features": 2280,
+    "kinds": [
+      "LineString",
+      "Polygon"
+    ]
+  },
+  "/heritage-register.json": {
+    "bytes": 1302990,
+    "sha256": "25fff1e3138a1f14b0dd763ccefc19cf0620e1763573f61db79d73fc712c66c1",
+    "features": 571,
+    "kinds": []
+  },
+  "/pois/national-archives.geojson": {
+    "bytes": 896,
+    "sha256": "f0c69502129e6c3ed147b270568c6652cda7e56414979b09e7ae9b6881c14105",
+    "features": 1,
+    "kinds": [
+      "Point"
+    ]
+  },
+  "/pois/national-libraries.geojson": {
+    "bytes": 2240,
+    "sha256": "69118dcf1bc9fb32b52d8c11e2ab9431baebf4fcf1ed5a12d9e6df3e4ebd5083",
+    "features": 3,
+    "kinds": [
+      "Point"
+    ]
+  },
+  "/pois/national-museums.geojson": {
+    "bytes": 5133,
+    "sha256": "6f57cbe1bc9134ec627c679ba8a2e0a14064887541a580443873ff8d208e48ab",
+    "features": 6,
+    "kinds": [
+      "Point"
+    ]
+  },
+  "/pois/oldtown.geojson": {
+    "bytes": 47142,
+    "sha256": "445bcdb2037ae09ab142b01a508a3c3810518ce6b4834e20512096ec53fdc421",
+    "features": 29,
+    "kinds": [
+      "Point"
+    ]
+  },
+  "/pois/royal-temples.geojson": {
+    "bytes": 62022,
+    "sha256": "cf0939b87e9c84d3b22cc225210f8548a57fdf6d5054317e2afa65c79cc4aaa7",
+    "features": 94,
+    "kinds": [
+      "Point"
+    ]
+  },
+  "/pois/temples.geojson": {
+    "bytes": 299562,
+    "sha256": "ca8f5aff28bcd7dd0ba9a5f7bc798cf4fb05a12fe661e3a6690c950afcf56a69",
+    "features": 460,
+    "kinds": [
+      "Point"
+    ]
+  }
+}

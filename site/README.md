@@ -19,8 +19,10 @@ The shared 3D language is intentional; the jobs are not interchangeable.
 | `/areas/[slug]` | heritage-quarter guide |
 | `/walks/[slug]` | routed cultural walk |
 | `/shophouses` | ten-minute argument, live pressure map and optional long research companion |
+| `/shophouses/atlas` | the pressure map at its own address, with the full district table |
 | `/shophouses/bible` | measured field reference and gazetteer |
 | `/shophouses/global` | comparative Asian shophouse research |
+| `/datasets` | the open-data catalogue — every served dataset, sourced, licensed, checksummed |
 
 ## Development and release gate
 

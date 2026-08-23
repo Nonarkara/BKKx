@@ -52,6 +52,24 @@ export default {
 
     headers.set("x-bkkx-edge", "bkk-heritage");
 
+    // Baseline hardening, set at the edge so it covers pages and data files
+    // alike. nosniff stops MIME-confusion on the GeoJSON downloads; the
+    // referrer policy keeps outbound clicks (UNESCO, Commons, DOIs) from
+    // carrying full URLs; the permissions policy declares the powerful APIs
+    // no BKKx surface uses. HSTS is left to the Cloudflare zone, and
+    // frame-ancestors is deliberately absent — the homepage iframes
+    // /atlas/* same-origin and nothing else is meant to embed or be embedded.
+    headers.set("x-content-type-options", "nosniff");
+    if (!headers.has("referrer-policy")) {
+      headers.set("referrer-policy", "strict-origin-when-cross-origin");
+    }
+    if (!headers.has("permissions-policy")) {
+      headers.set(
+        "permissions-policy",
+        "camera=(), microphone=(), geolocation=(), payment=()",
+      );
+    }
+
     return new Response(upstreamResponse.body, {
       status: upstreamResponse.status,
       statusText: upstreamResponse.statusText,

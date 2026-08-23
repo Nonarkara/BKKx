@@ -42,7 +42,6 @@ const worker = {
         referrer: typeof body.referrer === "string" ? body.referrer : null,
         country: cloudflareRequest.cf?.country ?? null,
         language: request.headers.get("accept-language"),
-        userAgent: request.headers.get("user-agent"),
       });
       return Response.json({ ok: true }, { status: 201 });
     }

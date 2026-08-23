@@ -7,6 +7,7 @@ import {
   ORIGIN_PORTS,
   MIGRATION_ROUTES,
   GLOBAL_COUNTS,
+  RANKED_TOWNS,
   compositeScore,
   BANGKOK_BASELINE_ID,
   SINGAPORE_ID,
@@ -22,7 +23,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Global Research — the shophouse outside Bangkok",
     description:
-      "Where the type went, who carried it, and what the towns are like 200 years later. 14 places, 5 Chinese origin ports, 9 dated migration vectors.",
+      `Where the type went, who carried it, and what the towns are like 200 years later. ${TOWNS.length} places, ${ORIGIN_PORTS.length} Chinese origin ports, ${MIGRATION_ROUTES.length} dated migration vectors.`,
     url: "/shophouses/global",
   },
 };
@@ -55,6 +56,19 @@ const VERDICT_BLURB: Record<Town["impact"]["verdict"], string> = {
 };
 
 export default function GlobalPage() {
+  // The bottom of the index, computed — never hand-written. An earlier
+  // revision asserted Singapore as "the floor of the index" while the table
+  // directly beneath it showed Shanghai lower; deriving the sentence from
+  // RANKED_TOWNS makes that class of contradiction impossible.
+  const shortName = (t: Town) => t.name.replace(/\s*\(.*\)$/, "");
+  const singapore = TOWNS.find((t) => t.id === SINGAPORE_ID)!;
+  const sgComposite = compositeScore(singapore.score);
+  const sgTies = RANKED_TOWNS.filter(
+    (t) => t.id !== SINGAPORE_ID && compositeScore(t.score) === sgComposite,
+  );
+  const sgBelow = RANKED_TOWNS.filter(
+    (t) => compositeScore(t.score) < sgComposite,
+  );
   return (
     <>
       <script
@@ -102,9 +116,10 @@ export default function GlobalPage() {
         <p className="sh-eyebrow">Global research</p>
         <h1>The shophouse outside Bangkok</h1>
         <p className="sh-subtitle">
-          Four UNESCO World Heritage towns, ten more in the comparative
-          literature, five Chinese origin ports and the dated vectors between
-          them — with a verdict on every one.
+          {GLOBAL_COUNTS.unesco} UNESCO World Heritage towns among the{" "}
+          {TOWNS.length} profiled, {ORIGIN_PORTS.length} Chinese origin ports
+          and the {MIGRATION_ROUTES.length} dated vectors between them — with
+          a verdict on every one.
         </p>
         <p className="sh-byline">
           The Bangkok shophouse is a regional instance of a Maritime Silk Road
@@ -185,10 +200,16 @@ export default function GlobalPage() {
             pre-pinned against Singapore.
           </p>
           <p>
-            <strong>Where Singapore is.</strong> Composite{" "}
-            {compositeScore(TOWNS.find((t) => t.id === SINGAPORE_ID)!.score).toFixed(1)} — the floor of the index on purpose. The HDB-style
-            shophouse revival with a lifestyle economy on top of it is what the
-            Bangkok Sukhumvit 71 corridor should not end up as.
+            <strong>Where Singapore is.</strong> Composite {sgComposite.toFixed(1)}
+            {sgTies.length > 0 &&
+              ` — tied with ${sgTies.map(shortName).join(" and ")}`}
+            {sgBelow.length > 0
+              ? `, above only ${sgBelow.map(shortName).join(" and ")}`
+              : " — the floor of the index"}
+            . What makes Singapore the cautionary case is not its rank but how
+            it was reached — deliberately. The HDB-style shophouse revival with
+            a lifestyle economy on top of it is what the Bangkok Sukhumvit 71
+            corridor should not end up as.
           </p>
           <RankingBoard />
 
@@ -307,8 +328,8 @@ export default function GlobalPage() {
           {/* ------------------ the towns ------------------ */}
           <h2 id="places">The places</h2>
           <p>
-            Fourteen towns, each with a photo, a description of the local
-            form, and a verdict on what the type is like there now. The
+            {TOWNS.length} towns, each with a photo, a description of the
+            local form, and a verdict on what the type is like there now. The
             order is by protection tier (UNESCO first), then alphabetical.
           </p>
           <div className="sh-global-towns">
@@ -358,6 +379,9 @@ export default function GlobalPage() {
                         <span className="sh-unesco-criteria">Criteria {t.unesco.criteria}</span>
                         <span className="sh-unesco-area">
                           {t.unesco.areaHa} ha{t.unesco.bufferHa ? ` + ${t.unesco.bufferHa} ha buffer` : ""}
+                          {t.unesco.serialWith
+                            ? ` — serial listing total, shared with ${t.unesco.serialWith}`
+                            : ""}
                         </span>
                       </header>
                       <blockquote>
@@ -444,10 +468,10 @@ export default function GlobalPage() {
             A travel guide. Every photo is Wikimedia Commons and every
             social-impact claim is peer-reviewed or grey-literature sourced;
             what is not sourced is marked as research-stage, which is the
-            honest description of the four places that have not been studied
-            at the depth the others have. The list is also not complete:
-            the comparative literature also includes Phnom Penh, Saigon,
-            Rangoon, Semarang and the smaller Peranakan towns of Java and
+            honest description of the {GLOBAL_COUNTS.verdicts["research-stage"] ?? 0} places
+            that have not been studied at the depth the others have. The list
+            is also not complete: the comparative literature also includes
+            Saigon, Rangoon, Semarang and the smaller Peranakan towns of Java and
             Sumatra, all of which would extend the table but are not on it
             because the primary records for each are harder to verify in one
             sitting. They are the next page.
