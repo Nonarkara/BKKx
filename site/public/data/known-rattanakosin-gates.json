@@ -1,0 +1,65 @@
+{
+  "Pratu Phi": {
+    "lon": 100.4965,
+    "lat": 13.761,
+    "source": "1926 Ratcha-anusorn plan + Wikipedia 'Pratu Phi'",
+    "source_url": "https://en.wikipedia.org/wiki/Pratu_Phi",
+    "notes": "Ghost Gate, north wall, west of Sanam Luang. Now commemorated by the Wu Yentafo restaurant across the street."
+  },
+  "Pratu Suan Mali": {
+    "lon": 100.5049,
+    "lat": 13.756,
+    "source": "1926 Ratcha-anusorn plan + BMA city map",
+    "source_url": "https://www.bangkok.go.th/",
+    "notes": "Jasmine Garden Gate, east wall, near Suan Amphorn."
+  },
+  "Pratu Tha Phra": {
+    "lon": 100.4905,
+    "lat": 13.751,
+    "source": "1926 Ratcha-anusorn plan + Wikipedia 'Tha Chang, Bangkok'",
+    "source_url": "https://en.wikipedia.org/wiki/Tha_Chang,_Bangkok",
+    "notes": "Monk's Landing Gate, west wall, near Tha Tien pier."
+  },
+  "Pratu Chakkrawat": {
+    "lon": 100.493,
+    "lat": 13.754,
+    "source": "1926 Ratcha-anusorn plan + Wikipedia 'Odeon Circle'",
+    "source_url": "https://en.wikipedia.org/wiki/Odeon_Circle",
+    "notes": "Emperor's Gate, west wall, near Tha Chang."
+  },
+  "Pratu Thep Ratcha": {
+    "lon": 100.499,
+    "lat": 13.761,
+    "source": "1926 Ratcha-anusorn plan",
+    "source_url": "https://www.bangkok.go.th/",
+    "notes": "north wall, near Wat Bowonniwet (named for the Thep Ratcha quarter)."
+  },
+  "Pratu Ratcha Dindam": {
+    "lon": 100.498,
+    "lat": 13.752,
+    "source": "1926 Ratcha-anusorn plan + Wikipedia 'Ratchadamnoen Avenue'",
+    "source_url": "https://en.wikipedia.org/wiki/Ratchadamnoen_Avenue",
+    "notes": "south wall, on Ratchadamnoen Klang. The street name comes from this gate."
+  },
+  "Pratu Suan Phu": {
+    "lon": 100.506,
+    "lat": 13.753,
+    "source": "1926 Ratcha-anusorn plan + BMA city map",
+    "source_url": "https://www.bangkok.go.th/",
+    "notes": "Banana Garden Gate, east wall, near Pom Mahakan."
+  },
+  "Pratu Damrong Sawan": {
+    "lon": 100.5055,
+    "lat": 13.7555,
+    "source": "1926 Ratcha-anusorn plan + BMA city map",
+    "source_url": "https://www.bangkok.go.th/",
+    "notes": "east wall, near Suan Amphorn."
+  },
+  "Pratu Phutthai Sawan": {
+    "lon": 100.496,
+    "lat": 13.761,
+    "source": "1926 Ratcha-anusorn plan",
+    "source_url": "https://www.bangkok.go.th/",
+    "notes": "north wall, near the corner of Phra Sumen Fort."
+  }
+}
