@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { PlaceMasthead } from "../PlaceMasthead";
 import { DATASETS, citationFor } from "../data/datasets";
+import { CopyCitation } from "./CopyCitation";
 import MANIFEST from "../data/dataset-manifest.json";
 
 // The evidence shelf. Every public dataset this project serves, in one
@@ -40,6 +41,10 @@ export const metadata: Metadata = {
     url: "https://bkk.nonarkara.org/datasets",
   },
 };
+
+function anchorFor(file: string): string {
+  return file.replace(/[/.]/g, "-").replace(/^-/, "");
+}
 
 function formatBytes(n: number): string {
   if (n >= 1_000_000) return `${(n / 1_000_000).toFixed(1)} MB`;
@@ -109,13 +114,20 @@ export default function DatasetsPage() {
             geometry is ODbL and stays ODbL; the licence line on each entry is
             the one that binds.
           </p>
+          <nav className="datasets-index" aria-label="Jump to a dataset">
+            {DATASETS.map((d) => (
+              <a key={d.file} href={`#${anchorFor(d.file)}`}>
+                {d.title}
+              </a>
+            ))}
+          </nav>
         </article>
 
         <section className="datasets-shelf" aria-label="Dataset catalogue">
           {DATASETS.map((d) => {
             const m = manifest[d.file];
             return (
-              <article key={d.file} className="datasets-entry" id={d.file.replace(/[/.]/g, "-").replace(/^-/, "")}>
+              <article key={d.file} className="datasets-entry" id={anchorFor(d.file)}>
                 <header>
                   <h2>
                     <a href={d.file} download>
@@ -175,8 +187,9 @@ export default function DatasetsPage() {
                   </div>
                   <div>
                     <dt>Cite as</dt>
-                    <dd>
+                    <dd className="datasets-cite-row">
                       <code className="datasets-citation">{citationFor(d)}</code>
+                      <CopyCitation text={citationFor(d)} />
                     </dd>
                   </div>
                 </dl>

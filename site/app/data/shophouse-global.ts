@@ -34,10 +34,12 @@
 //   Five metrics, each 1–5. The point is not to crown a winner but to
 //   show where each town is on the curve between "intact" and
 //   "Disneyfied". The composite is the simple mean; the verdict is the
-//   editor's read of where the town sits on that curve. Singapore is
-//   the floor of the index on purpose — the HDB-style reconstruction
-//   with a lifestyle economy on top of it is what the Bangkok Sukhumvit
-//   71 corridor should NOT end up as.
+//   editor's read of where the town sits on that curve. Singapore sits
+//   in the bottom tier by design of the metrics, not by assertion — the
+//   HDB-style reconstruction with a lifestyle economy on top of it is
+//   what the Bangkok Sukhumvit 71 corridor should NOT end up as. Never
+//   hand-write a rank ("the floor", "the lowest") in prose: derive it
+//   from RANKED_TOWNS, or the table will contradict the sentence.
 
 export type Town = {
   id: string;
@@ -768,7 +770,7 @@ export const TOWNS: Town[] = [
       wisdom: 1,
       verdict: "lost",
       editorial:
-        "Singapore is the floor of the index on purpose. The HDB-style shophouse revival — facades painted in pastels, ground floors converted to cocktail bars, the original trading Chinese community long since displaced to HDB towns — is what the Bangkok Sukhumvit 71 corridor should NOT end up as.",
+        "The bottom tier, reached on purpose. The HDB-style shophouse revival — facades painted in pastels, ground floors converted to cocktail bars, the original trading Chinese community long since displaced to HDB towns — is what the Bangkok Sukhumvit 71 corridor should NOT end up as.",
     },
     sources: [
       { label: "Lim, J. S. H. (1993), The 'Shophouse Rafflesia'", url: "https://www.jstor.org/stable/41493492" },

@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type maplibregl from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
 import type { Stop, World } from "../../walkthrough-data";
@@ -39,7 +39,7 @@ const HISTORIC_CORE_WALK_SLUGS = [
 type Props = {
   world: World;
   embedded?: boolean;
-  initialView?: { center: LngLat; zoom: number };
+  initialView?: { center: LngLat; zoom: number; pitch?: number; bearing?: number };
 };
 
 type LngLat = [number, number];
@@ -600,10 +600,17 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
 
   // Command Copy State
   const [copied, setCopied] = useState(false);
-  // Citable-view state: every camera position is a URL (?at=lng,lat,zoom),
-  // so a researcher can put the exact view they mean into an email or a
-  // footnote. Mirrors the /tp copy pattern above.
+  // Citable-view state: every camera position is a URL
+  // (?at=lng,lat,zoom,pitch,bearing), so a researcher can put the exact
+  // view they mean into an email or a footnote. Mirrors the /tp copy
+  // pattern above.
   const [viewLinkCopied, setViewLinkCopied] = useState(false);
+  const [showShortcuts, setShowShortcuts] = useState(false);
+  // The cursor/zoom readout writes straight into these nodes on mousemove —
+  // routing a 60 Hz stream through React state would re-render the whole
+  // console for every pixel of mouse travel.
+  const cursorReadoutRef = useRef<HTMLSpanElement | null>(null);
+  const zoomReadoutRef = useRef<HTMLSpanElement | null>(null);
 
   // Derived state to avoid synchronous state update in effect body
   const activeStopIdToUse = isTourPlaying ? (world.stops[tourIndex]?.id ?? activeStopId) : activeStopId;
@@ -749,11 +756,17 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
       .catch((err) => console.error("Could not copy command", err));
   };
 
-  const copyViewLink = () => {
+  const copyViewLink = useCallback(() => {
     const map = mapRef.current;
     if (!map) return;
     const c = map.getCenter();
-    const at = `${c.lng.toFixed(5)},${c.lat.toFixed(5)},${map.getZoom().toFixed(2)}`;
+    const at = [
+      c.lng.toFixed(5),
+      c.lat.toFixed(5),
+      map.getZoom().toFixed(2),
+      map.getPitch().toFixed(1),
+      map.getBearing().toFixed(1),
+    ].join(",");
     const url = `${window.location.origin}/atlas/${world.id}?at=${at}`;
     navigator.clipboard
       .writeText(url)
@@ -762,7 +775,41 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
         setTimeout(() => setViewLinkCopied(false), 2000);
       })
       .catch((err) => console.error("Could not copy view link", err));
-  };
+  }, [world.id]);
+
+  // Operator keys. Layer toggles on single letters, C for the view link,
+  // ? for the card that lists them. Nothing fires while a form control has
+  // focus, and modifier chords pass through untouched so browser shortcuts
+  // keep working.
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.metaKey || e.ctrlKey || e.altKey) return;
+      const t = e.target as HTMLElement | null;
+      if (
+        t &&
+        (t.tagName === "INPUT" ||
+          t.tagName === "TEXTAREA" ||
+          t.tagName === "SELECT" ||
+          t.isContentEditable)
+      ) {
+        return;
+      }
+      switch (e.key) {
+        case "h": case "H": setShowHeritage((v) => !v); break;
+        case "z": case "Z": setShowZoning((v) => !v); break;
+        case "t": case "T": setShowMobility((v) => !v); break;
+        case "a": case "A": setShowAerosol((v) => !v); break;
+        case "d": case "D": setShowArchitecturalDetail((v) => !v); break;
+        case "r": case "R": setShowRowhouseCandidates((v) => !v); break;
+        case "c": case "C": copyViewLink(); break;
+        case "?": setShowShortcuts((v) => !v); break;
+        case "Escape": setShowShortcuts(false); break;
+        default: return;
+      }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [copyViewLink]);
 
   useEffect(() => {
     if (!containerRef.current) return;
@@ -792,8 +839,8 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
         style: OPENFREEMAP_DARK_STYLE,
         center: initialView?.center ?? districtCenter(world.stops),
         zoom: initialView?.zoom ?? 15.4,
-        pitch: 60,
-        bearing: -20,
+        pitch: initialView?.pitch ?? 60,
+        bearing: initialView?.bearing ?? -20,
         maxPitch: 75,
         minZoom: 11,
         maxZoom: 19,
@@ -822,6 +869,22 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
       map.on("zoomstart", handleMapInteract);
       map.on("pitchstart", handleMapInteract);
       map.on("rotatestart", handleMapInteract);
+
+      // Console readout: cursor position and zoom, written straight to the
+      // DOM (no React state — see the refs' comment).
+      map.on("mousemove", (e) => {
+        if (cursorReadoutRef.current) {
+          cursorReadoutRef.current.textContent =
+            `${e.lngLat.lat.toFixed(5)}° N · ${e.lngLat.lng.toFixed(5)}° E`;
+        }
+      });
+      const writeZoom = () => {
+        if (zoomReadoutRef.current) {
+          zoomReadoutRef.current.textContent = `z ${map.getZoom().toFixed(2)}`;
+        }
+      };
+      map.on("move", writeZoom);
+      writeZoom();
 
       map.on("load", () => {
         if (!active) return;
@@ -1868,8 +1931,9 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
           </div>
         )}
 
-        {hasHistoricContext && (
-          <details className="atlas-map-key" open>
+        <div className="atlas-key-stack">
+          {hasHistoricContext && (
+            <details className="atlas-map-key" open>
             <summary>Map key</summary>
             <div>
               {showArchitecturalDetail ? <span><i className="key-building key-fabric" />Old Town full footprints</span> : null}
@@ -1884,17 +1948,49 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
               {showZoning ? <span><i className="key-area" />Illustrative conservation context</span> : null}
             </div>
           </details>
-        )}
+          )}
+          <button
+            type="button"
+            className={`atlas-viewlink${viewLinkCopied ? " is-copied" : ""}`}
+            onClick={copyViewLink}
+            disabled={!mapReady}
+            title="Copy a link that reopens this atlas at exactly the current view — center, zoom, pitch and bearing. Shortcut: C"
+          >
+            {viewLinkCopied ? "✓ View link copied" : "⧉ Cite this view"}
+          </button>
+          <p className="atlas-cursor-readout" aria-hidden="true">
+            <span ref={cursorReadoutRef}>—</span>
+            <span ref={zoomReadoutRef} className="atlas-cursor-zoom">z —</span>
+            <button
+              type="button"
+              className="atlas-shortcuts-hint"
+              onClick={() => setShowShortcuts((v) => !v)}
+              aria-label="Keyboard shortcuts"
+              title="Keyboard shortcuts (?)"
+            >
+              ?
+            </button>
+          </p>
+        </div>
 
-        <button
-          type="button"
-          className={`atlas-viewlink${viewLinkCopied ? " is-copied" : ""}`}
-          onClick={copyViewLink}
-          disabled={!mapReady}
-          title="Copy a link that reopens this atlas at exactly the current view — same center, same zoom."
-        >
-          {viewLinkCopied ? "✓ View link copied" : "⧉ Cite this view"}
-        </button>
+        {showShortcuts && (
+          <div className="atlas-shortcuts" role="dialog" aria-label="Keyboard shortcuts">
+            <p className="atlas-shortcuts-title">Operator keys</p>
+            <dl>
+              <div><dt>H</dt><dd>Heritage register pins</dd></div>
+              <div><dt>Z</dt><dd>Conservation context</dd></div>
+              <div><dt>T</dt><dd>Transit lines &amp; piers</dd></div>
+              <div><dt>A</dt><dd>Satellite aerosol</dd></div>
+              <div><dt>D</dt><dd>Old Town 3D detail</dd></div>
+              <div><dt>R</dt><dd>Rowhouse candidates</dd></div>
+              <div><dt>C</dt><dd>Copy citable view link</dd></div>
+              <div><dt>?</dt><dd>This card</dd></div>
+            </dl>
+            <button type="button" onClick={() => setShowShortcuts(false)}>
+              Close <small>Esc</small>
+            </button>
+          </div>
+        )}
 
         {hasHistoricContext && showAerosol && (
           <div className="atlas-aerosol-note" role="status">

@@ -640,7 +640,14 @@ button {
 .next-section > p:nth-of-type(2) { max-width: 680px; margin: 38px auto 0; font-size: 17px; line-height: 1.7; }
 .next-section a { margin-top: 32px; padding-bottom: 4px; border-bottom: 1px solid; font-size: 12px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
 
-footer {
+/* Scoped to the /worlds walkthrough footer. This used to be a bare
+   `footer` tag selector, which silently painted every footer on the site
+   #0b0c0a and forced it into this three-column grid — the shophouses
+   footers (whose <strong> is ink, i.e. invisible on this ground), the
+   register colophon and the datasets shelf all inherited it. A tag
+   selector is a site-wide promise; this one was only ever true on one
+   page. */
+.worlds-footer {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   align-items: end;
@@ -651,10 +658,10 @@ footer {
 
 .footer-wordmark { align-self: start; font-size: 70px; }
 .footer-wordmark b { font-size: 90px; }
-footer > p { margin: 0; color: #afb1a7; font-size: 14px; }
-footer > div { display: flex; justify-content: flex-end; gap: 24px; font-size: 11px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; }
-footer > div a:hover { color: var(--signal); }
-footer small { grid-column: 1 / -1; margin-top: 60px; padding-top: 24px; border-top: 1px solid var(--line); color: #676a61; font-size: 10px; letter-spacing: .07em; text-transform: uppercase; }
+.worlds-footer > p { margin: 0; color: #afb1a7; font-size: 14px; }
+.worlds-footer > div { display: flex; justify-content: flex-end; gap: 24px; font-size: 11px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; }
+.worlds-footer > div a:hover { color: var(--signal); }
+.worlds-footer small { grid-column: 1 / -1; margin-top: 60px; padding-top: 24px; border-top: 1px solid var(--line); color: #676a61; font-size: 10px; letter-spacing: .07em; text-transform: uppercase; }
 
 @media (max-width: 1100px) {
   .hero { grid-template-columns: 1fr 1fr; }
@@ -699,7 +706,7 @@ footer small { grid-column: 1 / -1; margin-top: 60px; padding-top: 24px; border-
   .download-grid { grid-template-columns: 1fr; }
   .download-card { min-height: 160px; padding: 22px; }
   .pipeline { justify-content: flex-start; }
-  footer { grid-template-columns: 1fr; }
+  .worlds-footer { grid-template-columns: 1fr; }
   footer > div { justify-content: flex-start; }
   footer small { grid-column: auto; }
 }
@@ -1153,10 +1160,6 @@ footer small { grid-column: 1 / -1; margin-top: 60px; padding-top: 24px; border-
    same floating stack as the map key; signal colour only on the copied
    confirmation, per the accent rule (signals and selected state). */
 .atlas-viewlink {
-  position: absolute;
-  left: 10px;
-  bottom: 44px; /* clear of the maplibre scale bar in the same corner */
-  z-index: 24;
   padding: 6px 12px;
   border: 1px solid var(--line);
   background: rgba(10, 12, 9, 0.82);
@@ -1172,12 +1175,99 @@ footer small { grid-column: 1 / -1; margin-top: 60px; padding-top: 24px; border-
 .atlas-viewlink:disabled { opacity: 0.5; cursor: default; }
 .atlas-viewlink.is-copied { color: var(--signal); border-color: var(--signal); }
 
-.atlas-map-key {
+/* The console readout: where the cursor is, how far in you are. Written
+   by the map's own events, not React — see AtlasView. */
+.atlas-cursor-readout {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0;
+  padding: 4px 8px;
+  border: 1px solid var(--line);
+  background: rgba(10, 12, 9, 0.82);
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+}
+.atlas-cursor-zoom { color: var(--paper); }
+.atlas-shortcuts-hint {
+  border: 1px solid var(--line);
+  background: none;
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  width: 18px;
+  height: 18px;
+  line-height: 1;
+  cursor: pointer;
+}
+.atlas-shortcuts-hint:hover, .atlas-shortcuts-hint:focus-visible { color: var(--signal); border-color: var(--signal); outline: none; }
+
+/* Operator keys card. Static, centred, dismissed by Esc or its button —
+   no motion, nothing trapped. */
+.atlas-shortcuts {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 40;
+  min-width: 260px;
+  padding: 18px 20px;
+  border: 1px solid var(--paper);
+  background: rgba(10, 12, 9, 0.96);
+  color: var(--paper);
+  font-family: var(--font-mono);
+  font-size: 12px;
+}
+.atlas-shortcuts-title {
+  margin: 0 0 12px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--signal);
+}
+.atlas-shortcuts dl { margin: 0 0 14px; }
+.atlas-shortcuts dl > div { display: flex; gap: 14px; padding: 3px 0; }
+.atlas-shortcuts dt {
+  width: 22px;
+  text-align: center;
+  border: 1px solid var(--line);
+  color: var(--paper);
+  font-weight: 700;
+  flex: none;
+}
+.atlas-shortcuts dd { margin: 0; color: var(--muted); }
+.atlas-shortcuts > button {
+  border: 1px solid var(--line);
+  background: none;
+  color: var(--paper);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  padding: 5px 12px;
+  cursor: pointer;
+  min-height: 32px;
+}
+.atlas-shortcuts > button:hover, .atlas-shortcuts > button:focus-visible { border-color: var(--signal); color: var(--signal); outline: none; }
+.atlas-shortcuts > button small { color: var(--muted); margin-left: 8px; }
+
+.atlas-key-stack {
   position: absolute;
   right: 10px;
   bottom: 34px;
   z-index: 24;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
   width: min(210px, calc(100% - 20px));
+  pointer-events: none; /* children re-enable; the gaps stay map-draggable */
+}
+.atlas-key-stack > * { pointer-events: auto; }
+.atlas-map-key {
+  width: 100%;
   border: 1px solid rgba(255, 255, 255, 0.22);
   background: rgba(17, 18, 15, 0.9);
   color: var(--paper-strong);
@@ -6023,6 +6113,21 @@ body:has(.sh-figexport) { background: #fff !important; }
    1–5 metric is easier to scan as a row of dots than a digit. */
 
 .sh-rank { margin: 0 0 var(--sh-page); }
+/* Metric headers double as sort controls — buttons, not links, styled to
+   read as the header text itself with the active sort carrying the pink
+   underline and the ↓. */
+.sh-rank-sort {
+  border: none;
+  background: none;
+  padding: 0;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+  text-decoration: none;
+}
+.sh-rank-sort:hover, .sh-rank-sort:focus-visible { text-decoration: underline; text-decoration-color: #e5007d; text-decoration-thickness: 2px; outline: none; }
+.sh-rank-sort.is-active { text-decoration: underline; text-decoration-color: #e5007d; text-decoration-thickness: 2px; }
+
 .sh-rank-tablewrap { overflow-x: auto; -webkit-overflow-scrolling: touch; max-width: 100%; min-width: 0; border: 1px solid var(--sh-ink); }
 .sh-rank-table { border-collapse: collapse; width: 100%; min-width: 920px; font-family: var(--font-display); font-size: 13px; background: var(--sh-paper); }
 .sh-rank-table thead th {
@@ -6364,6 +6469,38 @@ body:has(.sh-figexport) { background: #fff !important; }
   font-variant-numeric: tabular-nums;
 }
 .datasets-note { font-size: 14px; line-height: 1.6; color: var(--quiet); max-width: 44em; }
+
+.datasets-index {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 8px;
+  margin: 22px 0 0;
+}
+.datasets-index a {
+  border: 1px solid var(--rule);
+  background: var(--paper-raised);
+  padding: 3px 10px;
+  font-size: 12.5px;
+  text-decoration: none;
+  color: var(--ink);
+}
+.datasets-index a:hover, .datasets-index a:focus-visible { border-color: var(--ink); outline: none; }
+
+.datasets-cite-row { display: flex; align-items: stretch; gap: 8px; }
+.datasets-cite-row .datasets-citation { flex: 1; min-width: 0; }
+.datasets-copy {
+  flex: none;
+  border: 1px solid var(--rule);
+  background: var(--paper-raised);
+  color: var(--quiet);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  padding: 0 10px;
+  cursor: pointer;
+  min-height: 32px;
+}
+.datasets-copy:hover, .datasets-copy:focus-visible { border-color: var(--ink); color: var(--ink); outline: none; }
+.datasets-copy.is-copied { border-color: var(--ink); color: var(--ink); }
 
 .datasets-shelf {
   max-width: 880px;

@@ -860,7 +860,7 @@ test("the essay masthead has a Global nav link", async () => {
   assert.match(html, /href="\/shophouses\/global"/, "essay masthead missing Global link");
 });
 
-test("the Shophouse Health Index renders the ranking, comparison, and Singapore-as-floor", async () => {
+test("the Shophouse Health Index renders the ranking, comparison, and the Singapore caution", async () => {
   const response = await render("/shophouses/global");
   assert.equal(response.status, 200);
   const html = await response.text();
@@ -878,8 +878,9 @@ test("the Shophouse Health Index renders the ranking, comparison, and Singapore-
   ]) {
     assert.match(html, new RegExp(name.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")), `town missing from index: ${name}`);
   }
-  // Singapore explicitly called out as floor
-  assert.match(html, /Singapore.*floor of the index/i);
+  // Singapore's caution is stated without asserting a rank the table
+  // could contradict — the rank sentence above the board is derived.
+  assert.match(html, /bottom tier/i);
   // Bangkok baseline tagged
   assert.match(html, /Bangkok baseline/);
   // Comparison board pre-pinned with Singapore + Bangkok
@@ -1011,7 +1012,10 @@ test("the Health Index bottom-of-table sentence is derived, not asserted", async
   // … and may claim "the floor of the index" only when Singapore truly is it.
   // An earlier revision asserted the floor while the table showed Shanghai lower.
   if (below.length > 0) {
-    assert.doesNotMatch(html, /Composite [\d.]+ — the floor of the index/);
+    // Not just the lede sentence: the claim once survived in the pinned
+    // comparison card and the how-to-read note after being killed above.
+    assert.doesNotMatch(html, /the floor of the index/);
+    assert.doesNotMatch(html, /the floor on purpose/);
   }
 });
 
@@ -1180,4 +1184,58 @@ test("the atlas offers a citable view link", async () => {
   assert.equal(response.status, 200);
   const html = await response.text();
   assert.match(html, /Cite this view/);
+});
+
+test("the atlas console carries the operator surface", async () => {
+  const response = await render("/atlas/historic-core");
+  const html = await response.text();
+  // The citable-view control lives in the right-hand key stack (its old
+  // bottom-left spot was underneath the control panel), with the cursor
+  // readout and the shortcuts hint beside it.
+  assert.match(html, /atlas-key-stack/);
+  assert.match(html, /Cite this view/);
+  assert.match(html, /atlas-cursor-readout/);
+  assert.match(html, /Keyboard shortcuts/);
+});
+
+test("the ?at= parameter accepts a full camera pose and rejects garbage", async () => {
+  // 5-part pose renders
+  const posed = await render("/atlas/historic-core?at=100.4914,13.75,16.5,45.0,-90.0");
+  assert.equal(posed.status, 200);
+  // 3-part legacy links still render
+  const legacy = await render("/atlas/historic-core?at=100.4914,13.75,16.5");
+  assert.equal(legacy.status, 200);
+  // wrong arity or out-of-range pitch degrade to the default view, not an error
+  for (const bad of ["100,13", "100.49,13.75,16.5,999,0", "a,b,c"]) {
+    const r = await render(`/atlas/historic-core?at=${bad}`);
+    assert.equal(r.status, 200, `bad at=${bad} must not break the page`);
+  }
+});
+
+test("the Health Index headers are sort controls", async () => {
+  const response = await render("/shophouses/global");
+  const html = await response.text();
+  const sortButtons = (html.match(/sh-rank-sort/g) ?? []).length;
+  assert.ok(sortButtons >= 6, `expected six sortable headers, got ${sortButtons}`);
+});
+
+test("no footer inherits the worlds-only dark chrome", async () => {
+  // The bare `footer` tag rule used to paint every footer #0b0c0a; it is
+  // scoped to .worlds-footer now. The shophouses footer strong (ink) was
+  // invisible against it — assert the class exists only on /worlds.
+  const worlds = await (await render("/worlds")).text();
+  assert.match(worlds, /worlds-footer/);
+  for (const path of ["/shophouses/global", "/datasets", "/heritage"]) {
+    const html = await (await render(path)).text();
+    assert.doesNotMatch(html, /worlds-footer/, `${path} must not carry the dark footer`);
+  }
+});
+
+test("the datasets ledger is jumpable and citations are copyable", async () => {
+  const { DATASETS } = await import("../app/data/datasets.ts");
+  const html = await (await render("/datasets")).text();
+  const indexLinks = (html.match(/datasets-index/g) ?? []).length;
+  assert.ok(indexLinks >= 1, "jump index missing");
+  const copyButtons = (html.match(/datasets-copy/g) ?? []).length;
+  assert.ok(copyButtons >= DATASETS.length, `expected ${DATASETS.length} copy buttons, got ${copyButtons}`);
 });

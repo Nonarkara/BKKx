@@ -7,9 +7,11 @@
 //   2) The board always shows two pinned towns side-by-side; clear
 //      either pin to drop it.
 //
-// Singapore is the floor of the index on purpose. The Bangkok baseline
-// is highlighted in red ink so the page always shows where the home
-// city sits relative to the others.
+// Singapore is pre-pinned against the Bangkok baseline as the cautionary
+// comparison; the baseline is highlighted in red ink so the page always
+// shows where the home city sits relative to the others. Ranks live in
+// the table — never in hand-written prose (see the derived sentence on
+// the page above the board).
 
 import { useMemo, useState } from "react";
 import Link from "next/link";
@@ -47,20 +49,30 @@ const VERDICT_INK: Record<Town["score"]["verdict"], string> = {
   lost: "#fffdf5",
 };
 
+type SortKey = "composite" | (typeof METRICS)[number];
+
 export function RankingBoard() {
   const [pinned, setPinned] = useState<[string | null, string | null]>([
     BANGKOK_BASELINE_ID,
     SINGAPORE_ID,
   ]);
+  // Re-rankable: click a metric header to sort by that metric alone —
+  // "which town has the most intact fabric" is a different question from
+  // "which town scores best overall", and the reader gets both. Composite
+  // descending is the default and the canonical order.
+  const [sortKey, setSortKey] = useState<SortKey>("composite");
 
-  const townsWithComposite = useMemo(
-    () =>
-      RANKED_TOWNS.map((t) => ({
-        ...t,
-        composite: compositeScore(t.score),
-      })),
-    [],
-  );
+  const townsWithComposite = useMemo(() => {
+    const rows = RANKED_TOWNS.map((t) => ({
+      ...t,
+      composite: compositeScore(t.score),
+    }));
+    if (sortKey !== "composite") {
+      // Stable within a metric: ties keep the composite order.
+      rows.sort((a, b) => b.score[sortKey] - a.score[sortKey]);
+    }
+    return rows;
+  }, [sortKey]);
 
   function togglePin(id: string) {
     setPinned(([a, b]) => {
@@ -81,16 +93,33 @@ export function RankingBoard() {
             <tr>
               <th className="sh-rank-rank">#</th>
               <th className="sh-rank-name">Town</th>
-              <th className="sh-rank-score" title="Composite score (mean of 5 metrics)">
-                Score
+              <th
+                className="sh-rank-score"
+                title="Composite score (mean of 5 metrics)"
+                aria-sort={sortKey === "composite" ? "descending" : undefined}
+              >
+                <button
+                  type="button"
+                  className={`sh-rank-sort${sortKey === "composite" ? " is-active" : ""}`}
+                  onClick={() => setSortKey("composite")}
+                >
+                  Score{sortKey === "composite" ? " ↓" : ""}
+                </button>
               </th>
               {METRICS.map((m) => (
                 <th
                   key={m}
                   className="sh-rank-metric"
-                  title={SCORE_LEGEND[m].definition}
+                  title={`${SCORE_LEGEND[m].definition} — click to rank by this metric`}
+                  aria-sort={sortKey === m ? "descending" : undefined}
                 >
-                  {SCORE_LEGEND[m].label}
+                  <button
+                    type="button"
+                    className={`sh-rank-sort${sortKey === m ? " is-active" : ""}`}
+                    onClick={() => setSortKey(m)}
+                  >
+                    {SCORE_LEGEND[m].label}{sortKey === m ? " ↓" : ""}
+                  </button>
                   <small>1–5</small>
                 </th>
               ))}
@@ -167,9 +196,9 @@ export function RankingBoard() {
 
       <p className="sh-rank-legend">
         <strong>How to read this.</strong> 5 is the best on every metric. The
-        composite is the simple mean. Singapore is the floor on purpose — the
-        HDB-style shophouse revival is what the Bangkok Sukhumvit 71 corridor
-        should not end up as. A <em>vulnerable</em> verdict means the town scores
+        composite is the simple mean. Singapore sits in the bottom tier
+        deliberately — the HDB-style shophouse revival is what the Bangkok
+        Sukhumvit 71 corridor should not end up as. A <em>vulnerable</em> verdict means the town scores
         high but its continuity is fragile (e.g. tourism-dependent); a{" "}
         <em>lost</em> verdict means the trading community is gone and the stock
         is a backdrop.

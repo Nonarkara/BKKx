@@ -317,7 +317,7 @@ export function BangkokWalkthrough() {
         </a>
       </section>
 
-      <footer>
+      <footer className="worlds-footer">
         <a className="wordmark footer-wordmark" href="#top"><span>BKK</span><b>x</b><em>C(ulture)</em></a>
         <p>Bangkok, block by block.<br /><span lang="th">กรุงเทพฯ ทีละบล็อก</span></p>
         <div>

@@ -14,7 +14,13 @@ type Props = {
 
 function parseInitialView(value: string | undefined) {
   if (!value) return undefined;
-  const [lng, lat, zoom] = value.split(",").map(Number);
+  // Three parts (lng,lat,zoom) or five (…,pitch,bearing). The two-part-longer
+  // form is what "Cite this view" copies, so a pasted link reproduces the
+  // full camera pose; the three-part form stays valid for every link already
+  // in the wild and for the homepage quarter chips.
+  const parts = value.split(",").map(Number);
+  if (parts.length !== 3 && parts.length !== 5) return undefined;
+  const [lng, lat, zoom, pitch, bearing] = parts;
   if (
     !Number.isFinite(lng) ||
     !Number.isFinite(lat) ||
@@ -28,7 +34,19 @@ function parseInitialView(value: string | undefined) {
   ) {
     return undefined;
   }
-  return { center: [lng, lat] as [number, number], zoom };
+  const view: {
+    center: [number, number];
+    zoom: number;
+    pitch?: number;
+    bearing?: number;
+  } = { center: [lng, lat], zoom };
+  if (parts.length === 5) {
+    if (!Number.isFinite(pitch) || pitch < 0 || pitch > 85) return undefined;
+    if (!Number.isFinite(bearing) || bearing < -360 || bearing > 360) return undefined;
+    view.pitch = pitch;
+    view.bearing = bearing;
+  }
+  return view;
 }
 
 export function generateStaticParams(): Params[] {
