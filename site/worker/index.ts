@@ -2,10 +2,13 @@
 import { handleImageOptimization, DEFAULT_DEVICE_SIZES, DEFAULT_IMAGE_SIZES } from "vinext/server/image-optimization";
 import handler from "vinext/server/app-router-entry";
 import { pageviewStats, recordPageview } from "./pageviews";
+import { handleLiveRain, handleLiveCctv } from "./live";
 
 interface Env {
   ASSETS: Fetcher;
   DB: D1Database;
+  /** Optional: a JSON camera registry for the war room's CCTV rail. */
+  CCTV_SOURCE_URL?: string;
   IMAGES: {
     input(stream: ReadableStream): {
       transform(options: Record<string, unknown>): {
@@ -44,6 +47,17 @@ const worker = {
         language: request.headers.get("accept-language"),
       });
       return Response.json({ ok: true }, { status: 201 });
+    }
+
+    // Live civic feeds. Proxied here rather than fetched in the browser: the
+    // BMA gauge feed is plain HTTP and sends no CORS headers, so only the
+    // Worker can reach it. See worker/live.ts.
+    if (url.pathname === "/api/live/rain" && request.method === "GET") {
+      return handleLiveRain();
+    }
+
+    if (url.pathname === "/api/live/cctv" && request.method === "GET") {
+      return handleLiveCctv(env.CCTV_SOURCE_URL);
     }
 
     if (url.pathname === "/api/stats" && request.method === "GET") {

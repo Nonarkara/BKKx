@@ -20,6 +20,7 @@ export function PlaceMasthead() {
         <a href="https://shophouses.nonarkara.org" title="Shophouse Metropolis — the essay, the Bible, the citywide pressure map">Shophouses</a>
         <Link href="/case-for-bangkok">The case</Link>
         <Link href="/datasets" title="Every public dataset — sourced, licensed, checksummed">Data</Link>
+        <Link href="/warroom" title="The operational picture — live gauges, cameras and the counted corpus">War room</Link>
         <Link href="/heritage#quarters">{t("nav_quarters")}</Link>
         <Link href="/heritage#walks">{t("nav_walks")}</Link>
         <Link href="/heritage#register">{t("nav_register")}</Link>

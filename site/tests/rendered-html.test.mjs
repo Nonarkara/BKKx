@@ -1239,3 +1239,59 @@ test("the datasets ledger is jumpable and citations are copyable", async () => {
   const copyButtons = (html.match(/datasets-copy/g) ?? []).length;
   assert.ok(copyButtons >= DATASETS.length, `expected ${DATASETS.length} copy buttons, got ${copyButtons}`);
 });
+
+test("the war room computes its figures from the shipped corpus", async () => {
+  const { default: register } = await import("../public/heritage-register.json", {
+    with: { type: "json" },
+  });
+  const { PRESSURE_TOTAL, QUADRANTS } = await import("../app/data/shophouse-pressure.ts");
+  const { DATASETS } = await import("../app/data/datasets.ts");
+
+  const response = await render("/warroom");
+  assert.equal(response.status, 200);
+  const html = await response.text();
+
+  // Register figures come from the register file, not from prose
+  for (const n of [
+    register.counts.total,
+    register.counts.registered,
+    register.counts.awaiting,
+    register.counts.buildingPrecision,
+    register.counts.districtPrecision,
+  ]) {
+    assert.match(html, new RegExp(n.toLocaleString("en-US")), `register figure ${n} missing`);
+  }
+  // Shophouse quadrants and the total
+  assert.match(html, new RegExp(PRESSURE_TOTAL.toLocaleString("en-US")));
+  for (const q of QUADRANTS) {
+    assert.match(html, new RegExp(q.label.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")), `quadrant ${q.id}`);
+  }
+  // Dataset count
+  assert.match(html, new RegExp(`>${DATASETS.length}<`));
+  // It is an operator surface, kept out of the index
+  assert.match(html, /noindex/);
+});
+
+test("the war room ships all twelve water sources and never fakes a reading", async () => {
+  const { WATER_SOURCES, WATER_TALLY } = await import("../app/data/water-sources.ts");
+  const html = await (await render("/warroom")).text();
+
+  assert.equal(WATER_SOURCES.length, 12, "twelve datasets were nominated");
+  for (const s of WATER_SOURCES) {
+    assert.ok(html.includes(s.id), `water source missing from the panel: ${s.id}`);
+  }
+  // Nothing may claim ingestion until the ingest has actually run
+  assert.equal(WATER_TALLY.ingested, 0, "no water dataset has been ingested yet");
+  assert.equal(WATER_TALLY.awaiting, 12);
+  assert.match(html, /awaiting/i);
+  // The ingest route is named on the page so the next operator can run it
+  assert.match(html, /ingest-bkk-water\.py/);
+});
+
+test("the camera rail renders one line and explains an empty registry", async () => {
+  const html = await (await render("/warroom")).text();
+  assert.match(html, /wr-cctv/);
+  // No invented camera endpoints ship in the bundle
+  assert.doesNotMatch(html, /snapshotUrl":\s*"http/);
+  assert.match(html, /CCTV_SOURCE_URL/);
+});

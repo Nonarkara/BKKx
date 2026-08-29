@@ -207,7 +207,9 @@ export default function DatasetsPage() {
             . The shophouse pressure figures have their own page at{" "}
             <Link href="/shophouses/atlas">/shophouses/atlas</Link>; the
             register&apos;s method is documented in{" "}
-            <Link href="/heritage">the register</Link> itself.
+            <Link href="/heritage">the register</Link> itself. The same corpus,
+            counted and charted without a map, is the{" "}
+            <Link href="/warroom">war room</Link>.
           </p>
         </footer>
       </div>
