@@ -1,0 +1,32 @@
+{
+  "build": "build-rattanakosin-water-and-walls.py",
+  "version": "2026-08-25.1",
+  "world_projection": {
+    "min_mc_x": 0,
+    "max_mc_x": 3383,
+    "min_mc_z": 0,
+    "max_mc_z": 3216,
+    "min_lat": 13.737134,
+    "max_lat": 13.766063,
+    "min_lon": 100.478897,
+    "max_lon": 100.510225,
+    "scale": 1.0
+  },
+  "sources": {
+    "overpass": "https://overpass-api.de/",
+    "openstreetmap": "https://www.openstreetmap.org/copyright",
+    "ratcha-anusorn_1926": "Ratcha-anusorn 1926 city plan (referenced, not extracted here)"
+  },
+  "outputs": {
+    "water": "rattanakosin-water.geojson",
+    "gates": "rattanakosin-gates.geojson",
+    "forts": "rattanakosin-forts.geojson"
+  },
+  "moat_fragments": 10,
+  "river_fragments": 16,
+  "gates_found": 9,
+  "gates_expected": 9,
+  "forts_found": 2,
+  "forts_expected": 2,
+  "caveat": "All placements are linear / point features. The world-build pipeline must buffer the moat line by ~12 m to make water, and the river line by the channel width. This script does not place blocks itself — that is the world gen's job."
+}

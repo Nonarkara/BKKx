@@ -29,3 +29,8 @@ public/studio references/
 public/non in bangkok/
 public/shophouses bangkok/
 public/diagrams/
+
+# env files
+.env
+.env.*
+!.env.example
