@@ -2,6 +2,13 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { Camera, RainPayload, WeatherPayload } from "../../worker/live";
+import {
+  CURATED_CAMERAS,
+  CAMERA_TALLY,
+  posterFor,
+  embedFor,
+  type CuratedCamera,
+} from "../data/cctv-cameras";
 
 /* The live half of the war room: the clock, the gauge network, and the
    camera rail. Everything here degrades to a stated reason rather than a
@@ -248,6 +255,91 @@ export function WeatherPanel() {
 }
 
 /* ------------------------------------------------------- camera rail */
+
+/* One camera tile. The player is a facade: a proxied still plus a play
+   control, and the YouTube iframe is only constructed once someone asks
+   for it. That keeps four live streams from decoding at once, and keeps
+   Google out of the page until a viewer opts in. */
+function CuratedTile({ cam }: { cam: CuratedCamera }) {
+  const [playing, setPlaying] = useState(false);
+  const [posterFailed, setPosterFailed] = useState(false);
+  const located = cam.precision !== "unconfirmed";
+
+  // A link-only camera is one whose operator does not licence its player
+  // for embedding. The tile sends the viewer to them rather than taking
+  // the stream.
+  if (cam.kind === "link") {
+    return (
+      <figure className="wr-cam wr-cam-yt is-linkonly">
+        <a className="wr-cam-play" href={cam.sourceUrl} target="_blank" rel="noreferrer">
+          <span className="wr-cam-nosnap">
+            <span>watch at the operator ↗</span>
+          </span>
+        </a>
+        <figcaption>
+          <b>{cam.place ?? cam.title}</b>
+          <small>
+            {cam.district} · {cam.precision} precision · not embeddable
+          </small>
+          <a href={cam.sourceUrl} target="_blank" rel="noreferrer">
+            source ↗
+          </a>
+        </figcaption>
+      </figure>
+    );
+  }
+
+  return (
+    <figure className={`wr-cam wr-cam-yt${located ? "" : " is-unlocated"}`}>
+      {playing ? (
+        <iframe
+          className="wr-cam-frame"
+          src={embedFor(cam.videoId)}
+          title={cam.title}
+          allow="autoplay; encrypted-media; picture-in-picture"
+          allowFullScreen
+          referrerPolicy="strict-origin-when-cross-origin"
+        />
+      ) : (
+        <button
+          type="button"
+          className="wr-cam-play"
+          onClick={() => setPlaying(true)}
+          aria-label={`Play live stream: ${cam.title}`}
+        >
+          {posterFailed ? (
+            <span className="wr-cam-nosnap">
+              <span>live · press to play</span>
+            </span>
+          ) : (
+            /* eslint-disable-next-line @next/next/no-img-element */
+            <img
+              src={posterFor(cam.videoId)}
+              alt=""
+              loading="lazy"
+              onError={() => setPosterFailed(true)}
+            />
+          )}
+          {/* The fallback text already reads "press to play"; a glyph on
+              top of it collides. Only shown over a real poster. */}
+          {posterFailed ? null : (
+            <span className="wr-cam-playicon" aria-hidden="true">
+              ▶
+            </span>
+          )}
+        </button>
+      )}
+      <figcaption>
+        <b>{cam.place ?? "Location not confirmed"}</b>
+        <small>{located ? `${cam.district} · ${cam.precision} precision` : cam.title}</small>
+        <a href={cam.sourceUrl} target="_blank" rel="noreferrer">
+          source ↗
+        </a>
+      </figcaption>
+    </figure>
+  );
+}
+
 export function CctvRail() {
   const [state, setState] = useState<{ phase: "loading" | "ok" | "down"; env?: Envelope<CctvPayload> }>({
     phase: "loading",
@@ -280,8 +372,8 @@ export function CctvRail() {
     };
   }, []);
 
-  // Snapshot cache-buster. Paused when the tab is hidden so a backgrounded
-  // war room is not quietly pulling images all afternoon.
+  // Snapshot cache-buster for agency stills. Paused when the tab is hidden
+  // so a backgrounded war room is not quietly pulling images all afternoon.
   useEffect(() => {
     const t = setInterval(() => {
       if (document.visibilityState === "visible") setNonce((n) => n + 1);
@@ -289,8 +381,8 @@ export function CctvRail() {
     return () => clearInterval(t);
   }, []);
 
-  const cams = state.env?.data?.cameras ?? [];
-  const configured = state.env?.data?.configured ?? false;
+  const fetched = state.env?.data?.cameras ?? [];
+  const total = CURATED_CAMERAS.length + fetched.length;
 
   const scroll = (dir: -1 | 1) => {
     railRef.current?.scrollBy({ left: dir * 320, behavior: "smooth" });
@@ -300,15 +392,16 @@ export function CctvRail() {
     <section className="wr-panel wr-cctv" aria-labelledby="wr-cctv-h">
       <header className="wr-panel-head">
         <h2 id="wr-cctv-h">Cameras</h2>
-        <span className={`wr-state is-${cams.length ? "ok" : state.phase === "loading" ? "loading" : "idle"}`}>
+        <span className={`wr-state is-${total ? "ok" : "idle"}`}>
           <i aria-hidden="true" />
-          {state.phase === "loading"
-            ? "checking"
-            : cams.length
-              ? `${cams.length} online`
-              : "no source"}
+          {total} live
         </span>
-        {cams.length > 3 ? (
+        {CAMERA_TALLY.unconfirmed > 0 ? (
+          <span className="wr-panel-meta">
+            {CAMERA_TALLY.located} located · {CAMERA_TALLY.unconfirmed} awaiting a location
+          </span>
+        ) : null}
+        {total > 3 ? (
           <span className="wr-rail-nav">
             <button type="button" className="wr-btn is-icon" onClick={() => scroll(-1)} aria-label="Scroll cameras left">
               ←
@@ -320,58 +413,46 @@ export function CctvRail() {
         ) : null}
       </header>
 
-      {cams.length > 0 ? (
-        <div className="wr-rail" ref={railRef}>
-          {cams.map((c) => (
-            <figure key={c.id} className="wr-cam">
-              {c.snapshotUrl ? (
-                /* eslint-disable-next-line @next/next/no-img-element */
-                <img
-                  src={`${c.snapshotUrl}${c.snapshotUrl.includes("?") ? "&" : "?"}_=${nonce}`}
-                  alt={`Live view: ${c.name}`}
-                  loading="lazy"
-                  onError={(e) => {
-                    (e.currentTarget as HTMLImageElement).classList.add("is-broken");
-                  }}
-                />
-              ) : (
-                <div className="wr-cam-nosnap">
-                  <span>no snapshot endpoint</span>
-                </div>
-              )}
-              <figcaption>
-                <b>{c.name}</b>
-                {c.district ? <small>{c.district}</small> : null}
-                {c.streamUrl || c.pageUrl ? (
-                  <a href={(c.streamUrl ?? c.pageUrl)!} target="_blank" rel="noreferrer">
-                    {c.streamUrl ? "live stream ↗" : "open ↗"}
-                  </a>
-                ) : null}
-              </figcaption>
-            </figure>
-          ))}
-        </div>
-      ) : (
-        <div className="wr-degraded">
-          <p className="wr-degraded-reason">
-            {configured
-              ? "Camera registry reachable but returned no cameras."
-              : state.phase === "down"
-                ? (state.env?.reason ?? "Camera registry unreachable.")
-                : "No camera registry configured."}
-          </p>
-          <p className="wr-panel-note">
-            The rail is built and wired — it renders live snapshots, refreshes
-            every 30&nbsp;seconds, pauses when this tab is hidden and scrolls as
-            one line. It is empty because no camera endpoint has been verified
-            for this deployment, and inventing one would put a broken tile on
-            screen that looks like a working system. Set{" "}
-            <code>CCTV_SOURCE_URL</code> on the Worker to a JSON registry of{" "}
-            <code>{"{ id, name, district?, snapshotUrl?, pageUrl? }"}</code> and
-            this fills on the next load.
-          </p>
-        </div>
-      )}
+      <div className="wr-rail" ref={railRef}>
+        {CURATED_CAMERAS.map((c) => (
+          <CuratedTile key={c.id} cam={c} />
+        ))}
+        {fetched.map((c) => (
+          <figure key={c.id} className="wr-cam">
+            {c.snapshotUrl ? (
+              /* eslint-disable-next-line @next/next/no-img-element */
+              <img
+                src={`${c.snapshotUrl}${c.snapshotUrl.includes("?") ? "&" : "?"}_=${nonce}`}
+                alt={`Live view: ${c.name}`}
+                loading="lazy"
+                onError={(e) => {
+                  (e.currentTarget as HTMLImageElement).classList.add("is-broken");
+                }}
+              />
+            ) : (
+              <div className="wr-cam-nosnap">
+                <span>no snapshot endpoint</span>
+              </div>
+            )}
+            <figcaption>
+              <b>{c.name}</b>
+              {c.district ? <small>{c.district}</small> : null}
+              {c.streamUrl || c.pageUrl ? (
+                <a href={(c.streamUrl ?? c.pageUrl)!} target="_blank" rel="noreferrer">
+                  {c.streamUrl ? "live stream ↗" : "open ↗"}
+                </a>
+              ) : null}
+            </figcaption>
+          </figure>
+        ))}
+      </div>
+
+      <p className="wr-panel-note">
+        Streams play on demand: the rail shows a still proxied through this
+        site, and no request reaches Google until you press play — the same
+        rule the weather feed follows. Add agency cameras by setting{" "}
+        <code>CCTV_SOURCE_URL</code> on the Worker; they appear beside these.
+      </p>
     </section>
   );
 }

@@ -2,7 +2,13 @@
 import { handleImageOptimization, DEFAULT_DEVICE_SIZES, DEFAULT_IMAGE_SIZES } from "vinext/server/image-optimization";
 import handler from "vinext/server/app-router-entry";
 import { pageviewStats, recordPageview } from "./pageviews";
-import { handleLiveRain, handleLiveCctv, handleLiveWeather, handleLiveLongdo } from "./live";
+import {
+  handleLiveRain,
+  handleLiveCctv,
+  handleLiveWeather,
+  handleLiveLongdo,
+  handleCameraPoster,
+} from "./live";
 
 interface Env {
   ASSETS: Fetcher;
@@ -64,6 +70,12 @@ const worker = {
 
     if (url.pathname === "/api/live/weather" && request.method === "GET") {
       return handleLiveWeather();
+    }
+
+    // Camera stills, re-served from this origin so no third party is
+    // contacted until a viewer presses play. See worker/live.ts.
+    if (url.pathname === "/api/live/camera-poster" && request.method === "GET") {
+      return handleCameraPoster(url.searchParams.get("v"));
     }
 
     if (url.pathname.startsWith("/api/live/longdo/") && request.method === "GET") {

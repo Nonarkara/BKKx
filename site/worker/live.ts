@@ -459,3 +459,62 @@ export async function handleLiveLongdo(
     clearTimeout(timer);
   }
 }
+
+/* ==================================================================== *
+ * Camera poster proxy.
+ *
+ * The war room's rail shows a still for each live camera. Loading those
+ * stills straight from Google would contact a third party on every page
+ * view, before anyone has asked to watch anything — the same objection
+ * that sends the weather feed through this Worker. So the poster is
+ * fetched here and re-served from our own origin, and Google sees a
+ * request only when a viewer actually presses play.
+ *
+ * Only a YouTube video id is accepted, and it is validated against the
+ * id grammar before use: this route must never become a general-purpose
+ * image proxy for arbitrary URLs.
+ * ==================================================================== */
+
+const YT_ID = /^[A-Za-z0-9_-]{11}$/;
+const POSTER_TTL = 300; // live thumbnails move; five minutes is plenty
+
+export async function handleCameraPoster(videoId: string | null): Promise<Response> {
+  if (!videoId || !YT_ID.test(videoId)) {
+    return new Response("Bad video id", { status: 400 });
+  }
+
+  // hqdefault exists for every video; maxresdefault often 404s on live.
+  const candidates = [
+    `https://i.ytimg.com/vi/${videoId}/maxresdefault_live.jpg`,
+    `https://i.ytimg.com/vi/${videoId}/hqdefault_live.jpg`,
+    `https://i.ytimg.com/vi/${videoId}/hqdefault.jpg`,
+  ];
+
+  const ctrl = new AbortController();
+  const timer = setTimeout(() => ctrl.abort(), UPSTREAM_TIMEOUT_MS);
+  try {
+    for (const url of candidates) {
+      let res: Response;
+      try {
+        res = await fetch(url, { signal: ctrl.signal });
+      } catch {
+        continue;
+      }
+      if (!res.ok || !res.body) continue;
+      const type = res.headers.get("content-type") ?? "image/jpeg";
+      if (!type.startsWith("image/")) continue;
+      return new Response(res.body, {
+        headers: {
+          "content-type": type,
+          "cache-control": `public, max-age=${POSTER_TTL}, s-maxage=${POSTER_TTL}, stale-while-revalidate=1800`,
+          "x-bkkx-live": "poster",
+        },
+      });
+    }
+    // No poster is not an error worth breaking the rail over — the tile
+    // falls back to its label.
+    return new Response("No poster available", { status: 404 });
+  } finally {
+    clearTimeout(timer);
+  }
+}

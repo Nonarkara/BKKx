@@ -1340,3 +1340,43 @@ test("weather is presented as forecast, distinct from the observed gauges", asyn
   // The page must not let a model reading pass as an observation
   assert.match(html, /Forecast, not observation/);
 });
+
+test("curated cameras render as facades and never leak to Google on load", async () => {
+  const { CURATED_CAMERAS } = await import("../app/data/cctv-cameras.ts");
+  const html = await (await render("/warroom")).text();
+
+  // Every supplied stream is present
+  assert.ok(CURATED_CAMERAS.length >= 5, "all supplied cameras are registered");
+  // A camera whose operator does not licence embedding is linked, not taken
+  for (const c of CURATED_CAMERAS) {
+    if (c.kind === "link") {
+      assert.equal(c.videoId, "", "a link-only camera carries no embeddable id");
+      assert.ok(html.includes(c.sourceUrl), `link camera must link out: ${c.id}`);
+    }
+  }
+  for (const c of CURATED_CAMERAS.filter((x) => x.kind === "youtube")) {
+    assert.ok(html.includes(c.videoId), `camera missing from the rail: ${c.videoId}`);
+  }
+  // Posters come from this origin, not from Google
+  assert.match(html, /\/api\/live\/camera-poster\?v=/);
+  assert.doesNotMatch(html, /i\.ytimg\.com/, "poster must be proxied, not hotlinked");
+  // No player is constructed until a click — no iframe in the served HTML
+  assert.doesNotMatch(html, /youtube-nocookie\.com\/embed/, "the embed must be built on demand only");
+});
+
+test("a camera with no confirmed location is never given a coordinate", async () => {
+  const { CURATED_CAMERAS } = await import("../app/data/cctv-cameras.ts");
+  for (const c of CURATED_CAMERAS) {
+    if (c.precision === "unconfirmed") {
+      assert.equal(c.lat, null, `${c.id}: unconfirmed cameras must not carry a latitude`);
+      assert.equal(c.lon, null, `${c.id}: unconfirmed cameras must not carry a longitude`);
+      assert.equal(c.place, null, `${c.id}: unconfirmed cameras must not carry a place name`);
+    } else {
+      assert.ok(typeof c.lat === "number" && typeof c.lon === "number", `${c.id} is located but has no coordinate`);
+      assert.ok(c.locatedBy.length > 20, `${c.id} must record how it was located`);
+    }
+  }
+  // The rail says plainly how many are still awaiting a location
+  const html = await (await render("/warroom")).text();
+  assert.match(html, /awaiting a location/);
+});

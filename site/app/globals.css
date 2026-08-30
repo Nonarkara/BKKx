@@ -6804,3 +6804,42 @@ body:has(.sh-figexport) { background: #fff !important; }
 .wr-src-status.is-wired { color: var(--wr-ok); }
 .wr-src-status.is-ready { color: var(--wr-warn); }
 .wr-src-status.is-researched { color: var(--wr-faint); }
+
+/* ---- war room: YouTube camera facades ----
+   The tile is a poster + play control until someone asks for the stream;
+   only then is an iframe constructed. Four live players never decode at
+   once, and no third party is contacted before the click. */
+.wr-cam-yt { flex: 0 0 264px; }
+.wr-cam-play {
+  position: relative;
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: none;
+  background: var(--wr-sunk);
+  cursor: pointer;
+  line-height: 0;
+}
+.wr-cam-play img { display: block; width: 100%; height: 148px; object-fit: cover; }
+.wr-cam-play .wr-cam-nosnap { height: 148px; width: 100%; }
+.wr-cam-playicon {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-size: 26px;
+  color: var(--wr-ink);
+  text-shadow: 0 1px 6px rgba(0, 0, 0, .8);
+  background: rgba(8, 10, 7, .28);
+  transition: background 140ms ease;
+}
+.wr-cam-play:hover .wr-cam-playicon,
+.wr-cam-play:focus-visible .wr-cam-playicon { background: rgba(8, 10, 7, .05); color: var(--signal); }
+.wr-cam-play:focus-visible { outline: 2px solid var(--signal); outline-offset: 2px; }
+.wr-cam-frame { display: block; width: 100%; height: 148px; border: 0; background: #000; }
+.wr-cam-yt.is-unlocated { border-color: var(--wr-warn); }
+.wr-cam-yt.is-unlocated figcaption b { color: var(--wr-warn); }
+@media (prefers-reduced-motion: reduce) { .wr-cam-playicon { transition: none; } }
+.wr-cam-yt.is-linkonly .wr-cam-nosnap { height: 148px; width: 100%; }
+.wr-cam-yt.is-linkonly .wr-cam-play { display: block; text-decoration: none; }
+.wr-cam-yt.is-linkonly .wr-cam-play:hover .wr-cam-nosnap { color: var(--signal); }
