@@ -48,10 +48,28 @@
       "Polygon"
     ]
   },
+  "/data/rattanakosin-forts.geojson": {
+    "bytes": 1452,
+    "sha256": "78b9acad26c2fae56eb9a5dd3db1655fe6cb2e1f2abc234d3afbc27d82e590c9",
+    "features": null,
+    "kinds": []
+  },
+  "/data/rattanakosin-gates.geojson": {
+    "bytes": 3085,
+    "sha256": "b16f17b34a5db0b0d8a481dd9bf30646fd851d53b77678d66479f0602a592768",
+    "features": null,
+    "kinds": []
+  },
+  "/data/rattanakosin-water.geojson": {
+    "bytes": 4400,
+    "sha256": "c7aa900a374773b9f0d5906967432f38a8180e24d5efb33c453c6bb66381227c",
+    "features": null,
+    "kinds": []
+  },
   "/data/shophouse-pressure.geojson": {
-    "bytes": 492534,
-    "sha256": "eb91c632ecbe530eb9cc20678d9ecc2255c5eb6d538253ade794e1cfe21b892c",
-    "features": 2311,
+    "bytes": 519485,
+    "sha256": "74cfedbd3806a420886e30dcd343747b721024fe508c99e4dedc8bf24609bebe",
+    "features": 2433,
     "kinds": [
       "Point"
     ]
