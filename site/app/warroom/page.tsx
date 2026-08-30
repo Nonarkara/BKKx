@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { BarList, CompositionBar, Tally, TableView } from "./Charts";
 import { CAT } from "../data/chart-palette";
-import { BangkokClock, RainPanel, CctvRail } from "./LiveDeck";
+import { BangkokClock, RainPanel, WeatherPanel, CctvRail } from "./LiveDeck";
 import REGISTER from "../../public/heritage-register.json";
 import MANIFEST from "../data/dataset-manifest.json";
 import { DATASETS } from "../data/datasets";
@@ -13,6 +13,12 @@ import {
   SPLITS,
 } from "../data/shophouse-pressure";
 import { WATER_SOURCES, WATER_TALLY, LAYER_LABEL, LIVE_ENDPOINTS } from "../data/water-sources";
+import {
+  TWIN_SOURCES,
+  TWIN_TALLY,
+  CATEGORY_LABEL,
+  INTEGRATION_LABEL,
+} from "../data/twin-sources";
 
 /* The war room — the analytics surface that needs no map.
  *
@@ -118,7 +124,10 @@ export default function WarRoom() {
       {/* ---------------- water ---------------- */}
       <div className="wr-grid-2">
         <RainPanel />
+        <WeatherPanel />
+      </div>
 
+      <div className="wr-grid-2">
         <section className="wr-panel" aria-labelledby="wr-water-h">
           <header className="wr-panel-head">
             <h2 id="wr-water-h">Water, flood &amp; drainage sources</h2>
@@ -156,6 +165,48 @@ export default function WarRoom() {
           <p className="wr-panel-note">
             Live endpoint wired: <code>{LIVE_ENDPOINTS[0].route}</code> →{" "}
             {LIVE_ENDPOINTS[0].agency}.
+          </p>
+        </section>
+
+        <section className="wr-panel" aria-labelledby="wr-twin-h">
+          <header className="wr-panel-head">
+            <h2 id="wr-twin-h">Twin source register</h2>
+            <span className="wr-state is-ok">
+              <i aria-hidden="true" />
+              {TWIN_TALLY.wired} wired · {TWIN_TALLY.ready} ready
+            </span>
+          </header>
+          <p className="wr-panel-note">
+            Candidate layers for the twin, each with the capability it unlocks
+            and the caveat that will bite. <strong>Terrain is the gap</strong>:
+            Bangkok floods because it is flat, low and sinking, and without an
+            elevation model the hazard layers can colour a district but cannot
+            say where water goes. {TWIN_TALLY.keyless} of {TWIN_TALLY.total}{" "}
+            need no credential at all.
+          </p>
+          <ul className="wr-sources wr-twin-list">
+            {TWIN_SOURCES.map((s) => (
+              <li key={s.id}>
+                <span className={`wr-src-layer is-${s.category}`}>
+                  {CATEGORY_LABEL[s.category]}
+                </span>
+                <span className="wr-src-name">
+                  <a href={s.url} target="_blank" rel="noreferrer">
+                    {s.name}
+                  </a>
+                  <small>{s.provider}</small>
+                </span>
+                <span className={`wr-src-status is-${s.integration}`}>
+                  {INTEGRATION_LABEL[s.integration]}
+                  {s.auth !== "none" ? <small>needs {s.auth}</small> : null}
+                </span>
+              </li>
+            ))}
+          </ul>
+          <p className="wr-panel-note">
+            Full reasoning, licence traps and the adapter pattern for reuse in
+            another twin codebase are in{" "}
+            <code>docs/twin-data-sources.md</code>.
           </p>
         </section>
       </div>

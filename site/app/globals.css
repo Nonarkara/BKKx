@@ -6786,3 +6786,21 @@ body:has(.sh-figexport) { background: #fff !important; }
   .wr-rail { scroll-behavior: auto; }
   .wr-bar-fill, .wr-comp-seg { transition: none; }
 }
+
+/* ---- war room: weather grid + twin source register ---- */
+.wr-wx-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(118px, 1fr)); gap: 1px; background: var(--wr-line); border: 1px solid var(--wr-line); }
+.wr-twin-list li { grid-template-columns: 92px 1fr auto; }
+.wr-twin-list .wr-src-name a { font-family: var(--font-body); font-size: 13px; font-weight: 600; }
+.wr-twin-list .wr-src-name small { font-family: var(--font-mono); font-size: 10.5px; }
+/* category hues reuse the validated categorical set; status words carry the
+   meaning, colour is only reinforcement */
+.wr-src-layer.is-terrain { color: #c97f33; }
+.wr-src-layer.is-weather { color: #4691c9; }
+.wr-src-layer.is-air { color: #8b7ad1; }
+.wr-src-layer.is-population { color: #2f9e86; }
+.wr-src-layer.is-places { color: #c14190; }
+.wr-src-layer.is-mobility { color: #c14190; }
+.wr-src-layer.is-imagery { color: #2f9e86; }
+.wr-src-status.is-wired { color: var(--wr-ok); }
+.wr-src-status.is-ready { color: var(--wr-warn); }
+.wr-src-status.is-researched { color: var(--wr-faint); }

@@ -2,13 +2,15 @@
 import { handleImageOptimization, DEFAULT_DEVICE_SIZES, DEFAULT_IMAGE_SIZES } from "vinext/server/image-optimization";
 import handler from "vinext/server/app-router-entry";
 import { pageviewStats, recordPageview } from "./pageviews";
-import { handleLiveRain, handleLiveCctv } from "./live";
+import { handleLiveRain, handleLiveCctv, handleLiveWeather, handleLiveLongdo } from "./live";
 
 interface Env {
   ASSETS: Fetcher;
   DB: D1Database;
   /** Optional: a JSON camera registry for the war room's CCTV rail. */
   CCTV_SOURCE_URL?: string;
+  /** Optional: Longdo Map API key. Env only — never committed. */
+  LONGDO_API_KEY?: string;
   IMAGES: {
     input(stream: ReadableStream): {
       transform(options: Record<string, unknown>): {
@@ -58,6 +60,18 @@ const worker = {
 
     if (url.pathname === "/api/live/cctv" && request.method === "GET") {
       return handleLiveCctv(env.CCTV_SOURCE_URL);
+    }
+
+    if (url.pathname === "/api/live/weather" && request.method === "GET") {
+      return handleLiveWeather();
+    }
+
+    if (url.pathname.startsWith("/api/live/longdo/") && request.method === "GET") {
+      const kind = url.pathname.slice("/api/live/longdo/".length);
+      if (kind !== "search" && kind !== "cameras") {
+        return Response.json({ ok: false, reason: "Unknown Longdo service." }, { status: 404 });
+      }
+      return handleLiveLongdo(kind, env.LONGDO_API_KEY, url.searchParams);
     }
 
     if (url.pathname === "/api/stats" && request.method === "GET") {

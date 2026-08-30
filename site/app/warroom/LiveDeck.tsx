@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import type { Camera, RainPayload } from "../../worker/live";
+import type { Camera, RainPayload, WeatherPayload } from "../../worker/live";
 
 /* The live half of the war room: the clock, the gauge network, and the
    camera rail. Everything here degrades to a stated reason rather than a
@@ -13,6 +13,7 @@ type CctvPayload = { cameras: Camera[]; cameraCount: number; configured: boolean
 
 const RAIN_POLL_MS = 300_000; // matches the edge TTL — polling faster only hits cache
 const CAM_REFRESH_MS = 30_000;
+const WEATHER_POLL_MS = 900_000; // matches the edge TTL
 
 /* ---------------------------------------------------------------- clock */
 export function BangkokClock({ buildIso }: { buildIso: string }) {
@@ -146,6 +147,106 @@ export function RainPanel() {
   );
 }
 
+/* ----------------------------------------------------------- weather */
+export function WeatherPanel() {
+  const [state, setState] = useState<{ phase: "loading" | "ok" | "down"; env?: Envelope<WeatherPayload> }>({
+    phase: "loading",
+  });
+
+  const load = useCallback(async () => {
+    try {
+      const res = await fetch("/api/live/weather", { headers: { accept: "application/json" } });
+      const env = (await res.json()) as Envelope<WeatherPayload>;
+      setState({ phase: env.ok ? "ok" : "down", env });
+    } catch (err) {
+      setState({
+        phase: "down",
+        env: {
+          ok: false,
+          fetchedAt: new Date().toISOString(),
+          source: "/api/live/weather",
+          reason: (err as Error).message,
+        },
+      });
+    }
+  }, []);
+
+  useEffect(() => {
+    const first = setTimeout(() => void load(), 0);
+    const t = setInterval(() => {
+      if (document.visibilityState === "visible") void load();
+    }, WEATHER_POLL_MS);
+    return () => {
+      clearTimeout(first);
+      clearInterval(t);
+    };
+  }, [load]);
+
+  const d = state.env?.data;
+  const n = (v: number | null, digits = 0) => (v === null ? "—" : v.toFixed(digits));
+
+  return (
+    <section className="wr-panel" aria-labelledby="wr-wx-h">
+      <header className="wr-panel-head">
+        <h2 id="wr-wx-h">Weather &amp; air</h2>
+        <span className={`wr-state is-${state.phase}`}>
+          <i aria-hidden="true" />
+          {state.phase === "loading" ? "polling" : state.phase === "ok" ? "live" : "no feed"}
+        </span>
+      </header>
+
+      {state.phase === "ok" && d ? (
+        <>
+          <div className="wr-wx-grid">
+            <div className="wr-tally is-signal">
+              <p className="wr-tally-value">
+                {n(d.temperatureC, 1)}
+                <span className="wr-tally-unit">°C</span>
+              </p>
+              <p className="wr-tally-label">Now</p>
+            </div>
+            <div className="wr-tally">
+              <p className="wr-tally-value">
+                {n(d.rainChanceNext24h)}
+                <span className="wr-tally-unit">%</span>
+              </p>
+              <p className="wr-tally-label">Rain chance 24 h</p>
+            </div>
+            <div className="wr-tally">
+              <p className="wr-tally-value">
+                {n(d.rainNext24hMm, 1)}
+                <span className="wr-tally-unit">mm</span>
+              </p>
+              <p className="wr-tally-label">Forecast 24 h</p>
+            </div>
+            <div className={`wr-tally${d.pm25 !== null && d.pm25 > 37.5 ? " is-warn" : ""}`}>
+              <p className="wr-tally-value">
+                {n(d.pm25, 1)}
+                <span className="wr-tally-unit">µg/m³</span>
+              </p>
+              <p className="wr-tally-label">PM2.5</p>
+            </div>
+          </div>
+          <p className="wr-panel-note">{d.attribution}.</p>
+        </>
+      ) : state.phase === "loading" ? (
+        <p className="wr-panel-note">Polling the forecast models…</p>
+      ) : (
+        <div className="wr-degraded">
+          <p className="wr-degraded-reason">{state.env?.reason ?? "Feed unavailable."}</p>
+          <button type="button" className="wr-btn" onClick={() => void load()}>
+            Retry now
+          </button>
+        </div>
+      )}
+      <p className="wr-panel-note">
+        Forecast, not observation — where this disagrees with the gauge
+        network beside it, the gauge is what happened.
+      </p>
+    </section>
+  );
+}
+
 /* ------------------------------------------------------- camera rail */
 export function CctvRail() {
   const [state, setState] = useState<{ phase: "loading" | "ok" | "down"; env?: Envelope<CctvPayload> }>({
@@ -241,9 +342,9 @@ export function CctvRail() {
               <figcaption>
                 <b>{c.name}</b>
                 {c.district ? <small>{c.district}</small> : null}
-                {c.pageUrl ? (
-                  <a href={c.pageUrl} target="_blank" rel="noreferrer">
-                    open ↗
+                {c.streamUrl || c.pageUrl ? (
+                  <a href={(c.streamUrl ?? c.pageUrl)!} target="_blank" rel="noreferrer">
+                    {c.streamUrl ? "live stream ↗" : "open ↗"}
                   </a>
                 ) : null}
               </figcaption>

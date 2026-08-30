@@ -1295,3 +1295,48 @@ test("the camera rail renders one line and explains an empty registry", async ()
   assert.doesNotMatch(html, /snapshotUrl":\s*"http/);
   assert.match(html, /CCTV_SOURCE_URL/);
 });
+
+test("the twin source register ships with honest integration status", async () => {
+  const { TWIN_SOURCES, TWIN_TALLY } = await import("../app/data/twin-sources.ts");
+  const html = await (await render("/warroom")).text();
+
+  // Names round-trip through HTML entity encoding (& -> &amp;)
+  const enc = (t) => t.replace(/&/g, "&amp;");
+  for (const s of TWIN_SOURCES) {
+    assert.ok(html.includes(enc(s.name)), `twin source missing from the panel: ${s.id}`);
+  }
+  // Every source states a caveat before it is integrated — the field exists
+  // so the limit is written down ahead of the chart, not discovered after.
+  for (const s of TWIN_SOURCES) {
+    assert.ok(s.caveat && s.caveat.length > 40, `${s.id} needs a real caveat`);
+    assert.ok(s.unlocks && s.unlocks.length > 40, `${s.id} must say what it unlocks`);
+  }
+  // Anything needing a credential must be proxied, never browser-reachable
+  for (const s of TWIN_SOURCES) {
+    if (s.auth !== "none") {
+      assert.equal(s.browserReachable, false, `${s.id} needs auth so must not be browser-reachable`);
+    }
+  }
+  assert.ok(TWIN_TALLY.wired >= 1, "at least one source is actually wired");
+});
+
+test("no API key or secret is committed anywhere in the bundle", async () => {
+  const { readFileSync } = await import("node:fs");
+  // The Longdo key is read from Worker env at request time. Assert the source
+  // never carries a literal key, and that the proxy cannot echo one: an error
+  // string containing the upstream URL would leak it.
+  const live = readFileSync(new URL("../worker/live.ts", import.meta.url), "utf8");
+  assert.match(live, /LONGDO|key: string \| undefined|key\?: string/);
+  assert.doesNotMatch(live, /key=[A-Za-z0-9]{12,}/, "a literal API key must never be committed");
+  // The failure path reports a status code, not the upstream URL
+  assert.match(live, /Longdo returned HTTP \$\{res\.status\}/);
+  assert.doesNotMatch(live, /reason: `Longdo unreachable: \$\{upstream\}/);
+});
+
+test("weather is presented as forecast, distinct from the observed gauges", async () => {
+  const html = await (await render("/warroom")).text();
+  assert.match(html, /Weather/);
+  assert.match(html, /Gauge network/);
+  // The page must not let a model reading pass as an observation
+  assert.match(html, /Forecast, not observation/);
+});

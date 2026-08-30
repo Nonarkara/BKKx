@@ -28,12 +28,12 @@ export type LiveEnvelope<T> = {
   reason?: string;
 };
 
-function envelope<T>(body: LiveEnvelope<T>, status = 200): Response {
+function envelope<T>(body: LiveEnvelope<T>, ttl = TTL_SECONDS, status = 200): Response {
   return Response.json(body, {
     status,
     headers: {
       "cache-control": body.ok
-        ? `public, max-age=${TTL_SECONDS}, s-maxage=${TTL_SECONDS}, stale-while-revalidate=600`
+        ? `public, max-age=${ttl}, s-maxage=${ttl}, stale-while-revalidate=600`
         : "no-store",
       "x-bkkx-live": body.ok ? "hit" : "degraded",
     },
@@ -188,6 +188,10 @@ export type Camera = {
   lon: number | null;
   /** A still image refreshed by the client, if the source offers one. */
   snapshotUrl: string | null;
+  /** An HLS (or other) live stream. Opened on demand — never autoplayed
+      across the whole rail, which would cost more than the rest of the
+      page combined. */
+  streamUrl: string | null;
   /** Where a human can watch it properly. */
   pageUrl: string | null;
   attribution: string | null;
@@ -249,7 +253,8 @@ export async function handleLiveCctv(sourceUrl: string | undefined): Promise<Res
         lat: num(["lat"]),
         lon: num(["lon", "lng", "long"]),
         snapshotUrl: str(["snapshot", "image", "thumb", "jpg"]),
-        pageUrl: str(["page", "url", "link", "stream"]),
+        streamUrl: str(["stream", "hls", "m3u8", "video"]),
+        pageUrl: str(["page", "url", "link"]),
         attribution: str(["attribution", "owner", "agency"]),
       }];
     });
@@ -265,6 +270,190 @@ export async function handleLiveCctv(sourceUrl: string | undefined): Promise<Res
       fetchedAt,
       source: sourceUrl,
       reason: `Camera registry unreachable: ${(err as Error)?.message ?? "unknown error"}.`,
+    });
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
+/* ==================================================================== *
+ * Weather + air quality — Open-Meteo.
+ *
+ * Keyless, and it sends `Access-Control-Allow-Origin: *`, so a browser
+ * could call it directly. We proxy it anyway for two reasons, in this
+ * order: a direct call hands every visitor's IP to a third party, and
+ * this project's privacy rule is explicit that it will not collect that
+ * itself — routing through the Worker keeps the same promise about who
+ * else receives it. Edge caching is the bonus, not the reason.
+ * ==================================================================== */
+
+const BANGKOK = { lat: 13.7563, lon: 100.5018 };
+// 15 min — the models do not update faster than this.
+const WEATHER_TTL = 900;
+
+const FORECAST_URL =
+  `https://api.open-meteo.com/v1/forecast?latitude=${BANGKOK.lat}&longitude=${BANGKOK.lon}` +
+  "&current=temperature_2m,relative_humidity_2m,precipitation,weather_code,wind_speed_10m" +
+  "&hourly=precipitation_probability,precipitation" +
+  "&forecast_days=2&timezone=Asia%2FBangkok";
+
+const AIR_URL =
+  `https://air-quality-api.open-meteo.com/v1/air-quality?latitude=${BANGKOK.lat}&longitude=${BANGKOK.lon}` +
+  "&current=pm2_5,pm10,ozone&timezone=Asia%2FBangkok";
+
+export type WeatherPayload = {
+  temperatureC: number | null;
+  humidityPct: number | null;
+  precipitationMm: number | null;
+  windKph: number | null;
+  /** Highest hourly probability of precipitation in the next 24 h. */
+  rainChanceNext24h: number | null;
+  /** Total forecast precipitation over the next 24 h, mm. */
+  rainNext24hMm: number | null;
+  pm25: number | null;
+  pm10: number | null;
+  ozone: number | null;
+  observedAt: string | null;
+  attribution: string;
+};
+
+function num(v: unknown): number | null {
+  const n = Number(v);
+  return Number.isFinite(n) ? n : null;
+}
+
+export async function handleLiveWeather(): Promise<Response> {
+  const fetchedAt = new Date().toISOString();
+  const base = { fetchedAt, source: "open-meteo.com" };
+  const ctrl = new AbortController();
+  const timer = setTimeout(() => ctrl.abort(), UPSTREAM_TIMEOUT_MS);
+
+  try {
+    // Air quality is a separate host; a failure there must not lose the
+    // forecast, so it is settled independently.
+    const [fRes, aRes] = await Promise.allSettled([
+      fetch(FORECAST_URL, { signal: ctrl.signal, headers: { accept: "application/json" } }),
+      fetch(AIR_URL, { signal: ctrl.signal, headers: { accept: "application/json" } }),
+    ]);
+
+    if (fRes.status !== "fulfilled" || !fRes.value.ok) {
+      const why =
+        fRes.status === "rejected"
+          ? (fRes.reason as Error)?.message ?? "unknown error"
+          : `HTTP ${fRes.value.status}`;
+      return envelope({ ...base, ok: false, reason: `Forecast unavailable: ${why}.` });
+    }
+
+    const f = (await fRes.value.json().catch(() => null)) as {
+      current?: Record<string, unknown>;
+      hourly?: { precipitation_probability?: unknown[]; precipitation?: unknown[] };
+    } | null;
+    if (!f?.current) {
+      return envelope({ ...base, ok: false, reason: "Forecast returned an unexpected shape." });
+    }
+
+    const probs = (f.hourly?.precipitation_probability ?? []).slice(0, 24).map(num);
+    const rains = (f.hourly?.precipitation ?? []).slice(0, 24).map(num);
+
+    let air: Record<string, unknown> | null = null;
+    if (aRes.status === "fulfilled" && aRes.value.ok) {
+      const a = (await aRes.value.json().catch(() => null)) as { current?: Record<string, unknown> } | null;
+      air = a?.current ?? null;
+    }
+
+    return envelope<WeatherPayload>({
+      ...base,
+      ok: true,
+      data: {
+        temperatureC: num(f.current.temperature_2m),
+        humidityPct: num(f.current.relative_humidity_2m),
+        precipitationMm: num(f.current.precipitation),
+        windKph: num(f.current.wind_speed_10m),
+        rainChanceNext24h: probs.length ? Math.max(...probs.map((p) => p ?? 0)) : null,
+        rainNext24hMm: rains.length
+          ? Math.round(rains.reduce<number>((s, r) => s + (r ?? 0), 0) * 10) / 10
+          : null,
+        pm25: air ? num(air.pm2_5) : null,
+        pm10: air ? num(air.pm10) : null,
+        ozone: air ? num(air.ozone) : null,
+        observedAt: typeof f.current.time === "string" ? f.current.time : null,
+        attribution: "Open-Meteo · ECMWF / DWD ICON / NOAA GFS · CAMS for air quality",
+      },
+    }, WEATHER_TTL);
+  } catch (err) {
+    const reason =
+      (err as Error)?.name === "AbortError"
+        ? `Weather service did not respond within ${UPSTREAM_TIMEOUT_MS / 1000}s.`
+        : `Weather service unreachable: ${(err as Error)?.message ?? "unknown error"}.`;
+    return envelope({ ...base, ok: false, reason });
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
+/* ==================================================================== *
+ * Longdo — Thai place search and the iTIC camera network.
+ *
+ * The key lives in Worker env and never leaves it: it is not imported,
+ * not committed, and never echoed in a response or an error message. The
+ * browser calls a same-origin route and receives only the result.
+ * ==================================================================== */
+
+export type LongdoKind = "search" | "cameras";
+
+export async function handleLiveLongdo(
+  kind: LongdoKind,
+  key: string | undefined,
+  query: URLSearchParams,
+): Promise<Response> {
+  const fetchedAt = new Date().toISOString();
+  if (!key) {
+    return envelope({
+      ok: false,
+      fetchedAt,
+      source: "longdo",
+      reason:
+        "No Longdo API key configured on this deployment. Set LONGDO_API_KEY in the Worker environment — never in the repository.",
+    });
+  }
+
+  // Build upstream from an allowlist of parameters. Never forward the
+  // caller's query wholesale: that is how an open proxy is built by accident.
+  let upstream: string;
+  if (kind === "search") {
+    const q = (query.get("q") ?? "").slice(0, 200);
+    if (!q.trim()) {
+      return envelope({ ok: false, fetchedAt, source: "longdo", reason: "Missing search term." });
+    }
+    const p = new URLSearchParams({ keyword: q, limit: "20", key });
+    const lat = query.get("lat");
+    const lon = query.get("lon");
+    if (lat && Number.isFinite(Number(lat))) p.set("lat", lat);
+    if (lon && Number.isFinite(Number(lon))) p.set("lon", lon);
+    upstream = `https://search.longdo.com/mapsearch/json/search?${p}`;
+  } else {
+    upstream = `https://api.longdo.com/RouteService/json/camera?key=${encodeURIComponent(key)}`;
+  }
+
+  const ctrl = new AbortController();
+  const timer = setTimeout(() => ctrl.abort(), UPSTREAM_TIMEOUT_MS);
+  try {
+    const res = await fetch(upstream, { signal: ctrl.signal, headers: { accept: "application/json" } });
+    if (!res.ok) {
+      // Deliberately does not include `upstream` — it carries the key.
+      return envelope({ ok: false, fetchedAt, source: "longdo", reason: `Longdo returned HTTP ${res.status}.` });
+    }
+    const raw = await res.json().catch(() => null);
+    if (raw === null) {
+      return envelope({ ok: false, fetchedAt, source: "longdo", reason: "Longdo returned a body that is not JSON." });
+    }
+    return envelope({ ok: true, fetchedAt, source: "longdo", data: raw as Record<string, unknown> });
+  } catch (err) {
+    return envelope({
+      ok: false,
+      fetchedAt,
+      source: "longdo",
+      reason: `Longdo unreachable: ${(err as Error)?.message ?? "unknown error"}.`,
     });
   } finally {
     clearTimeout(timer);

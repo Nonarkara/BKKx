@@ -1,7 +1,7 @@
 "use client";
 
 import { useId, useState } from "react";
-import { CAT, SEQ } from "../data/chart-palette";
+import { SEQ } from "../data/chart-palette";
 
 /* Chart primitives for the Console war room.
  *
