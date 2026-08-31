@@ -162,7 +162,9 @@ export function Gazetteer() {
               return (
                 <li key={c.slug}>
                   <p className="sh-gaz-name">
-                    {c.nameEn}
+                    {/* Each cluster has its own page now — the editorial entry
+                        here, the computed spine there. */}
+                    <a href={`/shophouses/cluster/${c.slug}`}>{c.nameEn}</a>
                     {c.nameTh && (
                       <span lang="th" className="sh-gaz-th"> {c.nameTh}</span>
                     )}

@@ -1565,3 +1565,63 @@ test("the selected language is readable — the toggle never paints label on gro
   assert.match(active[0], /background:\s*var\(--lang-on\)/);
   assert.match(active[0], /color:\s*var\(--lang-on-text\)/);
 });
+
+/* ---------------------------------------------------------------- *
+ * shophouses — the computed argument, cluster by cluster
+ * ---------------------------------------------------------------- */
+
+test("every documented cluster has a page, and the gazetteer and spine agree on the set", async () => {
+  const { CLUSTER_RECORDS } = await import("../app/data/shophouse-spine-index.ts");
+  const { CLUSTERS } = await import("../app/data/shophouse-gazetteer.ts");
+
+  // The page joins the editorial half to the computed half. If the two
+  // sets ever diverge, some cluster loses one of its halves silently.
+  const spine = new Set(CLUSTER_RECORDS.map((c) => c.slug));
+  const gaz = new Set(CLUSTERS.map((c) => c.slug));
+  assert.deepEqual([...gaz].filter((s) => !spine.has(s)), [], "gazetteer clusters missing a spine rollup");
+  assert.deepEqual([...spine].filter((s) => !gaz.has(s)), [], "spine rollups missing a gazetteer entry");
+
+  const gone = await render("/shophouses/cluster/not-a-cluster");
+  assert.equal(gone.status, 404);
+});
+
+test("a cluster page states its figures with the rules that produced them", async () => {
+  const { CLUSTER_RECORDS } = await import("../app/data/shophouse-spine-index.ts");
+  const c = CLUSTER_RECORDS.find((r) => r.n > 50 && Object.keys(r.bindingClauses).length);
+  assert.ok(c, "at least one cluster must be large enough to carry binding clauses");
+
+  const html = await (await render(`/shophouses/cluster/${c.slug}`)).text();
+  assert.match(html, /The dimensions actually measured/);
+  assert.match(html, /What binds these buildings/);
+  assert.match(html, /Where the pressure sits/);
+  assert.match(html, /What this page cannot tell you/);
+  // The counted figures must be the ones the spine holds, not restated.
+  assert.match(html, new RegExp(String(c.n)));
+  assert.match(html, new RegExp(String(c.medianDepth).replace(".", "\\.")));
+  // Morphology is never allowed to read as a survey.
+  assert.match(html, /morphology only|Morphology is not proof/);
+});
+
+test("every binding clause the spine records has rule text in the Bible", async () => {
+  const { CLUSTER_RECORDS } = await import("../app/data/shophouse-spine-index.ts");
+  const { REGULATION } = await import("../app/data/shophouse-bible.ts");
+
+  const keys = new Set();
+  for (const c of CLUSTER_RECORDS) for (const k of Object.keys(c.bindingClauses)) keys.add(k);
+  assert.ok(keys.size > 0, "the spine must record at least one binding clause");
+
+  for (const key of keys) {
+    const clause = key.replace(/^MR55\s+/, "");
+    const rule = REGULATION.find((r) => r.clause === clause || r.clause.endsWith(`, ${clause}`));
+    assert.ok(rule, `no rule text for binding clause ${key} — the page would print a bare code`);
+  }
+});
+
+test("a cluster's quadrant split never claims more buildings than it screened", async () => {
+  const { CLUSTER_RECORDS } = await import("../app/data/shophouse-spine-index.ts");
+  for (const c of CLUSTER_RECORDS) {
+    const summed = Object.values(c.quadrants).reduce((a, b) => a + b, 0);
+    assert.equal(summed, c.n, `${c.slug}: quadrant counts must account for all ${c.n} footprints`);
+    assert.ok(c.storeysKnown <= c.n, `${c.slug}: cannot know storeys for more buildings than exist`);
+  }
+});

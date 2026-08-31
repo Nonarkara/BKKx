@@ -7163,3 +7163,167 @@ body:has(.sh-figexport) { background: #fff !important; }
   .mrec-prov { padding: calc(var(--page-unit) * 0.7); }
   .mrec-near-list li { grid-template-columns: 4.5em 1fr; }
 }
+
+/* ==================================================================
+   /shophouses/cluster/[slug] — one documented cluster
+   ------------------------------------------------------------------
+   The editorial gazetteer entry and the computed spine rollup on one
+   page. Reuses the essay surface's tokens and its quick-reference
+   grid; adds only what a per-cluster record needs, which is a way to
+   put a rule and the count it binds side by side.
+   ================================================================== */
+
+.sh-cluster {
+  width: min(1100px, 100% - (var(--sh-page) * 2));
+  margin: calc(var(--sh-page) * 1.6) auto 0;
+  padding-bottom: calc(var(--sh-page) * 3);
+}
+
+/* The section runs the container; the prose inside it keeps the house
+   measure. The figure grids are the exception — they are the section's
+   substance, not a note beside it, so they take the full width and get
+   four legible columns instead of four cramped ones. */
+.sh-cluster-block {
+  margin: 0 0 calc(var(--sh-page) * 2);
+  padding-top: var(--sh-base);
+  border-top: 1px solid var(--sh-ink);
+}
+.sh-cluster-block:last-child { margin-bottom: 0; }
+.sh-cluster-block > p,
+.sh-cluster-block > h2,
+.sh-cluster-clauses,
+.sh-cluster-quadrants,
+.sh-cluster-caveats,
+.sh-cluster-cite { max-width: var(--sh-measure); }
+
+.sh-cluster-block h2 {
+  margin: 0 0 var(--sh-cap);
+  font-family: var(--font-display);
+  font-size: 24px;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+}
+.sh-cluster-block > p { margin: 0 0 var(--sh-base); }
+.sh-cluster-block code {
+  font-family: var(--font-mono);
+  font-size: 0.82em;
+}
+
+/* Same visual grammar as the Bible's quick-reference card, without its
+   frame — these figures are the section, not a summary of it. */
+.sh-quickref-grid {
+  display: grid;
+  gap: var(--sh-base);
+  margin: var(--sh-base) 0;
+}
+@media (min-width: 560px) { .sh-quickref-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (min-width: 900px) { .sh-quickref-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+.sh-quickref-grid dt {
+  font-family: var(--font-display);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--sh-quiet);
+}
+.sh-quickref-grid dd {
+  margin: 2px 0 0;
+  font-family: var(--font-display);
+  font-size: 21px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+}
+.sh-quickref-grid dd small {
+  display: block;
+  margin-top: 1px;
+  font-family: var(--font-display);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--sh-quiet);
+}
+
+/* A clause and the number of buildings its own geometry triggers. */
+.sh-cluster-clauses,
+.sh-cluster-quadrants,
+.sh-cluster-caveats {
+  list-style: none;
+  margin: 0 0 var(--sh-base);
+  padding: 0;
+}
+.sh-cluster-clauses > li {
+  border-top: 1px solid var(--sh-hairline);
+  padding: var(--sh-cap) 0;
+}
+.sh-cluster-clause-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: var(--sh-base);
+  margin: 0 0 4px;
+  font-family: var(--font-display);
+  font-size: 15px;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
+.sh-cluster-clause-head b {
+  flex: none;
+  color: var(--sh-seal);
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
+}
+.sh-cluster-rule { margin: 0; font-size: 16px; line-height: 1.55; }
+.sh-cluster-clauses .sh-fig-note { margin-top: var(--sh-cap); }
+
+.sh-cluster-quadrants > li {
+  display: grid;
+  grid-template-columns: 14px minmax(0, 1fr);
+  gap: 0 12px;
+  border-top: 1px solid var(--sh-hairline);
+  padding: var(--sh-cap) 0;
+}
+.sh-cluster-swatch {
+  grid-row: 1 / span 3;
+  width: 14px;
+  height: 14px;
+  margin-top: 6px;
+  border: 1px solid var(--sh-rule);
+}
+.sh-cluster-q-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: var(--sh-base);
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 15px;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
+.sh-cluster-q-head b {
+  flex: none;
+  font-variant-numeric: tabular-nums;
+}
+.sh-cluster-q-what { margin: 2px 0 0; font-size: 16px; }
+.sh-cluster-quadrants .sh-fig-note { margin-top: 4px; }
+
+.sh-cluster-caveats > li {
+  border-top: 1px solid var(--sh-hairline);
+  padding: var(--sh-cap) 0;
+  font-size: 16px;
+  line-height: 1.55;
+  color: var(--sh-quiet);
+}
+
+.sh-cluster-cite code {
+  display: block;
+  border: 1px solid var(--sh-rule);
+  background: var(--sh-panel, transparent);
+  padding: 8px 10px;
+  font-size: 12.5px;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
