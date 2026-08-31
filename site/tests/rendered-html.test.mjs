@@ -22,6 +22,76 @@ async function render(path = "/") {
   );
 }
 
+async function callWorker(path, env) {
+  const workerUrl = new URL("../dist/server/index.js", import.meta.url);
+  workerUrl.searchParams.set("api-test", `${process.pid}-${Date.now()}-${path}`);
+  const { default: worker } = await import(workerUrl.href);
+  return worker.fetch(
+    new Request(`http://localhost${path}`, { headers: { accept: "application/json" } }),
+    env,
+    { waitUntil() {}, passThroughOnException() {} },
+  );
+}
+
+test("optional live feeds degrade honestly when the runtime provides no env object", async () => {
+  const cctv = await callWorker("/api/live/cctv", undefined);
+  assert.equal(cctv.status, 200);
+  const cctvBody = await cctv.json();
+  assert.equal(cctvBody.ok, true);
+  assert.equal(cctvBody.data.configured, false);
+  assert.deepEqual(cctvBody.data.cameras, []);
+
+  for (const path of ["/api/live/fires", "/api/live/longdo/cameras"]) {
+    const response = await callWorker(path, undefined);
+    assert.equal(response.status, 200, `${path} must return an envelope, not crash`);
+    const body = await response.json();
+    assert.equal(body.ok, false);
+    assert.match(body.reason, /No .*key configured/i);
+  }
+});
+
+test("weather keeps valid air observations when the forecast is rate-limited", async () => {
+  const { handleLiveWeather } = await import("../worker/live.ts");
+  const originalFetch = globalThis.fetch;
+  globalThis.fetch = async (input) => {
+    const url = String(input);
+    if (url.includes("air-quality-api.open-meteo.com")) {
+      return Response.json({ current: { time: "2026-09-01T10:00", pm2_5: 12.4, pm10: 18.2, ozone: 31 } });
+    }
+    return Response.json({ reason: "Daily API request limit exceeded" }, { status: 429 });
+  };
+
+  try {
+    const response = await handleLiveWeather();
+    assert.equal(response.status, 200);
+    const body = await response.json();
+    assert.equal(body.ok, true);
+    assert.equal(body.data.forecastAvailable, false);
+    assert.equal(body.data.airAvailable, true);
+    assert.equal(body.data.pm25, 12.4);
+    assert.equal(body.data.temperatureC, null);
+    assert.match(body.data.partialReason, /Forecast unavailable: HTTP 429/);
+  } finally {
+    globalThis.fetch = originalFetch;
+  }
+});
+
+test("rain treats a credential error inside HTTP 200 as unavailable data", async () => {
+  const { handleLiveRain } = await import("../worker/live.ts");
+  const originalFetch = globalThis.fetch;
+  globalThis.fetch = async () => Response.json({ Error: "username หรือ Password ไม่ถูกต้อง" });
+
+  try {
+    const response = await handleLiveRain();
+    const body = await response.json();
+    assert.equal(body.ok, false);
+    assert.match(body.reason, /requires credentials/);
+    assert.equal(response.headers.get("x-bkkx-live"), "degraded");
+  } finally {
+    globalThis.fetch = originalFetch;
+  }
+});
+
 test("renders the Bangkok walkthrough at /worlds", async () => {
   const response = await render("/worlds");
   assert.equal(response.status, 200);

@@ -68,7 +68,7 @@ const worker = {
     }
 
     if (url.pathname === "/api/live/cctv" && request.method === "GET") {
-      return handleLiveCctv(env.CCTV_SOURCE_URL);
+      return handleLiveCctv(env?.CCTV_SOURCE_URL);
     }
 
     if (url.pathname === "/api/live/weather" && request.method === "GET") {
@@ -82,7 +82,7 @@ const worker = {
     }
 
     if (url.pathname === "/api/live/fires" && request.method === "GET") {
-      return handleLiveFires(env.FIRMS_MAP_KEY);
+      return handleLiveFires(env?.FIRMS_MAP_KEY);
     }
 
     if (url.pathname.startsWith("/api/live/longdo/") && request.method === "GET") {
@@ -90,7 +90,7 @@ const worker = {
       if (kind !== "search" && kind !== "cameras") {
         return Response.json({ ok: false, reason: "Unknown Longdo service." }, { status: 404 });
       }
-      return handleLiveLongdo(kind, env.LONGDO_API_KEY, url.searchParams);
+      return handleLiveLongdo(kind, env?.LONGDO_API_KEY, url.searchParams);
     }
 
     if (url.pathname === "/api/stats" && request.method === "GET") {

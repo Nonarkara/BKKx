@@ -10,8 +10,9 @@
 //
 // 1. Transport decides architecture, not preference. A feed is reachable from
 //    a browser only if it is HTTPS *and* sends CORS headers. The BMA gauge
-//    feed is neither, so it must be proxied; Open-Meteo is both, so it need
-//    not be. We proxy it anyway — see `whyProxied` on that entry.
+//    feed is plain HTTP and now also requires credentials, so it must be
+//    proxied if agency access is restored; Open-Meteo is HTTPS with CORS, so
+//    it need not be. We proxy it anyway — see `whyProxied` on that entry.
 //
 // 2. Terrain is the missing layer, not more overlays. Bangkok floods because
 //    it is flat, low and sinking. Without elevation a flood twin can colour
@@ -225,17 +226,33 @@ export const TWIN_SOURCES: TwinSource[] = [
     name: "BMA rainfall gauge network",
     provider: "สำนักการระบายน้ำ กทม. — BMA Drainage & Sewerage",
     category: "hazard",
-    integration: "wired",
+    integration: "researched",
     unlocks:
       "Observed rainfall, station by station — the ground truth the forecast is checked against.",
-    licence: "Public agency feed; terms not formally published.",
-    auth: "none",
+    licence: "Agency endpoint; access and reuse terms are not formally published.",
+    auth: "account",
     browserReachable: false,
     whyProxied:
-      "Mandatory, not stylistic: the endpoint is plain HTTP and sends no CORS headers, so no HTTPS page can fetch it. Only a server can.",
-    caveat: "Undocumented response shape; the Worker validates and reports failure rather than rendering a zero.",
+      "Mandatory if access is restored: the endpoint is plain HTTP and sends no CORS headers, and credentials must never reach the browser.",
+    caveat:
+      "The endpoint currently returns a username/password error inside an HTTP 200 response. The Worker identifies that as unavailable and never renders it as zero rain.",
     url: "http://weather.bangkok.go.th/dds_webservices/api/rain/lastdata",
     route: "/api/live/rain",
+  },
+  {
+    id: "bma-flood-open-data",
+    name: "BMA flood locations and annual road-flood records",
+    provider: "สำนักการระบายน้ำ กทม. — BMA Drainage & Sewerage",
+    category: "hazard",
+    integration: "researched",
+    unlocks:
+      "A public baseline for the live twin: mapped flood-risk locations plus annual records of water waiting to drain on Bangkok's main roads, including the agency's 2025 table. This is evidence for recurrence and exposure, not a substitute for a live gauge.",
+    licence: "Bangkok Open Data terms; resource metadata and CSV downloads are public.",
+    auth: "none",
+    browserReachable: true,
+    caveat:
+      "Historical and administrative, not live. Yearly files vary in schema and Thai field naming, so they need a reproducible import and geography audit before map publication.",
+    url: "https://data.bangkok.go.th/dataset/frd_dds",
   },
   {
     id: "gistda-flood",

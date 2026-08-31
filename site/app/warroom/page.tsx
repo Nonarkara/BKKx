@@ -78,7 +78,7 @@ const locatedMonuments = PINNED_SITES.map((s) => ({
 
 export const metadata: Metadata = {
   title: "War room",
-  description: `The BKKx operational picture without a map: ${reg.counts.total} register entries, ${PRESSURE_TOTAL.toLocaleString("en-US")} screened shophouse footprints, ${DATASETS.length} checksummed datasets, and the live Bangkok gauge network.`,
+  description: `The BKKx operational picture without a map: ${reg.counts.total} register entries, ${PRESSURE_TOTAL.toLocaleString("en-US")} screened shophouse footprints, ${DATASETS.length} checksummed datasets, and source-labelled live services.`,
   alternates: { canonical: "/warroom" },
   robots: { index: false },
 };
