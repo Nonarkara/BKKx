@@ -24,6 +24,17 @@ import {
   HERITAGE_MOBILITY_STOPS,
 } from "../../data/heritage-mobility";
 import ROWHOUSE_CANDIDATE_SUMMARY from "../../data/rowhouse-footprint-summary.json";
+import {
+  EVIDENCE_COLOR,
+  EVIDENCE_TIERS,
+  FALLBACK_TIER,
+  LANDMARK_TIER,
+  tierForDetailSource,
+  tierForHeroConfidence,
+  type EvidenceTally,
+  type EvidenceTier,
+} from "../../data/evidence-tiers";
+import EVIDENCE_TALLY_JSON from "../../data/evidence-tally.json";
 
 // The walks that geographically belong to Historic Core — everything except
 // bang-krachao-loop, a disconnected bike loop far south of the old town.
@@ -102,6 +113,40 @@ const HERITAGE_DETAIL_COLOR: maplibregl.ExpressionSpecification = [
   "residential", "#ad8a62",
   "#92785d",
 ];
+
+/* Evidence mode — the ladder lives in app/data/evidence-tiers.ts, and the
+ * MapLibre colour expressions below are BUILT from it rather than restated,
+ * so the map, the legend and the build-time tally can never disagree about
+ * which height source counts as which kind of evidence. */
+
+function evidenceMatch(
+  property: string,
+  pick: (spec: (typeof EVIDENCE_TIERS)[number]) => readonly string[],
+): maplibregl.ExpressionSpecification {
+  const expression: unknown[] = ["match", ["coalesce", ["get", property], ""]];
+  for (const spec of EVIDENCE_TIERS) {
+    const values = pick(spec);
+    // The fallback tier's own values are covered by the fallback itself.
+    if (!values.length || spec.tier === FALLBACK_TIER) continue;
+    expression.push([...values], EVIDENCE_COLOR[spec.tier]);
+  }
+  // Anything unlisted is a guess — and the build-time guard has already
+  // failed if the corpus contains a value no tier claims.
+  expression.push(EVIDENCE_COLOR[FALLBACK_TIER]);
+  return expression as maplibregl.ExpressionSpecification;
+}
+
+const EVIDENCE_DETAIL_COLOR = evidenceMatch("height_source", (t) => t.detailSources);
+const EVIDENCE_HERO_COLOR = evidenceMatch("height_confidence", (t) => t.heroConfidences);
+const EVIDENCE_LANDMARK_COLOR = EVIDENCE_COLOR[LANDMARK_TIER];
+
+// Counted at build time by scripts/build-evidence-tally.mjs over the three
+// extruded layers — never typed by hand, and the build fails if the corpus
+// carries a height source no tier claims.
+const EVIDENCE_TALLY = EVIDENCE_TALLY_JSON as EvidenceTally;
+const EVIDENCE_INFERRED_SHARE = Math.round(
+  (EVIDENCE_TALLY.byTier[FALLBACK_TIER] / EVIDENCE_TALLY.total) * 100,
+);
 
 const HERITAGE_LANDMARK_COLOR: maplibregl.ExpressionSpecification = [
   "match",
@@ -551,6 +596,9 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
   const [showAerosol, setShowAerosol] = useState(false);
   const [aerosolDate] = useState(nasaObservationDate);
   const [showArchitecturalDetail, setShowArchitecturalDetail] = useState(true);
+  // Evidence mode recolours the same massing by how each height was
+  // established. Off by default: the city should look like a city first.
+  const [evidenceMode, setEvidenceMode] = useState(false);
   const [showRowhouseCandidates, setShowRowhouseCandidates] = useState(false);
   const [selectedHeritage, setSelectedHeritage] = useState<HeritageSite | null>(null);
   const [selectedArchitecture, setSelectedArchitecture] = useState<ArchitecturalDetail | null>(null);
@@ -589,6 +637,22 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
     if (showArchitecturalDetail) setSelectedArchitecture(null);
     setShowArchitecturalDetail((visible) => !visible);
   }
+
+  // Where the selected part sits on the evidence ladder. Hero parts carry
+  // height_confidence, Old Town footprints carry height_source, and the 73
+  // landmark parts carry neither — every one of those is a BKKx envelope for
+  // a named structure, which is the curated tier by definition.
+  const selectedTier = useMemo<EvidenceTier>(() => {
+    if (!selectedArchitecture) return LANDMARK_TIER;
+    const byConfidence = selectedArchitecture.height_confidence
+      ? tierForHeroConfidence(selectedArchitecture.height_confidence)
+      : null;
+    if (byConfidence) return byConfidence;
+    const bySource = selectedArchitecture.height_source
+      ? tierForDetailSource(selectedArchitecture.height_source)
+      : null;
+    return bySource ?? LANDMARK_TIER;
+  }, [selectedArchitecture]);
   const poiMarkerRefs = useRef<Record<PoiKind, maplibregl.Marker[]>>({
     temple: [],
     "royal-temple": [],
@@ -800,6 +864,7 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
         case "t": case "T": setShowMobility((v) => !v); break;
         case "a": case "A": setShowAerosol((v) => !v); break;
         case "d": case "D": setShowArchitecturalDetail((v) => !v); break;
+        case "e": case "E": setEvidenceMode((v) => !v); break;
         case "r": case "R": setShowRowhouseCandidates((v) => !v); break;
         case "c": case "C": copyViewLink(); break;
         case "?": setShowShortcuts((v) => !v); break;
@@ -1655,6 +1720,28 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
     }
   }, [showArchitecturalDetail, mapReady]);
 
+  // Evidence mode: the same geometry, recoloured by how each height was
+  // established. Only the paint changes — no layer is hidden and no
+  // footprint moves, so what you were looking at stays where it was and
+  // only the question changes.
+  useEffect(() => {
+    const map = mapRef.current;
+    if (!map || !mapReady) return;
+    const repaint: [string, maplibregl.ExpressionSpecification | string][] = [
+      ["bkkx-heritage-detail", evidenceMode ? EVIDENCE_DETAIL_COLOR : HERITAGE_DETAIL_COLOR],
+      ["bkkx-heritage-landmarks", evidenceMode ? EVIDENCE_LANDMARK_COLOR : HERITAGE_LANDMARK_COLOR],
+      [
+        "bkkx-hero-monuments",
+        evidenceMode
+          ? EVIDENCE_HERO_COLOR
+          : (["coalesce", ["get", "material_color"], "#f1c75b"] as maplibregl.ExpressionSpecification),
+      ],
+    ];
+    for (const [layerId, color] of repaint) {
+      if (map.getLayer(layerId)) map.setPaintProperty(layerId, "fill-extrusion-color", color);
+    }
+  }, [evidenceMode, mapReady, showArchitecturalDetail]);
+
   useEffect(() => {
     const map = mapRef.current;
     if (!map || !mapReady) return;
@@ -1878,6 +1965,16 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
             </button>
             <button
               type="button"
+              className={evidenceMode ? "active evidence-active" : ""}
+              onClick={() => setEvidenceMode((v) => !v)}
+              aria-pressed={evidenceMode}
+              disabled={!showArchitecturalDetail}
+              title={`Recolour the massing by how each height was established. ${EVIDENCE_INFERRED_SHARE}% of these ${EVIDENCE_TALLY.total.toLocaleString("en-US")} buildings carry a height nobody recorded. Shortcut: E`}
+            >
+              ◈ Evidence
+            </button>
+            <button
+              type="button"
               className={showMobility ? "active mobility-active" : ""}
               onClick={() => {
                 if (showMobility) setSelectedMobility(null);
@@ -1932,13 +2029,39 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
         )}
 
         <div className="atlas-key-stack">
+          {hasHistoricContext && showArchitecturalDetail && evidenceMode && (
+            <details className="atlas-map-key atlas-evidence-key" open>
+              <summary>Evidence · how each height was established</summary>
+              <div>
+                {EVIDENCE_TIERS.map((spec) => {
+                  const n = EVIDENCE_TALLY.byTier[spec.tier];
+                  return (
+                    <span key={spec.tier} title={spec.meaning}>
+                      <i
+                        className="key-building"
+                        style={{ background: EVIDENCE_COLOR[spec.tier] }}
+                      />
+                      {spec.label}
+                      <b>{n.toLocaleString("en-US")}</b>
+                    </span>
+                  );
+                })}
+                <p className="atlas-evidence-note">
+                  {EVIDENCE_INFERRED_SHARE}% of the{" "}
+                  {EVIDENCE_TALLY.total.toLocaleString("en-US")} extruded buildings here have a
+                  height nobody recorded — the model inferred it from a building tag. Counted at
+                  build time from the layers themselves, not estimated.
+                </p>
+              </div>
+            </details>
+          )}
           {hasHistoricContext && (
             <details className="atlas-map-key" open>
             <summary>Map key</summary>
             <div>
-              {showArchitecturalDetail ? <span><i className="key-building key-fabric" />Old Town full footprints</span> : null}
-              {showArchitecturalDetail ? <span><i className="key-building key-landmark" />Curated landmark massing</span> : null}
-              {showArchitecturalDetail ? <span><i className="key-building key-hero" />Evidence-labelled hero model</span> : null}
+              {showArchitecturalDetail && !evidenceMode ? <span><i className="key-building key-fabric" />Old Town full footprints</span> : null}
+              {showArchitecturalDetail && !evidenceMode ? <span><i className="key-building key-landmark" />Curated landmark massing</span> : null}
+              {showArchitecturalDetail && !evidenceMode ? <span><i className="key-building key-hero" />Evidence-labelled hero model</span> : null}
               {showPoi.oldtown ? <span><i className="key-line key-rowhouse" />Documented rowhouse</span> : null}
               {showPoi.oldtown ? <span><i className="key-line key-rowhouse key-dashed" />Interpretive corridor</span> : null}
               {showMobility ? <span><i className="key-line key-rail" />MRT / BTS</span> : null}
@@ -1982,6 +2105,7 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
               <div><dt>T</dt><dd>Transit lines &amp; piers</dd></div>
               <div><dt>A</dt><dd>Satellite aerosol</dd></div>
               <div><dt>D</dt><dd>Old Town 3D detail</dd></div>
+              <div><dt>E</dt><dd>Evidence mode</dd></div>
               <div><dt>R</dt><dd>Rowhouse candidates</dd></div>
               <div><dt>C</dt><dd>Copy citable view link</dd></div>
               <div><dt>?</dt><dd>This card</dd></div>
@@ -2094,6 +2218,17 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
                     title={HERITAGE_DETAIL_NOTE}
                   >
                     ◩ Old Town 3D
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setEvidenceMode((v) => !v)}
+                    className={`layer-toggle-btn evidence-toggle ${evidenceMode ? "active" : ""}`}
+                    aria-pressed={evidenceMode}
+                    disabled={!showArchitecturalDetail}
+                    aria-label="Recolour the 3D massing by the evidence behind each building height"
+                    title={`Recolour the massing by how each height was established. ${EVIDENCE_INFERRED_SHARE}% of these ${EVIDENCE_TALLY.total.toLocaleString("en-US")} buildings carry a height nobody recorded. Shortcut: E`}
+                  >
+                    ◈ Evidence
                   </button>
                   <button
                     type="button"
@@ -2290,7 +2425,19 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
             </p>
             <div className="heritage-meta-grid">
               <div><span>Character</span><strong>{selectedArchitecture.kind ?? selectedArchitecture.building_type ?? "heritage fabric"}</strong></div>
-              <div><span>Evidence</span><strong>{selectedArchitecture.height_confidence ?? "curated massing"}</strong></div>
+              {/* The same ladder the Evidence-mode colour uses, so a single
+                  building's tier and the citywide legend always agree. */}
+              <div>
+                <span>Evidence</span>
+                <strong>
+                  <i
+                    className="key-building heritage-evidence-swatch"
+                    style={{ background: EVIDENCE_COLOR[selectedTier] }}
+                    aria-hidden="true"
+                  />
+                  {EVIDENCE_TIERS.find((t) => t.tier === selectedTier)?.label ?? selectedTier}
+                </strong>
+              </div>
             </div>
             <p className="heritage-source-note">
               {selectedArchitecture.source ?? "OpenStreetMap footprint · BKKx typology-height model"}<br />

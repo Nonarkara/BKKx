@@ -3,7 +3,7 @@ import Link from "next/link";
 import { BarList, CompositionBar, Tally, TableView } from "./Charts";
 import { CAT } from "../data/chart-palette";
 import { BangkokClock, RainPanel, WeatherPanel, FirePanel, CctvRail } from "./LiveDeck";
-import REGISTER from "../../public/heritage-register.json";
+import { PINNED_SITES, REGISTER_COUNTS, REGISTER_SITES } from "../data/heritage-register";
 import MANIFEST from "../data/dataset-manifest.json";
 import { DATASETS } from "../data/datasets";
 import {
@@ -32,29 +32,7 @@ import {
  * deliberately not the Editorial paper of /heritage.
  */
 
-type RegisterSite = {
-  name?: string;
-  district?: string;
-  registerStatus?: string;
-  precision?: string;
-  locatedBy?: string;
-  world?: string | null;
-  lat?: number;
-  lon?: number;
-};
-type RegisterFile = {
-  counts: {
-    total: number;
-    registered: number;
-    awaiting: number;
-    buildingPrecision: number;
-    districtPrecision: number;
-    walkable: number;
-  };
-  sites: RegisterSite[];
-};
-
-const reg = REGISTER as unknown as RegisterFile;
+const reg = { counts: REGISTER_COUNTS, sites: REGISTER_SITES };
 const manifest = MANIFEST as Record<string, { bytes: number; sha256: string; features: number | null }>;
 
 /* ---- derived, never typed by hand ---------------------------------- */
@@ -88,10 +66,15 @@ const pressureSorted = [...PRESSURE_DISTRICTS].sort((a, b) => b.count - a.count)
 
 // Slim tuples for the fire panel's proximity check — computed here, once,
 // server-side, so the client component never imports the full 1.3 MB
-// register file just to compare two numbers per monument.
-const locatedMonuments = reg.sites
-  .filter((s): s is RegisterSite & { lat: number; lon: number } => typeof s.lat === "number" && typeof s.lon === "number")
-  .map((s, i) => ({ id: `reg-${i}`, name: s.name ?? "Unnamed entry", lat: s.lat, lon: s.lon }));
+// register file just to compare two numbers per monument. The id is the
+// register's own, so a detection near a monument can name the record and
+// link straight to it.
+const locatedMonuments = PINNED_SITES.map((s) => ({
+  id: s.id,
+  name: s.name,
+  lat: s.lat,
+  lon: s.lon,
+}));
 
 export const metadata: Metadata = {
   title: "War room",

@@ -1116,6 +1116,8 @@ button {
 .atlas-embed-tools button.active { background: var(--signal); color: var(--ink); }
 .atlas-embed-tools button.mobility-active { background: #dff6ff; color: #10202a; }
 .atlas-embed-tools button.detail-active { background: #efb739; color: #24180a; }
+.atlas-embed-tools button.evidence-active { background: #4fb0cd; color: #06222c; }
+.atlas-embed-tools button:disabled { opacity: .38; cursor: not-allowed; }
 .atlas-embed-tools a { border-right: 0; color: var(--signal); }
 
 .atlas-embed-more { position: relative; }
@@ -1827,6 +1829,47 @@ button {
   background: rgba(239, 183, 57, 0.22);
   border-color: #efb739;
   color: #ffd77a;
+}
+
+/* Evidence mode takes the cyan of its own ramp, never the signal lime and
+   never the amber of the massing it recolours — the control should look
+   like the question it asks. */
+.layer-toggle-btn.evidence-toggle.active {
+  background: rgba(79, 176, 205, 0.22);
+  border-color: #4fb0cd;
+  color: #a9e6f5;
+}
+.layer-toggle-btn:disabled { opacity: .38; cursor: not-allowed; }
+
+/* ---- Evidence-mode legend ----
+   Same chrome as the map key, but each row carries the counted figure, so
+   the legend is a claim you can check rather than a colour swatch. */
+.atlas-evidence-key { border-color: rgba(79, 176, 205, .5); }
+.atlas-evidence-key summary { color: #a9e6f5; }
+.atlas-evidence-key span {
+  grid-template-columns: 27px 1fr auto;
+  gap: 8px;
+}
+.atlas-evidence-key span b {
+  color: #a9e6f5;
+  font-size: 9px;
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+}
+.atlas-evidence-note {
+  margin: 4px 0 0;
+  padding-top: 7px;
+  border-top: 1px solid rgba(255, 255, 255, .12);
+  color: rgba(255, 255, 255, .62);
+  font-size: 8px;
+  line-height: 1.45;
+}
+.heritage-evidence-swatch {
+  display: inline-block;
+  width: 15px;
+  height: 8px;
+  margin-right: 6px;
+  vertical-align: baseline;
 }
 
 /* Fine Arts Heritage Inspector Popup Card */
@@ -4278,7 +4321,15 @@ button {
   .bangkok-case-footer { flex-direction: column; align-items: start; }
 }
 
+/* The selected language has to be the readable one, and `background:
+   currentColor` cannot do that on its own: knocking the label out means
+   setting `color` on the same element, which is also what `currentColor`
+   resolves against — so the label lands on a ground of its own colour and
+   disappears. Both halves of the pair are therefore named, and each surface
+   sets them to its own ink and ground. */
 .lang-toggle {
+  --lang-on: var(--ink, #11120f);
+  --lang-on-text: var(--paper, #f1efe8);
   display: inline-flex;
   border: 1px solid currentColor;
   opacity: 0.7;
@@ -4303,7 +4354,8 @@ button {
 }
 
 .lang-toggle button.is-active {
-  background: currentColor;
+  background: var(--lang-on);
+  color: var(--lang-on-text);
 }
 
 .register-nav .lang-toggle,
@@ -4311,13 +4363,11 @@ button {
   color: var(--ink);
 }
 
-.register-nav .lang-toggle button.is-active,
-.atlas-shell-nav .lang-toggle button.is-active {
-  color: var(--paper);
-}
-
+/* Dark chrome: the pair inverts, so the selected button is a paper chip. */
 .wordmark ~ * .lang-toggle {
   color: var(--paper);
+  --lang-on: var(--paper);
+  --lang-on-text: var(--ink);
 }
 
 /* ─────────────────────────────────────────────────────────────────
@@ -6888,3 +6938,228 @@ body:has(.sh-figexport) { background: #fff !important; }
 .wr-suggest-actions { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
 .wr-suggest-actions .wr-btn { font-size: 10px; padding: 4px 9px; min-height: 28px; }
 .wr-suggest-coord { margin: 6px 0 0; font-family: var(--font-mono); font-size: 11px; color: var(--signal); }
+
+/* Permalink out of the explorer panel into the entry's own page. */
+.register-permalink {
+  margin: 0 0 var(--baseline);
+  font-size: var(--size-down);
+}
+.register-permalink code {
+  font-family: var(--font-mono);
+  font-size: inherit;
+}
+
+/* ==================================================================
+   /heritage/[id] — the per-monument record
+   ------------------------------------------------------------------
+   Editorial register, one entry at a time. The page's argument is
+   its provenance panel, so that panel is the only element allowed a
+   raised ground and a seal rule; everything below it is plain
+   reading matter at the house measure. No second accent is
+   introduced — gazetted/awaiting is still carried by .seal alone.
+   ================================================================== */
+
+.mrec-head h1 {
+  max-width: 24ch;                /* Thai monument names run long */
+  font-size: clamp(30px, 4.4vw, 58px);
+}
+
+/* The evidence held, said at the top. On wide viewports it sits beside the
+   name the way an area page's tagline does, so the head fills the shell
+   instead of trailing off down the left edge. */
+.mrec-verdict {
+  max-width: 30ch;
+  margin: var(--baseline) 0 0;
+  color: var(--quiet);
+  font-family: var(--font-display);
+  font-size: var(--size-up);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.3;
+  text-wrap: balance;
+}
+
+.mrec-where {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0 8px;
+  max-width: 68ch;
+  margin: var(--baseline) 0 0;
+  color: var(--quiet);
+  font-size: var(--size-down);
+}
+.mrec-where .seal { align-self: center; margin-top: 0; }
+.mrec-where-sep { color: var(--rule); }
+
+.mrec-id {
+  font-family: var(--font-mono);
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.mrec-body > section {
+  max-width: 68ch;
+  margin: 0 0 calc(var(--page-unit) * 2);
+}
+.mrec-body > section:last-child { margin-bottom: 0; }
+
+/* Two sections are exceptions to the reading measure: the provenance panel,
+   because it is a record rather than prose, and the map, which is the one
+   element on the page that earns the full shell (§XX rule 5, same as the
+   area pages). */
+.mrec-body > .mrec-prov,
+.mrec-body > .mrec-map-section { max-width: none; }
+
+.mrec-body h2 {
+  margin: 0 0 var(--cap);
+  font-family: var(--font-display);
+  font-size: var(--size-up);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.2;
+}
+.mrec-body h3 {
+  margin: calc(var(--page-unit) * 0.9) 0 var(--cap);
+  font-family: var(--font-display);
+  font-size: var(--size-base);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+.mrec-body p { margin: 0 0 var(--baseline); line-height: 1.6; }
+.mrec-body p:last-child { margin-bottom: 0; }
+
+/* ---- the provenance panel: the reason this page exists ---- */
+
+.mrec-prov {
+  border-top: 2px solid var(--seal);
+  background: var(--paper-raised);
+  padding: var(--page-unit);
+}
+.mrec-prov-lead { max-width: 60ch; }
+
+.mrec-facts { border-top: 1px solid var(--rule); margin-top: var(--baseline); }
+.mrec-facts dt {
+  padding-top: var(--cap);
+  color: var(--quiet);
+  font-size: var(--size-down);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.mrec-facts dd {
+  margin: 0;
+  border-bottom: 1px solid var(--hairline);
+  padding: 2px 0 var(--cap);
+  line-height: 1.5;
+}
+.mrec-facts dd code {
+  font-family: var(--font-mono);
+  font-size: var(--size-down);
+  word-break: break-all;
+}
+.mrec-facts dd small {
+  display: block;
+  margin-top: 4px;
+  max-width: 58ch;
+  color: var(--quiet);
+  font-size: var(--size-down);
+  line-height: 1.5;
+}
+.mrec-coord { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
+.mrec-coord small { font-family: var(--font-body); }
+
+/* ---- unpinned: the honest empty state ---- */
+
+.mrec-unpinned {
+  border-left: 2px solid var(--rule);
+  padding-left: var(--page-unit);
+}
+.mrec-unpinned h2 { color: var(--quiet); }
+
+.mrec-truncation {
+  color: var(--quiet);
+  font-size: var(--size-down);
+  line-height: 1.6;
+}
+
+/* ---- walkable world ---- */
+
+.mrec-block code {
+  display: inline-block;
+  background: var(--paper-raised);
+  border: 1px solid var(--rule);
+  padding: 5px 10px;
+  font-family: var(--font-mono);
+  font-size: var(--size-down);
+}
+
+/* ---- nearest ---- */
+
+.mrec-near-list {
+  list-style: none;
+  margin: 0 0 var(--baseline);
+  padding: 0;
+  border-top: 1px solid var(--rule);
+}
+.mrec-near-list li {
+  display: grid;
+  grid-template-columns: 5.5em 1fr;
+  gap: 0 12px;
+  align-items: baseline;
+  border-bottom: 1px solid var(--hairline);
+  padding: var(--cap) 0;
+}
+.mrec-near-dist {
+  color: var(--quiet);
+  font-family: var(--font-mono);
+  font-size: var(--size-down);
+  font-variant-numeric: tabular-nums;
+}
+.mrec-near-list small {
+  grid-column: 2;
+  color: var(--quiet);
+  font-size: var(--size-down);
+}
+
+/* ---- cite ---- */
+
+.mrec-cite-row {
+  display: flex;
+  align-items: stretch;
+  gap: 8px;
+  margin-bottom: var(--cap);
+}
+.mrec-cite-row .datasets-citation { flex: 1; min-width: 0; }
+
+@media (min-width: 880px) {
+  /* Name left, verdict right — the area-page head, applied to a record. */
+  .mrec-head {
+    display: grid;
+    grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+    column-gap: var(--page-unit);
+    align-items: baseline;
+  }
+  .mrec-head > .register-eyebrow { grid-column: 1 / -1; }
+  .mrec-head > .mrec-where { grid-column: 1 / -1; }
+  .mrec-verdict { margin-top: 0; }
+
+  /* A record reads as label-then-value, not as a stack. */
+  .mrec-facts {
+    display: grid;
+    grid-template-columns: 13em minmax(0, 1fr);
+    column-gap: var(--page-unit);
+  }
+  .mrec-facts dt {
+    grid-column: 1;
+    border-bottom: 1px solid var(--hairline);
+    padding-bottom: var(--cap);
+  }
+  .mrec-facts dd { grid-column: 2; padding-top: var(--cap); }
+
+  .mrec-prov-lead { font-size: calc(var(--size-base) * 1.06); }
+}
+
+@media (max-width: 640px) {
+  .mrec-prov { padding: calc(var(--page-unit) * 0.7); }
+  .mrec-near-list li { grid-template-columns: 4.5em 1fr; }
+}

@@ -359,7 +359,11 @@ export function FirePanel({
                     <span className="wr-tally-unit">km</span>
                   </p>
                   <p className="wr-tally-label">Nearest to a register entry</p>
-                  <p className="wr-tally-sub">{closest.name}</p>
+                  <p className="wr-tally-sub">
+                    {/* The id is the register's own, so the operator can open
+                        the monument's record without leaving the incident. */}
+                    <a href={`/heritage/${closest.id}`}>{closest.name} ↗</a>
+                  </p>
                 </div>
               ) : null}
             </div>

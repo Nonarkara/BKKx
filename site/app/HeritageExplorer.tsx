@@ -456,6 +456,14 @@ export function HeritageExplorer() {
               </p>
               <h2 lang="th">{selected.name}</h2>
 
+              {/* Every entry has its own page now. The panel is for scanning;
+                  the permalink is what you cite, link to, or send to someone. */}
+              <p className="register-permalink">
+                <a href={`/heritage/${selected.id}`}>
+                  Full record · <code>{selected.id}</code> ↗
+                </a>
+              </p>
+
               <dl className="register-facts">
                 <dt>Status</dt>
                 <dd className={selected.registered ? "is-gazetted" : "is-awaiting"} lang="th">

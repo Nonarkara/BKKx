@@ -1450,3 +1450,118 @@ test("suggest-a-location renders only on unlocated camera tiles, and never auto-
   // the only outputs are clipboard and an outbound link the user controls.
   assert.doesNotMatch(html, /<form[^>]*action=/);
 });
+
+/* ---------------------------------------------------------------- *
+ * bkk — the register is citable, entry by entry
+ * ---------------------------------------------------------------- */
+
+test("every register entry has its own page, and an unknown id 404s", async () => {
+  const { REGISTER_SITES } = await import("../app/data/heritage-register.ts");
+  assert.equal(REGISTER_SITES.length, 571);
+
+  // Ids must be unique, or two monuments would fight over one URL.
+  const ids = new Set(REGISTER_SITES.map((s) => s.id));
+  assert.equal(ids.size, REGISTER_SITES.length, "register ids must be unique to be permalinks");
+
+  const gone = await render("/heritage/not-a-real-id");
+  assert.equal(gone.status, 404, "an id the register does not contain must not render a page");
+});
+
+test("a pinned entry states how it was located and offers a citation", async () => {
+  const { PINNED_SITES } = await import("../app/data/heritage-register.ts");
+  const site = PINNED_SITES.find((s) => s.registered && s.gazette);
+  assert.ok(site, "the register must contain at least one gazetted, pinned entry");
+
+  const html = await (await render(`/heritage/${site.id}`)).text();
+  assert.match(html, /How this record was located/);
+  assert.match(html, /Precision held/);
+  assert.match(html, /Cite this record/);
+  assert.match(html, /Legal status/);
+  // The gazette volume is the citation a Thai conservation officer needs.
+  assert.match(html, new RegExp(site.gazette.volume));
+  assert.match(html, /Where it stands/);
+});
+
+test("an unlocated entry renders no map and says why, rather than inventing a pin", async () => {
+  const { REGISTER_SITES, isPinned } = await import("../app/data/heritage-register.ts");
+  const site = REGISTER_SITES.find((s) => !isPinned(s));
+  assert.ok(site, "the register must contain unlocated entries — 260 of them");
+
+  const html = await (await render(`/heritage/${site.id}`)).text();
+  assert.match(html, /There is no map on this page/);
+  assert.match(html, /a guess dressed as a fact/);
+  assert.doesNotMatch(html, /Where it stands/, "an unpinned entry must not render the map section");
+  // No coordinate may appear for a record that holds none.
+  assert.doesNotMatch(html, /WGS 84/);
+});
+
+test("locatedBy is parsed into something a reader can check, not printed raw", async () => {
+  const { parseLocatedBy, REGISTER_SITES } = await import("../app/data/heritage-register.ts");
+
+  const osm = parseLocatedBy("osm:way/304092134:fuzzy");
+  assert.equal(osm.kind, "osm");
+  assert.equal(osm.match, "fuzzy");
+  assert.equal(osm.url, "https://www.openstreetmap.org/way/304092134");
+
+  assert.equal(parseLocatedBy("fine-arts").kind, "fine-arts");
+  assert.equal(parseLocatedBy("unlocated").kind, "unlocated");
+  assert.equal(parseLocatedBy("something-new").kind, "other");
+
+  // Every locatedBy in the shipped register must parse to a known shape —
+  // an "other" would mean the page is showing a provenance it cannot explain.
+  const unexplained = REGISTER_SITES.filter((s) => parseLocatedBy(s.locatedBy).kind === "other");
+  assert.equal(unexplained.length, 0, `${unexplained.length} entries carry an unrecognised locatedBy`);
+
+  // And an OSM-relocated entry must hand over the object id as a link.
+  const relocated = REGISTER_SITES.find((s) => s.locatedBy.startsWith("osm:"));
+  const html = await (await render(`/heritage/${relocated.id}`)).text();
+  assert.match(html, /openstreetmap\.org\/(way|node|relation)\/\d+/);
+  assert.match(html, /Match quality/);
+});
+
+/* ---------------------------------------------------------------- *
+ * atlas — the massing can show its own uncertainty
+ * ---------------------------------------------------------------- */
+
+test("the evidence tally is computed from the layers and every tier is claimed", async () => {
+  const { EVIDENCE_TIERS, tierForDetailSource, tierForHeroConfidence } = await import(
+    "../app/data/evidence-tiers.ts"
+  );
+  const tally = (await import("../app/data/evidence-tally.json", { with: { type: "json" } })).default;
+
+  // The tally has to add up to the corpus it claims to describe.
+  const summed = Object.values(tally.byTier).reduce((a, b) => a + b, 0);
+  assert.equal(summed, tally.total, "tier counts must sum to the stated total");
+
+  // And every raw value in the corpus must sit on the ladder — the same
+  // guard build-evidence-tally.mjs enforces, asserted here so a stale
+  // committed tally cannot pass unnoticed.
+  for (const value of Object.keys(tally.detailSources)) {
+    assert.ok(tierForDetailSource(value), `no evidence tier claims height_source=${value}`);
+  }
+  for (const value of Object.keys(tally.heroConfidences)) {
+    assert.ok(tierForHeroConfidence(value), `no tier claims height_confidence=${value}`);
+  }
+
+  // The point of the mode: a real, non-trivial share of the city is inferred.
+  assert.ok(tally.byTier.inferred > 0, "if nothing were inferred the mode would have no subject");
+  assert.equal(EVIDENCE_TIERS.length, 4);
+});
+
+test("the selected language is readable — the toggle never paints label on ground", async () => {
+  // Regression for a shipped defect: `background: currentColor` plus a
+  // `color` override on the same element resolves to one colour, so the
+  // active language button was ink on ink. Both halves must be named.
+  const css = await import("node:fs").then((fs) =>
+    fs.readFileSync(new URL("../app/globals.css", import.meta.url), "utf8"),
+  );
+  const active = css.match(/\.lang-toggle button\.is-active \{[^}]*\}/);
+  assert.ok(active, ".lang-toggle button.is-active rule must exist");
+  assert.doesNotMatch(
+    active[0],
+    /background:\s*currentColor/,
+    "the active language button must not take its ground from its own text colour",
+  );
+  assert.match(active[0], /background:\s*var\(--lang-on\)/);
+  assert.match(active[0], /color:\s*var\(--lang-on-text\)/);
+});

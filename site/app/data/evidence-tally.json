@@ -1,0 +1,32 @@
+{
+  "generatedFrom": [
+    "/data/bkk-heritage-detail.geojson",
+    "/data/bkk-hero-monuments.geojson",
+    "/data/bkk-landmarks.geojson"
+  ],
+  "byTier": {
+    "official": 7,
+    "measured": 5987,
+    "curated": 156,
+    "inferred": 3265
+  },
+  "detailSources": {
+    "override-id": 14,
+    "osm": 5987,
+    "viharn": 10,
+    "chedi": 21,
+    "type-default": 3220,
+    "ubosot": 3,
+    "throne": 15,
+    "prasat": 3,
+    "mondop": 1,
+    "clamped": 1
+  },
+  "heroConfidences": {
+    "official-envelope": 7,
+    "interpretive-proportion": 16,
+    "interpretive-envelope": 44
+  },
+  "landmarks": 73,
+  "total": 9415
+}
