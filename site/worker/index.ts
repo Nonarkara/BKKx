@@ -8,6 +8,7 @@ import {
   handleLiveWeather,
   handleLiveLongdo,
   handleCameraPoster,
+  handleLiveFires,
 } from "./live";
 
 interface Env {
@@ -17,6 +18,8 @@ interface Env {
   CCTV_SOURCE_URL?: string;
   /** Optional: Longdo Map API key. Env only — never committed. */
   LONGDO_API_KEY?: string;
+  /** Optional: NASA FIRMS MAP_KEY. Env only — never committed. */
+  FIRMS_MAP_KEY?: string;
   IMAGES: {
     input(stream: ReadableStream): {
       transform(options: Record<string, unknown>): {
@@ -76,6 +79,10 @@ const worker = {
     // contacted until a viewer presses play. See worker/live.ts.
     if (url.pathname === "/api/live/camera-poster" && request.method === "GET") {
       return handleCameraPoster(url.searchParams.get("v"));
+    }
+
+    if (url.pathname === "/api/live/fires" && request.method === "GET") {
+      return handleLiveFires(env.FIRMS_MAP_KEY);
     }
 
     if (url.pathname.startsWith("/api/live/longdo/") && request.method === "GET") {

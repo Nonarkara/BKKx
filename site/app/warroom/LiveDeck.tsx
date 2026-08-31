@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import type { Camera, RainPayload, WeatherPayload } from "../../worker/live";
+import type { Camera, RainPayload, WeatherPayload, FirePayload } from "../../worker/live";
 import {
   CURATED_CAMERAS,
   CAMERA_TALLY,
@@ -10,6 +10,7 @@ import {
   isLocated,
   type CuratedCamera,
 } from "../data/cctv-cameras";
+import { SuggestLocation } from "./SuggestLocation";
 
 /* The live half of the war room: the clock, the gauge network, and the
    camera rail. Everything here degrades to a stated reason rather than a
@@ -22,6 +23,7 @@ type CctvPayload = { cameras: Camera[]; cameraCount: number; configured: boolean
 const RAIN_POLL_MS = 300_000; // matches the edge TTL — polling faster only hits cache
 const CAM_REFRESH_MS = 30_000;
 const WEATHER_POLL_MS = 900_000; // matches the edge TTL
+const FIRE_POLL_MS = 1_800_000; // matches the edge TTL (FIRMS quota discipline)
 
 /* ---------------------------------------------------------------- clock */
 export function BangkokClock({ buildIso }: { buildIso: string }) {
@@ -255,6 +257,138 @@ export function WeatherPanel() {
   );
 }
 
+/* -------------------------------------------------------------- fires */
+
+type NearestMonument = { id: string; name: string; km: number };
+
+/** Great-circle distance, km — good enough at city scale, no library needed. */
+function haversineKm(aLat: number, aLon: number, bLat: number, bLon: number): number {
+  const R = 6371;
+  const dLat = ((bLat - aLat) * Math.PI) / 180;
+  const dLon = ((bLon - aLon) * Math.PI) / 180;
+  const s =
+    Math.sin(dLat / 2) ** 2 +
+    Math.cos((aLat * Math.PI) / 180) * Math.cos((bLat * Math.PI) / 180) * Math.sin(dLon / 2) ** 2;
+  return R * 2 * Math.atan2(Math.sqrt(s), Math.sqrt(1 - s));
+}
+
+export function FirePanel({
+  monuments,
+}: {
+  /** Slim {id,name,lat,lon} tuples for the register's 311 precisely-located
+      entries — passed as a prop rather than importing the 1.3 MB register
+      file into this client component. Computed once, server-side, in
+      page.tsx. */
+  monuments: { id: string; name: string; lat: number; lon: number }[];
+}) {
+  const [state, setState] = useState<{ phase: "loading" | "ok" | "down"; env?: Envelope<FirePayload> }>({
+    phase: "loading",
+  });
+
+  const load = useCallback(async () => {
+    try {
+      const res = await fetch("/api/live/fires", { headers: { accept: "application/json" } });
+      const env = (await res.json()) as Envelope<FirePayload>;
+      setState({ phase: env.ok ? "ok" : "down", env });
+    } catch (err) {
+      setState({
+        phase: "down",
+        env: { ok: false, fetchedAt: new Date().toISOString(), source: "/api/live/fires", reason: (err as Error).message },
+      });
+    }
+  }, []);
+
+  useEffect(() => {
+    const first = setTimeout(() => void load(), 0);
+    const t = setInterval(() => {
+      if (document.visibilityState === "visible") void load();
+    }, FIRE_POLL_MS);
+    return () => {
+      clearTimeout(first);
+      clearInterval(t);
+    };
+  }, [load]);
+
+  const d = state.env?.data;
+
+  // Nearest register monument to each detection — the "so what" the raw
+  // hotspot list does not answer on its own. O(detections × 311); trivial
+  // at VIIRS's actual detection density over one metro area.
+  const nearest: NearestMonument[] = (d?.detections ?? []).map((f) => {
+    let best: NearestMonument = { id: "", name: "", km: Infinity };
+    for (const m of monuments) {
+      const km = haversineKm(f.lat, f.lon, m.lat, m.lon);
+      if (km < best.km) best = { id: m.id, name: m.name, km };
+    }
+    return best;
+  });
+  const closest = nearest.length ? nearest.reduce((a, b) => (b.km < a.km ? b : a)) : null;
+
+  return (
+    <section className="wr-panel" aria-labelledby="wr-fire-h">
+      <header className="wr-panel-head">
+        <h2 id="wr-fire-h">Active fires</h2>
+        <span className={`wr-state is-${state.phase}`}>
+          <i aria-hidden="true" />
+          {state.phase === "loading" ? "polling" : state.phase === "ok" ? "live" : "no feed"}
+        </span>
+      </header>
+
+      {state.phase === "ok" && d ? (
+        d.detections.length === 0 ? (
+          <>
+            <p className="wr-panel-note">
+              No VIIRS thermal-anomaly detections over Bangkok in the trailing 24 h.
+            </p>
+            <p className="wr-panel-note">
+              A quiet feed is not proof of a quiet city: VIIRS catches open flame and
+              large hot roofs, not a contained fire inside a shophouse. {d.attribution}.
+            </p>
+          </>
+        ) : (
+          <>
+            <div className="wr-rain-row">
+              <div className="wr-tally is-warn">
+                <p className="wr-tally-value">{d.detections.length}</p>
+                <p className="wr-tally-label">Detections, 24 h</p>
+              </div>
+              {closest ? (
+                <div className="wr-tally is-warn">
+                  <p className="wr-tally-value">
+                    {closest.km.toFixed(1)}
+                    <span className="wr-tally-unit">km</span>
+                  </p>
+                  <p className="wr-tally-label">Nearest to a register entry</p>
+                  <p className="wr-tally-sub">{closest.name}</p>
+                </div>
+              ) : null}
+            </div>
+            <p className="wr-panel-note">
+              {d.source}, {d.attribution}. A thermal-anomaly detector, not a fire
+              department — treat this as a lead to check, not a confirmed fire.
+            </p>
+          </>
+        )
+      ) : state.phase === "loading" ? (
+        <p className="wr-panel-note">Polling NASA FIRMS…</p>
+      ) : (
+        <div className="wr-degraded">
+          <p className="wr-degraded-reason">{state.env?.reason ?? "Feed unavailable."}</p>
+          <p className="wr-panel-note">
+            Checked against the register&apos;s {monuments.length} precisely-located
+            monuments once live — Bangkok&apos;s oldest protected stock is wood-frame
+            construction in narrow lanes, the fabric a single ignition spreads
+            fastest through.
+          </p>
+          <button type="button" className="wr-btn" onClick={() => void load()}>
+            Retry now
+          </button>
+        </div>
+      )}
+    </section>
+  );
+}
+
 /* ------------------------------------------------------- camera rail */
 
 /* One camera tile. The player is a facade: a proxied still plus a play
@@ -336,6 +470,7 @@ function CuratedTile({ cam }: { cam: CuratedCamera }) {
         <a href={cam.sourceUrl} target="_blank" rel="noreferrer">
           source ↗
         </a>
+        {!located ? <SuggestLocation cam={cam} /> : null}
       </figcaption>
     </figure>
   );

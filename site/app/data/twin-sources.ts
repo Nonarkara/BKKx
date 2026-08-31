@@ -251,6 +251,53 @@ export const TWIN_SOURCES: TwinSource[] = [
     url: "https://data.go.th/en/dataset/http-flood-gistda-or-th",
   },
 
+  {
+    id: "nasa-firms",
+    name: "NASA FIRMS active fire detection (VIIRS)",
+    provider: "NASA LANCE / FIRMS",
+    category: "hazard",
+    integration: "ready",
+    unlocks:
+      "The fire-risk twin to the flood-risk one: satellite hotspot detections over Bangkok in the trailing 24 h, checked against the register's 311 precisely-located monuments. Bangkok's oldest protected stock is wood-frame shophouse construction packed into narrow lanes — exactly the fabric a single ignition spreads fastest through, and exactly the fabric this project has already spent two audits arguing is under-inventoried. A detection near a gazetted monument is the kind of finding nobody currently computes.",
+    licence: "NASA public domain; a free MAP_KEY is required to call the API and is rate-limited to 5,000 transactions per 10-minute window, shared across every caller of that key.",
+    auth: "key",
+    browserReachable: false,
+    whyProxied: "Key protection, and the Worker enforces the same cache discipline FIRMS asks for — see the route's own TTL.",
+    caveat:
+      "VIIRS NRT is a thermal-anomaly detector, not a fire department: it catches open flame and large hot roofs, not a contained kitchen fire inside a shophouse. A quiet feed is not proof of a quiet city — the sensor's blind spots must be stated beside the number, exactly like the drainage gauge's failure mode.",
+    url: "https://firms.modaps.eosdis.nasa.gov/api/area/",
+    route: "/api/live/fires",
+  },
+  {
+    id: "opensky-flights",
+    name: "OpenSky Network live flight positions",
+    provider: "OpenSky Network",
+    category: "mobility",
+    integration: "researched",
+    unlocks:
+      "Live air traffic over the two Bangkok airports, keyless for non-commercial use. Honest fit assessment: weak. Nothing in this project's argument — heritage, shophouses, drainage — touches aviation, and adding a layer because a feed is free and easy is exactly the kind of scope creep the rest of this file argues against. Catalogued so the option is visible and reasoned about, not built.",
+    licence: "Free for non-commercial/research use; a commercial deployment needs OpenSky's own terms.",
+    auth: "none",
+    browserReachable: false,
+    caveat: "No thesis fit yet. Do not build this until there is an actual question it answers for Bangkok.",
+    url: "https://opensky-network.org/apidoc/",
+  },
+  {
+    id: "usgs-earthquakes",
+    name: "USGS real-time earthquake feed",
+    provider: "United States Geological Survey",
+    category: "hazard",
+    integration: "researched",
+    unlocks:
+      "A live seismic feed, US public domain, no licence at all. Thailand does have real seismic exposure — the 2011 Mae Lao quake and Bangkok's felt shaking from the 2025 Myanmar earthquake are both on record — but it is a secondary hazard for this city next to flood and fire, and the drainage and fire work above already has the stronger claim on build effort.",
+    licence: "US public domain — no licence.",
+    auth: "none",
+    browserReachable: true,
+    caveat:
+      "Global feed with no Thailand-specific filtering or building-code context; would need real scoping (a Thailand bbox, a magnitude floor worth alerting on) before it says anything a reader could act on.",
+    url: "https://earthquake.usgs.gov/earthquakes/feed/",
+  },
+
   /* ----------------------------------------------------------- imagery */
   {
     id: "esa-worldcover",

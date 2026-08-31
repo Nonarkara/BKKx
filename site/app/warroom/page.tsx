@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { BarList, CompositionBar, Tally, TableView } from "./Charts";
 import { CAT } from "../data/chart-palette";
-import { BangkokClock, RainPanel, WeatherPanel, CctvRail } from "./LiveDeck";
+import { BangkokClock, RainPanel, WeatherPanel, FirePanel, CctvRail } from "./LiveDeck";
 import REGISTER from "../../public/heritage-register.json";
 import MANIFEST from "../data/dataset-manifest.json";
 import { DATASETS } from "../data/datasets";
@@ -33,11 +33,14 @@ import {
  */
 
 type RegisterSite = {
+  name?: string;
   district?: string;
   registerStatus?: string;
   precision?: string;
   locatedBy?: string;
   world?: string | null;
+  lat?: number;
+  lon?: number;
 };
 type RegisterFile = {
   counts: {
@@ -83,6 +86,13 @@ const corpusFeatures = DATASETS.reduce((n, d) => n + (manifest[d.file].features 
 
 const pressureSorted = [...PRESSURE_DISTRICTS].sort((a, b) => b.count - a.count);
 
+// Slim tuples for the fire panel's proximity check — computed here, once,
+// server-side, so the client component never imports the full 1.3 MB
+// register file just to compare two numbers per monument.
+const locatedMonuments = reg.sites
+  .filter((s): s is RegisterSite & { lat: number; lon: number } => typeof s.lat === "number" && typeof s.lon === "number")
+  .map((s, i) => ({ id: `reg-${i}`, name: s.name ?? "Unnamed entry", lat: s.lat, lon: s.lon }));
+
 export const metadata: Metadata = {
   title: "War room",
   description: `The BKKx operational picture without a map: ${reg.counts.total} register entries, ${PRESSURE_TOTAL.toLocaleString("en-US")} screened shophouse footprints, ${DATASETS.length} checksummed datasets, and the live Bangkok gauge network.`,
@@ -126,6 +136,8 @@ export default function WarRoom() {
         <RainPanel />
         <WeatherPanel />
       </div>
+
+      <FirePanel monuments={locatedMonuments} />
 
       <div className="wr-grid-2">
         <section className="wr-panel" aria-labelledby="wr-water-h">

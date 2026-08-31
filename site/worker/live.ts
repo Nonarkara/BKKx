@@ -518,3 +518,148 @@ export async function handleCameraPoster(videoId: string | null): Promise<Respon
     clearTimeout(timer);
   }
 }
+
+/* ==================================================================== *
+ * NASA FIRMS — active fire detection.
+ *
+ * Adapted from the pattern in bilawalsidhu/gods-eye-view: proxy the FIRMS
+ * area API server-side (the MAP_KEY must never reach the browser), cache
+ * long enough to respect the shared 5,000-transactions-per-10-minutes
+ * quota that key carries, and merge the reading against a real question —
+ * here, distance to the heritage register's precisely-located monuments,
+ * because Bangkok's oldest protected stock is wood-frame construction in
+ * narrow lanes and a fire feed with no register nearby to check it against
+ * is a curiosity, not a finding.
+ *
+ * The CSV column layout is read from FIRMS's own header row rather than
+ * assumed — this environment could not reach firms.modaps.eosdis.nasa.gov
+ * to confirm the schema at build time (egress-blocked), so the same
+ * defensive discipline as normaliseRain() applies: pick columns by name,
+ * drop what cannot be read, and report the drop count rather than hide it.
+ * ==================================================================== */
+
+// Same bounding box scripts/ingest-bkk-water.py uses for its defence-in-depth
+// guard: minlon, minlat, maxlon, maxlat.
+const FIRMS_BBOX = { west: 100.2, south: 13.4, east: 101.0, north: 14.2 };
+const FIRMS_TTL = 1800; // 30 min — matches FIRMS's own quota-respecting cadence
+const FIRMS_DAY_RANGE = 1; // trailing 24h, single most-recent VIIRS pass
+
+export type FireDetection = {
+  lat: number;
+  lon: number;
+  /** 0-100 for VIIRS, or "low"/"nominal"/"high" depending on source — kept
+      as the raw string so a downstream reader never assumes a numeric scale
+      that a different FIRMS source would violate. */
+  confidence: string | null;
+  /** Fire radiative power, MW, when the column is present. */
+  frpMw: number | null;
+  acqDate: string | null;
+  acqTime: string | null;
+  satellite: string | null;
+};
+
+export type FirePayload = {
+  detections: FireDetection[];
+  /** Rows FIRMS sent that carried no readable lat/lon. */
+  unreadable: number;
+  bbox: typeof FIRMS_BBOX;
+  dayRange: number;
+  source: "VIIRS_SNPP_NRT";
+  attribution: string;
+};
+
+function parseCsv(text: string): Record<string, string>[] {
+  const lines = text.trim().split("\n");
+  if (lines.length < 1) return [];
+  const header = lines[0].split(",").map((h) => h.trim().toLowerCase());
+  const rows: Record<string, string>[] = [];
+  for (const line of lines.slice(1)) {
+    const cells = line.split(",");
+    if (cells.length < header.length) continue;
+    const row: Record<string, string> = {};
+    header.forEach((h, i) => (row[h] = (cells[i] ?? "").trim()));
+    rows.push(row);
+  }
+  return rows;
+}
+
+export async function handleLiveFires(mapKey: string | undefined): Promise<Response> {
+  const fetchedAt = new Date().toISOString();
+  const base = { fetchedAt, source: "firms.modaps.eosdis.nasa.gov" };
+
+  if (!mapKey) {
+    return envelope({
+      ...base,
+      ok: false,
+      reason:
+        "No FIRMS_MAP_KEY configured on this deployment. Request a free key at https://firms.modaps.eosdis.nasa.gov/api_map_key/ and set FIRMS_MAP_KEY in the Worker environment — never in the repository.",
+    });
+  }
+
+  const bbox = `${FIRMS_BBOX.west},${FIRMS_BBOX.south},${FIRMS_BBOX.east},${FIRMS_BBOX.north}`;
+  const upstream = `https://firms.modaps.eosdis.nasa.gov/api/area/csv/${mapKey}/VIIRS_SNPP_NRT/${bbox}/${FIRMS_DAY_RANGE}`;
+
+  const ctrl = new AbortController();
+  const timer = setTimeout(() => ctrl.abort(), UPSTREAM_TIMEOUT_MS);
+  try {
+    const res = await fetch(upstream, { signal: ctrl.signal });
+    if (!res.ok) {
+      // Never include `upstream` — it carries the key, same rule as Longdo.
+      return envelope({ ...base, ok: false, reason: `FIRMS returned HTTP ${res.status}.` });
+    }
+    const text = await res.text();
+    const rows = parseCsv(text);
+
+    const detections: FireDetection[] = [];
+    let unreadable = 0;
+    for (const row of rows) {
+      const lat = Number(row.latitude);
+      const lon = Number(row.longitude);
+      if (!Number.isFinite(lat) || !Number.isFinite(lon)) {
+        unreadable += 1;
+        continue;
+      }
+      detections.push({
+        lat,
+        lon,
+        confidence: row.confidence || null,
+        frpMw: row.frp && Number.isFinite(Number(row.frp)) ? Number(row.frp) : null,
+        acqDate: row.acq_date || null,
+        acqTime: row.acq_time || null,
+        satellite: row.satellite || null,
+      });
+    }
+
+    if (rows.length > 0 && detections.length === 0 && unreadable === rows.length) {
+      return envelope({
+        ...base,
+        ok: false,
+        reason: `FIRMS responded with ${rows.length} row(s), but none carried a readable latitude/longitude. The CSV column layout has probably changed — parseCsv()/handleLiveFires() in worker/live.ts needs updating.`,
+      });
+    }
+
+    return envelope<FirePayload>(
+      {
+        ...base,
+        ok: true,
+        data: {
+          detections,
+          unreadable,
+          bbox: FIRMS_BBOX,
+          dayRange: FIRMS_DAY_RANGE,
+          source: "VIIRS_SNPP_NRT",
+          attribution: "NASA FIRMS / LANCE, VIIRS Suomi-NPP near-real-time",
+        },
+      },
+      FIRMS_TTL,
+    );
+  } catch (err) {
+    const reason =
+      (err as Error)?.name === "AbortError"
+        ? `FIRMS did not respond within ${UPSTREAM_TIMEOUT_MS / 1000}s.`
+        : `FIRMS unreachable: ${(err as Error)?.message ?? "unknown error"}.`;
+    return envelope({ ...base, ok: false, reason });
+  } finally {
+    clearTimeout(timer);
+  }
+}

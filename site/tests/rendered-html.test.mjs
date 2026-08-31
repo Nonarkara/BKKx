@@ -1402,3 +1402,51 @@ test("a placeholder camera carries a nominal marker but never a claimed place", 
   assert.match(html, /Location not confirmed/);
   assert.match(html, /awaiting a location/);
 });
+
+test("the fire panel is wired and never renders a reading before the client fetch resolves", async () => {
+  // Like RainPanel/WeatherPanel, this is a client-fetched panel: the SSR
+  // pass can only render its initial "loading" state, never a live reading
+  // or a failure reason — those exist only after the browser's own fetch
+  // resolves, which this test harness does not execute. Asserting the
+  // credential-failure text here would test a state the harness cannot
+  // reach, not a real bug.
+  const html = await (await render("/warroom")).text();
+  assert.match(html, /Active fires/);
+  assert.match(html, /Polling NASA FIRMS/);
+  // No live number may leak into the static HTML before a fetch has run
+  assert.doesNotMatch(html, /Detections, 24 h/);
+});
+
+test("the twin source register includes the new hazard and mobility entries with honest fit notes", async () => {
+  const { TWIN_SOURCES } = await import("../app/data/twin-sources.ts");
+  const ids = TWIN_SOURCES.map((s) => s.id);
+  assert.ok(ids.includes("nasa-firms"), "FIRMS must be catalogued");
+  assert.ok(ids.includes("opensky-flights"), "OpenSky must be catalogued even though not built");
+  assert.ok(ids.includes("usgs-earthquakes"), "USGS earthquakes must be catalogued even though not built");
+
+  const firms = TWIN_SOURCES.find((s) => s.id === "nasa-firms");
+  assert.equal(firms.integration, "ready", "FIRMS has a built adapter awaiting a key");
+  assert.equal(firms.route, "/api/live/fires");
+
+  const flights = TWIN_SOURCES.find((s) => s.id === "opensky-flights");
+  assert.equal(flights.integration, "researched", "flights are catalogued, not built — no thesis fit yet");
+  assert.match(flights.caveat, /No thesis fit/i);
+});
+
+test("suggest-a-location renders only on unlocated camera tiles, and never auto-submits anywhere", async () => {
+  const { CURATED_CAMERAS, isLocated } = await import("../app/data/cctv-cameras.ts");
+  const html = await (await render("/warroom")).text();
+
+  const unlocatedCount = CURATED_CAMERAS.filter((c) => !isLocated(c)).length;
+  const triggers = (html.match(/Suggest a location/g) ?? []).length;
+  assert.equal(triggers, unlocatedCount, `expected one trigger per unlocated camera (${unlocatedCount})`);
+
+  // The picker is closed by default (useState(false)) — its map container
+  // and action buttons must not be in the initial server-rendered HTML.
+  assert.doesNotMatch(html, /wr-suggest-map/);
+  assert.doesNotMatch(html, /File a GitHub issue/);
+
+  // No form action, no fetch target that could silently persist a guess —
+  // the only outputs are clipboard and an outbound link the user controls.
+  assert.doesNotMatch(html, /<form[^>]*action=/);
+});

@@ -6758,7 +6758,14 @@ body:has(.sh-figexport) { background: #fff !important; }
 /* ---- camera rail: one line ---- */
 .wr-cctv { margin-bottom: 14px; }
 .wr-rail-nav { display: flex; gap: 5px; }
-.wr-rail { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 6px; scroll-snap-type: x proximity; }
+.wr-rail {
+  display: flex;
+  align-items: flex-start; /* a tile whose picker is open must not stretch its siblings */
+  gap: 10px;
+  overflow-x: auto;
+  padding-bottom: 6px;
+  scroll-snap-type: x proximity;
+}
 .wr-cam { flex: 0 0 232px; margin: 0; scroll-snap-align: start; background: var(--wr-sunk); border: 1px solid var(--wr-line); }
 .wr-cam img { display: block; width: 100%; height: 130px; object-fit: cover; background: var(--wr-sunk); }
 .wr-cam img.is-broken { visibility: hidden; }
@@ -6843,3 +6850,41 @@ body:has(.sh-figexport) { background: #fff !important; }
 .wr-cam-yt.is-linkonly .wr-cam-nosnap { height: 148px; width: 100%; }
 .wr-cam-yt.is-linkonly .wr-cam-play { display: block; text-decoration: none; }
 .wr-cam-yt.is-linkonly .wr-cam-play:hover .wr-cam-nosnap { color: var(--signal); }
+
+/* ---- war room: suggest-a-location picker ----
+   A click-to-place map for the three placeholder cameras. Deliberately not
+   a modal — it expands in-flow inside the tile's own figcaption, which is
+   why .wr-rail needed align-items: flex-start above. Nothing here writes
+   anywhere; the two actions (copy, GitHub issue) both hand the coordinate
+   to a human, never to a database. */
+.wr-suggest-trigger {
+  align-self: flex-start;
+  margin-top: 4px;
+  padding: 3px 9px;
+  border: 1px solid var(--wr-warn);
+  background: none;
+  color: var(--wr-warn);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  cursor: pointer;
+  min-height: 26px;
+}
+.wr-suggest-trigger:hover, .wr-suggest-trigger:focus-visible { background: var(--wr-warn); color: var(--wr-sunk); outline: none; }
+
+.wr-suggest-panel {
+  width: 280px;
+  margin-top: 6px;
+  padding: 8px;
+  border: 1px solid var(--wr-warn);
+  background: var(--wr-sunk);
+}
+.wr-suggest-hint { margin: 0 0 6px; font-size: 10.5px; line-height: 1.5; color: var(--wr-quiet); }
+.wr-suggest-map {
+  width: 100%;
+  height: 180px;
+  border: 1px solid var(--wr-line);
+  cursor: crosshair;
+}
+.wr-suggest-actions { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+.wr-suggest-actions .wr-btn { font-size: 10px; padding: 4px 9px; min-height: 28px; }
+.wr-suggest-coord { margin: 6px 0 0; font-family: var(--font-mono); font-size: 11px; color: var(--signal); }
