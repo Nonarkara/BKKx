@@ -137,6 +137,18 @@ export async function handleLiveRain(): Promise<Response> {
     if (raw === null) {
       return envelope({ ...base, ok: false, reason: "Gauge network returned a body that is not JSON." });
     }
+    const upstreamError =
+      raw && typeof raw === "object" && typeof (raw as Record<string, unknown>).Error === "string"
+        ? String((raw as Record<string, unknown>).Error)
+        : null;
+    if (upstreamError && /username|password|user|pass|ผู้ใช้|รหัส/i.test(upstreamError)) {
+      return envelope({
+        ...base,
+        ok: false,
+        reason:
+          "BMA's gauge endpoint now requires credentials. No rainfall reading is shown until the agency provides authorised access.",
+      });
+    }
     const { stations, skipped } = normaliseRain(raw);
     if (stations.length === 0) {
       return envelope({
@@ -302,6 +314,10 @@ const AIR_URL =
   "&current=pm2_5,pm10,ozone&timezone=Asia%2FBangkok";
 
 export type WeatherPayload = {
+  forecastAvailable: boolean;
+  airAvailable: boolean;
+  /** Plain-language upstream failure notes when only one half is available. */
+  partialReason: string | null;
   temperatureC: number | null;
   humidityPct: number | null;
   precipitationMm: number | null;
@@ -314,6 +330,8 @@ export type WeatherPayload = {
   pm10: number | null;
   ozone: number | null;
   observedAt: string | null;
+  forecastObservedAt: string | null;
+  airObservedAt: string | null;
   attribution: string;
 };
 
@@ -336,24 +354,12 @@ export async function handleLiveWeather(): Promise<Response> {
       fetch(AIR_URL, { signal: ctrl.signal, headers: { accept: "application/json" } }),
     ]);
 
-    if (fRes.status !== "fulfilled" || !fRes.value.ok) {
-      const why =
-        fRes.status === "rejected"
-          ? (fRes.reason as Error)?.message ?? "unknown error"
-          : `HTTP ${fRes.value.status}`;
-      return envelope({ ...base, ok: false, reason: `Forecast unavailable: ${why}.` });
-    }
-
-    const f = (await fRes.value.json().catch(() => null)) as {
+    const f = (fRes.status === "fulfilled" && fRes.value.ok
+      ? await fRes.value.json().catch(() => null)
+      : null) as {
       current?: Record<string, unknown>;
       hourly?: { precipitation_probability?: unknown[]; precipitation?: unknown[] };
     } | null;
-    if (!f?.current) {
-      return envelope({ ...base, ok: false, reason: "Forecast returned an unexpected shape." });
-    }
-
-    const probs = (f.hourly?.precipitation_probability ?? []).slice(0, 24).map(num);
-    const rains = (f.hourly?.precipitation ?? []).slice(0, 24).map(num);
 
     let air: Record<string, unknown> | null = null;
     if (aRes.status === "fulfilled" && aRes.value.ok) {
@@ -361,14 +367,45 @@ export async function handleLiveWeather(): Promise<Response> {
       air = a?.current ?? null;
     }
 
+    const forecast = f?.current ?? null;
+    const settledReason = (name: string, result: PromiseSettledResult<Response>, hasShape: boolean): string | null => {
+      if (result.status === "rejected") {
+        return `${name} unavailable: ${(result.reason as Error)?.message ?? "unknown error"}.`;
+      }
+      if (!result.value.ok) return `${name} unavailable: HTTP ${result.value.status}.`;
+      return hasShape ? null : `${name} returned an unexpected shape.`;
+    };
+    const forecastReason = settledReason("Forecast", fRes, Boolean(forecast));
+    const airReason = settledReason("Air quality", aRes, Boolean(air));
+
+    if (!forecast && !air) {
+      return envelope({
+        ...base,
+        ok: false,
+        reason: [forecastReason, airReason].filter(Boolean).join(" ") || "Weather and air services returned no readings.",
+      });
+    }
+
+    const probs = (f?.hourly?.precipitation_probability ?? []).slice(0, 24).map(num);
+    const rains = (f?.hourly?.precipitation ?? []).slice(0, 24).map(num);
+    const forecastObservedAt = typeof forecast?.time === "string" ? forecast.time : null;
+    const airObservedAt = typeof air?.time === "string" ? air.time : null;
+    const attribution = [
+      forecast ? "Open-Meteo forecast · ECMWF / DWD ICON / NOAA GFS" : null,
+      air ? "Open-Meteo air quality · CAMS" : null,
+    ].filter(Boolean).join(" · ");
+
     return envelope<WeatherPayload>({
       ...base,
       ok: true,
       data: {
-        temperatureC: num(f.current.temperature_2m),
-        humidityPct: num(f.current.relative_humidity_2m),
-        precipitationMm: num(f.current.precipitation),
-        windKph: num(f.current.wind_speed_10m),
+        forecastAvailable: Boolean(forecast),
+        airAvailable: Boolean(air),
+        partialReason: [forecastReason, airReason].filter(Boolean).join(" ") || null,
+        temperatureC: num(forecast?.temperature_2m),
+        humidityPct: num(forecast?.relative_humidity_2m),
+        precipitationMm: num(forecast?.precipitation),
+        windKph: num(forecast?.wind_speed_10m),
         rainChanceNext24h: probs.length ? Math.max(...probs.map((p) => p ?? 0)) : null,
         rainNext24hMm: rains.length
           ? Math.round(rains.reduce<number>((s, r) => s + (r ?? 0), 0) * 10) / 10
@@ -376,8 +413,10 @@ export async function handleLiveWeather(): Promise<Response> {
         pm25: air ? num(air.pm2_5) : null,
         pm10: air ? num(air.pm10) : null,
         ozone: air ? num(air.ozone) : null,
-        observedAt: typeof f.current.time === "string" ? f.current.time : null,
-        attribution: "Open-Meteo · ECMWF / DWD ICON / NOAA GFS · CAMS for air quality",
+        observedAt: forecastObservedAt ?? airObservedAt,
+        forecastObservedAt,
+        airObservedAt,
+        attribution,
       },
     }, WEATHER_TTL);
   } catch (err) {

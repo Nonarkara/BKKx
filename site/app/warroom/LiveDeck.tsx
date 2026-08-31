@@ -238,6 +238,11 @@ export function WeatherPanel() {
             </div>
           </div>
           <p className="wr-panel-note">{d.attribution}.</p>
+          {d.partialReason ? (
+            <p className="wr-panel-note">
+              Partial live view: {d.partialReason} Available readings remain visible; missing readings stay blank.
+            </p>
+          ) : null}
         </>
       ) : state.phase === "loading" ? (
         <p className="wr-panel-note">Polling the forecast models…</p>
@@ -250,8 +255,8 @@ export function WeatherPanel() {
         </div>
       )}
       <p className="wr-panel-note">
-        Forecast, not observation — where this disagrees with the gauge
-        network beside it, the gauge is what happened.
+        Forecast, not observation, for weather; air quality is modelled observation. Missing readings stay blank.
+        Where rainfall forecast disagrees with an authorised gauge, the gauge is what happened.
       </p>
     </section>
   );
