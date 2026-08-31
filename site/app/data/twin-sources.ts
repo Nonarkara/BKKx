@@ -22,6 +22,8 @@
 //    from Worker env at request time. No key is imported, committed, or shipped
 //    to the browser, and the proxy routes never echo one back.
 
+import { PRESSURE_TOTAL } from "./shophouse-pressure.ts";
+
 export type TwinCategory =
   | "terrain"
   | "weather"
@@ -69,7 +71,7 @@ export const TWIN_SOURCES: TwinSource[] = [
     category: "terrain",
     integration: "researched",
     unlocks:
-      "The floor of a real flood model. FABDEM strips forest and building bias out of Copernicus GLO-30, and in published accuracy assessments over this exact region it ranked first among free global DEMs — ~1.95 m RMSE for the Bangkok area, best-in-class in urban terrain. With it, the flood-risk polygons stop being administrative shading and start being drainage: catchments, flow direction, ponding depth, and which of the 2,311 screened footprints sit in a hollow.",
+      `The floor of a real flood model. FABDEM strips forest and building bias out of Copernicus GLO-30, and in published accuracy assessments over this exact region it ranked first among free global DEMs — ~1.95 m RMSE for the Bangkok area, best-in-class in urban terrain. With it, the flood-risk polygons stop being administrative shading and start being drainage: catchments, flow direction, ponding depth, and which of the ${PRESSURE_TOTAL.toLocaleString("en-US")} screened footprints sit in a hollow.`,
     licence:
       "Free for non-commercial and academic use (CC BY-NC-SA 4.0). NOT open for commercial redistribution — the licence, not the download, is the constraint.",
     auth: "account",

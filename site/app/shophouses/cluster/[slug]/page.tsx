@@ -1,7 +1,12 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { CLUSTER_RECORDS, SPINE_MISSING, SPINE_TOTAL } from "../../../data/shophouse-spine-index";
+import {
+  CLUSTER_RECORDS,
+  SPINE_MISSING,
+  SPINE_TOTAL,
+  SPINE_UNJOINED,
+} from "../../../data/shophouse-spine-index";
 import { SIGNATURE } from "../../../data/shophouse-gazetteer";
 import { QUADRANTS, SPLITS, PRESSURE_TOTAL, PRESSURE_CAVEATS } from "../../../data/shophouse-pressure";
 import { REGULATION } from "../../../data/shophouse-bible";
@@ -295,11 +300,14 @@ export default async function ClusterPage({ params }: Props) {
             {unclassified > 0 ? (
               <p className="sh-fig-note">
                 {unclassified.toLocaleString("en-US")} of the {c.n.toLocaleString("en-US")}{" "}
-                footprints here carry no quadrant at all — the pressure screen, which covers{" "}
-                {PRESSURE_TOTAL.toLocaleString("en-US")} of the{" "}
-                {SPINE_TOTAL.toLocaleString("en-US")} spine buildings, did not reach them. They are
-                counted in the total and excluded from the split, which is why the quadrants above
-                sum to {classified.toLocaleString("en-US")} and not {c.n.toLocaleString("en-US")}.
+                footprints here carry no quadrant, so the split above sums to{" "}
+                {classified.toLocaleString("en-US")} rather than {c.n.toLocaleString("en-US")}. That
+                is a join artefact, not a gap in the screen: the pressure layer classifies all{" "}
+                {PRESSURE_TOTAL.toLocaleString("en-US")} footprints, but the spine joins the two
+                sets by centroid rounded to five decimal places, and{" "}
+                {SPINE_UNJOINED.toLocaleString("en-US")} of the{" "}
+                {SPINE_TOTAL.toLocaleString("en-US")} miss that key by a metre or so. Those
+                buildings have a quadrant; this page cannot currently name it.
               </p>
             ) : null}
             <dl className="sh-quickref-grid">

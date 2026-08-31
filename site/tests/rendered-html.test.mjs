@@ -120,6 +120,7 @@ test("every quarter photo URL resolves (page.tsx must use the photo slot, not th
   // and render as gray empty boxes.
   const fs = await import("node:fs");
   const path = await import("node:path");
+  const url = await import("node:url");
   const pageHtml = await render("/");
   const html = await pageHtml.text();
   const { default: places } = await import("../app/data/heritage-places.json", { with: { type: "json" } });
@@ -127,7 +128,15 @@ test("every quarter photo URL resolves (page.tsx must use the photo slot, not th
     if (!area.photo) continue;
     const expected = `/heritage/photos/${area.photo}.jpg`;
     assert.match(html, new RegExp(expected.replace(/[/.]/g, "\\$&")), `front-door HTML should reference ${expected} for ${area.slug}`);
-    const onDisk = path.join(process.cwd(), "public/heritage/photos", `${area.photo}.jpg`);
+    // Resolved against this file, not the shell's cwd: keying off
+    // process.cwd() made the suite pass from site/ and fail from the repo
+    // root with "photo not on disk", which reads as missing data rather
+    // than as a test that cannot find it.
+    const onDisk = path.join(
+      path.dirname(url.fileURLToPath(import.meta.url)),
+      "../public/heritage/photos",
+      `${area.photo}.jpg`,
+    );
     assert.ok(fs.existsSync(onDisk), `${area.slug}: photo ${area.photo}.jpg not on disk`);
   }
 });
@@ -1624,4 +1633,80 @@ test("a cluster's quadrant split never claims more buildings than it screened", 
     assert.equal(summed, c.n, `${c.slug}: quadrant counts must account for all ${c.n} footprints`);
     assert.ok(c.storeysKnown <= c.n, `${c.slug}: cannot know storeys for more buildings than exist`);
   }
+});
+
+test("the published shophouse figures still match the geojson they claim to come from", async () => {
+  // The drift this catches actually happened: the candidate screen was
+  // regenerated from 2,311 footprints to 2,433, the geojson grew, and the
+  // hand-committed summary did not — 31 figures wrong across two files,
+  // internally consistent with each other and wrong about the data, with
+  // one district missing entirely. Nothing failed, because nothing
+  // compared them.
+  const { readFileSync } = await import("node:fs");
+  const path = await import("node:path");
+  const url = await import("node:url");
+  const { PRESSURE_DISTRICTS, PRESSURE_TOTAL, QUADRANTS, SPLITS } = await import(
+    "../app/data/shophouse-pressure.ts"
+  );
+  const { SIGNATURE } = await import("../app/data/shophouse-gazetteer.ts");
+
+  const here = path.dirname(url.fileURLToPath(import.meta.url));
+  const rows = JSON.parse(
+    readFileSync(path.join(here, "../public/data/shophouse-pressure.geojson"), "utf8"),
+  ).features.map((f) => f.properties);
+
+  assert.equal(PRESSURE_TOTAL, rows.length, "PRESSURE_TOTAL must be the footprint count");
+  assert.equal(SIGNATURE.n, rows.length, "SIGNATURE.n must be the same corpus");
+
+  for (const q of QUADRANTS) {
+    assert.equal(q.count, rows.filter((r) => r.q === q.id).length, `quadrant ${q.id}`);
+  }
+  assert.equal(
+    QUADRANTS.reduce((n, q) => n + q.count, 0),
+    rows.length,
+    "the four quadrants must account for every footprint",
+  );
+
+  // Every district in the data must be published, and vice versa — the
+  // omission that hid Phasi Charoen's 39 footprints was invisible to any
+  // check that only looked at totals.
+  const inData = new Set(rows.map((r) => r.dist));
+  const published = new Set(PRESSURE_DISTRICTS.map((d) => d.district));
+  assert.deepEqual([...inData].filter((d) => !published.has(d)), [], "districts missing from the table");
+  assert.deepEqual([...published].filter((d) => !inData.has(d)), [], "districts published but not in the data");
+
+  for (const d of PRESSURE_DISTRICTS) {
+    const group = rows.filter((r) => r.dist === d.district);
+    assert.equal(d.count, group.length, `${d.district}.count`);
+    assert.equal(d.atRisk, group.filter((r) => r.q === "at-risk").length, `${d.district}.atRisk`);
+  }
+
+  assert.equal(
+    PRESSURE_DISTRICTS.reduce((n, d) => n + d.count, 0),
+    rows.length,
+    "district counts must sum to the corpus",
+  );
+  assert.ok(SPLITS.priceBaht > 0 && SPLITS.depthM > 0);
+});
+
+test("the spine's unjoined footprints are reported as a join miss, not as missing coverage", async () => {
+  const { CLUSTER_RECORDS, SPINE_TOTAL, SPINE_UNJOINED } = await import(
+    "../app/data/shophouse-spine-index.ts"
+  );
+  const { PRESSURE_TOTAL } = await import("../app/data/shophouse-pressure.ts");
+
+  // Both sets describe the same buildings. If they ever stop agreeing, the
+  // "join artefact" wording on the cluster pages becomes a false excuse.
+  assert.equal(SPINE_TOTAL, PRESSURE_TOTAL, "spine and pressure describe the same corpus");
+
+  const nulls = CLUSTER_RECORDS.reduce((n, c) => n + (c.quadrants["null"] ?? 0), 0);
+  assert.equal(SPINE_UNJOINED, nulls);
+  assert.ok(SPINE_UNJOINED < SPINE_TOTAL * 0.2, "a join losing a fifth of the set is a broken join");
+
+  const html = await (await render(`/shophouses/cluster/${CLUSTER_RECORDS[0].slug}`)).text();
+  assert.doesNotMatch(
+    html,
+    /pressure screen[^.]*did not reach/,
+    "an unjoined footprint is classified; the page must not call it uncovered",
+  );
 });

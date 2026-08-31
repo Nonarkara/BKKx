@@ -12,6 +12,8 @@
 // this repo; a dataset regenerated elsewhere says so instead of implying
 // reproducibility it does not have.
 
+import { PRESSURE_TOTAL } from "./shophouse-pressure.ts";
+
 export type DatasetNote = {
   /** Path as served, from the site root (also the path under public/). */
   file: string;
@@ -95,7 +97,7 @@ export const DATASETS: DatasetNote[] = [
   {
     file: "/data/shophouse-pressure.geojson",
     title: "The shophouse pressure atlas",
-    what: "2,311 candidate shophouse footprints, each carrying its quadrant (price × depth), frontage, depth and the land value under it. The map behind the essay's central argument.",
+    what: `${PRESSURE_TOTAL.toLocaleString("en-US")} candidate shophouse footprints, each carrying its quadrant (price × depth), frontage, depth and the land value under it. The map behind the essay's central argument.`,
     source: "Computed by joining the footprint candidates to the Treasury appraisal bands, point-in-polygon; splits at the medians.",
     license: "ODbL for the OSM/Overture-derived geometry, © OpenStreetMap contributors; appraisal figures quoted from the cited Treasury summary.",
     generator: "scripts/build-shophouse-pressure.py",

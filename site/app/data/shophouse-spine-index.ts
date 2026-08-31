@@ -1222,5 +1222,16 @@ export const CLUSTER_RECORDS: ClusterRecord[] = [
 ];
 
 export const SPINE_TOTAL = 2433;
+/* Footprints the spine could not give a pressure quadrant. The pressure layer
+   classifies every one of the SPINE_TOTAL footprints; these are lost in the
+   join, which matches the two sets on a centroid rounded to five decimal
+   places (~1 m) and misses where the two generators compute the centroid
+   slightly differently. Recorded, and checked against the data by
+   scripts/verify-shophouse-pressure.mjs, so no page describes them as a gap
+   in coverage — which is what they look like and are not. */
+export const SPINE_UNJOINED = CLUSTER_RECORDS.reduce(
+  (n, c) => n + (c.quadrants["null"] ?? 0),
+  0,
+);
 export const SPINE_ASSUMPTIONS = { assumedRoadM: 8.0, structureShare: 0.55, paybackYears: [10, 80], neighbourGapM: 1.5 } as const;
 export const SPINE_MISSING = ["storeys (for two-thirds of the set)", "tenure", "structural condition", "road width", "build year"] as const;
