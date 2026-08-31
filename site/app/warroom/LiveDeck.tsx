@@ -7,6 +7,7 @@ import {
   CAMERA_TALLY,
   posterFor,
   embedFor,
+  isLocated,
   type CuratedCamera,
 } from "../data/cctv-cameras";
 
@@ -263,7 +264,7 @@ export function WeatherPanel() {
 function CuratedTile({ cam }: { cam: CuratedCamera }) {
   const [playing, setPlaying] = useState(false);
   const [posterFailed, setPosterFailed] = useState(false);
-  const located = cam.precision !== "unconfirmed";
+  const located = isLocated(cam);
 
   // A link-only camera is one whose operator does not licence its player
   // for embedding. The tile sends the viewer to them rather than taking

@@ -5,10 +5,21 @@
 //
 // LOCATION DISCIPLINE. This file follows the same rule as the heritage
 // register: a location is recorded at the precision actually known, with the
-// method that established it, and a stream whose location cannot be confirmed
-// is marked `unconfirmed` rather than given a plausible coordinate. A camera
-// pinned to the wrong corner is worse than a camera with no pin, because the
-// pin will be believed.
+// method that established it. Four of the five cameras here carry real
+// evidence (a stream title naming a soi, an operator's own listing) and are
+// placed at that evidence's precision — never sharpened to a false
+// exactness.
+//
+// Three streams arrived with no identifying evidence at all. Per an explicit
+// operator decision (2026-08-30), those are not left pinless: each gets a
+// `placeholder` marker — a shared, clearly-nominal Bangkok reference point,
+// not a claim about where the camera actually is — so the tile has
+// *somewhere* to sit while someone who recognises the footage confirms it.
+// `place` stays null for a placeholder, so the tile still reads "Location
+// not confirmed"; only the coordinate exists, as a stand-in. A true
+// `unconfirmed` entry (no marker at all) remains available for a future
+// camera with neither evidence nor an operator instruction to place it
+// anyway.
 //
 // PRIVACY. Nothing here contacts Google on page load. The rail shows a poster
 // image proxied through this site's own Worker, and the YouTube player is only
@@ -24,8 +35,20 @@ export type Precision =
   | "street"
   /** Known only to the district. */
   | "district"
-  /** Not established. No coordinate is recorded. */
+  /** No evidence of the real location. Carries a shared, clearly-nominal
+      Bangkok marker so the tile is not pinless, pending confirmation — the
+      coordinate is a stand-in, not a claim. See LOCATION DISCIPLINE above. */
+  | "placeholder"
+  /** No coordinate recorded at all. */
   | "unconfirmed";
+
+/** Precisions backed by real evidence — the register's own idea of
+    "actually located", as distinct from a placeholder marker. */
+const LOCATED_PRECISIONS: readonly Precision[] = ["exact", "street", "district"];
+
+export function isLocated(c: Pick<CuratedCamera, "precision">): boolean {
+  return LOCATED_PRECISIONS.includes(c.precision);
+}
 
 export type CameraKind =
   /** A YouTube live stream we may embed, played on demand. */
@@ -53,6 +76,14 @@ export type CuratedCamera = {
   locatedBy: string;
   sourceUrl: string;
 };
+
+// The nominal Bangkok reference point used for every `placeholder` camera —
+// the same coordinate the weather feed uses for a citywide reading
+// (worker/live.ts BANGKOK). Reusing an already-documented generic point
+// rather than inventing a new one keeps the "this is not real evidence"
+// property visible: three cameras sharing one coordinate cannot be
+// mistaken for three confirmed, distinct locations.
+const PLACEHOLDER_MARKER = { lat: 13.7563, lon: 100.5018 };
 
 export const CURATED_CAMERAS: CuratedCamera[] = [
   {
@@ -94,11 +125,11 @@ export const CURATED_CAMERAS: CuratedCamera[] = [
     title: "Live stream — location not yet confirmed",
     place: null,
     district: null,
-    lat: null,
-    lon: null,
-    precision: "unconfirmed",
+    lat: PLACEHOLDER_MARKER.lat,
+    lon: PLACEHOLDER_MARKER.lon,
+    precision: "placeholder",
     locatedBy:
-      "supplied as a live camera; the stream's own title could not be read from the build environment (youtube.com is blocked by egress policy) and it is not indexed by search. Plays correctly; awaiting a location from the operator.",
+      "no evidence of the real location; pinned at the shared placeholder marker per an explicit operator decision (2026-08-30) rather than left without a coordinate. supplied as a live camera; the stream's own title could not be read from the build environment (youtube.com is blocked by egress policy) and it is not indexed by search. Plays correctly; awaiting a location from the operator.",
     sourceUrl: "https://www.youtube.com/live/a_bUVExv_Cg",
   },
   {
@@ -108,11 +139,11 @@ export const CURATED_CAMERAS: CuratedCamera[] = [
     title: "Live stream — location not yet confirmed",
     place: null,
     district: null,
-    lat: null,
-    lon: null,
-    precision: "unconfirmed",
+    lat: PLACEHOLDER_MARKER.lat,
+    lon: PLACEHOLDER_MARKER.lon,
+    precision: "placeholder",
     locatedBy:
-      "supplied as a live camera; title unreadable from this environment and not indexed. Plays correctly; awaiting a location from the operator.",
+      "no evidence of the real location; pinned at the shared placeholder marker per an explicit operator decision (2026-08-30) rather than left without a coordinate. supplied as a live camera; title unreadable from this environment and not indexed. Plays correctly; awaiting a location from the operator.",
     sourceUrl: "https://www.youtube.com/live/4mfkil3LzKg",
   },
   {
@@ -122,11 +153,11 @@ export const CURATED_CAMERAS: CuratedCamera[] = [
     title: "Live stream — location not yet confirmed",
     place: null,
     district: null,
-    lat: null,
-    lon: null,
-    precision: "unconfirmed",
+    lat: PLACEHOLDER_MARKER.lat,
+    lon: PLACEHOLDER_MARKER.lon,
+    precision: "placeholder",
     locatedBy:
-      "supplied as a live camera; title unreadable from this environment and not indexed. Plays correctly; awaiting a location from the operator.",
+      "no evidence of the real location; pinned at the shared placeholder marker per an explicit operator decision (2026-08-30) rather than left without a coordinate. supplied as a live camera; title unreadable from this environment and not indexed. Plays correctly; awaiting a location from the operator.",
     sourceUrl: "https://www.youtube.com/live/pP98CQP1dg0",
   },
 ];
@@ -135,8 +166,10 @@ export const CAMERA_TALLY = {
   total: CURATED_CAMERAS.length,
   embedded: CURATED_CAMERAS.filter((c) => c.kind === "youtube").length,
   linked: CURATED_CAMERAS.filter((c) => c.kind === "link").length,
-  located: CURATED_CAMERAS.filter((c) => c.precision !== "unconfirmed").length,
-  unconfirmed: CURATED_CAMERAS.filter((c) => c.precision === "unconfirmed").length,
+  located: CURATED_CAMERAS.filter(isLocated).length,
+  // "awaiting a location" on the tile — placeholder and true-unconfirmed
+  // both still need a human to confirm where the camera actually is.
+  unconfirmed: CURATED_CAMERAS.filter((c) => !isLocated(c)).length,
 };
 
 /** Poster image, proxied so the page never calls Google before a click. */

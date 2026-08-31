@@ -1364,19 +1364,41 @@ test("curated cameras render as facades and never leak to Google on load", async
   assert.doesNotMatch(html, /youtube-nocookie\.com\/embed/, "the embed must be built on demand only");
 });
 
-test("a camera with no confirmed location is never given a coordinate", async () => {
-  const { CURATED_CAMERAS } = await import("../app/data/cctv-cameras.ts");
+test("a placeholder camera carries a nominal marker but never a claimed place", async () => {
+  // Three cameras arrived with zero identifying evidence. Per an explicit
+  // operator decision they are pinned at a shared, clearly-nominal marker
+  // rather than left without a coordinate — but that marker must never be
+  // mistaken for evidence: no place name, no district, and the reasoning
+  // must say plainly that it is a stand-in.
+  const { CURATED_CAMERAS, isLocated } = await import("../app/data/cctv-cameras.ts");
+  const placeholders = CURATED_CAMERAS.filter((c) => c.precision === "placeholder");
+  assert.equal(placeholders.length, 3, "three cameras were supplied with no identifying evidence");
+
+  const markers = new Set(placeholders.map((c) => `${c.lat},${c.lon}`));
+  assert.equal(markers.size, 1, "placeholder cameras must share one nominal marker, never distinct invented positions");
+
+  for (const c of placeholders) {
+    assert.equal(c.place, null, `${c.id}: a placeholder marker must not carry a place name`);
+    assert.equal(c.district, null, `${c.id}: a placeholder marker must not carry a district`);
+    assert.match(c.locatedBy, /placeholder|no evidence/i, `${c.id} must say its coordinate is a stand-in`);
+    assert.equal(isLocated(c), false, `${c.id}: a placeholder marker is not "located" for the tally`);
+  }
+
   for (const c of CURATED_CAMERAS) {
-    if (c.precision === "unconfirmed") {
-      assert.equal(c.lat, null, `${c.id}: unconfirmed cameras must not carry a latitude`);
-      assert.equal(c.lon, null, `${c.id}: unconfirmed cameras must not carry a longitude`);
-      assert.equal(c.place, null, `${c.id}: unconfirmed cameras must not carry a place name`);
-    } else {
+    if (isLocated(c)) {
       assert.ok(typeof c.lat === "number" && typeof c.lon === "number", `${c.id} is located but has no coordinate`);
+      assert.ok(c.place, `${c.id} is located but carries no place name`);
       assert.ok(c.locatedBy.length > 20, `${c.id} must record how it was located`);
+    } else {
+      // Not located (placeholder or a true, coordinate-free unconfirmed
+      // entry) — either way the tile must not claim a place.
+      assert.equal(c.place, null, `${c.id}: an unlocated camera must not carry a place name`);
     }
   }
-  // The rail says plainly how many are still awaiting a location
+
+  // The tile still reads "Location not confirmed" for every unlocated
+  // camera, placeholder or not — the marker is invisible in the label.
   const html = await (await render("/warroom")).text();
+  assert.match(html, /Location not confirmed/);
   assert.match(html, /awaiting a location/);
 });
