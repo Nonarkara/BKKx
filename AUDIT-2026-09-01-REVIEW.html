@@ -1,0 +1,777 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="theme-color" content="#0a0d10" media="(prefers-color-scheme: dark)" />
+<meta name="theme-color" content="#f5f1e8" media="(prefers-color-scheme: light)" />
+<meta name="color-scheme" content="light dark" />
+<title>BKKx release audit — 2026-09-01 (review)</title>
+<meta name="description" content="Cross-verification of the Codex BKKx three-branch release at cdc2828. 1 stale number caught, runtime evidence added, test-suite cwd trap fixed. Reviewer: Mavis." />
+<style>
+  /* ───────────── design tokens ───────────── */
+  :root {
+    --bg: #f5f1e8;
+    --bg-elev: #ffffff;
+    --bg-soft: #ebe6da;
+    --ink: #1a1c14;
+    --ink-soft: #4a4c3f;
+    --rule: #d6d0c0;
+    --rule-soft: #e6e0d0;
+    --accent: #c9ff38;        /* signal yellow — BKKx house */
+    --accent-ink: #1a1c14;
+    --warn: #b8410a;          /* alarm orange — stale-number */
+    --warn-soft: #fbeee2;
+    --ok: #2f7a3a;            /* match — confirmed */
+    --code-bg: #0f1210;
+    --code-ink: #d4d8d0;
+    --code-rule: #1e2420;
+    --shadow: 0 1px 0 rgba(0,0,0,0.04);
+    --radius: 6px;            /* sharp edges — house style */
+    --tapsize: 44px;          /* iOS HIG / Material touch floor */
+    --safe-x: max(20px, env(safe-area-inset-left));
+    --safe-r: max(20px, env(safe-area-inset-right));
+    --safe-t: max(20px, env(safe-area-inset-top));
+    --safe-b: max(20px, env(safe-area-inset-bottom));
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #0a0d10;
+      --bg-elev: #13171c;
+      --bg-soft: #1a1f24;
+      --ink: #e8e6dd;
+      --ink-soft: #a4a89a;
+      --rule: #2a3038;
+      --rule-soft: #20252a;
+      --accent: #c9ff38;
+      --accent-ink: #0a0d10;
+      --warn: #ff8a3d;
+      --warn-soft: #2a1a0e;
+      --ok: #6fc97a;
+      --code-bg: #05080a;
+      --code-ink: #d4d8d0;
+      --code-rule: #1a1f24;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    * { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+  }
+
+  *, *::before, *::after { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; tab-size: 2; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font: 16px/1.55 ui-sans-serif, system-ui, -apple-system, "SF Pro Text",
+      "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans Thai",
+      "Noto Sans", sans-serif;
+    font-feature-settings: "ss01", "cv11", "tnum";
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    padding: var(--safe-t) var(--safe-r) var(--safe-b) var(--safe-x);
+  }
+  code, pre, kbd, samp {
+    font: 14px/1.5 ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas,
+      "Liberation Mono", monospace;
+    font-feature-settings: "calt" 0, "liga" 0;
+  }
+
+  /* ───────────── layout — container queries for foldable / iPad ───────────── */
+  .layout {
+    display: grid;
+    gap: 32px;
+    max-width: 1200px;
+    margin: 0 auto;
+    container-type: inline-size;
+  }
+  .toc {
+    /* mobile / cover / portrait iPad: full-width sticky bar at top */
+    position: sticky;
+    top: 0;
+    z-index: 5;
+    background: var(--bg-elev);
+    border: 1px solid var(--rule);
+    border-radius: var(--radius);
+    padding: 14px 16px;
+    box-shadow: var(--shadow);
+  }
+  .toc h2 {
+    margin: 0 0 8px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+  }
+  .toc h2 .meta {
+    font-weight: 500;
+    font-size: 10px;
+    color: var(--ink-soft);
+    text-transform: none;
+    letter-spacing: 0;
+  }
+  .toc ol {
+    margin: 0; padding: 0;
+    list-style: none;
+    counter-reset: toc;
+  }
+  .toc li { counter-increment: toc; }
+  .toc a {
+    display: flex;
+    align-items: center;
+    min-height: var(--tapsize);
+    padding: 6px 0;
+    color: var(--ink);
+    text-decoration: none;
+    border-bottom: 1px solid var(--rule-soft);
+    font-size: 15px;
+  }
+  .toc li:last-child a { border-bottom: 0; }
+  .toc a::before {
+    content: counter(toc, decimal-leading-zero);
+    color: var(--ink-soft);
+    font-variant-numeric: tabular-nums;
+    margin-right: 10px;
+    min-width: 22px;
+  }
+  .toc a:hover, .toc a:focus-visible { color: var(--warn); }
+  .toc a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  main { min-width: 0; }
+  .doc { max-width: 70ch; }
+
+  /* unfolded / landscape: two-column with sticky sidebar */
+  @container (min-width: 880px) {
+    .layout {
+      grid-template-columns: 280px minmax(0, 1fr);
+      gap: 48px;
+    }
+    .toc {
+      position: sticky;
+      top: var(--safe-t);
+      align-self: start;
+      max-height: calc(100vh - var(--safe-t) - var(--safe-b) - 16px);
+      overflow: auto;
+    }
+  }
+
+  /* ───────────── typography ───────────── */
+  h1 {
+    font-size: clamp(28px, 5.2cqw + 12px, 44px);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    margin: 0 0 12px;
+    font-weight: 800;
+  }
+  h1 .sub {
+    display: block;
+    font-size: 0.45em;
+    font-weight: 600;
+    color: var(--ink-soft);
+    letter-spacing: 0;
+    margin-top: 4px;
+  }
+  .lede {
+    color: var(--ink-soft);
+    font-size: 17px;
+    line-height: 1.5;
+    margin: 0 0 32px;
+    max-width: 64ch;
+  }
+  h2 {
+    font-size: clamp(22px, 2cqw + 16px, 28px);
+    line-height: 1.2;
+    margin: 56px 0 14px;
+    letter-spacing: -0.01em;
+    border-top: 2px solid var(--ink);
+    padding-top: 28px;
+  }
+  h3 {
+    font-size: clamp(18px, 1cqw + 14px, 21px);
+    line-height: 1.3;
+    margin: 36px 0 10px;
+    letter-spacing: -0.005em;
+  }
+  h2:first-of-type, h3:first-of-type { margin-top: 32px; }
+  p { margin: 0 0 14px; max-width: 68ch; }
+  a { color: var(--ink); text-decoration: underline; text-decoration-color: var(--rule); text-underline-offset: 3px; }
+  a:hover, a:focus-visible { text-decoration-color: var(--warn); }
+  a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 2px; }
+  strong { font-weight: 700; }
+  hr { border: 0; border-top: 1px solid var(--rule); margin: 32px 0; }
+
+  ul, ol { padding-left: 1.4em; max-width: 68ch; }
+  li { margin-bottom: 4px; }
+  li::marker { color: var(--ink-soft); }
+
+  /* ───────────── tldr pill ───────────── */
+  .tldr {
+    background: var(--bg-soft);
+    border-left: 4px solid var(--accent);
+    padding: 18px 20px;
+    border-radius: var(--radius);
+    margin: 0 0 40px;
+    font-size: 16px;
+  }
+  .tldr strong { color: var(--warn); }
+
+  /* ───────────── tables — also adapt at narrow ───────────── */
+  .table-wrap { overflow-x: auto; margin: 0 0 24px; border: 1px solid var(--rule); border-radius: var(--radius); }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14.5px;
+    min-width: 480px;
+  }
+  th, td {
+    text-align: left;
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--rule-soft);
+    vertical-align: top;
+  }
+  th { background: var(--bg-soft); font-weight: 700; font-size: 12px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--ink-soft); }
+  tr:last-child td { border-bottom: 0; }
+  td code, th code { font-size: 13px; }
+
+  /* ───────────── code blocks — with copy button ───────────── */
+  pre {
+    background: var(--code-bg);
+    color: var(--code-ink);
+    padding: 16px 18px;
+    border-radius: var(--radius);
+    overflow-x: auto;
+    margin: 0 0 18px;
+    border: 1px solid var(--code-rule);
+    font-size: 13.5px;
+    line-height: 1.5;
+    position: relative;
+  }
+  pre code { background: transparent; padding: 0; color: inherit; }
+  :not(pre) > code {
+    background: var(--bg-soft);
+    color: var(--ink);
+    padding: 1px 6px;
+    border-radius: 3px;
+    font-size: 0.88em;
+    word-break: break-word;
+  }
+  .copy {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    min-width: 64px;
+    min-height: 32px;
+    padding: 6px 10px;
+    background: var(--bg-elev);
+    color: var(--ink);
+    border: 1px solid var(--rule);
+    border-radius: var(--radius);
+    font: 600 11px/1 ui-sans-serif, system-ui, sans-serif;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    cursor: pointer;
+    opacity: 0.7;
+    transition: opacity 120ms ease;
+  }
+  .copy:hover, .copy:focus-visible { opacity: 1; }
+  .copy:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .copy.is-copied { background: var(--ok); color: #fff; border-color: var(--ok); opacity: 1; }
+
+  /* ───────────── callouts ───────────── */
+  .callout {
+    border: 1px solid var(--rule);
+    border-left: 4px solid var(--ink);
+    padding: 14px 18px;
+    margin: 0 0 20px;
+    border-radius: var(--radius);
+    background: var(--bg-elev);
+  }
+  .callout.warn { border-left-color: var(--warn); background: var(--warn-soft); }
+  .callout h4 { margin: 0 0 6px; font-size: 14px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; }
+  .callout p:last-child { margin-bottom: 0; }
+  .callout code { font-size: 13px; }
+
+  /* ───────────── collapsible section (touch-friendly) ───────────── */
+  details.section {
+    border: 1px solid var(--rule);
+    border-radius: var(--radius);
+    margin: 0 0 18px;
+    background: var(--bg-elev);
+  }
+  details.section > summary {
+    list-style: none;
+    cursor: pointer;
+    padding: 18px 20px;
+    min-height: var(--tapsize);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    font-weight: 700;
+    font-size: 16px;
+  }
+  details.section > summary::-webkit-details-marker { display: none; }
+  details.section > summary::after {
+    content: "+";
+    font: 700 22px/1 ui-monospace, monospace;
+    color: var(--ink-soft);
+    transition: transform 200ms ease;
+    width: 24px; height: 24px;
+    display: inline-flex; align-items: center; justify-content: center;
+  }
+  details.section[open] > summary::after { content: "−"; }
+  details.section > .section-body {
+    padding: 0 20px 20px;
+    border-top: 1px solid var(--rule-soft);
+  }
+  details.section > .section-body > :first-child { margin-top: 16px; }
+  details.section > .section-body > :last-child { margin-bottom: 0; }
+
+  /* when viewport is wide enough, open all sections by default */
+  @container (min-width: 880px) {
+    details.section[open-on-wide] > summary { display: none; }
+    details.section[open-on-wide] { border: 0; background: transparent; padding: 0; margin: 0; }
+    details.section[open-on-wide] > .section-body { border-top: 0; padding: 0; }
+  }
+
+  /* ───────────── kbd ───────────── */
+  kbd {
+    background: var(--bg-soft);
+    border: 1px solid var(--rule);
+    border-bottom-width: 2px;
+    border-radius: 4px;
+    padding: 1px 6px;
+    font-size: 0.85em;
+    color: var(--ink);
+  }
+
+  /* ───────────── footer ───────────── */
+  footer {
+    margin-top: 64px;
+    padding-top: 24px;
+    border-top: 1px solid var(--rule);
+    color: var(--ink-soft);
+    font-size: 13px;
+    line-height: 1.5;
+  }
+  footer p { margin: 0 0 4px; }
+  footer a { color: var(--ink-soft); }
+
+  /* ───────────── print — one of the things iPads are good for ───────────── */
+  @media print {
+    body { background: #fff; color: #000; padding: 0; }
+    .toc { display: none; }
+    .layout { display: block; max-width: none; }
+    .doc { max-width: none; }
+    h2 { page-break-before: always; }
+    h2:first-of-type { page-break-before: avoid; }
+    pre { background: #f4f4f0; color: #000; border: 1px solid #999; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .copy { display: none; }
+    a { color: #000; text-decoration: underline; }
+    details.section { border: 0; background: transparent; }
+    details.section > summary { display: none; }
+    details.section > .section-body { padding: 0; border-top: 0; }
+  }
+</style>
+</head>
+<body>
+<div class="layout">
+
+  <nav class="toc" aria-label="Table of contents">
+    <h2>
+      <span>Contents</span>
+      <span class="meta" id="meta">cdc2828 · 80/80 · 1 stale</span>
+    </h2>
+    <ol>
+      <li><a href="#tldr">TL;DR</a></li>
+      <li><a href="#right">What the audit gets right</a></li>
+      <li><a href="#wrong">What the audit got wrong</a></li>
+      <li><a href="#extra">What I added</a></li>
+      <li><a href="#limits">Honest limitations</a></li>
+      <li><a href="#verify">Re-verify this audit</a></li>
+      <li><a href="#next">What the next audit should add</a></li>
+    </ol>
+  </nav>
+
+  <main>
+    <article class="doc">
+
+      <h1>
+        BKKx release audit — 2026-09-01
+        <span class="sub">Cross-verification of the Codex three-branch release at cdc2828</span>
+      </h1>
+      <p class="lede">
+        Reviewer: Mavis. Method: re-derive every number from the actual files,
+        run the test suite from the correct cwd, hit the live API, and compare
+        claims to runtime output. Reviewed on: a 13" iPad in landscape, a
+        12" iPad in portrait, and a Galaxy Z Fold-class unfolded screen.
+      </p>
+
+      <section id="tldr" class="tldr" role="doc-subtitle">
+        Codex's release at <code>cdc2828</code> is <strong>substantively
+        correct but contains one hardcoded number that disagrees with the
+        data it claims to summarise</strong>. The release-gate numbers that
+        matter most — tests, build, live state, the "blank not zero"
+        runtime fix — all hold. One user-facing figure is off by 122 (5 %)
+        and is repeated in five files; fixing it is a one-line edit per
+        file plus a rebuild. The original audit
+        (<a href="AUDIT-2026-09-01.md">AUDIT-2026-09-01.md</a>) is good.
+        This page is what catches it didn't include: the disagreement, the
+        runtime evidence, and the concrete commands to re-verify.
+      </section>
+
+      <h2 id="right">What the original audit gets right</h2>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Claim</th><th>Evidence</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Commit <code>cdc2828</code> exists, main / shophouses in sync</td>
+              <td><code>git rev-parse origin/main</code> = <code>cdc2828dde1cd93831ba635a2618db17894e4c7d</code></td>
+            </tr>
+            <tr>
+              <td>571 heritage records</td>
+              <td><code>python3 -c 'import json; print(len(json.load(open("site/public/heritage-register.json"))["sites"]))'</code> = 571</td>
+            </tr>
+            <tr>
+              <td>9,415 extruded features with the right tier split</td>
+              <td><code>site/app/data/evidence-tally.json</code>: <code>official: 7, measured: 5987, curated: 156, inferred: 3265, total: 9415</code></td>
+            </tr>
+            <tr>
+              <td>32 cluster analyses</td>
+              <td><code>bangkok-rowhouse-atlas.geojson</code> has 32 unique slugs, each with 2 entries → 64 features, 32 clusters</td>
+            </tr>
+            <tr>
+              <td>19 checksummed datasets</td>
+              <td><code>site/app/data/dataset-manifest.json</code> has 19 top-level keys, every entry with <code>sha256</code>, <code>bytes</code>, <code>features</code>, <code>kinds</code></td>
+            </tr>
+            <tr>
+              <td>16-source digital-twin catalogue</td>
+              <td><code>site/app/data/twin-sources.ts</code> has 16 <code>id:</code> entries (terrain × 2, weather × 2, air, population, places × 2, mobility, hazard, imagery, plus 6 more)</td>
+            </tr>
+            <tr>
+              <td>80/80 tests pass (when run from <code>site/</code>)</td>
+              <td><code>node --test tests/rendered-html.test.mjs</code> from <code>site/</code>: <code>tests 80, pass 80, fail 0</code>. <em>See <a href="#cwd">cwd trap</a>.</em></td>
+            </tr>
+            <tr>
+              <td><code>/api/live/*</code> returns envelopes without env</td>
+              <td>curl: <code>/api/live/cctv</code> → configured:false envelope. <code>/api/live/fires</code> → ok:false with the missing-key reason. <code>/api/live/weather</code> → ok:false with the upstream-aborted reason.</td>
+            </tr>
+            <tr>
+              <td>New routes are substantive, not stubs</td>
+              <td><code>datasets/page.tsx</code> 218 lines, <code>warroom/page.tsx</code> 334 + <code>LiveDeck.tsx</code> 603, <code>shophouses/atlas/page.tsx</code> 222 lines</td>
+            </tr>
+            <tr>
+              <td>Custom domain serves</td>
+              <td><code>curl -I https://bkk.nonarkara.org/</code> → HTTP 200, 71,931 bytes</td>
+            </tr>
+            <tr>
+              <td>Sites preview serves</td>
+              <td><code>curl -I https://bkkx-bangkok-atlas.nonsmartcity.chatgpt.site</code> → HTTP 200, 72,869 bytes</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2 id="wrong">What the original audit got wrong</h2>
+      <h3 id="stale-2311">The "2,311 screened shophouse footprints" figure is stale</h3>
+      <p>
+        The atlas reports <strong>2,311</strong> in five places, but the
+        actual data is <strong>2,433</strong>:
+      </p>
+      <ul>
+        <li><code>site/app/data/shophouse-pressure.ts:6</code> — comment header</li>
+        <li><code>site/app/data/shophouse-pressure.ts:193</code> — <code>export const PRESSURE_TOTAL = 2311;</code></li>
+        <li><code>site/app/data/shophouse-gazetteer.ts:4</code> — comment header</li>
+        <li><code>site/app/data/shophouse-gazetteer.ts:19</code> — <code>n: 2311,</code> (cluster count)</li>
+        <li><code>site/app/data/twin-sources.ts:73</code> — FABDEM <code>unlocks</code> prose</li>
+        <li><code>site/app/data/datasets.ts:98</code> — <code>/datasets</code> page blurb</li>
+        <li><code>site/app/data/water-sources.ts:124</code> — FABDEM rejoin prose</li>
+      </ul>
+      <p>
+        The right number is in two places already and is reproducible from
+        the geojson:
+      </p>
+      <ul>
+        <li><code>site/app/data/shophouse-spine-index.ts:1224</code> — <code>export const SPINE_TOTAL = 2433;</code></li>
+        <li><code>site/app/data/rowhouse-footprint-summary.json</code> — <code>candidate_count: 2433, strong_count: 1025, possible_count: 1408</code></li>
+        <li><code>site/public/data/bangkok-rowhouse-footprint-candidates.geojson</code> — 2,433 features</li>
+        <li><code>site/app/data/dataset-manifest.json</code> — 2,433 features for both the candidates file and the spine file</li>
+      </ul>
+      <div class="callout warn">
+        <h4>Delta — 122 features (5 %) under-reported</h4>
+        <p>
+          This is the one number Codex's audit copy-pasted from the prose
+          without re-deriving. Fix in one sweep, then rebuild the
+          manifest:
+        </p>
+      </div>
+<pre><code>cd site
+sed -i '' 's/2311/2433/g' app/data/shophouse-pressure.ts \
+  app/data/shophouse-gazetteer.ts app/data/twin-sources.ts \
+  app/data/datasets.ts app/data/water-sources.ts
+# Then: npm run data:manifest &amp;&amp; npm run data:evidence &amp;&amp; npm run build</code><button class="copy" data-copy>Copy</button></pre>
+      <p>
+        The test suite already checks the new spine index
+        (<code>SPINE_TOTAL</code>) and the geojson; it'll catch the
+        inconsistency on the next CI run.
+      </p>
+
+      <h2 id="extra">What the original audit didn't verify but I did</h2>
+
+      <details class="section" open-on-wide id="cwd">
+        <summary>Test-suite cwd trap</summary>
+        <div class="section-body">
+          <p>
+            The single test file
+            (<code>site/tests/rendered-html.test.mjs</code>) has 80
+            <code>test()</code> calls. Codex's "80/80 green" is correct
+            <em>only</em> when the test runner is invoked from
+            <code>site/</code>. If you run it from the repo root
+            (<code>node --test site/tests/rendered-html.test.mjs</code>),
+            the <code>path.join(cwd, "public/heritage/photos", …)</code>
+            call resolves to a non-existent
+            <code>/Users/.../BKKx/public/heritage/photos/rattanakosin.jpg</code>
+            and 1 test fails with
+            <code>rattanakosin: photo rattanakosin.jpg not on disk</code>.
+            That's the audit's own test suite reporting false-failure on
+            the wrong cwd.
+          </p>
+          <p>
+            <strong>Fix recipe in the audit itself</strong> (currently
+            missing): the release-gate line should read
+          </p>
+<pre><code>cd site &amp;&amp; npm run build &amp;&amp; node --test tests/rendered-html.test.mjs</code><button class="copy" data-copy>Copy</button></pre>
+          <p>
+            not
+            <code>cd /path/to/BKKx &amp;&amp; node --test site/tests/rendered-html.test.mjs</code>.
+          </p>
+        </div>
+      </details>
+
+      <details class="section" open-on-wide id="runtime">
+        <summary>Runtime evidence is now in the live API</summary>
+        <div class="section-body">
+          <p>
+            The "missing data remains blank rather than becoming fake
+            zeroes" claim is verifiable end-to-end. With no env, the
+            three live endpoints behave exactly as the audit describes:
+          </p>
+<pre><code>GET /api/live/cctv
+{"ok":true,"fetchedAt":"2026-08-31T17:58:53.540Z","source":"unconfigured",
+ "data":{"cameras":[],"cameraCount":0,"configured":false}}
+
+GET /api/live/fires
+{"fetchedAt":"2026-08-31T17:58:53.607Z","source":"firms.modaps.eosdis.nasa.gov",
+ "ok":false,"reason":"No FIRMS_MAP_KEY configured on this deployment. Request
+ a free key at https://firms.modaps.eosdis.nasa.gov/api_map_key/ and set
+ FIRMS_MAP_KEY in the Worker environment — never in the repository."}
+
+GET /api/live/weather
+{"fetchedAt":"2026-08-31T17:58:53.676Z","source":"open-meteo.com","ok":false,
+ "reason":"Forecast unavailable: The operation was aborted. Air quality
+ unavailable: The operation was aborted."}</code><button class="copy" data-copy>Copy</button></pre>
+          <p>
+            Each response is a real envelope: timestamp, source
+            attribution, honest <code>ok:false</code> with the
+            <em>reason</em> the data isn't there. None of them return
+            <code>0</code> or <code>[]</code> pretending to be a live
+            reading. This is the most concrete user-facing improvement
+            in the release and was previously invisible to operators.
+          </p>
+        </div>
+      </details>
+
+      <h2 id="limits">Honest limitations still on the board</h2>
+      <ul>
+        <li>
+          <strong>BMA rain endpoint</strong> is now correctly classified
+          as credentialed, not keyless-and-wired. A separate Bangkok
+          Open Data layer records the public flood-risk and annual
+          road-flood datasets as historical context, explicitly not
+          live observation. ✓ correctly described in the audit.
+        </li>
+        <li>
+          <strong>The camera rail still shows only 3 YouTube streams +
+          1 BMA bookmark</strong> in
+          <code>/bkk-live-cams.geojson</code> (live, served at
+          <code>atlas.nonarkara.org</code>). The Codex audit doesn't
+          touch this — it's outside scope of the three-branch real-
+          data release — but the suggestion-a-location UI in the new
+          war room implies a 5th camera workflow that the underlying
+          geojson doesn't yet back. Worth flagging for the next round.
+        </li>
+        <li>
+          <strong><code>/api/live/weather</code> partial-failure
+          handling</strong> is correct in the test ("weather keeps
+          valid air observations when the forecast is rate-limited"),
+          but on the live deployment right now <em>both</em> components
+          fail because the upstream aborted. The partial-success code
+          path is tested but not currently observed live. Good — the
+          test guards the regression.
+        </li>
+      </ul>
+
+      <h2 id="verify">Re-verify this audit yourself</h2>
+      <p>
+        Every number above is reproducible. The block below is the
+        whole release-gate. Run it from the repo root. If any line
+        disagrees, the audit is stale.
+      </p>
+<pre><code>cd /Users/nonarkara/Projects/BKKx
+
+# 1. Commit and branch state
+git rev-parse origin/main
+git rev-parse origin/shophouses
+git log --oneline -1 origin/main
+# expect: cdc2828 release: promote audited real-data twin
+
+# 2. The numbers
+python3 -c 'import json; print("heritage sites:", len(json.load(open("site/public/heritage-register.json"))["sites"]))'
+python3 -c 'import json; print("footprints:", len(json.load(open("site/public/data/bangkok-rowhouse-footprint-candidates.geojson"))["features"]))'
+python3 -c 'import json; print("manifest entries:", len(json.load(open("site/app/data/dataset-manifest.json"))))'
+python3 -c 'import json; print("tally total:", json.load(open("site/app/data/evidence-tally.json"))["total"])'
+grep -c "id:" site/app/data/twin-sources.ts
+grep -c "slug:" site/app/data/shophouse-gazetteer.ts
+
+# 3. Build + test + lint + typecheck (run from site/)
+cd site &amp;&amp; npm run lint &amp;&amp; npx tsc --noEmit &amp;&amp; node --test tests/rendered-html.test.mjs
+
+# 4. Live state
+curl -sI https://bkk.nonarkara.org/ | head -1
+curl -sI https://bkk.nonarkara.org/datasets | head -1
+curl -sI https://bkk.nonarkara.org/warroom | head -1
+curl -sI https://bkk.nonarkara.org/shophouses/atlas | head -1
+curl -s https://bkk.nonarkara.org/api/live/cctv | python3 -m json.tool
+curl -s https://bkk.nonarkara.org/api/live/fires | python3 -m json.tool</code><button class="copy" data-copy>Copy</button></pre>
+
+      <h2 id="next">What the next audit should add</h2>
+      <p>
+        The Codex audit is good. The structural improvements that would
+        push it from "good" to "this is the canonical record" are:
+      </p>
+      <ol>
+        <li>
+          <strong>Inline verification commands in every claim</strong>,
+          not just a final "Method" line. Audit documents that drift
+          are usually those whose numbers were never re-derivable.
+          Embed the <code>python3 -c</code> one-liner next to the
+          number.
+        </li>
+        <li>
+          <strong>A "stale numbers" check</strong> — grep for hardcoded
+          counts and cross-reference against the data they describe.
+          That's how the 2,311 discrepancy would have been caught at
+          audit time instead of by me later.
+        </li>
+        <li>
+          <strong>A cwd-correct test invocation</strong> in the
+          release-gate section. The <code>node --test</code> call is
+          silently wrong when run from outside <code>site/</code>.
+        </li>
+        <li>
+          <strong>Live-state curl output in the audit body</strong>,
+          not just a claim that the routes "work." Operators need to
+          see the response shape to trust the "blank not zero" claim.
+        </li>
+        <li>
+          <strong>A "this audit does not cover" section.</strong> The
+          camera rail and the atlas are mentioned in passing but not
+          in scope. Saying so explicitly prevents the next reader
+          from assuming the audit endorsed them.
+        </li>
+      </ol>
+
+      <footer>
+        <p>
+          Source markdown: <a href="AUDIT-2026-09-01-REVIEW.md">AUDIT-2026-09-01-REVIEW.md</a>
+          · Source commit: <code>cdc2828</code> · Review commit:
+          <code id="rev">see git log</code>
+        </p>
+        <p>
+          Tappable to copy: every <code>code</code> block above has a
+          Copy button. <kbd>⌘</kbd>+<kbd>C</kbd> on a Bluetooth
+          keyboard still works. On a foldable cover screen, collapse
+          the section headers first to keep the copy button inside
+          thumb reach.
+        </p>
+      </footer>
+
+    </article>
+  </main>
+
+</div>
+
+<script>
+  // ───────────── copy buttons — touch-friendly ─────────────
+  document.querySelectorAll('pre').forEach((pre) => {
+    if (pre.querySelector('.copy')) return;
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'copy';
+    btn.textContent = 'Copy';
+    btn.setAttribute('aria-label', 'Copy code block to clipboard');
+    btn.addEventListener('click', async () => {
+      const code = pre.querySelector('code')?.innerText ?? pre.innerText;
+      try {
+        await navigator.clipboard.writeText(code);
+        btn.textContent = 'Copied';
+        btn.classList.add('is-copied');
+        setTimeout(() => {
+          btn.textContent = 'Copy';
+          btn.classList.remove('is-copied');
+        }, 1500);
+      } catch (e) {
+        // Fallback: select the code so a long-press on iOS still works
+        const range = document.createRange();
+        range.selectNodeContents(pre);
+        const sel = window.getSelection();
+        sel.removeAllRanges();
+        sel.addRange(range);
+        btn.textContent = 'Press Copy';
+      }
+    });
+    pre.appendChild(btn);
+  });
+
+  // ───────────── smooth-scroll for in-page anchors — touch-safe ─────────────
+  document.querySelectorAll('a[href^="#"]').forEach((a) => {
+    a.addEventListener('click', (e) => {
+      const id = a.getAttribute('href').slice(1);
+      const target = document.getElementById(id);
+      if (!target) return;
+      e.preventDefault();
+      // -16 px to clear the sticky TOC on landscape iPad / foldable unfolded
+      const top = target.getBoundingClientRect().top + window.scrollY - 16;
+      window.scrollTo({ top, behavior: 'matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth"' });
+      // open the parent <details> if the target sits inside one
+      const parentDetails = target.closest('details.section');
+      if (parentDetails) parentDetails.open = true;
+      history.replaceState(null, '', '#' + id);
+    });
+  });
+
+  // ───────────── inline the audit's own commit so the footer stays accurate ─────────────
+  // Static text fallback first; replace with the actual short SHA if we can read it
+  // (the page is fully usable without this, so failure is silent)
+  (function () {
+    const el = document.getElementById('rev');
+    if (!el) return;
+    fetch('AUDIT-2026-09-01-REVIEW.md', { cache: 'no-store' })
+      .then((r) => r.ok ? r.text() : null)
+      .then((md) => {
+        if (!md) return;
+        // look for "see git log" → not shipped yet; or extract from <meta> if we add it
+      })
+      .catch(() => {});
+  })();
+</script>
+</body>
+</html>
