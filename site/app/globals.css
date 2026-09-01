@@ -7327,3 +7327,149 @@ body:has(.sh-figexport) { background: #fff !important; }
   line-height: 1.5;
   overflow-wrap: anywhere;
 }
+
+/* ==================================================================
+   Atlas live-camera layer
+   ------------------------------------------------------------------
+   Alarm red, the register already reserves for live incidents — a
+   camera is the one thing on this map showing the city as it is right
+   now, so it takes the live colour rather than another layer hue.
+   ================================================================== */
+
+.bkkx-cam-marker {
+  position: relative;
+  width: 18px;
+  height: 18px;
+  border: 0;
+  background: none;
+  padding: 0;
+  cursor: pointer;
+  line-height: 0;
+}
+.bkkx-cam-marker .cam-dot {
+  position: absolute;
+  inset: 5px;
+  border: 1px solid rgba(255, 255, 255, .85);
+  border-radius: 50%;
+  background: #ff4d3d;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, .5);
+}
+/* Registry cameras read quieter than curated ones: the operator's feed is
+   a position we republish, not one we checked. */
+.bkkx-cam-marker.is-registry .cam-dot { background: #d98a2b; }
+.bkkx-cam-marker .cam-pulse {
+  position: absolute;
+  inset: 0;
+  border: 1px solid rgba(255, 77, 61, .55);
+  border-radius: 50%;
+  animation: bkkx-cam-pulse 2.4s ease-out infinite;
+}
+.bkkx-cam-marker:hover .cam-dot,
+.bkkx-cam-marker:focus-visible .cam-dot { inset: 3px; }
+.bkkx-cam-marker:focus-visible { outline: 2px solid var(--signal); outline-offset: 3px; }
+
+@keyframes bkkx-cam-pulse {
+  0%   { transform: scale(.6); opacity: .9; }
+  100% { transform: scale(1.6); opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .bkkx-cam-marker .cam-pulse { animation: none; opacity: .5; }
+}
+
+.key-cam {
+  display: block;
+  width: 11px;
+  height: 11px;
+  margin-left: 5px;
+  border: 1px solid rgba(255, 255, 255, .8);
+  border-radius: 50%;
+  background: #ff4d3d;
+}
+
+.atlas-embed-tools button.camera-active { background: #ff4d3d; color: #2a0a06; }
+.layer-toggle-btn.camera-toggle.active {
+  background: rgba(255, 77, 61, .2);
+  border-color: #ff4d3d;
+  color: #ffb3aa;
+}
+
+/* ---- the camera inspector ---- */
+/* The base badge paints an amber ground with dark text. Overriding only the
+   colour — as the first cut of this did — leaves salmon on amber, which is a
+   filled block with no readable label. Both halves are set, the same lesson
+   the language toggle taught. */
+.camera-inspector-card .heritage-reg-badge.is-live {
+  background: #ff4d3d;
+  color: #2a0a06;
+  letter-spacing: .12em;
+}
+.camera-inspector-card { border-color: rgba(255, 77, 61, .5); border-left-color: #ff4d3d; }
+.camera-inspector-card .heritage-source-note a { color: #ff8a7d; }
+
+/* Give the camera row the same three-column shape as the evidence legend so
+   its count sits beside the label instead of wrapping under it. */
+.atlas-map-key span:has(.key-cam) { grid-template-columns: 27px 1fr auto; }
+.atlas-map-key span:has(.key-cam) b {
+  color: #ff8a7d;
+  font-size: 9px;
+  font-variant-numeric: tabular-nums;
+}
+.cam-stage {
+  position: relative;
+  margin: 10px 0;
+  border: 1px solid rgba(255, 255, 255, .18);
+  background: #0d0f0c;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+}
+.cam-stage iframe,
+.cam-stage > img { width: 100%; height: 100%; border: 0; display: block; object-fit: cover; }
+.cam-play {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  padding: 0;
+  background: #0d0f0c;
+  cursor: pointer;
+  position: relative;
+}
+.cam-play img { width: 100%; height: 100%; object-fit: cover; opacity: .82; }
+.cam-play:hover img, .cam-play:focus-visible img { opacity: 1; }
+.cam-play-glyph {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: 40px; height: 40px;
+  display: grid; place-items: center;
+  border: 1px solid rgba(255, 255, 255, .8);
+  border-radius: 50%;
+  background: rgba(13, 15, 12, .6);
+  color: #fff;
+  font-size: 14px;
+}
+.cam-play-note {
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  padding: 4px 7px;
+  background: linear-gradient(transparent, rgba(13, 15, 12, .92));
+  color: rgba(255, 255, 255, .78);
+  font-family: var(--font-mono);
+  font-size: 9px;
+  text-align: left;
+}
+.cam-nostream {
+  margin: 0;
+  padding: 14px;
+  color: rgba(255, 255, 255, .66);
+  font-size: 11px;
+  line-height: 1.5;
+}
+.atlas-cam-note {
+  margin: 4px 0 0;
+  padding-top: 7px;
+  border-top: 1px solid rgba(255, 255, 255, .12);
+  color: rgba(255, 255, 255, .6);
+  font-size: 8px;
+  line-height: 1.45;
+}

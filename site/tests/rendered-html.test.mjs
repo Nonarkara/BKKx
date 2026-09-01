@@ -1444,14 +1444,19 @@ test("curated cameras render as facades and never leak to Google on load", async
 });
 
 test("a placeholder camera carries a nominal marker but never a claimed place", async () => {
-  // Three cameras arrived with zero identifying evidence. Per an explicit
+  // Some streams arrive with zero identifying evidence. Per an explicit
   // operator decision they are pinned at a shared, clearly-nominal marker
   // rather than left without a coordinate — but that marker must never be
   // mistaken for evidence: no place name, no district, and the reasoning
   // must say plainly that it is a stand-in.
+  //
+  // This asserts the rule, not a count. The original pinned the number at
+  // three, which was true of the day it was written and became false the
+  // moment a fourth unlocatable stream was added — a test that fails for
+  // being out of date teaches nothing about the invariant it was guarding.
   const { CURATED_CAMERAS, isLocated } = await import("../app/data/cctv-cameras.ts");
   const placeholders = CURATED_CAMERAS.filter((c) => c.precision === "placeholder");
-  assert.equal(placeholders.length, 3, "three cameras were supplied with no identifying evidence");
+  assert.ok(placeholders.length > 0, "the fixture this rule guards must exist");
 
   const markers = new Set(placeholders.map((c) => `${c.lat},${c.lon}`));
   assert.equal(markers.size, 1, "placeholder cameras must share one nominal marker, never distinct invented positions");
@@ -1779,4 +1784,64 @@ test("the spine's unjoined footprints are reported as a join miss, not as missin
     /pressure screen[^.]*did not reach/,
     "an unjoined footprint is classified; the page must not call it uncovered",
   );
+});
+
+/* ---------------------------------------------------------------- *
+ * cameras — more of them, and never on the map without evidence
+ * ---------------------------------------------------------------- */
+
+test("a placeholder-located camera never reaches the atlas map layer", async () => {
+  const { CURATED_CAMERAS, isLocated } = await import("../app/data/cctv-cameras.ts");
+
+  // The rule the whole camera layer rests on. Three streams share one
+  // nominal Bangkok coordinate so their war-room tiles are not pinless;
+  // plotting that would put pins where no camera is.
+  const placeholders = CURATED_CAMERAS.filter((c) => c.precision === "placeholder");
+  assert.ok(placeholders.length > 0, "the fixture for this rule must exist");
+  for (const c of placeholders) {
+    assert.equal(isLocated(c), false, `${c.id}: a placeholder must never count as located`);
+    assert.equal(c.place, null, `${c.id}: a placeholder must not carry a place name`);
+  }
+
+  // Every placeholder shares one coordinate, which is what makes it
+  // unmistakably nominal rather than three separate false claims.
+  const coords = new Set(placeholders.map((c) => `${c.lat},${c.lon}`));
+  assert.equal(coords.size, 1, "placeholders must share the single nominal marker");
+
+  // And the mappable set is exactly the evidence-located one.
+  const mappable = CURATED_CAMERAS.filter(
+    (c) => isLocated(c) && typeof c.lat === "number" && typeof c.lon === "number",
+  );
+  assert.ok(mappable.length >= 6, "the curated half of the atlas layer must not be empty");
+  for (const c of mappable) {
+    assert.notEqual(c.precision, "placeholder");
+    assert.ok(c.locatedBy.length > 20, `${c.id}: a mapped camera must say how it was located`);
+  }
+});
+
+test("every camera records how it was located, and no two share an id", async () => {
+  const { CURATED_CAMERAS, CAMERA_TALLY } = await import("../app/data/cctv-cameras.ts");
+  const ids = new Set(CURATED_CAMERAS.map((c) => c.id));
+  assert.equal(ids.size, CURATED_CAMERAS.length, "camera ids must be unique");
+  assert.equal(CAMERA_TALLY.total, CURATED_CAMERAS.length);
+  assert.equal(CAMERA_TALLY.located + CAMERA_TALLY.unconfirmed, CAMERA_TALLY.total);
+
+  for (const c of CURATED_CAMERAS) {
+    assert.ok(c.locatedBy && c.locatedBy.length > 20, `${c.id}: locatedBy must be a real sentence`);
+    // A YouTube camera must carry an id the poster proxy will accept; a
+    // link camera must carry the page it sends viewers to instead.
+    if (c.kind === "youtube") assert.match(c.videoId, /^[A-Za-z0-9_-]{11}$/, `${c.id}: video id`);
+    else assert.ok(c.sourceUrl.startsWith("https://"), `${c.id}: link camera needs a page`);
+  }
+});
+
+test("the atlas camera layer is opt-in and loads no third-party player up front", async () => {
+  const html = await (await render("/atlas/historic-core")).text();
+  // The layer is off by default, so no marker, card or embed may be in the
+  // server-rendered HTML — and above all no YouTube iframe.
+  assert.doesNotMatch(html, /bkkx-cam-marker/);
+  assert.doesNotMatch(html, /camera-inspector-card/);
+  assert.doesNotMatch(html, /youtube-nocookie\.com\/embed/);
+  // The control exists, though, or the layer would be unreachable.
+  assert.match(html, /Live cams/);
 });
