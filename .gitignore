@@ -34,3 +34,7 @@ public/diagrams/
 .env
 .env.*
 !.env.example
+
+# Python bytecode from the operator-runnable scripts
+__pycache__/
+*.pyc

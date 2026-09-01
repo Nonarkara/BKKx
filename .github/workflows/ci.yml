@@ -30,3 +30,11 @@ jobs:
       - run: npx tsc --noEmit
       - run: npm run lint
       - run: node --test tests/rendered-html.test.mjs
+      # The world-pipeline scripts are pure arithmetic with no heavy
+      # dependency, precisely so their geometry can be checked here rather
+      # than only on an operator's machine with amulet-core installed.
+      - name: world pipeline geometry
+        working-directory: .
+        run: |
+          python3 scripts/test-build-hero-monument-blocks.py
+          python3 scripts/test-build-rattanakosin-water-and-walls.py

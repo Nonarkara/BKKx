@@ -146,20 +146,43 @@ and have simply never been introduced to each other.
 general building mass, and it does elevation properly. Take its output as the
 base world.
 
-**The monuments → BKKx's own writer.** Extend the amulet pipeline with a
-`scripts/apply-hero-monuments-to-world.py` that:
+**The monuments → BKKx's own writer.** The first half of this now exists:
+`scripts/build-hero-monument-blocks.py` turns the massing into a placement
+plan, and `scripts/test-build-hero-monument-blocks.py` checks it. It:
 
 1. reads `bkk-hero-monuments.geojson`,
-2. converts each part's polygon to block coordinates with the same transform
-   `build-heritage-register.py` uses (`to_block`, world bounds and
-   `blocks.maxX/maxZ` are in `heritage-register.json`),
-3. fills from `base_height` to `height` with a block chosen from
-   `material_color` — a small explicit map, not a colour-distance guess, so a
-   reviewer can see why every block was picked,
-4. **suppresses the Arnis-generated box first** inside each part's footprint,
-   the same way `landmarks.rs` clears OSM fabric under a schematic,
-5. and refuses to write any part whose `height_confidence` is missing, so the
-   world cannot contain massing the register cannot defend.
+2. projects each part's polygon with the same transform
+   `build-heritage-register.py` uses — verified against the **105 register
+   monuments already committed with block coordinates**, 96 of which it
+   reproduces exactly and none by more than one block (the residual is the
+   register storing lat/lon at six decimal places, not a different projection),
+3. scanline-fills each footprint into row spans and fills `base_height` to
+   `height` with a block chosen by an explicit hue-and-lightness rule, with the
+   full 32-colour → family → block table written into the output and pinned by
+   the test, so every assignment is reviewable,
+4. records a **per-hero bounding box** so the applier can clear the generated
+   box underneath first, the same way `landmarks.rs` suppresses OSM fabric
+   under a schematic,
+5. and refuses any part whose `height_confidence` is missing, so the world
+   cannot contain massing the register cannot defend.
+
+The plan today: **67 parts, 78,399 blocks**, ground plane y=64 — the
+same frame the moat surface (y=63) and the gate markers (y=64) already use.
+The Phra Mondop comes out as a seven-tier stepped spire alternating gilt and
+green glazed tile, tapering from 2,496 blocks at the body to 16 at the finial.
+That is precisely the form `roof:shape` has no value for, and it fell out of
+data that was already in the repository.
+
+Two finials — the Siratana Chedi's at 0.94 m across — are genuinely narrower
+than one block. They are snapped to a single column rather than dropped, since
+dropping them blunts the spire they tip, and the plan marks them
+`snappedToOneColumn` so the block reads as a placement and not a measurement.
+
+**What is left is the applier**: a thin amulet-core loop over
+`bkk-hero-monument-blocks.json` that clears each `heroBounds` box and writes
+the spans. That half needs a world file and so belongs on your machine, not in
+CI — which is exactly why the arithmetic was split out to where it could be
+tested.
 
 Point 5 matters: the atlas's Evidence mode already grades these parts
 (`official-envelope` 7, `interpretive-proportion` 16, `interpretive-envelope`
