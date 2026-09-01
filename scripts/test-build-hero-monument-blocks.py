@@ -195,6 +195,44 @@ def test_the_palace_actually_stacks() -> None:
           f"{tallest['id']} top={tallest['yTo'] - hb.DEFAULT_GROUND_Y} m")
 
 
+def test_the_committed_plan_is_not_stale() -> None:
+    """The guard the other tests could not give.
+
+    Everything above calls build() directly, so all of it passed while the
+    committed plan on disk was a version older than the code — 78,399 blocks
+    from before the scanline fencepost was fixed, with no snapped finials.
+    A builder that is correct and an artifact that is stale look identical
+    from inside the builder's own tests.
+
+    So this one reads the file, and fails when it disagrees with what the
+    current code produces. Same guard as verify-shophouse-pressure.mjs, for
+    the same reason: a generated file nobody compares is a claim nobody
+    checks.
+    """
+    path = ROOT / "site/public/data/bkk-hero-monument-blocks.json"
+    check("the plan has been generated at all", path.exists(), str(path))
+    if not path.exists():
+        return
+
+    committed = json.loads(path.read_text())
+    fresh = hb.build(committed.get("groundY", hb.DEFAULT_GROUND_Y))
+
+    check(
+        "committed counts match a fresh build",
+        committed["counts"] == fresh["counts"],
+        f"committed={committed['counts']} fresh={fresh['counts']}",
+    )
+    check(
+        "committed palette matches a fresh build",
+        committed["palette"] == fresh["palette"],
+    )
+    check(
+        "every committed part matches a fresh build",
+        committed["parts"] == fresh["parts"],
+        "part geometry or block choice has drifted — re-run build-hero-monument-blocks.py",
+    )
+
+
 def main() -> int:
     for fn in (
         test_projection_agrees_with_the_register,
@@ -203,6 +241,7 @@ def main() -> int:
         test_palette_assignment_is_pinned,
         test_plan_is_whole_and_inside_the_world,
         test_the_palace_actually_stacks,
+        test_the_committed_plan_is_not_stale,
     ):
         print(f"\n{fn.__name__}")
         fn()

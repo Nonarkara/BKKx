@@ -314,6 +314,14 @@ def main() -> int:
     plan = build(args.ground_y)
     c = plan["counts"]
 
+    # Written BEFORE the summary is printed. The summary is 40-odd lines, and
+    # piping it through `head` closes the pipe mid-print, SIGPIPEs the process
+    # and loses the artifact — which is how a stale plan got committed once
+    # already. The side effect that matters should not be downstream of
+    # anything as fragile as stdout.
+    if not args.summary_only:
+        OUT.write_text(json.dumps(plan, indent=1) + "\n")
+
     print(f"hero monument blocks: {c['parts']} parts, {c['blocks']:,} blocks, ground y={plan['groundY']}")
     for conf, n in c["byConfidence"].items():
         print(f"  {conf:<26} {n}")
@@ -326,9 +334,7 @@ def main() -> int:
 
     if args.summary_only:
         return 0
-    OUT.write_text(json.dumps(plan, indent=1) + "\n")
-    size = OUT.stat().st_size
-    print(f"wrote {OUT.relative_to(ROOT)} ({size / 1000:.0f} kB)")
+    print(f"wrote {OUT.relative_to(ROOT)} ({OUT.stat().st_size / 1000:.0f} kB)")
     return 0
 
 

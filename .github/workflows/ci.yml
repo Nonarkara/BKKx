@@ -38,3 +38,7 @@ jobs:
         run: |
           python3 scripts/test-build-hero-monument-blocks.py
           python3 scripts/test-build-rattanakosin-water-and-walls.py
+          # The applier's dry run needs neither amulet nor a world, so its
+          # selection, dilation and reporting are all exercised here.
+          python3 scripts/apply-hero-monuments-to-world.py --dry-run
+          python3 scripts/apply-hero-monuments-to-world.py --dry-run --min-confidence official-envelope
