@@ -1,9 +1,11 @@
-# BKKx
-
-<img src="docs/hero-banner.png" alt="Manga-style civic atlas of Bangkok at dusk: a rider on an overlook reads a holographic district map from a tablet, with the Chao Phraya, temples, Skytrain and city lights beyond. Floating HUD panels in the artwork are illustration only — not screenshots of the live interface." width="100%" />
+<p align="center">
+  <img src="docs/hero-banner.png" alt="Manga-style civic atlas of Bangkok at dusk: a rider on an overlook reads a holographic district map from a tablet, with the Chao Phraya, temples, Skytrain and city lights beyond. Floating HUD panels in the artwork are illustration only — not screenshots of the live interface." width="100%" />
+</p>
 
 <p align="center"><em>City layers over Bangkok — a civic atlas, not a sealed console.<br />
 The HUD panels in this banner (district layers, water level, survey overview, elevation model, transit flow) are <strong>illustration only</strong>. They are concept artwork, not the running UI.</em></p>
+
+# BKKx
 
 **[bkk.nonarkara.org](https://bkk.nonarkara.org)** is an open civic atlas of Bangkok: the Fine Arts Department register of 571 ancient monuments, nine authored heritage quarters, seven street-following walks, a sourced rowhouse atlas, bilingual English/Thai reading, and two Minecraft Java worlds generated at 1 block = 1 metre. The 3D map is the front door.
 
