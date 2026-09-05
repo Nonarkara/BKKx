@@ -7,7 +7,7 @@
   },
   "scripts": {
     "dev": "WRANGLER_LOG_PATH=.wrangler/wrangler.log vinext dev",
-    "build": "npm run data:rowhouses && npm run data:heroes && npm run data:evidence && npm run data:pressure && npm run data:manifest && WRANGLER_LOG_PATH=.wrangler/wrangler.log vinext build && node scripts/fix-asset-manifest.mjs",
+    "build": "npm run data:rowhouses && npm run data:heroes && npm run data:evidence && npm run data:pressure && npm run data:spine && npm run data:pois && npm run data:manifest && WRANGLER_LOG_PATH=.wrangler/wrangler.log vinext build && node scripts/fix-asset-manifest.mjs",
     "start": "WRANGLER_LOG_PATH=.wrangler/wrangler.log vinext start",
     "test": "npm run build && node --test tests/rendered-html.test.mjs",
     "lint": "eslint . --ignore-pattern dist --ignore-pattern .next",
@@ -16,6 +16,8 @@
     "data:heroes": "python3 scripts/build-hero-monuments.py",
     "data:evidence": "node --experimental-strip-types scripts/build-evidence-tally.mjs",
     "data:pressure": "node --experimental-strip-types scripts/verify-shophouse-pressure.mjs",
+    "data:spine": "node --experimental-strip-types scripts/verify-shophouse-spine.mjs",
+    "data:pois": "node --experimental-strip-types scripts/verify-pois.mjs",
     "data:manifest": "node --experimental-strip-types scripts/build-dataset-manifest.mjs",
     "data:rowhouse-footprints": "npm run data:rowhouses && python3 scripts/build-rowhouse-footprints.py"
   },
