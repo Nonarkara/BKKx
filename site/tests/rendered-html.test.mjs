@@ -778,12 +778,17 @@ test("builds Wat Arun, Wat Phra Kaew and Wat Pho as sourced, evidence-labelled h
   assert.equal(source.elements.length, 5, "Wat Arun source snapshot must carry one central and four satellite footprints");
   assert.match(source.attribution, /OpenStreetMap contributors/);
   assert.equal(source.retrieved_at, "2026-08-17");
-  assert.equal(hero.featureCount, 67);
+  assert.equal(hero.featureCount, 88);
   assert.equal(hero.features.length, hero.featureCount);
   assert.deepEqual(hero.complexes, {
     "wat-arun-prang-group": 23,
     "wat-phra-kaew-hero-structures": 20,
     "wat-pho-four-great-chedis": 24,
+    "loha-prasat": 4,
+    "dusit-maha-prasat": 5,
+    "aphonphimok-prasat": 4,
+    "siwalai-maha-prasat": 4,
+    "golden-mount-chedi": 4,
   });
   assert.match(hero.modelStatus, /not a measured conservation model/i);
   assert.match(hero.sourceConflict, /Fine Arts: 82 m/);
@@ -791,11 +796,19 @@ test("builds Wat Arun, Wat Phra Kaew and Wat Pho as sourced, evidence-labelled h
   assert.equal(Math.max(...hero.features.map((feature) => feature.properties.height)), 82);
   assert.equal(hero.features.filter((feature) => feature.properties.kind === "hero_prang").length, 7);
   assert.equal(hero.features.filter((feature) => feature.properties.kind === "satellite_prang").length, 16);
-  assert.equal(hero.features.filter((feature) => feature.properties.model_status === "official-plan matched schematic").length, 20);
+  assert.equal(hero.features.filter((feature) => feature.properties.model_status === "official-plan matched schematic").length, 33);
   assert.equal(hero.features.filter((feature) => feature.properties.kind === "hero_wat_pho_chedi").length, 24);
   assert.equal(new Set(hero.features.filter((feature) => feature.properties.kind === "hero_wat_pho_chedi").map((feature) => feature.properties.hero_id)).size, 4);
   assert.ok(hero.features.some((feature) => feature.properties.id === "grand-palace-phra-mondop-roof-7"),
     "Phra Mondop must carry the Fine Arts-documented seventh roof tier");
+  assert.ok(hero.features.some((feature) => feature.properties.id === "loha-prasat-spire"));
+  assert.ok(hero.features.some((feature) => feature.properties.id === "dusit-maha-prasat-finial"));
+  assert.ok(hero.features.some((feature) => feature.properties.id === "golden-mount-chedi-spire"));
+  assert.equal(
+    Math.min(...hero.features.filter((feature) => feature.properties.hero_id === "golden-mount-chedi").map((feature) => feature.properties.base_height)),
+    45,
+    "Golden Mount chedi must sit on the 45 m hill, not start at grade",
+  );
   for (const feature of hero.features) {
     assert.equal(feature.properties.not_measured_survey, true);
     assert.ok(feature.properties.source_url?.startsWith("https://"));
@@ -823,7 +836,7 @@ test("the 3D atlas shell renders the 5 POI layer toggles", async () => {
   assert.match(html, /9,275/);
   assert.match(html, /full-resolution OSM footprints/);
   assert.match(html, /evidence-labelled schematic, not measured conservation documentation/);
-  assert.match(html, /67(?:<!-- -->)? hero parts across Wat Arun, Wat Phra Kaew and Wat Pho/);
+  assert.match(html, /88(?:<!-- -->)? hero parts across Wat Arun, Wat Phra Kaew, Wat Pho, Loha Prasat, the palace prasats and the Golden Mount/);
   assert.match(html, /Evidence-labelled hero model/);
 });
 

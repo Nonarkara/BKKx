@@ -111,9 +111,10 @@ Not a bug in Arnis — a vocabulary gap in OSM's own roof taxonomy.
 ## 4. The finding: BKKx already holds better monument data than OSM
 
 `site/scripts/build-hero-monuments.py` writes
-`site/public/data/bkk-hero-monuments.geojson`: **67 stacked parts** across Wat
+`site/public/data/bkk-hero-monuments.geojson`: **88 stacked parts** across Wat
 Arun's prang group (23), the Grand Palace's Phra Mondop (8), Siratana Chedi
-(7) and Thepbidorn (5), and Wat Pho's four great chedis (6 each).
+(7) and Thepbidorn (5), Wat Pho's four great chedis (6 each), Loha Prasat,
+the palace prasats and the Golden Mount chedi.
 
 Every part already carries exactly what a voxel build needs:
 
@@ -166,7 +167,8 @@ plan, and `scripts/test-build-hero-monument-blocks.py` checks it. It:
 5. and refuses any part whose `height_confidence` is missing, so the world
    cannot contain massing the register cannot defend.
 
-The plan today: **67 parts, 78,399 blocks**, ground plane y=64 — the
+The plan today is rebuilt by `scripts/build-hero-monument-blocks.py` —
+stacked parts, ground plane y=64 — the
 same frame the moat surface (y=63) and the gate markers (y=64) already use.
 The Phra Mondop comes out as a seven-tier stepped spire alternating gilt and
 green glazed tile, tapering from 2,496 blocks at the body to 16 at the finial.

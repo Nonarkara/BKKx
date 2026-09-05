@@ -43,12 +43,12 @@
    "#3f7c62": {
     "family": "glaze_green",
     "block": "minecraft:green_terracotta",
-    "parts": 3
+    "parts": 6
    },
    "#42745a": {
     "family": "glaze_green",
     "block": "minecraft:green_terracotta",
-    "parts": 1
+    "parts": 2
    },
    "#4f8a68": {
     "family": "glaze_green",
@@ -60,12 +60,22 @@
     "block": "minecraft:blue_terracotta",
     "parts": 6
    },
+   "#9a8b6e": {
+    "family": "plaster",
+    "block": "minecraft:smooth_sandstone",
+    "parts": 1
+   },
    "#a95536": {
     "family": "terracotta",
     "block": "minecraft:terracotta",
     "parts": 1
    },
    "#b8a77e": {
+    "family": "plaster",
+    "block": "minecraft:smooth_sandstone",
+    "parts": 1
+   },
+   "#b8a88a": {
     "family": "plaster",
     "block": "minecraft:smooth_sandstone",
     "parts": 1
@@ -88,17 +98,17 @@
    "#c9ad78": {
     "family": "plaster",
     "block": "minecraft:smooth_sandstone",
-    "parts": 1
+    "parts": 2
    },
    "#d5a53e": {
     "family": "gilt",
     "block": "minecraft:gold_block",
-    "parts": 3
+    "parts": 6
    },
    "#d6a932": {
     "family": "gilt",
     "block": "minecraft:gold_block",
-    "parts": 1
+    "parts": 2
    },
    "#d8b85e": {
     "family": "gilt",
@@ -108,7 +118,7 @@
    "#d9b75e": {
     "family": "gilt",
     "block": "minecraft:gold_block",
-    "parts": 1
+    "parts": 2
    },
    "#d9c69f": {
     "family": "plaster",
@@ -128,12 +138,12 @@
    "#e7d4aa": {
     "family": "whitewash",
     "block": "minecraft:smooth_quartz",
-    "parts": 1
+    "parts": 2
    },
    "#e8bd50": {
     "family": "gilt",
     "block": "minecraft:gold_block",
-    "parts": 4
+    "parts": 6
    },
    "#e9d39d": {
     "family": "plaster",
@@ -143,17 +153,17 @@
    "#e9ddc1": {
     "family": "whitewash",
     "block": "minecraft:smooth_quartz",
-    "parts": 4
+    "parts": 5
    },
    "#ebca6e": {
     "family": "gilt",
     "block": "minecraft:gold_block",
-    "parts": 1
+    "parts": 2
    },
    "#eee2c5": {
     "family": "whitewash",
     "block": "minecraft:smooth_quartz",
-    "parts": 1
+    "parts": 2
    },
    "#eee7d5": {
     "family": "whitewash",
@@ -163,12 +173,12 @@
    "#efc757": {
     "family": "gilt",
     "block": "minecraft:gold_block",
-    "parts": 1
+    "parts": 3
    },
    "#f0c95a": {
     "family": "gilt",
     "block": "minecraft:gold_block",
-    "parts": 1
+    "parts": 2
    },
    "#f0cf66": {
     "family": "gilt",
@@ -193,18 +203,36 @@
   }
  },
  "counts": {
-  "parts": 67,
+  "parts": 88,
   "snappedToOneColumn": 2,
   "refused": 0,
-  "blocks": 72626,
+  "blocks": 130876,
   "byConfidence": {
-   "interpretive-envelope": 44,
+   "interpretive-envelope": 65,
    "interpretive-proportion": 16,
    "official-envelope": 7
   }
  },
  "refused": [],
  "heroBounds": {
+  "aphonphimok-prasat": {
+   "minX": 1273,
+   "minZ": 1746,
+   "maxX": 1282,
+   "maxZ": 1760
+  },
+  "dusit-maha-prasat": {
+   "minX": 1236,
+   "minZ": 1748,
+   "maxX": 1272,
+   "maxZ": 1786
+  },
+  "golden-mount-chedi": {
+   "minX": 2994,
+   "minZ": 1350,
+   "maxX": 3009,
+   "maxZ": 1365
+  },
   "grand-palace-phra-mondop": {
    "minX": 1460,
    "minZ": 1598,
@@ -222,6 +250,18 @@
    "minZ": 1587,
    "maxX": 1509,
    "maxZ": 1618
+  },
+  "loha-prasat": {
+   "minX": 2709,
+   "minZ": 1224,
+   "maxX": 2756,
+   "maxZ": 1271
+  },
+  "siwalai-maha-prasat": {
+   "minX": 1529,
+   "minZ": 1881,
+   "maxX": 1573,
+   "maxZ": 1898
   },
   "wat-arun-prang-group": {
    "minX": 1049,
@@ -255,6 +295,1180 @@
   }
  },
  "parts": [
+  {
+   "id": "aphonphimok-prasat-body",
+   "heroId": "aphonphimok-prasat",
+   "name": "Aphonphimok Prasat",
+   "partLabel": "open pavilion body",
+   "block": "minecraft:smooth_quartz",
+   "family": "whitewash",
+   "materialColor": "#e9ddc1",
+   "yFrom": 64,
+   "yTo": 73,
+   "heightConfidence": "interpretive-envelope",
+   "heightSource": "BKKx curated interpretive envelope \u00b7 not an official dimension",
+   "notMeasuredSurvey": true,
+   "spans": [
+    [
+     1746,
+     1274,
+     1280
+    ],
+    [
+     1747,
+     1273,
+     1280
+    ],
+    [
+     1748,
+     1273,
+     1280
+    ],
+    [
+     1749,
+     1274,
+     1280
+    ],
+    [
+     1750,
+     1274,
+     1280
+    ],
+    [
+     1751,
+     1274,
+     1280
+    ],
+    [
+     1752,
+     1274,
+     1280
+    ],
+    [
+     1753,
+     1274,
+     1281
+    ],
+    [
+     1754,
+     1274,
+     1281
+    ],
+    [
+     1755,
+     1274,
+     1281
+    ],
+    [
+     1756,
+     1274,
+     1281
+    ],
+    [
+     1757,
+     1275,
+     1281
+    ],
+    [
+     1758,
+     1275,
+     1281
+    ],
+    [
+     1759,
+     1275,
+     1281
+    ],
+    [
+     1760,
+     1275,
+     1282
+    ]
+   ],
+   "blocks": 1120,
+   "snappedToOneColumn": false
+  },
+  {
+   "id": "aphonphimok-prasat-roof",
+   "heroId": "aphonphimok-prasat",
+   "name": "Aphonphimok Prasat",
+   "partLabel": "pyramidal roof envelope",
+   "block": "minecraft:green_terracotta",
+   "family": "glaze_green",
+   "materialColor": "#3f7c62",
+   "yFrom": 74,
+   "yTo": 81,
+   "heightConfidence": "interpretive-envelope",
+   "heightSource": "BKKx curated interpretive envelope \u00b7 not an official dimension",
+   "notMeasuredSurvey": true,
+   "spans": [
+    [
+     1747,
+     1275,
+     1279
+    ],
+    [
+     1748,
+     1274,
+     1279
+    ],
+    [
+     1749,
+     1274,
+     1279
+    ],
+    [
+     1750,
+     1274,
+     1280
+    ],
+    [
+     1751,
+     1274,
+     1280
+    ],
+    [
+     1752,
+     1275,
+     1280
+    ],
+    [
+     1753,
+     1275,
+     1280
+    ],
+    [
+     1754,
+     1275,
+     1280
+    ],
+    [
+     1755,
+     1275,
+     1280
+    ],
+    [
+     1756,
+     1275,
+     1280
+    ],
+    [
+     1757,
+     1275,
+     1280
+    ],
+    [
+     1758,
+     1275,
+     1281
+    ],
+    [
+     1759,
+     1275,
+     1277
+    ]
+   ],
+   "blocks": 616,
+   "snappedToOneColumn": false
+  },
+  {
+   "id": "aphonphimok-prasat-spire",
+   "heroId": "aphonphimok-prasat",
+   "name": "Aphonphimok Prasat",
+   "partLabel": "central spire envelope",
+   "block": "minecraft:gold_block",
+   "family": "gilt",
+   "materialColor": "#d5a53e",
+   "yFrom": 82,
+   "yTo": 88,
+   "heightConfidence": "interpretive-envelope",
+   "heightSource": "BKKx curated interpretive envelope \u00b7 not an official dimension",
+   "notMeasuredSurvey": true,
+   "spans": [
+    [
+     1750,
+     1276,
+     1278
+    ],
+    [
+     1751,
+     1276,
+     1278
+    ],
+    [
+     1752,
+     1276,
+     1278
+    ],
+    [
+     1753,
+     1276,
+     1278
+    ],
+    [
+     1754,
+     1277,
+     1278
+    ]
+   ],
+   "blocks": 98,
+   "snappedToOneColumn": false
+  },
+  {
+   "id": "aphonphimok-prasat-finial",
+   "heroId": "aphonphimok-prasat",
+   "name": "Aphonphimok Prasat",
+   "partLabel": "finial",
+   "block": "minecraft:gold_block",
+   "family": "gilt",
+   "materialColor": "#f0c95a",
+   "yFrom": 89,
+   "yTo": 91,
+   "heightConfidence": "interpretive-envelope",
+   "heightSource": "BKKx curated interpretive envelope \u00b7 not an official dimension",
+   "notMeasuredSurvey": true,
+   "spans": [
+    [
+     1752,
+     1277,
+     1277
+    ]
+   ],
+   "blocks": 3,
+   "snappedToOneColumn": false
+  },
+  {
+   "id": "dusit-maha-prasat-body",
+   "heroId": "dusit-maha-prasat",
+   "name": "Dusit Maha Prasat",
+   "partLabel": "throne-hall body",
+   "block": "minecraft:smooth_quartz",
+   "family": "whitewash",
+   "materialColor": "#eee2c5",
+   "yFrom": 64,
+   "yTo": 75,
+   "heightConfidence": "interpretive-envelope",
+   "heightSource": "BKKx curated interpretive envelope \u00b7 not an official dimension",
+   "notMeasuredSurvey": true,
+   "spans": [
+    [
+     1748,
+     1255,
+     1255
+    ],
+    [
+     1749,
+     1248,
+     1255
+    ],
+    [
+     1750,
+     1246,
+     1255
+    ],
+    [
+     1751,
+     1247,
+     1255
+    ],
+    [
+     1752,
+     1247,
+     1255
+    ],
+    [
+     1753,
+     1247,
+     1255
+    ],
+    [
+     1754,
+     1247,
+     1256
+    ],
+    [
+     1755,
+     1247,
+     1256
+    ],
+    [
+     1756,
+     1247,
+     1256
+    ],
+    [
+     1757,
+     1247,
+     1256
+    ],
+    [
+     1758,
+     1248,
+     1256
+    ],
+    [
+     1759,
+     1248,
+     1256
+    ],
+    [
+     1759,
+     1270,
+     1270
+    ],
+    [
+     1760,
+     1248,
+     1256
+    ],
+    [
+     1760,
+     1262,
+     1270
+    ],
+    [
+     1761,
+     1248,
+     1271
+    ],
+    [
+     1762,
+     1248,
+     1271
+    ],
+    [
+     1763,
+     1244,
+     1271
+    ],
+    [
+     1764,
+     1237,
+     1271
+    ],
+    [
+     1765,
+     1236,
+     1271
+    ],
+    [
+     1766,
+     1236,
+     1271
+    ],
+    [
+     1767,
+     1236,
+     1271
+    ],
+    [
+     1768,
+     1236,
+     1272
+    ],
+    [
+     1769,
+     1236,
+     1272
+    ],
+    [
+     1770,
+     1236,
+     1272
+    ],
+    [
+     1771,
+     1236,
+     1271
+    ],
+    [
+     1772,
+     1237,
+     1264
+    ],
+    [
+     1773,
+     1237,
+     1259
+    ],
+    [
+     1774,
+     1237,
+     1259
+    ],
+    [
+     1775,
+     1237,
+     1243
+    ],
+    [
+     1775,
+     1249,
+     1259
+    ],
+    [
+     1776,
+     1250,
+     1259
+    ],
+    [
+     1777,
+     1250,
+     1259
+    ],
+    [
+     1778,
+     1250,
+     1259
+    ],
+    [
+     1779,
+     1250,
+     1259
+    ],
+    [
+     1780,
+     1250,
+     1260
+    ],
+    [
+     1781,
+     1250,
+     1260
+    ],
+    [
+     1782,
+     1250,
+     1260
+    ],
+    [
+     1783,
+     1251,
+     1260
+    ],
+    [
+     1784,
+     1251,
+     1260
+    ],
+    [
+     1785,
+     1251,
+     1260
+    ],
+    [
+     1786,
+     1251,
+     1257
+    ]
+   ],
+   "blocks": 8292,
+   "snappedToOneColumn": false
+  },
+  {
+   "id": "dusit-maha-prasat-lower-roof",
+   "heroId": "dusit-maha-prasat",
+   "name": "Dusit Maha Prasat",
+   "partLabel": "lower stacked gable",
+   "block": "minecraft:green_terracotta",
+   "family": "glaze_green",
+   "materialColor": "#3f7c62",
+   "yFrom": 76,
+   "yTo": 81,
+   "heightConfidence": "interpretive-envelope",
+   "heightSource": "BKKx curated interpretive envelope \u00b7 not an official dimension",
+   "notMeasuredSurvey": true,
+   "spans": [
+    [
+     1751,
+     1250,
+     1255
+    ],
+    [
+     1752,
+     1247,
+     1255
+    ],
+    [
+     1753,
+     1247,
+     1255
+    ],
+    [
+     1754,
+     1248,
+     1255
+    ],
+    [
+     1755,
+     1248,
+     1255
+    ],
+    [
+     1756,
+     1248,
+     1255
+    ],
+    [
+     1757,
+     1248,
+     1255
+    ],
+    [
+     1758,
+     1248,
+     1256
+    ],
+    [
+     1759,
+     1248,
+     1256
+    ],
+    [
+     1760,
+     1248,
+     1256
+    ],
+    [
+     1760,
+     1268,
+     1268
+    ],
+    [
+     1761,
+     1249,
+     1256
+    ],
+    [
+     1761,
+     1261,
+     1268
+    ],
+    [
+     1762,
+     1249,
+     1268
+    ],
+    [
+     1763,
+     1249,
+     1269
+    ],
+    [
+     1764,
+     1242,
+     1269
+    ],
+    [
+     1765,
+     1238,
+     1269
+    ],
+    [
+     1766,
+     1238,
+     1269
+    ],
+    [
+     1767,
+     1238,
+     1269
+    ],
+    [
+     1768,
+     1238,
+     1269
+    ],
+    [
+     1769,
+     1238,
+     1269
+    ],
+    [
+     1770,
+     1238,
+     1270
+    ],
+    [
+     1771,
+     1239,
+     1266
+    ],
+    [
+     1772,
+     1239,
+     1258
+    ],
+    [
+     1773,
+     1239,
+     1258
+    ],
+    [
+     1774,
+     1239,
+     1245
+    ],
+    [
+     1774,
+     1250,
+     1258
+    ],
+    [
+     1775,
+     1250,
+     1258
+    ],
+    [
+     1776,
+     1250,
+     1258
+    ],
+    [
+     1777,
+     1250,
+     1259
+    ],
+    [
+     1778,
+     1251,
+     1259
+    ],
+    [
+     1779,
+     1251,
+     1259
+    ],
+    [
+     1780,
+     1251,
+     1259
+    ],
+    [
+     1781,
+     1251,
+     1259
+    ],
+    [
+     1782,
+     1251,
+     1259
+    ],
+    [
+     1783,
+     1251,
+     1259
+    ],
+    [
+     1784,
+     1251,
+     1254
+    ]
+   ],
+   "blocks": 3192,
+   "snappedToOneColumn": false
+  },
+  {
+   "id": "dusit-maha-prasat-upper-roof",
+   "heroId": "dusit-maha-prasat",
+   "name": "Dusit Maha Prasat",
+   "partLabel": "upper stacked gable",
+   "block": "minecraft:gold_block",
+   "family": "gilt",
+   "materialColor": "#d5a53e",
+   "yFrom": 82,
+   "yTo": 87,
+   "heightConfidence": "interpretive-envelope",
+   "heightSource": "BKKx curated interpretive envelope \u00b7 not an official dimension",
+   "notMeasuredSurvey": true,
+   "spans": [
+    [
+     1756,
+     1250,
+     1254
+    ],
+    [
+     1757,
+     1249,
+     1254
+    ],
+    [
+     1758,
+     1249,
+     1254
+    ],
+    [
+     1759,
+     1250,
+     1255
+    ],
+    [
+     1760,
+     1250,
+     1255
+    ],
+    [
+     1761,
+     1250,
+     1255
+    ],
+    [
+     1762,
+     1250,
+     1255
+    ],
+    [
+     1763,
+     1250,
+     1255
+    ],
+    [
+     1763,
+     1258,
+     1264
+    ],
+    [
+     1764,
+     1250,
+     1264
+    ],
+    [
+     1765,
+     1246,
+     1264
+    ],
+    [
+     1766,
+     1243,
+     1264
+    ],
+    [
+     1767,
+     1243,
+     1264
+    ],
+    [
+     1768,
+     1243,
+     1264
+    ],
+    [
+     1769,
+     1243,
+     1265
+    ],
+    [
+     1770,
+     1243,
+     1261
+    ],
+    [
+     1771,
+     1243,
+     1257
+    ],
+    [
+     1772,
+     1243,
+     1247
+    ],
+    [
+     1772,
+     1251,
+     1257
+    ],
+    [
+     1773,
+     1251,
+     1257
+    ],
+    [
+     1774,
+     1251,
+     1257
+    ],
+    [
+     1775,
+     1252,
+     1257
+    ],
+    [
+     1776,
+     1252,
+     1257
+    ],
+    [
+     1777,
+     1252,
+     1257
+    ],
+    [
+     1778,
+     1252,
+     1257
+    ],
+    [
+     1779,
+     1252,
+     1255
+    ]
+   ],
+   "blocks": 1590,
+   "snappedToOneColumn": false
+  },
+  {
+   "id": "dusit-maha-prasat-spire",
+   "heroId": "dusit-maha-prasat",
+   "name": "Dusit Maha Prasat",
+   "partLabel": "central spire envelope",
+   "block": "minecraft:green_terracotta",
+   "family": "glaze_green",
+   "materialColor": "#42745a",
+   "yFrom": 88,
+   "yTo": 91,
+   "heightConfidence": "interpretive-envelope",
+   "heightSource": "BKKx curated interpretive envelope \u00b7 not an official dimension",
+   "notMeasuredSurvey": true,
+   "spans": [
+    [
+     1763,
+     1252,
+     1254
+    ],
+    [
+     1764,
+     1252,
+     1254
+    ],
+    [
+     1765,
+     1252,
+     1254
+    ],
+    [
+     1766,
+     1252,
+     1258
+    ],
+    [
+     1767,
+     1249,
+     1258
+    ],
+    [
+     1768,
+     1249,
+     1258
+    ],
+    [
+     1769,
+     1249,
+     1254
+    ],
+    [
+     1770,
+     1253,
+     1255
+    ],
+    [
+     1771,
+     1253,
+     1255
+    ],
+    [
+     1772,
+     1253,
+     1255
+    ]
+   ],
+   "blocks": 204,
+   "snappedToOneColumn": false
+  },
+  {
+   "id": "dusit-maha-prasat-finial",
+   "heroId": "dusit-maha-prasat",
+   "name": "Dusit Maha Prasat",
+   "partLabel": "finial",
+   "block": "minecraft:gold_block",
+   "family": "gilt",
+   "materialColor": "#efc757",
+   "yFrom": 92,
+   "yTo": 93,
+   "heightConfidence": "interpretive-envelope",
+   "heightSource": "BKKx curated interpretive envelope \u00b7 not an official dimension",
+   "notMeasuredSurvey": true,
+   "spans": [
+    [
+     1766,
+     1253,
+     1253
+    ],
+    [
+     1767,
+     1253,
+     1254
+    ],
+    [
+     1768,
+     1252,
+     1253
+    ],
+    [
+     1769,
+     1254,
+     1254
+    ]
+   ],
+   "blocks": 12,
+   "snappedToOneColumn": false
+  },
+  {
+   "id": "golden-mount-chedi-plinth",
+   "heroId": "golden-mount-chedi",
+   "name": "Golden Mount Chedi",
+   "partLabel": "chedi plinth on the hill",
+   "block": "minecraft:gold_block",
+   "family": "gilt",
+   "materialColor": "#d9b75e",
+   "yFrom": 109,
+   "yTo": 111,
+   "heightConfidence": "interpretive-envelope",
+   "heightSource": "BKKx curated interpretive envelope \u00b7 not an official dimension",
+   "notMeasuredSurvey": true,
+   "spans": [
+    [
+     1350,
+     2998,
+     3004
+    ],
+    [
+     1351,
+     2997,
+     3006
+    ],
+    [
+     1352,
+     2996,
+     3007
+    ],
+    [
+     1353,
+     2995,
+     3007
+    ],
+    [
+     1354,
+     2994,
+     3008
+    ],
+    [
+     1355,
+     2994,
+     3008
+    ],
+    [
+     1356,
+     2994,
+     3008
+    ],
+    [
+     1357,
+     2994,
+     3009
+    ],
+    [
+     1358,
+     2994,
+     3008
+    ],
+    [
+     1359,
+     2994,
+     3008
+    ],
+    [
+     1360,
+     2994,
+     3008
+    ],
+    [
+     1361,
+     2995,
+     3008
+    ],
+    [
+     1362,
+     2995,
+     3007
+    ],
+    [
+     1363,
+     2996,
+     3006
+    ],
+    [
+     1364,
+     2997,
+     3005
+    ],
+    [
+     1365,
+     3000,
+     3002
+    ]
+   ],
+   "blocks": 594,
+   "snappedToOneColumn": false
+  },
+  {
+   "id": "golden-mount-chedi-bell",
+   "heroId": "golden-mount-chedi",
+   "name": "Golden Mount Chedi",
+   "partLabel": "bell-form envelope",
+   "block": "minecraft:gold_block",
+   "family": "gilt",
+   "materialColor": "#ebca6e",
+   "yFrom": 112,
+   "yTo": 117,
+   "heightConfidence": "interpretive-envelope",
+   "heightSource": "BKKx curated interpretive envelope \u00b7 not an official dimension",
+   "notMeasuredSurvey": true,
+   "spans": [
+    [
+     1352,
+     2999,
+     3003
+    ],
+    [
+     1353,
+     2998,
+     3004
+    ],
+    [
+     1354,
+     2997,
+     3005
+    ],
+    [
+     1355,
+     2996,
+     3006
+    ],
+    [
+     1356,
+     2996,
+     3006
+    ],
+    [
+     1357,
+     2996,
+     3006
+    ],
+    [
+     1358,
+     2996,
+     3006
+    ],
+    [
+     1359,
+     2996,
+     3006
+    ],
+    [
+     1360,
+     2997,
+     3006
+    ],
+    [
+     1361,
+     2997,
+     3005
+    ],
+    [
+     1362,
+     2998,
+     3004
+    ]
+   ],
+   "blocks": 612,
+   "snappedToOneColumn": false
+  },
+  {
+   "id": "golden-mount-chedi-shoulder",
+   "heroId": "golden-mount-chedi",
+   "name": "Golden Mount Chedi",
+   "partLabel": "upper shoulder",
+   "block": "minecraft:gold_block",
+   "family": "gilt",
+   "materialColor": "#d6a932",
+   "yFrom": 118,
+   "yTo": 120,
+   "heightConfidence": "interpretive-envelope",
+   "heightSource": "BKKx curated interpretive envelope \u00b7 not an official dimension",
+   "notMeasuredSurvey": true,
+   "spans": [
+    [
+     1355,
+     2999,
+     3003
+    ],
+    [
+     1356,
+     2999,
+     3003
+    ],
+    [
+     1357,
+     2998,
+     3004
+    ],
+    [
+     1358,
+     2999,
+     3004
+    ],
+    [
+     1359,
+     2999,
+     3003
+    ],
+    [
+     1360,
+     3000,
+     3002
+    ]
+   ],
+   "blocks": 93,
+   "snappedToOneColumn": false
+  },
+  {
+   "id": "golden-mount-chedi-spire",
+   "heroId": "golden-mount-chedi",
+   "name": "Golden Mount Chedi",
+   "partLabel": "spire",
+   "block": "minecraft:gold_block",
+   "family": "gilt",
+   "materialColor": "#e8bd50",
+   "yFrom": 121,
+   "yTo": 123,
+   "heightConfidence": "interpretive-envelope",
+   "heightSource": "BKKx curated interpretive envelope \u00b7 not an official dimension",
+   "notMeasuredSurvey": true,
+   "spans": [
+    [
+     1357,
+     3001,
+     3002
+    ],
+    [
+     1358,
+     3001,
+     3001
+    ]
+   ],
+   "blocks": 9,
+   "snappedToOneColumn": false
+  },
   {
    "id": "grand-palace-phra-mondop-body",
    "heroId": "grand-palace-phra-mondop",
@@ -1758,6 +2972,935 @@
     ]
    ],
    "blocks": 21,
+   "snappedToOneColumn": false
+  },
+  {
+   "id": "loha-prasat-body",
+   "heroId": "loha-prasat",
+   "name": "Loha Prasat",
+   "partLabel": "square body",
+   "block": "minecraft:smooth_sandstone",
+   "family": "plaster",
+   "materialColor": "#b8a88a",
+   "yFrom": 64,
+   "yTo": 77,
+   "heightConfidence": "interpretive-envelope",
+   "heightSource": "BKKx curated interpretive envelope \u00b7 not an official dimension",
+   "notMeasuredSurvey": true,
+   "spans": [
+    [
+     1224,
+     2719,
+     2721
+    ],
+    [
+     1225,
+     2719,
+     2725
+    ],
+    [
+     1226,
+     2719,
+     2729
+    ],
+    [
+     1227,
+     2719,
+     2732
+    ],
+    [
+     1228,
+     2718,
+     2736
+    ],
+    [
+     1229,
+     2718,
+     2740
+    ],
+    [
+     1230,
+     2718,
+     2743
+    ],
+    [
+     1231,
+     2717,
+     2747
+    ],
+    [
+     1232,
+     2717,
+     2751
+    ],
+    [
+     1233,
+     2717,
+     2755
+    ],
+    [
+     1234,
+     2717,
+     2756
+    ],
+    [
+     1235,
+     2716,
+     2756
+    ],
+    [
+     1236,
+     2716,
+     2755
+    ],
+    [
+     1237,
+     2716,
+     2755
+    ],
+    [
+     1238,
+     2716,
+     2755
+    ],
+    [
+     1239,
+     2715,
+     2755
+    ],
+    [
+     1240,
+     2715,
+     2754
+    ],
+    [
+     1241,
+     2715,
+     2754
+    ],
+    [
+     1242,
+     2715,
+     2754
+    ],
+    [
+     1243,
+     2714,
+     2753
+    ],
+    [
+     1244,
+     2714,
+     2753
+    ],
+    [
+     1245,
+     2714,
+     2753
+    ],
+    [
+     1246,
+     2713,
+     2753
+    ],
+    [
+     1247,
+     2713,
+     2752
+    ],
+    [
+     1248,
+     2713,
+     2752
+    ],
+    [
+     1249,
+     2713,
+     2752
+    ],
+    [
+     1250,
+     2712,
+     2752
+    ],
+    [
+     1251,
+     2712,
+     2751
+    ],
+    [
+     1252,
+     2712,
+     2751
+    ],
+    [
+     1253,
+     2712,
+     2751
+    ],
+    [
+     1254,
+     2711,
+     2751
+    ],
+    [
+     1255,
+     2711,
+     2750
+    ],
+    [
+     1256,
+     2711,
+     2750
+    ],
+    [
+     1257,
+     2710,
+     2750
+    ],
+    [
+     1258,
+     2710,
+     2749
+    ],
+    [
+     1259,
+     2710,
+     2749
+    ],
+    [
+     1260,
+     2710,
+     2749
+    ],
+    [
+     1261,
+     2709,
+     2749
+    ],
+    [
+     1262,
+     2712,
+     2748
+    ],
+    [
+     1263,
+     2715,
+     2748
+    ],
+    [
+     1264,
+     2719,
+     2748
+    ],
+    [
+     1265,
+     2723,
+     2748
+    ],
+    [
+     1266,
+     2726,
+     2747
+    ],
+    [
+     1267,
+     2730,
+     2747
+    ],
+    [
+     1268,
+     2734,
+     2747
+    ],
+    [
+     1269,
+     2738,
+     2746
+    ],
+    [
+     1270,
+     2741,
+     2746
+    ],
+    [
+     1271,
+     2745,
+     2746
+    ]
+   ],
+   "blocks": 21462,
+   "snappedToOneColumn": false
+  },
+  {
+   "id": "loha-prasat-pavilion",
+   "heroId": "loha-prasat",
+   "name": "Loha Prasat",
+   "partLabel": "concentric pavilion roof",
+   "block": "minecraft:smooth_sandstone",
+   "family": "plaster",
+   "materialColor": "#9a8b6e",
+   "yFrom": 78,
+   "yTo": 85,
+   "heightConfidence": "interpretive-envelope",
+   "heightSource": "BKKx curated interpretive envelope \u00b7 not an official dimension",
+   "notMeasuredSurvey": true,
+   "spans": [
+    [
+     1229,
+     2722,
+     2723
+    ],
+    [
+     1230,
+     2722,
+     2727
+    ],
+    [
+     1231,
+     2722,
+     2730
+    ],
+    [
+     1232,
+     2722,
+     2734
+    ],
+    [
+     1233,
+     2721,
+     2738
+    ],
+    [
+     1234,
+     2721,
+     2742
+    ],
+    [
+     1235,
+     2721,
+     2745
+    ],
+    [
+     1236,
+     2721,
+     2749
+    ],
+    [
+     1237,
+     2720,
+     2751
+    ],
+    [
+     1238,
+     2720,
+     2750
+    ],
+    [
+     1239,
+     2720,
+     2750
+    ],
+    [
+     1240,
+     2719,
+     2750
+    ],
+    [
+     1241,
+     2719,
+     2750
+    ],
+    [
+     1242,
+     2719,
+     2749
+    ],
+    [
+     1243,
+     2719,
+     2749
+    ],
+    [
+     1244,
+     2718,
+     2749
+    ],
+    [
+     1245,
+     2718,
+     2749
+    ],
+    [
+     1246,
+     2718,
+     2748
+    ],
+    [
+     1247,
+     2718,
+     2748
+    ],
+    [
+     1248,
+     2717,
+     2748
+    ],
+    [
+     1249,
+     2717,
+     2747
+    ],
+    [
+     1250,
+     2717,
+     2747
+    ],
+    [
+     1251,
+     2717,
+     2747
+    ],
+    [
+     1252,
+     2716,
+     2747
+    ],
+    [
+     1253,
+     2716,
+     2746
+    ],
+    [
+     1254,
+     2716,
+     2746
+    ],
+    [
+     1255,
+     2715,
+     2746
+    ],
+    [
+     1256,
+     2715,
+     2746
+    ],
+    [
+     1257,
+     2715,
+     2745
+    ],
+    [
+     1258,
+     2715,
+     2745
+    ],
+    [
+     1259,
+     2717,
+     2745
+    ],
+    [
+     1260,
+     2721,
+     2744
+    ],
+    [
+     1261,
+     2725,
+     2744
+    ],
+    [
+     1262,
+     2728,
+     2744
+    ],
+    [
+     1263,
+     2732,
+     2744
+    ],
+    [
+     1264,
+     2736,
+     2743
+    ],
+    [
+     1265,
+     2739,
+     2743
+    ],
+    [
+     1266,
+     2743,
+     2743
+    ]
+   ],
+   "blocks": 7456,
+   "snappedToOneColumn": false
+  },
+  {
+   "id": "loha-prasat-tower",
+   "heroId": "loha-prasat",
+   "name": "Loha Prasat",
+   "partLabel": "central tower",
+   "block": "minecraft:smooth_sandstone",
+   "family": "plaster",
+   "materialColor": "#c9ad78",
+   "yFrom": 86,
+   "yTo": 92,
+   "heightConfidence": "interpretive-envelope",
+   "heightSource": "BKKx curated interpretive envelope \u00b7 not an official dimension",
+   "notMeasuredSurvey": true,
+   "spans": [
+    [
+     1238,
+     2727,
+     2729
+    ],
+    [
+     1239,
+     2727,
+     2733
+    ],
+    [
+     1240,
+     2727,
+     2737
+    ],
+    [
+     1241,
+     2726,
+     2740
+    ],
+    [
+     1242,
+     2726,
+     2742
+    ],
+    [
+     1243,
+     2726,
+     2742
+    ],
+    [
+     1244,
+     2726,
+     2742
+    ],
+    [
+     1245,
+     2725,
+     2741
+    ],
+    [
+     1246,
+     2725,
+     2741
+    ],
+    [
+     1247,
+     2725,
+     2741
+    ],
+    [
+     1248,
+     2725,
+     2740
+    ],
+    [
+     1249,
+     2724,
+     2740
+    ],
+    [
+     1250,
+     2724,
+     2740
+    ],
+    [
+     1251,
+     2724,
+     2740
+    ],
+    [
+     1252,
+     2723,
+     2739
+    ],
+    [
+     1253,
+     2723,
+     2739
+    ],
+    [
+     1254,
+     2726,
+     2739
+    ],
+    [
+     1255,
+     2730,
+     2739
+    ],
+    [
+     1256,
+     2733,
+     2738
+    ],
+    [
+     1257,
+     2737,
+     2738
+    ]
+   ],
+   "blocks": 1897,
+   "snappedToOneColumn": false
+  },
+  {
+   "id": "loha-prasat-spire",
+   "heroId": "loha-prasat",
+   "name": "Loha Prasat",
+   "partLabel": "gilded central spire",
+   "block": "minecraft:gold_block",
+   "family": "gilt",
+   "materialColor": "#e8bd50",
+   "yFrom": 93,
+   "yTo": 96,
+   "heightConfidence": "interpretive-envelope",
+   "heightSource": "BKKx curated interpretive envelope \u00b7 not an official dimension",
+   "notMeasuredSurvey": true,
+   "spans": [
+    [
+     1245,
+     2731,
+     2734
+    ],
+    [
+     1246,
+     2731,
+     2735
+    ],
+    [
+     1247,
+     2730,
+     2735
+    ],
+    [
+     1248,
+     2730,
+     2735
+    ],
+    [
+     1249,
+     2730,
+     2735
+    ],
+    [
+     1250,
+     2732,
+     2734
+    ]
+   ],
+   "blocks": 120,
+   "snappedToOneColumn": false
+  },
+  {
+   "id": "siwalai-maha-prasat-body",
+   "heroId": "siwalai-maha-prasat",
+   "name": "Siwalai Maha Prasat",
+   "partLabel": "prasat body",
+   "block": "minecraft:smooth_quartz",
+   "family": "whitewash",
+   "materialColor": "#e7d4aa",
+   "yFrom": 64,
+   "yTo": 75,
+   "heightConfidence": "interpretive-envelope",
+   "heightSource": "BKKx curated interpretive envelope \u00b7 not an official dimension",
+   "notMeasuredSurvey": true,
+   "spans": [
+    [
+     1881,
+     1548,
+     1554
+    ],
+    [
+     1882,
+     1546,
+     1554
+    ],
+    [
+     1882,
+     1568,
+     1572
+    ],
+    [
+     1883,
+     1546,
+     1573
+    ],
+    [
+     1884,
+     1540,
+     1573
+    ],
+    [
+     1885,
+     1529,
+     1573
+    ],
+    [
+     1886,
+     1529,
+     1573
+    ],
+    [
+     1887,
+     1529,
+     1573
+    ],
+    [
+     1888,
+     1529,
+     1573
+    ],
+    [
+     1889,
+     1529,
+     1573
+    ],
+    [
+     1890,
+     1529,
+     1573
+    ],
+    [
+     1891,
+     1529,
+     1573
+    ],
+    [
+     1892,
+     1529,
+     1573
+    ],
+    [
+     1893,
+     1529,
+     1573
+    ],
+    [
+     1894,
+     1529,
+     1573
+    ],
+    [
+     1895,
+     1529,
+     1567
+    ],
+    [
+     1896,
+     1529,
+     1555
+    ],
+    [
+     1897,
+     1529,
+     1538
+    ],
+    [
+     1897,
+     1547,
+     1555
+    ],
+    [
+     1898,
+     1547,
+     1549
+    ]
+   ],
+   "blocks": 7452,
+   "snappedToOneColumn": false
+  },
+  {
+   "id": "siwalai-maha-prasat-roof",
+   "heroId": "siwalai-maha-prasat",
+   "name": "Siwalai Maha Prasat",
+   "partLabel": "stacked roof envelope",
+   "block": "minecraft:green_terracotta",
+   "family": "glaze_green",
+   "materialColor": "#3f7c62",
+   "yFrom": 76,
+   "yTo": 83,
+   "heightConfidence": "interpretive-envelope",
+   "heightSource": "BKKx curated interpretive envelope \u00b7 not an official dimension",
+   "notMeasuredSurvey": true,
+   "spans": [
+    [
+     1883,
+     1547,
+     1553
+    ],
+    [
+     1884,
+     1547,
+     1553
+    ],
+    [
+     1884,
+     1560,
+     1568
+    ],
+    [
+     1885,
+     1546,
+     1568
+    ],
+    [
+     1886,
+     1534,
+     1568
+    ],
+    [
+     1887,
+     1534,
+     1568
+    ],
+    [
+     1888,
+     1534,
+     1568
+    ],
+    [
+     1889,
+     1534,
+     1568
+    ],
+    [
+     1890,
+     1534,
+     1568
+    ],
+    [
+     1891,
+     1534,
+     1568
+    ],
+    [
+     1892,
+     1534,
+     1568
+    ],
+    [
+     1893,
+     1534,
+     1568
+    ],
+    [
+     1894,
+     1534,
+     1561
+    ],
+    [
+     1895,
+     1534,
+     1546
+    ],
+    [
+     1895,
+     1548,
+     1554
+    ],
+    [
+     1896,
+     1548,
+     1552
+    ]
+   ],
+   "blocks": 3032,
+   "snappedToOneColumn": false
+  },
+  {
+   "id": "siwalai-maha-prasat-spire",
+   "heroId": "siwalai-maha-prasat",
+   "name": "Siwalai Maha Prasat",
+   "partLabel": "central spire envelope",
+   "block": "minecraft:gold_block",
+   "family": "gilt",
+   "materialColor": "#d5a53e",
+   "yFrom": 84,
+   "yTo": 89,
+   "heightConfidence": "interpretive-envelope",
+   "heightSource": "BKKx curated interpretive envelope \u00b7 not an official dimension",
+   "notMeasuredSurvey": true,
+   "spans": [
+    [
+     1887,
+     1550,
+     1551
+    ],
+    [
+     1888,
+     1545,
+     1557
+    ],
+    [
+     1889,
+     1544,
+     1557
+    ],
+    [
+     1890,
+     1544,
+     1557
+    ],
+    [
+     1891,
+     1544,
+     1558
+    ],
+    [
+     1892,
+     1544,
+     1546
+    ],
+    [
+     1892,
+     1550,
+     1552
+    ]
+   ],
+   "blocks": 384,
+   "snappedToOneColumn": false
+  },
+  {
+   "id": "siwalai-maha-prasat-finial",
+   "heroId": "siwalai-maha-prasat",
+   "name": "Siwalai Maha Prasat",
+   "partLabel": "finial",
+   "block": "minecraft:gold_block",
+   "family": "gilt",
+   "materialColor": "#efc757",
+   "yFrom": 90,
+   "yTo": 91,
+   "heightConfidence": "interpretive-envelope",
+   "heightSource": "BKKx curated interpretive envelope \u00b7 not an official dimension",
+   "notMeasuredSurvey": true,
+   "spans": [
+    [
+     1889,
+     1551,
+     1552
+    ],
+    [
+     1890,
+     1549,
+     1552
+    ]
+   ],
+   "blocks": 12,
    "snappedToOneColumn": false
   },
   {

@@ -121,7 +121,7 @@ def test_plan_is_whole_and_inside_the_world() -> None:
     world = json.loads((ROOT / "site/public/heritage-register.json").read_text())["worlds"][hb.WORLD_ID]
     max_x, max_z = world["blocks"]["maxX"], world["blocks"]["maxZ"]
 
-    check("all 67 hero parts are planned", plan["counts"]["parts"] == 67, str(plan["counts"]))
+    check("all hero parts are planned", plan["counts"]["parts"] == 88, str(plan["counts"]))
     check("nothing was refused", plan["counts"]["refused"] == 0, str(plan["refused"]))
 
     outside = [
@@ -157,7 +157,7 @@ def test_plan_is_whole_and_inside_the_world() -> None:
     check(
         "the three evidence grades are carried, not flattened",
         plan["counts"]["byConfidence"] == {
-            "interpretive-envelope": 44,
+            "interpretive-envelope": 65,
             "interpretive-proportion": 16,
             "official-envelope": 7,
         },
@@ -193,6 +193,18 @@ def test_the_palace_actually_stacks() -> None:
     check("Wat Arun's finial is the tallest thing in the world",
           tallest["heroId"] == "wat-arun-prang-group" and tallest["yTo"] - hb.DEFAULT_GROUND_Y == 81,
           f"{tallest['id']} top={tallest['yTo'] - hb.DEFAULT_GROUND_Y} m")
+
+    dusit = [p for p in plan["parts"] if p["heroId"] == "dusit-maha-prasat"]
+    dusit.sort(key=lambda p: p["yFrom"])
+    check("Dusit Maha Prasat is stacked, not a box", len(dusit) == 5, str(len(dusit)))
+    check("its parts stack without a gap or overlap",
+          all(b["yFrom"] == a["yTo"] + 1 for a, b in zip(dusit, dusit[1:])))
+
+    mount = [p for p in plan["parts"] if p["heroId"] == "golden-mount-chedi"]
+    mount.sort(key=lambda p: p["yFrom"])
+    check("Golden Mount chedi sits on the 45 m hill",
+          mount and mount[0]["yFrom"] - hb.DEFAULT_GROUND_Y == 45,
+          str([(p["yFrom"] - hb.DEFAULT_GROUND_Y, p["yTo"] - hb.DEFAULT_GROUND_Y) for p in mount]))
 
 
 def test_the_committed_plan_is_not_stale() -> None:

@@ -5,9 +5,10 @@ build-hero-monument-blocks.py
 Turn the hero-monument massing into a block placement plan.
 
 WHY THIS EXISTS. site/scripts/build-hero-monuments.py already computes the
-thing OpenStreetMap cannot express and Arnis therefore cannot generate: 67
+thing OpenStreetMap cannot express and Arnis therefore cannot generate: the
 stacked parts across Wat Arun's prang group, the Grand Palace's Phra Mondop,
-Siratana Chedi and Thepbidorn, and Wat Pho's four great chedis — each with a
+Siratana Chedi and Thepbidorn, Wat Pho's four great chedis, Loha Prasat,
+the palace prasats and the Golden Mount chedi — each with a
 footprint, a base and top height in metres, a material tone, and a per-part
 provenance grade. Separately, scripts/apply-rattanakosin-to-world.py can write
 geojson in block coordinates into .mca region files with amulet-core.
@@ -25,8 +26,8 @@ dependency — means the geometry can be tested in CI and reviewed in a diff,
 and the applier stays a thin loop over a plan somebody has already read.
 
 EVIDENCE IS NOT FLATTENED. The atlas grades every one of these parts
-(`official-envelope` 7, `interpretive-proportion` 16, `interpretive-envelope`
-44) and Evidence mode colours the city by it. A part with no grade is REFUSED
+(`official-envelope`, `interpretive-proportion`, `interpretive-envelope`)
+and Evidence mode colours the city by it. A part with no grade is REFUSED
 rather than built: a world that shows the Fine Arts Department's published
 82 m envelope and a BKKx-curated silhouette as the same kind of fact lies more
 confidently than the map does. The grade travels with every part into the
@@ -52,7 +53,7 @@ HEROES = ROOT / "site/public/data/bkk-hero-monuments.geojson"
 REGISTER = ROOT / "site/public/heritage-register.json"
 OUT = ROOT / "site/public/data/bkk-hero-monument-blocks.json"
 
-# Which generated world these monuments fall in. All 67 parts are Rattanakosin.
+# Which generated world these monuments fall in. All hero parts are Rattanakosin.
 WORLD_ID = "bangkok-historic-core-java"
 
 # Minecraft sea level. apply-rattanakosin-to-world.py puts the moat surface at

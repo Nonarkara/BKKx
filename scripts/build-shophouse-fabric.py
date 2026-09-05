@@ -6,7 +6,9 @@ Turn the 2,433 screened shophouse footprints into a block placement plan.
 
 WHY THIS EXISTS. The historic-core world currently extrudes OSM footprints as
 boxes. A shophouse is not a box: it is a 4 m bay, a party wall, a firewall
-every five bays, a row that must break at ten units / 40 m. Those are not
+every five bays, a row that must break at ten units / 40 m, a shop
+opening on the street, a window per bay per floor, a 1 m awning, and
+a rear courtyard when the plot is deeper than 16 m. Those are not
 design preferences. They are Ministerial Regulation No. 55 B.E. 2543 ข้อ 2,
 ข้อ 4 and ข้อ 17, which is also the rhythm you can read from the pavement.
 
@@ -59,6 +61,7 @@ FOOTPRINTS = ROOT / "site/public/data/bangkok-rowhouse-footprint-candidates.geoj
 SPINE = ROOT / "site/public/data/shophouse-spine.json"
 REGISTER = ROOT / "site/public/heritage-register.json"
 HERO_PLAN = ROOT / "site/public/data/bkk-hero-monument-blocks.json"
+ATLAS = ROOT / "site/public/data/bangkok-rowhouse-atlas.geojson"
 OUT = ROOT / "site/public/data/bkk-shophouse-fabric-blocks.json"
 
 WORLD_ID = "bangkok-historic-core-java"
@@ -76,10 +79,25 @@ WALL_THICKNESS_M = 1.0
 FIREWALL_ABOVE_M = 1.0     # law asks ≥ 30 cm; one block is the resolution
 MIN_FRONTAGE_M = 2.0
 
+OPENING_W_M = 2.0
+OPENING_D_M = 1.0
+OPENING_H_BLOCKS = 3
+WINDOW_W_M = 1.0
+WINDOW_D_M = 1.0
+AWNING_D_M = 1.0
+COURTYARD_AFTER_M = 16.0
+COURTYARD_DEPTH_M = 4.0
+REAR_WALL_M = 1.0
+STAIR_W_M = 1.0
+STAIR_D_M = 2.0
+SIDE_INSET = 1.0
+
 BODY_BLOCK = "minecraft:smooth_sandstone"
 PARTY_BLOCK = "minecraft:stone_bricks"
 FIRE_BLOCK = "minecraft:bricks"
 ROOF_BLOCK = "minecraft:terracotta"
+AWNING_BLOCK = "minecraft:oak_planks"
+WINDOW_BLOCK = "minecraft:glass"
 
 CONFIDENCE_OVERTURE = "overture-storeys"
 CONFIDENCE_DEFAULT = "interpretive-storeys"
@@ -136,6 +154,82 @@ def clip_spans(spans: list[list[int]], max_x: int, max_z: int) -> list[list[int]
         if b >= a:
             out.append([z, a, b])
     return out
+
+
+def dist_point_seg(px: float, py: float, ax: float, ay: float, bx: float, by: float) -> float:
+    vx, vy = bx - ax, by - ay
+    length2 = vx * vx + vy * vy
+    if length2 < 1e-12:
+        return math.hypot(px - ax, py - ay)
+    t = max(0.0, min(1.0, ((px - ax) * vx + (py - ay) * vy) / length2))
+    return math.hypot(px - (ax + t * vx), py - (ay + t * vy))
+
+
+def dist_to_lines(px: float, py: float, lines: list[list[tuple[float, float]]]) -> float:
+    best = float("inf")
+    for line in lines:
+        for i in range(len(line) - 1):
+            best = min(best, dist_point_seg(px, py, *line[i], *line[i + 1]))
+    return best
+
+
+def load_streets(world: dict) -> list[list[tuple[float, float]]]:
+    if not ATLAS.exists():
+        return []
+    atlas = json.loads(ATLAS.read_text())
+    lines: list[list[tuple[float, float]]] = []
+    for feature in atlas["features"]:
+        if feature["geometry"]["type"] != "LineString":
+            continue
+        lines.append([
+            project(lat, lon, world)
+            for lon, lat in feature["geometry"]["coordinates"]
+        ])
+    return lines
+
+
+def street_at_depth_min(rect: dict, streets: list[list[tuple[float, float]]]) -> bool:
+    """Which short end of the OBB faces the nearest documented corridor.
+
+    The 32 atlas LineStrings are the named sois this fabric is clustered on,
+    not every alley. Nearer-end is the street face; the other is the rear.
+    """
+    ox, oz = rect["origin"]
+    fu, fv, du, dv = rect["fu"], rect["fv"], rect["du"], rect["dv"]
+    mid = rect["frontage_m"] / 2
+    depth = rect["depth_m"]
+    p0 = (ox + fu * mid, oz + fv * mid)
+    p1 = (ox + fu * mid + du * depth, oz + fv * mid + dv * depth)
+    if not streets:
+        return True
+    return dist_to_lines(*p0, streets) <= dist_to_lines(*p1, streets)
+
+
+def slab(rect: dict, f0: float, f1: float, d0: float, d1: float) -> list[tuple[float, float]]:
+    return rect_ring(
+        rect["origin"], rect["fu"], rect["fv"], rect["du"], rect["dv"],
+        f0, f1, d0, d1,
+    )
+
+
+def street_depth(rect: dict, street_min: bool, thick: float, *, outward: bool = False) -> tuple[float, float]:
+    depth = rect["depth_m"]
+    if street_min:
+        return (-thick, 0.0) if outward else (0.0, thick)
+    return (depth, depth + thick) if outward else (depth - thick, depth)
+
+
+def anatomy_volume(b: dict) -> int:
+    """Solid blocks after openings are cut. Windows replace body, net zero."""
+    layers = b["yTo"] - b["yFrom"] + 1
+    fire_layers = layers + int(FIREWALL_ABOVE_M)
+    return (
+        span_volume(b["spans"], layers)
+        + span_volume(b["partyWalls"], layers)
+        + span_volume(b["firewalls"], fire_layers)
+        + span_volume(b.get("awning") or [], 1)
+        - span_volume(b.get("openings") or [], OPENING_H_BLOCKS)
+    )
 
 
 def wall_spans(rect: dict, f0: float, f1: float, body: set[tuple[int, int]]) -> list[list[int]]:
@@ -213,13 +307,20 @@ def assign_row_bays(buildings: list[dict]) -> None:
                 b["overRowCap"] = over
 
 
-def rasterise(b: dict, blocked: set[tuple[int, int]], max_x: int, max_z: int) -> None:
+def rasterise(b: dict, blocked: set[tuple[int, int]], max_x: int, max_z: int,
+              streets: list[list[tuple[float, float]]]) -> None:
     rect = b["rect"]
     body = clip_spans(punch_spans(row_spans(b["ring"]), blocked), max_x, max_z)
     if not body:
         b["spans"] = []
         b["partyWalls"] = []
         b["firewalls"] = []
+        b["openings"] = []
+        b["windows"] = []
+        b["awning"] = []
+        b["courtyard"] = []
+        b["stair"] = []
+        b["streetAtDepthMin"] = True
         b["blocks"] = 0
         return
 
@@ -242,16 +343,70 @@ def rasterise(b: dict, blocked: set[tuple[int, int]], max_x: int, max_z: int) ->
     if b["rowBayTo"] % FIREWALL_EVERY_BAYS == 0:
         fires.extend(wall_spans(rect, frontage - WALL_THICKNESS_M, frontage, body_cols))
 
-    layers = b["yTo"] - b["yFrom"] + 1
-    fire_layers = layers + int(FIREWALL_ABOVE_M)
+    wall_cols = columns_of(party) | columns_of(fires)
+    street_min = street_at_depth_min(rect, streets)
+    b["streetAtDepthMin"] = street_min
+
+    # Shop opening and window per bay on the street face. 2 m × 3 m air at
+    # ground floor, 1 m glass on each upper floor. This is the legal/typological
+    # rhythm (a Hall opening, one window per bay), not a survey of the actual
+    # shopfronts.
+    openings: list[list[int]] = []
+    windows: list[list[int]] = []
+    bay_w = frontage / n
+    open_w = min(OPENING_W_M, max(1.0, bay_w - 1.0))
+    d0, d1 = street_depth(rect, street_min, OPENING_D_M)
+    wd0, wd1 = street_depth(rect, street_min, WINDOW_D_M)
+    for i in range(n):
+        centre = (i + 0.5) * bay_w
+        o0, o1 = centre - open_w / 2, centre + open_w / 2
+        openings.extend(keep_spans(row_spans(slab(rect, o0, o1, d0, d1)), body_cols))
+        if b["storeys"] >= 2:
+            w0, w1 = centre - WINDOW_W_M / 2, centre + WINDOW_W_M / 2
+            windows.extend(keep_spans(row_spans(slab(rect, w0, w1, wd0, wd1)), body_cols))
+    openings = punch_spans(clip_spans(openings, max_x, max_z), wall_cols)
+    windows = punch_spans(clip_spans(windows, max_x, max_z), wall_cols)
+
+    ad0, ad1 = street_depth(rect, street_min, AWNING_D_M, outward=True)
+    awning = clip_spans(row_spans(slab(rect, 0.0, frontage, ad0, ad1)), max_x, max_z)
+
+    courtyard: list[list[int]] = []
+    if rect["depth_m"] > COURTYARD_AFTER_M:
+        thick = min(COURTYARD_DEPTH_M, rect["depth_m"] - 8.0)
+        if thick >= 2.0 and frontage > 2 * SIDE_INSET:
+            if street_min:
+                cd0, cd1 = rect["depth_m"] - REAR_WALL_M - thick, rect["depth_m"] - REAR_WALL_M
+            else:
+                cd0, cd1 = REAR_WALL_M, REAR_WALL_M + thick
+            courtyard = keep_spans(
+                row_spans(slab(rect, SIDE_INSET, frontage - SIDE_INSET, cd0, cd1)),
+                body_cols,
+            )
+            courtyard = punch_spans(clip_spans(courtyard, max_x, max_z), wall_cols)
+
+    if street_min:
+        sd0, sd1 = rect["depth_m"] - REAR_WALL_M - STAIR_D_M, rect["depth_m"] - REAR_WALL_M
+    else:
+        sd0, sd1 = REAR_WALL_M, REAR_WALL_M + STAIR_D_M
+    stair = keep_spans(
+        row_spans(slab(rect, SIDE_INSET, SIDE_INSET + STAIR_W_M, sd0, sd1)),
+        body_cols,
+    )
+    stair = punch_spans(clip_spans(stair, max_x, max_z), wall_cols)
+
+    voids = columns_of(courtyard) | columns_of(stair)
+    if voids:
+        body = punch_spans(body, voids)
+
     b["spans"] = body
     b["partyWalls"] = party
     b["firewalls"] = fires
-    b["blocks"] = (
-        span_volume(body, layers)
-        + span_volume(party, layers)
-        + span_volume(fires, fire_layers)
-    )
+    b["openings"] = openings
+    b["windows"] = windows
+    b["awning"] = awning
+    b["courtyard"] = courtyard
+    b["stair"] = stair
+    b["blocks"] = anatomy_volume(b)
 
 
 def load_spine(path: Path) -> dict[str, dict]:
@@ -265,6 +420,7 @@ def build(ground_y: int, cluster: str | None = None) -> dict:
     world = json.loads(REGISTER.read_text())["worlds"][WORLD_ID]
     spine = load_spine(SPINE)
     blocked = hero_columns(HERO_PLAN)
+    streets = load_streets(world)
     max_x, max_z = world["blocks"]["maxX"], world["blocks"]["maxZ"]
 
     buildings: list[dict] = []
@@ -325,7 +481,7 @@ def build(ground_y: int, cluster: str | None = None) -> dict:
 
     planned: list[dict] = []
     for b in buildings:
-        rasterise(b, blocked, max_x, max_z)
+        rasterise(b, blocked, max_x, max_z, streets)
         if not b["spans"]:
             punched += 1
             refused.append({"id": b["id"], "why": "rasterised to nothing after hero punch"})
@@ -353,6 +509,12 @@ def build(ground_y: int, cluster: str | None = None) -> dict:
             "spans": b["spans"],
             "partyWalls": b["partyWalls"],
             "firewalls": b["firewalls"],
+            "openings": b["openings"],
+            "windows": b["windows"],
+            "awning": b["awning"],
+            "courtyard": b["courtyard"],
+            "stair": b["stair"],
+            "streetAtDepthMin": b["streetAtDepthMin"],
             "blocks": b["blocks"],
         })
 
@@ -366,6 +528,7 @@ def build(ground_y: int, cluster: str | None = None) -> dict:
             "site/public/data/shophouse-spine.json",
             "site/public/heritage-register.json",
             "site/public/data/bkk-hero-monument-blocks.json",
+            "site/public/data/bangkok-rowhouse-atlas.geojson",
         ],
         "world": WORLD_ID,
         "groundY": ground_y,
@@ -379,12 +542,22 @@ def build(ground_y: int, cluster: str | None = None) -> dict:
             "upperHeightM": UPPER_HEIGHT_M,
             "defaultStoreys": DEFAULT_STOREYS,
             "wallThicknessM": WALL_THICKNESS_M,
+            "openingWM": OPENING_W_M,
+            "openingDM": OPENING_D_M,
+            "openingHeightBlocks": OPENING_H_BLOCKS,
+            "windowWM": WINDOW_W_M,
+            "awningDM": AWNING_D_M,
+            "courtyardAfterM": COURTYARD_AFTER_M,
+            "courtyardDepthM": COURTYARD_DEPTH_M,
             "note": (
                 "The 4 m module and the firewall every five bays are the legal "
                 "rhythm (MR55 ข้อ 2, ข้อ 4, ข้อ 17) applied to screened footprints. "
                 "They are not a survey of the actual party walls. Over-cap rows "
                 "are tagged, not broken. Storeys default to 2 where Overture is silent "
-                "— the modal known value in this world, graded interpretive-storeys."
+                "— the modal known value in this world, graded interpretive-storeys. "
+                "Shop openings, upper windows, the 1 m awning, the rear courtyard "
+                "void (depth > 16 m) and the stair shaft are the same kind of fact: "
+                "typological rhythm, not a survey of the actual openings."
             ),
         },
         "palette": {
@@ -392,10 +565,14 @@ def build(ground_y: int, cluster: str | None = None) -> dict:
             "partyWall": PARTY_BLOCK,
             "firewall": FIRE_BLOCK,
             "roof": ROOF_BLOCK,
+            "awning": AWNING_BLOCK,
+            "window": WINDOW_BLOCK,
             "why": (
                 "Sandstone body, stone-brick party wall, brick firewall rising "
                 "one block above the roof. The roof is terracotta so a long row "
-                "reads as a row, not a monument."
+                "reads as a row, not a monument. Oak awning at the first-floor "
+                "line; glass for the upper windows. Openings and the courtyard "
+                "are air."
             ),
         },
         "counts": {
@@ -410,6 +587,8 @@ def build(ground_y: int, cluster: str | None = None) -> dict:
             "buildings": len(planned),
             "bays": sum(b["nBays"] for b in planned),
             "firewalls": sum(1 for b in planned if b["firewalls"]),
+            "withOpenings": sum(1 for b in planned if b["openings"]),
+            "withCourtyard": sum(1 for b in planned if b["courtyard"]),
             "overRowCap": sum(1 for b in planned if b["overRowCap"]),
             "blocks": sum(b["blocks"] for b in planned),
             "heroColumnsReserved": len(blocked),
@@ -443,7 +622,7 @@ def main() -> int:
         f"{c['blocks']:,} blocks, ground y={plan['groundY']}"
     )
     print(f"  in-world {c['inWorld']}  out-of-world {c['outOfWorld']}  refused {c['refused']}  punched-by-hero {c['punchedByHero']}")
-    print(f"  firewalls on {c['firewalls']} buildings  over-cap {c['overRowCap']}  hero columns reserved {c['heroColumnsReserved']:,}")
+    print(f"  firewalls on {c['firewalls']} buildings  courtyards {c['withCourtyard']}  openings {c['withOpenings']}  over-cap {c['overRowCap']}  hero columns reserved {c['heroColumnsReserved']:,}")
     for conf, n in c["byConfidence"].items():
         print(f"  {conf:<24} {n}")
     for slug, n in list(c["byCluster"].items())[:8]:

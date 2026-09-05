@@ -138,11 +138,7 @@ def test_plan_is_inside_the_world_and_honest() -> None:
 
     mismatched = [
         b["id"] for b in plan["buildings"]
-        if b["blocks"] != (
-            mc.span_volume(b["spans"], b["yTo"] - b["yFrom"] + 1)
-            + mc.span_volume(b["partyWalls"], b["yTo"] - b["yFrom"] + 1)
-            + mc.span_volume(b["firewalls"], b["yTo"] - b["yFrom"] + 1 + int(fab.FIREWALL_ABOVE_M))
-        )
+        if b["blocks"] != fab.anatomy_volume(b)
     ]
     check("stated volume matches the spans", not mismatched, str(mismatched[:3]))
 
@@ -150,6 +146,11 @@ def test_plan_is_inside_the_world_and_honest() -> None:
           c["overRowCap"] < c["buildings"] * 0.5,
           f"{c['overRowCap']}/{c['buildings']}")
     check("default storeys are 2", plan["module"]["defaultStoreys"] == 2)
+    check("most buildings have a shop opening", c["withOpenings"] > c["buildings"] * 0.8,
+          f"{c['withOpenings']}/{c['buildings']}")
+    check("deep plots get a courtyard, shallow ones do not",
+          0 < c["withCourtyard"] < c["buildings"],
+          f"{c['withCourtyard']}/{c['buildings']}")
 
 
 def test_hero_columns_are_not_occupied() -> None:
@@ -165,6 +166,38 @@ def test_hero_columns_are_not_occupied() -> None:
     ]
     check("no shophouse body sits on a hero-monument column", not overlap, str(overlap[:3]))
     check("the plan records how many hero columns were reserved", plan["counts"]["heroColumnsReserved"] == len(hero_cols))
+
+
+def test_projection_roundtrips() -> None:
+    world = json.loads((ROOT / "site/public/heritage-register.json").read_text())["worlds"][fab.WORLD_ID]
+    lat, lon = 13.7513, 100.4927
+    x, z = mc.project(lat, lon, world)
+    back_lat, back_lon = mc.unproject(x, z, world)
+    check("unproject inverts project",
+          abs(back_lat - lat) < 1e-9 and abs(back_lon - lon) < 1e-9,
+          f"got {(back_lat, back_lon)}")
+
+
+def test_anatomy_is_typological_not_a_survey() -> None:
+    plan = fab.build(fab.DEFAULT_GROUND_Y, cluster="tanao-road-rows")
+    rows = plan["buildings"]
+    with_open = [b for b in rows if b["openings"]]
+    with_window = [b for b in rows if b["windows"]]
+    with_awning = [b for b in rows if b["awning"]]
+    deep = [b for b in rows if b["depthM"] > fab.COURTYARD_AFTER_M]
+    shallow = [b for b in rows if b["depthM"] <= fab.COURTYARD_AFTER_M]
+    check("Tanao shopfronts are cut", len(with_open) > 50, str(len(with_open)))
+    check("upper floors have a window span", len(with_window) > 50, str(len(with_window)))
+    check("an awning sits on the street face", len(with_awning) > 50, str(len(with_awning)))
+    if deep:
+        check("a plot deeper than 16 m has a courtyard void",
+              any(b["courtyard"] for b in deep),
+              f"deep={len(deep)}")
+    if shallow:
+        check("a plot of 16 m or less has no courtyard",
+              all(not b["courtyard"] for b in shallow))
+    check("the module says the openings are not a survey",
+          "not a survey of the actual openings" in plan["module"]["note"])
 
 
 def test_tanao_has_firewall_rhythm() -> None:
@@ -219,6 +252,8 @@ def main() -> int:
         test_over_cap_is_tagged_not_broken,
         test_plan_is_inside_the_world_and_honest,
         test_hero_columns_are_not_occupied,
+        test_projection_roundtrips,
+        test_anatomy_is_typological_not_a_survey,
         test_tanao_has_firewall_rhythm,
         test_the_committed_plan_is_not_stale,
     ):

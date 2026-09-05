@@ -2,7 +2,7 @@
  *
  * Every extruded building in /atlas/* carries a record of where its height
  * came from — `height_source` on the 9,275 Old Town footprints,
- * `height_confidence` on the 67 hero monument parts. Until Evidence mode
+ * `height_confidence` on the hero monument parts. Until Evidence mode
  * that record was readable one building at a time, in the inspector card,
  * which made the honest answer to "how much of this city is actually
  * measured?" a nine-thousand-click question.

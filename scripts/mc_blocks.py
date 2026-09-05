@@ -24,6 +24,17 @@ def project(lat: float, lon: float, world: dict) -> tuple[float, float]:
     return x, z
 
 
+def unproject(x: float, z: float, world: dict) -> tuple[float, float]:
+    """Inverse of `project`. Returns (lat, lon)."""
+    lon = world["bounds"]["minLon"] + (x / world["blocks"]["maxX"]) * (
+        world["bounds"]["maxLon"] - world["bounds"]["minLon"]
+    )
+    lat = world["bounds"]["maxLat"] - (z / world["blocks"]["maxZ"]) * (
+        world["bounds"]["maxLat"] - world["bounds"]["minLat"]
+    )
+    return lat, lon
+
+
 def row_spans(ring: list[tuple[float, float]]) -> list[list[int]]:
     """Scanline-fill a polygon ring into [z, x_start, x_end] spans, inclusive.
 

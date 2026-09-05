@@ -6,7 +6,8 @@ Write the shophouse-fabric placement plan into a Minecraft world.
 
 The writer half of the pair. scripts/build-shophouse-fabric.py does the
 arithmetic — 4 m module, firewall every five bays, storey grades, hero
-punch — and writes site/public/data/bkk-shophouse-fabric-blocks.json.
+punch, shop openings, windows, awning, courtyard void — and writes
+site/public/data/bkk-shophouse-fabric-blocks.json.
 This script reads that plan and sets blocks.
 
 Same shape as apply-hero-monuments-to-world.py. The amulet import is
@@ -139,6 +140,20 @@ def apply(level, buildings: list[dict], plan: dict, dry_run: bool) -> tuple[int,
         fill(b["firewalls"], fire, b["yFrom"], b["yTo"] + 1)
         # Roof on the body only — firewall already rises through it.
         fill(b["spans"], roof, b["yTo"], b["yTo"])
+
+        glass = Block("minecraft", "glass")
+        awning_block = Block(*(plan["palette"].get("awning") or "minecraft:oak_planks").split(":", 1))
+        gf = int(round(plan["module"]["gfHeightM"]))
+        up = int(round(plan["module"]["upperHeightM"]))
+        opening_h = int(plan["module"].get("openingHeightBlocks") or 3)
+        fill(b.get("openings") or [], air, b["yFrom"], b["yFrom"] + opening_h - 1)
+        y = b["yFrom"] + gf
+        for _ in range(max(0, b["storeys"] - 1)):
+            mid = y + up // 2
+            fill(b.get("windows") or [], glass, mid, mid)
+            y += up
+        awning_y = b["yFrom"] + gf - 1
+        fill(b.get("awning") or [], awning_block, awning_y, awning_y)
 
     return cleared, written, failed
 

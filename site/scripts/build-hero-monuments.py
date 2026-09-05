@@ -29,6 +29,8 @@ FINE_ARTS_PALACE_SOURCE = (
     "7HyIvuwwlVMUPue5a0kEH4vEkgJdLKZRhQBNH1A3.pdf"
 )
 WAT_PHO_SOURCE = "https://watpho.com/en/architecture/detail/262"
+LOHA_PRASAT_SOURCE = "https://www.tourismthailand.org/Attraction/wat-ratchanaddaram"
+GOLDEN_MOUNT_SOURCE = "https://www.tourismthailand.org/Attraction/wat-saket"
 FINE_ARTS_RAMA_III_SOURCE = (
     "https://www.finearts.go.th/main/view/29960-"
     "%E0%B8%AB%E0%B8%99%E0%B8%B1%E0%B8%87%E0%B8%AA%E0%B8%B7%E0%B8%AD%E0%B9%80%E0%B8%A3%E0%B8%B7%E0%B9%88%E0%B8%AD%E0%B8%87--"
@@ -113,6 +115,63 @@ def part(
     }
 
 
+PALACE_PLAN_NOTE = (
+    "The official Grand Palace plan confirms this structure's identity. "
+    "The stacked envelope is interpretive and is not a measured survey, BIM or conservation record."
+)
+
+
+def stacked_part(
+    *,
+    source_feature: dict,
+    hero_id: str,
+    name: str,
+    name_en: str,
+    kind: str,
+    part_id: str,
+    part_label: str,
+    base: float,
+    height: float,
+    scale: float,
+    color: str,
+    morphology_source: str,
+    morphology_url: str,
+    model_status: str,
+    source_note: str,
+) -> dict:
+    """Stacked schematic tier on an OSM / landmark footprint.
+
+    Identity can be source-confirmed (a named hall on the Grand Palace plan,
+    a published chedi). The envelope itself is always interpretive.
+    """
+    ring = source_feature["geometry"]["coordinates"][0]
+    raw_id = source_feature["properties"]["id"]
+    return {
+        "type": "Feature",
+        "geometry": {"type": "Polygon", "coordinates": [scale_ring(ring, scale)]},
+        "properties": {
+            "id": part_id,
+            "hero_id": hero_id,
+            "name": name,
+            "name_en": name_en,
+            "part_label": part_label,
+            "kind": kind,
+            "height": height,
+            "base_height": base,
+            "material_color": color,
+            "osm_id": raw_id.removeprefix("bkk-building-"),
+            "footprint_source": "OpenStreetMap footprint · BKKx landmark extract 2026-08-10",
+            "height_source": "BKKx curated interpretive envelope · not an official dimension",
+            "height_confidence": "interpretive-envelope",
+            "model_status": model_status,
+            "source": morphology_source,
+            "source_url": morphology_url,
+            "source_note": source_note,
+            "not_measured_survey": True,
+        },
+    }
+
+
 def palace_part(
     *,
     source_feature: dict,
@@ -128,36 +187,27 @@ def palace_part(
     color: str,
     morphology_source: str,
     morphology_url: str,
+    source_note: str = PALACE_PLAN_NOTE,
+    model_status: str = "official-plan matched schematic",
 ) -> dict:
     """Create an official-plan-matched but explicitly interpretive palace tier."""
-    ring = source_feature["geometry"]["coordinates"][0]
-    return {
-        "type": "Feature",
-        "geometry": {"type": "Polygon", "coordinates": [scale_ring(ring, scale)]},
-        "properties": {
-            "id": part_id,
-            "hero_id": hero_id,
-            "name": name,
-            "name_en": name_en,
-            "part_label": part_label,
-            "kind": kind,
-            "height": height,
-            "base_height": base,
-            "material_color": color,
-            "osm_id": source_feature["properties"]["id"].removeprefix("bkk-building-"),
-            "footprint_source": "OpenStreetMap footprint · BKKx landmark extract 2026-08-10",
-            "height_source": "BKKx curated interpretive envelope · not an official dimension",
-            "height_confidence": "interpretive-envelope",
-            "model_status": "official-plan matched schematic",
-            "source": morphology_source,
-            "source_url": morphology_url,
-            "source_note": (
-                "The official Grand Palace plan confirms this structure's identity. "
-                "The stacked envelope is interpretive and is not a measured survey, BIM or conservation record."
-            ),
-            "not_measured_survey": True,
-        },
-    }
+    return stacked_part(
+        source_feature=source_feature,
+        hero_id=hero_id,
+        name=name,
+        name_en=name_en,
+        kind=kind,
+        part_id=part_id,
+        part_label=part_label,
+        base=base,
+        height=height,
+        scale=scale,
+        color=color,
+        morphology_source=morphology_source,
+        morphology_url=morphology_url,
+        model_status=model_status,
+        source_note=source_note,
+    )
 
 
 def wat_pho_part(
@@ -356,15 +406,139 @@ def main() -> None:
                 color=color,
             ))
 
+    # Distinctive landmarks that were still a single box. Identity is sourced;
+    # the stacked envelope is interpretive and stays inside the curated height
+    # already published on the landmark layer. Loha Prasat is not modelled as
+    # thirty-seven spires — that would invent positions this data does not have.
+    further_models = [
+        {
+            "source_id": "bkk-building-103097698",
+            "hero_id": "loha-prasat",
+            "name": "โลหะปราสาท",
+            "name_en": "Loha Prasat",
+            "kind": "hero_loha_prasat",
+            "source": "Tourism Authority of Thailand · Wat Ratchanaddaram / Loha Prasat",
+            "source_url": LOHA_PRASAT_SOURCE,
+            "model_status": "source-identified schematic",
+            "source_note": (
+                "TAT identifies the metal castle at Wat Ratchanaddaram. "
+                "The stacked envelope is interpretive and does not place the thirty-seven spires."
+            ),
+            "tiers": [
+                ("body", "square body", 0, 14, 1.00, "#b8a88a"),
+                ("pavilion", "concentric pavilion roof", 14, 22, 0.78, "#9a8b6e"),
+                ("tower", "central tower", 22, 29, 0.42, "#c9ad78"),
+                ("spire", "gilded central spire", 29, 33, 0.14, "#e8bd50"),
+            ],
+        },
+        {
+            "source_id": "bkk-building-82541999",
+            "hero_id": "dusit-maha-prasat",
+            "name": "พระที่นั่งดุสิตมหาปราสาท",
+            "name_en": "Dusit Maha Prasat",
+            "kind": "hero_prasat",
+            "source": "Bureau of the Royal Household official plan · Dusit Maha Prasat",
+            "source_url": GRAND_PALACE_PLAN,
+            "model_status": "official-plan matched schematic",
+            "source_note": PALACE_PLAN_NOTE,
+            "tiers": [
+                ("body", "throne-hall body", 0, 12, 1.00, "#eee2c5"),
+                ("lower-roof", "lower stacked gable", 12, 18, 0.88, "#3f7c62"),
+                ("upper-roof", "upper stacked gable", 18, 24, 0.62, "#d5a53e"),
+                ("spire", "central spire envelope", 24, 28, 0.28, "#42745a"),
+                ("finial", "finial", 28, 30, 0.09, "#efc757"),
+            ],
+        },
+        {
+            "source_id": "bkk-building-229783128",
+            "hero_id": "aphonphimok-prasat",
+            "name": "พระที่นั่งอาภรณ์พิโมกข์ปราสาท",
+            "name_en": "Aphonphimok Prasat",
+            "kind": "hero_prasat",
+            "source": "Bureau of the Royal Household official plan · Aphonphimok Prasat",
+            "source_url": GRAND_PALACE_PLAN,
+            "model_status": "official-plan matched schematic",
+            "source_note": PALACE_PLAN_NOTE,
+            "tiers": [
+                ("body", "open pavilion body", 0, 10, 1.00, "#e9ddc1"),
+                ("roof", "pyramidal roof envelope", 10, 18, 0.82, "#3f7c62"),
+                ("spire", "central spire envelope", 18, 25, 0.34, "#d5a53e"),
+                ("finial", "finial", 25, 28, 0.10, "#f0c95a"),
+            ],
+        },
+        {
+            "source_id": "bkk-building-82546665",
+            "hero_id": "siwalai-maha-prasat",
+            "name": "พระที่นั่งศิวาลัยมหาปราสาท",
+            "name_en": "Siwalai Maha Prasat",
+            "kind": "hero_prasat",
+            "source": "Bureau of the Royal Household official plan · Siwalai Maha Prasat",
+            "source_url": GRAND_PALACE_PLAN,
+            "model_status": "official-plan matched schematic",
+            "source_note": PALACE_PLAN_NOTE,
+            "tiers": [
+                ("body", "prasat body", 0, 12, 1.00, "#e7d4aa"),
+                ("roof", "stacked roof envelope", 12, 20, 0.78, "#3f7c62"),
+                ("spire", "central spire envelope", 20, 26, 0.32, "#d5a53e"),
+                ("finial", "finial", 26, 28, 0.10, "#efc757"),
+            ],
+        },
+        {
+            "source_id": "landmark-golden-mount-chedi",
+            "hero_id": "golden-mount-chedi",
+            "name": "พระบรมบรรพต",
+            "name_en": "Golden Mount Chedi",
+            "kind": "hero_chedi",
+            "source": "Tourism Authority of Thailand · Wat Saket / Golden Mount",
+            "source_url": GOLDEN_MOUNT_SOURCE,
+            "model_status": "source-identified schematic",
+            "source_note": (
+                "TAT identifies the chedi on the artificial hill at Wat Saket. "
+                "Tiers sit on the 45 m hill already modelled as a landmark box "
+                "and stay inside the 60 m schematic silhouette; they are not a measured survey."
+            ),
+            "tiers": [
+                ("plinth", "chedi plinth on the hill", 45, 48, 1.00, "#d9b75e"),
+                ("bell", "bell-form envelope", 48, 54, 0.72, "#ebca6e"),
+                ("shoulder", "upper shoulder", 54, 57, 0.40, "#d6a932"),
+                ("spire", "spire", 57, 60, 0.14, "#e8bd50"),
+            ],
+        },
+    ]
+    for model in further_models:
+        source_feature = landmark_by_id[model["source_id"]]
+        for tier_id, label, base, height, scale, color in model["tiers"]:
+            features.append(
+                stacked_part(
+                    source_feature=source_feature,
+                    hero_id=model["hero_id"],
+                    name=model["name"],
+                    name_en=model["name_en"],
+                    kind=model["kind"],
+                    part_id=f"{model['hero_id']}-{tier_id}",
+                    part_label=label,
+                    base=base,
+                    height=height,
+                    scale=scale,
+                    color=color,
+                    morphology_source=model["source"],
+                    morphology_url=model["source_url"],
+                    model_status=model["model_status"],
+                    source_note=model["source_note"],
+                )
+            )
+
     payload = {
         "type": "FeatureCollection",
         "name": "bkk-hero-monuments",
-        "version": "2026-08-17.3",
+        "version": "2026-09-05.1",
         "description": (
             "Survey-informed procedural monument parts. Wat Arun uses current OSM footprints "
             "and the Fine Arts Department's published 82 m central envelope. Wat Phra Kaew hero "
             "structures are matched to the official Grand Palace plan. Wat Pho's Four Great Chedis are "
-            "identified from Wat Pho and Fine Arts records. All tiering remains interpretive."
+            "identified from Wat Pho and Fine Arts records. Loha Prasat, Dusit Maha Prasat, "
+            "Aphonphimok Prasat, Siwalai Maha Prasat and the Golden Mount chedi are stacked "
+            "from the same landmark footprints, still interpretive. All tiering remains interpretive."
         ),
         "modelStatus": "survey-informed schematic · not a measured conservation model",
         "sourceConflict": (
@@ -379,11 +553,18 @@ def main() -> None:
             {"label": "Fine Arts Department palace reference", "url": FINE_ARTS_PALACE_SOURCE},
             {"label": "Wat Pho official architecture record", "url": WAT_PHO_SOURCE},
             {"label": "Fine Arts Department Rama III record", "url": FINE_ARTS_RAMA_III_SOURCE},
+            {"label": "Tourism Authority of Thailand · Wat Ratchanaddaram", "url": LOHA_PRASAT_SOURCE},
+            {"label": "Tourism Authority of Thailand · Wat Saket", "url": GOLDEN_MOUNT_SOURCE},
         ],
         "complexes": {
             "wat-arun-prang-group": 23,
             "wat-phra-kaew-hero-structures": 20,
             "wat-pho-four-great-chedis": 24,
+            "loha-prasat": 4,
+            "dusit-maha-prasat": 5,
+            "aphonphimok-prasat": 4,
+            "siwalai-maha-prasat": 4,
+            "golden-mount-chedi": 4,
         },
         "featureCount": len(features),
         "features": features,

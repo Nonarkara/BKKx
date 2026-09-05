@@ -81,9 +81,9 @@ const NASA_AEROSOL_SOURCE =
 
 const HERITAGE_DETAIL_COUNT = 9_275;
 const HERITAGE_LANDMARK_PART_COUNT = 73;
-const HERO_MONUMENT_PART_COUNT = 67;
+const HERO_MONUMENT_PART_COUNT = 88;
 const HERITAGE_DETAIL_NOTE =
-  "Full-resolution OpenStreetMap footprints with curated typology heights. Hero monuments use official records and OSM footprints; tiering remains evidence-labelled schematic, not measured conservation documentation.";
+  "Full-resolution OpenStreetMap footprints with curated typology heights. Hero monuments use official records and OSM footprints; tiering remains evidence-labelled schematic, not measured conservation documentation. Screened shophouse candidates extrude at the legal storey height (3.5 m ground floor, 3 m above) where Overture is silent — that default is the modal known value, not a survey of the openings.";
 
 const HERITAGE_DETAIL_HEIGHT: maplibregl.ExpressionSpecification = [
   "case",
@@ -120,6 +120,16 @@ const HERITAGE_DETAIL_COLOR: maplibregl.ExpressionSpecification = [
   "house", "#ad8a62",
   "residential", "#ad8a62",
   "#92785d",
+];
+
+// Legal storey height, same numbers as the Minecraft fabric builder.
+// Overture `num_floors` when present; otherwise 2 storeys (6.5 m), the modal
+// known value in this world. This is a typological extrusion, not a survey.
+const SHOPHOUSE_CANDIDATE_HEIGHT: maplibregl.ExpressionSpecification = [
+  "case",
+  [">", ["to-number", ["coalesce", ["get", "num_floors"], 0]], 0],
+  ["+", 3.5, ["*", 3, ["-", ["to-number", ["get", "num_floors"]], 1]]],
+  6.5,
 ];
 
 /* Evidence mode — the ladder lives in app/data/evidence-tiers.ts, and the
@@ -504,6 +514,8 @@ type RowhouseCandidate = {
   aligned_neighbours_32m: number;
   corridor_distance_m: number;
   review_status: string;
+  num_floors?: number | null;
+  height_m?: number | null;
 };
 
 type ArchitecturalDetail = {
@@ -677,7 +689,7 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
   const [cameraFeedReason, setCameraFeedReason] = useState<string | null>(null);
   const [selectedCamera, setSelectedCamera] = useState<AtlasCamera | null>(null);
   const [cameraPlaying, setCameraPlaying] = useState(false);
-  const [showRowhouseCandidates, setShowRowhouseCandidates] = useState(false);
+  const [showRowhouseCandidates, setShowRowhouseCandidates] = useState(true);
   const [selectedHeritage, setSelectedHeritage] = useState<HeritageSite | null>(null);
   const [selectedArchitecture, setSelectedArchitecture] = useState<ArchitecturalDetail | null>(null);
   const [selectedCandidate, setSelectedCandidate] = useState<RowhouseCandidate | null>(null);
@@ -1555,8 +1567,8 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
         }
 
         // Present-day Overture roofprints/footprints screened by morphology.
-        // Deliberately opt-in: these are a field-review queue, not confirmed
-        // rowhouses, age estimates or statutory heritage designations.
+        // On by default so the twin shows the 2,433-unit fabric; still labelled
+        // as a field-review queue, not confirmed rowhouses or heritage.
         if (hasHistoricContext && !map.getSource("bkkx-rowhouse-candidates-src")) {
           try {
             map.addSource("bkkx-rowhouse-candidates-src", {
@@ -1565,29 +1577,38 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
             });
             map.addLayer({
               id: "bkkx-rowhouse-candidates-possible",
-              type: "fill",
+              type: "fill-extrusion",
               source: "bkkx-rowhouse-candidates-src",
               minzoom: 13.5,
               filter: ["==", ["get", "candidate_strength"], "possible morphology"],
-              layout: { visibility: "none" },
-              paint: { "fill-color": "#f4d492", "fill-opacity": 0.24 },
+              paint: {
+                "fill-extrusion-color": "#c4a574",
+                "fill-extrusion-height": SHOPHOUSE_CANDIDATE_HEIGHT,
+                "fill-extrusion-base": 0,
+                "fill-extrusion-opacity": 0.82,
+                "fill-extrusion-vertical-gradient": true,
+              },
             });
             map.addLayer({
               id: "bkkx-rowhouse-candidates-strong",
-              type: "fill",
+              type: "fill-extrusion",
               source: "bkkx-rowhouse-candidates-src",
               minzoom: 13.5,
               filter: ["==", ["get", "candidate_strength"], "strong morphology"],
-              layout: { visibility: "none" },
-              paint: { "fill-color": "#ffb52b", "fill-opacity": 0.48 },
+              paint: {
+                "fill-extrusion-color": "#d4a056",
+                "fill-extrusion-height": SHOPHOUSE_CANDIDATE_HEIGHT,
+                "fill-extrusion-base": 0,
+                "fill-extrusion-opacity": 0.9,
+                "fill-extrusion-vertical-gradient": true,
+              },
             });
             map.addLayer({
               id: "bkkx-rowhouse-candidates-outline",
               type: "line",
               source: "bkkx-rowhouse-candidates-src",
               minzoom: 13.5,
-              layout: { visibility: "none" },
-              paint: { "line-color": "#fff0c7", "line-width": 1, "line-opacity": 0.72 },
+              paint: { "line-color": "#fff0c7", "line-width": 1, "line-opacity": 0.55 },
             });
 
             const inspectCandidate = (event: maplibregl.MapLayerMouseEvent) => {
@@ -2500,11 +2521,11 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
                   </button>
                 </div>
                 <small className="control-source-note">
-                  Old Town 3D: {HERITAGE_DETAIL_COUNT.toLocaleString()} full-resolution OSM footprints + {HERITAGE_LANDMARK_PART_COUNT} curated landmark parts + {HERO_MONUMENT_PART_COUNT} hero parts across Wat Arun, Wat Phra Kaew and Wat Pho.
+                  Old Town 3D: {HERITAGE_DETAIL_COUNT.toLocaleString()} full-resolution OSM footprints + {HERITAGE_LANDMARK_PART_COUNT} curated landmark parts + {HERO_MONUMENT_PART_COUNT} hero parts across Wat Arun, Wat Phra Kaew, Wat Pho, Loha Prasat, the palace prasats and the Golden Mount.
                   {" "}{HERITAGE_DETAIL_NOTE}{" "}
                   Conservation geometry is off by default and illustrative. {BKK_URBAN_ZONING_NOTE}
                   {" "}{HERITAGE_MOBILITY_NOTE} NASA aerosol is a dated regional optical-depth
-                  composite, not street-level PM2.5. Candidate footprints are opt-in and unverified.
+                  composite, not street-level PM2.5. Screened shophouse fabric is on by default as 3D massing and remains unverified.
                 </small>
               </div>
             )}
@@ -2779,6 +2800,14 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
               <div><span>Depth / width</span><strong>{selectedCandidate.shape_ratio}</strong></div>
               <div><span>Aligned neighbours</span><strong>{selectedCandidate.aligned_neighbours_32m}</strong></div>
               <div><span>From corridor</span><strong>{selectedCandidate.corridor_distance_m} m</strong></div>
+              <div>
+                <span>Storeys</span>
+                <strong>
+                  {selectedCandidate.num_floors
+                    ? `${selectedCandidate.num_floors} (Overture)`
+                    : "2 (modal default)"}
+                </strong>
+              </div>
             </div>
             <p className="heritage-source-note">
               Overture Maps buildings {selectedCandidate.overture_release} · ID {selectedCandidate.overture_id}<br />

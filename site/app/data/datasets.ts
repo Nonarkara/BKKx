@@ -52,11 +52,11 @@ export const DATASETS: DatasetNote[] = [
   {
     file: "/data/bangkok-rowhouse-footprint-candidates.geojson",
     title: "Rowhouse footprint candidates",
-    what: "Current building footprints screened for rowhouse morphology, as an opt-in field-review queue. Explicitly does not confirm that any building is a rowhouse, its age, or its heritage status.",
+    what: "Current building footprints screened for rowhouse morphology, extruded in the Historic Core atlas at the legal storey height. Explicitly does not confirm that any building is a rowhouse, its age, or its heritage status.",
     source: "Overture Maps / OpenStreetMap building geometry, morphology-screened.",
     license: "ODbL, © OpenStreetMap contributors; Overture Maps Foundation data licenses per theme.",
     generator: "site/scripts/build-rowhouse-footprints.py",
-    usedBy: ["/rowhouses", "/shophouses/atlas"],
+    usedBy: ["/rowhouses", "/shophouses/atlas", "/atlas/historic-core"],
   },
   {
     file: "/data/bkk-heritage-detail.geojson",
@@ -71,8 +71,8 @@ export const DATASETS: DatasetNote[] = [
   {
     file: "/data/bkk-hero-monuments.geojson",
     title: "Hero monuments (3D parts)",
-    what: "67 transparent, survey-informed 3D parts for Wat Arun, Wat Phra Kaew, Wat Pho's Four Great Chedis and company. Official published dimensions define the envelopes; intermediate tiers are labelled proportional interpretation, not measurement.",
-    source: "Fine Arts Department and BMA publications, the Grand Palace plan, watpho.com architecture records, and a checked-in OSM way snapshot.",
+    what: "88 transparent, survey-informed 3D parts for Wat Arun, Wat Phra Kaew, Wat Pho's Four Great Chedis, Loha Prasat, Dusit Maha Prasat, Aphonphimok Prasat, Siwalai Maha Prasat and the Golden Mount chedi. Official published dimensions define the envelopes; intermediate tiers are labelled proportional interpretation, not measurement.",
+    source: "Fine Arts Department and BMA publications, the Grand Palace plan, watpho.com architecture records, TAT identification of Loha Prasat and the Golden Mount, and a checked-in OSM way snapshot.",
     license: "ODbL for OSM-derived footprints, © OpenStreetMap contributors; cited official documents for dimensions.",
     generator: "site/scripts/build-hero-monuments.py",
     usedBy: ["/atlas/historic-core"],
