@@ -49,6 +49,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 PLAN = ROOT / "site/public/data/bkk-hero-monument-blocks.json"
+SHOPHOUSE_PLAN = ROOT / "site/public/data/bkk-shophouse-blocks.json"
 
 # The world version apply-rattanakosin-to-world.py writes with. Kept identical
 # so the two scripts cannot disagree about what game they are building for.
@@ -62,8 +63,30 @@ CONFIDENCE_ORDER = ["official-envelope", "interpretive-proportion", "interpretiv
 def load_plan(path: Path) -> dict:
     plan = json.loads(path.read_text())
     if not plan.get("parts"):
-        raise SystemExit(f"{path} contains no parts — run build-hero-monument-blocks.py first")
+        raise SystemExit(f"{path} contains no parts — run the matching builder first")
+    plan["parts"] = normalise(plan["parts"])
     return plan
+
+
+def normalise(parts: list[dict]) -> list[dict]:
+    """Accept both plan shapes.
+
+    The monument plan is one entry per part, each with its own footprint,
+    because every tier of a spire has a different one. The shophouse plan is
+    one entry per building with the footprint once and `bands` as y ranges
+    over it — writing 2,433 footprints three times over tripled that file to
+    9.8 MB for no extra information.
+
+    Expanding here rather than on disk keeps one applier and one small file.
+    """
+    flat: list[dict] = []
+    for part in parts:
+        if "bands" not in part:
+            flat.append(part)
+            continue
+        for band in part["bands"]:
+            flat.append({**{k: v for k, v in part.items() if k != "bands"}, **band})
+    return flat
 
 
 def columns_of(part: dict) -> set[tuple[int, int]]:
@@ -184,7 +207,10 @@ def main() -> int:
         description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter
     )
     ap.add_argument("--world", help="path to the Minecraft save (required unless --dry-run)")
-    ap.add_argument("--plan", type=Path, default=PLAN)
+    ap.add_argument("--plan", type=Path, default=PLAN,
+                    help="placement plan to write (default the monuments)")
+    ap.add_argument("--shophouses", action="store_const", const=SHOPHOUSE_PLAN, dest="plan",
+                    help=f"shorthand for --plan {SHOPHOUSE_PLAN.name}")
     ap.add_argument("--skirt", type=int, default=1,
                     help="blocks of margin cleared around each monument (default 1)")
     ap.add_argument("--hero", action="append", dest="heroes",
@@ -203,12 +229,20 @@ def main() -> int:
 
     r = report(plan, parts, args.skirt)
     print(f"plan: {r['parts']} parts across {len(r['heroes'])} monuments, ground y={plan['groundY']}")
-    for hero_id, h in sorted(r["heroes"].items()):
+    # The monument plan has 8 groups and every line is worth reading. The
+    # shophouse plan has 2,433 and a full listing is noise, so it shows the
+    # heaviest and says how many it did not print.
+    ranked = sorted(r["heroes"].items(), key=lambda kv: -kv[1]["blocks"])
+    shown = ranked if len(ranked) <= 12 else ranked[:8]
+    for hero_id, h in shown:
         grades = " ".join(f"{k}={v}" for k, v in sorted(h["grades"].items()))
-        print(f"  {hero_id:<32} {h['parts']:>2} parts  top y={h['top']:<4} "
-              f"write {h['blocks']:>6}  clear {h['clearBlocks']:>7}  [{grades}]")
-    print(f"  {'TOTAL':<32} {r['parts']:>2} parts             "
-          f"write {r['totalWrite']:>6}  clear {r['totalClear']:>7}")
+        print(f"  {hero_id:<38} {h['parts']:>2} parts  top y={h['top']:<4} "
+              f"write {h['blocks']:>7}  clear {h['clearBlocks']:>8}  [{grades}]")
+    if len(ranked) > len(shown):
+        rest = sum(h["blocks"] for _, h in ranked[len(shown):])
+        print(f"  … and {len(ranked) - len(shown):,} more groups, {rest:,} blocks between them")
+    print(f"  {'TOTAL':<38} {r['parts']:>2} parts             "
+          f"write {r['totalWrite']:>7}  clear {r['totalClear']:>8}")
 
     if args.dry_run:
         print("\ndry run — nothing written. Re-run with --world to build.")

@@ -191,14 +191,38 @@ flattening it — a world that shows the Fine Arts Department's published 82 m
 envelope and a BKKx-curated silhouette as the same kind of fact is a world
 that lies more confidently than the map does.
 
-**The shophouses → the screened set, not OSM.**
-`bangkok-rowhouse-footprint-candidates.geojson` holds 2,433 screened
-footprints with measured frontage and depth per building, and
-`shophouse-spine-index.ts` holds storeys for 1/3 of them plus the binding
-regulation clauses. Building the rows from that gives the real 4 m module and
-the real row breaks. Where storeys are null, leave them null and use one
-stated default — the spine already names storeys as missing data rather than
-estimating it, and the world should not invent what the dataset refuses to.
+**The shophouses → the screened set, not OSM.** Also built:
+`scripts/build-shophouse-blocks.py`, with `scripts/test-build-shophouse-blocks.py`
+checking it. **1,823 of the 2,433 screened footprints, 1,571,232 blocks.**
+
+Height comes from the statute rather than a default. MR55 ข้อ 22(4) sets the
+storey minima — ground ≥ 3.50 m, every floor above ≥ 3.00 m — so a building is
+`3.5 + (storeys − 1) × 3.0` and every metre traces to a clause. That is what
+gives the fabric vertical texture where OSM would give it one flat height.
+
+Each building lays down as three horizontal bands over the same measured
+footprint — shopfront, body, parapet — because that is the anatomy of the type
+and it is what stops 1,823 buildings reading as 1,823 cuboids. No geometry is
+invented.
+
+The honesty is in the counts. **594 footprints carry a storey count and
+1,229 do not**; the latter take the median of the known set (2), are marked
+`storeysAssumed`, and are graded at the weaker confidence so
+`--min-confidence` can exclude the guessed fabric wholesale. **610
+footprints lie outside this world entirely** — Bang Rak, Thon Buri, Lat
+Krabang, Nong Chok, Phasi Charoen and the part of Samphanthawong that spills
+east past the bbox — and are counted by district rather than projected to
+coordinates the world does not have. Four straddle the edge and are clipped to
+it, as the moat and the roads already are.
+
+The join deserves a note: the spine and the footprints share no id, and are
+matched on centroid because the spine's lat/lon *is* the footprint centroid at
+six decimal places. All 2,433 match exactly, no centroid is claimed twice, and
+the test asserts both — the cluster pages once lost 241 footprints to a looser
+version of that join and described the loss as missing coverage.
+
+The plan is schema-compatible with the monument one, so
+`apply-hero-monuments-to-world.py --shophouses` writes it unchanged.
 
 **If you would rather stay inside Arnis**, the Tier 4 route is legitimate:
 fork it, build a `.schem` per monument, and register it in `landmarks.rs`
