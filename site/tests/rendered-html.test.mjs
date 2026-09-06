@@ -1410,6 +1410,24 @@ test("the twin source register ships with honest integration status", async () =
     }
   }
   assert.ok(TWIN_TALLY.wired >= 1, "at least one source is actually wired");
+
+  // A source whose licence nobody has read cannot be wired or made ready.
+  // Publishing a figure derived from data whose terms are unread is the same
+  // class of mistake as publishing a height nobody measured, so the state is
+  // typed rather than left to a reader of prose.
+  for (const s of TWIN_SOURCES) {
+    if (s.licenceUnverified) {
+      assert.equal(
+        s.integration,
+        "researched",
+        `${s.id} has an unread licence, so it must stay researched`,
+      );
+      assert.ok(
+        s.licenceUnverified.length > 40,
+        `${s.id} must say what stopped the licence check`,
+      );
+    }
+  }
 });
 
 test("no API key or secret is committed anywhere in the bundle", async () => {
