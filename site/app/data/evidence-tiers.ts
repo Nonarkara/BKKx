@@ -113,6 +113,10 @@ export type EvidenceTally = {
   /** Raw value counts, kept so the legend can cite what it actually counted. */
   detailSources: Record<string, number>;
   heroConfidences: Record<string, number>;
+  /** Drawn landmark parts — the file's count minus the hidden ones. */
   landmarks: number;
+  /** Features flagged hide_3d by scripts/hide-under-heroes.py: standing under
+   *  a hero model, not drawn, and so not counted above. */
+  hidden: { detail: number; landmarks: number };
   total: number;
 };

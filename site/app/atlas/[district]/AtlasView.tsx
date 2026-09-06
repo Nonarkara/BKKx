@@ -228,6 +228,10 @@ const EVIDENCE_TALLY = EVIDENCE_TALLY_JSON as EvidenceTally;
 const EVIDENCE_INFERRED_SHARE = Math.round(
   (EVIDENCE_TALLY.byTier[FALLBACK_TIER] / EVIDENCE_TALLY.total) * 100,
 );
+// Boxes a hero model replaced. Flagged at build time by
+// scripts/hide-under-heroes.py, filtered out of the detail and landmark
+// layers above, and therefore absent from every count in this legend.
+const EVIDENCE_HIDDEN = EVIDENCE_TALLY.hidden.detail + EVIDENCE_TALLY.hidden.landmarks;
 
 const HERITAGE_LANDMARK_COLOR: maplibregl.ExpressionSpecification = [
   "match",
@@ -1203,6 +1207,9 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
               type: "fill-extrusion",
               source: "bkkx-heritage-landmarks-src",
               minzoom: 13,
+              // Same flag as the detail layer: a landmark part a hero model
+              // was built on is hidden, or the model stands inside it.
+              filter: ["!=", ["get", "hide_3d"], true],
               paint: {
                 "fill-extrusion-color": HERITAGE_LANDMARK_COLOR,
                 "fill-extrusion-height": ["coalesce", ["get", "height"], 12],
@@ -1229,7 +1236,7 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
               type: "symbol",
               source: "bkkx-heritage-landmarks-src",
               minzoom: 15.8,
-              filter: ["has", "name"],
+              filter: ["all", ["has", "name"], ["!=", ["get", "hide_3d"], true]],
               layout: {
                 "text-field": ["coalesce", ["get", "name_en"], ["get", "name"]],
                 "text-size": 10,
@@ -2267,6 +2274,12 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
                   {EVIDENCE_TALLY.total.toLocaleString("en-US")} extruded buildings here have a
                   height nobody recorded — the model inferred it from a building tag. Counted at
                   build time from the layers themselves, not estimated.
+                  {EVIDENCE_HIDDEN > 0 ? (
+                    <>
+                      {" "}
+                      {EVIDENCE_HIDDEN} boxes standing under a hero model are hidden and not counted.
+                    </>
+                  ) : null}
                 </p>
               </div>
             </details>

@@ -12,7 +12,11 @@
 // and the atlas would quietly understate its own evidence. A build that
 // stops is better than a map that lies.
 //
-// Runs as part of `npm run build` (data:evidence).
+// A box flagged `hide_3d` by hide-under-heroes.py stands under a hero model
+// and is not drawn, so it is not counted; the number of them is written
+// alongside so the legend can say so rather than quietly shrinking.
+//
+// Runs as part of `npm run build` (data:evidence), after data:hide.
 
 import { readFileSync, writeFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
@@ -52,9 +56,19 @@ function tally(list, key) {
   return counts;
 }
 
-const detailSources = tally(features(DETAIL), "height_source");
+const drawn = (f) => f.properties?.hide_3d !== true;
+const detailAll = features(DETAIL);
+const landmarksAll = features(LANDMARKS);
+const detailDrawn = detailAll.filter(drawn);
+const landmarksDrawn = landmarksAll.filter(drawn);
+const hidden = {
+  detail: detailAll.length - detailDrawn.length,
+  landmarks: landmarksAll.length - landmarksDrawn.length,
+};
+
+const detailSources = tally(detailDrawn, "height_source");
 const heroConfidences = tally(features(HERO), "height_confidence");
-const landmarks = features(LANDMARKS).length;
+const landmarks = landmarksDrawn.length;
 
 // The guard. Every value the data actually contains must be claimed by a
 // tier; the empty string is allowed only where the layer legitimately has no
@@ -94,6 +108,7 @@ writeFileSync(
       detailSources,
       heroConfidences,
       landmarks,
+      hidden,
       total,
     },
     null,
@@ -103,5 +118,6 @@ writeFileSync(
 
 console.log(
   `build-evidence-tally: ${total} extruded features · ` +
-    EVIDENCE_TIERS.map((t) => `${t.tier} ${byTier[t.tier]}`).join(" · "),
+    EVIDENCE_TIERS.map((t) => `${t.tier} ${byTier[t.tier]}`).join(" · ") +
+    ` · ${hidden.detail + hidden.landmarks} hidden under hero models`,
 );

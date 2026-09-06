@@ -39,6 +39,10 @@ jobs:
           python3 scripts/test-build-hero-monument-blocks.py
           python3 scripts/test-build-rattanakosin-water-and-walls.py
           python3 scripts/test-build-shophouse-fabric.py
+          python3 scripts/test-hide-under-heroes.py
+          # The independent check that no hero model stands inside a box the
+          # atlas still draws — re-derived from the files, not from the step.
+          python3 scripts/audit-hero-occlusion.py --verify
           # The appliers' dry runs need neither amulet nor a world, so
           # selection, dilation and reporting are all exercised here.
           python3 scripts/apply-hero-monuments-to-world.py --dry-run

@@ -1,99 +1,147 @@
 #!/usr/bin/env python3
-"""Which OSM detail boxes stand under each hero monument, and how many rowhouse
-candidates are extruded twice.
+"""Which boxes stand under each hero monument, and how many shophouse
+candidates are extruded twice — recomputed from the atlas's own files.
 
-Written for AUDIT-2026-09-06.md. Pure python (ray-cast point-in-polygon), reads
-the atlas's own geojson, prints two tables:
+Written for AUDIT-2026-09-06.md; now the independent check on
+site/scripts/hide-under-heroes.py. Two tables:
 
-  A. per hero group: the detail boxes whose centroid lies inside the hero's
-     lowest part (or vice versa), the tallest box, and how many parts of the
-     monument sit entirely below that box's top — i.e. are occluded in the
-     atlas's opaque, depth-tested extrusion.
-  B. rowhouse candidates whose centroid lies inside a detail box, split by
-     which of the two extrusions is taller.
+  A. per hero group: the detail and landmark features standing on the same
+     ground (centroid inside the hero's lowest part, or the hero's centroid
+     inside the feature), how many of them the map still draws, the tallest
+     one it draws, and how many of the monument's parts sit entirely below
+     that — i.e. are invisible in the atlas's opaque, depth-tested extrusion.
+     A part's `height` is its absolute top (MapLibre semantics); the first
+     draft of the audit added base to it and reported 25 occluded parts
+     where the true count was 64.
+  B. rowhouse candidates whose centroid lies inside a detail box, by which of
+     the two extrusions is taller.
 
-Run:  python3 scripts/audit-hero-occlusion.py            # this checkout
-      python3 scripts/audit-hero-occlusion.py <repo-root>  # another worktree
+Run:  python3 scripts/audit-hero-occlusion.py             # this checkout
+      python3 scripts/audit-hero-occlusion.py --verify    # exit 1 on any occluded part
+      python3 scripts/audit-hero-occlusion.py <repo-root> # another worktree
 
-When the boxes under the monuments are hidden (hide_3d), table A should read
-zero occluded parts everywhere; that is the moment this becomes a verify step.
+The geometry and the ported height rules come from the build step itself —
+one implementation of "what the map draws" — but the tables are re-derived
+here from the files on disk, after the step has run, which is the check.
 """
-import json, sys, statistics
-W = sys.argv[1] if len(sys.argv) > 1 else str(__import__("pathlib").Path(__file__).resolve().parents[1])
-D = lambda n: json.load(open(f"{W}/site/public/data/{n}"))["features"]
-detail, heroes, cands = D("bkk-heritage-detail.geojson"), D("bkk-hero-monuments.geojson"), D("bangkok-rowhouse-footprint-candidates.geojson")
+from __future__ import annotations
 
-def rings(geom):
-    if geom["type"] == "Polygon": yield geom["coordinates"][0]
-    elif geom["type"] == "MultiPolygon":
-        for poly in geom["coordinates"]: yield poly[0]
-def pip(pt, ring):
-    x, y = pt; inside = False
-    for (x1, y1), (x2, y2) in zip(ring, ring[1:] + ring[:1]):
-        if (y1 > y) != (y2 > y) and x < (x2 - x1) * (y - y1) / (y2 - y1) + x1: inside = not inside
-    return inside
-def inside(pt, geom): return any(pip(pt, r) for r in rings(geom))
-def centroid(geom):
-    pts = [p for r in rings(geom) for p in r]
-    return (sum(p[0] for p in pts) / len(pts), sum(p[1] for p in pts) / len(pts))
-def bbox(geom):
-    pts = [p for r in rings(geom) for p in r]
-    return min(p[0] for p in pts), min(p[1] for p in pts), max(p[0] for p in pts), max(p[1] for p in pts)
+import importlib.util
+import json
+import statistics
+import sys
+from pathlib import Path
 
-# (a) boxes under heroes
-by_hero = {}
-for f in heroes: by_hero.setdefault(f["properties"]["hero_id"], []).append(f)
-print("A. OSM detail boxes under each hero monument (as committed in this checkout)")
-print(f"{'hero':32s} {'parts':>5s} {'top m':>6s} {'plinth m':>8s} {'boxes':>5s} {'box h max':>9s}  box ids / height_source / render_height")
-tot_parts = tot_occluded = 0
-for hid, parts in by_hero.items():
-    top = max(p["properties"].get("base_height", 0) + p["properties"]["height"] for p in parts)
-    lowest = min(parts, key=lambda p: p["properties"].get("base_height", 0))
-    plinth = lowest["properties"]["height"]
-    hb = bbox(lowest["geometry"])
-    hc = centroid(lowest["geometry"])
-    boxes = []
-    for d in detail:
-        db = bbox(d["geometry"])
-        if db[2] < hb[0] or db[0] > hb[2] or db[3] < hb[1] or db[1] > hb[3]: continue
-        if inside(centroid(d["geometry"]), lowest["geometry"]) or inside(hc, d["geometry"]):
-            boxes.append(d)
-    tot_parts += len(parts)
-    bh = max((b["properties"].get("render_height") or b["properties"].get("height") or 0) for b in boxes) if boxes else 0
-    # a part is occluded if a box under it is at least as tall as the part's top
-    occl = sum(1 for p in parts if bh >= p["properties"].get("base_height", 0) + p["properties"]["height"])
-    tot_occluded += occl
-    ids = "; ".join(f"{b['properties'].get('id')}/{b['properties'].get('height_source')}/rh={b['properties'].get('render_height')} h={b['properties'].get('height')}" for b in boxes[:4])
-    print(f"{hid:32s} {len(parts):5d} {top:6.0f} {plinth:8.1f} {len(boxes):5d} {bh:9.1f}  {ids}  occluded_parts={occl}")
-print(f"TOTAL parts={tot_parts} parts fully inside a box={tot_occluded}")
-print("detail features with render_height==0 or missing:", sum(1 for d in detail if not d["properties"].get("render_height")))
 
-# (b) candidates double-extruded
-def cand_h(p):
-    n = p.get("num_floors")
-    try: n = float(n) if n not in (None, "") else 0
-    except: n = 0
-    return 3.5 + 3 * (n - 1) if n > 0 else 6.5
-# spatial index on detail bboxes by coarse grid
-grid = {}
-for i, d in enumerate(detail):
-    x0, y0, x1, y1 = bbox(d["geometry"])
-    for gx in range(int(x0 * 1000), int(x1 * 1000) + 1):
-        for gy in range(int(y0 * 1000), int(y1 * 1000) + 1):
-            grid.setdefault((gx, gy), []).append(i)
-same = cand_taller = det_taller = 0; diffs = []; keys = set()
-for c in cands:
-    keys |= set(c["properties"].keys())
-    pt = centroid(c["geometry"])
-    hit = None
-    for i in grid.get((int(pt[0] * 1000), int(pt[1] * 1000)), []):
-        if inside(pt, detail[i]["geometry"]): hit = detail[i]; break
-    if not hit: continue
-    ch = cand_h(c["properties"]); dh = hit["properties"].get("render_height") or hit["properties"].get("height") or 0
-    if abs(ch - dh) < 0.01: same += 1
-    elif ch > dh: cand_taller += 1
-    else: det_taller += 1
-    diffs.append(abs(ch - dh))
-print("\nB. candidates whose centroid lies inside an OSM detail box (both layers extrude by default)")
-print(f"overlapping={len(diffs)} same_height={same} candidate_taller={cand_taller} detail_taller={det_taller} median_abs_diff_m={statistics.median(diffs) if diffs else None}")
-print("candidate has num_floors key:", "num_floors" in keys, "| keys:", sorted(keys))
+def load_step(root: Path):
+    spec = importlib.util.spec_from_file_location("hide_under_heroes", root / "site/scripts/hide-under-heroes.py")
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod
+
+
+def features(root: Path, name: str) -> list[dict]:
+    return json.loads((root / "site/public/data" / name).read_text(encoding="utf-8"))["features"]
+
+
+def table_a(root: Path, H) -> list[dict]:
+    heroes = features(root, "bkk-hero-monuments.geojson")
+    layers = {"detail": features(root, "bkk-heritage-detail.geojson"),
+              "landmarks": features(root, "bkk-landmarks.geojson")}
+    rows = []
+    for group in H.hero_groups(heroes):
+        on_ground = []
+        for layer, feats in layers.items():
+            for f in feats:
+                p = f.get("properties") or {}
+                if f.get("geometry") and H.on_same_ground(group, f["geometry"]):
+                    on_ground.append((layer, p.get("id"), H.top_of(layer, p), H.is_drawn(layer, p), p.get("hidden_by")))
+        drawn = [b for b in on_ground if b[3]]
+        tallest = max((b[2] for b in drawn), default=0.0)
+        occluded = sum(1 for part in group["parts"] if tallest >= H.part_top(part["properties"]))
+        rows.append({
+            "hero": group["hero_id"], "parts": len(group["parts"]), "top": group["top"],
+            "base": group["base"], "boxes": on_ground, "drawn": len(drawn),
+            "tallest_drawn": tallest, "occluded": occluded,
+        })
+    return rows
+
+
+def table_b(root: Path, H) -> dict:
+    detail = features(root, "bkk-heritage-detail.geojson")
+    cands = features(root, "bangkok-rowhouse-footprint-candidates.geojson")
+
+    def cand_height(p: dict) -> float:
+        try:
+            n = float(p.get("num_floors") or 0)
+        except (TypeError, ValueError):
+            n = 0
+        return 3.5 + 3 * (n - 1) if n > 0 else 6.5
+
+    grid: dict[tuple[int, int], list[int]] = {}
+    for i, d in enumerate(detail):
+        x0, y0, x1, y1 = H.bbox(d["geometry"])
+        for gx in range(int(x0 * 1000), int(x1 * 1000) + 1):
+            for gy in range(int(y0 * 1000), int(y1 * 1000) + 1):
+                grid.setdefault((gx, gy), []).append(i)
+    same = cand_taller = box_taller = 0
+    diffs: list[float] = []
+    still_double = 0
+    for c in cands:
+        pt = H.centroid(c["geometry"])
+        hit = next((detail[i] for i in grid.get((int(pt[0] * 1000), int(pt[1] * 1000)), [])
+                    if H.contains(pt, detail[i]["geometry"])), None)
+        if not hit:
+            continue
+        ch, dh = cand_height(c["properties"]), H.detail_height(hit["properties"])
+        if abs(ch - dh) < 0.01:
+            same += 1
+        elif ch > dh:
+            cand_taller += 1
+        else:
+            box_taller += 1
+        diffs.append(abs(ch - dh))
+        # Both extruded: the box is drawn and the candidate is not flagged as
+        # standing on one (the flag hide-under-heroes' sibling step will set).
+        if H.is_drawn("detail", hit["properties"]) and c["properties"].get("has_detail_box") is not True:
+            still_double += 1
+    return {
+        "overlapping": len(diffs), "same": same, "candidate_taller": cand_taller, "box_taller": box_taller,
+        "median_abs_diff_m": statistics.median(diffs) if diffs else None, "still_double_extruded": still_double,
+    }
+
+
+def main(argv: list[str]) -> int:
+    verify = "--verify" in argv
+    args = [a for a in argv if not a.startswith("--")]
+    root = Path(args[0]).resolve() if args else Path(__file__).resolve().parents[1]
+    H = load_step(root)
+
+    rows = table_a(root, H)
+    print("A. boxes standing on each hero monument's ground (as committed in this checkout)")
+    print(f"{'hero':32s} {'parts':>5s} {'top m':>6s} {'base':>5s} {'boxes':>5s} {'drawn':>5s} {'tallest drawn':>13s} {'occluded parts':>14s}")
+    total_parts = total_occluded = 0
+    for r in rows:
+        total_parts += r["parts"]
+        total_occluded += r["occluded"]
+        ids = "; ".join(f"{layer}:{fid} {top:.0f}m{'' if drawn else ' hidden→' + str(by)}" for layer, fid, top, drawn, by in r["boxes"][:4])
+        print(f"{r['hero']:32s} {r['parts']:5d} {r['top']:6.0f} {r['base']:5.0f} {len(r['boxes']):5d} {r['drawn']:5d} {r['tallest_drawn']:13.1f} {r['occluded']:14d}  {ids}")
+    print(f"TOTAL parts={total_parts} parts entirely below a drawn box={total_occluded}")
+
+    b = table_b(root, H)
+    print("\nB. candidates whose centroid lies inside an OSM detail box")
+    print(f"overlapping={b['overlapping']} same_height={b['same']} candidate_taller={b['candidate_taller']} "
+          f"box_taller={b['box_taller']} median_abs_diff_m={b['median_abs_diff_m']} "
+          f"still_double_extruded={b['still_double_extruded']}")
+
+    if verify and total_occluded:
+        print(f"\nverify: {total_occluded} hero part(s) are invisible behind a drawn box — "
+              "run site/scripts/hide-under-heroes.py")
+        return 1
+    if verify:
+        print("\nverify: every hero part clears every drawn box")
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main(sys.argv[1:]))
