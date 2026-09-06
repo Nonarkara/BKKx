@@ -56,6 +56,18 @@ def centroid(ring: list[list[float]]) -> tuple[float, float]:
 
 
 def scale_ring(ring: list[list[float]], factor: float) -> list[list[float]]:
+    """Scale a ring about its centroid, to seven decimals.
+
+    Seven, not the register's six: the smallest parts here are finials under
+    a metre across, and a sixth-decimal rounding (~11 cm) moves their
+    vertices by a tenth of their size, which changes how the block-plan
+    builder rasterises them. The committed file once differed from a fresh
+    build by one unit in the seventh decimal on two finials — a digit this
+    generator does not produce (three runs here agree byte for byte), so a
+    stale commit rather than arithmetic (AUDIT-2026-09-06.md §2.5). CI now
+    fails if a build changes any committed generated file, which is the fix
+    for that class; fewer digits would only have hidden it.
+    """
     center_x, center_y = centroid(ring)
     return [
         [

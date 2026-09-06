@@ -27,6 +27,13 @@ jobs:
           cache-dependency-path: site/package-lock.json
       - run: npm ci
       - run: npm run build
+      # Every generated file is committed, and the build regenerates every
+      # one of them: the geojson flags, the evidence tally, the manifest. If
+      # a build changes a committed file, what is deployed is not what was
+      # reviewed. The hero geojson once drifted from its generator by one
+      # digit and nothing noticed (AUDIT-2026-09-06.md §2.5); this notices.
+      - name: a build leaves no generated file modified
+        run: git diff --exit-code --stat -- public/data app/data
       - run: npx tsc --noEmit
       - run: npm run lint
       - run: node --test tests/rendered-html.test.mjs
