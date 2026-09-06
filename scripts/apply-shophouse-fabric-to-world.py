@@ -19,6 +19,11 @@ SKIRT IS ZERO. Adjacent shophouses share a party wall. A one-block
 margin would eat the neighbour, which is the opposite of the rhythm
 this plan exists to keep. Heroes are isolated monuments; these are not.
 
+THE GROUND IS MEASURED, NOT ASSUMED. Same rule as the hero applier: the
+world is probed for its ground plane and every y in the plan is re-based
+by the difference before anything is written (AUDIT-2026-09-06.md §4.1).
+--ground-y overrides, --no-probe trusts the plan.
+
 WHAT IT CLEARS FIRST. Only the columns the building occupies, from the
 ground plane up to that building's firewall top. Never the whole bbox:
 a cluster bbox contains temples, roads and other people's plots.
@@ -34,11 +39,17 @@ Usage:
 from __future__ import annotations
 
 import argparse
+import importlib.util
 import json
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 PLAN = ROOT / "site/public/data/bkk-shophouse-fabric-blocks.json"
+REGISTER = ROOT / "site/public/heritage-register.json"
+
+_spec = importlib.util.spec_from_file_location("mc_ground", ROOT / "scripts/mc_ground.py")
+mc_ground = importlib.util.module_from_spec(_spec)
+_spec.loader.exec_module(mc_ground)
 
 GAME_VERSION = ("java", (1, 21, 4))
 DIMENSION = "minecraft:overworld"
@@ -69,6 +80,21 @@ def select(plan: dict, clusters: list[str] | None, min_conf: str | None) -> list
         allowed = set(CONFIDENCE_ORDER[: CONFIDENCE_ORDER.index(min_conf) + 1])
         keep = [b for b in keep if b["heightConfidence"] in allowed]
     return keep
+
+
+def world_columns(world_id: str) -> list[tuple[int, int]]:
+    world = json.loads(REGISTER.read_text(encoding="utf-8"))["worlds"][world_id]
+    return mc_ground.sample_columns(world["blocks"]["maxX"], world["blocks"]["maxZ"])
+
+
+def rebase_plan(plan: dict, buildings: list[dict], level, override: int | None, probe: bool) -> tuple[int, str]:
+    """Move the selected buildings onto the world's real ground. Returns (ground, how)."""
+    ground, how = mc_ground.resolve_ground(
+        plan["groundY"], level, override, probe, world_columns(plan["world"]) if level is not None else []
+    )
+    mc_ground.rebase(buildings, ground - plan["groundY"])
+    plan["groundY"] = ground
+    return ground, how
 
 
 def report(plan: dict, buildings: list[dict]) -> dict:
@@ -168,6 +194,10 @@ def main() -> int:
                     help="build only buildings at this evidence grade or stronger")
     ap.add_argument("--dry-run", action="store_true",
                     help="report what would be written; needs neither amulet nor a world")
+    ap.add_argument("--ground-y", type=int, default=None,
+                    help="build on this ground plane instead of probing the world for it")
+    ap.add_argument("--no-probe", action="store_true",
+                    help="trust the plan's groundY instead of measuring the world's")
     args = ap.parse_args()
 
     plan = load_plan(args.plan)
@@ -175,6 +205,12 @@ def main() -> int:
     if not buildings:
         print("nothing selected — check --cluster / --min-confidence")
         return 1
+
+    if args.dry_run:
+        ground, how = rebase_plan(plan, buildings, None, args.ground_y, probe=False)
+        if args.ground_y is None:
+            how = f"plan groundY {ground} — an assumption; the world is probed at write time"
+        print(f"ground: {how}")
 
     r = report(plan, buildings)
     print(
@@ -200,6 +236,8 @@ def main() -> int:
 
     level = amulet.load_level(args.world)
     try:
+        ground, how = rebase_plan(plan, buildings, level, args.ground_y, probe=not args.no_probe)
+        print(f"ground: {how}")
         cleared, written, failed = apply(level, buildings, plan, dry_run=False)
         level.save()
     finally:

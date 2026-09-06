@@ -35,7 +35,7 @@ plan, so the applier can act on it too.
 
 Usage:
     python3 scripts/build-hero-monument-blocks.py
-    python3 scripts/build-hero-monument-blocks.py --ground-y 64 --summary-only
+    python3 scripts/build-hero-monument-blocks.py --ground-y -61 --summary-only
 """
 from __future__ import annotations
 
@@ -56,11 +56,15 @@ OUT = ROOT / "site/public/data/bkk-hero-monument-blocks.json"
 # Which generated world these monuments fall in. All hero parts are Rattanakosin.
 WORLD_ID = "bangkok-historic-core-java"
 
-# Minecraft sea level. apply-rattanakosin-to-world.py puts the moat surface at
-# y=63 and gate markers at y=64, so this is the same ground frame those
-# features already assume. Overridable, because it is an assumption about a
-# world file this script never opens.
-DEFAULT_GROUND_Y = 64
+# The first air block above the ground Arnis generates. Arnis's default
+# --ground-level is −62 (src/args.rs, v3.1.0) — the surface block of a
+# superflat, which is what worlds/*/bkkx-manifest.json records these worlds
+# as (terrain_elevation: false) — and the register measured SpawnY = −50 in
+# this world from its level.dat. This script never opens the world, so the
+# number is an assumption with its source stated; the applier probes the
+# world and re-bases the plan onto what it finds (scripts/mc_ground.py).
+# It was 64, Minecraft's sea level, for a long time: AUDIT-2026-09-06.md §4.1.
+DEFAULT_GROUND_Y = -61
 
 # ---------------------------------------------------------------------------
 # Palette
@@ -250,7 +254,8 @@ def build(ground_y: int) -> dict:
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--ground-y", type=int, default=DEFAULT_GROUND_Y,
-                    help=f"Y of the monument ground plane (default {DEFAULT_GROUND_Y}, Minecraft sea level)")
+                    help=f"Y of the monument ground plane (default {DEFAULT_GROUND_Y}, the first air block "
+                         "above Arnis's −62 surface; the applier re-bases onto the world's measured ground)")
     ap.add_argument("--summary-only", action="store_true", help="print the summary without writing the plan")
     args = ap.parse_args()
 

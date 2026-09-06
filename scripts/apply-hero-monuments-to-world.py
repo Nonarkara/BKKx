@@ -29,6 +29,16 @@ plane up to that hero's tallest part, plus a skirt. Only the columns the
 monument actually occupies, never the whole bounding box: the Grand Palace
 bbox contains buildings that are not the Grand Palace.
 
+THE GROUND IS MEASURED, NOT ASSUMED. The plan says where its ground plane is,
+and for a long time every plan said y=64, Minecraft's sea level, for a world
+Arnis generated with its surface near y=−62 (AUDIT-2026-09-06.md §4.1).
+Built as planned, the monuments would have floated 125 blocks up. So before
+writing, the applier probes the world — the highest non-air block over a
+spread of columns, the most common such height, plus one — and re-bases every
+y in the plan by the difference, printing both numbers. --ground-y overrides
+the probe; --no-probe trusts the plan; --dry-run has no world to probe and
+says so.
+
 EVIDENCE IS A FILTER, NOT A FOOTNOTE. --min-confidence lets you build only
 what a published source supports. The default builds everything, because the
 plan already refuses anything ungraded, but a world meant to be cited rather
@@ -44,11 +54,17 @@ Usage:
 from __future__ import annotations
 
 import argparse
+import importlib.util
 import json
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 PLAN = ROOT / "site/public/data/bkk-hero-monument-blocks.json"
+REGISTER = ROOT / "site/public/heritage-register.json"
+
+_spec = importlib.util.spec_from_file_location("mc_ground", ROOT / "scripts/mc_ground.py")
+mc_ground = importlib.util.module_from_spec(_spec)
+_spec.loader.exec_module(mc_ground)
 
 # The world version apply-rattanakosin-to-world.py writes with. Kept identical
 # so the two scripts cannot disagree about what game they are building for.
@@ -82,6 +98,22 @@ def dilate(columns: set[tuple[int, int]], skirt: int) -> set[tuple[int, int]]:
             for dz in range(-skirt, skirt + 1):
                 out.add((x + dx, z + dz))
     return out
+
+
+def world_columns(world_id: str) -> list[tuple[int, int]]:
+    """Sample columns across the world the plan was projected into."""
+    world = json.loads(REGISTER.read_text(encoding="utf-8"))["worlds"][world_id]
+    return mc_ground.sample_columns(world["blocks"]["maxX"], world["blocks"]["maxZ"])
+
+
+def rebase_plan(plan: dict, parts: list[dict], level, override: int | None, probe: bool) -> tuple[int, str]:
+    """Move the selected parts onto the world's real ground. Returns (ground, how)."""
+    ground, how = mc_ground.resolve_ground(
+        plan["groundY"], level, override, probe, world_columns(plan["world"]) if level is not None else []
+    )
+    mc_ground.rebase(parts, ground - plan["groundY"])
+    plan["groundY"] = ground
+    return ground, how
 
 
 def plan_for(plan: dict, heroes: list[str] | None, min_conf: str | None) -> list[dict]:
@@ -193,6 +225,10 @@ def main() -> int:
                     help="build only parts at this evidence grade or stronger")
     ap.add_argument("--dry-run", action="store_true",
                     help="report what would be written; needs neither amulet nor a world")
+    ap.add_argument("--ground-y", type=int, default=None,
+                    help="build on this ground plane instead of probing the world for it")
+    ap.add_argument("--no-probe", action="store_true",
+                    help="trust the plan's groundY instead of measuring the world's")
     args = ap.parse_args()
 
     plan = load_plan(args.plan)
@@ -200,6 +236,14 @@ def main() -> int:
     if not parts:
         print("nothing selected — check --hero / --min-confidence")
         return 1
+
+    if args.dry_run:
+        # No world to probe. Re-base onto an explicit --ground-y if given,
+        # otherwise report at the plan's ground and say it is not measured.
+        ground, how = rebase_plan(plan, parts, None, args.ground_y, probe=False)
+        if args.ground_y is None:
+            how = f"plan groundY {ground} — an assumption; the world is probed at write time"
+        print(f"ground: {how}")
 
     r = report(plan, parts, args.skirt)
     print(f"plan: {r['parts']} parts across {len(r['heroes'])} monuments, ground y={plan['groundY']}")
@@ -221,6 +265,8 @@ def main() -> int:
 
     level = amulet.load_level(args.world)
     try:
+        ground, how = rebase_plan(plan, parts, level, args.ground_y, probe=not args.no_probe)
+        print(f"ground: {how}")
         cleared, written, failed = apply(level, parts, plan, args.skirt, dry_run=False)
         level.save()
     finally:

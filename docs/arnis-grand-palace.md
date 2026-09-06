@@ -168,11 +168,13 @@ plan, and `scripts/test-build-hero-monument-blocks.py` checks it. It:
    cannot contain massing the register cannot defend.
 
 The plan today is rebuilt by `scripts/build-hero-monument-blocks.py` —
-stacked parts, ground plane y=64, the frame the moat surface (y=63) and the
-gate markers (y=64) already use. `AUDIT-2026-09-06.md` §4.1 establishes that
-the generated superflat world's ground sits near y=−62, so that frame is
-wrong for every plan in the repository and the applier must probe the world
-rather than trust it.
+stacked parts on a ground plane of y=−61, the first air block above the
+−62 surface Arnis generates a superflat at. For a long time every plan in
+the repository said y=64, Minecraft's sea level, which for this world is
+about 125 blocks up in the air; `AUDIT-2026-09-06.md` §4.1 has the evidence.
+The number in the plan is still an assumption with its source stated: every
+applier now probes the world for its ground (`scripts/mc_ground.py`) and
+re-bases the plan onto what it measures before writing a block.
 The Phra Mondop comes out as a seven-tier stepped spire alternating gilt and
 green glazed tile, tapering from 2,496 blocks at the body to 16 at the finial.
 That is precisely the form `roof:shape` has no value for, and it fell out of

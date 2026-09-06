@@ -65,7 +65,10 @@ ATLAS = ROOT / "site/public/data/bangkok-rowhouse-atlas.geojson"
 OUT = ROOT / "site/public/data/bkk-shophouse-fabric-blocks.json"
 
 WORLD_ID = "bangkok-historic-core-java"
-DEFAULT_GROUND_Y = 64
+# The first air block above Arnis's −62 superflat surface — see the note in
+# build-hero-monument-blocks.py. An assumption the applier probes the world
+# to correct; it was 64 (sea level) until AUDIT-2026-09-06.md §4.1.
+DEFAULT_GROUND_Y = -61
 
 MODULE_M = 4.0
 FIREWALL_EVERY_BAYS = 5
