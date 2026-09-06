@@ -128,9 +128,16 @@ def height_m(storeys: int) -> float:
 
 def centroid_lonlat(ring: list[list[float]]) -> tuple[float, float]:
     pts = ring[:-1] if ring[0] == ring[-1] else ring
+    # math.fsum, not sum(): CPython 3.12 changed sum() over floats to
+    # compensated (Neumaier) summation, so the same ring gives a different
+    # last bit on 3.11 and on 3.12. That reached the committed geojson as a
+    # seventh-decimal difference on a couple of vertices and turned CI red
+    # against a file generated here (AUDIT-2026-09-06.md §2.5). fsum is
+    # correctly rounded and identical on every version, so the artifact is
+    # a function of the input rather than of the interpreter.
     return (
-        sum(p[0] for p in pts) / len(pts),
-        sum(p[1] for p in pts) / len(pts),
+        math.fsum(p[0] for p in pts) / len(pts),
+        math.fsum(p[1] for p in pts) / len(pts),
     )
 
 
@@ -290,8 +297,8 @@ def assign_row_bays(buildings: list[dict]) -> None:
             runs[find(i)].append(b)
 
         for run in runs.values():
-            fu = sum(b["rect"]["fu"] for b in run) / len(run)
-            fv = sum(b["rect"]["fv"] for b in run) / len(run)
+            fu = math.fsum(b["rect"]["fu"] for b in run) / len(run)
+            fv = math.fsum(b["rect"]["fv"] for b in run) / len(run)
             length = math.hypot(fu, fv) or 1.0
             fu, fv = fu / length, fv / length
             run.sort(key=lambda b: b["mx"] * fu + b["my"] * fv)

@@ -165,8 +165,15 @@ def build(ground_y: int) -> dict:
         # it was snapped: the block is a placement, not a measurement.
         snapped = False
         if not spans and len(ring) >= 3:
-            cx = sum(x for x, _ in ring) / len(ring)
-            cz = sum(z for _, z in ring) / len(ring)
+            # math.fsum, not sum(): CPython 3.12 changed sum() over floats to
+    # compensated (Neumaier) summation, so the same ring gives a different
+    # last bit on 3.11 and on 3.12. That reached the committed geojson as a
+    # seventh-decimal difference on a couple of vertices and turned CI red
+    # against a file generated here (AUDIT-2026-09-06.md §2.5). fsum is
+    # correctly rounded and identical on every version, so the artifact is
+    # a function of the input rather than of the interpreter.
+            cx = math.fsum(x for x, _ in ring) / len(ring)
+            cz = math.fsum(z for _, z in ring) / len(ring)
             spans = [[int(math.floor(cz)), int(math.floor(cx)), int(math.floor(cx))]]
             snapped = True
         if not spans:

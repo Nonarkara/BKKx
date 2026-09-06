@@ -47,6 +47,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import math
 import sys
 from pathlib import Path
 
@@ -88,7 +89,14 @@ def contains(pt, geom: dict) -> bool:
 
 def centroid(geom: dict):
     pts = [p for r in rings(geom) for p in r]
-    return (sum(p[0] for p in pts) / len(pts), sum(p[1] for p in pts) / len(pts))
+    # math.fsum, not sum(): CPython 3.12 changed sum() over floats to
+    # compensated (Neumaier) summation, so the same ring gives a different
+    # last bit on 3.11 and on 3.12. That reached the committed geojson as a
+    # seventh-decimal difference on a couple of vertices and turned CI red
+    # against a file generated here (AUDIT-2026-09-06.md §2.5). fsum is
+    # correctly rounded and identical on every version, so the artifact is
+    # a function of the input rather than of the interpreter.
+    return (math.fsum(p[0] for p in pts) / len(pts), math.fsum(p[1] for p in pts) / len(pts))
 
 
 def bbox(geom: dict):

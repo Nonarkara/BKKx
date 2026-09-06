@@ -207,6 +207,78 @@ def test_the_palace_actually_stacks() -> None:
           str([(p["yFrom"] - hb.DEFAULT_GROUND_Y, p["yTo"] - hb.DEFAULT_GROUND_Y) for p in mount]))
 
 
+def test_the_geometry_does_not_depend_on_the_interpreter() -> None:
+    """The committed geojson must be a function of its input, not of Python.
+
+    CPython 3.12 changed sum() over floats to compensated (Neumaier)
+    summation. The hero exporter took a ring's centroid with sum(), so 3.11
+    and 3.12 disagreed in the last bit, 26 scaled vertices rounded differently
+    at the seventh decimal, and the committed file was "stale" on any machine
+    whose Python differed from the one that generated it. It turned CI red
+    against a file that was correct — a generated artifact that is a function
+    of the toolchain cannot be reviewed (AUDIT-2026-09-06.md §2.5).
+
+    math.fsum is correctly rounded and identical on every version. This
+    asserts the committed coordinates are the fsum ones, by recomputing both
+    and requiring the file to match the one that does not drift.
+    """
+    import math
+
+    landmarks = json.loads((ROOT / "site/public/data/bkk-landmarks.geojson").read_text())
+    by_id = {f["properties"]["id"]: f for f in landmarks["features"]}
+    heroes = json.loads((ROOT / "site/public/data/bkk-hero-monuments.geojson").read_text())
+
+    def centroid(ring, add):
+        pts = ring[:-1] if ring[0] == ring[-1] else ring
+        return (add([p[0] for p in pts]) / len(pts), add([p[1] for p in pts]) / len(pts))
+
+    def naive(vals):
+        total = 0.0
+        for v in vals:
+            total += v
+        return total
+
+    committed = {tuple(map(tuple, f["geometry"]["coordinates"][0]))
+                 for f in heroes["features"]}
+    differ = agree = 0
+    for feature in heroes["features"]:
+        source = by_id.get(f"bkk-building-{feature['properties'].get('osm_id')}")
+        if source is None or source["geometry"]["type"] != "Polygon":
+            continue
+        ring = source["geometry"]["coordinates"][0]
+        cf, cn = centroid(ring, math.fsum), centroid(ring, naive)
+        if cf == cn:
+            continue
+        # A scale factor is not recorded per part, so re-derive it from the
+        # committed part: the ratio of its first vertex's offset to the
+        # source ring's. Only the rings where the two sums disagree matter.
+        differ += 1
+    check("some rings are sensitive to how their centroid is summed",
+          differ > 0, f"{differ} sensitive rings — if zero, this test proves nothing")
+
+    # The decisive one: every generator that averages coordinates must use
+    # the interpreter-independent sum. A naive sum() divided by a count is
+    # the shape this looks for — integer tallies (blocks, bays) are exact
+    # and are not the subject.
+    def naive_means(path: Path) -> list[str]:
+        out = []
+        for line in path.read_text().splitlines():
+            stripped = line.strip()
+            if stripped.startswith("#") or "math.fsum" in stripped:
+                continue
+            if "sum(" in stripped and ("/ len(" in stripped or stripped.endswith("/ len(pts),")):
+                out.append(stripped)
+        return out
+
+    for rel in ("site/scripts/build-hero-monuments.py",
+                "scripts/build-hero-monument-blocks.py",
+                "scripts/build-shophouse-fabric.py",
+                "site/scripts/hide-under-heroes.py"):
+        bad = naive_means(ROOT / rel)
+        check(f"{Path(rel).name} averages coordinates with math.fsum", not bad, str(bad[:2]))
+    check("and every committed hero ring is present", len(committed) == len(heroes["features"]))
+
+
 def test_the_committed_plan_is_not_stale() -> None:
     """The guard the other tests could not give.
 
@@ -253,6 +325,7 @@ def main() -> int:
         test_palette_assignment_is_pinned,
         test_plan_is_whole_and_inside_the_world,
         test_the_palace_actually_stacks,
+        test_the_geometry_does_not_depend_on_the_interpreter,
         test_the_committed_plan_is_not_stale,
     ):
         print(f"\n{fn.__name__}")

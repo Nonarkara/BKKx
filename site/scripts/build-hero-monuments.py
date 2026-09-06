@@ -9,6 +9,7 @@ labelled proportional interpretation rather than measured conservation data.
 from __future__ import annotations
 
 import json
+import math
 from pathlib import Path
 
 
@@ -49,9 +50,16 @@ def ring_for(element: dict) -> list[list[float]]:
 
 def centroid(ring: list[list[float]]) -> tuple[float, float]:
     points = ring[:-1] if ring[0] == ring[-1] else ring
+    # math.fsum, not sum(): CPython 3.12 changed sum() over floats to
+    # compensated (Neumaier) summation, so the same ring gives a different
+    # last bit on 3.11 and on 3.12. That reached the committed geojson as a
+    # seventh-decimal difference on a couple of vertices and turned CI red
+    # against a file generated here (AUDIT-2026-09-06.md §2.5). fsum is
+    # correctly rounded and identical on every version, so the artifact is
+    # a function of the input rather than of the interpreter.
     return (
-        sum(point[0] for point in points) / len(points),
-        sum(point[1] for point in points) / len(points),
+        math.fsum(point[0] for point in points) / len(points),
+        math.fsum(point[1] for point in points) / len(points),
     )
 
 
