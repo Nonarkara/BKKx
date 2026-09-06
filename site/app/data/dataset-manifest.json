@@ -25,9 +25,9 @@
     ]
   },
   "/data/bkk-hero-monuments.geojson": {
-    "bytes": 88971,
-    "sha256": "f24c666a766af2fe887299c8f1ece520963982fdd554303dae473a9a4145cd5e",
-    "features": 67,
+    "bytes": 116441,
+    "sha256": "048edc268ddb71de1200d69c1486baa1bd52b10a2c5c13c07407a1257b693bb6",
+    "features": 88,
     "kinds": [
       "Polygon"
     ]
@@ -41,8 +41,8 @@
     ]
   },
   "/data/bkk-landmarks.geojson": {
-    "bytes": 42969,
-    "sha256": "564b696dddfa999a29b0211e9f7f34a1ad0fc61b668e0f6813aac494cde6f6e4",
+    "bytes": 43020,
+    "sha256": "89c74d988ce610b8eb7f02fd0ec4235d8009c345e4373c7b0a701d8cfa4acecc",
     "features": 73,
     "kinds": [
       "Polygon"

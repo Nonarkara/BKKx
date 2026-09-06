@@ -5,9 +5,10 @@ build-hero-monument-blocks.py
 Turn the hero-monument massing into a block placement plan.
 
 WHY THIS EXISTS. site/scripts/build-hero-monuments.py already computes the
-thing OpenStreetMap cannot express and Arnis therefore cannot generate: 67
+thing OpenStreetMap cannot express and Arnis therefore cannot generate: the
 stacked parts across Wat Arun's prang group, the Grand Palace's Phra Mondop,
-Siratana Chedi and Thepbidorn, and Wat Pho's four great chedis — each with a
+Siratana Chedi and Thepbidorn, Wat Pho's four great chedis, Loha Prasat,
+the palace prasats and the Golden Mount chedi — each with a
 footprint, a base and top height in metres, a material tone, and a per-part
 provenance grade. Separately, scripts/apply-rattanakosin-to-world.py can write
 geojson in block coordinates into .mca region files with amulet-core.
@@ -25,8 +26,8 @@ dependency — means the geometry can be tested in CI and reviewed in a diff,
 and the applier stays a thin loop over a plan somebody has already read.
 
 EVIDENCE IS NOT FLATTENED. The atlas grades every one of these parts
-(`official-envelope` 7, `interpretive-proportion` 16, `interpretive-envelope`
-44) and Evidence mode colours the city by it. A part with no grade is REFUSED
+(`official-envelope`, `interpretive-proportion`, `interpretive-envelope`)
+and Evidence mode colours the city by it. A part with no grade is REFUSED
 rather than built: a world that shows the Fine Arts Department's published
 82 m envelope and a BKKx-curated silhouette as the same kind of fact lies more
 confidently than the map does. The grade travels with every part into the
@@ -42,14 +43,17 @@ import argparse
 import colorsys
 import json
 import math
+import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from mc_blocks import project, row_spans, span_volume  # noqa: E402
 HEROES = ROOT / "site/public/data/bkk-hero-monuments.geojson"
 REGISTER = ROOT / "site/public/heritage-register.json"
 OUT = ROOT / "site/public/data/bkk-hero-monument-blocks.json"
 
-# Which generated world these monuments fall in. All 67 parts are Rattanakosin.
+# Which generated world these monuments fall in. All hero parts are Rattanakosin.
 WORLD_ID = "bangkok-historic-core-java"
 
 # Minecraft sea level. apply-rattanakosin-to-world.py puts the moat surface at
@@ -116,67 +120,6 @@ def classify(hex_colour: str) -> str:
     if l >= 0.78:
         return "whitewash"
     return "plaster"
-
-
-# ---------------------------------------------------------------------------
-# Projection — the same linear local projection the register and the
-# water-and-walls builder both use. 1 block = 1 metre; Minecraft north is -Z,
-# so the world's northern edge is z = 0 and z grows southward.
-# ---------------------------------------------------------------------------
-
-def project(lat: float, lon: float, world: dict) -> tuple[float, float]:
-    x = (lon - world["bounds"]["minLon"]) / (
-        world["bounds"]["maxLon"] - world["bounds"]["minLon"]
-    ) * world["blocks"]["maxX"]
-    z = (world["bounds"]["maxLat"] - lat) / (
-        world["bounds"]["maxLat"] - world["bounds"]["minLat"]
-    ) * world["blocks"]["maxZ"]
-    return x, z
-
-
-# ---------------------------------------------------------------------------
-# Rasterisation
-# ---------------------------------------------------------------------------
-
-def row_spans(ring: list[tuple[float, float]]) -> list[list[int]]:
-    """Scanline-fill a polygon ring into [z, x_start, x_end] spans, inclusive.
-
-    Even-odd rule, sampling each row at its centre (z + 0.5) so a block is
-    filled when its middle is inside the polygon rather than when its corner
-    grazes an edge. Spans rather than points because a prang footprint is a few
-    hundred blocks wide and listing every column would make the plan enormous
-    for no extra information.
-    """
-    if len(ring) < 3:
-        return []
-    zs = [p[1] for p in ring]
-    z_lo, z_hi = int(min(zs)), int(max(zs))
-    spans: list[list[int]] = []
-    for z in range(z_lo, z_hi + 1):
-        y = z + 0.5
-        xs: list[float] = []
-        for i in range(len(ring)):
-            x1, z1 = ring[i]
-            x2, z2 = ring[(i + 1) % len(ring)]
-            if (z1 > y) == (z2 > y):
-                continue
-            xs.append(x1 + (y - z1) / (z2 - z1) * (x2 - x1))
-        xs.sort()
-        for i in range(0, len(xs) - 1, 2):
-            # Block column x covers [x, x+1), so its centre is x+0.5. A column
-            # is filled when that centre falls between the two crossings —
-            # which is ceil(xa - 0.5) .. floor(xb - 0.5), not round(xa) ..
-            # round(xb). The naive version is one block too wide on every row
-            # and inflates a 10x10 footprint to 10x11.
-            a = math.ceil(xs[i] - 0.5)
-            b = math.floor(xs[i + 1] - 0.5)
-            if b >= a:
-                spans.append([z, a, b])
-    return spans
-
-
-def span_volume(spans: list[list[int]], layers: int) -> int:
-    return sum((b - a + 1) for _, a, b in spans) * layers
 
 
 # ---------------------------------------------------------------------------

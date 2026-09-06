@@ -111,9 +111,10 @@ Not a bug in Arnis — a vocabulary gap in OSM's own roof taxonomy.
 ## 4. The finding: BKKx already holds better monument data than OSM
 
 `site/scripts/build-hero-monuments.py` writes
-`site/public/data/bkk-hero-monuments.geojson`: **67 stacked parts** across Wat
+`site/public/data/bkk-hero-monuments.geojson`: **88 stacked parts** across Wat
 Arun's prang group (23), the Grand Palace's Phra Mondop (8), Siratana Chedi
-(7) and Thepbidorn (5), and Wat Pho's four great chedis (6 each).
+(7) and Thepbidorn (5), Wat Pho's four great chedis (6 each), Loha Prasat,
+the palace prasats and the Golden Mount chedi.
 
 Every part already carries exactly what a voxel build needs:
 
@@ -166,14 +167,12 @@ plan, and `scripts/test-build-hero-monument-blocks.py` checks it. It:
 5. and refuses any part whose `height_confidence` is missing, so the world
    cannot contain massing the register cannot defend.
 
-The plan's current size is whatever
-`python3 scripts/build-hero-monument-blocks.py --summary-only` prints — a
-figure quoted in this sentence went stale within a day of being written, so
-the sentence now quotes the command instead. The plan's ground plane is
-y=64, the frame the moat surface (y=63) and the gate markers (y=64) already
-use; `AUDIT-2026-09-06.md` §4.1 establishes that the generated superflat
-world's ground sits near y=−62, so that frame is wrong for every plan in the
-repository and the applier must probe the world rather than trust it.
+The plan today is rebuilt by `scripts/build-hero-monument-blocks.py` —
+stacked parts, ground plane y=64, the frame the moat surface (y=63) and the
+gate markers (y=64) already use. `AUDIT-2026-09-06.md` §4.1 establishes that
+the generated superflat world's ground sits near y=−62, so that frame is
+wrong for every plan in the repository and the applier must probe the world
+rather than trust it.
 The Phra Mondop comes out as a seven-tier stepped spire alternating gilt and
 green glazed tile, tapering from 2,496 blocks at the body to 16 at the finial.
 That is precisely the form `roof:shape` has no value for, and it fell out of
@@ -197,38 +196,40 @@ flattening it — a world that shows the Fine Arts Department's published 82 m
 envelope and a BKKx-curated silhouette as the same kind of fact is a world
 that lies more confidently than the map does.
 
-**The shophouses → the screened set, not OSM.** Also built:
-`scripts/build-shophouse-blocks.py`, with `scripts/test-build-shophouse-blocks.py`
-checking it. **1,823 of the 2,433 screened footprints, 1,571,232 blocks.**
+**The shophouses → the screened set, not OSM.** Built as
+`scripts/build-shophouse-fabric.py` (Dr Non + Cursor, `feat/shophouse-fabric`),
+with `scripts/test-build-shophouse-fabric.py` checking it and
+`scripts/apply-shophouse-fabric-to-world.py` writing it. An earlier, flatter
+builder of mine — three bands per footprint, no module — was retired in favour
+of it on 2026-09-06; the counts below are the fabric plan's own.
 
-Height comes from the statute rather than a default. MR55 ข้อ 22(4) sets the
-storey minima — ground ≥ 3.50 m, every floor above ≥ 3.00 m — so a building is
-`3.5 + (storeys − 1) × 3.0` and every metre traces to a clause. That is what
-gives the fabric vertical texture where OSM would give it one flat height.
+**1,824 of the 2,433 screened footprints, 1,397,837 blocks.** 608 lie outside
+this world and are counted rather than dropped; one is refused for a frontage
+under 2 m and named.
 
-Each building lays down as three horizontal bands over the same measured
-footprint — shopfront, body, parapet — because that is the anatomy of the type
-and it is what stops 1,823 buildings reading as 1,823 cuboids. No geometry is
-invented.
+The module is the law, not a survey. `n_bays = floor(frontage / 4 m)`, so a
+7.9 m unit stays one bay rather than becoming two illegal ones — 2,527 bays in
+all. A firewall lands on the right edge of every fifth bay along a
+neighbour-joined run (239 of them, MR55 ข้อ 17). Rows over the 10-unit / 40 m
+cap (ข้อ 4) are tagged, not broken: 780 of them, and the plan shows what
+stands. Height comes from the statute — ข้อ 22(4): ground ≥ 3.50 m, every
+floor above ≥ 3.00 m — so every metre traces to a clause. Shop openings, a 1 m
+awning, windows, a rear courtyard on plots deeper than 16 m (ข้อ 2) and a stair
+shaft are cut as typological rhythm, and are stated as such: the plan does not
+know where any actual door is.
 
-The honesty is in the counts. **594 footprints carry a storey count and
-1,229 do not**; the latter take the median of the known set (2), are marked
-`storeysAssumed`, and are graded at the weaker confidence so
-`--min-confidence` can exclude the guessed fabric wholesale. **610
-footprints lie outside this world entirely** — Bang Rak, Thon Buri, Lat
-Krabang, Nong Chok, Phasi Charoen and the part of Samphanthawong that spills
-east past the bbox — and are counted by district rather than projected to
-coordinates the world does not have. Four straddle the edge and are clipped to
-it, as the moat and the roads already are.
+The honesty is in the grading. **595 footprints carry a storey count from
+Overture and 1,229 do not**; the latter default to two and are graded
+`interpretive-storeys` rather than `overture-storeys`, so the two are never
+the same kind of fact and `--min-confidence overture-storeys` builds only the
+595. Skirt is zero — adjacent shophouses share a party wall — and 6,306 hero
+columns are punched out so the fabric never writes into a monument; the Grand
+Palace bbox is not, because that bbox contains buildings that are not the
+Grand Palace.
 
-The join deserves a note: the spine and the footprints share no id, and are
-matched on centroid because the spine's lat/lon *is* the footprint centroid at
-six decimal places. All 2,433 match exactly, no centroid is claimed twice, and
-the test asserts both — the cluster pages once lost 241 footprints to a looser
-version of that join and described the loss as missing coverage.
-
-The plan is schema-compatible with the monument one, so
-`apply-hero-monuments-to-world.py --shophouses` writes it unchanged.
+The scanline and projection live in `scripts/mc_blocks.py`, shared with the
+hero builder, so a fencepost fix cannot land in the monuments and miss the
+shophouses.
 
 **If you would rather stay inside Arnis**, the Tier 4 route is legitimate:
 fork it, build a `.schem` per monument, and register it in `landmarks.rs`

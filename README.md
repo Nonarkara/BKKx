@@ -80,8 +80,9 @@ survey: 26 are linked to mapped corridors and 20 remain visibly queued. See
 
 **Heritage-specific 3D.** The Historic Core does not stop at the operational twin's generic building tiles.
 `bkk-heritage-detail.geojson` keeps 9,275 full-resolution Old Town footprints; `bkk-landmarks.geojson` supplies
-73 curated massing parts; and `bkk-hero-monuments.geojson` now carries 67 higher-detail parts across Wat Arun,
-Phra Siratana Chedi, Phra Mondop, Prasat Phra Dhepbidorn and Wat Pho's Four Great Chedis. Wat Arun's central 82 m envelope comes from a Fine
+73 curated massing parts; and `bkk-hero-monuments.geojson` now carries 88 higher-detail parts across Wat Arun,
+Phra Siratana Chedi, Phra Mondop, Prasat Phra Dhepbidorn, Wat Pho's Four Great Chedis, Loha Prasat, Dusit Maha
+Prasat, Aphonphimok Prasat, Siwalai Maha Prasat and the Golden Mount chedi. Wat Arun's central 82 m envelope comes from a Fine
 Arts Department publication and its footprint from a checked-in OSM way snapshot. The three Wat Phra Kaew
 structures are matched to the Bureau of the Royal Household's official plan; Phra Mondop's seven roof tiers are
 also documented by Fine Arts. Wat Pho and Fine Arts sources establish the four-chedi group and royal chronology;
