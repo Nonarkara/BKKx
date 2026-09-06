@@ -64,10 +64,23 @@ jobs:
       # It never ran before: the appliers had never been executed against a
       # world, here or anywhere (AUDIT-2026-09-06.md, disposition).
       # amulet-core is the Minecraft save library; shapely is the moat
-      # geometry. Both are wheels, both install in seconds.
+      # geometry.
+      #
+      # PINNED TO 3.11 ON PURPOSE. amulet-core depends on amulet-rocksdb,
+      # which publishes a cp311 wheel and no cp312 one, so on the runner's
+      # default Python it tries to build RocksDB from source and fails. The
+      # Java/Anvil path these tests use never touches RocksDB — it is a
+      # transitive dependency for Bedrock saves — but pip resolves it anyway.
+      # Only this step moves; the geometry suites above stay on the runner's
+      # own Python, which is the version that caught the sum() difference in
+      # the first place, and math.fsum now makes the output agree on both.
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
       - name: world pipeline writes
         working-directory: .
         run: |
           python3 -m pip install --quiet amulet-core==1.9.45 shapely
+          python3 -c "import sys, amulet, shapely; print('python', sys.version.split()[0], '· amulet ok')"
           python3 scripts/test-apply-to-fixture-world.py
           python3 scripts/test-apply-rattanakosin-to-world.py
