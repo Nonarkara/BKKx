@@ -46,6 +46,27 @@ def sample_columns(max_x: int, max_z: int, per_axis: int = 8) -> list[tuple[int,
     return [(x, z) for x in xs for z in zs]
 
 
+def world_bounds(level, dimension: str = DIMENSION) -> tuple[int, int] | None:
+    """The world's declared (min_y, max_y), or None if it will not say.
+
+    Read from level.dat, not from the chunks: it is what amulet's save path
+    obeys, and a world that declares the pre-1.18 range keeps only the
+    sub-chunks inside it.
+    """
+    try:
+        group = level.bounds(dimension)
+    except Exception:
+        return None
+    try:
+        return int(group.min_y), int(group.max_y)
+    except AttributeError:
+        pass
+    boxes = list(getattr(group, "selection_boxes", []) or [])
+    if not boxes:
+        return None
+    return min(int(b.min_y) for b in boxes), max(int(b.max_y) for b in boxes)
+
+
 def sample_around(spans: list, margin: int = 6, per_axis: int = 9) -> list[tuple[int, int]]:
     """Columns to probe for the ground a plan will stand on.
 
@@ -104,9 +125,14 @@ def block_name(level, x: int, y: int, z: int) -> str | None:
     return None
 
 
-def surface_at(level, x: int, z: int) -> int | None:
-    """Highest non-air y in the column, or None if the chunk is absent."""
-    for y in range(Y_TOP, Y_BOTTOM - 1, -1):
+def surface_at(level, x: int, z: int, top: int = Y_TOP, bottom: int = Y_BOTTOM) -> int | None:
+    """Highest non-air y in the column, or None if the chunk is absent.
+
+    The scan starts at the world's own ceiling, not at 319: reading above a
+    world's declared height raises, which this would read as "chunk absent"
+    and report every column of a perfectly good old world as ungenerated.
+    """
+    for y in range(top, bottom - 1, -1):
         name = block_name(level, x, y, z)
         if name is None:
             return None
@@ -121,10 +147,12 @@ def probe_ground(level, columns: list[tuple[int, int]]) -> dict:
     Returns the plane and how it was reached, so an applier can print the
     evidence beside the number it is about to build on.
     """
+    bounds = world_bounds(level)
+    top, bottom = (bounds[1] - 1, bounds[0]) if bounds else (Y_TOP, Y_BOTTOM)
     surfaces = []
     missing = 0
     for x, z in columns:
-        s = surface_at(level, x, z)
+        s = surface_at(level, x, z, top, bottom)
         if s is None:
             missing += 1
         else:
@@ -158,27 +186,6 @@ def rebase(items: list[dict], delta: int, keys: tuple[str, ...] = ("yFrom", "yTo
             if key in item:
                 item[key] += delta
     return len(items)
-
-
-def world_bounds(level, dimension: str = DIMENSION) -> tuple[int, int] | None:
-    """The world's declared (min_y, max_y), or None if it will not say.
-
-    Read from level.dat, not from the chunks: it is what amulet's save path
-    obeys, and a world that declares the pre-1.18 range keeps only the
-    sub-chunks inside it.
-    """
-    try:
-        group = level.bounds(dimension)
-    except Exception:
-        return None
-    try:
-        return int(group.min_y), int(group.max_y)
-    except AttributeError:
-        pass
-    boxes = list(getattr(group, "selection_boxes", []) or [])
-    if not boxes:
-        return None
-    return min(int(b.min_y) for b in boxes), max(int(b.max_y) for b in boxes)
 
 
 def assert_fits(level, y_from: int, y_to: int, dimension: str = DIMENSION) -> str:

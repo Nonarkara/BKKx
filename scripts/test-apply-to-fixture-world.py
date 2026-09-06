@@ -38,6 +38,8 @@ DIMENSION = "minecraft:overworld"
 VERSION = ("java", (1, 21, 4))
 SURFACE = -62          # where Arnis puts these worlds
 GROUND = SURFACE + 1   # the first air block above it
+# A world built in the old frame, used to exercise the pre-1.18 height case.
+SURFACE_SHALLOW = 63
 
 FAILED: list[str] = []
 
@@ -203,7 +205,7 @@ def test_a_world_too_shallow_for_the_plan_is_refused() -> None:
     from amulet_nbt import load as nbt_load  # noqa: PLC0415
 
     with tempfile.TemporaryDirectory() as td:
-        r = build_fixture(Path(td), "w", fixture.hero_bbox(HERO))
+        r = build_fixture(Path(td), "w", fixture.hero_bbox(HERO), surface=SURFACE_SHALLOW)
         tag = nbt_load(str(Path(r["path"]) / "level.dat"))
         dims = tag.compound.get_compound("Data").get_compound("WorldGenSettings").get_compound("dimensions")
         for name in list(dims.keys()):
@@ -221,6 +223,18 @@ def test_a_world_too_shallow_for_the_plan_is_refused() -> None:
             except SystemExit as e:
                 check("assert_fits refuses a plan the world cannot hold",
                       "dropped by the save" in str(e), str(e)[:80])
+
+            # …but the ground under it is still measurable. The probe scans
+            # from the world's own ceiling, not from 319: reading above a
+            # world's declared height raises, and an earlier version read
+            # that as "chunk absent" and refused every column of a perfectly
+            # good old-height world.
+            spans = [s for p in json.loads(hero_applier.PLAN.read_text())["parts"]
+                     if p["heroId"] == HERO for s in p["spans"]]
+            probe = G.probe_ground(level, G.sample_around(spans))
+            check("the probe still measures a world whose ceiling is lower than 319",
+                  probe["missing"] == 0 and probe["surface"] == SURFACE_SHALLOW,
+                  str(probe)[:120])
 
             # And the reason it must: the write is accepted and then lost.
             from amulet.api.block import Block  # noqa: PLC0415
