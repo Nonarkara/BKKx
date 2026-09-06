@@ -166,8 +166,14 @@ plan, and `scripts/test-build-hero-monument-blocks.py` checks it. It:
 5. and refuses any part whose `height_confidence` is missing, so the world
    cannot contain massing the register cannot defend.
 
-The plan today: **67 parts, 78,399 blocks**, ground plane y=64 — the
-same frame the moat surface (y=63) and the gate markers (y=64) already use.
+The plan's current size is whatever
+`python3 scripts/build-hero-monument-blocks.py --summary-only` prints — a
+figure quoted in this sentence went stale within a day of being written, so
+the sentence now quotes the command instead. The plan's ground plane is
+y=64, the frame the moat surface (y=63) and the gate markers (y=64) already
+use; `AUDIT-2026-09-06.md` §4.1 establishes that the generated superflat
+world's ground sits near y=−62, so that frame is wrong for every plan in the
+repository and the applier must probe the world rather than trust it.
 The Phra Mondop comes out as a seven-tier stepped spire alternating gilt and
 green glazed tile, tapering from 2,496 blocks at the body to 16 at the finial.
 That is precisely the form `roof:shape` has no value for, and it fell out of
