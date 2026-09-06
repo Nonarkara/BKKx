@@ -9,8 +9,8 @@
     ]
   },
   "/data/bangkok-rowhouse-footprint-candidates.geojson": {
-    "bytes": 2561479,
-    "sha256": "5835b25cc271eeb4f7f06d9fd7d3c2811683ae482750410d485181cf432ad289",
+    "bytes": 2713657,
+    "sha256": "405f62c591137e8ffd59a5d269d4089cbf569e09daf1c9d56fe97556e9b2b897",
     "features": 2433,
     "kinds": [
       "Polygon"

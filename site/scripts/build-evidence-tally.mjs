@@ -1,10 +1,11 @@
 // Count the atlas's own evidence, so the Evidence-mode legend can state a
 // figure instead of asserting one.
 //
-// Reads the three extruded layers, tallies every `height_source` on the Old
-// Town detail footprints and every `height_confidence` on the hero monument
-// parts, folds them into the tiers defined in app/data/evidence-tiers.ts,
-// and writes app/data/evidence-tally.json.
+// Reads the four extruded layers, tallies every `height_source` on the Old
+// Town detail footprints, every `height_confidence` on the hero monument
+// parts and every `height_basis` on the extruded shophouse candidates, folds
+// them into the tiers defined in app/data/evidence-tiers.ts, and writes
+// app/data/evidence-tally.json.
 //
 // It enforces the contract in the direction that matters: a source value no
 // tier claims FAILS the build. Without that, adding a new height rule to a
@@ -24,6 +25,7 @@ import { fileURLToPath } from "node:url";
 import {
   EVIDENCE_TIERS,
   LANDMARK_TIER,
+  tierForCandidateBasis,
   tierForDetailSource,
   tierForHeroConfidence,
 } from "../app/data/evidence-tiers.ts";
@@ -35,6 +37,7 @@ const out = resolve(here, "../app/data/evidence-tally.json");
 const DETAIL = "/data/bkk-heritage-detail.geojson";
 const HERO = "/data/bkk-hero-monuments.geojson";
 const LANDMARKS = "/data/bkk-landmarks.geojson";
+const CANDIDATES = "/data/bangkok-rowhouse-footprint-candidates.geojson";
 
 function features(file) {
   const parsed = JSON.parse(readFileSync(resolve(pub, `.${file}`), "utf8"));
@@ -66,8 +69,19 @@ const hidden = {
   landmarks: landmarksAll.length - landmarksDrawn.length,
 };
 
+// A candidate standing on a drawn OSM footprint is outlined, not extruded
+// (has_detail_box, set by flag-candidates-over-detail.py), so only the rest
+// are counted — and by height_basis, which the ladder grades.
+const candidatesAll = features(CANDIDATES);
+const candidatesExtruded = candidatesAll.filter((f) => f.properties?.has_detail_box !== true);
+const candidates = {
+  extruded: candidatesExtruded.length,
+  onDetailBox: candidatesAll.length - candidatesExtruded.length,
+};
+
 const detailSources = tally(detailDrawn, "height_source");
 const heroConfidences = tally(features(HERO), "height_confidence");
+const candidateBases = tally(candidatesExtruded, "height_basis");
 const landmarks = landmarksDrawn.length;
 
 // The guard. Every value the data actually contains must be claimed by a
@@ -80,6 +94,9 @@ for (const value of Object.keys(detailSources)) {
 }
 for (const value of Object.keys(heroConfidences)) {
   if (!tierForHeroConfidence(value)) unclaimed.push(`height_confidence=${JSON.stringify(value)}`);
+}
+for (const value of Object.keys(candidateBases)) {
+  if (!tierForCandidateBasis(value)) unclaimed.push(`height_basis=${JSON.stringify(value)}`);
 }
 if (unclaimed.length) {
   console.error(
@@ -95,6 +112,7 @@ if (unclaimed.length) {
 const byTier = Object.fromEntries(EVIDENCE_TIERS.map((t) => [t.tier, 0]));
 for (const [value, n] of Object.entries(detailSources)) byTier[tierForDetailSource(value)] += n;
 for (const [value, n] of Object.entries(heroConfidences)) byTier[tierForHeroConfidence(value)] += n;
+for (const [value, n] of Object.entries(candidateBases)) byTier[tierForCandidateBasis(value)] += n;
 byTier[LANDMARK_TIER] += landmarks;
 
 const total = Object.values(byTier).reduce((a, b) => a + b, 0);
@@ -103,12 +121,14 @@ writeFileSync(
   out,
   JSON.stringify(
     {
-      generatedFrom: [DETAIL, HERO, LANDMARKS],
+      generatedFrom: [DETAIL, HERO, LANDMARKS, CANDIDATES],
       byTier,
       detailSources,
       heroConfidences,
       landmarks,
       hidden,
+      candidateBases,
+      candidates,
       total,
     },
     null,
@@ -119,5 +139,6 @@ writeFileSync(
 console.log(
   `build-evidence-tally: ${total} extruded features · ` +
     EVIDENCE_TIERS.map((t) => `${t.tier} ${byTier[t.tier]}`).join(" · ") +
-    ` · ${hidden.detail + hidden.landmarks} hidden under hero models`,
+    ` · ${hidden.detail + hidden.landmarks} hidden under hero models` +
+    ` · ${candidates.extruded} candidates extruded, ${candidates.onDetailBox} outlined on an OSM footprint`,
 );

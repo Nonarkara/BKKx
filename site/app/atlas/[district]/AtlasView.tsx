@@ -156,6 +156,7 @@ function evidenceMatch(
 
 const EVIDENCE_DETAIL_COLOR = evidenceMatch("height_source", (t) => t.detailSources);
 const EVIDENCE_HERO_COLOR = evidenceMatch("height_confidence", (t) => t.heroConfidences);
+const EVIDENCE_CANDIDATE_COLOR = evidenceMatch("height_basis", (t) => t.candidateBases);
 const EVIDENCE_LANDMARK_COLOR = EVIDENCE_COLOR[LANDMARK_TIER];
 
 // Counted at build time by scripts/build-evidence-tally.mjs over the three
@@ -232,6 +233,9 @@ const EVIDENCE_INFERRED_SHARE = Math.round(
 // scripts/hide-under-heroes.py, filtered out of the detail and landmark
 // layers above, and therefore absent from every count in this legend.
 const EVIDENCE_HIDDEN = EVIDENCE_TALLY.hidden.detail + EVIDENCE_TALLY.hidden.landmarks;
+// The screened shophouses: extruded at statutory storey heights where no OSM
+// footprint stands, outlined only where one does. Counted the same way.
+const EVIDENCE_CANDIDATES = EVIDENCE_TALLY.candidates;
 
 const HERITAGE_LANDMARK_COLOR: maplibregl.ExpressionSpecification = [
   "match",
@@ -520,6 +524,10 @@ type RowhouseCandidate = {
   review_status: string;
   num_floors?: number | null;
   height_m?: number | null;
+  /** Set at build time by scripts/flag-candidates-over-detail.py. */
+  height_basis?: "overture-storeys" | "modal-storeys";
+  has_detail_box?: boolean;
+  detail_box_id?: string;
 };
 
 type ArchitecturalDetail = {
@@ -1587,7 +1595,10 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
               type: "fill-extrusion",
               source: "bkkx-rowhouse-candidates-src",
               minzoom: 13.5,
-              filter: ["==", ["get", "candidate_strength"], "possible morphology"],
+              // A candidate standing on an OSM footprint the atlas draws is
+              // outlined only (has_detail_box, set at build time by
+              // scripts/flag-candidates-over-detail.py): one building, one box.
+              filter: ["all", ["==", ["get", "candidate_strength"], "possible morphology"], ["!=", ["get", "has_detail_box"], true]],
               paint: {
                 "fill-extrusion-color": "#c4a574",
                 "fill-extrusion-height": SHOPHOUSE_CANDIDATE_HEIGHT,
@@ -1601,7 +1612,7 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
               type: "fill-extrusion",
               source: "bkkx-rowhouse-candidates-src",
               minzoom: 13.5,
-              filter: ["==", ["get", "candidate_strength"], "strong morphology"],
+              filter: ["all", ["==", ["get", "candidate_strength"], "strong morphology"], ["!=", ["get", "has_detail_box"], true]],
               paint: {
                 "fill-extrusion-color": "#d4a056",
                 "fill-extrusion-height": SHOPHOUSE_CANDIDATE_HEIGHT,
@@ -1950,24 +1961,27 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
           ? EVIDENCE_HERO_COLOR
           : (["coalesce", ["get", "material_color"], "#f1c75b"] as maplibregl.ExpressionSpecification),
       ],
+      ["bkkx-rowhouse-candidates-possible", evidenceMode ? EVIDENCE_CANDIDATE_COLOR : "#c4a574"],
+      ["bkkx-rowhouse-candidates-strong", evidenceMode ? EVIDENCE_CANDIDATE_COLOR : "#d4a056"],
     ];
     for (const [layerId, color] of repaint) {
       if (map.getLayer(layerId)) map.setPaintProperty(layerId, "fill-extrusion-color", color);
     }
   }, [evidenceMode, mapReady, showArchitecturalDetail]);
 
+  // The candidate massing is 3D massing, so `D` hides it with the rest; the
+  // outline is the candidate screen itself and follows only its own toggle.
   useEffect(() => {
     const map = mapRef.current;
     if (!map || !mapReady) return;
-    const visibility = showRowhouseCandidates ? "visible" : "none";
-    for (const layerId of [
-      "bkkx-rowhouse-candidates-possible",
-      "bkkx-rowhouse-candidates-strong",
-      "bkkx-rowhouse-candidates-outline",
-    ]) {
-      if (map.getLayer(layerId)) map.setLayoutProperty(layerId, "visibility", visibility);
+    const massing = showRowhouseCandidates && showArchitecturalDetail ? "visible" : "none";
+    for (const layerId of ["bkkx-rowhouse-candidates-possible", "bkkx-rowhouse-candidates-strong"]) {
+      if (map.getLayer(layerId)) map.setLayoutProperty(layerId, "visibility", massing);
     }
-  }, [showRowhouseCandidates, mapReady]);
+    if (map.getLayer("bkkx-rowhouse-candidates-outline")) {
+      map.setLayoutProperty("bkkx-rowhouse-candidates-outline", "visibility", showRowhouseCandidates ? "visible" : "none");
+    }
+  }, [showRowhouseCandidates, showArchitecturalDetail, mapReady]);
 
   // Synchronize Zoning Layer visibility
   useEffect(() => {
@@ -2280,6 +2294,11 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
                       {EVIDENCE_HIDDEN} boxes standing under a hero model are hidden and not counted.
                     </>
                   ) : null}
+                  {" "}
+                  {EVIDENCE_CANDIDATES.extruded.toLocaleString("en-US")} screened shophouses are extruded at
+                  statutory storey heights where no OSM footprint stands;{" "}
+                  {EVIDENCE_CANDIDATES.onDetailBox.toLocaleString("en-US")} more stand on one and are
+                  outlined only.
                 </p>
               </div>
             </details>
@@ -2291,6 +2310,7 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
               {showArchitecturalDetail && !evidenceMode ? <span><i className="key-building key-fabric" />Old Town full footprints</span> : null}
               {showArchitecturalDetail && !evidenceMode ? <span><i className="key-building key-landmark" />Curated landmark massing</span> : null}
               {showArchitecturalDetail && !evidenceMode ? <span><i className="key-building key-hero" />Evidence-labelled hero model</span> : null}
+              {showArchitecturalDetail && showRowhouseCandidates && !evidenceMode ? <span><i className="key-building key-candidate" />Screened shophouses · statutory storeys</span> : null}
               {showPoi.oldtown ? <span><i className="key-line key-rowhouse" />Documented rowhouse</span> : null}
               {showPoi.oldtown ? <span><i className="key-line key-rowhouse key-dashed" />Interpretive corridor</span> : null}
               {showCameras ? (
@@ -2534,7 +2554,7 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
                   </button>
                 </div>
                 <small className="control-source-note">
-                  Old Town 3D: {HERITAGE_DETAIL_COUNT.toLocaleString()} full-resolution OSM footprints + {HERITAGE_LANDMARK_PART_COUNT} curated landmark parts + {HERO_MONUMENT_PART_COUNT} hero parts across Wat Arun, Wat Phra Kaew, Wat Pho, Loha Prasat, the palace prasats and the Golden Mount.
+                  Old Town 3D: {HERITAGE_DETAIL_COUNT.toLocaleString()} full-resolution OSM footprints + {HERITAGE_LANDMARK_PART_COUNT} curated landmark parts + {HERO_MONUMENT_PART_COUNT} hero parts across Wat Arun, Wat Phra Kaew, Wat Pho, Loha Prasat, the palace prasats and the Golden Mount, with the {EVIDENCE_HIDDEN} boxes the hero models replace hidden; {EVIDENCE_CANDIDATES.extruded.toLocaleString()} screened shophouses extruded at statutory storey heights where no OSM footprint stands, {EVIDENCE_CANDIDATES.onDetailBox.toLocaleString()} outlined only where one does.
                   {" "}{HERITAGE_DETAIL_NOTE}{" "}
                   Conservation geometry is off by default and illustrative. {BKK_URBAN_ZONING_NOTE}
                   {" "}{HERITAGE_MOBILITY_NOTE} NASA aerosol is a dated regional optical-depth
@@ -2819,6 +2839,14 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
                   {selectedCandidate.num_floors
                     ? `${selectedCandidate.num_floors} (Overture)`
                     : "2 (modal default)"}
+                </strong>
+              </div>
+              <div>
+                <span>Drawn as</span>
+                <strong>
+                  {selectedCandidate.has_detail_box
+                    ? `outline only — OSM footprint ${selectedCandidate.detail_box_id ?? ""} is extruded here`
+                    : "statutory storey height"}
                 </strong>
               </div>
             </div>

@@ -2,13 +2,15 @@
   "generatedFrom": [
     "/data/bkk-heritage-detail.geojson",
     "/data/bkk-hero-monuments.geojson",
-    "/data/bkk-landmarks.geojson"
+    "/data/bkk-landmarks.geojson",
+    "/data/bangkok-rowhouse-footprint-candidates.geojson"
   ],
   "byTier": {
     "official": 7,
     "measured": 5987,
     "curated": 132,
-    "inferred": 3286
+    "typological": 243,
+    "inferred": 4308
   },
   "detailSources": {
     "override-id": 7,
@@ -32,5 +34,13 @@
     "detail": 12,
     "landmarks": 12
   },
-  "total": 9412
+  "candidateBases": {
+    "modal-storeys": 1022,
+    "overture-storeys": 243
+  },
+  "candidates": {
+    "extruded": 1265,
+    "onDetailBox": 1168
+  },
+  "total": 10677
 }

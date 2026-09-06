@@ -146,9 +146,12 @@ def test_hidden_boxes_are_not_counted_as_evidence() -> None:
     drawn_detail = len(layers["detail"]) - hidden["detail"]
     drawn_landmarks = len(layers["landmarks"]) - hidden["landmarks"]
     heroes = len(json.loads(H.HERO.read_text(encoding="utf-8"))["features"])
-    check("the tally's total is drawn detail + drawn landmarks + hero parts",
-          tally["total"] == drawn_detail + drawn_landmarks + heroes,
-          f"total={tally['total']} expected={drawn_detail + drawn_landmarks + heroes}")
+    # The fourth extruded layer, the screened shophouses, is counted where it
+    # is extruded; test-flag-candidates-over-detail.py checks that half.
+    candidates = tally.get("candidates", {}).get("extruded", 0)
+    check("the tally's total is drawn detail + drawn landmarks + hero parts + extruded candidates",
+          tally["total"] == drawn_detail + drawn_landmarks + heroes + candidates,
+          f"total={tally['total']} expected={drawn_detail + drawn_landmarks + heroes + candidates}")
 
 
 def main() -> int:

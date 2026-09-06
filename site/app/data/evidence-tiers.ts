@@ -2,7 +2,8 @@
  *
  * Every extruded building in /atlas/* carries a record of where its height
  * came from — `height_source` on the 9,275 Old Town footprints,
- * `height_confidence` on the hero monument parts. Until Evidence mode
+ * `height_confidence` on the hero monument parts, `height_basis` on the
+ * screened shophouse candidates. Until Evidence mode
  * that record was readable one building at a time, in the inspector card,
  * which made the honest answer to "how much of this city is actually
  * measured?" a nine-thousand-click question.
@@ -24,7 +25,7 @@
  * evidence. A build that stops is better than a map that lies.
  */
 
-export type EvidenceTier = "official" | "measured" | "curated" | "inferred";
+export type EvidenceTier = "official" | "measured" | "curated" | "typological" | "inferred";
 
 /* An ordinal ramp on the atlas's dark ground: bright where someone recorded
  * a real dimension, drab where the model inferred one from a building tag.
@@ -36,6 +37,7 @@ export const EVIDENCE_COLOR: Record<EvidenceTier, string> = {
   official: "#8fe3f2",
   measured: "#4fb0cd",
   curated: "#2f7b96",
+  typological: "#3d6577",
   inferred: "#4d5a63",
 };
 
@@ -47,6 +49,10 @@ export type EvidenceTierSpec = {
   detailSources: readonly string[];
   /** `height_confidence` values on bkk-hero-monuments.geojson that land here. */
   heroConfidences: readonly string[];
+  /** `height_basis` values on the screened shophouse candidates
+   *  (bangkok-rowhouse-footprint-candidates.geojson, written by
+   *  scripts/flag-candidates-over-detail.py) that land here. */
+  candidateBases: readonly string[];
 };
 
 /** Strongest evidence first. The legend renders in this order. */
@@ -58,6 +64,7 @@ export const EVIDENCE_TIERS: readonly EvidenceTierSpec[] = [
       "An official figure — the Fine Arts Department's own published height for the structure.",
     detailSources: [],
     heroConfidences: ["official-envelope"],
+    candidateBases: [],
   },
   {
     tier: "measured",
@@ -66,6 +73,7 @@ export const EVIDENCE_TIERS: readonly EvidenceTierSpec[] = [
       "Somebody recorded a height for this specific building and published it. Checkable by anyone.",
     detailSources: ["osm"],
     heroConfidences: [],
+    candidateBases: [],
   },
   {
     tier: "curated",
@@ -74,6 +82,16 @@ export const EVIDENCE_TIERS: readonly EvidenceTierSpec[] = [
       "BKKx set the height from knowledge of this building or its Thai type — chedi, viharn, ubosot, prasat, throne hall, mondop — or a per-building override.",
     detailSources: ["override-id", "chedi", "throne", "viharn", "ubosot", "prasat", "mondop"],
     heroConfidences: ["interpretive-proportion"],
+    candidateBases: [],
+  },
+  {
+    tier: "typological",
+    label: "Statutory storeys",
+    meaning:
+      "A storey count recorded for this specific building in Overture, converted at the legal minimum storey height (MR55 ข้อ 22(4): 3.5 m ground floor, 3 m per floor above). The count is checkable; the height is a formula.",
+    detailSources: [],
+    heroConfidences: [],
+    candidateBases: ["overture-storeys"],
   },
   {
     tier: "inferred",
@@ -82,6 +100,9 @@ export const EVIDENCE_TIERS: readonly EvidenceTierSpec[] = [
       "No height was recorded anywhere. The model took a default for the tag — house, commercial, terrace — so the silhouette is plausible and the number is not evidence.",
     detailSources: ["type-default", "clamped"],
     heroConfidences: ["interpretive-envelope"],
+    // The two-storey default the fabric takes where Overture records no
+    // floor count: the modal known value, not a fact about this building.
+    candidateBases: ["modal-storeys"],
   },
 ] as const;
 
@@ -105,6 +126,11 @@ export function tierForHeroConfidence(value: string): EvidenceTier | null {
   return EVIDENCE_TIERS.find((t) => t.heroConfidences.includes(value))?.tier ?? null;
 }
 
+/** Tier for a candidate's `height_basis`, or null when no tier claims the value. */
+export function tierForCandidateBasis(value: string): EvidenceTier | null {
+  return EVIDENCE_TIERS.find((t) => t.candidateBases.includes(value))?.tier ?? null;
+}
+
 /** Shape of app/data/evidence-tally.json, written by build-evidence-tally.mjs. */
 export type EvidenceTally = {
   generatedFrom: string[];
@@ -118,5 +144,10 @@ export type EvidenceTally = {
   /** Features flagged hide_3d by scripts/hide-under-heroes.py: standing under
    *  a hero model, not drawn, and so not counted above. */
   hidden: { detail: number; landmarks: number };
+  /** Raw `height_basis` counts over the candidates that are extruded. */
+  candidateBases: Record<string, number>;
+  /** Screened shophouse candidates: extruded where no OSM footprint stands,
+   *  outlined only where one does (has_detail_box, set at build time). */
+  candidates: { extruded: number; onDetailBox: number };
   total: number;
 };

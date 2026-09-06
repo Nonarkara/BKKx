@@ -138,8 +138,12 @@ def main(argv: list[str]) -> int:
         print(f"\nverify: {total_occluded} hero part(s) are invisible behind a drawn box — "
               "run site/scripts/hide-under-heroes.py")
         return 1
+    if verify and b["still_double_extruded"]:
+        print(f"\nverify: {b['still_double_extruded']} candidate(s) are extruded through a drawn OSM box — "
+              "run site/scripts/flag-candidates-over-detail.py")
+        return 1
     if verify:
-        print("\nverify: every hero part clears every drawn box")
+        print("\nverify: every hero part clears every drawn box; no candidate is extruded through one")
     return 0
 
 

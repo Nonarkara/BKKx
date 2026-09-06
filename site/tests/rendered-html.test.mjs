@@ -1621,7 +1621,7 @@ test("locatedBy is parsed into something a reader can check, not printed raw", a
  * ---------------------------------------------------------------- */
 
 test("the evidence tally is computed from the layers and every tier is claimed", async () => {
-  const { EVIDENCE_TIERS, tierForDetailSource, tierForHeroConfidence } = await import(
+  const { EVIDENCE_TIERS, tierForCandidateBasis, tierForDetailSource, tierForHeroConfidence } = await import(
     "../app/data/evidence-tiers.ts"
   );
   const tally = (await import("../app/data/evidence-tally.json", { with: { type: "json" } })).default;
@@ -1639,10 +1639,25 @@ test("the evidence tally is computed from the layers and every tier is claimed",
   for (const value of Object.keys(tally.heroConfidences)) {
     assert.ok(tierForHeroConfidence(value), `no tier claims height_confidence=${value}`);
   }
+  for (const value of Object.keys(tally.candidateBases)) {
+    assert.ok(tierForCandidateBasis(value), `no tier claims height_basis=${value}`);
+  }
+
+  // The screened shophouses are counted only where they are extruded, and
+  // the two halves add up to the whole screen.
+  assert.equal(
+    Object.values(tally.candidateBases).reduce((a, b) => a + b, 0),
+    tally.candidates.extruded,
+    "candidate bases must sum to the extruded candidates",
+  );
+  assert.ok(tally.candidates.onDetailBox > 0, "some candidates stand on an OSM footprint and are outlined only");
+  // Boxes hidden under hero models are not extruded and so not counted.
+  assert.equal(tally.hidden.detail + tally.hidden.landmarks, 24);
 
   // The point of the mode: a real, non-trivial share of the city is inferred.
   assert.ok(tally.byTier.inferred > 0, "if nothing were inferred the mode would have no subject");
-  assert.equal(EVIDENCE_TIERS.length, 4);
+  assert.ok(tally.byTier.typological > 0, "the statutory-storeys tier has a subject");
+  assert.equal(EVIDENCE_TIERS.length, 5);
 });
 
 test("the selected language is readable — the toggle never paints label on ground", async () => {
