@@ -45,7 +45,6 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 PLAN = ROOT / "site/public/data/bkk-shophouse-fabric-blocks.json"
-REGISTER = ROOT / "site/public/heritage-register.json"
 
 _spec = importlib.util.spec_from_file_location("mc_ground", ROOT / "scripts/mc_ground.py")
 mc_ground = importlib.util.module_from_spec(_spec)
@@ -82,15 +81,11 @@ def select(plan: dict, clusters: list[str] | None, min_conf: str | None) -> list
     return keep
 
 
-def world_columns(world_id: str) -> list[tuple[int, int]]:
-    world = json.loads(REGISTER.read_text(encoding="utf-8"))["worlds"][world_id]
-    return mc_ground.sample_columns(world["blocks"]["maxX"], world["blocks"]["maxZ"])
-
-
 def rebase_plan(plan: dict, buildings: list[dict], level, override: int | None, probe: bool) -> tuple[int, str]:
     """Move the selected buildings onto the world's real ground. Returns (ground, how)."""
     ground, how = mc_ground.resolve_ground(
-        plan["groundY"], level, override, probe, world_columns(plan["world"]) if level is not None else []
+        plan["groundY"], level, override, probe,
+        mc_ground.sample_around([s for b in buildings for key in ("spans", "partyWalls", "firewalls") for s in (b.get(key) or [])]) if level is not None else [],
     )
     mc_ground.rebase(buildings, ground - plan["groundY"])
     plan["groundY"] = ground
@@ -129,12 +124,16 @@ def _set(level, x: int, y: int, z: int, block, dry_run: bool) -> bool:
         return False
 
 
-def apply(level, buildings: list[dict], plan: dict, dry_run: bool) -> tuple[int, int, int]:
+def apply(level, buildings: list[dict], plan: dict, dry_run: bool) -> tuple[int, int, int, list]:
     from amulet.api.block import Block  # noqa: PLC0415 — lazy so --dry-run needs no amulet
 
     ground = plan["groundY"]
     air = Block("minecraft", "air")
     cleared = written = failed = 0
+    # Each cell mapped to the LAST block intended there, so the read-back
+    # after the save compares against the final state rather than against a
+    # course some later pass legitimately covered.
+    writes: dict[tuple[int, int, int], str] = {}
 
     for b in buildings:
         body = Block(*b["block"].split(":", 1))
@@ -148,16 +147,19 @@ def apply(level, buildings: list[dict], plan: dict, dry_run: bool) -> tuple[int,
             for y in range(ground, top + 1):
                 if _set(level, x, y, z, air, dry_run):
                     cleared += 1
+                    writes[(x, y, z)] = "minecraft:air"
                 else:
                     failed += 1
 
         def fill(spans, block, y_from, y_to):
             nonlocal written, failed
+            name = f"{block.namespace}:{block.base_name}"
             for z, a, end in spans:
                 for x in range(a, end + 1):
                     for y in range(y_from, y_to + 1):
                         if _set(level, x, y, z, block, dry_run):
                             written += 1
+                            writes[(x, y, z)] = name
                         else:
                             failed += 1
 
@@ -181,7 +183,7 @@ def apply(level, buildings: list[dict], plan: dict, dry_run: bool) -> tuple[int,
         awning_y = b["yFrom"] + gf - 1
         fill(b.get("awning") or [], awning_block, awning_y, awning_y)
 
-    return cleared, written, failed
+    return cleared, written, failed, writes
 
 
 def main() -> int:
@@ -238,14 +240,32 @@ def main() -> int:
     try:
         ground, how = rebase_plan(plan, buildings, level, args.ground_y, probe=not args.no_probe)
         print(f"ground: {how}")
-        cleared, written, failed = apply(level, buildings, plan, dry_run=False)
+        tops = [b["yTo"] + (1 if b["firewalls"] else 0) for b in buildings]
+        print(mc_ground.assert_fits(level, min(b["yFrom"] for b in buildings), max(tops)))
+        cleared, written, failed, writes = apply(level, buildings, plan, dry_run=False)
         level.save()
     finally:
         level.close()
 
-    print(f"\ncleared {cleared:,} · wrote {written:,} · failed {failed:,}")
+    print(f"\ncleared {cleared:,} · wrote {written:,} · failed {failed:,} "
+          f"· {len(writes):,} distinct cells")
     if failed:
         print("failed writes are ungenerated chunks — the world is smaller than the plan.")
+
+    # The counts above are calls that did not raise. This reopens the world
+    # and reads a sample of them back, which is the only step that knows
+    # whether the save reached the disk.
+    level = amulet.load_level(args.world)
+    try:
+        v = mc_ground.verify_written(level, mc_ground.sample_writes(writes))
+    finally:
+        level.close()
+    print(f"verified {v['ok']}/{v['sampled']} sampled blocks on disk "
+          f"(wrong {v['wrong']}, missing {v['missing']})")
+    if v["ok"] != v["sampled"]:
+        print(f"  first mismatch: {v['firstBad']}")
+        print("  the world does not contain what was written — do not ship this save.")
+        return 1
     return 0
 
 

@@ -46,6 +46,39 @@ def sample_columns(max_x: int, max_z: int, per_axis: int = 8) -> list[tuple[int,
     return [(x, z) for x in xs for z in zs]
 
 
+def sample_around(spans: list, margin: int = 6, per_axis: int = 9) -> list[tuple[int, int]]:
+    """Columns to probe for the ground a plan will stand on.
+
+    A grid over the plan's own bounding box, dilated by `margin`, with the
+    plan's footprints themselves removed. Two reasons not to sample the
+    footprints: whatever the generator already put there — the boxy
+    extrusion the applier is about to clear — is standing on them, and it is
+    the ground BESIDE a monument, the street it fronts, that the monument
+    should sit on.
+
+    And two reasons not to sample the whole world, which is what this did
+    first: a partially generated world has no chunks at its far corner, so
+    the probe refused a world it could have measured; and on a real city the
+    ground under the Grand Palace is the only ground that matters to the
+    Grand Palace.
+    """
+    occupied = {(x, z) for z, a, b in spans for x in range(a, b + 1)}
+    xs = [x for _, a, b in spans for x in (a, b)]
+    zs = [z for z, _, _ in spans]
+    if not xs:
+        return []
+    x0, x1 = min(xs) - margin, max(xs) + margin
+    z0, z1 = min(zs) - margin, max(zs) + margin
+    out = []
+    for i in range(per_axis):
+        for j in range(per_axis):
+            x = x0 + round((x1 - x0) * i / max(1, per_axis - 1))
+            z = z0 + round((z1 - z0) * j / max(1, per_axis - 1))
+            if (x, z) not in occupied:
+                out.append((x, z))
+    return out
+
+
 def block_name(level, x: int, y: int, z: int) -> str | None:
     """The block's base name at (x, y, z), or None when the chunk is absent.
 
@@ -125,6 +158,95 @@ def rebase(items: list[dict], delta: int, keys: tuple[str, ...] = ("yFrom", "yTo
             if key in item:
                 item[key] += delta
     return len(items)
+
+
+def world_bounds(level, dimension: str = DIMENSION) -> tuple[int, int] | None:
+    """The world's declared (min_y, max_y), or None if it will not say.
+
+    Read from level.dat, not from the chunks: it is what amulet's save path
+    obeys, and a world that declares the pre-1.18 range keeps only the
+    sub-chunks inside it.
+    """
+    try:
+        group = level.bounds(dimension)
+    except Exception:
+        return None
+    try:
+        return int(group.min_y), int(group.max_y)
+    except AttributeError:
+        pass
+    boxes = list(getattr(group, "selection_boxes", []) or [])
+    if not boxes:
+        return None
+    return min(int(b.min_y) for b in boxes), max(int(b.max_y) for b in boxes)
+
+
+def assert_fits(level, y_from: int, y_to: int, dimension: str = DIMENSION) -> str:
+    """Refuse a plan the world cannot hold. Returns the line to print.
+
+    THE FAILURE THIS PREVENTS. amulet's `set_version_block` succeeds for a y
+    outside the world's declared height — the block goes into the in-memory
+    chunk, `save()` drops the sub-chunk, and the applier reports every block
+    written while the world receives none. Measured, not supposed: a world
+    whose level.dat does not declare its height falls back to y=0..256, and
+    writes at y=-61 vanish on save with no error anywhere
+    (AUDIT-2026-09-06.md, disposition).
+
+    So the plan's range is checked against the declared bounds before a
+    single block is written, and a world that cannot hold it is refused
+    rather than half-built.
+    """
+    bounds = world_bounds(level, dimension)
+    if bounds is None:
+        return f"world bounds: not declared — writing y {y_from}..{y_to} unchecked"
+    lo, hi = bounds
+    if y_from < lo or y_to >= hi:
+        raise SystemExit(
+            f"the plan spans y {y_from}..{y_to}, the world declares y {lo}..{hi - 1}.\n"
+            "Blocks outside a world's declared height are accepted by the API and "
+            "dropped by the save, so this would report success and write nothing.\n"
+            "Either the world is the wrong one, or its level.dat does not declare its "
+            "height (see scripts/make-fixture-world.py, fix_level_dat)."
+        )
+    return f"world bounds: y {lo}..{hi - 1} — the plan's y {y_from}..{y_to} fits"
+
+
+def sample_writes(writes: dict[tuple[int, int, int], str], want: int = 240) -> list[tuple[int, int, int, str]]:
+    """An evenly spread, deterministic sample of the plan's FINAL intended state.
+
+    A dict keyed by cell, not a list of calls, because the appliers write some
+    cells more than once by design — a party wall over a body, a roof course
+    over the top of it, glass punched into a window, air punched into a
+    shopfront. Checking a cell against the first thing written there fails on
+    every one of those, which is what the first version of this did: it
+    reported 53 of 240 wrong on a world that was correct.
+    """
+    cells = sorted(writes.items())
+    if len(cells) > want:
+        step = len(cells) / want
+        cells = [cells[int(i * step)] for i in range(want)]
+    return [(x, y, z, name) for (x, y, z), name in cells]
+
+
+def verify_written(level, samples: list[tuple[int, int, int, str]], dimension: str = DIMENSION) -> dict:
+    """Read sampled blocks back and count how many are what the plan said.
+
+    Call it on a level opened AFTER the save: reading the level that did the
+    writing proves only that they reached memory.
+    """
+    ok = wrong = missing = 0
+    first_bad = None
+    for x, y, z, expected in samples:
+        name = block_name(level, x, y, z)
+        if name is None:
+            missing += 1
+            first_bad = first_bad or (x, y, z, expected, "chunk absent")
+        elif name == expected.split(":", 1)[-1]:
+            ok += 1
+        else:
+            wrong += 1
+            first_bad = first_bad or (x, y, z, expected, name)
+    return {"sampled": len(samples), "ok": ok, "wrong": wrong, "missing": missing, "firstBad": first_bad}
 
 
 def resolve_ground(plan_ground: int, level, override: int | None, probe: bool, columns) -> tuple[int, str]:

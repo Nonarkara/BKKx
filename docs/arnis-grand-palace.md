@@ -244,13 +244,64 @@ running your fork gets the monuments automatically.
 
 ---
 
-## 6. What this note does not establish
+## 6. Running it, and knowing that it ran
 
-- **Nothing here was run.** `arnismc.com`, `live.iticfoundation.org` and
+`worlds/` holds manifests, not saves, so for a long time there was no world in
+this repository to write into and the appliers had never been executed against
+one at all — every test checked the arithmetic that produces a plan, which is
+a different claim from *the blocks are in a world*.
+
+`scripts/make-fixture-world.py` closes that. It builds a small superflat world
+in this repository's own block frame — Java 1.21.4, surface at y=−62 where
+Arnis puts these worlds, chunks only over the footprint you ask for. A
+monument's fixture is four chunks and about 110 KB:
+
+```
+python3 scripts/make-fixture-world.py --out /tmp/w --hero grand-palace-siratana-chedi
+python3 scripts/apply-hero-monuments-to-world.py --world /tmp/w --hero grand-palace-siratana-chedi
+```
+
+which prints, in this order, the three things that used to be assumed:
+
+```
+ground: probed: surface y=-62 in 100% of 60 sampled columns (0 missing)
+        -> ground plane y=-61; plan said -61
+world bounds: y -64..319 — the plan's y -61..-20 fits
+cleared 11,046 · wrote 3,374 · failed 0 · 11,046 distinct cells
+verified 240/240 sampled blocks on disk (wrong 0, missing 0)
+```
+
+**The ground is measured, not assumed.** The applier probes the columns
+*around* the plan — not the whole world, whose far corner may be ungenerated,
+and not the footprint itself, where whatever the generator already built is
+standing — takes the modal surface, and re-bases every y onto it.
+
+**The world is checked before it is written.** A plan outside the world's
+declared height is refused. This is not caution for its own sake: amulet
+*accepts* a write outside those bounds and drops the sub-chunk on save, so
+without the check the applier reports every block written into a world that
+receives none. A world whose `level.dat` does not declare its height reads as
+the pre-1.18 y=0..255, and at y=−61 that is every block.
+
+**The blocks are read back.** After saving, the applier reopens the world and
+reads a 240-block sample: a count of API calls that did not raise is not
+evidence that a world contains anything. `scripts/test-apply-to-fixture-world.py`
+does the same in CI and additionally reads the Siratana Chedi's profile out of
+the world to check it tapers — 195, 151, 100, 60, 17, 4, 1 blocks per course,
+plinth to finial, standing on the stone.
+
+---
+
+## 7. What this note does not establish
+
+- **No Arnis build was run.** `arnismc.com`, `live.iticfoundation.org` and
   `youtube.com` are all blocked by this environment's egress proxy; the source
-  and wiki were read through the git proxy instead. No Arnis build was
-  executed and no world was generated, so the flags above are read from
-  `src/args.rs`, not observed.
+  and wiki were read through the git proxy instead. The flags above are read
+  from `src/args.rs`, not observed, and no Arnis-generated world exists here.
+  §6's fixture world is built by this repository to the frame the manifest
+  records — it is the right shape to test against, and it is not the real
+  world. The first write into the real save should still be one monument, and
+  somebody should stand next to it.
 - **Bedrock output is claimed by the README, not tested here.**
 - **The `.schem` authoring workflow is unexamined.** `landmarks.rs` documents
   the placement fields precisely, but how the four bundled Munich schematics

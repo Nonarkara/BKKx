@@ -58,3 +58,16 @@ jobs:
           python3 scripts/apply-hero-monuments-to-world.py --dry-run --min-confidence official-envelope
           python3 scripts/apply-shophouse-fabric-to-world.py --dry-run
           python3 scripts/apply-shophouse-fabric-to-world.py --dry-run --min-confidence overture-storeys
+      # Everything above checks a plan. This builds a world, writes the plan
+      # into it, closes it, reopens it and reads the blocks back — the only
+      # step that knows whether the pipeline puts anything in a world at all.
+      # It never ran before: the appliers had never been executed against a
+      # world, here or anywhere (AUDIT-2026-09-06.md, disposition).
+      # amulet-core is the Minecraft save library; shapely is the moat
+      # geometry. Both are wheels, both install in seconds.
+      - name: world pipeline writes
+        working-directory: .
+        run: |
+          python3 -m pip install --quiet amulet-core==1.9.45 shapely
+          python3 scripts/test-apply-to-fixture-world.py
+          python3 scripts/test-apply-rattanakosin-to-world.py

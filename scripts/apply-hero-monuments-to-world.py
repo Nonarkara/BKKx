@@ -60,7 +60,6 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 PLAN = ROOT / "site/public/data/bkk-hero-monument-blocks.json"
-REGISTER = ROOT / "site/public/heritage-register.json"
 
 _spec = importlib.util.spec_from_file_location("mc_ground", ROOT / "scripts/mc_ground.py")
 mc_ground = importlib.util.module_from_spec(_spec)
@@ -100,16 +99,11 @@ def dilate(columns: set[tuple[int, int]], skirt: int) -> set[tuple[int, int]]:
     return out
 
 
-def world_columns(world_id: str) -> list[tuple[int, int]]:
-    """Sample columns across the world the plan was projected into."""
-    world = json.loads(REGISTER.read_text(encoding="utf-8"))["worlds"][world_id]
-    return mc_ground.sample_columns(world["blocks"]["maxX"], world["blocks"]["maxZ"])
-
-
 def rebase_plan(plan: dict, parts: list[dict], level, override: int | None, probe: bool) -> tuple[int, str]:
     """Move the selected parts onto the world's real ground. Returns (ground, how)."""
     ground, how = mc_ground.resolve_ground(
-        plan["groundY"], level, override, probe, world_columns(plan["world"]) if level is not None else []
+        plan["groundY"], level, override, probe,
+        mc_ground.sample_around([s for p in parts for s in p["spans"]]) if level is not None else [],
     )
     mc_ground.rebase(parts, ground - plan["groundY"])
     plan["groundY"] = ground
@@ -155,13 +149,16 @@ def report(plan: dict, parts: list[dict], skirt: int) -> dict:
     }
 
 
-def apply(level, parts: list[dict], plan: dict, skirt: int, dry_run: bool) -> tuple[int, int, int]:
+def apply(level, parts: list[dict], plan: dict, skirt: int, dry_run: bool) -> tuple[int, int, int, list]:
     """Clear each hero's columns, then write its parts bottom-up.
 
-    Returns (cleared, written, failed). A failed write is a chunk that is not
-    generated — the world is smaller than the plan — and is counted rather
-    than raised, so one monument outside the generated area does not abort
-    the other seven.
+    Returns (cleared, written, failed, writes). A failed write is a chunk
+    that is not generated — the world is smaller than the plan — and is
+    counted rather than raised, so one monument outside the generated area
+    does not abort the other seven. `writes` maps each cell to the LAST block
+    this intended to leave there — the clears included, so the read-back also
+    proves the crate around a monument really was emptied. A count of calls
+    that returned True is not evidence that a world contains blocks.
     """
     from amulet.api.block import Block  # noqa: PLC0415 — lazy so --dry-run needs no amulet
 
@@ -173,6 +170,7 @@ def apply(level, parts: list[dict], plan: dict, skirt: int, dry_run: bool) -> tu
         by_hero.setdefault(part["heroId"], []).append(part)
 
     cleared = written = failed = 0
+    writes: dict[tuple[int, int, int], str] = {}
     for hero_id, hero_parts in sorted(by_hero.items()):
         top = max(p["yTo"] for p in hero_parts)
         columns = dilate(set().union(*(columns_of(p) for p in hero_parts)), skirt)
@@ -181,6 +179,7 @@ def apply(level, parts: list[dict], plan: dict, skirt: int, dry_run: bool) -> tu
             for y in range(ground, top + 1):
                 if _set(level, x, y, z, air, dry_run):
                     cleared += 1
+                    writes[(x, y, z)] = "minecraft:air"
 
         # Bottom-up, so a taller part never writes into a lower one's space
         # before that space has been cleared.
@@ -192,11 +191,12 @@ def apply(level, parts: list[dict], plan: dict, skirt: int, dry_run: bool) -> tu
                     for y in range(part["yFrom"], part["yTo"] + 1):
                         if _set(level, x, y, z, block, dry_run):
                             written += 1
+                            writes[(x, y, z)] = part["block"]
                         else:
                             failed += 1
         print(f"  {hero_id}: {len(hero_parts)} parts to y={top}")
 
-    return cleared, written, failed
+    return cleared, written, failed, writes
 
 
 def _set(level, x: int, y: int, z: int, block, dry_run: bool) -> bool:
@@ -267,14 +267,31 @@ def main() -> int:
     try:
         ground, how = rebase_plan(plan, parts, level, args.ground_y, probe=not args.no_probe)
         print(f"ground: {how}")
-        cleared, written, failed = apply(level, parts, plan, args.skirt, dry_run=False)
+        print(mc_ground.assert_fits(level, min(p["yFrom"] for p in parts), max(p["yTo"] for p in parts)))
+        cleared, written, failed, writes = apply(level, parts, plan, args.skirt, dry_run=False)
         level.save()
     finally:
         level.close()
 
-    print(f"\ncleared {cleared:,} · wrote {written:,} · failed {failed:,}")
+    print(f"\ncleared {cleared:,} · wrote {written:,} · failed {failed:,} "
+          f"· {len(writes):,} distinct cells")
     if failed:
         print("failed writes are ungenerated chunks — the world is smaller than the plan.")
+
+    # Read the blocks back out of a reopened world. Everything above counts
+    # calls that did not raise; this is the only step that knows whether the
+    # save put anything on disk.
+    level = amulet.load_level(args.world)
+    try:
+        v = mc_ground.verify_written(level, mc_ground.sample_writes(writes))
+    finally:
+        level.close()
+    print(f"verified {v['ok']}/{v['sampled']} sampled blocks on disk "
+          f"(wrong {v['wrong']}, missing {v['missing']})")
+    if v["ok"] != v["sampled"]:
+        print(f"  first mismatch: {v['firstBad']}")
+        print("  the world does not contain what was written — do not ship this save.")
+        return 1
     return 0
 
 
