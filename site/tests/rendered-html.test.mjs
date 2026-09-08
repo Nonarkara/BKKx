@@ -134,6 +134,7 @@ test("limits Old Town context layers to Historic Core", async () => {
   assert.match(html, /Public transport/);
   assert.match(html, /Map key/);
   assert.match(html, /Candidates\s*\(/);
+  assert.match(html, /Live cams/);
   assert.match(html, /orientation only/i);
 });
 
@@ -178,6 +179,10 @@ test("serves the 3D map heritage atlas as the front door", async () => {
   // register moved to /heritage.
   assert.match(html, /block by block/);
   assert.match(html, /application\/ld\+json/);
+  // Compact live strip: clock + war-room cams, not a three-line tagline.
+  assert.match(html, /atlas-live-strip/);
+  assert.match(html, /href="\/warroom"/);
+  assert.match(html, /href="\/datasets"/);
 });
 
 test("every quarter photo URL resolves (page.tsx must use the photo slot, not the slug)", async () => {
@@ -1435,14 +1440,15 @@ test("curated cameras render as facades and never leak to Google on load", async
 });
 
 test("a placeholder camera carries a nominal marker but never a claimed place", async () => {
-  // Three cameras arrived with zero identifying evidence. Per an explicit
+  // Three cameras arrived with zero identifying evidence, and a fourth
+  // names only "Sukhumvit Road" which is too long to locate. Per an explicit
   // operator decision they are pinned at a shared, clearly-nominal marker
   // rather than left without a coordinate — but that marker must never be
   // mistaken for evidence: no place name, no district, and the reasoning
   // must say plainly that it is a stand-in.
   const { CURATED_CAMERAS, isLocated } = await import("../app/data/cctv-cameras.ts");
   const placeholders = CURATED_CAMERAS.filter((c) => c.precision === "placeholder");
-  assert.equal(placeholders.length, 3, "three cameras were supplied with no identifying evidence");
+  assert.equal(placeholders.length, 4, "four cameras were supplied with no identifying evidence");
 
   const markers = new Set(placeholders.map((c) => `${c.lat},${c.lon}`));
   assert.equal(markers.size, 1, "placeholder cameras must share one nominal marker, never distinct invented positions");

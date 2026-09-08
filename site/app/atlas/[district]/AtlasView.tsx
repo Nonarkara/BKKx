@@ -5,6 +5,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type maplibregl from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
 import type { Stop, World } from "../../walkthrough-data";
+import type { Camera } from "../../../worker/live";
 import {
   FINEARTS_HERITAGE_SITES,
   FINEARTS_HERITAGE_SOURCE,
@@ -35,6 +36,13 @@ import {
   type EvidenceTier,
 } from "../../data/evidence-tiers";
 import EVIDENCE_TALLY_JSON from "../../data/evidence-tally.json";
+import {
+  CURATED_CAMERAS,
+  embedFor,
+  isLocated,
+  posterFor,
+  type CuratedCamera,
+} from "../../data/cctv-cameras";
 
 // The walks that geographically belong to Historic Core — everything except
 // bang-krachao-loop, a disconnected bike loop far south of the old town.
@@ -139,6 +147,69 @@ function evidenceMatch(
 const EVIDENCE_DETAIL_COLOR = evidenceMatch("height_source", (t) => t.detailSources);
 const EVIDENCE_HERO_COLOR = evidenceMatch("height_confidence", (t) => t.heroConfidences);
 const EVIDENCE_LANDMARK_COLOR = EVIDENCE_COLOR[LANDMARK_TIER];
+
+/* ------------------------------------------------------------------ *
+ * LIVE CAMERAS ON THE MAP
+ *
+ * The war room already carries a camera rail, but a rail cannot answer
+ * "what is the nearest live view of this building" — that is a question
+ * about geography, and it belongs on the map.
+ *
+ * Two sources feed one layer. The curated streams in
+ * app/data/cctv-cameras.ts are hand-entered and evidence-located; the rest
+ * arrive at runtime from /api/live/cctv, which proxies the operator's CCTV
+ * registry (the iTIC / Longdo network) once CCTV_SOURCE_URL or
+ * LONGDO_API_KEY is set on the Worker. Until then that half is empty and
+ * the layer says so rather than implying the city has six cameras in it.
+ *
+ * ONE RULE, INHERITED FROM THE REGISTER: a camera whose position is a
+ * placeholder never gets a marker. Streams that share one nominal Bangkok
+ * coordinate so their tiles are not pinless stay in the rail; drawing that
+ * on a map would put several pins on a spot where no camera is.
+ *
+ * Embed vs standalone: the homepage iframe (embed=1) opens with cameras
+ * on — that surface's job is the living city. The operator atlas still
+ * starts with the city, and the layer is a question you ask of it (V).
+ * ------------------------------------------------------------------ */
+
+type AtlasCamera = {
+  id: string;
+  name: string;
+  lat: number;
+  lon: number;
+  district: string | null;
+  place: string | null;
+  /** How the position was established — shown, never hidden. */
+  locatedBy: string;
+  precision: string;
+  /** Set for a YouTube stream we may embed on demand. */
+  videoId: string | null;
+  /** Where a human can watch it at full size. */
+  pageUrl: string | null;
+  /** A still the operator's own registry offers, if any. */
+  snapshotUrl: string | null;
+  attribution: string | null;
+  origin: "curated" | "registry";
+};
+
+const CURATED_ATLAS_CAMERAS: AtlasCamera[] = CURATED_CAMERAS.filter(
+  (c): c is CuratedCamera & { lat: number; lon: number } =>
+    isLocated(c) && typeof c.lat === "number" && typeof c.lon === "number",
+).map((c) => ({
+  id: c.id,
+  name: c.title,
+  lat: c.lat,
+  lon: c.lon,
+  district: c.district,
+  place: c.place,
+  locatedBy: c.locatedBy,
+  precision: c.precision,
+  videoId: c.kind === "youtube" ? c.videoId : null,
+  pageUrl: c.sourceUrl,
+  snapshotUrl: null,
+  attribution: null,
+  origin: "curated" as const,
+}));
 
 // Counted at build time by scripts/build-evidence-tally.mjs over the three
 // extruded layers — never typed by hand, and the build fails if the corpus
@@ -600,6 +671,14 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
   // established. Off by default: the city should look like a city first.
   const [evidenceMode, setEvidenceMode] = useState(false);
   const [showRowhouseCandidates, setShowRowhouseCandidates] = useState(false);
+  // Live cameras. On in embed (the homepage's job is the living city);
+  // off on the operator atlas until asked. Shortcut: V.
+  const [showCameras, setShowCameras] = useState(Boolean(embedded));
+  const [registryCameras, setRegistryCameras] = useState<AtlasCamera[] | null>(null);
+  const [cameraFeedReason, setCameraFeedReason] = useState<string | null>(null);
+  const [selectedCamera, setSelectedCamera] = useState<AtlasCamera | null>(null);
+  const [cameraPlaying, setCameraPlaying] = useState(false);
+  const cameraMarkerRefs = useRef<maplibregl.Marker[]>([]);
   const [selectedHeritage, setSelectedHeritage] = useState<HeritageSite | null>(null);
   const [selectedArchitecture, setSelectedArchitecture] = useState<ArchitecturalDetail | null>(null);
   const [selectedCandidate, setSelectedCandidate] = useState<RowhouseCandidate | null>(null);
@@ -637,6 +716,14 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
     if (showArchitecturalDetail) setSelectedArchitecture(null);
     setShowArchitecturalDetail((visible) => !visible);
   }
+
+  const toggleCameras = useCallback(() => {
+    if (showCameras) {
+      setSelectedCamera(null);
+      setCameraPlaying(false);
+    }
+    setShowCameras((visible) => !visible);
+  }, [showCameras]);
 
   // Where the selected part sits on the evidence ladder. Hero parts carry
   // height_confidence, Old Town footprints carry height_source, and the 73
@@ -865,16 +952,21 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
         case "a": case "A": setShowAerosol((v) => !v); break;
         case "d": case "D": setShowArchitecturalDetail((v) => !v); break;
         case "e": case "E": setEvidenceMode((v) => !v); break;
+        case "v": case "V": toggleCameras(); break;
         case "r": case "R": setShowRowhouseCandidates((v) => !v); break;
         case "c": case "C": copyViewLink(); break;
         case "?": setShowShortcuts((v) => !v); break;
-        case "Escape": setShowShortcuts(false); break;
+        case "Escape":
+          setShowShortcuts(false);
+          setSelectedCamera(null);
+          setCameraPlaying(false);
+          break;
         default: return;
       }
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [copyViewLink]);
+  }, [copyViewLink, toggleCameras]);
 
   useEffect(() => {
     if (!containerRef.current) return;
@@ -1191,6 +1283,8 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
               setSelectedPoi(null);
               setSelectedCandidate(null);
               setSelectedMobility(null);
+              setSelectedCamera(null);
+              setCameraPlaying(false);
             };
             for (const layerId of ["bkkx-heritage-landmarks", "bkkx-hero-monuments"]) {
               map.on("click", layerId, inspectArchitecture);
@@ -1349,6 +1443,8 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
               setSelectedHeritage(null);
               setSelectedCandidate(null);
               setSelectedArchitecture(null);
+              setSelectedCamera(null);
+              setCameraPlaying(false);
             };
             const inspectMobilityStop = (event: maplibregl.MapLayerMouseEvent) => {
               const id = event.features?.[0]?.properties?.id as string | undefined;
@@ -1358,6 +1454,8 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
               setSelectedHeritage(null);
               setSelectedCandidate(null);
               setSelectedArchitecture(null);
+              setSelectedCamera(null);
+              setCameraPlaying(false);
             };
             for (const layerId of ["bkkx-mobility-rail", "bkkx-mobility-boat", "bkkx-mobility-ferry"]) {
               map.on("click", layerId, inspectMobilityService);
@@ -1462,6 +1560,8 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
               setSelectedPoi(feature);
               setSelectedMobility(null);
               setSelectedArchitecture(null);
+              setSelectedCamera(null);
+              setCameraPlaying(false);
               map.flyTo({ center: feature.geometry.coordinates, zoom: 16.7, pitch: 60, speed: 0.8, essential: true });
             };
             for (const layerId of ["bkkx-rowhouse-fabric-solid", "bkkx-rowhouse-fabric-inferred"]) {
@@ -1518,6 +1618,8 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
               setSelectedHeritage(null);
               setSelectedMobility(null);
               setSelectedArchitecture(null);
+              setSelectedCamera(null);
+              setCameraPlaying(false);
             };
             for (const layerId of ["bkkx-rowhouse-candidates-possible", "bkkx-rowhouse-candidates-strong"]) {
               map.on("click", layerId, inspectCandidate);
@@ -1573,6 +1675,8 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
             setSelectedPoi(null);
             setSelectedCandidate(null);
             setSelectedArchitecture(null);
+            setSelectedCamera(null);
+            setCameraPlaying(false);
             map.flyTo({
               center: site.coordinates,
               zoom: 17.2,
@@ -1604,6 +1708,8 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
       markerRefs.current = [];
       heritageMarkerRefs.current.forEach((marker) => marker.remove());
       heritageMarkerRefs.current = [];
+      cameraMarkerRefs.current.forEach((marker) => marker.remove());
+      cameraMarkerRefs.current = [];
       // Clean up POI markers on map teardown
       for (const kind of Object.keys(poiMarkerSnapshot) as PoiKind[]) {
         poiMarkerSnapshot[kind].forEach((m) => m.remove());
@@ -1649,6 +1755,8 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
           setSelectedPoi(feat);
           setSelectedMobility(null);
           setSelectedArchitecture(null);
+          setSelectedCamera(null);
+          setCameraPlaying(false);
           map.flyTo({
             center: feat.geometry.coordinates as [number, number],
             zoom: 16.4,
@@ -1664,6 +1772,110 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
       }
     }
   }, [showPoi, poiData, mapReady]);
+
+  // The registry half, fetched once the layer is first opened. Nothing is
+  // requested while the layer is off — a map that quietly polls a camera
+  // network nobody asked to see is not a map, it is a tracker. The homepage
+  // embed opens with the layer on, so that fetch runs on first paint there.
+  useEffect(() => {
+    if (!showCameras || registryCameras !== null) return;
+    let cancelled = false;
+    void (async () => {
+      try {
+        const res = await fetch("/api/live/cctv", { headers: { accept: "application/json" } });
+        const env = (await res.json()) as {
+          ok: boolean;
+          reason?: string;
+          data?: { cameras: Camera[]; configured: boolean };
+        };
+        if (cancelled) return;
+        if (!env.ok || !env.data) {
+          setRegistryCameras([]);
+          setCameraFeedReason(env.reason ?? "The camera registry did not answer.");
+          return;
+        }
+        if (!env.data.configured) {
+          setRegistryCameras([]);
+          setCameraFeedReason(
+            "No CCTV registry is configured on this deployment, so only the curated streams appear. Setting CCTV_SOURCE_URL or LONGDO_API_KEY on the Worker fills this layer with the operator's own network.",
+          );
+          return;
+        }
+        setRegistryCameras(
+          env.data.cameras
+            .filter((c): c is Camera & { lat: number; lon: number } =>
+              typeof c.lat === "number" && typeof c.lon === "number")
+            .map((c) => ({
+              id: `registry-${c.id}`,
+              name: c.name,
+              lat: c.lat,
+              lon: c.lon,
+              district: c.district,
+              place: null,
+              locatedBy: "published by the operator's own camera registry",
+              precision: "registry",
+              videoId: null,
+              pageUrl: c.pageUrl,
+              snapshotUrl: c.snapshotUrl,
+              attribution: c.attribution,
+              origin: "registry" as const,
+            })),
+        );
+        setCameraFeedReason(null);
+      } catch (err) {
+        if (cancelled) return;
+        setRegistryCameras([]);
+        setCameraFeedReason(`Could not reach this site's own camera endpoint: ${(err as Error).message}`);
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [showCameras, registryCameras]);
+
+  const atlasCameras = useMemo(
+    () => [...CURATED_ATLAS_CAMERAS, ...(registryCameras ?? [])],
+    [registryCameras],
+  );
+
+  // Camera markers. A Marker is a DOM overlay that needs neither the style
+  // nor a single tile — so gating on mapReady would blank the layer whenever
+  // the basemap CDN is slow, which is exactly when an operator most wants to
+  // know where the live views are. mapReady stays in the deps so the layer
+  // still rebuilds when the map finishes loading.
+  useEffect(() => {
+    const map = mapRef.current;
+    const maplibregl = maplibreModuleRef.current;
+    if (!map || !maplibregl) return;
+
+    cameraMarkerRefs.current.forEach((m) => m.remove());
+    cameraMarkerRefs.current = [];
+    if (!showCameras) return;
+
+    for (const cam of atlasCameras) {
+      const el = document.createElement("button");
+      el.type = "button";
+      el.className = `bkkx-cam-marker is-${cam.origin}`;
+      el.setAttribute("aria-label", `Live camera: ${cam.name}`);
+      el.title = cam.place ?? cam.name;
+      el.innerHTML = '<span class="cam-dot" aria-hidden="true"></span><span class="cam-pulse" aria-hidden="true"></span>';
+      el.addEventListener("click", (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        setSelectedCamera(cam);
+        setCameraPlaying(false);
+        setSelectedPoi(null);
+        setSelectedMobility(null);
+        setSelectedArchitecture(null);
+        setSelectedHeritage(null);
+        setSelectedCandidate(null);
+        map.flyTo({ center: [cam.lon, cam.lat], zoom: 16.6, pitch: 60, speed: 0.8, essential: true });
+      });
+      cameraMarkerRefs.current.push(
+        new maplibregl.Marker({ element: el, anchor: "center" }).setLngLat([cam.lon, cam.lat]).addTo(map),
+      );
+    }
+  }, [showCameras, atlasCameras, mapReady]);
 
   // Keep the corridor geometry and its point markers under one toggle.
   useEffect(() => {
@@ -1993,6 +2205,15 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
             >
               🏛 Register {FINEARTS_HERITAGE_SITES.length}
             </button>
+            <button
+              type="button"
+              className={showCameras ? "active camera-active" : ""}
+              onClick={toggleCameras}
+              aria-pressed={showCameras}
+              title="Live cameras with a confirmed position. Placeholder-located streams stay in the war room rail, off the map. Shortcut: V"
+            >
+              ◉ Live {CURATED_ATLAS_CAMERAS.length}
+            </button>
             <details className="atlas-embed-more">
               <summary>More layers +</summary>
               <div>
@@ -2069,6 +2290,15 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
               {showAerosol ? <span><i className="key-aerosol" />Satellite aerosol depth</span> : null}
               {selectedWalkSlug ? <span><i className="key-line key-walk" />Selected walk</span> : null}
               {showZoning ? <span><i className="key-area" />Illustrative conservation context</span> : null}
+              {showCameras ? (
+                <span>
+                  <i className="key-cam" />
+                  Live cameras <b>{atlasCameras.length}</b>
+                </span>
+              ) : null}
+              {showCameras && cameraFeedReason ? (
+                <p className="atlas-cam-note">{cameraFeedReason}</p>
+              ) : null}
             </div>
           </details>
           )}
@@ -2106,6 +2336,7 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
               <div><dt>A</dt><dd>Satellite aerosol</dd></div>
               <div><dt>D</dt><dd>Old Town 3D detail</dd></div>
               <div><dt>E</dt><dd>Evidence mode</dd></div>
+              <div><dt>V</dt><dd>Live cameras</dd></div>
               <div><dt>R</dt><dd>Rowhouse candidates</dd></div>
               <div><dt>C</dt><dd>Copy citable view link</dd></div>
               <div><dt>?</dt><dd>This card</dd></div>
@@ -2280,6 +2511,16 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
                   >
                     ◫ Candidates ({ROWHOUSE_CANDIDATE_SUMMARY.candidate_count.toLocaleString()})
                   </button>
+                  <button
+                    type="button"
+                    onClick={toggleCameras}
+                    className={`layer-toggle-btn camera-toggle ${showCameras ? "active" : ""}`}
+                    aria-pressed={showCameras}
+                    aria-label="Toggle live camera positions"
+                    title="Live cameras with a confirmed position. Shortcut: V"
+                  >
+                    ◉ Live cams
+                  </button>
                 </div>
                 <small className="control-source-note">
                   Old Town 3D: {HERITAGE_DETAIL_COUNT.toLocaleString()} full-resolution OSM footprints + {HERITAGE_LANDMARK_PART_COUNT} curated landmark parts + {HERO_MONUMENT_PART_COUNT} hero parts across Wat Arun, Wat Phra Kaew and Wat Pho.
@@ -2402,6 +2643,89 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
             </div>
           );
         })()}
+
+        {selectedCamera && (
+          <div
+            className="heritage-inspector-card camera-inspector-card"
+            role="dialog"
+            aria-modal="false"
+            aria-label={`Live camera: ${selectedCamera.name}`}
+          >
+            <div className="heritage-card-header">
+              <div className="heritage-badge-group">
+                <span className="heritage-reg-badge is-live">● LIVE</span>
+                <span className="heritage-era-badge">{selectedCamera.precision}</span>
+              </div>
+              <button
+                type="button"
+                className="heritage-close-btn"
+                onClick={() => {
+                  setSelectedCamera(null);
+                  setCameraPlaying(false);
+                }}
+                aria-label="Close camera"
+              >
+                ✕
+              </button>
+            </div>
+            <h4>{selectedCamera.name}</h4>
+            {selectedCamera.place ? <p className="heritage-desc">{selectedCamera.place}</p> : null}
+
+            <div className="cam-stage">
+              {cameraPlaying && selectedCamera.videoId ? (
+                <iframe
+                  src={embedFor(selectedCamera.videoId)}
+                  title={selectedCamera.name}
+                  allow="autoplay; encrypted-media; picture-in-picture"
+                  allowFullScreen
+                />
+              ) : selectedCamera.videoId ? (
+                <button
+                  type="button"
+                  className="cam-play"
+                  onClick={() => setCameraPlaying(true)}
+                  aria-label={`Play ${selectedCamera.name}`}
+                >
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={posterFor(selectedCamera.videoId)} alt="" loading="lazy" />
+                  <span className="cam-play-glyph" aria-hidden="true">▶</span>
+                  <span className="cam-play-note">press to play · nothing loads until you do</span>
+                </button>
+              ) : selectedCamera.snapshotUrl ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img src={selectedCamera.snapshotUrl} alt={selectedCamera.name} loading="lazy" />
+              ) : (
+                <p className="cam-nostream">
+                  {selectedCamera.origin === "curated"
+                    ? "This operator does not licence their player for embedding, so the stream opens on their own page rather than here."
+                    : "This registry entry publishes a position but no stream this page can embed."}
+                  {selectedCamera.pageUrl ? " The link below goes straight to it." : ""}
+                </p>
+              )}
+            </div>
+
+            <div className="heritage-meta-grid">
+              <div>
+                <span>District</span>
+                <strong lang="th">{selectedCamera.district ?? "not recorded"}</strong>
+              </div>
+              <div>
+                <span>Source</span>
+                <strong>{selectedCamera.origin === "curated" ? "curated stream" : "camera registry"}</strong>
+              </div>
+            </div>
+            <p className="heritage-source-note">
+              {selectedCamera.locatedBy}
+              <br />
+              {selectedCamera.attribution ? <>{selectedCamera.attribution}<br /></> : null}
+              {selectedCamera.pageUrl ? (
+                <a href={selectedCamera.pageUrl} target="_blank" rel="noreferrer">
+                  Watch at the source ↗
+                </a>
+              ) : null}
+            </p>
+          </div>
+        )}
 
         {hasHistoricContext && selectedArchitecture && (
           <div className="heritage-inspector-card architecture-inspector-card" role="dialog" aria-modal="false" aria-label={`Architectural detail: ${selectedArchitecture.name_en ?? selectedArchitecture.name ?? "Old Town landmark"}`}>

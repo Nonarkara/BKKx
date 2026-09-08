@@ -748,8 +748,8 @@ button {
   display: grid;
   grid-template-columns: auto 1fr auto;
   align-items: center;
-  gap: 24px;
-  padding: 18px clamp(20px, 3vw, 48px);
+  gap: 16px;
+  padding: 8px clamp(12px, 2vw, 28px);
   background: rgba(17, 18, 15, 0.88);
   border-bottom: 1px solid rgba(255, 255, 255, 0.16);
   backdrop-filter: blur(8px);
@@ -772,7 +772,7 @@ button {
 
 .atlas-header-meta strong {
   font-family: var(--font-display);
-  font-size: clamp(20px, 2vw, 28px);
+  font-size: clamp(16px, 1.6vw, 22px);
   font-weight: 800;
   letter-spacing: -0.05em;
 }
@@ -1094,13 +1094,13 @@ button {
 .atlas-embed-tools a {
   display: inline-flex;
   align-items: center;
-  min-height: 34px;
-  padding: 0 10px;
+  min-height: 28px;
+  padding: 0 8px;
   border: 0;
   border-right: 1px solid rgba(255, 255, 255, 0.15);
   background: transparent;
   color: inherit;
-  font: 700 9px/1 var(--font-mono);
+  font: 700 8px/1 var(--font-mono);
   letter-spacing: 0.04em;
   text-decoration: none;
   white-space: nowrap;
@@ -1124,8 +1124,8 @@ button {
 .atlas-embed-more > summary {
   display: inline-flex;
   align-items: center;
-  min-height: 34px;
-  padding: 0 10px;
+  min-height: 28px;
+  padding: 0 8px;
   cursor: pointer;
   list-style: none;
   color: inherit;
@@ -3290,8 +3290,8 @@ button {
   justify-content: space-between;
   align-items: center;
   flex-wrap: wrap;
-  gap: 16px;
-  padding: 12px 24px;
+  gap: 8px 14px;
+  padding: 6px 14px;
   border-bottom: 1px solid var(--ink);
   background: var(--paper-strong);
 }
@@ -3299,39 +3299,44 @@ button {
 .atlas-shell-masthead-meta {
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 1px;
   min-width: 0;
-  flex: 1 1 300px;
+  flex: 1 1 220px;
+}
+.atlas-shell-masthead-meta .register-eyebrow {
+  margin: 0;
+  font-size: 9px;
+  letter-spacing: 0.12em;
 }
 .atlas-shell-masthead-meta strong {
   font-family: var(--font-display);
-  font-size: 21px;
-  line-height: 1.15;
+  font-size: 16px;
+  line-height: 1.1;
   letter-spacing: -0.01em;
   color: var(--ink);
   white-space: nowrap;
 }
 .atlas-shell-masthead-meta small {
   font-family: var(--font-body);
-  font-size: 13px;
-  line-height: 1.4;
+  font-size: 12px;
+  line-height: 1.3;
   color: var(--quiet, rgba(17, 18, 15, 0.72));
 }
 
 .atlas-shell-nav {
   display: flex;
-  gap: 20px;
+  gap: 12px;
   align-items: center;
   flex-wrap: wrap;
 }
 .atlas-shell-nav a {
   font-family: var(--font-body);
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 600;
   color: var(--ink);
   text-decoration: none;
   border-bottom: 1.5px solid transparent;
-  padding: 4px 0;
+  padding: 2px 0;
 }
 .atlas-shell-nav a:hover {
   border-bottom-color: var(--ink);
@@ -3339,7 +3344,7 @@ button {
 
 .atlas-shell-body {
   display: grid;
-  grid-template-columns: clamp(400px, 30vw, 480px) 1fr;
+  grid-template-columns: clamp(300px, 26vw, 360px) 1fr;
   min-height: 0;
   overflow: hidden;
 }
@@ -3348,10 +3353,10 @@ button {
   overflow-y: auto;
   border-right: 1px solid var(--ink);
   background: var(--paper);
-  padding: 14px 18px 32px;
+  padding: 8px 10px 16px;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 8px;
 }
 
 .atlas-shell-rail-tabs {
@@ -3359,16 +3364,16 @@ button {
   grid-template-columns: 1fr 1fr;
   border: 1.5px solid var(--ink);
   flex: 0 0 auto;
-  border-radius: 4px;
+  border-radius: 3px;
   overflow: hidden;
 }
 
 .atlas-shell-rail-tabs button {
-  min-height: 36px;
+  min-height: 28px;
   border: 0;
   background: transparent;
   color: var(--ink);
-  font: 700 11px/1 var(--font-mono);
+  font: 700 10px/1 var(--font-mono);
   letter-spacing: 0.06em;
   text-transform: uppercase;
   cursor: pointer;
@@ -3390,7 +3395,7 @@ button {
 .atlas-shell-quarters-title {
   margin: 0;
   font-family: var(--font-display);
-  font-size: 20px;
+  font-size: 15px;
   font-weight: 800;
   letter-spacing: -0.01em;
   line-height: 1.15;
@@ -3419,18 +3424,18 @@ button {
 .atlas-shell-quarter-chips li:last-child { border-bottom: 0; }
 .atlas-shell-quarter-chips button {
   display: grid;
-  grid-template-columns: 64px minmax(0, 1fr);
+  grid-template-columns: 44px minmax(0, 1fr);
   align-items: start;
-  column-gap: 12px;
+  column-gap: 8px;
   width: 100%;
   text-align: left;
   background: transparent;
   border: 0;
-  padding: 12px 0;
+  padding: 7px 0;
   font-family: var(--font-body);
   color: var(--ink);
   cursor: pointer;
-  min-height: 96px;
+  min-height: 56px;
   position: relative;
   transition: background 80ms linear;
 }
@@ -3439,9 +3444,9 @@ button {
      pseudo-element so the layout doesn't shift on selection */
   content: "";
   position: absolute;
-  left: -20px;
-  top: 12px;
-  bottom: 12px;
+  left: -12px;
+  top: 7px;
+  bottom: 7px;
   width: 3px;
   background: transparent;
   transition: background 80ms linear;
@@ -3453,8 +3458,8 @@ button {
 
 .atlas-shell-quarter-thumb {
   display: block;
-  width: 64px;
-  height: 64px;
+  width: 44px;
+  height: 44px;
   background-color: rgba(17, 18, 15, 0.08);
   background-size: cover;
   background-position: center;
@@ -3484,9 +3489,9 @@ button {
 }
 .atlas-shell-quarter-name {
   display: block;
-  font-size: 15px;
+  font-size: 13px;
   font-weight: 700;
-  line-height: 1.25;
+  line-height: 1.2;
   color: inherit;
   white-space: nowrap;
   overflow: hidden;
@@ -3534,10 +3539,10 @@ button {
 .atlas-shell-oldtown {
   display: flex;
   flex-direction: column;
-  gap: 5px;
-  padding-bottom: 6px;
+  gap: 4px;
+  padding-bottom: 4px;
   border-bottom: 1px solid rgba(17, 18, 15, 0.18);
-  margin-bottom: 4px;
+  margin-bottom: 0;
 }
 
 .atlas-shell-oldtown-heading {
@@ -3549,23 +3554,23 @@ button {
 
 .atlas-shell-oldtown-heading .register-eyebrow { margin-bottom: 3px; }
 .atlas-shell-oldtown-heading > strong {
-  font: 700 24px/1 var(--font-display);
+  font: 700 18px/1 var(--font-mono);
   color: var(--seal, #8c2f23);
 }
 
 .atlas-shell-oldtown-title {
   margin: 0;
   font-family: var(--font-display);
-  font-size: 18px;
+  font-size: 15px;
   line-height: 1.1;
   letter-spacing: -0.01em;
 }
 
 .atlas-shell-oldtown-lede {
-  margin: 0 0 4px 0;
+  margin: 0 0 2px 0;
   font-family: var(--font-body);
-  font-size: 11px;
-  line-height: 1.45;
+  font-size: 10.5px;
+  line-height: 1.35;
   color: rgba(17, 18, 15, 0.65);
 }
 
@@ -3575,7 +3580,7 @@ button {
   padding: 0;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 4px;
 }
 
 .atlas-shell-oldtown-cards li {
@@ -3584,15 +3589,15 @@ button {
 
 .atlas-shell-oldtown-cards button {
   display: grid;
-  grid-template-columns: 64px minmax(0, 1fr);
+  grid-template-columns: 48px minmax(0, 1fr);
   align-items: start;
-  column-gap: 12px;
+  column-gap: 8px;
   width: 100%;
   text-align: left;
   background: var(--paper-strong);
   border: 1px solid rgba(17, 18, 15, 0.15);
-  border-radius: 5px;
-  padding: 10px 12px;
+  border-radius: 3px;
+  padding: 6px 8px;
   font-family: var(--font-body);
   color: var(--ink);
   cursor: pointer;
@@ -3612,12 +3617,12 @@ button {
 
 .atlas-shell-oldtown-photo {
   display: block;
-  width: 64px;
-  height: 52px;
+  width: 48px;
+  height: 40px;
   background-color: rgba(17, 18, 15, 0.08);
   background-size: cover;
   background-position: center;
-  border-radius: 3px;
+  border-radius: 2px;
   border: 1px solid rgba(17, 18, 15, 0.2);
 }
 
@@ -3630,9 +3635,9 @@ button {
 
 .atlas-shell-oldtown-name {
   display: block;
-  font-size: 14px;
+  font-size: 12.5px;
   font-weight: 700;
-  line-height: 1.25;
+  line-height: 1.2;
   color: inherit;
 }
 .atlas-shell-oldtown-name small {
@@ -3645,12 +3650,12 @@ button {
 
 .atlas-shell-oldtown-callout {
   display: block;
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 600;
-  line-height: 1.35;
+  line-height: 1.3;
   font-family: var(--font-body);
   color: var(--seal, #8c2f23);
-  margin-top: 1px;
+  margin-top: 0;
 }
 .atlas-shell-oldtown-cards button.is-active .atlas-shell-oldtown-callout {
   color: var(--signal);
@@ -3667,14 +3672,13 @@ button {
 }
 
 .atlas-shell-oldtown-note {
-  display: block;
-  font-size: 10.5px;
-  line-height: 1.4;
+  display: -webkit-box;
+  font-size: 10px;
+  line-height: 1.35;
   color: rgba(17, 18, 15, 0.72);
   font-family: var(--font-body);
-  margin-top: 2px;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
+  margin-top: 1px;
+  -webkit-line-clamp: 1;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
@@ -6659,7 +6663,7 @@ body:has(.sh-figexport) { background: #fff !important; }
   --wr-crit: #e0533d;
 
   min-height: 100vh;
-  padding: 0 clamp(14px, 2.4vw, 30px) 70px;
+  padding: 0 clamp(10px, 1.8vw, 22px) 48px;
   background: var(--wr-ground);
   color: var(--wr-ink);
   font-family: var(--font-body);
@@ -6670,31 +6674,31 @@ body:has(.sh-figexport) { background: #fff !important; }
 .wr-masthead {
   display: flex;
   flex-wrap: wrap;
-  gap: 20px 40px;
+  gap: 10px 24px;
   align-items: flex-end;
   justify-content: space-between;
-  padding: 34px 0 24px;
+  padding: 16px 0 12px;
   border-bottom: 1px solid var(--wr-line-hi);
 }
 .wr-eyebrow {
-  margin: 0 0 8px;
+  margin: 0 0 4px;
   font-family: var(--font-mono);
-  font-size: 10px;
+  font-size: 9px;
   letter-spacing: .18em;
   text-transform: uppercase;
   color: var(--signal);
 }
 .warroom h1 {
-  margin: 0 0 8px;
-  font-size: clamp(28px, 4vw, 40px);
+  margin: 0 0 4px;
+  font-size: clamp(22px, 3.2vw, 32px);
   font-weight: 700;
   letter-spacing: -.025em;
   line-height: 1;
 }
-.wr-dek { margin: 0; max-width: 56ch; font-size: 14.5px; line-height: 1.55; color: var(--wr-quiet); }
+.wr-dek { margin: 0; max-width: 62ch; font-size: 12.5px; line-height: 1.4; color: var(--wr-quiet); }
 
-.wr-clock { display: flex; flex-direction: column; align-items: flex-end; gap: 2px; font-family: var(--font-mono); }
-.wr-clock-time { font-size: clamp(26px, 4vw, 36px); font-weight: 700; color: var(--signal); font-variant-numeric: tabular-nums; line-height: 1; }
+.wr-clock { display: flex; flex-direction: column; align-items: flex-end; gap: 1px; font-family: var(--font-mono); }
+.wr-clock-time { font-size: clamp(22px, 3.2vw, 30px); font-weight: 700; color: var(--signal); font-variant-numeric: tabular-nums; line-height: 1; }
 .wr-clock-zone { font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: var(--wr-quiet); }
 .wr-clock-build { font-size: 10px; color: var(--wr-faint); }
 .wr-clock-build b { color: var(--wr-quiet); font-weight: 400; }
@@ -6702,17 +6706,17 @@ body:has(.sh-figexport) { background: #fff !important; }
 /* ---- tallies ---- */
 .wr-tallies {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(128px, 1fr));
   gap: 1px;
-  margin: 22px 0;
+  margin: 12px 0;
   background: var(--wr-line);
   border: 1px solid var(--wr-line);
 }
-.wr-tally { background: var(--wr-panel); padding: 14px 16px 16px; }
+.wr-tally { background: var(--wr-panel); padding: 8px 10px 10px; }
 .wr-tally-value {
   margin: 0;
   font-family: var(--font-mono);
-  font-size: clamp(24px, 3.2vw, 32px);
+  font-size: clamp(18px, 2.4vw, 26px);
   font-weight: 700;
   line-height: 1;
   font-variant-numeric: tabular-nums;
@@ -6721,14 +6725,14 @@ body:has(.sh-figexport) { background: #fff !important; }
 .wr-tally.is-signal .wr-tally-value { color: var(--signal); }
 .wr-tally.is-warn .wr-tally-value { color: var(--wr-warn); }
 .wr-tally-unit { font-size: .5em; font-weight: 400; color: var(--wr-quiet); margin-left: 5px; letter-spacing: 0; }
-.wr-tally-label { margin: 7px 0 0; font-size: 11px; letter-spacing: .07em; text-transform: uppercase; color: var(--wr-quiet); }
-.wr-tally-sub { margin: 3px 0 0; font-size: 11.5px; color: var(--wr-faint); }
+.wr-tally-label { margin: 4px 0 0; font-size: 10px; letter-spacing: .07em; text-transform: uppercase; color: var(--wr-quiet); }
+.wr-tally-sub { margin: 2px 0 0; font-size: 10.5px; color: var(--wr-faint); }
 
 /* ---- panels ---- */
-.wr-grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 14px; margin-bottom: 14px; }
-.wr-panel { background: var(--wr-panel); border: 1px solid var(--wr-line); padding: 16px 18px 20px; }
-.wr-panel-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px 14px; margin-bottom: 14px; padding-bottom: 10px; border-bottom: 1px solid var(--wr-line); }
-.wr-panel-head h2 { margin: 0; font-size: 15px; font-weight: 700; letter-spacing: -.01em; flex: 1 1 auto; }
+.wr-grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 8px; margin-bottom: 8px; }
+.wr-panel { background: var(--wr-panel); border: 1px solid var(--wr-line); padding: 10px 12px 12px; }
+.wr-panel-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 12px; margin-bottom: 8px; padding-bottom: 6px; border-bottom: 1px solid var(--wr-line); }
+.wr-panel-head h2 { margin: 0; font-size: 13px; font-weight: 700; letter-spacing: -.01em; flex: 1 1 auto; }
 .wr-panel-meta { font-family: var(--font-mono); font-size: 10.5px; color: var(--wr-faint); }
 .wr-panel-note { margin: 12px 0 0; font-size: 12.5px; line-height: 1.6; color: var(--wr-quiet); }
 .wr-panel-note code { font-family: var(--font-mono); font-size: 11.5px; color: var(--wr-ink); background: var(--wr-sunk); padding: 1px 5px; border: 1px solid var(--wr-line); }
@@ -6806,20 +6810,20 @@ body:has(.sh-figexport) { background: #fff !important; }
 .wr-rain-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 1px; background: var(--wr-line); border: 1px solid var(--wr-line); }
 
 /* ---- camera rail: one line ---- */
-.wr-cctv { margin-bottom: 14px; }
+.wr-cctv { margin-bottom: 8px; }
 .wr-rail-nav { display: flex; gap: 5px; }
 .wr-rail {
   display: flex;
   align-items: flex-start; /* a tile whose picker is open must not stretch its siblings */
-  gap: 10px;
+  gap: 6px;
   overflow-x: auto;
-  padding-bottom: 6px;
+  padding-bottom: 4px;
   scroll-snap-type: x proximity;
 }
-.wr-cam { flex: 0 0 232px; margin: 0; scroll-snap-align: start; background: var(--wr-sunk); border: 1px solid var(--wr-line); }
-.wr-cam img { display: block; width: 100%; height: 130px; object-fit: cover; background: var(--wr-sunk); }
+.wr-cam { flex: 0 0 196px; margin: 0; scroll-snap-align: start; background: var(--wr-sunk); border: 1px solid var(--wr-line); }
+.wr-cam img { display: block; width: 100%; height: 110px; object-fit: cover; background: var(--wr-sunk); }
 .wr-cam img.is-broken { visibility: hidden; }
-.wr-cam-nosnap { height: 130px; display: grid; place-items: center; font-family: var(--font-mono); font-size: 10px; letter-spacing: .06em; color: var(--wr-faint); }
+.wr-cam-nosnap { height: 110px; display: grid; place-items: center; font-family: var(--font-mono); font-size: 10px; letter-spacing: .06em; color: var(--wr-faint); }
 .wr-cam figcaption { padding: 7px 9px 9px; display: flex; flex-direction: column; gap: 2px; }
 .wr-cam figcaption b { font-size: 12px; font-weight: 600; line-height: 1.25; }
 .wr-cam figcaption small { font-size: 10.5px; color: var(--wr-faint); }
@@ -7326,4 +7330,195 @@ body:has(.sh-figexport) { background: #fff !important; }
   font-size: 12.5px;
   line-height: 1.5;
   overflow-wrap: anywhere;
+}
+
+/* ==================================================================
+   Front-door live strip
+   ------------------------------------------------------------------
+   One line in the Editorial masthead: Bangkok time, a temperature or an
+   honest blank, PM2.5 when the air feed answers, and a count of cameras
+   with a confirmed position. Alarm red is reserved for live state.
+   ================================================================== */
+
+.atlas-live-strip {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 6px 10px;
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  line-height: 1.2;
+  color: var(--ink);
+}
+.atlas-live-clock {
+  font-size: 18px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.04em;
+  line-height: 1;
+}
+.atlas-live-zone {
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(17, 18, 15, 0.5);
+}
+.atlas-live-wx,
+.atlas-live-pm {
+  font-variant-numeric: tabular-nums;
+  color: rgba(17, 18, 15, 0.72);
+}
+.atlas-live-wx.is-live { color: var(--ink); font-weight: 700; }
+.atlas-live-wx.is-down { color: #8c2f23; }
+.atlas-live-cams {
+  color: #8c2f23;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  font-size: 10px;
+  border-bottom: 1px solid transparent;
+}
+.atlas-live-cams:hover,
+.atlas-live-cams:focus-visible {
+  border-bottom-color: #8c2f23;
+}
+
+/* ==================================================================
+   Atlas live-camera layer
+   ------------------------------------------------------------------
+   Alarm red, the register already reserves for live incidents — a
+   camera is the one thing on this map showing the city as it is right
+   now, so it takes the live colour rather than another layer hue.
+   ================================================================== */
+
+.bkkx-cam-marker {
+  position: relative;
+  width: 18px;
+  height: 18px;
+  border: 0;
+  background: none;
+  padding: 0;
+  cursor: pointer;
+  line-height: 0;
+}
+.bkkx-cam-marker .cam-dot {
+  position: absolute;
+  inset: 5px;
+  border: 1px solid rgba(255, 255, 255, .85);
+  border-radius: 50%;
+  background: #ff4d3d;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, .5);
+}
+/* Registry cameras read quieter than curated ones: the operator's feed is
+   a position we republish, not one we checked. */
+.bkkx-cam-marker.is-registry .cam-dot { background: #d98a2b; }
+.bkkx-cam-marker .cam-pulse {
+  position: absolute;
+  inset: 0;
+  border: 1px solid rgba(255, 77, 61, .55);
+  border-radius: 50%;
+  animation: bkkx-cam-pulse 2.4s ease-out infinite;
+}
+.bkkx-cam-marker:hover .cam-dot,
+.bkkx-cam-marker:focus-visible .cam-dot { inset: 3px; }
+.bkkx-cam-marker:focus-visible { outline: 2px solid var(--signal); outline-offset: 3px; }
+
+@keyframes bkkx-cam-pulse {
+  0%   { transform: scale(.6); opacity: .9; }
+  100% { transform: scale(1.6); opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .bkkx-cam-marker .cam-pulse { animation: none; opacity: .5; }
+}
+
+.key-cam {
+  display: block;
+  width: 11px;
+  height: 11px;
+  margin-left: 5px;
+  border: 1px solid rgba(255, 255, 255, .8);
+  border-radius: 50%;
+  background: #ff4d3d;
+}
+
+.atlas-embed-tools button.camera-active { background: #ff4d3d; color: #2a0a06; }
+.layer-toggle-btn.camera-toggle.active {
+  background: rgba(255, 77, 61, .2);
+  border-color: #ff4d3d;
+  color: #ffb3aa;
+}
+
+.camera-inspector-card .heritage-reg-badge.is-live {
+  background: #ff4d3d;
+  color: #2a0a06;
+  letter-spacing: .12em;
+}
+.camera-inspector-card { border-color: rgba(255, 77, 61, .5); border-left-color: #ff4d3d; }
+.camera-inspector-card .heritage-source-note a { color: #ff8a7d; }
+
+.atlas-map-key span:has(.key-cam) { grid-template-columns: 27px 1fr auto; }
+.atlas-map-key span:has(.key-cam) b {
+  color: #ff8a7d;
+  font-size: 9px;
+  font-variant-numeric: tabular-nums;
+}
+.cam-stage {
+  position: relative;
+  margin: 10px 0;
+  border: 1px solid rgba(255, 255, 255, .18);
+  background: #0d0f0c;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+}
+.cam-stage iframe,
+.cam-stage > img { width: 100%; height: 100%; border: 0; display: block; object-fit: cover; }
+.cam-play {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  padding: 0;
+  background: #0d0f0c;
+  cursor: pointer;
+  position: relative;
+}
+.cam-play img { width: 100%; height: 100%; object-fit: cover; opacity: .82; }
+.cam-play:hover img, .cam-play:focus-visible img { opacity: 1; }
+.cam-play-glyph {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: 40px; height: 40px;
+  display: grid; place-items: center;
+  border: 1px solid rgba(255, 255, 255, .8);
+  border-radius: 50%;
+  background: rgba(13, 15, 12, .6);
+  color: #fff;
+  font-size: 14px;
+}
+.cam-play-note {
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  padding: 4px 7px;
+  background: linear-gradient(transparent, rgba(13, 15, 12, .92));
+  color: rgba(255, 255, 255, .78);
+  font-family: var(--font-mono);
+  font-size: 9px;
+  text-align: left;
+}
+.cam-nostream {
+  margin: 0;
+  padding: 14px;
+  color: rgba(255, 255, 255, .66);
+  font-size: 11px;
+  line-height: 1.5;
+}
+.atlas-cam-note {
+  margin: 4px 0 0;
+  padding-top: 7px;
+  border-top: 1px solid rgba(255, 255, 255, .12);
+  color: rgba(255, 255, 255, .6);
+  font-size: 8px;
+  line-height: 1.45;
 }
