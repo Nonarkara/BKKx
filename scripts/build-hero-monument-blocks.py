@@ -1,0 +1,297 @@
+#!/usr/bin/env python3
+"""
+build-hero-monument-blocks.py
+-----------------------------
+Turn the hero-monument massing into a block placement plan.
+
+WHY THIS EXISTS. site/scripts/build-hero-monuments.py already computes the
+thing OpenStreetMap cannot express and Arnis therefore cannot generate: the
+stacked parts across Wat Arun's prang group, the Grand Palace's Phra Mondop,
+Siratana Chedi and Thepbidorn, Wat Pho's four great chedis, Loha Prasat,
+the palace prasats and the Golden Mount chedi — each with a
+footprint, a base and top height in metres, a material tone, and a per-part
+provenance grade. Separately, scripts/apply-rattanakosin-to-world.py can write
+geojson in block coordinates into .mca region files with amulet-core.
+
+Both halves have been in this repository for weeks and had never been
+introduced. This is the introduction: geometry and evidence in, a placement
+plan out, in the same block frame the moat and the city gates already use.
+
+    lat/lon polygon + base_height/height  ->  row spans per Y band, per part
+
+WHAT IT DELIBERATELY DOES NOT DO. It does not touch a world. Writing blocks
+needs amulet-core and an actual save file, which is an operator's machine, not
+a build server. Keeping the arithmetic here — pure, deterministic, no heavy
+dependency — means the geometry can be tested in CI and reviewed in a diff,
+and the applier stays a thin loop over a plan somebody has already read.
+
+EVIDENCE IS NOT FLATTENED. The atlas grades every one of these parts
+(`official-envelope`, `interpretive-proportion`, `interpretive-envelope`)
+and Evidence mode colours the city by it. A part with no grade is REFUSED
+rather than built: a world that shows the Fine Arts Department's published
+82 m envelope and a BKKx-curated silhouette as the same kind of fact lies more
+confidently than the map does. The grade travels with every part into the
+plan, so the applier can act on it too.
+
+Usage:
+    python3 scripts/build-hero-monument-blocks.py
+    python3 scripts/build-hero-monument-blocks.py --ground-y -61 --summary-only
+"""
+from __future__ import annotations
+
+import argparse
+import colorsys
+import json
+import math
+import sys
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from mc_blocks import project, row_spans, span_volume  # noqa: E402
+HEROES = ROOT / "site/public/data/bkk-hero-monuments.geojson"
+REGISTER = ROOT / "site/public/heritage-register.json"
+OUT = ROOT / "site/public/data/bkk-hero-monument-blocks.json"
+
+# Which generated world these monuments fall in. All hero parts are Rattanakosin.
+WORLD_ID = "bangkok-historic-core-java"
+
+# The first air block above the ground Arnis generates. Arnis's default
+# --ground-level is −62 (src/args.rs, v3.1.0) — the surface block of a
+# superflat, which is what worlds/*/bkkx-manifest.json records these worlds
+# as (terrain_elevation: false) — and the register measured SpawnY = −50 in
+# this world from its level.dat. This script never opens the world, so the
+# number is an assumption with its source stated; the applier probes the
+# world and re-bases the plan onto what it finds (scripts/mc_ground.py).
+# It was 64, Minecraft's sea level, for a long time: AUDIT-2026-09-06.md §4.1.
+DEFAULT_GROUND_Y = -61
+
+# ---------------------------------------------------------------------------
+# Palette
+#
+# The generator emits 32 distinct material tones. Rather than hand-assigning 32
+# hexes — which nobody can check — each is classified by hue and lightness into
+# one of six families, and the family carries the block. The rule is here, and
+# the full resulting colour -> family -> block table is written into the output
+# and pinned by scripts/test-build-hero-monument-blocks.py, so every assignment
+# is visible in a diff the first time it changes.
+#
+# The families are the palette of a Rattanakosin monument: gilded surfaces,
+# whitewashed masonry, the plain plastered body, glazed roof tile in green and
+# in blue, and the terracotta of an unglazed or weathered element.
+# ---------------------------------------------------------------------------
+
+FAMILY_BLOCKS: dict[str, tuple[str, str]] = {
+    "gilt":       ("minecraft", "gold_block"),
+    "whitewash":  ("minecraft", "smooth_quartz"),
+    "plaster":    ("minecraft", "smooth_sandstone"),
+    "glaze_green": ("minecraft", "green_terracotta"),
+    "glaze_blue":  ("minecraft", "blue_terracotta"),
+    "terracotta": ("minecraft", "terracotta"),
+}
+
+FAMILY_NOTE: dict[str, str] = {
+    "gilt": "saturated yellow — gold leaf over lacquer, the gilded chedi and mondop surfaces",
+    "whitewash": "very light and barely saturated — whitewashed masonry and lime plaster",
+    "plaster": "mid-tone ochre — the plain plastered body of a wall or terrace",
+    "glaze_green": "green — glazed roof tile",
+    "glaze_blue": "blue — glazed roof tile",
+    "terracotta": "red-orange — unglazed or weathered terracotta",
+}
+
+
+def classify(hex_colour: str) -> str:
+    """Family for one material tone, by hue and lightness. Explicit bands, no
+    nearest-neighbour search: a rule a reader can apply by hand to any hex."""
+    h, l, s = colorsys.rgb_to_hls(
+        int(hex_colour[1:3], 16) / 255,
+        int(hex_colour[3:5], 16) / 255,
+        int(hex_colour[5:7], 16) / 255,
+    )
+    deg = h * 360
+    if 90 <= deg <= 180:
+        return "glaze_green"
+    if 180 < deg <= 260:
+        return "glaze_blue"
+    if deg < 20 or deg > 330:
+        return "terracotta"
+    # What is left is the yellow-through-orange band, split by how light and
+    # how saturated it is.
+    if l >= 0.85 and s < 0.45:
+        return "whitewash"
+    if s >= 0.5 and l < 0.75:
+        return "gilt"
+    if l >= 0.78:
+        return "whitewash"
+    return "plaster"
+
+
+# ---------------------------------------------------------------------------
+# Plan
+# ---------------------------------------------------------------------------
+
+def build(ground_y: int) -> dict:
+    heroes = json.loads(HEROES.read_text())
+    world = json.loads(REGISTER.read_text())["worlds"][WORLD_ID]
+
+    parts: list[dict] = []
+    refused: list[dict] = []
+    palette: dict[str, dict] = {}
+    hero_bounds: dict[str, list[int]] = {}
+
+    for feature in heroes["features"]:
+        p = feature["properties"]
+
+        # The refusal that keeps the world as honest as the map. A part with
+        # no grade is massing nobody has taken responsibility for.
+        if not p.get("height_confidence"):
+            refused.append({"id": p.get("id"), "why": "no height_confidence"})
+            continue
+
+        top = p.get("height")
+        base = p.get("base_height") or 0
+        if not isinstance(top, (int, float)) or top <= base:
+            refused.append({"id": p.get("id"), "why": f"height {top!r} not above base {base!r}"})
+            continue
+
+        ring = [project(lat, lon, world) for lon, lat in feature["geometry"]["coordinates"][0]]
+        spans = row_spans(ring)
+
+        # A finial can genuinely be under a metre across — the Siratana Chedi's
+        # is 0.94 m — so at one block per metre its footprint rasterises to
+        # nothing. Dropping it would blunt the spire it tips, which is the part
+        # of the silhouette this whole exercise exists to keep. So a sub-block
+        # part is snapped to a single column at its centroid, and the plan says
+        # it was snapped: the block is a placement, not a measurement.
+        snapped = False
+        if not spans and len(ring) >= 3:
+            # math.fsum, not sum(): CPython 3.12 changed sum() over floats to
+    # compensated (Neumaier) summation, so the same ring gives a different
+    # last bit on 3.11 and on 3.12. That reached the committed geojson as a
+    # seventh-decimal difference on a couple of vertices and turned CI red
+    # against a file generated here (AUDIT-2026-09-06.md §2.5). fsum is
+    # correctly rounded and identical on every version, so the artifact is
+    # a function of the input rather than of the interpreter.
+            cx = math.fsum(x for x, _ in ring) / len(ring)
+            cz = math.fsum(z for _, z in ring) / len(ring)
+            spans = [[int(math.floor(cz)), int(math.floor(cx)), int(math.floor(cx))]]
+            snapped = True
+        if not spans:
+            refused.append({"id": p.get("id"), "why": "footprint rasterised to nothing"})
+            continue
+
+        colour = p.get("material_color") or "#d9c69f"
+        family = classify(colour)
+        block = FAMILY_BLOCKS[family]
+        palette.setdefault(
+            colour, {"family": family, "block": f"{block[0]}:{block[1]}", "parts": 0}
+        )
+        palette[colour]["parts"] += 1
+
+        y_from = ground_y + int(round(base))
+        y_to = ground_y + int(round(top)) - 1
+
+        # Extent of every part of a hero, so the applier can clear the
+        # generated box underneath before it builds — the same thing Arnis's
+        # own landmark path does with `suppress_half_x/z`.
+        zs = [s[0] for s in spans]
+        xs = [v for s in spans for v in (s[1], s[2])]
+        bb = hero_bounds.setdefault(
+            p.get("hero_id") or p["id"], [min(xs), min(zs), max(xs), max(zs)]
+        )
+        bb[0], bb[1] = min(bb[0], min(xs)), min(bb[1], min(zs))
+        bb[2], bb[3] = max(bb[2], max(xs)), max(bb[3], max(zs))
+
+        parts.append(
+            {
+                "id": p["id"],
+                "heroId": p.get("hero_id"),
+                "name": p.get("name_en") or p.get("name"),
+                "partLabel": p.get("part_label"),
+                "block": f"{block[0]}:{block[1]}",
+                "family": family,
+                "materialColor": colour,
+                "yFrom": y_from,
+                "yTo": y_to,
+                # Carried, not summarised: the applier and any reviewer can see
+                # which parts are a published dimension and which are a
+                # silhouette somebody chose.
+                "heightConfidence": p["height_confidence"],
+                "heightSource": p.get("height_source"),
+                "notMeasuredSurvey": bool(p.get("not_measured_survey")),
+                "spans": spans,
+                "blocks": span_volume(spans, y_to - y_from + 1),
+                # True when the footprint was smaller than one block and got a
+                # single column instead. Not a measured extent.
+                "snappedToOneColumn": snapped,
+            }
+        )
+
+    parts.sort(key=lambda x: (x["heroId"] or "", x["yFrom"]))
+    by_conf: dict[str, int] = {}
+    for part in parts:
+        by_conf[part["heightConfidence"]] = by_conf.get(part["heightConfidence"], 0) + 1
+
+    return {
+        "generatedFrom": [
+            "site/public/data/bkk-hero-monuments.geojson",
+            "site/public/heritage-register.json",
+        ],
+        "world": WORLD_ID,
+        "groundY": ground_y,
+        "projection": "linear local, 1 block = 1 m, north = -Z (matches build-heritage-register.py to_block)",
+        "palette": {
+            "rule": "hue and lightness bands, see classify() — never a nearest-colour search",
+            "families": {k: {"block": f"{v[0]}:{v[1]}", "why": FAMILY_NOTE[k]} for k, v in FAMILY_BLOCKS.items()},
+            "colors": dict(sorted(palette.items())),
+        },
+        "counts": {
+            "parts": len(parts),
+            "snappedToOneColumn": sum(1 for p in parts if p["snappedToOneColumn"]),
+            "refused": len(refused),
+            "blocks": sum(p["blocks"] for p in parts),
+            "byConfidence": dict(sorted(by_conf.items())),
+        },
+        "refused": refused,
+        "heroBounds": {k: {"minX": v[0], "minZ": v[1], "maxX": v[2], "maxZ": v[3]} for k, v in sorted(hero_bounds.items())},
+        "parts": parts,
+    }
+
+
+def main() -> int:
+    ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    ap.add_argument("--ground-y", type=int, default=DEFAULT_GROUND_Y,
+                    help=f"Y of the monument ground plane (default {DEFAULT_GROUND_Y}, the first air block "
+                         "above Arnis's −62 surface; the applier re-bases onto the world's measured ground)")
+    ap.add_argument("--summary-only", action="store_true", help="print the summary without writing the plan")
+    args = ap.parse_args()
+
+    plan = build(args.ground_y)
+    c = plan["counts"]
+
+    # Written BEFORE the summary is printed. The summary is 40-odd lines, and
+    # piping it through `head` closes the pipe mid-print, SIGPIPEs the process
+    # and loses the artifact — which is how a stale plan got committed once
+    # already. The side effect that matters should not be downstream of
+    # anything as fragile as stdout.
+    if not args.summary_only:
+        OUT.write_text(json.dumps(plan, indent=1) + "\n")
+
+    print(f"hero monument blocks: {c['parts']} parts, {c['blocks']:,} blocks, ground y={plan['groundY']}")
+    for conf, n in c["byConfidence"].items():
+        print(f"  {conf:<26} {n}")
+    for colour, info in plan["palette"]["colors"].items():
+        print(f"  {colour}  {info['family']:<12} -> {info['block']:<28} ({info['parts']} part(s))")
+    if c["snappedToOneColumn"]:
+        print(f"  {c['snappedToOneColumn']} sub-block part(s) snapped to one column (finials under 1 m)")
+    for r in plan["refused"]:
+        print(f"  REFUSED {r['id']}: {r['why']}")
+
+    if args.summary_only:
+        return 0
+    print(f"wrote {OUT.relative_to(ROOT)} ({OUT.stat().st_size / 1000:.0f} kB)")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

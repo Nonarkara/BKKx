@@ -1,7 +1,7 @@
 // Two reference artifacts for the Bible, both computed rather than asserted.
 //
 // SIGNATURE — the dimensional fingerprint of the type, measured across the
-// 2311 screened candidate footprints. Frontage and depth are the short and
+// 2433 screened candidate footprints. Frontage and depth are the short and
 // long sides of each footprint's minimum-area bounding rectangle. This is the
 // closest thing to an answer for "how big is a shophouse, actually" that open
 // data can currently give, and it lands within a decimetre of what the studio
@@ -16,17 +16,13 @@
 export type DimensionBin = { x: number; n: number };
 
 export const SIGNATURE = {
-  n: 2311,
-  frontage: {
-    p10: 3.2, p50: 5.0, p90: 11.7,
-    hist: [{"x": 0, "n": 0}, {"x": 1, "n": 2}, {"x": 2, "n": 117}, {"x": 3, "n": 658}, {"x": 4, "n": 362}, {"x": 5, "n": 252}, {"x": 6, "n": 190}, {"x": 7, "n": 137}, {"x": 8, "n": 145}, {"x": 9, "n": 94}, {"x": 10, "n": 69}, {"x": 11, "n": 74}, {"x": 12, "n": 49}, {"x": 13, "n": 36}, {"x": 14, "n": 27}, {"x": 15, "n": 23}, {"x": 16, "n": 21}, {"x": 17, "n": 11}, {"x": 18, "n": 6}, {"x": 19, "n": 38}] as DimensionBin[],
-    unit: "m", step: 1, max: 20,
-  },
-  depth: {
-    p10: 8.3, p50: 13.5, p90: 26.6,
-    hist: [{"x": 0, "n": 0}, {"x": 2, "n": 0}, {"x": 4, "n": 29}, {"x": 6, "n": 148}, {"x": 8, "n": 263}, {"x": 10, "n": 358}, {"x": 12, "n": 432}, {"x": 14, "n": 392}, {"x": 16, "n": 180}, {"x": 18, "n": 100}, {"x": 20, "n": 78}, {"x": 22, "n": 48}, {"x": 24, "n": 43}, {"x": 26, "n": 38}, {"x": 28, "n": 26}, {"x": 30, "n": 30}, {"x": 32, "n": 18}, {"x": 34, "n": 21}, {"x": 36, "n": 16}, {"x": 38, "n": 91}] as DimensionBin[],
-    unit: "m", step: 2, max: 40,
-  },
+  n: 2433,
+  frontage: { p10: 3.2, p50: 5.1, p90: 12,
+    hist: [{"x":0,"n":0},{"x":1,"n":2},{"x":2,"n":119},{"x":3,"n":666},{"x":4,"n":370},{"x":5,"n":263},{"x":6,"n":202},{"x":7,"n":146},{"x":8,"n":152},{"x":9,"n":105},{"x":10,"n":83},{"x":11,"n":78},{"x":12,"n":58},{"x":13,"n":43},{"x":14,"n":29},{"x":15,"n":28},{"x":16,"n":25},{"x":17,"n":11},{"x":18,"n":8},{"x":19,"n":45}] as DimensionBin[],
+    unit: "m", step: 1, max: 20, },
+  depth: { p10: 8.4, p50: 13.6, p90: 27.6,
+    hist: [{"x":0,"n":0},{"x":2,"n":0},{"x":4,"n":31},{"x":6,"n":152},{"x":8,"n":267},{"x":10,"n":373},{"x":12,"n":455},{"x":14,"n":402},{"x":16,"n":186},{"x":18,"n":106},{"x":20,"n":86},{"x":22,"n":51},{"x":24,"n":45},{"x":26,"n":41},{"x":28,"n":33},{"x":30,"n":32},{"x":32,"n":21},{"x":34,"n":27},{"x":36,"n":18},{"x":38,"n":107}] as DimensionBin[],
+    unit: "m", step: 2, max: 40, },
 } as const;
 
 export type DocumentedCluster = {

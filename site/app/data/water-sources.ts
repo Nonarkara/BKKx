@@ -19,6 +19,8 @@
 // figure until the ingest has produced one; the panels show what is missing
 // rather than a plausible placeholder.
 
+import { PRESSURE_TOTAL } from "./shophouse-pressure.ts";
+
 export type WaterLayer =
   /** Built drainage assets — gates, pumps, canals. The machine itself. */
   | "asset"
@@ -121,7 +123,7 @@ export const WATER_SOURCES: WaterSource[] = [
     titleEn: "Flood risk areas, Bangkok",
     layer: "hazard",
     confidence: "corroborated",
-    role: "The standing hazard surface, and the highest-value join in the whole list: intersect it with the heritage register and the 2,311 screened shophouse footprints and the war room can state how much of the protected and at-risk building stock sits inside a designated flood-risk zone — a number nobody currently publishes.",
+    role: `The standing hazard surface, and the highest-value join in the whole list: intersect it with the heritage register and the ${PRESSURE_TOTAL.toLocaleString("en-US")} screened shophouse footprints and the war room can state how much of the protected and at-risk building stock sits inside a designated flood-risk zone — a number nobody currently publishes.`,
     limit: "A designated zone is an administrative judgement with a vintage, not a hydraulic model output. It will not say how deep, how long, or how often.",
     status: "awaiting-ingest",
   },

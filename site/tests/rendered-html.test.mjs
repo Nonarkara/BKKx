@@ -190,6 +190,7 @@ test("every quarter photo URL resolves (page.tsx must use the photo slot, not th
   // and render as gray empty boxes.
   const fs = await import("node:fs");
   const path = await import("node:path");
+  const url = await import("node:url");
   const pageHtml = await render("/");
   const html = await pageHtml.text();
   const { default: places } = await import("../app/data/heritage-places.json", { with: { type: "json" } });
@@ -197,7 +198,15 @@ test("every quarter photo URL resolves (page.tsx must use the photo slot, not th
     if (!area.photo) continue;
     const expected = `/heritage/photos/${area.photo}.jpg`;
     assert.match(html, new RegExp(expected.replace(/[/.]/g, "\\$&")), `front-door HTML should reference ${expected} for ${area.slug}`);
-    const onDisk = path.join(process.cwd(), "public/heritage/photos", `${area.photo}.jpg`);
+    // Resolved against this file, not the shell's cwd: keying off
+    // process.cwd() made the suite pass from site/ and fail from the repo
+    // root with "photo not on disk", which reads as missing data rather
+    // than as a test that cannot find it.
+    const onDisk = path.join(
+      path.dirname(url.fileURLToPath(import.meta.url)),
+      "../public/heritage/photos",
+      `${area.photo}.jpg`,
+    );
     assert.ok(fs.existsSync(onDisk), `${area.slug}: photo ${area.photo}.jpg not on disk`);
   }
 });
@@ -769,12 +778,17 @@ test("builds Wat Arun, Wat Phra Kaew and Wat Pho as sourced, evidence-labelled h
   assert.equal(source.elements.length, 5, "Wat Arun source snapshot must carry one central and four satellite footprints");
   assert.match(source.attribution, /OpenStreetMap contributors/);
   assert.equal(source.retrieved_at, "2026-08-17");
-  assert.equal(hero.featureCount, 67);
+  assert.equal(hero.featureCount, 88);
   assert.equal(hero.features.length, hero.featureCount);
   assert.deepEqual(hero.complexes, {
     "wat-arun-prang-group": 23,
     "wat-phra-kaew-hero-structures": 20,
     "wat-pho-four-great-chedis": 24,
+    "loha-prasat": 4,
+    "dusit-maha-prasat": 5,
+    "aphonphimok-prasat": 4,
+    "siwalai-maha-prasat": 4,
+    "golden-mount-chedi": 4,
   });
   assert.match(hero.modelStatus, /not a measured conservation model/i);
   assert.match(hero.sourceConflict, /Fine Arts: 82 m/);
@@ -782,11 +796,19 @@ test("builds Wat Arun, Wat Phra Kaew and Wat Pho as sourced, evidence-labelled h
   assert.equal(Math.max(...hero.features.map((feature) => feature.properties.height)), 82);
   assert.equal(hero.features.filter((feature) => feature.properties.kind === "hero_prang").length, 7);
   assert.equal(hero.features.filter((feature) => feature.properties.kind === "satellite_prang").length, 16);
-  assert.equal(hero.features.filter((feature) => feature.properties.model_status === "official-plan matched schematic").length, 20);
+  assert.equal(hero.features.filter((feature) => feature.properties.model_status === "official-plan matched schematic").length, 33);
   assert.equal(hero.features.filter((feature) => feature.properties.kind === "hero_wat_pho_chedi").length, 24);
   assert.equal(new Set(hero.features.filter((feature) => feature.properties.kind === "hero_wat_pho_chedi").map((feature) => feature.properties.hero_id)).size, 4);
   assert.ok(hero.features.some((feature) => feature.properties.id === "grand-palace-phra-mondop-roof-7"),
     "Phra Mondop must carry the Fine Arts-documented seventh roof tier");
+  assert.ok(hero.features.some((feature) => feature.properties.id === "loha-prasat-spire"));
+  assert.ok(hero.features.some((feature) => feature.properties.id === "dusit-maha-prasat-finial"));
+  assert.ok(hero.features.some((feature) => feature.properties.id === "golden-mount-chedi-spire"));
+  assert.equal(
+    Math.min(...hero.features.filter((feature) => feature.properties.hero_id === "golden-mount-chedi").map((feature) => feature.properties.base_height)),
+    45,
+    "Golden Mount chedi must sit on the 45 m hill, not start at grade",
+  );
   for (const feature of hero.features) {
     assert.equal(feature.properties.not_measured_survey, true);
     assert.ok(feature.properties.source_url?.startsWith("https://"));
@@ -814,7 +836,7 @@ test("the 3D atlas shell renders the 5 POI layer toggles", async () => {
   assert.match(html, /9,275/);
   assert.match(html, /full-resolution OSM footprints/);
   assert.match(html, /evidence-labelled schematic, not measured conservation documentation/);
-  assert.match(html, /67(?:<!-- -->)? hero parts across Wat Arun, Wat Phra Kaew and Wat Pho/);
+  assert.match(html, /88(?:<!-- -->)? hero parts across Wat Arun, Wat Phra Kaew, Wat Pho, Loha Prasat, the palace prasats and the Golden Mount/);
   assert.match(html, /Evidence-labelled hero model/);
 });
 
@@ -1388,6 +1410,24 @@ test("the twin source register ships with honest integration status", async () =
     }
   }
   assert.ok(TWIN_TALLY.wired >= 1, "at least one source is actually wired");
+
+  // A source whose licence nobody has read cannot be wired or made ready.
+  // Publishing a figure derived from data whose terms are unread is the same
+  // class of mistake as publishing a height nobody measured, so the state is
+  // typed rather than left to a reader of prose.
+  for (const s of TWIN_SOURCES) {
+    if (s.licenceUnverified) {
+      assert.equal(
+        s.integration,
+        "researched",
+        `${s.id} has an unread licence, so it must stay researched`,
+      );
+      assert.ok(
+        s.licenceUnverified.length > 40,
+        `${s.id} must say what stopped the licence check`,
+      );
+    }
+  }
 });
 
 test("no API key or secret is committed anywhere in the bundle", async () => {
@@ -1435,14 +1475,19 @@ test("curated cameras render as facades and never leak to Google on load", async
 });
 
 test("a placeholder camera carries a nominal marker but never a claimed place", async () => {
-  // Three cameras arrived with zero identifying evidence. Per an explicit
+  // Some streams arrive with zero identifying evidence. Per an explicit
   // operator decision they are pinned at a shared, clearly-nominal marker
   // rather than left without a coordinate — but that marker must never be
   // mistaken for evidence: no place name, no district, and the reasoning
   // must say plainly that it is a stand-in.
+  //
+  // This asserts the rule, not a count. The original pinned the number at
+  // three, which was true of the day it was written and became false the
+  // moment a fourth unlocatable stream was added — a test that fails for
+  // being out of date teaches nothing about the invariant it was guarding.
   const { CURATED_CAMERAS, isLocated } = await import("../app/data/cctv-cameras.ts");
   const placeholders = CURATED_CAMERAS.filter((c) => c.precision === "placeholder");
-  assert.equal(placeholders.length, 3, "three cameras were supplied with no identifying evidence");
+  assert.ok(placeholders.length > 0, "the fixture this rule guards must exist");
 
   const markers = new Set(placeholders.map((c) => `${c.lat},${c.lon}`));
   assert.equal(markers.size, 1, "placeholder cameras must share one nominal marker, never distinct invented positions");
@@ -1594,7 +1639,7 @@ test("locatedBy is parsed into something a reader can check, not printed raw", a
  * ---------------------------------------------------------------- */
 
 test("the evidence tally is computed from the layers and every tier is claimed", async () => {
-  const { EVIDENCE_TIERS, tierForDetailSource, tierForHeroConfidence } = await import(
+  const { EVIDENCE_TIERS, tierForCandidateBasis, tierForDetailSource, tierForHeroConfidence } = await import(
     "../app/data/evidence-tiers.ts"
   );
   const tally = (await import("../app/data/evidence-tally.json", { with: { type: "json" } })).default;
@@ -1612,10 +1657,25 @@ test("the evidence tally is computed from the layers and every tier is claimed",
   for (const value of Object.keys(tally.heroConfidences)) {
     assert.ok(tierForHeroConfidence(value), `no tier claims height_confidence=${value}`);
   }
+  for (const value of Object.keys(tally.candidateBases)) {
+    assert.ok(tierForCandidateBasis(value), `no tier claims height_basis=${value}`);
+  }
+
+  // The screened shophouses are counted only where they are extruded, and
+  // the two halves add up to the whole screen.
+  assert.equal(
+    Object.values(tally.candidateBases).reduce((a, b) => a + b, 0),
+    tally.candidates.extruded,
+    "candidate bases must sum to the extruded candidates",
+  );
+  assert.ok(tally.candidates.onDetailBox > 0, "some candidates stand on an OSM footprint and are outlined only");
+  // Boxes hidden under hero models are not extruded and so not counted.
+  assert.equal(tally.hidden.detail + tally.hidden.landmarks, 24);
 
   // The point of the mode: a real, non-trivial share of the city is inferred.
   assert.ok(tally.byTier.inferred > 0, "if nothing were inferred the mode would have no subject");
-  assert.equal(EVIDENCE_TIERS.length, 4);
+  assert.ok(tally.byTier.typological > 0, "the statutory-storeys tier has a subject");
+  assert.equal(EVIDENCE_TIERS.length, 5);
 });
 
 test("the selected language is readable — the toggle never paints label on ground", async () => {
@@ -1694,4 +1754,140 @@ test("a cluster's quadrant split never claims more buildings than it screened", 
     assert.equal(summed, c.n, `${c.slug}: quadrant counts must account for all ${c.n} footprints`);
     assert.ok(c.storeysKnown <= c.n, `${c.slug}: cannot know storeys for more buildings than exist`);
   }
+});
+
+test("the published shophouse figures still match the geojson they claim to come from", async () => {
+  // The drift this catches actually happened: the candidate screen was
+  // regenerated from 2,311 footprints to 2,433, the geojson grew, and the
+  // hand-committed summary did not — 31 figures wrong across two files,
+  // internally consistent with each other and wrong about the data, with
+  // one district missing entirely. Nothing failed, because nothing
+  // compared them.
+  const { readFileSync } = await import("node:fs");
+  const path = await import("node:path");
+  const url = await import("node:url");
+  const { PRESSURE_DISTRICTS, PRESSURE_TOTAL, QUADRANTS, SPLITS } = await import(
+    "../app/data/shophouse-pressure.ts"
+  );
+  const { SIGNATURE } = await import("../app/data/shophouse-gazetteer.ts");
+
+  const here = path.dirname(url.fileURLToPath(import.meta.url));
+  const rows = JSON.parse(
+    readFileSync(path.join(here, "../public/data/shophouse-pressure.geojson"), "utf8"),
+  ).features.map((f) => f.properties);
+
+  assert.equal(PRESSURE_TOTAL, rows.length, "PRESSURE_TOTAL must be the footprint count");
+  assert.equal(SIGNATURE.n, rows.length, "SIGNATURE.n must be the same corpus");
+
+  for (const q of QUADRANTS) {
+    assert.equal(q.count, rows.filter((r) => r.q === q.id).length, `quadrant ${q.id}`);
+  }
+  assert.equal(
+    QUADRANTS.reduce((n, q) => n + q.count, 0),
+    rows.length,
+    "the four quadrants must account for every footprint",
+  );
+
+  // Every district in the data must be published, and vice versa — the
+  // omission that hid Phasi Charoen's 39 footprints was invisible to any
+  // check that only looked at totals.
+  const inData = new Set(rows.map((r) => r.dist));
+  const published = new Set(PRESSURE_DISTRICTS.map((d) => d.district));
+  assert.deepEqual([...inData].filter((d) => !published.has(d)), [], "districts missing from the table");
+  assert.deepEqual([...published].filter((d) => !inData.has(d)), [], "districts published but not in the data");
+
+  for (const d of PRESSURE_DISTRICTS) {
+    const group = rows.filter((r) => r.dist === d.district);
+    assert.equal(d.count, group.length, `${d.district}.count`);
+    assert.equal(d.atRisk, group.filter((r) => r.q === "at-risk").length, `${d.district}.atRisk`);
+  }
+
+  assert.equal(
+    PRESSURE_DISTRICTS.reduce((n, d) => n + d.count, 0),
+    rows.length,
+    "district counts must sum to the corpus",
+  );
+  assert.ok(SPLITS.priceBaht > 0 && SPLITS.depthM > 0);
+});
+
+test("the spine's unjoined footprints are reported as a join miss, not as missing coverage", async () => {
+  const { CLUSTER_RECORDS, SPINE_TOTAL, SPINE_UNJOINED } = await import(
+    "../app/data/shophouse-spine-index.ts"
+  );
+  const { PRESSURE_TOTAL } = await import("../app/data/shophouse-pressure.ts");
+
+  // Both sets describe the same buildings. If they ever stop agreeing, the
+  // "join artefact" wording on the cluster pages becomes a false excuse.
+  assert.equal(SPINE_TOTAL, PRESSURE_TOTAL, "spine and pressure describe the same corpus");
+
+  const nulls = CLUSTER_RECORDS.reduce((n, c) => n + (c.quadrants["null"] ?? 0), 0);
+  assert.equal(SPINE_UNJOINED, nulls);
+  assert.ok(SPINE_UNJOINED < SPINE_TOTAL * 0.2, "a join losing a fifth of the set is a broken join");
+
+  const html = await (await render(`/shophouses/cluster/${CLUSTER_RECORDS[0].slug}`)).text();
+  assert.doesNotMatch(
+    html,
+    /pressure screen[^.]*did not reach/,
+    "an unjoined footprint is classified; the page must not call it uncovered",
+  );
+});
+
+/* ---------------------------------------------------------------- *
+ * cameras — more of them, and never on the map without evidence
+ * ---------------------------------------------------------------- */
+
+test("a placeholder-located camera never reaches the atlas map layer", async () => {
+  const { CURATED_CAMERAS, isLocated } = await import("../app/data/cctv-cameras.ts");
+
+  // The rule the whole camera layer rests on. Three streams share one
+  // nominal Bangkok coordinate so their war-room tiles are not pinless;
+  // plotting that would put pins where no camera is.
+  const placeholders = CURATED_CAMERAS.filter((c) => c.precision === "placeholder");
+  assert.ok(placeholders.length > 0, "the fixture for this rule must exist");
+  for (const c of placeholders) {
+    assert.equal(isLocated(c), false, `${c.id}: a placeholder must never count as located`);
+    assert.equal(c.place, null, `${c.id}: a placeholder must not carry a place name`);
+  }
+
+  // Every placeholder shares one coordinate, which is what makes it
+  // unmistakably nominal rather than three separate false claims.
+  const coords = new Set(placeholders.map((c) => `${c.lat},${c.lon}`));
+  assert.equal(coords.size, 1, "placeholders must share the single nominal marker");
+
+  // And the mappable set is exactly the evidence-located one.
+  const mappable = CURATED_CAMERAS.filter(
+    (c) => isLocated(c) && typeof c.lat === "number" && typeof c.lon === "number",
+  );
+  assert.ok(mappable.length >= 6, "the curated half of the atlas layer must not be empty");
+  for (const c of mappable) {
+    assert.notEqual(c.precision, "placeholder");
+    assert.ok(c.locatedBy.length > 20, `${c.id}: a mapped camera must say how it was located`);
+  }
+});
+
+test("every camera records how it was located, and no two share an id", async () => {
+  const { CURATED_CAMERAS, CAMERA_TALLY } = await import("../app/data/cctv-cameras.ts");
+  const ids = new Set(CURATED_CAMERAS.map((c) => c.id));
+  assert.equal(ids.size, CURATED_CAMERAS.length, "camera ids must be unique");
+  assert.equal(CAMERA_TALLY.total, CURATED_CAMERAS.length);
+  assert.equal(CAMERA_TALLY.located + CAMERA_TALLY.unconfirmed, CAMERA_TALLY.total);
+
+  for (const c of CURATED_CAMERAS) {
+    assert.ok(c.locatedBy && c.locatedBy.length > 20, `${c.id}: locatedBy must be a real sentence`);
+    // A YouTube camera must carry an id the poster proxy will accept; a
+    // link camera must carry the page it sends viewers to instead.
+    if (c.kind === "youtube") assert.match(c.videoId, /^[A-Za-z0-9_-]{11}$/, `${c.id}: video id`);
+    else assert.ok(c.sourceUrl.startsWith("https://"), `${c.id}: link camera needs a page`);
+  }
+});
+
+test("the atlas camera layer is opt-in and loads no third-party player up front", async () => {
+  const html = await (await render("/atlas/historic-core")).text();
+  // The layer is off by default, so no marker, card or embed may be in the
+  // server-rendered HTML — and above all no YouTube iframe.
+  assert.doesNotMatch(html, /bkkx-cam-marker/);
+  assert.doesNotMatch(html, /camera-inspector-card/);
+  assert.doesNotMatch(html, /youtube-nocookie\.com\/embed/);
+  // The control exists, though, or the layer would be unreachable.
+  assert.match(html, /Live cams/);
 });

@@ -124,6 +124,28 @@ def main() -> int:
     assert_(len(forts.get("forts", {})) >= 2, f"at least 2 forts: got {len(forts.get('forts', {}))}")
 
     print()
+    print("[5] Committed meta is not stale against committed geojson")
+    # The generator hits Overpass, so CI cannot re-run it. It can still
+    # catch the usual drift: geojson updated, meta left behind — or the
+    # WORLD constant moving while the committed meta still quotes the old
+    # projection. A generated file nobody compares is how the last stale
+    # plan shipped.
+    meta_path = ROOT / "site/public/data/rattanakosin-water-and-walls.meta.json"
+    assert_(meta_path.exists(), "meta file exists")
+    meta = json.loads(meta_path.read_text())
+    assert_(meta["moat_fragments"] == len(water.get("moat", {}).get("lines", [])),
+            f"meta.moat_fragments={meta['moat_fragments']} vs water file {len(water.get('moat', {}).get('lines', []))}")
+    assert_(meta["river_fragments"] == len(water.get("river", {}).get("lines", [])),
+            f"meta.river_fragments={meta['river_fragments']} vs water file {len(water.get('river', {}).get('lines', []))}")
+    assert_(meta["gates_found"] == len(gates.get("gates", {})),
+            f"meta.gates_found={meta['gates_found']} vs gates file {len(gates.get('gates', {}))}")
+    assert_(meta["forts_found"] == len(forts.get("forts", {})),
+            f"meta.forts_found={meta['forts_found']} vs forts file {len(forts.get('forts', {}))}")
+    proj = meta.get("world_projection") or {}
+    for key in ("min_mc_x", "max_mc_x", "min_mc_z", "max_mc_z", "min_lat", "max_lat", "min_lon", "max_lon"):
+        assert_(proj.get(key) == WORLD[key], f"meta.world_projection.{key}={proj.get(key)} vs WORLD {WORLD[key]}")
+
+    print()
     print("All self-tests pass.")
     return 0
 

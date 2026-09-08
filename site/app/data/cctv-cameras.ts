@@ -119,6 +119,91 @@ export const CURATED_CAMERAS: CuratedCamera[] = [
     sourceUrl: "https://www.youtube.com/live/Q71sLS8h9a4",
   },
   {
+    id: "yt-jacks-bar-chao-phraya",
+    kind: "youtube",
+    videoId: "UdDpOaGviq4",
+    title: "Chao Phraya River · Jack's Bar · live camera stream",
+    place: "Jack's Bar, end of Soi Wat Suan Phlu off Charoen Krung, on the river just south of the Shangri-La",
+    district: "Bang Rak",
+    // The operator publishes a street address (62/1 Soi Wat Suan Phlu, Bang
+    // Rak); the camera looks out across the water, so this pins the terrace
+    // it stands on, not what it sees.
+    lat: 13.7192,
+    lon: 100.5132,
+    precision: "street",
+    locatedBy:
+      "the venue publishes its address at the river end of Soi Wat Suan Phlu, Bang Rak; pinned to that soi rather than to the framing, which faces across the Chao Phraya toward Thonburi",
+    sourceUrl: "https://www.youtube.com/watch?v=UdDpOaGviq4",
+  },
+  {
+    id: "yt-el-gaucho-soi-11",
+    kind: "youtube",
+    videoId: "GIky-GXIBVY",
+    title: "El Gaucho · Soi 11 · Sukhumvit Road · live street webcam (4K)",
+    place: "Sukhumvit Soi 11, off Sukhumvit Road near Nana",
+    district: "Watthana",
+    // Same operator and the same reasoning as the Soi 19 camera already in
+    // this file: the title names the soi, which is a 400 m lane, not a
+    // building.
+    lat: 13.7434,
+    lon: 100.5556,
+    precision: "street",
+    locatedBy: "stream title names Sukhumvit Soi 11; placed at the soi, not the premises",
+    sourceUrl: "https://www.youtube.com/watch?v=GIky-GXIBVY",
+  },
+  {
+    id: "yt-soi-cowboy",
+    kind: "youtube",
+    videoId: "ISPQCuWssKA",
+    title: "Soi Cowboy · Bangkok · live",
+    place: "Soi Cowboy, the lane between Sukhumvit Soi 21 (Asok) and Soi 23",
+    district: "Watthana",
+    // Unusually good for a street precision: Soi Cowboy is a single
+    // ~150 m pedestrian lane, so naming it places the camera more tightly
+    // than most soi names do.
+    lat: 13.7373,
+    lon: 100.5606,
+    precision: "street",
+    locatedBy:
+      "stream title names Soi Cowboy, a single 150 m lane between Sukhumvit 21 and 23; placed at its midpoint",
+    sourceUrl: "https://www.youtube.com/watch?v=ISPQCuWssKA",
+  },
+  {
+    id: "yt-sathorn-silom",
+    kind: "youtube",
+    videoId: "CW4Js-oyc58",
+    title: "Sathorn Road · Silom · Bangkok livestream 24/7 (4K)",
+    place: "Sathorn Road at Silom — the business district, exact vantage not published",
+    district: "Bang Rak",
+    // District precision, not street. Sathorn Road runs about 3 km and forms
+    // the Bang Rak / Sathon boundary; naming it plus "Silom" narrows the
+    // camera to a neighbourhood, not to a block. Pinned near the
+    // Sathorn-Naradhiwas junction, the centre of the area both names share.
+    lat: 13.722,
+    lon: 100.529,
+    precision: "district",
+    locatedBy:
+      "stream title names Sathorn Road and Silom but no vantage point; Sathorn runs ~3 km, so this is recorded at district precision near the Sathorn-Naradhiwas junction rather than sharpened to a false address",
+    sourceUrl: "https://www.youtube.com/watch?v=CW4Js-oyc58",
+  },
+  {
+    id: "yt-sukhumvit-unplaced-TfOOzM6mPT4",
+    kind: "youtube",
+    videoId: "TfOOzM6mPT4",
+    title: "Sukhumvit Road · Bangkok · live street webcam",
+    place: null,
+    district: null,
+    // The title names a road and nothing else. Sukhumvit runs the length of
+    // the city and crosses Khlong Toei, Watthana and Phra Khanong, so even a
+    // district would be a guess. Placeholder, like the three streams below.
+    lat: PLACEHOLDER_MARKER.lat,
+    lon: PLACEHOLDER_MARKER.lon,
+    precision: "placeholder",
+    locatedBy:
+      "stream title names Sukhumvit Road and no soi or landmark. Sukhumvit crosses several districts, so no district can be recorded either; pinned at the shared placeholder marker per the operator decision of 2026-08-30, awaiting someone who recognises the frame",
+    sourceUrl: "https://www.youtube.com/live/TfOOzM6mPT4",
+  },
+  {
     id: "yt-unconfirmed-a_bUVExv_Cg",
     kind: "youtube",
     videoId: "a_bUVExv_Cg",

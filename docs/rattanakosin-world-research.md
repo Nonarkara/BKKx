@@ -52,7 +52,12 @@ block (1361, 1675). Wat Pho lands at (1231, 2153). Wat Arun at
 | Wat Pho: Phra Maha Chedi Dilok | 6 | Wat Pho architecture + Fine Arts |
 | Wat Pho: Phra Maha Chedi Muni Bat | 6 | Wat Pho architecture + Fine Arts |
 | Wat Pho: Phra Maha Chedi Srisuriyothai | 6 | Wat Pho architecture + Fine Arts |
-| **Total** | **67** | All interpretive, not measured |
+| Loha Prasat | 4 | TAT identity; stacked envelope interpretive |
+| Dusit Maha Prasat | 5 | Grand Palace plan identity; envelope interpretive |
+| Aphonphimok Prasat | 4 | Grand Palace plan identity; envelope interpretive |
+| Siwalai Maha Prasat | 4 | Grand Palace plan identity; envelope interpretive |
+| Golden Mount chedi | 4 | TAT identity; sits on the 45 m hill |
+| **Total** | **88** | All interpretive, not measured |
 
 The script's own caveat (line 367) is the right one: **"All tiering
 remains interpretive."** Every model carries a `not_measured_survey: true`
@@ -280,7 +285,7 @@ piece of work with its own commit and review.
 - The full OSM building fabric (32,077 shophouse candidates in
   the rowhouse atlas)
 - 1:1 scale world covering the entire Rattanakosin core
-- 67 hero-monument parts already defined and tested
+- 88 hero-monument parts already defined and tested
 
 ### Need
 

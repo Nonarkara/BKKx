@@ -5,6 +5,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type maplibregl from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
 import type { Stop, World } from "../../walkthrough-data";
+import type { Camera } from "../../../worker/live";
 import {
   FINEARTS_HERITAGE_SITES,
   FINEARTS_HERITAGE_SOURCE,
@@ -35,6 +36,13 @@ import {
   type EvidenceTier,
 } from "../../data/evidence-tiers";
 import EVIDENCE_TALLY_JSON from "../../data/evidence-tally.json";
+import {
+  CURATED_CAMERAS,
+  embedFor,
+  isLocated,
+  posterFor,
+  type CuratedCamera,
+} from "../../data/cctv-cameras";
 
 // The walks that geographically belong to Historic Core — everything except
 // bang-krachao-loop, a disconnected bike loop far south of the old town.
@@ -73,9 +81,9 @@ const NASA_AEROSOL_SOURCE =
 
 const HERITAGE_DETAIL_COUNT = 9_275;
 const HERITAGE_LANDMARK_PART_COUNT = 73;
-const HERO_MONUMENT_PART_COUNT = 67;
+const HERO_MONUMENT_PART_COUNT = 88;
 const HERITAGE_DETAIL_NOTE =
-  "Full-resolution OpenStreetMap footprints with curated typology heights. Hero monuments use official records and OSM footprints; tiering remains evidence-labelled schematic, not measured conservation documentation.";
+  "Full-resolution OpenStreetMap footprints with curated typology heights. Hero monuments use official records and OSM footprints; tiering remains evidence-labelled schematic, not measured conservation documentation. Screened shophouse candidates extrude at the legal storey height (3.5 m ground floor, 3 m above) where Overture is silent — that default is the modal known value, not a survey of the openings.";
 
 const HERITAGE_DETAIL_HEIGHT: maplibregl.ExpressionSpecification = [
   "case",
@@ -114,6 +122,16 @@ const HERITAGE_DETAIL_COLOR: maplibregl.ExpressionSpecification = [
   "#92785d",
 ];
 
+// Legal storey height, same numbers as the Minecraft fabric builder.
+// Overture `num_floors` when present; otherwise 2 storeys (6.5 m), the modal
+// known value in this world. This is a typological extrusion, not a survey.
+const SHOPHOUSE_CANDIDATE_HEIGHT: maplibregl.ExpressionSpecification = [
+  "case",
+  [">", ["to-number", ["coalesce", ["get", "num_floors"], 0]], 0],
+  ["+", 3.5, ["*", 3, ["-", ["to-number", ["get", "num_floors"]], 1]]],
+  6.5,
+];
+
 /* Evidence mode — the ladder lives in app/data/evidence-tiers.ts, and the
  * MapLibre colour expressions below are BUILT from it rather than restated,
  * so the map, the legend and the build-time tally can never disagree about
@@ -138,15 +156,86 @@ function evidenceMatch(
 
 const EVIDENCE_DETAIL_COLOR = evidenceMatch("height_source", (t) => t.detailSources);
 const EVIDENCE_HERO_COLOR = evidenceMatch("height_confidence", (t) => t.heroConfidences);
+const EVIDENCE_CANDIDATE_COLOR = evidenceMatch("height_basis", (t) => t.candidateBases);
 const EVIDENCE_LANDMARK_COLOR = EVIDENCE_COLOR[LANDMARK_TIER];
 
 // Counted at build time by scripts/build-evidence-tally.mjs over the three
 // extruded layers — never typed by hand, and the build fails if the corpus
 // carries a height source no tier claims.
+/* ------------------------------------------------------------------ *
+ * LIVE CAMERAS ON THE MAP
+ *
+ * The war room already carries a camera rail, but a rail cannot answer
+ * "what is the nearest live view of this building" — that is a question
+ * about geography, and it belongs on the map.
+ *
+ * Two sources feed one layer. The curated streams in
+ * app/data/cctv-cameras.ts are hand-entered and evidence-located; the rest
+ * arrive at runtime from /api/live/cctv, which proxies the operator's CCTV
+ * registry (the iTIC / Longdo network) once CCTV_SOURCE_URL or
+ * LONGDO_API_KEY is set on the Worker. Until then that half is empty and
+ * the layer says so rather than implying the city has six cameras in it.
+ *
+ * ONE RULE, INHERITED FROM THE REGISTER: a camera whose position is a
+ * placeholder never gets a marker. Three streams currently share one
+ * nominal Bangkok coordinate so their tiles are not pinless; drawing that
+ * on a map would put three pins on a spot where no camera is, which is
+ * exactly the false precision the rest of this project refuses. They stay
+ * in the rail, where the tile can say "location not confirmed" out loud.
+ * ------------------------------------------------------------------ */
+
+type AtlasCamera = {
+  id: string;
+  name: string;
+  lat: number;
+  lon: number;
+  district: string | null;
+  place: string | null;
+  /** How the position was established — shown, never hidden. */
+  locatedBy: string;
+  precision: string;
+  /** Set for a YouTube stream we may embed on demand. */
+  videoId: string | null;
+  /** Where a human can watch it at full size. */
+  pageUrl: string | null;
+  /** A still the operator's own registry offers, if any. */
+  snapshotUrl: string | null;
+  attribution: string | null;
+  origin: "curated" | "registry";
+};
+
+const CURATED_ATLAS_CAMERAS: AtlasCamera[] = CURATED_CAMERAS.filter(
+  (c): c is CuratedCamera & { lat: number; lon: number } =>
+    // Evidence-located only. A placeholder marker is a stand-in for a tile,
+    // never a claim about where a camera is, and a map turns it into one.
+    isLocated(c) && typeof c.lat === "number" && typeof c.lon === "number",
+).map((c) => ({
+  id: c.id,
+  name: c.title,
+  lat: c.lat,
+  lon: c.lon,
+  district: c.district,
+  place: c.place,
+  locatedBy: c.locatedBy,
+  precision: c.precision,
+  videoId: c.kind === "youtube" ? c.videoId : null,
+  pageUrl: c.sourceUrl,
+  snapshotUrl: null,
+  attribution: null,
+  origin: "curated" as const,
+}));
+
 const EVIDENCE_TALLY = EVIDENCE_TALLY_JSON as EvidenceTally;
 const EVIDENCE_INFERRED_SHARE = Math.round(
   (EVIDENCE_TALLY.byTier[FALLBACK_TIER] / EVIDENCE_TALLY.total) * 100,
 );
+// Boxes a hero model replaced. Flagged at build time by
+// scripts/hide-under-heroes.py, filtered out of the detail and landmark
+// layers above, and therefore absent from every count in this legend.
+const EVIDENCE_HIDDEN = EVIDENCE_TALLY.hidden.detail + EVIDENCE_TALLY.hidden.landmarks;
+// The screened shophouses: extruded at statutory storey heights where no OSM
+// footprint stands, outlined only where one does. Counted the same way.
+const EVIDENCE_CANDIDATES = EVIDENCE_TALLY.candidates;
 
 const HERITAGE_LANDMARK_COLOR: maplibregl.ExpressionSpecification = [
   "match",
@@ -433,6 +522,12 @@ type RowhouseCandidate = {
   aligned_neighbours_32m: number;
   corridor_distance_m: number;
   review_status: string;
+  num_floors?: number | null;
+  height_m?: number | null;
+  /** Set at build time by scripts/flag-candidates-over-detail.py. */
+  height_basis?: "overture-storeys" | "modal-storeys";
+  has_detail_box?: boolean;
+  detail_box_id?: string;
 };
 
 type ArchitecturalDetail = {
@@ -599,7 +694,14 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
   // Evidence mode recolours the same massing by how each height was
   // established. Off by default: the city should look like a city first.
   const [evidenceMode, setEvidenceMode] = useState(false);
-  const [showRowhouseCandidates, setShowRowhouseCandidates] = useState(false);
+  // Live cameras. Off by default: the map's first job is the city, and a
+  // camera layer is a question you ask of it, not the answer it opens with.
+  const [showCameras, setShowCameras] = useState(false);
+  const [registryCameras, setRegistryCameras] = useState<AtlasCamera[] | null>(null);
+  const [cameraFeedReason, setCameraFeedReason] = useState<string | null>(null);
+  const [selectedCamera, setSelectedCamera] = useState<AtlasCamera | null>(null);
+  const [cameraPlaying, setCameraPlaying] = useState(false);
+  const [showRowhouseCandidates, setShowRowhouseCandidates] = useState(true);
   const [selectedHeritage, setSelectedHeritage] = useState<HeritageSite | null>(null);
   const [selectedArchitecture, setSelectedArchitecture] = useState<ArchitecturalDetail | null>(null);
   const [selectedCandidate, setSelectedCandidate] = useState<RowhouseCandidate | null>(null);
@@ -653,6 +755,7 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
       : null;
     return bySource ?? LANDMARK_TIER;
   }, [selectedArchitecture]);
+  const cameraMarkerRefs = useRef<maplibregl.Marker[]>([]);
   const poiMarkerRefs = useRef<Record<PoiKind, maplibregl.Marker[]>>({
     temple: [],
     "royal-temple": [],
@@ -865,6 +968,7 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
         case "a": case "A": setShowAerosol((v) => !v); break;
         case "d": case "D": setShowArchitecturalDetail((v) => !v); break;
         case "e": case "E": setEvidenceMode((v) => !v); break;
+        case "v": case "V": setShowCameras((v) => !v); break;
         case "r": case "R": setShowRowhouseCandidates((v) => !v); break;
         case "c": case "C": copyViewLink(); break;
         case "?": setShowShortcuts((v) => !v); break;
@@ -1111,6 +1215,9 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
               type: "fill-extrusion",
               source: "bkkx-heritage-landmarks-src",
               minzoom: 13,
+              // Same flag as the detail layer: a landmark part a hero model
+              // was built on is hidden, or the model stands inside it.
+              filter: ["!=", ["get", "hide_3d"], true],
               paint: {
                 "fill-extrusion-color": HERITAGE_LANDMARK_COLOR,
                 "fill-extrusion-height": ["coalesce", ["get", "height"], 12],
@@ -1137,7 +1244,7 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
               type: "symbol",
               source: "bkkx-heritage-landmarks-src",
               minzoom: 15.8,
-              filter: ["has", "name"],
+              filter: ["all", ["has", "name"], ["!=", ["get", "hide_3d"], true]],
               layout: {
                 "text-field": ["coalesce", ["get", "name_en"], ["get", "name"]],
                 "text-size": 10,
@@ -1475,8 +1582,8 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
         }
 
         // Present-day Overture roofprints/footprints screened by morphology.
-        // Deliberately opt-in: these are a field-review queue, not confirmed
-        // rowhouses, age estimates or statutory heritage designations.
+        // On by default so the twin shows the 2,433-unit fabric; still labelled
+        // as a field-review queue, not confirmed rowhouses or heritage.
         if (hasHistoricContext && !map.getSource("bkkx-rowhouse-candidates-src")) {
           try {
             map.addSource("bkkx-rowhouse-candidates-src", {
@@ -1485,29 +1592,41 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
             });
             map.addLayer({
               id: "bkkx-rowhouse-candidates-possible",
-              type: "fill",
+              type: "fill-extrusion",
               source: "bkkx-rowhouse-candidates-src",
               minzoom: 13.5,
-              filter: ["==", ["get", "candidate_strength"], "possible morphology"],
-              layout: { visibility: "none" },
-              paint: { "fill-color": "#f4d492", "fill-opacity": 0.24 },
+              // A candidate standing on an OSM footprint the atlas draws is
+              // outlined only (has_detail_box, set at build time by
+              // scripts/flag-candidates-over-detail.py): one building, one box.
+              filter: ["all", ["==", ["get", "candidate_strength"], "possible morphology"], ["!=", ["get", "has_detail_box"], true]],
+              paint: {
+                "fill-extrusion-color": "#c4a574",
+                "fill-extrusion-height": SHOPHOUSE_CANDIDATE_HEIGHT,
+                "fill-extrusion-base": 0,
+                "fill-extrusion-opacity": 0.82,
+                "fill-extrusion-vertical-gradient": true,
+              },
             });
             map.addLayer({
               id: "bkkx-rowhouse-candidates-strong",
-              type: "fill",
+              type: "fill-extrusion",
               source: "bkkx-rowhouse-candidates-src",
               minzoom: 13.5,
-              filter: ["==", ["get", "candidate_strength"], "strong morphology"],
-              layout: { visibility: "none" },
-              paint: { "fill-color": "#ffb52b", "fill-opacity": 0.48 },
+              filter: ["all", ["==", ["get", "candidate_strength"], "strong morphology"], ["!=", ["get", "has_detail_box"], true]],
+              paint: {
+                "fill-extrusion-color": "#d4a056",
+                "fill-extrusion-height": SHOPHOUSE_CANDIDATE_HEIGHT,
+                "fill-extrusion-base": 0,
+                "fill-extrusion-opacity": 0.9,
+                "fill-extrusion-vertical-gradient": true,
+              },
             });
             map.addLayer({
               id: "bkkx-rowhouse-candidates-outline",
               type: "line",
               source: "bkkx-rowhouse-candidates-src",
               minzoom: 13.5,
-              layout: { visibility: "none" },
-              paint: { "line-color": "#fff0c7", "line-width": 1, "line-opacity": 0.72 },
+              paint: { "line-color": "#fff0c7", "line-width": 1, "line-opacity": 0.55 },
             });
 
             const inspectCandidate = (event: maplibregl.MapLayerMouseEvent) => {
@@ -1665,6 +1784,112 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
     }
   }, [showPoi, poiData, mapReady]);
 
+  // The registry half, fetched once the layer is first opened. Nothing is
+  // requested while the layer is off — a map that quietly polls a camera
+  // network nobody asked to see is not a map, it is a tracker.
+  useEffect(() => {
+    if (!showCameras || registryCameras !== null) return;
+    let cancelled = false;
+    void (async () => {
+      try {
+        const res = await fetch("/api/live/cctv", { headers: { accept: "application/json" } });
+        const env = (await res.json()) as {
+          ok: boolean;
+          reason?: string;
+          data?: { cameras: Camera[]; configured: boolean };
+        };
+        if (cancelled) return;
+        if (!env.ok || !env.data) {
+          setRegistryCameras([]);
+          setCameraFeedReason(env.reason ?? "The camera registry did not answer.");
+          return;
+        }
+        if (!env.data.configured) {
+          setRegistryCameras([]);
+          setCameraFeedReason(
+            "No CCTV registry is configured on this deployment, so only the curated streams appear. Setting CCTV_SOURCE_URL or LONGDO_API_KEY on the Worker fills this layer with the operator's own network.",
+          );
+          return;
+        }
+        setRegistryCameras(
+          env.data.cameras
+            // A registry row with no coordinate is still a camera; it just
+            // cannot go on a map. It stays countable in the rail.
+            .filter((c): c is Camera & { lat: number; lon: number } =>
+              typeof c.lat === "number" && typeof c.lon === "number")
+            .map((c) => ({
+              id: `registry-${c.id}`,
+              name: c.name,
+              lat: c.lat,
+              lon: c.lon,
+              district: c.district,
+              place: null,
+              locatedBy: "published by the operator's own camera registry",
+              precision: "registry",
+              videoId: null,
+              pageUrl: c.pageUrl,
+              snapshotUrl: c.snapshotUrl,
+              attribution: c.attribution,
+              origin: "registry" as const,
+            })),
+        );
+        setCameraFeedReason(null);
+      } catch (err) {
+        if (cancelled) return;
+        setRegistryCameras([]);
+        setCameraFeedReason(`Could not reach this site's own camera endpoint: ${(err as Error).message}`);
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [showCameras, registryCameras]);
+
+  const atlasCameras = useMemo(
+    () => [...CURATED_ATLAS_CAMERAS, ...(registryCameras ?? [])],
+    [registryCameras],
+  );
+
+  // Camera markers. Same teardown-and-rebuild shape as the POI layers —
+  // the set is small enough that diffing would cost more than it saves.
+  useEffect(() => {
+    const map = mapRef.current;
+    const maplibregl = maplibreModuleRef.current;
+    // Deliberately NOT gated on mapReady. That flag tracks the style's `load`
+    // event, and a Marker is a DOM overlay that needs neither the style nor a
+    // single tile — so gating on it would blank the camera layer whenever the
+    // basemap CDN is slow or down, which is exactly when an operator most
+    // wants to know where the live views are. mapReady stays in the deps so
+    // the layer still rebuilds when the map finishes loading.
+    if (!map || !maplibregl) return;
+
+    cameraMarkerRefs.current.forEach((m) => m.remove());
+    cameraMarkerRefs.current = [];
+    if (!showCameras) return;
+
+    for (const cam of atlasCameras) {
+      const el = document.createElement("button");
+      el.type = "button";
+      el.className = `bkkx-cam-marker is-${cam.origin}`;
+      el.setAttribute("aria-label", `Live camera: ${cam.name}`);
+      el.title = cam.place ?? cam.name;
+      el.innerHTML = '<span class="cam-dot" aria-hidden="true"></span><span class="cam-pulse" aria-hidden="true"></span>';
+      el.addEventListener("click", (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        setSelectedCamera(cam);
+        setCameraPlaying(false);
+        setSelectedPoi(null);
+        setSelectedMobility(null);
+        setSelectedArchitecture(null);
+        map.flyTo({ center: [cam.lon, cam.lat], zoom: 16.6, pitch: 60, speed: 0.8, essential: true });
+      });
+      cameraMarkerRefs.current.push(
+        new maplibregl.Marker({ element: el, anchor: "center" }).setLngLat([cam.lon, cam.lat]).addTo(map),
+      );
+    }
+  }, [showCameras, atlasCameras, mapReady]);
+
   // Keep the corridor geometry and its point markers under one toggle.
   useEffect(() => {
     const map = mapRef.current;
@@ -1736,24 +1961,27 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
           ? EVIDENCE_HERO_COLOR
           : (["coalesce", ["get", "material_color"], "#f1c75b"] as maplibregl.ExpressionSpecification),
       ],
+      ["bkkx-rowhouse-candidates-possible", evidenceMode ? EVIDENCE_CANDIDATE_COLOR : "#c4a574"],
+      ["bkkx-rowhouse-candidates-strong", evidenceMode ? EVIDENCE_CANDIDATE_COLOR : "#d4a056"],
     ];
     for (const [layerId, color] of repaint) {
       if (map.getLayer(layerId)) map.setPaintProperty(layerId, "fill-extrusion-color", color);
     }
   }, [evidenceMode, mapReady, showArchitecturalDetail]);
 
+  // The candidate massing is 3D massing, so `D` hides it with the rest; the
+  // outline is the candidate screen itself and follows only its own toggle.
   useEffect(() => {
     const map = mapRef.current;
     if (!map || !mapReady) return;
-    const visibility = showRowhouseCandidates ? "visible" : "none";
-    for (const layerId of [
-      "bkkx-rowhouse-candidates-possible",
-      "bkkx-rowhouse-candidates-strong",
-      "bkkx-rowhouse-candidates-outline",
-    ]) {
-      if (map.getLayer(layerId)) map.setLayoutProperty(layerId, "visibility", visibility);
+    const massing = showRowhouseCandidates && showArchitecturalDetail ? "visible" : "none";
+    for (const layerId of ["bkkx-rowhouse-candidates-possible", "bkkx-rowhouse-candidates-strong"]) {
+      if (map.getLayer(layerId)) map.setLayoutProperty(layerId, "visibility", massing);
     }
-  }, [showRowhouseCandidates, mapReady]);
+    if (map.getLayer("bkkx-rowhouse-candidates-outline")) {
+      map.setLayoutProperty("bkkx-rowhouse-candidates-outline", "visibility", showRowhouseCandidates ? "visible" : "none");
+    }
+  }, [showRowhouseCandidates, showArchitecturalDetail, mapReady]);
 
   // Synchronize Zoning Layer visibility
   useEffect(() => {
@@ -1975,6 +2203,15 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
             </button>
             <button
               type="button"
+              className={showCameras ? "active camera-active" : ""}
+              onClick={() => setShowCameras((v) => !v)}
+              aria-pressed={showCameras}
+              title="Live cameras with a confirmed position. Placeholder-located streams stay in the war room rail, off the map. Shortcut: V"
+            >
+              ◉ Live cams
+            </button>
+            <button
+              type="button"
               className={showMobility ? "active mobility-active" : ""}
               onClick={() => {
                 if (showMobility) setSelectedMobility(null);
@@ -2051,6 +2288,17 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
                   {EVIDENCE_TALLY.total.toLocaleString("en-US")} extruded buildings here have a
                   height nobody recorded — the model inferred it from a building tag. Counted at
                   build time from the layers themselves, not estimated.
+                  {EVIDENCE_HIDDEN > 0 ? (
+                    <>
+                      {" "}
+                      {EVIDENCE_HIDDEN} boxes standing under a hero model are hidden and not counted.
+                    </>
+                  ) : null}
+                  {" "}
+                  {EVIDENCE_CANDIDATES.extruded.toLocaleString("en-US")} screened shophouses are extruded at
+                  statutory storey heights where no OSM footprint stands;{" "}
+                  {EVIDENCE_CANDIDATES.onDetailBox.toLocaleString("en-US")} more stand on one and are
+                  outlined only.
                 </p>
               </div>
             </details>
@@ -2062,8 +2310,21 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
               {showArchitecturalDetail && !evidenceMode ? <span><i className="key-building key-fabric" />Old Town full footprints</span> : null}
               {showArchitecturalDetail && !evidenceMode ? <span><i className="key-building key-landmark" />Curated landmark massing</span> : null}
               {showArchitecturalDetail && !evidenceMode ? <span><i className="key-building key-hero" />Evidence-labelled hero model</span> : null}
+              {showArchitecturalDetail && showRowhouseCandidates && !evidenceMode ? <span><i className="key-building key-candidate" />Screened shophouses · statutory storeys</span> : null}
               {showPoi.oldtown ? <span><i className="key-line key-rowhouse" />Documented rowhouse</span> : null}
               {showPoi.oldtown ? <span><i className="key-line key-rowhouse key-dashed" />Interpretive corridor</span> : null}
+              {showCameras ? (
+                <span>
+                  <i className="key-cam" />
+                  Live cameras <b>{atlasCameras.length}</b>
+                </span>
+              ) : null}
+              {showCameras && cameraFeedReason ? (
+                /* Why the layer is thin, said plainly. An operator seeing six
+                   pins over a city of thousands of cameras should be told it
+                   is a missing credential, not a quiet city. */
+                <p className="atlas-cam-note">{cameraFeedReason}</p>
+              ) : null}
               {showMobility ? <span><i className="key-line key-rail" />MRT / BTS</span> : null}
               {showMobility ? <span><i className="key-line key-boat key-dotted" />Boat / ferry</span> : null}
               {showAerosol ? <span><i className="key-aerosol" />Satellite aerosol depth</span> : null}
@@ -2106,6 +2367,7 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
               <div><dt>A</dt><dd>Satellite aerosol</dd></div>
               <div><dt>D</dt><dd>Old Town 3D detail</dd></div>
               <div><dt>E</dt><dd>Evidence mode</dd></div>
+              <div><dt>V</dt><dd>Live cameras</dd></div>
               <div><dt>R</dt><dd>Rowhouse candidates</dd></div>
               <div><dt>C</dt><dd>Copy citable view link</dd></div>
               <div><dt>?</dt><dd>This card</dd></div>
@@ -2232,6 +2494,16 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
                   </button>
                   <button
                     type="button"
+                    onClick={() => setShowCameras((v) => !v)}
+                    className={`layer-toggle-btn camera-toggle ${showCameras ? "active" : ""}`}
+                    aria-pressed={showCameras}
+                    aria-label="Toggle live camera positions"
+                    title="Live cameras with a confirmed position. Shortcut: V"
+                  >
+                    ◉ Live cams
+                  </button>
+                  <button
+                    type="button"
                     onClick={() => setShowHeritage((prev) => !prev)}
                     className={`layer-toggle-btn ${showHeritage ? "active" : ""}`}
                     aria-pressed={showHeritage}
@@ -2282,11 +2554,11 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
                   </button>
                 </div>
                 <small className="control-source-note">
-                  Old Town 3D: {HERITAGE_DETAIL_COUNT.toLocaleString()} full-resolution OSM footprints + {HERITAGE_LANDMARK_PART_COUNT} curated landmark parts + {HERO_MONUMENT_PART_COUNT} hero parts across Wat Arun, Wat Phra Kaew and Wat Pho.
+                  Old Town 3D: {HERITAGE_DETAIL_COUNT.toLocaleString()} full-resolution OSM footprints + {HERITAGE_LANDMARK_PART_COUNT} curated landmark parts + {HERO_MONUMENT_PART_COUNT} hero parts across Wat Arun, Wat Phra Kaew, Wat Pho, Loha Prasat, the palace prasats and the Golden Mount, with the {EVIDENCE_HIDDEN} boxes the hero models replace hidden; {EVIDENCE_CANDIDATES.extruded.toLocaleString()} screened shophouses extruded at statutory storey heights where no OSM footprint stands, {EVIDENCE_CANDIDATES.onDetailBox.toLocaleString()} outlined only where one does.
                   {" "}{HERITAGE_DETAIL_NOTE}{" "}
                   Conservation geometry is off by default and illustrative. {BKK_URBAN_ZONING_NOTE}
                   {" "}{HERITAGE_MOBILITY_NOTE} NASA aerosol is a dated regional optical-depth
-                  composite, not street-level PM2.5. Candidate footprints are opt-in and unverified.
+                  composite, not street-level PM2.5. Screened shophouse fabric is on by default as 3D massing and remains unverified.
                 </small>
               </div>
             )}
@@ -2403,6 +2675,96 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
           );
         })()}
 
+        {selectedCamera && (
+          <div
+            className="heritage-inspector-card camera-inspector-card"
+            role="dialog"
+            aria-modal="false"
+            aria-label={`Live camera: ${selectedCamera.name}`}
+          >
+            <div className="heritage-card-header">
+              <div className="heritage-badge-group">
+                <span className="heritage-reg-badge is-live">● LIVE</span>
+                <span className="heritage-era-badge">{selectedCamera.precision}</span>
+              </div>
+              <button
+                type="button"
+                className="heritage-close-btn"
+                onClick={() => {
+                  setSelectedCamera(null);
+                  setCameraPlaying(false);
+                }}
+                aria-label="Close camera"
+              >
+                ✕
+              </button>
+            </div>
+            <h4>{selectedCamera.name}</h4>
+            {selectedCamera.place ? <p className="heritage-desc">{selectedCamera.place}</p> : null}
+
+            {/* The facade, same as the war room rail: nothing contacts
+                Google until a viewer asks it to. */}
+            <div className="cam-stage">
+              {cameraPlaying && selectedCamera.videoId ? (
+                <iframe
+                  src={embedFor(selectedCamera.videoId)}
+                  title={selectedCamera.name}
+                  allow="autoplay; encrypted-media; picture-in-picture"
+                  allowFullScreen
+                />
+              ) : selectedCamera.videoId ? (
+                <button
+                  type="button"
+                  className="cam-play"
+                  onClick={() => setCameraPlaying(true)}
+                  aria-label={`Play ${selectedCamera.name}`}
+                >
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={posterFor(selectedCamera.videoId)} alt="" loading="lazy" />
+                  <span className="cam-play-glyph" aria-hidden="true">▶</span>
+                  <span className="cam-play-note">press to play · nothing loads until you do</span>
+                </button>
+              ) : selectedCamera.snapshotUrl ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img src={selectedCamera.snapshotUrl} alt={selectedCamera.name} loading="lazy" />
+              ) : (
+                <p className="cam-nostream">
+                  {selectedCamera.origin === "curated"
+                    ? // A link-only stream: some operators do not licence their
+                      // player for third-party embedding, and taking it anyway
+                      // is not ours to do.
+                      "This operator does not licence their player for embedding, so the stream opens on their own page rather than here."
+                    : "This registry entry publishes a position but no stream this page can embed."}
+                  {selectedCamera.pageUrl ? " The link below goes straight to it." : ""}
+                </p>
+              )}
+            </div>
+
+            <div className="heritage-meta-grid">
+              <div>
+                <span>District</span>
+                <strong lang="th">{selectedCamera.district ?? "not recorded"}</strong>
+              </div>
+              <div>
+                <span>Source</span>
+                <strong>{selectedCamera.origin === "curated" ? "curated stream" : "camera registry"}</strong>
+              </div>
+            </div>
+            <p className="heritage-source-note">
+              {/* The register's discipline, applied to a camera: the position
+                  is only as good as the method that established it. */}
+              {selectedCamera.locatedBy}
+              <br />
+              {selectedCamera.attribution ? <>{selectedCamera.attribution}<br /></> : null}
+              {selectedCamera.pageUrl ? (
+                <a href={selectedCamera.pageUrl} target="_blank" rel="noreferrer">
+                  Watch at the source ↗
+                </a>
+              ) : null}
+            </p>
+          </div>
+        )}
+
         {hasHistoricContext && selectedArchitecture && (
           <div className="heritage-inspector-card architecture-inspector-card" role="dialog" aria-modal="false" aria-label={`Architectural detail: ${selectedArchitecture.name_en ?? selectedArchitecture.name ?? "Old Town landmark"}`}>
             <div className="heritage-card-header">
@@ -2471,6 +2833,22 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
               <div><span>Depth / width</span><strong>{selectedCandidate.shape_ratio}</strong></div>
               <div><span>Aligned neighbours</span><strong>{selectedCandidate.aligned_neighbours_32m}</strong></div>
               <div><span>From corridor</span><strong>{selectedCandidate.corridor_distance_m} m</strong></div>
+              <div>
+                <span>Storeys</span>
+                <strong>
+                  {selectedCandidate.num_floors
+                    ? `${selectedCandidate.num_floors} (Overture)`
+                    : "2 (modal default)"}
+                </strong>
+              </div>
+              <div>
+                <span>Drawn as</span>
+                <strong>
+                  {selectedCandidate.has_detail_box
+                    ? `outline only — OSM footprint ${selectedCandidate.detail_box_id ?? ""} is extruded here`
+                    : "statutory storey height"}
+                </strong>
+              </div>
             </div>
             <p className="heritage-source-note">
               Overture Maps buildings {selectedCandidate.overture_release} · ID {selectedCandidate.overture_id}<br />
