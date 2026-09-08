@@ -2,12 +2,17 @@
 
 import Link from "next/link";
 import { useLocale } from "../i18n/LocaleContext";
-import { AREA_TH } from "../data/heritage-translations-th";
+import { AREA_MS, AREA_ZH } from "../data/heritage-translations";
 import { walkDistance, type Area, type Walk } from "../data/heritage-content";
+
+function areaTag(locale: string, slug: string, fallback: string): string {
+  if (locale === "ms") return AREA_MS[slug]?.tagline ?? fallback;
+  if (locale === "zh") return AREA_ZH[slug]?.tagline ?? fallback;
+  return fallback;
+}
 
 export function QuartersIndex({ areas }: { areas: Area[] }) {
   const { t, locale } = useLocale();
-  const th = locale === "th";
   return (
     <section className="register-quarters" id="quarters" aria-label="Heritage quarters">
       <h2 className="register-section-title">{t("section_quarters_title")}</h2>
@@ -17,10 +22,10 @@ export function QuartersIndex({ areas }: { areas: Area[] }) {
           <li key={area.slug}>
             <Link href={`/areas/${area.slug}`}>
               <span className="quarters-name">
-                {area.name} <small lang="th">{area.thai}</small>
+                {area.name} <small lang={locale === "zh" ? "zh" : "ms"}>{area.thai}</small>
               </span>
-              <span className="quarters-tag" lang={th ? "th" : undefined}>
-                {th ? AREA_TH[area.slug]?.tagline ?? area.tagline : area.tagline}
+              <span className="quarters-tag" lang={locale === "en" ? undefined : locale}>
+                {areaTag(locale, area.slug, area.tagline)}
               </span>
             </Link>
           </li>

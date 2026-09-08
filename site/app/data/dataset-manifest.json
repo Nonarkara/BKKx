@@ -48,6 +48,38 @@
       "Polygon"
     ]
   },
+  "/data/klx-flood-corridor.geojson": {
+    "bytes": 242669,
+    "sha256": "925c32dfbd616149611b3b2a89811202190448dc96d130baaa37088f20e347f5",
+    "features": 11,
+    "kinds": [
+      "Polygon"
+    ]
+  },
+  "/data/klx-hero-monuments.geojson": {
+    "bytes": 155323,
+    "sha256": "6e50e05ffa7e754162a6f5aa01121cb3a7e9b904c4037df4fa9d4d971d4cb9af",
+    "features": 45,
+    "kinds": [
+      "Polygon"
+    ]
+  },
+  "/data/klx-land-price.geojson": {
+    "bytes": 6537,
+    "sha256": "f65a69cc26fc4876998c4c3ed7eaa7eba8df75e1953df70734873bab22ca7a0a",
+    "features": 5,
+    "kinds": [
+      "Polygon"
+    ]
+  },
+  "/data/klx-rivers.geojson": {
+    "bytes": 111356,
+    "sha256": "9f4d6b7d733f0be48940990715abd8c1e99f597e1ab13e26f983732f2e55eeea",
+    "features": 11,
+    "kinds": [
+      "LineString"
+    ]
+  },
   "/data/rattanakosin-forts.geojson": {
     "bytes": 1452,
     "sha256": "78b9acad26c2fae56eb9a5dd3db1655fe6cb2e1f2abc234d3afbc27d82e590c9",
@@ -74,6 +106,12 @@
       "Point"
     ]
   },
+  "/data/sources/klx-osm-way-snapshot.json": {
+    "bytes": 289898,
+    "sha256": "7c77d62e0d338e1f18dcbdbe42b89f4a2ae5a176540ff99844d054157294e589",
+    "features": 34,
+    "kinds": []
+  },
   "/data/sources/wat-arun-osm-way-snapshot.json": {
     "bytes": 5643,
     "sha256": "3bf7a5038ff553d7716fbe4b0c25381ed35cfa004091703135480c21f8e94ef7",
@@ -90,9 +128,9 @@
     ]
   },
   "/heritage-register.json": {
-    "bytes": 1302990,
-    "sha256": "25fff1e3138a1f14b0dd763ccefc19cf0620e1763573f61db79d73fc712c66c1",
-    "features": 571,
+    "bytes": 16069,
+    "sha256": "cf47ddbb41a42fae818e9c28d6f6c042175ec257604dbe6f095257894f4f2cd0",
+    "features": 20,
     "kinds": []
   },
   "/pois/national-archives.geojson": {

@@ -4,7 +4,7 @@ import { AREAS, WALKS } from "./data/heritage-content";
 import { REGISTER_SITES } from "./data/heritage-register";
 import { CLUSTER_RECORDS } from "./data/shophouse-spine-index";
 
-const siteUrl = "https://bkk.nonarkara.org";
+const siteUrl = "https://klx.nonarkara.org";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const lastModified = new Date("2026-08-09T00:00:00+07:00");

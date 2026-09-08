@@ -1,7 +1,5 @@
-// Short, mechanical UI chrome strings — hand-translated, not swarm-translated
-// (the swarm handled the long-form editorial prose in heritage-translations-th.ts).
-// Long-form content that has no Thai translation falls back to English via
-// useLocale()'s t(); this dictionary must do the same for any missing key.
+// Short, mechanical UI chrome strings — hand-translated, not swarm-translated.
+// Long-form content falls back to English via useLocale()'s t().
 
 export const DICTIONARY = {
   en: {
@@ -9,22 +7,26 @@ export const DICTIONARY = {
     nav_walks: "Walks",
     nav_register: "Register",
     nav_about: "About",
-    nav_worlds: "The worlds",
+    nav_worlds: "The atlas",
     nav_github: "GitHub",
 
     hero_eyebrow: "Why this exists",
-    front_door_tagline: "The 3D map is the front door. Nine quarters, seven walks, 571 registered monuments — pick a quarter and fly there.",
+    front_door_tagline:
+      "The 3D map is the front door. Nine quarters, three walks, a National Heritage register mapped honestly — pick a landmark and fly there.",
 
     section_quarters_title: "The quarters",
     section_walks_title: "The walks",
     section_register_title: "The register, mapped",
-    quarters_lede: "From the royal island to the green lung. Click to fly the map.",
+    quarters_lede: "From Dataran Merdeka to Thean Hou. Click to fly the map.",
     home_quarters_heading: "Nine quarters",
     home_source_label: "Source",
     home_source_github: "Source on GitHub",
-    quarters_index_lede: "Heritage in Bangkok is not scattered evenly — it pools in quarters, each with its own founding story. Nine of them, from the royal island to the green lung, each with its monuments, its walks and its own page.",
-    walks_index_lede: "Seven routes, seven different ways of moving through the city's heritage — sacred sites, trading lanes, the royal axis, a market morning, a green loop by bicycle. Every line is a real street-following route; every stop is a documented place.",
-    register_mapped_lede: "Every monument with a position precise enough to draw. Filled marks are gazetted; hollow marks await consideration. Pick one for its history, its Royal Gazette entry, and — inside a generated world — the block to stand on.",
+    quarters_index_lede:
+      "Heritage in Kuala Lumpur is not scattered evenly — it pools in quarters, each with its own founding story. Nine of them, from the padang to the hillside temple, each with its monuments, its walks and its own page.",
+    walks_index_lede:
+      "Three routes through the civic core, the Golden Triangle, and Chinatown to Thean Hou. Distances are 1.25 × great-circle; the public OSRM foot profile detours around Dataran Merdeka and is not used.",
+    register_mapped_lede:
+      "National Heritage sites from Jabatan Warisan Negara, plus named OSM landmarks. Filled marks are gazetted; hollow marks are iconic but not on the 2007/2009/2012 lists pulled here. Unlocated gazette entries stay unpinned.",
     by_bicycle: "by bicycle",
 
     filter_all: "Every located monument",
@@ -41,7 +43,7 @@ export const DICTIONARY = {
     walk_mode_walking: "Walking",
     walk_mode_bike: "Bicycle",
     walk_by_the_numbers: "By the numbers",
-    walk_on_register: "On the Fine Arts register",
+    walk_on_register: "On the National Heritage lists pulled here",
     walk_oldest_gazette: "Oldest gazette entry on this walk",
     walk_walkable_minecraft: "Walkable in Minecraft",
     walk_pace: "Pace",
@@ -56,10 +58,9 @@ export const DICTIONARY = {
     walk_from_stop: "m from stop",
     walk_min_walk: "min walk",
 
-    // data.go.th POI layers (5 toggles in the atlas GIS panel)
-    poi_legend_label: "Data.go.th POI Layers",
+    poi_legend_label: "Map layers",
     poi_legend_caption:
-      "From data.go.th & data.bangkok.go.th open-data registries. BKK bbox only (lng 100.2–101.0, lat 13.4–14.2).",
+      "KLX overlay: stacked hero monuments, OSM rivers, interpretive drainage corridors, listing-based land bands. OpenFreeMap 3D buildings are global OSM massing.",
     poi_pin_label: "pin",
     poi_pins_label: "pins",
 
@@ -74,81 +75,159 @@ export const DICTIONARY = {
 
     lang_toggle_label: "Language",
   },
-  th: {
-    nav_quarters: "ย่านต่างๆ",
-    nav_walks: "เส้นทางเดิน",
-    nav_register: "ทะเบียนโบราณสถาน",
-    nav_about: "เกี่ยวกับ",
-    nav_worlds: "โลก Minecraft",
+  ms: {
+    nav_quarters: "Kawasan",
+    nav_walks: "Laluan jalan kaki",
+    nav_register: "Daftar warisan",
+    nav_about: "Tentang",
+    nav_worlds: "Atlas",
     nav_github: "GitHub",
 
-    hero_eyebrow: "ที่มาของโครงการนี้",
-    front_door_tagline: "แผนที่ 3 มิติคือหน้าบ้าน — เก้าย่าน เจ็ดเส้นทางเดิน โบราณสถาน 571 แห่ง เลือกย่านแล้วบินไปดูได้เลย",
-    home_quarters_heading: "เก้าย่าน",
-    home_source_label: "แหล่งข้อมูล",
-    home_source_github: "ซอร์สโค้ดบน GitHub",
-    quarters_index_lede: "มรดกของกรุงเทพฯ ไม่ได้กระจายเท่ากันทั่วเมือง แต่รวมตัวอยู่เป็นย่านๆ แต่ละย่านมีเรื่องราวการก่อร่างสร้างตัวของตัวเอง เก้าย่านนี้ ตั้งแต่เกาะรัตนโกสินทร์ไปจนถึงปอดสีเขียว แต่ละแห่งมีโบราณสถาน เส้นทางเดิน และหน้าเพจของตัวเอง",
-    walks_index_lede: "เจ็ดเส้นทาง เจ็ดวิธีสัมผัสมรดกของเมืองที่ต่างกัน ทั้งสถานที่ศักดิ์สิทธิ์ ตรอกการค้า แกนราชวงศ์ เช้าวันตลาด และวงรอบสีเขียวด้วยจักรยาน ทุกเส้นทางคือเส้นทางเดินจริงตามถนนจริง ทุกจุดแวะคือสถานที่ที่มีการบันทึกไว้",
-    register_mapped_lede: "โบราณสถานทุกแห่งที่ระบุตำแหน่งได้แม่นยำพอจะวาดลงแผนที่ จุดทึบคือขึ้นทะเบียนแล้ว จุดกลวงคือรอการพิจารณา เลือกจุดใดก็ได้เพื่อดูประวัติ รายการในราชกิจจานุเบกษา และ — ถ้าอยู่ในโลกที่สร้างแล้ว — พิกัดบล็อกที่จะไปยืนได้",
-    by_bicycle: "โดยจักรยาน",
+    hero_eyebrow: "Sebab wujud",
+    front_door_tagline:
+      "Peta 3D ialah pintu depan. Sembilan kawasan, tiga laluan, daftar Warisan Kebangsaan yang dipetakan dengan jujur — pilih mercu tanda dan terbang ke situ.",
 
-    section_quarters_title: "ย่านต่างๆ",
-    section_walks_title: "เส้นทางเดิน",
-    section_register_title: "ทะเบียนโบราณสถานบนแผนที่",
-    quarters_lede: "จากเกาะรัตนโกสินทร์ไปจนถึงปอดสีเขียว คลิกเพื่อบินแผนที่",
+    section_quarters_title: "Kawasan",
+    section_walks_title: "Laluan jalan kaki",
+    section_register_title: "Daftar, dipetakan",
+    quarters_lede: "Dari Dataran Merdeka ke Thean Hou. Klik untuk terbang.",
+    home_quarters_heading: "Sembilan kawasan",
+    home_source_label: "Sumber",
+    home_source_github: "Sumber di GitHub",
+    quarters_index_lede:
+      "Warisan Kuala Lumpur tidak tersebar rata — ia berkumpul dalam kawasan, setiap satu dengan cerita penubuhannya. Sembilan kawasan, dari padang ke kuil di bukit.",
+    walks_index_lede:
+      "Tiga laluan: teras sivik, Segi Tiga Emas, dan 茨厂街 ke Thean Hou. Jarak ialah 1.25 × bulatan besar; profil kaki OSRM awam memusing Dataran Merdeka dan tidak digunakan.",
+    register_mapped_lede:
+      "Tapak Warisan Kebangsaan Jabatan Warisan Negara, plus mercu tanda OSM yang dinamakan. Tanda padat sudah diisytihar; tanda berongga ikonik tetapi tiada dalam senarai 2007/2009/2012 yang disemak di sini.",
+    by_bicycle: "dengan basikal",
 
-    filter_all: "โบราณสถานทั้งหมดที่ระบุตำแหน่งได้",
-    filter_registered: "ขึ้นทะเบียนแล้วเท่านั้น",
-    filter_walkable: "เดินได้ในโลก Minecraft",
-    status_gazetted: "ขึ้นทะเบียนแล้ว",
-    status_awaiting: "รอพิจารณาขึ้นทะเบียน",
+    filter_all: "Setiap monumen yang ada pin",
+    filter_registered: "Yang diisytihar sahaja",
+    filter_walkable: "Boleh berjalan dalam Minecraft",
+    status_gazetted: "diisytihar",
+    status_awaiting: "menunggu pertimbangan",
 
-    walk_eyebrow: "เส้นทางเดินเชิงมรดก",
-    walk_stops: "จุดแวะ",
-    walk_distance: "ระยะทาง",
-    walk_on_foot: "เวลาเดิน",
-    walk_mode: "รูปแบบ",
-    walk_mode_walking: "เดินเท้า",
-    walk_mode_bike: "จักรยาน",
-    walk_by_the_numbers: "ตัวเลขที่น่าสนใจ",
-    walk_on_register: "อยู่ในทะเบียนกรมศิลปากร",
-    walk_oldest_gazette: "รายการขึ้นทะเบียนที่เก่าแก่ที่สุดในเส้นทางนี้",
-    walk_walkable_minecraft: "เดินได้ในโลก Minecraft",
-    walk_pace: "ความเร็วเฉลี่ย",
-    walk_longest_shortest: "ช่วงที่ยาวที่สุด / สั้นที่สุด",
-    walk_of: "จาก",
-    walk_stops_lower: "จุด",
-    walk_years_ago: "ปีที่แล้ว",
-    walk_newest: "ล่าสุด",
-    walk_gazetted_label: "ขึ้นทะเบียนปี",
-    walk_from_stop: "เมตร จากจุดที่",
-    walk_min_walk: "นาทีเดิน",
-    walk_nearby_eyebrow: "ใกล้เคียง · เศรษฐกิจริมถนน",
-    walk_nearby_source: "OpenStreetMap (ODbL) · เรียงตามระยะทางจากจุด",
+    walk_eyebrow: "Laluan warisan",
+    walk_stops: "Hentian",
+    walk_distance: "Jarak",
+    walk_on_foot: "Berjalan kaki",
+    walk_mode: "Mod",
+    walk_mode_walking: "Berjalan kaki",
+    walk_mode_bike: "Basikal",
+    walk_by_the_numbers: "Mengikut nombor",
+    walk_on_register: "Dalam senarai Warisan Kebangsaan yang disemak",
+    walk_oldest_gazette: "Pengisytiharan tertua pada laluan ini",
+    walk_walkable_minecraft: "Boleh berjalan dalam Minecraft",
+    walk_pace: "Kadar",
+    walk_longest_shortest: "Kaki terpanjang / terpendek",
+    walk_of: "daripada",
+    walk_stops_lower: "hentian",
+    walk_years_ago: "tahun lalu",
+    walk_newest: "terbaharu",
+    walk_gazetted_label: "Diisytihar",
+    walk_nearby_eyebrow: "Berdekatan · ekonomi jalanan",
+    walk_nearby_source: "OpenStreetMap (ODbL) · disusun mengikut jarak dari hentian ini",
+    walk_from_stop: "m dari hentian",
+    walk_min_walk: "min berjalan",
 
-    poi_legend_label: "ชั้นข้อมูล POI จาก data.go.th",
+    poi_legend_label: "Lapisan peta",
     poi_legend_caption:
-      "จากทะเบียนข้อมูลเปิด data.go.th และ data.bangkok.go.th กรองเฉพาะในกรุงเทพมหานคร (lng 100.2–101.0, lat 13.4–14.2)",
-    poi_pin_label: "จุด",
-    poi_pins_label: "จุด",
+      "Lapisan KLX: mercu tanda bertingkat, sungai OSM, koridor saliran interpretif, jalur harga tanah berasaskan senarai. Bangunan 3D OpenFreeMap ialah jisim OSM global.",
+    poi_pin_label: "pin",
+    poi_pins_label: "pin",
 
-    quests_heading: "ภารกิจใกล้เคียง",
-    quests_lede: "สถานที่จริงที่ยังเปิดอยู่ ไม่ใช่ลิสต์ท็อปเทน ตรวจสอบก่อนเผยแพร่แล้ว แต่ควรโทรเช็คก่อนไปอยู่ดี",
-    quests_address_label: "ที่ตั้ง",
-    quests_map_link: "เปิดในแผนที่",
+    quests_heading: "Hentian sampingan dekat sini",
+    quests_lede: "Tempat nyata yang masih buka — bukan senarai top-10.",
+    quests_address_label: "Di mana",
+    quests_map_link: "Buka dalam Peta",
 
-    oldtown_callout_label: "ทำไมจึงสำคัญ",
+    oldtown_callout_label: "Mengapa penting",
 
-    nav_global: "ทั่วโลก",
+    nav_global: "Global",
 
-    lang_toggle_label: "ภาษา",
+    lang_toggle_label: "Bahasa",
+  },
+  zh: {
+    nav_quarters: "街区",
+    nav_walks: "步行路线",
+    nav_register: "名录",
+    nav_about: "关于",
+    nav_worlds: "地图",
+    nav_github: "GitHub",
+
+    hero_eyebrow: "为何存在",
+    front_door_tagline:
+      "三维地图就是正门。九个街区、三条步行、一份如实标点的国家遗产名录——选一座地标飞过去。",
+
+    section_quarters_title: "街区",
+    section_walks_title: "步行路线",
+    section_register_title: "名录，已上图",
+    quarters_lede: "从独立广场到天后宫。点击即可飞到地图上。",
+    home_quarters_heading: "九个街区",
+    home_source_label: "来源",
+    home_source_github: "GitHub 源码",
+    quarters_index_lede:
+      "吉隆坡的遗产并不均匀散布，而是聚在街区里。九个街区，从独立广场到山腰上的天后宫，各有古迹、步行与专页。",
+    walks_index_lede:
+      "三条路线：殖民市政核心、金三角、茨厂街到天后宫。距离为大圆距离的 1.25 倍；公开 OSRM 步行线会绕开独立广场，故未采用。",
+    register_mapped_lede:
+      "国家遗产局（Jabatan Warisan Negara）名录，外加有名称的 OSM 地标。实心为已公布；空心为地标但不在本次核对的 2007/2009/2012 名单上。未能定位的条目不打点。",
+    by_bicycle: "骑行",
+
+    filter_all: "所有已定位古迹",
+    filter_registered: "仅已公布",
+    filter_walkable: "可在 Minecraft 中行走",
+    status_gazetted: "已公布",
+    status_awaiting: "待审议",
+
+    walk_eyebrow: "遗产步行",
+    walk_stops: "站点",
+    walk_distance: "距离",
+    walk_on_foot: "步行",
+    walk_mode: "方式",
+    walk_mode_walking: "步行",
+    walk_mode_bike: "骑行",
+    walk_by_the_numbers: "数字",
+    walk_on_register: "在本次核对的国家遗产名单上",
+    walk_oldest_gazette: "本路线最早公布年份",
+    walk_walkable_minecraft: "可在 Minecraft 中行走",
+    walk_pace: "步速",
+    walk_longest_shortest: "最长 / 最短一段",
+    walk_of: "/",
+    walk_stops_lower: "站",
+    walk_years_ago: "年前",
+    walk_newest: "最新",
+    walk_gazetted_label: "公布于",
+    walk_nearby_eyebrow: "附近 · 街道经济",
+    walk_nearby_source: "OpenStreetMap (ODbL) · 按距本站距离排序",
+    walk_from_stop: "米，距站点",
+    walk_min_walk: "分钟步行",
+
+    poi_legend_label: "图层",
+    poi_legend_caption:
+      "KLX 图层：分层地标、OSM 河流、解释性排水廊道、基于挂牌的地价带。OpenFreeMap 三维建筑是全球 OSM 体量。",
+    poi_pin_label: "点",
+    poi_pins_label: "点",
+
+    quests_heading: "附近可去之处",
+    quests_lede: "真实仍在营业的地点，不是十佳榜。",
+    quests_address_label: "地址",
+    quests_map_link: "在地图中打开",
+
+    oldtown_callout_label: "为何重要",
+
+    nav_global: "全球",
+
+    lang_toggle_label: "语言",
   },
 } as const;
 
 export type DictKey = keyof typeof DICTIONARY.en;
 
-// Compile-time guard: adding a key to one language without the other is a
-// type error here, not a silent runtime fallback discovered by a user.
-type _AssertBothLocalesCoverAllKeys = Record<DictKey, string> & typeof DICTIONARY.th;
-const _check: _AssertBothLocalesCoverAllKeys = DICTIONARY.th;
-void _check;
+type _AssertMs = Record<DictKey, string> & typeof DICTIONARY.ms;
+type _AssertZh = Record<DictKey, string> & typeof DICTIONARY.zh;
+const _checkMs: _AssertMs = DICTIONARY.ms;
+const _checkZh: _AssertZh = DICTIONARY.zh;
+void _checkMs;
+void _checkZh;

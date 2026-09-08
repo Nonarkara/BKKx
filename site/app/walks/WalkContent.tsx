@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { PlaceMap } from "../PlaceMap";
 import { useLocale } from "../i18n/LocaleContext";
-import { WALK_TH } from "../data/heritage-translations-th";
+import { WALK_MS, WALK_ZH } from "../data/heritage-translations";
 import { MonumentStatus } from "./MonumentStatus";
 import { WalkNearby } from "./WalkNearby";
 import {
@@ -14,7 +14,10 @@ import {
 } from "../data/heritage-content";
 
 function gazetteYear(g: Gazette | undefined): number | null {
-  const year = Number(g?.date.split("/")[2]);
+  if (!g?.date) return null;
+  const parts = g.date.split("/");
+  const raw = parts.length >= 3 ? parts[2] : g.date;
+  const year = Number(raw);
   return Number.isFinite(year) && year > 1800 ? year : null;
 }
 
@@ -25,13 +28,13 @@ function paceLabel(distanceM: number, durationMin: number): string {
 
 export function WalkContent({ walk, areas }: { walk: Walk; areas: Area[] }) {
   const { locale, t } = useLocale();
-  const th = locale === "th";
-  const translation = th ? WALK_TH[walk.slug] : undefined;
+  const translation =
+    locale === "ms" ? WALK_MS[walk.slug] : locale === "zh" ? WALK_ZH[walk.slug] : undefined;
   const intro = translation?.intro ?? walk.intro;
   const distance = walkDistance(walk);
   const stats = walk.stats;
   const thisYear = new Date().getFullYear();
-  const lang = th ? "th" : undefined;
+  const lang = translation ? locale : undefined;
 
   return (
     <>
@@ -41,7 +44,7 @@ export function WalkContent({ walk, areas }: { walk: Walk; areas: Area[] }) {
         </p>
         <h1>
           {walk.name}
-          <small lang="th">{walk.thai}</small>
+          <small lang="ms">{walk.thai}</small>
         </h1>
 
         <dl className="walk-facts">
@@ -86,8 +89,9 @@ export function WalkContent({ walk, areas }: { walk: Walk; areas: Area[] }) {
           }))}
         />
         <p className="register-caption">
-          The line is a real street-following walking route (OSRM foot profile, ©
-          OpenStreetMap contributors)
+          The line is 1.25 × great-circle between stops (© OpenStreetMap
+          contributors for the coordinates). The public OSRM foot profile detours
+          around Dataran Merdeka and is not used.
           {distance
             ? ` — ${distance}${walk.durationMin ? `, about ${walk.durationMin} minutes at walking pace` : ""}`
             : ""}
@@ -123,12 +127,14 @@ export function WalkContent({ walk, areas }: { walk: Walk; areas: Area[] }) {
                 </dd>
               </div>
             ) : null}
+            {stats.walkable > 0 ? (
             <div>
               <dt>{t("walk_walkable_minecraft")}</dt>
               <dd>
                 {stats.walkable} {t("walk_of")} {walk.stops.length} {t("walk_stops_lower")}
               </dd>
             </div>
+            ) : null}
             {walk.distanceM && walk.durationMin ? (
               <div>
                 <dt>{t("walk_pace")}</dt>
@@ -157,7 +163,7 @@ export function WalkContent({ walk, areas }: { walk: Walk; areas: Area[] }) {
                 <div>
                   <h2>
                     {stop.name}
-                    {stop.thai ? <small lang="th">{stop.thai}</small> : null}
+                    {stop.thai ? <small lang="ms">{stop.thai}</small> : null}
                   </h2>
                   <p lang={lang}>{note}</p>
                   <p className="walk-stop-meta">

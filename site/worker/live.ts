@@ -13,7 +13,7 @@
  * reading and an unreachable gauge network are opposite facts.
  */
 
-const RAIN_UPSTREAM = "http://weather.bangkok.go.th/dds_webservices/api/rain/lastdata";
+const RAIN_UPSTREAM = "https://publicinfobanjir.water.gov.my/";
 const UPSTREAM_TIMEOUT_MS = 6_000;
 const TTL_SECONDS = 300;
 
@@ -121,63 +121,13 @@ export type RainPayload = {
 
 export async function handleLiveRain(): Promise<Response> {
   const fetchedAt = new Date().toISOString();
-  const base = { fetchedAt, source: RAIN_UPSTREAM };
-
-  const ctrl = new AbortController();
-  const timer = setTimeout(() => ctrl.abort(), UPSTREAM_TIMEOUT_MS);
-  try {
-    const res = await fetch(RAIN_UPSTREAM, {
-      signal: ctrl.signal,
-      headers: { accept: "application/json", "user-agent": "BKKx/1.0 (+https://bkk.nonarkara.org)" },
-    });
-    if (!res.ok) {
-      return envelope({ ...base, ok: false, reason: `Gauge network returned HTTP ${res.status}.` });
-    }
-    const raw = await res.json().catch(() => null);
-    if (raw === null) {
-      return envelope({ ...base, ok: false, reason: "Gauge network returned a body that is not JSON." });
-    }
-    const upstreamError =
-      raw && typeof raw === "object" && typeof (raw as Record<string, unknown>).Error === "string"
-        ? String((raw as Record<string, unknown>).Error)
-        : null;
-    if (upstreamError && /username|password|user|pass|ผู้ใช้|รหัส/i.test(upstreamError)) {
-      return envelope({
-        ...base,
-        ok: false,
-        reason:
-          "BMA's gauge endpoint now requires credentials. No rainfall reading is shown until the agency provides authorised access.",
-      });
-    }
-    const { stations, skipped } = normaliseRain(raw);
-    if (stations.length === 0) {
-      return envelope({
-        ...base,
-        ok: false,
-        reason: `Gauge network responded, but no station carried a readable rainfall value (${skipped} row(s) unreadable). The upstream shape has probably changed — normaliseRain() in worker/live.ts needs updating.`,
-      });
-    }
-    return envelope<RainPayload>({
-      ...base,
-      ok: true,
-      data: {
-        stations,
-        stationCount: stations.length,
-        wet: stations.filter((s) => s.mm > 0).length,
-        maxMm: stations.reduce((m, s) => Math.max(m, s.mm), 0),
-        unreadable: skipped,
-        agency: "สำนักการระบายน้ำ กทม. · BMA Department of Drainage and Sewerage",
-      },
-    });
-  } catch (err) {
-    const reason =
-      (err as Error)?.name === "AbortError"
-        ? `Gauge network did not respond within ${UPSTREAM_TIMEOUT_MS / 1000}s.`
-        : `Gauge network unreachable: ${(err as Error)?.message ?? "unknown error"}.`;
-    return envelope({ ...base, ok: false, reason });
-  } finally {
-    clearTimeout(timer);
-  }
+  return envelope({
+    ok: false,
+    fetchedAt,
+    source: RAIN_UPSTREAM,
+    reason:
+      "JPS Public Info Banjir (publicinfobanjir.water.gov.my, state code WLH for WP Kuala Lumpur) has no documented public JSON API. This twin does not scrape unofficial mirrors and does not show Bangkok BMA rain as Kuala Lumpur rain. Open-Meteo precipitation is on /api/live/weather.",
+  });
 }
 
 /**
@@ -299,19 +249,19 @@ export async function handleLiveCctv(sourceUrl: string | undefined): Promise<Res
  * else receives it. Edge caching is the bonus, not the reason.
  * ==================================================================== */
 
-const BANGKOK = { lat: 13.7563, lon: 100.5018 };
+const KUALA_LUMPUR = { lat: 3.139, lon: 101.6869 };
 // 15 min — the models do not update faster than this.
 const WEATHER_TTL = 900;
 
 const FORECAST_URL =
-  `https://api.open-meteo.com/v1/forecast?latitude=${BANGKOK.lat}&longitude=${BANGKOK.lon}` +
+  `https://api.open-meteo.com/v1/forecast?latitude=${KUALA_LUMPUR.lat}&longitude=${KUALA_LUMPUR.lon}` +
   "&current=temperature_2m,relative_humidity_2m,precipitation,weather_code,wind_speed_10m" +
   "&hourly=precipitation_probability,precipitation" +
-  "&forecast_days=2&timezone=Asia%2FBangkok";
+  "&forecast_days=2&timezone=Asia%2FKuala_Lumpur";
 
 const AIR_URL =
-  `https://air-quality-api.open-meteo.com/v1/air-quality?latitude=${BANGKOK.lat}&longitude=${BANGKOK.lon}` +
-  "&current=pm2_5,pm10,ozone&timezone=Asia%2FBangkok";
+  `https://air-quality-api.open-meteo.com/v1/air-quality?latitude=${KUALA_LUMPUR.lat}&longitude=${KUALA_LUMPUR.lon}` +
+  "&current=pm2_5,pm10,ozone&timezone=Asia%2FKuala_Lumpur";
 
 export type WeatherPayload = {
   forecastAvailable: boolean;

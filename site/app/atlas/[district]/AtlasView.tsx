@@ -7,8 +7,10 @@ import "maplibre-gl/dist/maplibre-gl.css";
 import type { Stop, World } from "../../walkthrough-data";
 import type { Camera } from "../../../worker/live";
 import {
-  FINEARTS_HERITAGE_SITES,
-  FINEARTS_HERITAGE_SOURCE,
+  PINNED_SITES,
+  REGISTER_SOURCE,
+} from "../../data/heritage-register";
+import {
   type HeritageSite,
 } from "../../data/heritage-finearts";
 import {
@@ -79,11 +81,10 @@ const NASA_AEROSOL_LAYER = "MODIS_Combined_MAIAC_L2G_AerosolOpticalDepth";
 const NASA_AEROSOL_SOURCE =
   "https://gibs.earthdata.nasa.gov/layer-metadata/v1.0/MODIS_Combined_MAIAC_L2G_AerosolOpticalDepth.json";
 
-const HERITAGE_DETAIL_COUNT = 9_275;
-const HERITAGE_LANDMARK_PART_COUNT = 73;
-const HERO_MONUMENT_PART_COUNT = 88;
-const HERITAGE_DETAIL_NOTE =
-  "Full-resolution OpenStreetMap footprints with curated typology heights. Hero monuments use official records and OSM footprints; tiering remains evidence-labelled schematic, not measured conservation documentation. Screened shophouse candidates extrude at the legal storey height (3.5 m ground floor, 3 m above) where Overture is silent — that default is the modal known value, not a survey of the openings.";
+const HERO_MONUMENT_PART_COUNT = 45;
+const HERO_COMPLEX_COUNT = 12;
+const KL_HERO_NOTE =
+  "Stacked schematic parts for mayor-demo recognisability. Official published envelopes (CTBUH, Menara KL, Tourism Malaysia); intermediate tapers labelled interpretive. Not a measured conservation model.";
 
 const HERITAGE_DETAIL_HEIGHT: maplibregl.ExpressionSpecification = [
   "case",
@@ -305,7 +306,7 @@ function districtCenter(stops: Stop[]): LngLat {
   const coords = stops
     .map((stop) => parseCoordinates(stop.coordinates))
     .filter((value): value is LngLat => value !== null);
-  if (coords.length === 0) return [100.5018, 13.7567];
+  if (coords.length === 0) return [101.6869, 3.139];
   const lng = coords.reduce((sum, [x]) => sum + x, 0) / coords.length;
   const lat = coords.reduce((sum, [, y]) => sum + y, 0) / coords.length;
   return [lng, lat];
@@ -655,7 +656,8 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
   // (the POI effect below) read the real module through this ref instead.
   const maplibreModuleRef = useRef<typeof maplibregl | null>(null);
   const markerRefs = useRef<maplibregl.Marker[]>([]);
-  const hasHistoricContext = world.id === "historic-core";
+  const hasHistoricContext = false;
+  const hasKlContext = true;
   const [activeStopId, setActiveStopId] = useState<string>(world.stops[0].id);
   const [mapReady, setMapReady] = useState(false);
 
@@ -685,6 +687,8 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
   // Live cameras. Off by default: the map's first job is the city, and a
   // camera layer is a question you ask of it, not the answer it opens with.
   const [showCameras, setShowCameras] = useState(false);
+  const [showFlood, setShowFlood] = useState(true);
+  const [showLand, setShowLand] = useState(true);
   const [registryCameras, setRegistryCameras] = useState<AtlasCamera[] | null>(null);
   const [cameraFeedReason, setCameraFeedReason] = useState<string | null>(null);
   const [selectedCamera, setSelectedCamera] = useState<AtlasCamera | null>(null);
@@ -806,7 +810,7 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
 
   // Live AQI Fetch
   useEffect(() => {
-    fetch("https://air-quality-api.open-meteo.com/v1/air-quality?latitude=13.7563&longitude=100.5018&current=pm2_5")
+    fetch("https://air-quality-api.open-meteo.com/v1/air-quality?latitude=3.139&longitude=101.6869&current=pm2_5")
       .then((res) => (res.ok ? (res.json() as Promise<OpenMeteoAQIResponse>) : null))
       .then((data) => {
         const val = data?.current?.pm2_5;
@@ -830,7 +834,7 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
 
   // Live weather fetch — same Bangkok coordinate as the PM2.5 call above.
   useEffect(() => {
-    fetch("https://api.open-meteo.com/v1/forecast?latitude=13.7563&longitude=100.5018&current=weather_code,precipitation")
+    fetch("https://api.open-meteo.com/v1/forecast?latitude=3.139&longitude=101.6869&current=weather_code,precipitation")
       .then((res) => (res.ok ? (res.json() as Promise<OpenMeteoWeatherResponse>) : null))
       .then((data) => {
         const code = data?.current?.weather_code;
@@ -848,17 +852,18 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
   // Walk route geometry — same file /walks/:slug pages already draw
   // (PlaceMap.tsx), fetched once so any walk can be picked from the panel.
   useEffect(() => {
-    if (!hasHistoricContext) return;
+    if (!hasKlContext) return;
     fetch("/heritage-walk-geometry.json")
       .then((res) => (res.ok ? (res.json() as Promise<Record<string, { line: LngLat[] }>>) : null))
       .then((data) => {
         if (data) setWalkGeometry(data);
       })
-      .catch((err) => console.warn("bkkx: walk geometry fetch failed", err));
-  }, [hasHistoricContext]);
+      .catch((err) => console.warn("klx: walk geometry fetch failed", err));
+  }, [hasKlContext]);
 
   // 5 data.go.th POI layers — fetched once, only the visible ones get markers.
   useEffect(() => {
+    if (hasKlContext) return;
     let cancelled = false;
     (async () => {
       for (const layer of POI_LAYERS) {
@@ -1150,6 +1155,115 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
             });
           } catch (err) {
             console.warn("bkkx: 3d buildings layer failed", err);
+          }
+        }
+
+        if (hasKlContext && !map.getSource("bkkx-hero-monuments-src")) {
+          try {
+            map.addSource("bkkx-hero-monuments-src", {
+              type: "geojson",
+              data: "/data/klx-hero-monuments.geojson",
+              attribution:
+                "CTBUH / Menara KL / Tourism Malaysia / Jabatan Warisan Negara envelopes · © OpenStreetMap contributors · KLX schematic tiering",
+            });
+            map.addSource("klx-rivers-src", {
+              type: "geojson",
+              data: "/data/klx-rivers.geojson",
+              attribution: "© OpenStreetMap contributors (ODbL-1.0)",
+            });
+            map.addSource("klx-flood-src", {
+              type: "geojson",
+              data: "/data/klx-flood-corridor.geojson",
+              attribution: "Interpretive 90 m OSM river buffer — not JPS zon banjir",
+            });
+            map.addSource("klx-land-src", {
+              type: "geojson",
+              data: "/data/klx-land-price.geojson",
+              attribution: "Listing/media PSF bands — not NAPIC parcels",
+            });
+            map.addLayer({
+              id: "klx-flood-fill",
+              type: "fill",
+              source: "klx-flood-src",
+              paint: { "fill-color": "#3d7ea6", "fill-opacity": 0.18 },
+            });
+            map.addLayer({
+              id: "klx-land-fill",
+              type: "fill",
+              source: "klx-land-src",
+              paint: { "fill-color": "#c9a227", "fill-opacity": 0.12 },
+            });
+            map.addLayer({
+              id: "klx-rivers-line",
+              type: "line",
+              source: "klx-rivers-src",
+              paint: { "line-color": "#7ec8e3", "line-width": 2.4, "line-opacity": 0.9 },
+            });
+            map.addLayer({
+              id: "bkkx-hero-monuments",
+              type: "fill-extrusion",
+              source: "bkkx-hero-monuments-src",
+              minzoom: 12.2,
+              paint: {
+                "fill-extrusion-color": ["coalesce", ["get", "material_color"], "#f1c75b"],
+                "fill-extrusion-height": ["coalesce", ["get", "height"], 12],
+                "fill-extrusion-base": ["coalesce", ["get", "base_height"], 0],
+                "fill-extrusion-opacity": 1,
+                "fill-extrusion-vertical-gradient": true,
+              },
+            });
+            map.addLayer({
+              id: "bkkx-hero-monument-labels",
+              type: "symbol",
+              source: "bkkx-hero-monuments-src",
+              minzoom: 13.6,
+              filter: [
+                "in",
+                ["get", "id"],
+                [
+                  "literal",
+                  [
+                    "petronas-1-shaft",
+                    "petronas-2-shaft",
+                    "petronas-skybridge",
+                    "merdeka-118-spire",
+                    "kl-tower-pod",
+                    "exchange-106-crown",
+                    "masjid-negara-umbrella",
+                    "sas-clock-tower",
+                    "jamek-dome-2",
+                    "thean-hou-pagoda",
+                    "murugan-statue",
+                  ],
+                ],
+              ],
+              layout: {
+                "text-field": ["coalesce", ["get", "name_en"], ["get", "name"]],
+                "text-size": 11,
+                "text-offset": [0, 1.4],
+                "text-anchor": "top",
+                "text-allow-overlap": false,
+              },
+              paint: {
+                "text-color": "#fff0c2",
+                "text-halo-color": "#17120c",
+                "text-halo-width": 1.6,
+              },
+            });
+            const inspectArchitecture = (event: maplibregl.MapLayerMouseEvent) => {
+              const properties = event.features?.[0]?.properties;
+              if (!properties) return;
+              setSelectedArchitecture(properties as unknown as ArchitecturalDetail);
+              setSelectedHeritage(null);
+              setSelectedPoi(null);
+              setSelectedCandidate(null);
+              setSelectedMobility(null);
+            };
+            map.on("click", "bkkx-hero-monuments", inspectArchitecture);
+            map.on("mouseenter", "bkkx-hero-monuments", () => { map.getCanvas().style.cursor = "pointer"; });
+            map.on("mouseleave", "bkkx-hero-monuments", () => { map.getCanvas().style.cursor = ""; });
+          } catch (err) {
+            console.warn("klx: hero / river / land layers failed", err);
           }
         }
 
@@ -1658,24 +1772,36 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
       });
 
       // Add Fine Arts Heritage Markers
-      if (hasHistoricContext) {
-        FINEARTS_HERITAGE_SITES.forEach((site) => {
+      if (hasKlContext) {
+        PINNED_SITES.forEach((site) => {
           const el = document.createElement("button");
           el.type = "button";
           el.className = "bkkx-heritage-marker";
-          el.setAttribute("aria-label", `Heritage site: ${site.name} (${site.thai})`);
-          el.title = `${site.name} · ${site.thai}`;
+          el.setAttribute("aria-label", `Heritage site: ${site.name}`);
+          el.title = site.name;
           el.innerHTML = `<span class="fa-icon">🏛️</span><span class="fa-label">${site.name.split(" ")[0]}</span>`;
+          const mapped: HeritageSite = {
+            id: site.id,
+            name: site.name,
+            thai: site.name,
+            regId: site.id,
+            era: site.gazette?.date ?? "",
+            category: "Civic",
+            coordinates: [site.lon, site.lat],
+            year: site.gazette?.date ?? "",
+            description: site.history ?? site.present ?? "",
+            gazette: site.gazette ? `${site.gazette.topic} ${site.gazette.volume}` : "",
+          };
           el.addEventListener("click", (event) => {
             event.preventDefault();
             event.stopPropagation();
-            setSelectedHeritage(site);
+            setSelectedHeritage(mapped);
             setSelectedMobility(null);
             setSelectedPoi(null);
             setSelectedCandidate(null);
             setSelectedArchitecture(null);
             map.flyTo({
-              center: site.coordinates,
+              center: mapped.coordinates,
               zoom: 17.2,
               pitch: 65,
               speed: 0.8,
@@ -1683,7 +1809,7 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
             });
           });
           const marker = new maplibregl.Marker({ element: el, anchor: "bottom" })
-            .setLngLat(site.coordinates)
+            .setLngLat(mapped.coordinates)
             .addTo(map);
           heritageMarkerRefs.current.push(marker);
         });
@@ -1927,6 +2053,22 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
     }
   }, [showArchitecturalDetail, mapReady]);
 
+  useEffect(() => {
+    const map = mapRef.current;
+    if (!map || !mapReady) return;
+    if (map.getLayer("klx-flood-fill")) {
+      map.setLayoutProperty("klx-flood-fill", "visibility", showFlood ? "visible" : "none");
+    }
+  }, [showFlood, mapReady]);
+
+  useEffect(() => {
+    const map = mapRef.current;
+    if (!map || !mapReady) return;
+    if (map.getLayer("klx-land-fill")) {
+      map.setLayoutProperty("klx-land-fill", "visibility", showLand ? "visible" : "none");
+    }
+  }, [showLand, mapReady]);
+
   // Evidence mode: the same geometry, recoloured by how each height was
   // established. Only the paint changes — no layer is hidden and no
   // footprint moves, so what you were looking at stays where it was and
@@ -2117,8 +2259,8 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
   return (
     <main className={`atlas-page${embedded ? " is-embedded" : ""}`}>
       {!embedded && <header className="atlas-header">
-        <Link className="wordmark" href="/" aria-label="BKKxC(ulture) home">
-          <span>BKK</span>
+        <Link className="wordmark" href="/" aria-label="KLXxC(ulture) home">
+          <span>KL</span>
           <b>x</b>
           <em>C(ulture)</em>
         </Link>
@@ -2127,18 +2269,20 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
             World {world.number} · 3D Atlas
           </span>
           <strong>{world.name}</strong>
-          <small><span lang="th">{world.thai}</span> · {world.distance}</small>
+          <small><span lang="ms">{world.thai}</span> · {world.distance}</small>
         </div>
         <nav className="atlas-header-nav" aria-label="Atlas navigation">
           <Link href="/">Heritage register</Link>
-          <Link href="/worlds#atlas">The worlds</Link>
-          <a className="atlas-download" href={world.download} target="_blank" rel="noreferrer">
-            Download world <span aria-hidden="true">↓</span>
-          </a>
+          <Link href="/worlds#atlas">The atlas</Link>
+          {world.download ? (
+            <a className="atlas-download" href={world.download} target="_blank" rel="noreferrer">
+              Download world <span aria-hidden="true">↓</span>
+            </a>
+          ) : null}
         </nav>
       </header>}
 
-      <div className="atlas-map" aria-label={`3D map of ${world.name}, Bangkok`}>
+      <div className="atlas-map" aria-label={`3D map of ${world.name}, Kuala Lumpur`}>
         <div ref={containerRef} style={{ width: "100%", height: "100%" }} />
 
         {/* Weather FX Overlays */}
@@ -2149,26 +2293,17 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
           <div className="weather-haze-overlay" style={{ opacity: hazeOpacity }} />
         )}
 
-        {embedded && hasHistoricContext && (
+        {embedded && hasKlContext && (
           <div className="atlas-embed-tools" aria-label="Map layers">
             <span className="atlas-embed-tools-label">Explore</span>
-            <button
-              type="button"
-              className={showPoi.oldtown ? "active" : ""}
-              onClick={() => setShowPoi((prev) => ({ ...prev, oldtown: !prev.oldtown }))}
-              aria-pressed={showPoi.oldtown}
-              title="Solid lines: high-confidence documented axes. Dashed lines: curated connections."
-            >
-              ▥ Rowhouses {poiCounts.oldtown}
-            </button>
             <button
               type="button"
               className={showArchitecturalDetail ? "active detail-active" : ""}
               onClick={toggleArchitecturalDetail}
               aria-pressed={showArchitecturalDetail}
-              title={HERITAGE_DETAIL_NOTE}
+              title="Stacked schematic parts. Official published envelopes; intermediate tapers labelled interpretive."
             >
-              ◩ Old Town 3D
+              ◩ Iconic 3D
             </button>
             <button
               type="button"
@@ -2176,7 +2311,7 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
               onClick={() => setEvidenceMode((v) => !v)}
               aria-pressed={evidenceMode}
               disabled={!showArchitecturalDetail}
-              title={`Recolour the massing by how each height was established. ${EVIDENCE_INFERRED_SHARE}% of these ${EVIDENCE_TALLY.total.toLocaleString("en-US")} buildings carry a height nobody recorded. Shortcut: E`}
+              title="Recolour the massing by how each height was established. Shortcut: E"
             >
               ◈ Evidence
             </button>
@@ -2185,21 +2320,9 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
               className={showCameras ? "active camera-active" : ""}
               onClick={() => setShowCameras((v) => !v)}
               aria-pressed={showCameras}
-              title="Live cameras with a confirmed position. Placeholder-located streams stay in the war room rail, off the map. Shortcut: V"
+              title="Live cameras with a confirmed position. Placeholder-located streams stay in the war room rail, off the map."
             >
               ◉ Live cams
-            </button>
-            <button
-              type="button"
-              className={showMobility ? "active mobility-active" : ""}
-              onClick={() => {
-                if (showMobility) setSelectedMobility(null);
-                setShowMobility((prev) => !prev);
-              }}
-              aria-pressed={showMobility}
-              title="Solid lines are rail; dotted lines are scheduled boat and ferry services."
-            >
-              ⛴ Transit
             </button>
             <button
               type="button"
@@ -2207,45 +2330,14 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
               onClick={() => setShowHeritage((prev) => !prev)}
               aria-pressed={showHeritage}
             >
-              🏛 Register {FINEARTS_HERITAGE_SITES.length}
+              🏛 Register {PINNED_SITES.length}
             </button>
-            <details className="atlas-embed-more">
-              <summary>More layers +</summary>
-              <div>
-                <button
-                  type="button"
-                  className={showRowhouseCandidates ? "active" : ""}
-                  onClick={toggleRowhouseCandidates}
-                  aria-pressed={showRowhouseCandidates}
-                  title="Machine-screened present-day footprints for field review; not heritage designations."
-                >
-                  ◫ Candidate screen · {ROWHOUSE_CANDIDATE_SUMMARY.candidate_count.toLocaleString()}
-                </button>
-                <button
-                  type="button"
-                  className={showZoning ? "active" : ""}
-                  onClick={() => setShowZoning((prev) => !prev)}
-                  aria-pressed={showZoning}
-                >
-                  ▧ Conservation context
-                </button>
-                <button
-                  type="button"
-                  className={showAerosol ? "active aerosol-active" : ""}
-                  onClick={() => setShowAerosol((prev) => !prev)}
-                  aria-pressed={showAerosol}
-                  title="NASA Terra + Aqua satellite aerosol optical depth; regional composite, not a street sensor."
-                >
-                  ◉ Satellite aerosol · {aerosolDate}
-                </button>
-                <Link href="/atlas/historic-core" target="_top">Full controls ↗</Link>
-              </div>
-            </details>
+            <Link href="/atlas/klcc" target="_top">Full controls ↗</Link>
           </div>
         )}
 
         <div className="atlas-key-stack">
-          {hasHistoricContext && showArchitecturalDetail && evidenceMode && (
+          {hasKlContext && showArchitecturalDetail && evidenceMode && (
             <details className="atlas-map-key atlas-evidence-key" open>
               <summary>Evidence · how each height was established</summary>
               <div>
@@ -2263,23 +2355,22 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
                   );
                 })}
                 <p className="atlas-evidence-note">
-                  {EVIDENCE_INFERRED_SHARE}% of the{" "}
-                  {EVIDENCE_TALLY.total.toLocaleString("en-US")} extruded buildings here have a
-                  height nobody recorded — the model inferred it from a building tag. Counted at
-                  build time from the layers themselves, not estimated.
+                  Counted at build time from the KL hero parts themselves.
+                  Interpretive tapers are labelled, not measured.{" "}
+                  {EVIDENCE_TALLY.total.toLocaleString("en-US")} extruded parts ·{" "}
+                  {EVIDENCE_INFERRED_SHARE}% inferred envelopes.
                 </p>
               </div>
             </details>
           )}
-          {hasHistoricContext && (
+          {hasKlContext && (
             <details className="atlas-map-key" open>
             <summary>Map key</summary>
             <div>
-              {showArchitecturalDetail && !evidenceMode ? <span><i className="key-building key-fabric" />Old Town full footprints</span> : null}
-              {showArchitecturalDetail && !evidenceMode ? <span><i className="key-building key-landmark" />Curated landmark massing</span> : null}
-              {showArchitecturalDetail && !evidenceMode ? <span><i className="key-building key-hero" />Evidence-labelled hero model</span> : null}
-              {showPoi.oldtown ? <span><i className="key-line key-rowhouse" />Documented rowhouse</span> : null}
-              {showPoi.oldtown ? <span><i className="key-line key-rowhouse key-dashed" />Interpretive corridor</span> : null}
+              {showArchitecturalDetail && !evidenceMode ? <span><i className="key-building key-hero" />Iconic stacked monuments</span> : null}
+              {showFlood ? <span><i className="key-area" />Interpretive 90 m river corridor — not JPS zon banjir</span> : null}
+              {showLand ? <span><i className="key-area" />Listing land-price bands — not NAPIC parcels</span> : null}
+              <span><i className="key-line key-walk" />Sungai Klang / Gombak (OSM)</span>
               {showCameras ? (
                 <span>
                   <i className="key-cam" />
@@ -2287,16 +2378,9 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
                 </span>
               ) : null}
               {showCameras && cameraFeedReason ? (
-                /* Why the layer is thin, said plainly. An operator seeing six
-                   pins over a city of thousands of cameras should be told it
-                   is a missing credential, not a quiet city. */
                 <p className="atlas-cam-note">{cameraFeedReason}</p>
               ) : null}
-              {showMobility ? <span><i className="key-line key-rail" />MRT / BTS</span> : null}
-              {showMobility ? <span><i className="key-line key-boat key-dotted" />Boat / ferry</span> : null}
-              {showAerosol ? <span><i className="key-aerosol" />Satellite aerosol depth</span> : null}
               {selectedWalkSlug ? <span><i className="key-line key-walk" />Selected walk</span> : null}
-              {showZoning ? <span><i className="key-area" />Illustrative conservation context</span> : null}
             </div>
           </details>
           )}
@@ -2329,13 +2413,9 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
             <p className="atlas-shortcuts-title">Operator keys</p>
             <dl>
               <div><dt>H</dt><dd>Heritage register pins</dd></div>
-              <div><dt>Z</dt><dd>Conservation context</dd></div>
-              <div><dt>T</dt><dd>Transit lines &amp; piers</dd></div>
-              <div><dt>A</dt><dd>Satellite aerosol</dd></div>
-              <div><dt>D</dt><dd>Old Town 3D detail</dd></div>
+              <div><dt>D</dt><dd>Iconic 3D monuments</dd></div>
               <div><dt>E</dt><dd>Evidence mode</dd></div>
               <div><dt>V</dt><dd>Live cameras</dd></div>
-              <div><dt>R</dt><dd>Rowhouse candidates</dd></div>
               <div><dt>C</dt><dd>Copy citable view link</dd></div>
               <div><dt>?</dt><dd>This card</dd></div>
             </dl>
@@ -2391,7 +2471,7 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
                       setTimeMode(t);
                     }}
                     className={timeMode === t ? "active" : ""}
-                    title={t === "realtime" ? "Live Bangkok Time" : t}
+                    title={t === "realtime" ? "Live Kuala Lumpur time" : t}
                     aria-label={t === "realtime" ? "Switch to live local time" : `Switch to ${t} lighting`}
                   >
                     {t === "realtime" ? "🕒" : t === "sunrise" ? "🌅" : t === "noon" ? "☀️" : t === "sunset" ? "🌇" : "🌙"}
@@ -2428,13 +2508,13 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
             {weatherMode === "hazepm25" && (
               <div className="pm25-readout">
                 <span className="status-dot" style={{ backgroundColor: pm25Status.color }} />
-                <span>Bangkok PM2.5: {pm25Status.text}</span>
+                <span>Kuala Lumpur PM2.5: {pm25Status.text}</span>
               </div>
             )}
 
             <div className="control-section-divider" />
 
-            {hasHistoricContext && (
+            {hasKlContext && (
               <div className="control-row">
                 <small className="control-label">GIS Layers</small>
                 <div className="btn-group-layers" role="group" aria-label="GIS Data Layers">
@@ -2443,10 +2523,10 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
                     onClick={toggleArchitecturalDetail}
                     className={`layer-toggle-btn detail-toggle ${showArchitecturalDetail ? "active" : ""}`}
                     aria-pressed={showArchitecturalDetail}
-                    aria-label="Toggle detailed Old Town building footprints and landmark massing"
-                    title={HERITAGE_DETAIL_NOTE}
+                    aria-label="Toggle stacked iconic monument parts"
+                    title={KL_HERO_NOTE}
                   >
-                    ◩ Old Town 3D
+                    ◩ Iconic 3D
                   </button>
                   <button
                     type="button"
@@ -2455,7 +2535,7 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
                     aria-pressed={evidenceMode}
                     disabled={!showArchitecturalDetail}
                     aria-label="Recolour the 3D massing by the evidence behind each building height"
-                    title={`Recolour the massing by how each height was established. ${EVIDENCE_INFERRED_SHARE}% of these ${EVIDENCE_TALLY.total.toLocaleString("en-US")} buildings carry a height nobody recorded. Shortcut: E`}
+                    title={`Recolour the massing by how each height was established. ${EVIDENCE_TALLY.total.toLocaleString("en-US")} hero parts. Shortcut: E`}
                   >
                     ◈ Evidence
                   </button>
@@ -2474,58 +2554,38 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
                     onClick={() => setShowHeritage((prev) => !prev)}
                     className={`layer-toggle-btn ${showHeritage ? "active" : ""}`}
                     aria-pressed={showHeritage}
-                    aria-label="Toggle Fine Arts Department Heritage Sites"
+                    aria-label="Toggle National Heritage register pins"
                   >
-                    🏛️ Heritage ({FINEARTS_HERITAGE_SITES.length})
+                    🏛️ Register ({PINNED_SITES.length})
                   </button>
                   <button
                     type="button"
-                    onClick={() => setShowZoning((prev) => !prev)}
-                    className={`layer-toggle-btn ${showZoning ? "active" : ""}`}
-                    aria-pressed={showZoning}
-                    aria-label="Toggle illustrative conservation and planning overlay"
+                    onClick={() => setShowFlood((prev) => !prev)}
+                    className={`layer-toggle-btn ${showFlood ? "active" : ""}`}
+                    aria-pressed={showFlood}
+                    aria-label="Toggle interpretive river flood corridor"
+                    title="90 m buffer around OSM rivers. Not JPS zon banjir."
                   >
-                    ▧ Conservation zones
+                    ▧ Flood corridor
                   </button>
                   <button
                     type="button"
-                    onClick={() => {
-                      if (showMobility) setSelectedMobility(null);
-                      setShowMobility((prev) => !prev);
-                    }}
-                    className={`layer-toggle-btn mobility-toggle ${showMobility ? "active" : ""}`}
-                    aria-pressed={showMobility}
-                    aria-label="Toggle public transport for heritage exploration"
+                    onClick={() => setShowLand((prev) => !prev)}
+                    className={`layer-toggle-btn ${showLand ? "active" : ""}`}
+                    aria-pressed={showLand}
+                    aria-label="Toggle listing-based land price bands"
+                    title="Media and listing PSF bands converted to RM/m². Not NAPIC parcels."
                   >
-                    ⛴ Public transport
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setShowAerosol((prev) => !prev)}
-                    className={`layer-toggle-btn aerosol-toggle ${showAerosol ? "active" : ""}`}
-                    aria-pressed={showAerosol}
-                    aria-label="Toggle NASA satellite aerosol optical depth"
-                    title="Regional Terra + Aqua composite; not a street-level pollution sensor."
-                  >
-                    ◉ Satellite aerosol · {aerosolDate}
-                  </button>
-                  <button
-                    type="button"
-                    onClick={toggleRowhouseCandidates}
-                    className={`layer-toggle-btn ${showRowhouseCandidates ? "active" : ""}`}
-                    aria-pressed={showRowhouseCandidates}
-                    aria-label="Toggle machine-screened rowhouse footprint candidates"
-                    title="Present-day Overture geometry screened for field review; not a heritage designation."
-                  >
-                    ◫ Candidates ({ROWHOUSE_CANDIDATE_SUMMARY.candidate_count.toLocaleString()})
+                    ▧ Land bands
                   </button>
                 </div>
                 <small className="control-source-note">
-                  Old Town 3D: {HERITAGE_DETAIL_COUNT.toLocaleString()} full-resolution OSM footprints + {HERITAGE_LANDMARK_PART_COUNT} curated landmark parts + {HERO_MONUMENT_PART_COUNT} hero parts across Wat Arun, Wat Phra Kaew, Wat Pho, Loha Prasat, the palace prasats and the Golden Mount.
-                  {" "}{HERITAGE_DETAIL_NOTE}{" "}
-                  Conservation geometry is off by default and illustrative. {BKK_URBAN_ZONING_NOTE}
-                  {" "}{HERITAGE_MOBILITY_NOTE} NASA aerosol is a dated regional optical-depth
-                  composite, not street-level PM2.5. Screened shophouse fabric is on by default as 3D massing and remains unverified.
+                  Iconic 3D: {HERO_MONUMENT_PART_COUNT} stacked parts across {HERO_COMPLEX_COUNT} complexes
+                  (Petronas twins, Merdeka 118, Menara KL, Exchange 106, Masjid Negara, Sultan Abdul Samad, Masjid Jamek, Thean Hou, Parlimen, Tugu Negara, Batu Caves Murugan in Gombak).
+                  {" "}{KL_HERO_NOTE}{" "}
+                  Flood fill is an interpretive 90 m OSM-river buffer, not official zon banjir.
+                  Land bands are listing/media PSF converted to RM/m², not NAPIC appraisal parcels.
+                  OpenFreeMap 3D buildings are global OSM massing.
                 </small>
               </div>
             )}
@@ -2570,11 +2630,11 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
 
             <div className="control-section-divider" />
 
-            {hasHistoricContext && (
+            {hasKlContext && (
               <div className="control-row">
                 <small className="control-label">Walks</small>
                 <div className="btn-group-walks" role="group" aria-label="Show a walk's route">
-                  {historicCoreWalks.map((walk) => (
+                  {WALKS.map((walk) => (
                     <button
                       key={walk.slug}
                       type="button"
@@ -2732,7 +2792,7 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
           </div>
         )}
 
-        {hasHistoricContext && selectedArchitecture && (
+        {hasKlContext && selectedArchitecture && (
           <div className="heritage-inspector-card architecture-inspector-card" role="dialog" aria-modal="false" aria-label={`Architectural detail: ${selectedArchitecture.name_en ?? selectedArchitecture.name ?? "Old Town landmark"}`}>
             <div className="heritage-card-header">
               <div className="heritage-badge-group">
@@ -2745,11 +2805,11 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
             </div>
             <h4>{selectedArchitecture.name_en ?? selectedArchitecture.name ?? "Old Town landmark part"}</h4>
             {selectedArchitecture.name_en && selectedArchitecture.name ? (
-              <p className="heritage-thai" lang="th">{selectedArchitecture.name}</p>
+              <p className="heritage-thai" lang="ms">{selectedArchitecture.name}</p>
             ) : null}
             {selectedArchitecture.part_label ? <p className="architecture-part-label">{selectedArchitecture.part_label}</p> : null}
             <p className="heritage-desc">
-              A map-scale part of Bangkok&apos;s heritage silhouette. The footprint and published overall envelope are spatial evidence;
+              A map-scale part of Kuala Lumpur&apos;s heritage silhouette. The footprint and published overall envelope are spatial evidence;
               proportional tiering is an interpretation and must not be read as a measured conservation model.
             </p>
             <div className="heritage-meta-grid">
@@ -2817,7 +2877,7 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
         )}
 
         {/* Heritage Inspector Card Popup */}
-        {hasHistoricContext && selectedHeritage && (
+        {hasKlContext && selectedHeritage && (
           <div className="heritage-inspector-card" role="dialog" aria-modal="false" aria-label={`Heritage Site: ${selectedHeritage.name}`}>
             {selectedHeritage.photo && photoFor(selectedHeritage.photo) && (
               <figure className="heritage-card-photo">
@@ -2847,7 +2907,7 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
               </button>
             </div>
             <h4>{selectedHeritage.name}</h4>
-            <p className="heritage-thai" lang="th">{selectedHeritage.thai}</p>
+            <p className="heritage-thai" lang="ms">{selectedHeritage.thai}</p>
             <p className="heritage-desc">{selectedHeritage.description}</p>
             <div className="heritage-meta-grid">
               <div>
@@ -2864,10 +2924,10 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
               </div>
             </div>
             <p className="heritage-source-note">
-              <a href={FINEARTS_HERITAGE_SOURCE.url} target="_blank" rel="noreferrer">
-                {FINEARTS_HERITAGE_SOURCE.name}
+              <a href={REGISTER_SOURCE.dataset} target="_blank" rel="noreferrer">
+                {REGISTER_SOURCE.nameEn}
               </a>
-              {" · "}{FINEARTS_HERITAGE_SOURCE.attribution}
+              {" · "}{REGISTER_SOURCE.osmAttribution}
             </p>
           </div>
         )}
@@ -2973,7 +3033,7 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
       {!embedded && <aside className="atlas-panel" aria-live="polite">
         <p className="atlas-panel-eyebrow">{activeStop.chapter}</p>
         <h2>{activeStop.name}</h2>
-        <p className="atlas-panel-thai" lang="th">{activeStop.thai}</p>
+        <p className="atlas-panel-thai" lang="ms">{activeStop.thai}</p>
         <p className="atlas-panel-desc">{activeStop.description}</p>
 
         <div className="atlas-field-note">
@@ -3014,7 +3074,7 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
               >
                 <span>{String(index + 1).padStart(2, "0")}</span>
                 <strong>{stop.name}</strong>
-                <small lang="th">{stop.thai}</small>
+                <small lang="ms">{stop.thai}</small>
               </button>
             </li>
           ))}

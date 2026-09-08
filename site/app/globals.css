@@ -42,8 +42,8 @@
   /* Sao Chingcha carries the whole site — 87/87 Thai and full Latin.
      IBM Plex Sans Thai stays as the fallback while the face loads and
      for any glyph outside its 342. */
-  --font-body: "Sao Chingcha", var(--font-plex-thai), sans-serif;
-  --font-display: "Sao Chingcha", var(--font-plex-thai), sans-serif;
+  --font-body: var(--font-plex), var(--font-noto-sc), sans-serif;
+  --font-display: var(--font-plex), var(--font-noto-sc), sans-serif;
   --font-mono: var(--font-jetbrains), ui-monospace, monospace;
 }
 

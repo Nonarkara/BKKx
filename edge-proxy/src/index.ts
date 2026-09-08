@@ -50,7 +50,7 @@ export default {
       );
     }
 
-    headers.set("x-bkkx-edge", "bkk-heritage");
+    headers.set("x-klx-edge", "kl-heritage");
 
     // Baseline hardening, set at the edge so it covers pages and data files
     // alike. nosniff stops MIME-confusion on the GeoJSON downloads; the

@@ -2,42 +2,27 @@ import type { Metadata } from "next";
 import { PlaceMasthead } from "../PlaceMasthead";
 import { AboutClient } from "./AboutClient";
 
-// Bangkok by the numbers — the dry frame for a city you can only
-// feel by walking through it. Added 2026-08-11 alongside the
-// redesigned front door: the 3D map covers the spatial, the
-// register covers the heritage, and this page covers the city in
-// the numbers that the city is actually made of (population,
-// tourism receipts, PM2.5, the register itself).
-//
-// Order: numbers first, then the Dr Non essay (the qualitative
-// side of the city, in his own words, with photos). Both halves
-// live at /about because they answer the same question from two
-// directions — what is this city made of, and what does it feel
-// like. The end of the numbers section links to the register,
-// the quarters, the walks, and the 3D map, so the reader who
-// started here lands somewhere physical.
-
 export const metadata: Metadata = {
-  title: "Bangkok by the numbers",
+  title: "Kuala Lumpur by the numbers",
   description:
-    "Bangkok in numbers: 10.54 million residents, 39.9 million visitors, 571 registered ancient monuments, 432,077 buildings in the 3D atlas. The dry frame, then the walk through the city.",
+    "Kuala Lumpur in numbers: 1,982,112 residents (MyCensus 2020), 243 km², Petronas 451.9 m, Merdeka 118 678.9 m, a National Heritage register mapped honestly.",
   alternates: { canonical: "/about" },
   openGraph: {
-    title: "Bangkok by the numbers · BKKx",
+    title: "Kuala Lumpur by the numbers · KLX",
     description:
-      "The dry frame: population, GDP, tourism receipts, PM2.5, the register. Then the qualitative side of the city.",
-    url: "https://bkk.nonarkara.org/about",
+      "The dry frame: population, published tower heights, the register, the rivers. Then why the atlas exists.",
+    url: "https://klx.nonarkara.org/about",
   },
 };
 
 const structuredData = {
   "@context": "https://schema.org",
   "@type": "WebSite",
-  name: "BKKxC(ulture) — Bangkok by the numbers",
-  alternateName: "BKKx",
-  url: "https://bkk.nonarkara.org/about",
+  name: "KLXxC(ulture) — Kuala Lumpur by the numbers",
+  alternateName: "KLX",
+  url: "https://klx.nonarkara.org/about",
   description:
-    "Bangkok in numbers — population, GDP, tourism receipts, air quality, the Fine Arts Department register. The dry frame for a city you can only feel by walking through it.",
+    "Kuala Lumpur in numbers — population, published tower heights, National Heritage lists, rivers. The dry frame for a city you can only feel by walking through it.",
   creator: { "@type": "Person", name: "Non Arkara", url: "https://nonarkara.org" },
 };
 

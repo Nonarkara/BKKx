@@ -2,47 +2,27 @@ import type { Metadata } from "next";
 import { AREAS } from "./data/heritage-content";
 import { HomepageClient } from "./heritage-atlas/HomepageClient";
 
-// The new BKKx front door (added 2026-08-11).
-//
-// Old philosophy: the heritage register is the homepage; the 3D map is
-// a secondary link in the nav, gated by a per-district world picker.
-// The user's actual flow (audited from the Fable 5 incident) was:
-// land on the register, hunt for the 3D map in the nav, click through
-// to a district page, get confused about which district to choose.
-//
-// New philosophy: the 3D map IS the homepage. The nine heritage
-// quarters are quick-jump chips in a side panel that fly the map to
-// a precise center+zoom (atlas now accepts ?at=lng,lat,zoom for
-// external fly-to, added 2026-08-11). The two Minecraft worlds are
-// side offers in the masthead, not a section. The drill-down pages
-// (/areas/[slug], /walks/[slug], /heritage, /worlds) keep the
-// Editorial register content for the curious — but the front door
-// is the map.
-//
-// Metadata lives here (not in the client component) so Next.js
-// picks it up for SSR/SEO. The iframe is rendered client-side
-// because the quarter click changes the iframe's src.
 export const metadata: Metadata = {
-  title: "Bangkok's heritage, block by block",
+  title: "Kuala Lumpur's heritage, monument by monument",
   description:
-    "An open 3D atlas of Bangkok's heritage: nine quarters from the royal island to Bang Krachao, 571 registered ancient monuments, and seven documented walks — the culture half of the BKKx pair, alongside the operational city twin at atlas.nonarkara.org.",
+    "An open 3D atlas of Kuala Lumpur: nine quarters from Dataran Merdeka to Thean Hou, a National Heritage register mapped honestly, and three walks — the culture half of the KLX pair.",
   alternates: { canonical: "/" },
   openGraph: {
-    title: "Bangkok's heritage, block by block · BKKxC(ulture)",
+    title: "Kuala Lumpur's heritage, monument by monument · KLXxC(ulture)",
     description:
-      "9 quarters, 7 walks, 571 registered monuments. The 3D map is the front door.",
-    url: "https://bkk.nonarkara.org",
+      "9 quarters, 3 walks, National Heritage sites mapped honestly. The 3D map is the front door.",
+    url: "https://klx.nonarkara.org",
   },
 };
 
 const structuredData = {
   "@context": "https://schema.org",
   "@type": "WebSite",
-  name: "BKKxC(ulture) — Bangkok's heritage, block by block",
-  alternateName: "BKKx",
-  url: "https://bkk.nonarkara.org",
+  name: "KLXxC(ulture) — Kuala Lumpur's heritage, monument by monument",
+  alternateName: "KLX",
+  url: "https://klx.nonarkara.org",
   description:
-    "The heritage-focused 3D atlas of Bangkok: 9 quarters, 7 walks, 571 registered monuments — the sibling system to Bangkok's operational digital twin at atlas.nonarkara.org.",
+    "The heritage-focused 3D atlas of Kuala Lumpur: 9 quarters, 3 walks, National Heritage sites from Jabatan Warisan Negara.",
   creator: { "@type": "Person", name: "Non Arkara", url: "https://nonarkara.org" },
 };
 
@@ -54,13 +34,6 @@ export default function Home() {
     tagline: a.tagline,
     center: a.center,
     zoom: a.zoom,
-    // Photo: every quarter has a licensed Commons photo in the attribution
-    // manifest at /public/heritage/photos/{slot}.jpg — the photo slot
-    // is keyed by the photo's own slug, which is shorter than the area
-    // slug in two cases (yaowarat-sampheng → yaowarat, charoen-krung
-    // maps to itself). Build the URL from the photo slot, not the area
-    // slug, or the two mismatches 404 silently and the chip renders as
-    // a gray empty box.
     photo: a.photo ? `/heritage/photos/${a.photo}.jpg` : undefined,
   }));
 

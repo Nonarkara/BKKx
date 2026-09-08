@@ -33,12 +33,12 @@ const totalFeatures = DATASETS.reduce(
 
 export const metadata: Metadata = {
   title: "The datasets",
-  description: `Every public dataset behind BKKx — ${DATASETS.length} files, ${totalFeatures.toLocaleString("en-US")} features — each with its source, its license, the script that regenerates it and its build-time checksum.`,
+  description: `Every public dataset behind KLX — ${DATASETS.length} files, ${totalFeatures.toLocaleString("en-US")} features — each with its source, its license, the script that regenerates it and its build-time checksum.`,
   alternates: { canonical: "/datasets" },
   openGraph: {
-    title: "The datasets · BKKxC(ulture)",
-    description: `${DATASETS.length} open data files: the heritage register, the rowhouse atlas, the shophouse pressure map, the POI layers — sized, checksummed, licensed, citable.`,
-    url: "https://bkk.nonarkara.org/datasets",
+    title: "The datasets · KLXxC(ulture)",
+    description: `${DATASETS.length} open data files: the WP KL heritage register, iconic 3D monument parts, flood corridor and land bands — sized, checksummed, licensed, citable. Bangkok lineage files remain on disk.`,
+    url: "https://klx.nonarkara.org/datasets",
   },
 };
 
@@ -55,16 +55,16 @@ function formatBytes(n: number): string {
 const structuredData = {
   "@context": "https://schema.org",
   "@type": "DataCatalog",
-  name: "BKKx open data",
+  name: "KLX open data",
   description:
-    "The public datasets behind Bangkok's BKKx heritage system: the Fine Arts Department register resolved to building precision, the rowhouse and shophouse atlases, curated 3D monument parts and the POI layers.",
-  url: "https://bkk.nonarkara.org/datasets",
+    "The public datasets behind Kuala Lumpur's KLX heritage atlas: Jabatan Warisan Negara register entries resolved to building precision, stacked 3D monument parts, OSM rivers, an interpretive flood corridor and listing land-price bands. Bangkok lineage files remain catalogued on disk.",
+  url: "https://klx.nonarkara.org/datasets",
   creator: { "@type": "Person", name: "Non Arkara", url: "https://nonarkara.org" },
   dataset: DATASETS.map((d) => ({
     "@type": "Dataset",
     name: d.title,
     description: d.what,
-    contentUrl: `https://bkk.nonarkara.org${d.file}`,
+    contentUrl: `https://klx.nonarkara.org${d.file}`,
     license: d.license,
     isBasedOn: d.source,
   })),
@@ -204,8 +204,8 @@ export default function DatasetsPage() {
             <a href="https://github.com/Nonarkara/BKKx/issues" target="_blank" rel="noreferrer">
               GitHub Issues
             </a>
-            . The shophouse pressure figures have their own page at{" "}
-            <Link href="/shophouses/atlas">/shophouses/atlas</Link>; the
+            . Kuala Lumpur files lead the catalogue; the Bangkok shophouse pressure figures remain
+            at <Link href="/shophouses/atlas">/shophouses/atlas</Link> as lineage. The
             register&apos;s method is documented in{" "}
             <Link href="/heritage">the register</Link> itself. The same corpus,
             counted and charted without a map, is the{" "}

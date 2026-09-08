@@ -33,7 +33,7 @@ export function BangkokClock({ buildIso }: { buildIso: string }) {
     const tick = () =>
       setNow(
         new Intl.DateTimeFormat("en-GB", {
-          timeZone: "Asia/Bangkok",
+          timeZone: "Asia/Kuala_Lumpur",
           hour: "2-digit",
           minute: "2-digit",
           second: "2-digit",
@@ -46,7 +46,7 @@ export function BangkokClock({ buildIso }: { buildIso: string }) {
   }, []);
 
   const built = new Intl.DateTimeFormat("en-GB", {
-    timeZone: "Asia/Bangkok",
+    timeZone: "Asia/Kuala_Lumpur",
     dateStyle: "medium",
     timeStyle: "short",
   }).format(new Date(buildIso));
@@ -57,7 +57,7 @@ export function BangkokClock({ buildIso }: { buildIso: string }) {
         {/* Server-rendered as em-dash: the server's clock is not the reader's. */}
         {now ?? "--:--:--"}
       </span>
-      <span className="wr-clock-zone">ICT · Asia/Bangkok</span>
+      <span className="wr-clock-zone">MYT · Asia/Kuala_Lumpur</span>
       <span className="wr-clock-build">
         static layers built <b>{built}</b>
       </span>
@@ -134,7 +134,7 @@ export function RainPanel() {
           </div>
           <p className="wr-panel-note">
             {d.agency}. Reading fetched{" "}
-            {new Date(state.env!.fetchedAt).toLocaleTimeString("en-GB", { timeZone: "Asia/Bangkok" })} ICT
+            {new Date(state.env!.fetchedAt).toLocaleTimeString("en-GB", { timeZone: "Asia/Kuala_Lumpur" })} MYT
             {d.unreadable > 0 ? ` · ${d.unreadable} row(s) unreadable` : ""}.
           </p>
         </>
@@ -343,7 +343,7 @@ export function FirePanel({
         d.detections.length === 0 ? (
           <>
             <p className="wr-panel-note">
-              No VIIRS thermal-anomaly detections over Bangkok in the trailing 24 h.
+              No VIIRS thermal-anomaly detections over Kuala Lumpur in the trailing 24 h.
             </p>
             <p className="wr-panel-note">
               A quiet feed is not proof of a quiet city: VIIRS catches open flame and
@@ -385,7 +385,7 @@ export function FirePanel({
           <p className="wr-degraded-reason">{state.env?.reason ?? "Feed unavailable."}</p>
           <p className="wr-panel-note">
             Checked against the register&apos;s {monuments.length} precisely-located
-            monuments once live — Bangkok&apos;s oldest protected stock is wood-frame
+            monuments once live — Kuala Lumpur&apos;s timber mosque halls and palace timber
             construction in narrow lanes, the fabric a single ignition spreads
             fastest through.
           </p>
@@ -414,7 +414,7 @@ function CuratedTile({ cam }: { cam: CuratedCamera }) {
   // the stream.
   if (cam.kind === "link") {
     return (
-      <figure className="wr-cam wr-cam-yt is-linkonly">
+      <figure className={`wr-cam wr-cam-yt is-linkonly${located ? "" : " is-unlocated"}`}>
         <a className="wr-cam-play" href={cam.sourceUrl} target="_blank" rel="noreferrer">
           <span className="wr-cam-nosnap">
             <span>watch at the operator ↗</span>
@@ -423,11 +423,14 @@ function CuratedTile({ cam }: { cam: CuratedCamera }) {
         <figcaption>
           <b>{cam.place ?? cam.title}</b>
           <small>
-            {cam.district} · {cam.precision} precision · not embeddable
+            {located
+              ? `${cam.district} · ${cam.precision} precision · not embeddable`
+              : "Location not confirmed · not embeddable"}
           </small>
           <a href={cam.sourceUrl} target="_blank" rel="noreferrer">
             source ↗
           </a>
+          {!located ? <SuggestLocation cam={cam} /> : null}
         </figcaption>
       </figure>
     );

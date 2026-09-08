@@ -55,7 +55,7 @@ export const EVIDENCE_TIERS: readonly EvidenceTierSpec[] = [
     tier: "official",
     label: "Published dimension",
     meaning:
-      "An official figure — the Fine Arts Department's own published height for the structure.",
+      "A published figure — CTBUH architectural or occupied height, Menara KL antenna/pod, or a Tourism Malaysia minaret.",
     detailSources: [],
     heroConfidences: ["official-envelope"],
   },
@@ -65,7 +65,7 @@ export const EVIDENCE_TIERS: readonly EvidenceTierSpec[] = [
     meaning:
       "Somebody recorded a height for this specific building and published it. Checkable by anyone.",
     detailSources: ["osm"],
-    heroConfidences: [],
+    heroConfidences: ["osm-tagged"],
   },
   {
     tier: "curated",

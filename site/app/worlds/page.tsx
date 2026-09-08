@@ -2,14 +2,14 @@ import type { Metadata } from "next";
 import { BangkokWalkthrough } from "../walkthrough";
 
 export const metadata: Metadata = {
-  title: "The Minecraft worlds",
+  title: "The atlas",
   description:
-    "Walk Bangkok as a playable Minecraft city atlas, from Ratchathewi's transit spine to the historic Chao Phraya riverfront.",
+    "Walk Kuala Lumpur in a 3D browser atlas — Merdeka civic core, KLCC and the Klang Valley. Atlas only: no Minecraft world has been generated.",
   alternates: { canonical: "/worlds" },
   openGraph: {
-    title: "The Minecraft worlds · BKKxC(ulture)",
+    title: "The atlas · KLXxC(ulture)",
     description:
-      "Two Bangkok districts generated block by block from open geographic data.",
+      "Three Kuala Lumpur districts as a 3D atlas. No Minecraft world ships on this branch.",
     url: "/worlds",
   },
 };
@@ -17,11 +17,11 @@ export const metadata: Metadata = {
 const structuredData = {
   "@context": "https://schema.org",
   "@type": "WebSite",
-  name: "BKKxC(ulture)",
-  alternateName: "Bangkok, block by block",
-  url: "https://bkk.nonarkara.org",
+  name: "KLXxC(ulture)",
+  alternateName: "Kuala Lumpur, monument by monument",
+  url: "https://klx.nonarkara.org",
   description:
-    "An open, playable city atlas that turns Bangkok into Minecraft worlds.",
+    "An open 3D atlas of Kuala Lumpur's heritage and iconic towers.",
   creator: {
     "@type": "Person",
     name: "Non Arkara",

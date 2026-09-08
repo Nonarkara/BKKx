@@ -1,32 +1,31 @@
 import type { Metadata, Viewport } from "next";
-import { IBM_Plex_Sans_Thai, JetBrains_Mono, Source_Serif_4 } from "next/font/google";
+import { IBM_Plex_Sans, Noto_Sans_SC, JetBrains_Mono, Source_Serif_4 } from "next/font/google";
 import { LocaleProvider } from "./i18n/LocaleContext";
 import "./globals.css";
 
-// Sao Chingcha (self-hosted, declared in globals.css) is the site's face.
-// IBM Plex Sans Thai stays as its fallback: non-looped, which is the hard
-// requirement for any Thai-facing surface here — looped faces read as
-// learner material to a Thai reader. Inter is banned workspace-wide.
-const plexThai = IBM_Plex_Sans_Thai({
-  variable: "--font-plex-thai",
-  subsets: ["latin", "thai"],
+// Malay is Latin. IBM Plex Sans is the body face on this branch.
+// Inter is banned workspace-wide.
+const plex = IBM_Plex_Sans({
+  variable: "--font-plex",
+  subsets: ["latin", "latin-ext"],
   weight: ["400", "500", "600", "700"],
   display: "swap",
 });
 
-// Coordinates, gazette volumes, block numbers.
+// Simplified Chinese for the ZH locale. Noto Sans SC, never a looped display face.
+const notoSc = Noto_Sans_SC({
+  variable: "--font-noto-sc",
+  subsets: ["latin"],
+  weight: ["400", "500", "700"],
+  display: "swap",
+});
+
 const mono = JetBrains_Mono({
   variable: "--font-jetbrains",
   subsets: ["latin"],
   display: "swap",
 });
 
-// The essay body on /shophouses only. Axiom Design Core §XV Editorial calls
-// for a serif "for the body of the piece", which the rest of this site
-// cannot use — its reading matter is ~90% Thai and every serif-adjacent Thai
-// face carries the looped head banned workspace-wide. The studio essay is
-// English, so the register's own rule is available here and taken. Sao
-// Chingcha still carries every heading, label and number.
 const serif = Source_Serif_4({
   variable: "--font-serif",
   subsets: ["latin"],
@@ -36,13 +35,13 @@ const serif = Source_Serif_4({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://bkk.nonarkara.org"),
+  metadataBase: new URL("https://klx.nonarkara.org"),
   title: {
-    default: "BKKxC(ulture) — Bangkok's heritage, monument by monument",
-    template: "%s · BKKxC(ulture)",
+    default: "KLXxC(ulture) — Kuala Lumpur's heritage, monument by monument",
+    template: "%s · KLXxC(ulture)",
   },
   description:
-    "Every registered ancient monument in Bangkok, mapped from the Fine Arts Department register — and the Minecraft worlds that let you walk them.",
+    "National Heritage sites of Kuala Lumpur mapped from Jabatan Warisan Negara, plus the iconic towers as stacked 3D parts — an atlas for the mayors who have to see the city.",
   alternates: { canonical: "/" },
   icons: {
     icon: "/favicon.png",
@@ -52,17 +51,17 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     url: "/",
-    siteName: "BKKxC(ulture)",
-    title: "BKKxC(ulture) — Bangkok's heritage, block by block",
+    siteName: "KLXxC(ulture)",
+    title: "KLXxC(ulture) — Kuala Lumpur's heritage, monument by monument",
     description:
-      "Walk through Bangkok's heritage as an open, playable 3D atlas.",
+      "Walk Kuala Lumpur's civic core, the Golden Triangle and the two-river confluence as an open 3D atlas.",
     images: [{ url: "/og.jpg", width: 1200, height: 630 }],
   },
   twitter: {
     card: "summary_large_image",
-    title: "BKKxC(ulture) — Bangkok's heritage, block by block",
+    title: "KLXxC(ulture) — Kuala Lumpur's heritage, monument by monument",
     description:
-      "Walk through Bangkok's heritage as an open, playable 3D atlas.",
+      "Walk Kuala Lumpur's civic core, the Golden Triangle and the two-river confluence as an open 3D atlas.",
     images: ["/og.jpg"],
   },
 };
@@ -78,12 +77,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    // The font variables go on <html>, not <body>. globals.css declares
-    // --font-body/--font-display on :root, and a custom property is
-    // substituted using the element it is declared on — so a --font-* living
-    // one level down on <body> is invisible to it, the whole chain computes
-    // to nothing, and everything silently falls back to system-ui.
-    <html lang="en" className={`${plexThai.variable} ${mono.variable} ${serif.variable}`}>
+    <html lang="en" className={`${plex.variable} ${notoSc.variable} ${mono.variable} ${serif.variable}`}>
       <body>
         <LocaleProvider>{children}</LocaleProvider>
       </body>

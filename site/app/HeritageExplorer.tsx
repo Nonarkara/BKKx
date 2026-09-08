@@ -15,8 +15,8 @@ const OPENFREEMAP_LIGHT_STYLE = "https://tiles.openfreemap.org/styles/positron";
 // label renders blank.
 const MAP_FONT = ["Noto Sans Regular"];
 
-// Bangkok only. Below this the base tiles start repeating the world.
-const MIN_ZOOM = 10;
+// WP Kuala Lumpur. Below this the base tiles start repeating the world.
+const MIN_ZOOM = 9;
 
 const REGISTER_URL = "/heritage-register.json";
 
@@ -86,8 +86,8 @@ type Filter = "all" | "registered" | "walkable";
 
 const FILTERS: { id: Filter; labelKey: DictKey; hint: string }[] = [
   { id: "all", labelKey: "filter_all", hint: "Everything with a building-precision position" },
-  { id: "registered", labelKey: "filter_registered", hint: "Formally registered in the Royal Gazette" },
-  { id: "walkable", labelKey: "filter_walkable", hint: "Inside a generated BKKx world" },
+  { id: "registered", labelKey: "filter_registered", hint: "Gazetted as Warisan Kebangsaan" },
+  { id: "walkable", labelKey: "filter_walkable", hint: "Inside a generated Minecraft world" },
 ];
 
 function matches(site: Site, filter: Filter): boolean {
@@ -104,7 +104,7 @@ function teleport(site: Site, world: World | undefined): string | null {
 
 function locationNote(site: Site): string {
   if (site.locatedBy === "fine-arts") {
-    return "Coordinate as published by the Fine Arts Department.";
+    return "Coordinate as published by the source register.";
   }
   const method = site.locatedBy.split(":").pop();
   return `The published coordinate was too coarse to plot; located by matching the monument name against OpenStreetMap (${method}).`;
@@ -203,8 +203,8 @@ export function HeritageExplorer() {
       map = new maplibre.Map({
         container: containerRef.current,
         style: OPENFREEMAP_LIGHT_STYLE,
-        center: [100.4977, 13.7546],
-        zoom: 12.6,
+        center: [101.6869, 3.139],
+        zoom: 12.4,
         minZoom: MIN_ZOOM,
         renderWorldCopies: false,
         attributionControl: false,
@@ -363,8 +363,9 @@ export function HeritageExplorer() {
         {error ? (
           <p className="register-state is-error" role="alert">
             The register did not load ({error}). The map is empty for that reason,
-            not because Bangkok has no monuments. Reload, or read the source data
-            directly at data.go.th.
+            The register did not load ({error}). The map is empty for that reason,
+            not because Kuala Lumpur has no monuments. Reload, or read the source
+            notes on this page.
           </p>
         ) : null}
         {!register && !error ? (
@@ -375,7 +376,7 @@ export function HeritageExplorer() {
       <p className="register-caption">
         {counts
           ? `${counts.buildingPrecision} monuments plotted to a building. ${counts.districtPrecision} more are in the register with no position precise enough to draw, and are deliberately not shown on the map.`
-          : "Registered ancient monuments of Bangkok."}
+          : "National Heritage sites of Kuala Lumpur."}
       </p>
 
       <div className="register-body">
@@ -403,7 +404,7 @@ export function HeritageExplorer() {
             </select>
           </div>
           <div className="register-filters" role="group" aria-label="Filter monuments">
-            {FILTERS.map((f) => (
+            {FILTERS.filter((f) => f.id !== "walkable" || (register?.counts.walkable ?? 0) > 0).map((f) => (
               <button
                 key={f.id}
                 type="button"
@@ -434,11 +435,11 @@ export function HeritageExplorer() {
                     className={site.registered ? "seal is-gazetted" : "seal is-awaiting"}
                     aria-hidden="true"
                   />
-                  <span className="register-list-name" lang="th">
+                  <span className="register-list-name" lang="ms">
                     {site.name}
                   </span>
                   <span className="register-list-meta">
-                    <span lang="th">{site.district}</span>
+                    <span lang="ms">{site.district}</span>
                     {site.block ? ` · block ${site.block.x}, ${site.block.z}` : ""}
                   </span>
                 </button>
@@ -450,11 +451,11 @@ export function HeritageExplorer() {
         <aside className="register-detail" aria-live="polite">
           {selected ? (
             <>
-              <p className="register-eyebrow" lang="th">
+              <p className="register-eyebrow" lang="ms">
                 {selected.district}
                 {selected.subDistrict ? ` · ${selected.subDistrict}` : ""}
               </p>
-              <h2 lang="th">{selected.name}</h2>
+              <h2 lang="ms">{selected.name}</h2>
 
               {/* Every entry has its own page now. The panel is for scanning;
                   the permalink is what you cite, link to, or send to someone. */}
@@ -466,12 +467,12 @@ export function HeritageExplorer() {
 
               <dl className="register-facts">
                 <dt>Status</dt>
-                <dd className={selected.registered ? "is-gazetted" : "is-awaiting"} lang="th">
+                <dd className={selected.registered ? "is-gazetted" : "is-awaiting"} lang="ms">
                   {selected.registerStatus}
                 </dd>
                 {selected.gazette ? (
                   <>
-                    <dt>Royal Gazette</dt>
+                    <dt>Pengisytiharan</dt>
                     <dd>
                       Vol {selected.gazette.volume}
                       {selected.gazette.part ? `, part ${selected.gazette.part}` : ""}
@@ -502,39 +503,39 @@ export function HeritageExplorer() {
                 </div>
               ) : (
                 <p className="register-outside">
-                  Outside both generated worlds. Mapped here, but there is no
-                  Minecraft ground to stand on yet.
+                  Atlas only. No Minecraft world has been generated for Kuala Lumpur —
+                  the 3D map is the ground.
                 </p>
               )}
 
               {selected.history ? (
                 <section className="register-prose">
-                  <h3 lang="th">ประวัติ</h3>
-                  <p lang="th">{selected.history}</p>
+                  <h3>History</h3>
+                  <p>{selected.history}</p>
                 </section>
               ) : null}
               {selected.artCulture ? (
                 <section className="register-prose">
-                  <h3 lang="th">ลักษณะทางศิลปกรรม</h3>
-                  <p lang="th">{selected.artCulture}</p>
+                  <h3>Seni bina</h3>
+                  <p lang="ms">{selected.artCulture}</p>
                 </section>
               ) : null}
               {selected.present ? (
                 <section className="register-prose">
-                  <h3 lang="th">สภาพปัจจุบัน</h3>
-                  <p lang="th">{selected.present}</p>
+                  <h3>Present</h3>
+                  <p>{selected.present}</p>
                 </section>
               ) : null}
               {!selected.history && selected.blurb ? (
                 <section className="register-prose">
-                  <h3 lang="th">ประวัติ</h3>
-                  <p lang="th">
+                  <h3>Sejarah</h3>
+                  <p lang="ms">
                     {selected.blurb}
                     {selected.blurbTruncated ? "…" : ""}
                   </p>
                   {selected.blurbTruncated && register ? (
                     <a href={register.source.dataset} target="_blank" rel="noreferrer">
-                      Read the full entry in the Fine Arts register
+                      Read the full entry in the National Heritage lists
                     </a>
                   ) : null}
                 </section>
@@ -544,10 +545,9 @@ export function HeritageExplorer() {
             <div className="register-detail-empty">
               <h2>Pick a monument.</h2>
               <p>
-                Choose one from the index, or a point on the map, to read what the
-                register records: its status, the Royal Gazette entry that
-                protects it, its history, and — where BKKx has built that part of
-                the city — the block to stand on.
+            Choose one from the index, or a point on the map, to read what the
+            register records: its status, the gazette year that protects it, and
+            how the pin was located.
               </p>
             </div>
           )}
@@ -559,7 +559,7 @@ export function HeritageExplorer() {
           <h3>Where this comes from</h3>
           <p>
             <a href={register.source.dataset} target="_blank" rel="noreferrer">
-              <span lang="th">{register.source.name}</span>
+              <span lang="ms">{register.source.name}</span>
             </a>{" "}
             — {register.source.nameEn}. {register.source.licence}.{" "}
             {register.source.osmAttribution}.
@@ -567,10 +567,9 @@ export function HeritageExplorer() {
           </p>
           <p>{register.source.coordinateNote}</p>
           <p>
-            The Ministry of Culture&apos;s better-known{" "}
-            <span lang="th">สถาปัตยกรรมสำคัญ</span> dataset covers 72 provinces
-            and contains no Bangkok records at all, which is why this register is
-            built from the Fine Arts Department&apos;s instead.
+            Batu Caves is in Gombak, Selangor, and is labelled as such. This
+            register is WP Kuala Lumpur plus named OSM landmarks. Batu Caves is
+            in Gombak, Selangor, and is labelled as such.
           </p>
         </footer>
       ) : null}

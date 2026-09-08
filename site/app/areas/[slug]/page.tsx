@@ -13,10 +13,6 @@ import {
   walkBySlug,
   walkDistance,
 } from "../../data/heritage-content";
-import {
-  HERITAGE_MOBILITY_SERVICES,
-  nearestHeritageMobilityStops,
-} from "../../data/heritage-mobility";
 
 type Params = { slug: string };
 type Props = { params: Promise<Params> };
@@ -34,7 +30,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     description: area.tagline,
     alternates: { canonical: `/areas/${area.slug}` },
     openGraph: {
-      title: `${area.name} — Bangkok heritage · BKKxC(ulture)`,
+      title: `${area.name} — Kuala Lumpur heritage · KLXxC(ulture)`,
       description: area.tagline,
       url: `/areas/${area.slug}`,
       images: photoFor(area.photo) ? [{ url: photoFor(area.photo)!.file }] : undefined,
@@ -52,12 +48,6 @@ export default async function AreaPage({ params }: Props) {
     .map((w) => walkBySlug(w))
     .filter((w): w is NonNullable<typeof w> => Boolean(w));
   const pinned = area.monuments.filter((m) => m.lat && m.lon);
-  const nearbyMobility = nearestHeritageMobilityStops(area.center, 2);
-
-  const formatDistance = (distanceKm: number) => {
-    if (distanceKm < 1) return `${Math.round(distanceKm * 1000)} m`;
-    return `${distanceKm.toFixed(1)} km`;
-  };
 
   return (
     <div className="register">
@@ -65,11 +55,11 @@ export default async function AreaPage({ params }: Props) {
 
       <article className="register-lede place-page">
         <p className="register-eyebrow">
-          Heritage quarter · <span lang="th">{area.district}</span>
+          Heritage quarter · <span lang="ms">{area.district}</span>
         </p>
         <h1>
           {area.name}
-          <small lang="th">{area.thai}</small>
+          <small lang="ms">{area.thai}</small>
         </h1>
         <AreaTagline area={area} />
 
@@ -103,45 +93,23 @@ export default async function AreaPage({ params }: Props) {
         />
         <p className="register-caption">
           Register monuments of the quarter — filled marks are gazetted, hollow marks
-          await consideration. Positions from the Fine Arts Department register,
-          relocated where needed as documented on the{" "}
+          await consideration. Positions from Jabatan Warisan Negara lists and named
+          OSM landmarks, relocated where needed as documented on the{" "}
           <Link href="/heritage#register">register page</Link>.
         </p>
 
         <aside className="place-arrival" aria-labelledby="place-arrival-title">
           <div className="place-arrival-heading">
-            <p className="register-eyebrow">Arrive without a car</p>
-            <h2 id="place-arrival-title">The nearest useful stops.</h2>
-            <Link href="/atlas/historic-core">See every route in 3D ↗</Link>
+            <p className="register-eyebrow">Arrive in 3D</p>
+            <h2 id="place-arrival-title">See the quarter on the atlas.</h2>
+            <Link href={`/atlas/klcc?at=${area.center[0]},${area.center[1]},${area.zoom}`}>Open in 3D ↗</Link>
           </div>
-          <ol>
-            {nearbyMobility.map((stop) => {
-              const services = stop.serviceIds
-                .map((serviceId) => HERITAGE_MOBILITY_SERVICES.find((service) => service.id === serviceId))
-                .filter((service): service is NonNullable<typeof service> => Boolean(service));
-              return (
-                <li key={stop.id}>
-                  <span className="place-arrival-distance">{formatDistance(stop.distanceKm)}</span>
-                  <strong>{stop.name}<small lang="th">{stop.thai}</small></strong>
-                  <span className="place-arrival-nearby">For {stop.nearby.join(" · ")}</span>
-                  <span className="place-arrival-services">
-                    {services.map((service, index) => (
-                      <span key={service.id}>
-                        {index ? " · " : ""}
-                        <a href={service.sourceUrl} target="_blank" rel="noreferrer">{service.shortName}</a>
-                      </span>
-                    ))}
-                  </span>
-                </li>
-              );
-            })}
-          </ol>
-          <p>Distances are straight-line orientation. Boat calls and service patterns change; check the operator link before setting out.</p>
+          <p>No Rapid KL stop inventory is ingested on this branch. The 3D map is the orientation layer.</p>
         </aside>
 
         {area.monuments.length ? (
           <div className="place-monuments">
-            <h2>In the Fine Arts register</h2>
+            <h2>On this register</h2>
             <ul>
               {area.monuments.map((m) => (
                 <li key={m.fad}>
@@ -149,7 +117,7 @@ export default async function AreaPage({ params }: Props) {
                     className={m.registered ? "seal is-gazetted" : "seal is-awaiting"}
                     aria-hidden="true"
                   />
-                  <span lang="th">{m.name}</span>
+                  <span lang="ms">{m.name}</span>
                   <small>
                     <MonumentStatus registered={m.registered} />
                   </small>
@@ -159,10 +127,10 @@ export default async function AreaPage({ params }: Props) {
           </div>
         ) : (
           <div className="place-monuments">
-            <h2>In the Fine Arts register</h2>
+            <h2>On this register</h2>
             <p className="place-none">
-              Nothing here is on the register — this quarter&apos;s heritage is the
-              landscape itself, which no gazette volume knows how to hold.
+              Nothing here is gazetted on the 2007/2009/2012 lists pulled for this
+              twin — this quarter&apos;s heritage is the fabric itself.
             </p>
           </div>
         )}

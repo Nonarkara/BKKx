@@ -68,8 +68,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     description: `Walk ${world.name} (${world.thai}) in a 3D browser atlas. ${world.description}`,
     alternates: { canonical: `/atlas/${world.id}` },
     openGraph: {
-      title: `${world.name} — 3D atlas · BKKxC(ulture)`,
-      description: `Walk ${world.name} in a 3D browser atlas before downloading the Minecraft world.`,
+      title: `${world.name} — 3D atlas · KLXxC(ulture)`,
+      description: `Walk ${world.name} in a 3D browser atlas. Atlas only — no Minecraft world has been generated for Kuala Lumpur.`,
       url: `/atlas/${world.id}`,
     },
   };

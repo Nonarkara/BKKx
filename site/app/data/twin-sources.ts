@@ -23,8 +23,6 @@
 //    from Worker env at request time. No key is imported, committed, or shipped
 //    to the browser, and the proxy routes never echo one back.
 
-import { PRESSURE_TOTAL } from "./shophouse-pressure.ts";
-
 export type TwinCategory =
   | "terrain"
   | "weather"
@@ -72,7 +70,7 @@ export const TWIN_SOURCES: TwinSource[] = [
     category: "terrain",
     integration: "researched",
     unlocks:
-      `The floor of a real flood model. FABDEM strips forest and building bias out of Copernicus GLO-30, and in published accuracy assessments over this exact region it ranked first among free global DEMs — ~1.95 m RMSE for the Bangkok area, best-in-class in urban terrain. With it, the flood-risk polygons stop being administrative shading and start being drainage: catchments, flow direction, ponding depth, and which of the ${PRESSURE_TOTAL.toLocaleString("en-US")} screened footprints sit in a hollow.`,
+      `The floor of a real flood model. FABDEM strips forest and building bias out of Copernicus GLO-30. With it, the flood-risk polygons stop being administrative shading and start being drainage: catchments, flow direction, ponding depth along Sungai Klang and Sungai Gombak.`,
     licence:
       "Free for non-commercial and academic use (CC BY-NC-SA 4.0). NOT open for commercial redistribution — the licence, not the download, is the constraint.",
     auth: "account",
@@ -120,7 +118,7 @@ export const TWIN_SOURCES: TwinSource[] = [
     category: "weather",
     integration: "wired",
     unlocks:
-      "The twin's forward view. The BMA gauge network says what has already fallen; this says what is coming, which is the difference between a dashboard and an operations tool. Hourly precipitation, temperature, humidity and wind, 16 days out, plus 80 years of history for context.",
+      "The twin's forward view. JPS InfoBanjir says what has already fallen, once a machine feed exists; this says what is coming. Hourly precipitation, temperature, humidity and wind, 16 days out.",
     licence: "Free for non-commercial use (CC BY 4.0), attribution required.",
     auth: "none",
     browserReachable: true,
@@ -146,7 +144,7 @@ export const TWIN_SOURCES: TwinSource[] = [
     browserReachable: true,
     whyProxied: "Same call as the forecast — one route, one cache, no visitor IPs leaving the origin.",
     caveat:
-      "Also model reanalysis, not a sensor on a pole. Air4Thai's station network is the ground truth for Thailand and should eventually sit beside this.",
+      "Also model reanalysis, not a sensor on a pole. DOE / APIMS station readings are the ground truth for Malaysia and should eventually sit beside this.",
     url: "https://open-meteo.com/en/docs/air-quality-api",
     route: "/api/live/weather",
   },
@@ -159,12 +157,12 @@ export const TWIN_SOURCES: TwinSource[] = [
     category: "population",
     integration: "researched",
     unlocks:
-      "Population growth as an actual surface, in five-year steps from 1975 to 2030 — the layer that answers 'how did this city arrive here'. Paired with GHS-BUILT it shows fifty years of Bangkok's built expansion against the heritage register, which is the single most legible way to show what the register has been losing ground to. It is also the exposure denominator: population inside a flood-risk polygon is what turns a hazard into a priority.",
+      "Population growth as an actual surface, in five-year steps from 1975 to 2030 — how the Klang Valley arrived here. The exposure denominator: population inside a flood corridor is what turns a river into a priority.",
     licence: "Open and free, attribution required. Commercial use permitted.",
     auth: "none",
     browserReachable: false,
     caveat:
-      "GHS-POP disaggregates census counts by built-up volume, so it is strongest exactly where Bangkok is dense and weakest in rural fringes — published comparisons find large negative bias in rural cells. For the Bangkok core that is the right trade; for the outer districts, state it.",
+      "GHS-POP disaggregates census counts by built-up volume, so it is strongest where Kuala Lumpur is dense and weaker in the remaining kampung fabric.",
     url: "https://human-settlement.emergency.copernicus.eu/ghs_pop.php",
   },
 
@@ -222,52 +220,50 @@ export const TWIN_SOURCES: TwinSource[] = [
 
   /* ------------------------------------------------------------ hazard */
   {
-    id: "bma-gauges",
-    name: "BMA rainfall gauge network",
-    provider: "สำนักการระบายน้ำ กทม. — BMA Drainage & Sewerage",
+    id: "jps-infobanjir",
+    name: "JPS Public Info Banjir (WLH = WP Kuala Lumpur)",
+    provider: "Jabatan Pengairan dan Saliran",
     category: "hazard",
     integration: "researched",
     unlocks:
-      "Observed rainfall, station by station — the ground truth the forecast is checked against.",
-    licence: "Agency endpoint; access and reuse terms are not formally published.",
-    auth: "account",
-    browserReachable: false,
-    whyProxied:
-      "Mandatory if access is restored: the endpoint is plain HTTP and sends no CORS headers, and credentials must never reach the browser.",
-    caveat:
-      "The endpoint currently returns a username/password error inside an HTTP 200 response. The Worker identifies that as unavailable and never renders it as zero rain.",
-    url: "http://weather.bangkok.go.th/dds_webservices/api/rain/lastdata",
-    route: "/api/live/rain",
-  },
-  {
-    id: "bma-flood-open-data",
-    name: "BMA flood locations and annual road-flood records",
-    provider: "สำนักการระบายน้ำ กทม. — BMA Drainage & Sewerage",
-    category: "hazard",
-    integration: "researched",
-    unlocks:
-      "A public baseline for the live twin: mapped flood-risk locations plus annual records of water waiting to drain on Bangkok's main roads, including the agency's 2025 table. This is evidence for recurrence and exposure, not a substitute for a live gauge.",
-    licence: "Bangkok Open Data terms; resource metadata and CSV downloads are public.",
+      "Observed river level and rainfall, station by station — the ground truth the Open-Meteo forecast is checked against. State code WLH.",
+    licence: "Agency portal; no documented public JSON API or open licence for bulk scrape.",
     auth: "none",
     browserReachable: true,
     caveat:
-      "Historical and administrative, not live. Yearly files vary in schema and Thai field naming, so they need a reproducible import and geography audit before map publication.",
-    url: "https://data.bangkok.go.th/dataset/frd_dds",
+      "The Worker does not scrape the portal or unofficial mirrors. /api/live/rain returns an honest unavailable envelope until JPS publishes a machine feed.",
+    url: "https://publicinfobanjir.water.gov.my/",
+    route: "/api/live/rain",
   },
   {
-    id: "gistda-flood",
-    name: "Daily flood extent from satellite imagery",
-    provider: "GISTDA (via data.go.th)",
-    category: "hazard",
+    id: "napic-land",
+    name: "NAPIC / JPPH property market reports",
+    provider: "Valuation and Property Services Department (JPPH)",
+    category: "places",
     integration: "researched",
     unlocks:
-      "Observed inundation, daily, from space — the only source on this list that shows where water actually stood rather than where a zone says it might. It is the check on the flood-risk polygons: places that flood but are not zoned are the finding.",
-    licence: "Open Government Data of Thailand licence.",
+      "Official land and property prices for WP Kuala Lumpur — Jadual Harga dan Sewa and Laporan Pasaran Harta. The number that decides whether a shophouse stands.",
+    licence: "Government statistical publication; PDF, not a tile API.",
     auth: "none",
-    browserReachable: false,
+    browserReachable: true,
     caveat:
-      "Optical satellite flood mapping is defeated by exactly the cloud cover that accompanies the flood. Gaps in the series are weather, not dry days — never chart it as if absence meant no flooding.",
-    url: "https://data.go.th/en/dataset/http-flood-gistda-or-th",
+      "The 2025 PDF exists and is not ingested. Atlas bands currently use media/listing PSF with a conversion to m² and a caveat on every polygon. Appraised ≠ market.",
+    url: "https://napic.jpph.gov.my/",
+  },
+  {
+    id: "klccc-cctv",
+    name: "KLCCC public CCTV portal",
+    provider: "Dewan Bandaraya Kuala Lumpur",
+    category: "mobility",
+    integration: "researched",
+    unlocks:
+      "DBKL's command centre publishes a public portal over thousands of city cameras. The war-room rail should fill from a licensed still or embed, not from invented stream URLs.",
+    licence: "DBKL / KLCCC terms; camera imagery remains the agency's.",
+    auth: "none",
+    browserReachable: true,
+    caveat:
+      "No documented public JSON camera registry is used here. This twin links the portal and does not invent DBKL endpoints.",
+    url: "https://klccc.dbkl.gov.my/",
   },
 
   {
@@ -277,7 +273,7 @@ export const TWIN_SOURCES: TwinSource[] = [
     category: "hazard",
     integration: "ready",
     unlocks:
-      "The fire-risk twin to the flood-risk one: satellite hotspot detections over Bangkok in the trailing 24 h, checked against the register's 311 precisely-located monuments. Bangkok's oldest protected stock is wood-frame shophouse construction packed into narrow lanes — exactly the fabric a single ignition spreads fastest through, and exactly the fabric this project has already spent two audits arguing is under-inventoried. A detection near a gazetted monument is the kind of finding nobody currently computes.",
+      "The fire-risk twin to the flood-risk one: satellite hotspot detections over the Klang Valley in the trailing 24 h, checked against the National Heritage pins this twin actually locates. A detection near a gazetted civic building is the kind of finding nobody currently computes.",
     licence: "NASA public domain; a free MAP_KEY is required to call the API and is rate-limited to 5,000 transactions per 10-minute window, shared across every caller of that key.",
     auth: "key",
     browserReachable: false,
@@ -294,7 +290,7 @@ export const TWIN_SOURCES: TwinSource[] = [
     category: "mobility",
     integration: "researched",
     unlocks:
-      "Live air traffic over the two Bangkok airports, keyless for non-commercial use. Honest fit assessment: weak. Nothing in this project's argument — heritage, shophouses, drainage — touches aviation, and adding a layer because a feed is free and easy is exactly the kind of scope creep the rest of this file argues against. Catalogued so the option is visible and reasoned about, not built.",
+      "Live air traffic over KLIA and Subang, keyless for non-commercial use. Honest fit assessment: weak. Nothing in this project's argument — heritage, floodplain, land price — touches aviation. Catalogued so the option is visible, not built.",
     licence: "Free for non-commercial/research use; a commercial deployment needs OpenSky's own terms.",
     auth: "none",
     browserReachable: false,
@@ -308,7 +304,7 @@ export const TWIN_SOURCES: TwinSource[] = [
     category: "hazard",
     integration: "researched",
     unlocks:
-      "A live seismic feed, US public domain, no licence at all. Thailand does have real seismic exposure — the 2011 Mae Lao quake and Bangkok's felt shaking from the 2025 Myanmar earthquake are both on record — but it is a secondary hazard for this city next to flood and fire, and the drainage and fire work above already has the stronger claim on build effort.",
+      "A live seismic feed, US public domain. Malaysia has real seismic exposure, but flood remains the primary hazard for this valley, and the JPS / FABDEM work above already has the stronger claim on build effort.",
     licence: "US public domain — no licence.",
     auth: "none",
     browserReachable: true,

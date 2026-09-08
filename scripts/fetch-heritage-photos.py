@@ -48,6 +48,17 @@ OK_LICENCES = re.compile(
 
 # slot -> ordered candidate queries (or ("file", exact Commons title))
 SLOTS: dict[str, list] = {
+    # KLX quarter photos — one Commons file per slot, never reused.
+    "klx-hero": ["Petronas Twin Towers Kuala Lumpur night", "Petronas Twin Towers Kuala Lumpur"],
+    "merdeka-core": ["Sultan Abdul Samad Building Kuala Lumpur", "Dataran Merdeka Kuala Lumpur"],
+    "klcc": ["Petronas Twin Towers daytime Kuala Lumpur", "KLCC Park Petronas"],
+    "petaling-street": ["Petaling Street Kuala Lumpur", "Chinatown Kuala Lumpur Petaling"],
+    "kampung-baru": ["Kampung Baru Kuala Lumpur", "Kampung Baharu mosque"],
+    "brickfields": ["Brickfields Little India Kuala Lumpur", "Sri Kandaswamy Brickfields"],
+    "bukit-bintang": ["Bukit Bintang Kuala Lumpur night", "Jalan Bukit Bintang"],
+    "chow-kit": ["Chow Kit Market Kuala Lumpur", "Pasar Chow Kit"],
+    "river-of-life": ["Masjid Jamek Kuala Lumpur", "Jamek Mosque confluence"],
+    "thean-hou": ["Thean Hou Temple Kuala Lumpur", "Thean Hou Temple hillside"],
     # Pinned after review: the top search hit for "Wat Arun at dusk" is a
     # mistitled photo of a different temple. Commons titles are not evidence.
     "hero": [("file", "File:Wat Arun on the sunset.jpg")],

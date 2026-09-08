@@ -3,12 +3,10 @@
   "name": "bkkx-domain-proxy",
   "main": "src/index.ts",
   "compatibility_date": "2026-08-03",
-  // bkk.nonarkara.org only. atlas.nonarkara.org belongs to the separate
-  // bkk-3d-atlas Worker; claiming it here took the domain away from that
-  // deploy and served this site in its place.
+  // klx.nonarkara.org only. This branch is the Kuala Lumpur twin.
   "routes": [
     {
-      "pattern": "bkk.nonarkara.org",
+      "pattern": "klx.nonarkara.org",
       "custom_domain": true
     }
   ],

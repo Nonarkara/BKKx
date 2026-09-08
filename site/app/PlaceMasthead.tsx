@@ -4,21 +4,16 @@ import Link from "next/link";
 import { useLocale } from "./i18n/LocaleContext";
 import { LangToggle } from "./i18n/LangToggle";
 
-// The shared masthead of the heritage register pages (home, areas, walks).
-// The Minecraft-facing pages (/worlds, /atlas) keep their own dark chrome.
 export function PlaceMasthead() {
   const { t } = useLocale();
   return (
     <header className="register-masthead">
-      <Link className="register-wordmark" href="/" aria-label="BKKxC(ulture) home">
-        <span>BKK</span>
+      <Link className="register-wordmark" href="/" aria-label="KLXxC(ulture) home">
+        <span>KL</span>
         <b>x</b>
         <em>C(ulture)</em>
       </Link>
       <nav className="register-nav" aria-label="Primary navigation">
-        <Link href="/rowhouses">Rowhouses</Link>
-        <a href="https://shophouses.nonarkara.org" title="Shophouse Metropolis — the essay, the Bible, the citywide pressure map">Shophouses</a>
-        <Link href="/case-for-bangkok">The case</Link>
         <Link href="/datasets" title="Every public dataset — sourced, licensed, checksummed">Data</Link>
         <Link href="/warroom" title="The operational picture — live gauges, cameras and the counted corpus">War room</Link>
         <Link href="/heritage#quarters">{t("nav_quarters")}</Link>

@@ -78,7 +78,7 @@ const locatedMonuments = PINNED_SITES.map((s) => ({
 
 export const metadata: Metadata = {
   title: "War room",
-  description: `The BKKx operational picture without a map: ${reg.counts.total} register entries, ${PRESSURE_TOTAL.toLocaleString("en-US")} screened shophouse footprints, ${DATASETS.length} checksummed datasets, and source-labelled live services.`,
+  description: `The KLX operational picture without a map: ${reg.counts.total} register entries, ${PRESSURE_TOTAL.toLocaleString("en-US")} screened Bangkok lineage footprints kept on disk, ${DATASETS.length} checksummed datasets, and source-labelled live services.`,
   alternates: { canonical: "/warroom" },
   robots: { index: false },
 };
@@ -90,7 +90,7 @@ export default function WarRoom() {
     <div className="warroom">
       <header className="wr-masthead">
         <div>
-          <p className="wr-eyebrow">BKKx · operational picture</p>
+          <p className="wr-eyebrow">KLX · operational picture</p>
           <h1>War room</h1>
           <p className="wr-dek">
             Everything the system can count, without a map underneath it. Static
@@ -103,7 +103,7 @@ export default function WarRoom() {
 
       {/* ---------------- the standing picture ---------------- */}
       <section className="wr-tallies" aria-label="Corpus at a glance">
-        <Tally value={reg.counts.total} label="Register entries" sub="Fine Arts Dept, Bangkok" tone="signal" />
+        <Tally value={reg.counts.total} label="Register entries" sub="JWN + named OSM, WP KL" tone="signal" />
         <Tally value={reg.counts.registered} label="Gazetted" sub={`${reg.counts.awaiting} awaiting`} />
         <Tally value={PRESSURE_TOTAL} label="Screened footprints" sub={`${PRESSURE_DISTRICTS.length} districts`} />
         <Tally value={DATASETS.length} label="Datasets served" sub="each checksummed" />
@@ -132,13 +132,11 @@ export default function WarRoom() {
             </span>
           </header>
           <p className="wr-panel-note">
-            The twelve nominated <code>data.go.th</code> datasets, studied and
-            catalogued. None carries figures yet: <code>data.go.th</code> is
-            blocked from the environment this was built in, so the honest state
-            is <em>awaiting ingest</em> rather than a plausible number. Run{" "}
-            <code>python3 scripts/ingest-bkk-water.py</code> anywhere with open
-            egress — it resolves each dataset against CKAN, reads the real
-            column names instead of assuming a schema, and writes what it finds.
+            The nominated JPS / MyGDI / OSM water sources, studied and
+            catalogued. OSM rivers are ingested as geometry. JPS InfoBanjir has
+            no documented public JSON API, so the honest live state is unavailable
+            rather than a plausible millimetre. MyGDI 2002/2003 surfaces remain
+            awaiting ingest.
           </p>
           <ul className="wr-sources">
             {WATER_SOURCES.map((s) => (
@@ -174,8 +172,8 @@ export default function WarRoom() {
           <p className="wr-panel-note">
             Candidate layers for the twin, each with the capability it unlocks
             and the caveat that will bite. <strong>Terrain is the gap</strong>:
-            Bangkok floods because it is flat, low and sinking, and without an
-            elevation model the hazard layers can colour a district but cannot
+            Kuala Lumpur floods along Sungai Klang and Sungai Gombak, and without an
+            elevation model the hazard layers can colour a corridor but cannot
             say where water goes. {TWIN_TALLY.keyless} of {TWIN_TALLY.total}{" "}
             need no credential at all.
           </p>
@@ -214,12 +212,12 @@ export default function WarRoom() {
           </header>
           <CompositionBar
             total={reg.counts.total}
-            caption="Every Fine Arts Department entry in Bangkok, by whether protection has actually been granted."
+            caption="Every register entry on this twin, by whether National Heritage protection has actually been granted."
             parts={[
-              { label: "Gazetted", value: reg.counts.registered, hue: CAT[0], meaning: "ขึ้นทะเบียนแล้ว — protection in force" },
-              { label: "Awaiting consideration", value: reg.counts.awaiting, hue: CAT[1], meaning: "รอพิจารณาขึ้นทะเบียน — listed, unprotected" },
+              { label: "Gazetted", value: reg.counts.registered, hue: CAT[0], meaning: "Warisan Kebangsaan — protection in force" },
+              { label: "Awaiting consideration", value: reg.counts.awaiting, hue: CAT[1], meaning: "Iconic, not on the 2007/2009/2012 lists pulled here" },
             ]}
-            note="Nearly two thirds of the register is waiting; those are the buildings most likely to be gone before a decision arrives."
+            note="Fourteen of twenty rows are already gazetted. The rest are iconic towers and temples not on the 2007/2009/2012 lists pulled here — they are not a demolition queue."
           />
         </section>
 
@@ -234,7 +232,7 @@ export default function WarRoom() {
               { label: "Building precision", value: reg.counts.buildingPrecision, hue: CAT[4], meaning: "pinned to a structure" },
               { label: "District only", value: reg.counts.districtPrecision, hue: CAT[2], meaning: "~1.1 km — never pinned, never given a block" },
             ]}
-            note="The register publishes many coordinates to two decimal places; those rows are left unpinned rather than guessed."
+            note="Four gazette names were not uniquely matchable on OpenStreetMap, including Istana Negara 2007 (the old Jalan Istana palace). Those rows stay unpinned rather than guessed."
           />
           <BarList
             caption="How the placed monuments were resolved."
@@ -255,7 +253,7 @@ export default function WarRoom() {
             <span className="wr-panel-meta">{districtCounts.length} districts</span>
           </header>
           <BarList
-            caption="Registered monuments by district — the top ten of 39. Heritage in Bangkok is not scattered evenly; it is quartered."
+            caption="Registered monuments by district. Heritage in Kuala Lumpur is not scattered evenly; it is quartered."
             data={districtCounts.slice(0, 10).map(([label, value]) => ({ label, value }))}
           />
           <TableView
@@ -267,14 +265,14 @@ export default function WarRoom() {
 
         <section className="wr-panel" aria-labelledby="wr-quad-h">
           <header className="wr-panel-head">
-            <h2 id="wr-quad-h">Shophouse pressure</h2>
+            <h2 id="wr-quad-h">Bangkok lineage · shophouse pressure</h2>
             <span className="wr-panel-meta">
-              split ฿{SPLITS.priceBaht.toLocaleString("en-US")} · {SPLITS.depthM} m
+              split ฿{SPLITS.priceBaht.toLocaleString("en-US")} · {SPLITS.depthM} m · not WP KL
             </span>
           </header>
           <CompositionBar
             total={PRESSURE_TOTAL}
-            caption="Every screened shophouse footprint by the two axes that decide its fate: land value under it, and whether the plot survives a setback."
+            caption="Bangkok lineage corpus kept on this branch so those tests still pass — not a Kuala Lumpur shophouse screen. Land value under a plot, and whether the plot survives a setback."
             parts={QUADRANTS.map((q, i) => ({
               label: q.label,
               value: q.count,
@@ -324,7 +322,7 @@ export default function WarRoom() {
           headers. No panel on this page renders a number it did not receive.
         </p>
         <p>
-          <Link href="/atlas/historic-core">Console atlas →</Link>{" "}
+          <Link href="/atlas/klcc">Console atlas →</Link>{" "}
           <Link href="/datasets">Datasets →</Link>{" "}
           <Link href="/heritage">The register →</Link>
         </p>

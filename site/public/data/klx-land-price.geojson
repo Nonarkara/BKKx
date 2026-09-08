@@ -1,0 +1,223 @@
+{
+  "type": "FeatureCollection",
+  "name": "KLX land-price bands",
+  "modelStatus": "District-scale listing/media bands, not NAPIC parcels or Treasury appraisal.",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              101.708,
+              3.154
+            ],
+            [
+              101.718,
+              3.154
+            ],
+            [
+              101.718,
+              3.162
+            ],
+            [
+              101.708,
+              3.162
+            ],
+            [
+              101.708,
+              3.154
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "klcc",
+        "name": "KLCC",
+        "rm_psf_low": 1500,
+        "rm_psf_high": 3000,
+        "rm_m2_low": 16146,
+        "rm_m2_high": 32292,
+        "unit": "RM per sq ft (listing/media) and converted RM per m²",
+        "conversion": "1 sq ft = 0.092903 m²; RM/m² = RM/sqft ÷ 0.092903",
+        "caveat": "Luxury condo listing range, media 2026 summaries. Not NAPIC appraisal. Appraised ≠ market. These polygons are district-scale boxes, not cadastral parcels.",
+        "source": "Media/listing summaries 2026 (trxklccproperty and similar). Official NAPIC Laporan Pasaran Harta 2025 exists as PDF and is not ingested.",
+        "source_url": "https://napic.jpph.gov.my/"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              101.706,
+              3.144
+            ],
+            [
+              101.718,
+              3.144
+            ],
+            [
+              101.718,
+              3.152
+            ],
+            [
+              101.706,
+              3.152
+            ],
+            [
+              101.706,
+              3.144
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "bukit-bintang",
+        "name": "Bukit Bintang",
+        "rm_psf_low": 900,
+        "rm_psf_high": 2500,
+        "rm_m2_low": 9688,
+        "rm_m2_high": 26910,
+        "unit": "RM per sq ft (listing/media) and converted RM per m²",
+        "conversion": "1 sq ft = 0.092903 m²; RM/m² = RM/sqft ÷ 0.092903",
+        "caveat": "Often quoted 15–30% below KLCC on a psf basis. Listing/media, not NAPIC. Appraised ≠ market. These polygons are district-scale boxes, not cadastral parcels.",
+        "source": "Media/listing summaries 2026 (trxklccproperty and similar). Official NAPIC Laporan Pasaran Harta 2025 exists as PDF and is not ingested.",
+        "source_url": "https://napic.jpph.gov.my/"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              101.714,
+              3.138
+            ],
+            [
+              101.722,
+              3.138
+            ],
+            [
+              101.722,
+              3.146
+            ],
+            [
+              101.714,
+              3.146
+            ],
+            [
+              101.714,
+              3.138
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "trx",
+        "name": "Tun Razak Exchange",
+        "rm_psf_low": 1900,
+        "rm_psf_high": 2326,
+        "rm_m2_low": 20451,
+        "rm_m2_high": 25037,
+        "unit": "RM per sq ft (listing/media) and converted RM per m²",
+        "conversion": "1 sq ft = 0.092903 m²; RM/m² = RM/sqft ÷ 0.092903",
+        "caveat": "TRX listing medians around RM 2,200 psf in 2026 media indexes. Not NAPIC. Appraised ≠ market. These polygons are district-scale boxes, not cadastral parcels.",
+        "source": "Media/listing summaries 2026 (trxklccproperty and similar). Official NAPIC Laporan Pasaran Harta 2025 exists as PDF and is not ingested.",
+        "source_url": "https://napic.jpph.gov.my/"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              101.724,
+              3.16
+            ],
+            [
+              101.736,
+              3.16
+            ],
+            [
+              101.736,
+              3.172
+            ],
+            [
+              101.724,
+              3.172
+            ],
+            [
+              101.724,
+              3.16
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "kampung-baru",
+        "name": "Kampung Baru",
+        "rm_psf_low": 400,
+        "rm_psf_high": 900,
+        "rm_m2_low": 4306,
+        "rm_m2_high": 9688,
+        "unit": "RM per sq ft (listing/media) and converted RM per m²",
+        "conversion": "1 sq ft = 0.092903 m²; RM/m² = RM/sqft ÷ 0.092903",
+        "caveat": "Malay reserve village; listing evidence is thin. Band is a media-order-of-magnitude, not a parcel appraisal. Appraised ≠ market. These polygons are district-scale boxes, not cadastral parcels.",
+        "source": "Media/listing summaries 2026 (trxklccproperty and similar). Official NAPIC Laporan Pasaran Harta 2025 exists as PDF and is not ingested.",
+        "source_url": "https://napic.jpph.gov.my/"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              101.693,
+              3.14
+            ],
+            [
+              101.7,
+              3.14
+            ],
+            [
+              101.7,
+              3.15
+            ],
+            [
+              101.693,
+              3.15
+            ],
+            [
+              101.693,
+              3.14
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "chinatown",
+        "name": "Petaling Street / city centre shophouses",
+        "rm_psf_low": 600,
+        "rm_psf_high": 1400,
+        "rm_m2_low": 6458,
+        "rm_m2_high": 15069,
+        "unit": "RM per sq ft (listing/media) and converted RM per m²",
+        "conversion": "1 sq ft = 0.092903 m²; RM/m² = RM/sqft ÷ 0.092903",
+        "caveat": "Shophouse/commercial listings in the historic core, media order of magnitude. Not NAPIC. Appraised ≠ market. These polygons are district-scale boxes, not cadastral parcels.",
+        "source": "Media/listing summaries 2026 (trxklccproperty and similar). Official NAPIC Laporan Pasaran Harta 2025 exists as PDF and is not ingested.",
+        "source_url": "https://napic.jpph.gov.my/"
+      }
+    }
+  ],
+  "featureCount": 5
+}

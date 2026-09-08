@@ -1,0 +1,6276 @@
+{
+  "type": "FeatureCollection",
+  "name": "KLX hero monuments",
+  "modelStatus": "Stacked schematic parts for mayor-demo recognisability. Not a measured conservation model, BIM, or as-built survey.",
+  "attribution": "© OpenStreetMap contributors, ODbL 1.0. Published heights from CTBUH, Menara KL, Tourism Malaysia, Jabatan Warisan Negara.",
+  "retrieved_at": "2026-09-08",
+  "complexes": {
+    "petronas-twin-towers": 10,
+    "menara-3-petronas": 1,
+    "merdeka-118": 6,
+    "exchange-106": 3,
+    "menara-kl": 3,
+    "masjid-negara": 3,
+    "sultan-abdul-samad": 5,
+    "masjid-jamek": 4,
+    "thean-hou": 4,
+    "parlimen": 2,
+    "tugu-negara": 2,
+    "batu-caves-murugan": 2
+  },
+  "featureCount": 45,
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              101.7118658,
+              3.1585926
+            ],
+            [
+              101.7118976,
+              3.1585878
+            ],
+            [
+              101.7119263,
+              3.1585735
+            ],
+            [
+              101.7119491,
+              3.158551
+            ],
+            [
+              101.7119639,
+              3.1585225
+            ],
+            [
+              101.7119666,
+              3.1585062
+            ],
+            [
+              101.7119874,
+              3.1585097
+            ],
+            [
+              101.7120471,
+              3.1584554
+            ],
+            [
+              101.7120532,
+              3.1584585
+            ],
+            [
+              101.7120666,
+              3.1584607
+            ],
+            [
+              101.71208,
+              3.1584587
+            ],
+            [
+              101.7120921,
+              3.1584527
+            ],
+            [
+              101.7120997,
+              3.1584461
+            ],
+            [
+              101.7121436,
+              3.1584948
+            ],
+            [
+              101.7121904,
+              3.1584526
+            ],
+            [
+              101.7121986,
+              3.158461
+            ],
+            [
+              101.7122107,
+              3.1584672
+            ],
+            [
+              101.7122241,
+              3.1584694
+            ],
+            [
+              101.7122375,
+              3.1584674
+            ],
+            [
+              101.7122496,
+              3.1584614
+            ],
+            [
+              101.7122593,
+              3.1584518
+            ],
+            [
+              101.7122655,
+              3.1584398
+            ],
+            [
+              101.7122678,
+              3.1584264
+            ],
+            [
+              101.712268,
+              3.1584242
+            ],
+            [
+              101.712332,
+              3.1584275
+            ],
+            [
+              101.7123354,
+              3.158361
+            ],
+            [
+              101.7123424,
+              3.1583609
+            ],
+            [
+              101.7123559,
+              3.1583588
+            ],
+            [
+              101.712368,
+              3.1583528
+            ],
+            [
+              101.7123777,
+              3.1583433
+            ],
+            [
+              101.7123839,
+              3.1583312
+            ],
+            [
+              101.7123861,
+              3.1583179
+            ],
+            [
+              101.7123841,
+              3.1583045
+            ],
+            [
+              101.712378,
+              3.1582923
+            ],
+            [
+              101.7123736,
+              3.1582879
+            ],
+            [
+              101.7124197,
+              3.1582465
+            ],
+            [
+              101.7123771,
+              3.1581993
+            ],
+            [
+              101.7123856,
+              3.158191
+            ],
+            [
+              101.7123918,
+              3.158179
+            ],
+            [
+              101.712394,
+              3.1581656
+            ],
+            [
+              101.712392,
+              3.1581522
+            ],
+            [
+              101.7123859,
+              3.1581401
+            ],
+            [
+              101.7123764,
+              3.1581304
+            ],
+            [
+              101.7123644,
+              3.1581242
+            ],
+            [
+              101.712351,
+              3.158122
+            ],
+            [
+              101.7123477,
+              3.1581218
+            ],
+            [
+              101.712351,
+              3.1580569
+            ],
+            [
+              101.7122896,
+              3.1580538
+            ],
+            [
+              101.7122892,
+              3.1580494
+            ],
+            [
+              101.7122872,
+              3.158036
+            ],
+            [
+              101.7122811,
+              3.1580239
+            ],
+            [
+              101.7122716,
+              3.1580142
+            ],
+            [
+              101.7122595,
+              3.158008
+            ],
+            [
+              101.7122462,
+              3.1580057
+            ],
+            [
+              101.7122327,
+              3.1580078
+            ],
+            [
+              101.7122206,
+              3.1580138
+            ],
+            [
+              101.7122149,
+              3.1580195
+            ],
+            [
+              101.712172,
+              3.1579719
+            ],
+            [
+              101.7121266,
+              3.1580127
+            ],
+            [
+              101.7121172,
+              3.1580032
+            ],
+            [
+              101.7121052,
+              3.1579969
+            ],
+            [
+              101.7120918,
+              3.1579947
+            ],
+            [
+              101.7120784,
+              3.1579967
+            ],
+            [
+              101.7120663,
+              3.1580028
+            ],
+            [
+              101.7120566,
+              3.1580123
+            ],
+            [
+              101.7120503,
+              3.1580244
+            ],
+            [
+              101.7120481,
+              3.1580377
+            ],
+            [
+              101.7120478,
+              3.1580415
+            ],
+            [
+              101.711629,
+              3.1576873
+            ],
+            [
+              101.7116358,
+              3.1576855
+            ],
+            [
+              101.7116484,
+              3.1576803
+            ],
+            [
+              101.7116587,
+              3.1576716
+            ],
+            [
+              101.7116659,
+              3.15766
+            ],
+            [
+              101.711669,
+              3.1576468
+            ],
+            [
+              101.711668,
+              3.1576334
+            ],
+            [
+              101.7116628,
+              3.1576208
+            ],
+            [
+              101.711654,
+              3.1576104
+            ],
+            [
+              101.7116487,
+              3.1576072
+            ],
+            [
+              101.7116836,
+              3.157556
+            ],
+            [
+              101.7116309,
+              3.1575203
+            ],
+            [
+              101.7116372,
+              3.1575102
+            ],
+            [
+              101.7116403,
+              3.1574971
+            ],
+            [
+              101.7116393,
+              3.1574836
+            ],
+            [
+              101.7116341,
+              3.157471
+            ],
+            [
+              101.7116253,
+              3.1574607
+            ],
+            [
+              101.7116138,
+              3.1574536
+            ],
+            [
+              101.7116006,
+              3.1574504
+            ],
+            [
+              101.7115871,
+              3.1574515
+            ],
+            [
+              101.7115839,
+              3.1574521
+            ],
+            [
+              101.7115716,
+              3.1573882
+            ],
+            [
+              101.7115112,
+              3.1573998
+            ],
+            [
+              101.7115098,
+              3.1573957
+            ],
+            [
+              101.7115046,
+              3.1573831
+            ],
+            [
+              101.7114958,
+              3.1573728
+            ],
+            [
+              101.7114843,
+              3.1573657
+            ],
+            [
+              101.711471,
+              3.1573625
+            ],
+            [
+              101.7114576,
+              3.1573635
+            ],
+            [
+              101.711445,
+              3.1573687
+            ],
+            [
+              101.7114346,
+              3.1573774
+            ],
+            [
+              101.7114305,
+              3.1573843
+            ],
+            [
+              101.7113774,
+              3.1573483
+            ],
+            [
+              101.7113431,
+              3.1573987
+            ],
+            [
+              101.7113317,
+              3.1573917
+            ],
+            [
+              101.7113185,
+              3.1573885
+            ],
+            [
+              101.711305,
+              3.1573895
+            ],
+            [
+              101.7112925,
+              3.1573947
+            ],
+            [
+              101.7112822,
+              3.1574035
+            ],
+            [
+              101.711275,
+              3.157415
+            ],
+            [
+              101.7112718,
+              3.1574282
+            ],
+            [
+              101.7112728,
+              3.1574417
+            ],
+            [
+              101.7112734,
+              3.1574454
+            ],
+            [
+              101.7112081,
+              3.157458
+            ],
+            [
+              101.7112204,
+              3.1575219
+            ],
+            [
+              101.7112169,
+              3.1575227
+            ],
+            [
+              101.7112043,
+              3.1575279
+            ],
+            [
+              101.7111939,
+              3.1575367
+            ],
+            [
+              101.7111869,
+              3.1575482
+            ],
+            [
+              101.7111836,
+              3.1575614
+            ],
+            [
+              101.7111847,
+              3.1575749
+            ],
+            [
+              101.7111898,
+              3.1575874
+            ],
+            [
+              101.7111986,
+              3.1575977
+            ],
+            [
+              101.7112047,
+              3.1576021
+            ],
+            [
+              101.7111686,
+              3.1576552
+            ],
+            [
+              101.7111943,
+              3.1576727
+            ],
+            [
+              101.7112201,
+              3.1576901
+            ],
+            [
+              101.7112144,
+              3.1576992
+            ],
+            [
+              101.7112113,
+              3.1577123
+            ],
+            [
+              101.7112122,
+              3.1577259
+            ],
+            [
+              101.7112175,
+              3.1577384
+            ],
+            [
+              101.7111689,
+              3.1578082
+            ],
+            [
+              101.7111738,
+              3.1578276
+            ],
+            [
+              101.7111511,
+              3.1578368
+            ],
+            [
+              101.7111267,
+              3.1578577
+            ],
+            [
+              101.7111098,
+              3.157885
+            ],
+            [
+              101.7111023,
+              3.1579161
+            ],
+            [
+              101.7111047,
+              3.157948
+            ],
+            [
+              101.711117,
+              3.1579776
+            ],
+            [
+              101.7111377,
+              3.1580021
+            ],
+            [
+              101.7111651,
+              3.1580189
+            ],
+            [
+              101.7111963,
+              3.1580265
+            ],
+            [
+              101.7112283,
+              3.158024
+            ],
+            [
+              101.711258,
+              3.1580118
+            ],
+            [
+              101.7112824,
+              3.157991
+            ],
+            [
+              101.7112992,
+              3.1579638
+            ],
+            [
+              101.7113068,
+              3.1579326
+            ],
+            [
+              101.7113055,
+              3.1579161
+            ],
+            [
+              101.7113266,
+              3.1579145
+            ],
+            [
+              101.7113716,
+              3.1578476
+            ],
+            [
+              101.7113782,
+              3.1578491
+            ],
+            [
+              101.7113918,
+              3.1578481
+            ],
+            [
+              101.7114043,
+              3.157843
+            ],
+            [
+              101.7114146,
+              3.1578343
+            ],
+            [
+              101.7114204,
+              3.157826
+            ],
+            [
+              101.7114747,
+              3.1578629
+            ],
+            [
+              101.7115101,
+              3.1578108
+            ],
+            [
+              101.71152,
+              3.157817
+            ],
+            [
+              101.7115333,
+              3.1578201
+            ],
+            [
+              101.7115468,
+              3.1578191
+            ],
+            [
+              101.7115593,
+              3.1578139
+            ],
+            [
+              101.7115697,
+              3.1578052
+            ],
+            [
+              101.7115768,
+              3.1577936
+            ],
+            [
+              101.7115799,
+              3.1577804
+            ],
+            [
+              101.711579,
+              3.1577669
+            ],
+            [
+              101.7115787,
+              3.1577647
+            ],
+            [
+              101.7119781,
+              3.1581031
+            ],
+            [
+              101.7119744,
+              3.1581031
+            ],
+            [
+              101.711961,
+              3.1581051
+            ],
+            [
+              101.7119488,
+              3.1581112
+            ],
+            [
+              101.7119392,
+              3.1581207
+            ],
+            [
+              101.7119329,
+              3.1581327
+            ],
+            [
+              101.7119307,
+              3.1581461
+            ],
+            [
+              101.7119327,
+              3.1581595
+            ],
+            [
+              101.7119388,
+              3.1581716
+            ],
+            [
+              101.7119436,
+              3.1581773
+            ],
+            [
+              101.7118959,
+              3.1582202
+            ],
+            [
+              101.7119376,
+              3.1582664
+            ],
+            [
+              101.7119299,
+              3.1582739
+            ],
+            [
+              101.7119237,
+              3.1582859
+            ],
+            [
+              101.7119214,
+              3.1582993
+            ],
+            [
+              101.7119235,
+              3.1583127
+            ],
+            [
+              101.7118597,
+              3.1583689
+            ],
+            [
+              101.7118598,
+              3.1583889
+            ],
+            [
+              101.7118356,
+              3.1583925
+            ],
+            [
+              101.7118069,
+              3.1584069
+            ],
+            [
+              101.711784,
+              3.1584294
+            ],
+            [
+              101.7117692,
+              3.1584578
+            ],
+            [
+              101.711764,
+              3.1584894
+            ],
+            [
+              101.7117688,
+              3.1585211
+            ],
+            [
+              101.7117831,
+              3.1585498
+            ],
+            [
+              101.7118057,
+              3.1585726
+            ],
+            [
+              101.7118342,
+              3.1585874
+            ],
+            [
+              101.7118658,
+              3.1585926
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "petronas-podium",
+        "hero_id": "petronas-twin-towers",
+        "name": "Menara Berkembar Petronas",
+        "name_en": "Petronas Twin Towers podium",
+        "name_ms": "Podium Menara Berkembar Petronas",
+        "name_zh": "国油双峰塔裙楼",
+        "part_label": "shared podium",
+        "kind": "hero_podium",
+        "height": 22,
+        "base_height": 0,
+        "material_color": "#4a5563",
+        "osm_id": 279944536,
+        "footprint_source": "OpenStreetMap way 279944536 snapshot · 2026-09-08 · interpretive star split of the combined twin outline",
+        "height_source": "KLX interpretive podium · not an official dimension",
+        "height_confidence": "interpretive-envelope",
+        "model_status": "survey-informed schematic",
+        "source": "CTBUH envelope + OSM combined twin outline",
+        "source_url": "https://www.skyscrapercenter.com/building/petronas-twin-towers/149",
+        "source_note": "CTBUH architectural height 451.9 m; occupied 375 m. Skybridge 58.4 m long at 170 m AGL, levels 41–42. OSM records the twins as one combined way (279944536); shafts are an interpretive eight-pointed-star split of that outline. Not a floor-by-floor survey.",
+        "not_measured_survey": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              101.7122002,
+              3.1584608
+            ],
+            [
+              101.7121913,
+              3.15834
+            ],
+            [
+              101.7123122,
+              3.1583489
+            ],
+            [
+              101.7122204,
+              3.1582699
+            ],
+            [
+              101.7123122,
+              3.1581908
+            ],
+            [
+              101.7121913,
+              3.1581998
+            ],
+            [
+              101.7122002,
+              3.158079
+            ],
+            [
+              101.7121211,
+              3.1581707
+            ],
+            [
+              101.7120419,
+              3.158079
+            ],
+            [
+              101.7120508,
+              3.1581998
+            ],
+            [
+              101.7119299,
+              3.1581908
+            ],
+            [
+              101.7120217,
+              3.1582699
+            ],
+            [
+              101.7119299,
+              3.1583489
+            ],
+            [
+              101.7120508,
+              3.15834
+            ],
+            [
+              101.7120419,
+              3.1584608
+            ],
+            [
+              101.7121211,
+              3.1583691
+            ],
+            [
+              101.7122002,
+              3.1584608
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "petronas-1-shaft",
+        "hero_id": "petronas-twin-towers",
+        "name": "Menara Berkembar Petronas",
+        "name_en": "Petronas Tower 1",
+        "name_ms": "Menara Petronas 1",
+        "name_zh": "国油双峰塔一号",
+        "part_label": "office shaft",
+        "kind": "hero_tower",
+        "height": 375.0,
+        "base_height": 22,
+        "material_color": "#c9d6e2",
+        "osm_id": 279944536,
+        "footprint_source": "OpenStreetMap way 279944536 snapshot · 2026-09-08 · interpretive star split of the combined twin outline",
+        "height_source": "CTBUH occupied height 375 m",
+        "height_confidence": "official-envelope",
+        "model_status": "official-envelope schematic",
+        "source": "CTBUH Petronas Twin Towers + OSM way 279944536",
+        "source_url": "https://www.skyscrapercenter.com/building/petronas-twin-towers/149",
+        "source_note": "CTBUH architectural height 451.9 m; occupied 375 m. Skybridge 58.4 m long at 170 m AGL, levels 41–42. OSM records the twins as one combined way (279944536); shafts are an interpretive eight-pointed-star split of that outline. Not a floor-by-floor survey.",
+        "not_measured_survey": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              101.7121828,
+              3.1584188
+            ],
+            [
+              101.7121758,
+              3.1583246
+            ],
+            [
+              101.7122701,
+              3.1583315
+            ],
+            [
+              101.7121985,
+              3.1582699
+            ],
+            [
+              101.7122701,
+              3.1582082
+            ],
+            [
+              101.7121758,
+              3.1582152
+            ],
+            [
+              101.7121828,
+              3.158121
+            ],
+            [
+              101.7121211,
+              3.1581925
+            ],
+            [
+              101.7120593,
+              3.158121
+            ],
+            [
+              101.7120663,
+              3.1582152
+            ],
+            [
+              101.711972,
+              3.1582082
+            ],
+            [
+              101.7120436,
+              3.1582699
+            ],
+            [
+              101.711972,
+              3.1583315
+            ],
+            [
+              101.7120663,
+              3.1583246
+            ],
+            [
+              101.7120593,
+              3.1584188
+            ],
+            [
+              101.7121211,
+              3.1583473
+            ],
+            [
+              101.7121828,
+              3.1584188
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "petronas-1-shoulder",
+        "hero_id": "petronas-twin-towers",
+        "name": "Menara Berkembar Petronas",
+        "name_en": "Petronas Tower 1",
+        "name_ms": "Menara Petronas 1",
+        "name_zh": "国油双峰塔一号",
+        "part_label": "setback shoulder",
+        "kind": "hero_tower",
+        "height": 375.0,
+        "base_height": 300,
+        "material_color": "#b7c7d6",
+        "osm_id": 279944536,
+        "footprint_source": "OpenStreetMap way 279944536 snapshot · 2026-09-08 · interpretive star split of the combined twin outline",
+        "height_source": "Interpretive setback proportion below the occupied envelope",
+        "height_confidence": "interpretive-proportion",
+        "model_status": "official-envelope schematic",
+        "source": "CTBUH Petronas Twin Towers + OSM way 279944536",
+        "source_url": "https://www.skyscrapercenter.com/building/petronas-twin-towers/149",
+        "source_note": "CTBUH architectural height 451.9 m; occupied 375 m. Skybridge 58.4 m long at 170 m AGL, levels 41–42. OSM records the twins as one combined way (279944536); shafts are an interpretive eight-pointed-star split of that outline. Not a floor-by-floor survey.",
+        "not_measured_survey": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              101.7121543,
+              3.1583501
+            ],
+            [
+              101.7121506,
+              3.1582993
+            ],
+            [
+              101.7122013,
+              3.1583031
+            ],
+            [
+              101.7121628,
+              3.1582699
+            ],
+            [
+              101.7122013,
+              3.1582367
+            ],
+            [
+              101.7121506,
+              3.1582405
+            ],
+            [
+              101.7121543,
+              3.1581897
+            ],
+            [
+              101.7121211,
+              3.1582282
+            ],
+            [
+              101.7120878,
+              3.1581897
+            ],
+            [
+              101.7120915,
+              3.1582405
+            ],
+            [
+              101.7120408,
+              3.1582367
+            ],
+            [
+              101.7120793,
+              3.1582699
+            ],
+            [
+              101.7120408,
+              3.1583031
+            ],
+            [
+              101.7120915,
+              3.1582993
+            ],
+            [
+              101.7120878,
+              3.1583501
+            ],
+            [
+              101.7121211,
+              3.1583116
+            ],
+            [
+              101.7121543,
+              3.1583501
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "petronas-1-pinnacle-base",
+        "hero_id": "petronas-twin-towers",
+        "name": "Menara Berkembar Petronas",
+        "name_en": "Petronas Tower 1",
+        "name_ms": "Menara Petronas 1",
+        "name_zh": "国油双峰塔一号",
+        "part_label": "pinnacle base",
+        "kind": "hero_tower",
+        "height": 410,
+        "base_height": 375.0,
+        "material_color": "#dfe7ee",
+        "osm_id": 279944536,
+        "footprint_source": "OpenStreetMap way 279944536 snapshot · 2026-09-08 · interpretive star split of the combined twin outline",
+        "height_source": "Interpretive pinnacle taper inside the 451.9 m CTBUH architectural envelope",
+        "height_confidence": "interpretive-proportion",
+        "model_status": "official-envelope schematic",
+        "source": "CTBUH Petronas Twin Towers + OSM way 279944536",
+        "source_url": "https://www.skyscrapercenter.com/building/petronas-twin-towers/149",
+        "source_note": "CTBUH architectural height 451.9 m; occupied 375 m. Skybridge 58.4 m long at 170 m AGL, levels 41–42. OSM records the twins as one combined way (279944536); shafts are an interpretive eight-pointed-star split of that outline. Not a floor-by-floor survey.",
+        "not_measured_survey": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              101.7121337,
+              3.1583004
+            ],
+            [
+              101.7121323,
+              3.1582811
+            ],
+            [
+              101.7121516,
+              3.1582825
+            ],
+            [
+              101.712137,
+              3.1582699
+            ],
+            [
+              101.7121516,
+              3.1582572
+            ],
+            [
+              101.7121323,
+              3.1582587
+            ],
+            [
+              101.7121337,
+              3.1582393
+            ],
+            [
+              101.7121211,
+              3.158254
+            ],
+            [
+              101.7121084,
+              3.1582393
+            ],
+            [
+              101.7121098,
+              3.1582587
+            ],
+            [
+              101.7120905,
+              3.1582572
+            ],
+            [
+              101.7121052,
+              3.1582699
+            ],
+            [
+              101.7120905,
+              3.1582825
+            ],
+            [
+              101.7121098,
+              3.1582811
+            ],
+            [
+              101.7121084,
+              3.1583004
+            ],
+            [
+              101.7121211,
+              3.1582858
+            ],
+            [
+              101.7121337,
+              3.1583004
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "petronas-1-pinnacle",
+        "hero_id": "petronas-twin-towers",
+        "name": "Menara Berkembar Petronas",
+        "name_en": "Petronas Tower 1",
+        "name_ms": "Menara Petronas 1",
+        "name_zh": "国油双峰塔一号",
+        "part_label": "pinnacle",
+        "kind": "hero_tower",
+        "height": 451.9,
+        "base_height": 410,
+        "material_color": "#eef3f7",
+        "osm_id": 279944536,
+        "footprint_source": "OpenStreetMap way 279944536 snapshot · 2026-09-08 · interpretive star split of the combined twin outline",
+        "height_source": "CTBUH architectural height 451.9 m",
+        "height_confidence": "official-envelope",
+        "model_status": "official-envelope schematic",
+        "source": "CTBUH Petronas Twin Towers + OSM way 279944536",
+        "source_url": "https://www.skyscrapercenter.com/building/petronas-twin-towers/149",
+        "source_note": "CTBUH architectural height 451.9 m; occupied 375 m. Skybridge 58.4 m long at 170 m AGL, levels 41–42. OSM records the twins as one combined way (279944536); shafts are an interpretive eight-pointed-star split of that outline. Not a floor-by-floor survey.",
+        "not_measured_survey": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              101.7114716,
+              3.1578379
+            ],
+            [
+              101.7114627,
+              3.1577171
+            ],
+            [
+              101.7115836,
+              3.1577261
+            ],
+            [
+              101.7114918,
+              3.157647
+            ],
+            [
+              101.7115836,
+              3.1575679
+            ],
+            [
+              101.7114627,
+              3.1575769
+            ],
+            [
+              101.7114716,
+              3.1574561
+            ],
+            [
+              101.7113925,
+              3.1575478
+            ],
+            [
+              101.7113133,
+              3.1574561
+            ],
+            [
+              101.7113222,
+              3.1575769
+            ],
+            [
+              101.7112013,
+              3.1575679
+            ],
+            [
+              101.7112931,
+              3.157647
+            ],
+            [
+              101.7112013,
+              3.1577261
+            ],
+            [
+              101.7113222,
+              3.1577171
+            ],
+            [
+              101.7113133,
+              3.1578379
+            ],
+            [
+              101.7113925,
+              3.1577462
+            ],
+            [
+              101.7114716,
+              3.1578379
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "petronas-2-shaft",
+        "hero_id": "petronas-twin-towers",
+        "name": "Menara Berkembar Petronas",
+        "name_en": "Petronas Tower 2",
+        "name_ms": "Menara Petronas 2",
+        "name_zh": "国油双峰塔二号",
+        "part_label": "office shaft",
+        "kind": "hero_tower",
+        "height": 375.0,
+        "base_height": 22,
+        "material_color": "#c9d6e2",
+        "osm_id": 279944536,
+        "footprint_source": "OpenStreetMap way 279944536 snapshot · 2026-09-08 · interpretive star split of the combined twin outline",
+        "height_source": "CTBUH occupied height 375 m",
+        "height_confidence": "official-envelope",
+        "model_status": "official-envelope schematic",
+        "source": "CTBUH Petronas Twin Towers + OSM way 279944536",
+        "source_url": "https://www.skyscrapercenter.com/building/petronas-twin-towers/149",
+        "source_note": "CTBUH architectural height 451.9 m; occupied 375 m. Skybridge 58.4 m long at 170 m AGL, levels 41–42. OSM records the twins as one combined way (279944536); shafts are an interpretive eight-pointed-star split of that outline. Not a floor-by-floor survey.",
+        "not_measured_survey": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              101.7114542,
+              3.1577959
+            ],
+            [
+              101.7114472,
+              3.1577017
+            ],
+            [
+              101.7115415,
+              3.1577087
+            ],
+            [
+              101.7114699,
+              3.157647
+            ],
+            [
+              101.7115415,
+              3.1575853
+            ],
+            [
+              101.7114472,
+              3.1575923
+            ],
+            [
+              101.7114542,
+              3.1574981
+            ],
+            [
+              101.7113925,
+              3.1575696
+            ],
+            [
+              101.7113307,
+              3.1574981
+            ],
+            [
+              101.7113377,
+              3.1575923
+            ],
+            [
+              101.7112434,
+              3.1575853
+            ],
+            [
+              101.711315,
+              3.157647
+            ],
+            [
+              101.7112434,
+              3.1577087
+            ],
+            [
+              101.7113377,
+              3.1577017
+            ],
+            [
+              101.7113307,
+              3.1577959
+            ],
+            [
+              101.7113925,
+              3.1577244
+            ],
+            [
+              101.7114542,
+              3.1577959
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "petronas-2-shoulder",
+        "hero_id": "petronas-twin-towers",
+        "name": "Menara Berkembar Petronas",
+        "name_en": "Petronas Tower 2",
+        "name_ms": "Menara Petronas 2",
+        "name_zh": "国油双峰塔二号",
+        "part_label": "setback shoulder",
+        "kind": "hero_tower",
+        "height": 375.0,
+        "base_height": 300,
+        "material_color": "#b7c7d6",
+        "osm_id": 279944536,
+        "footprint_source": "OpenStreetMap way 279944536 snapshot · 2026-09-08 · interpretive star split of the combined twin outline",
+        "height_source": "Interpretive setback proportion below the occupied envelope",
+        "height_confidence": "interpretive-proportion",
+        "model_status": "official-envelope schematic",
+        "source": "CTBUH Petronas Twin Towers + OSM way 279944536",
+        "source_url": "https://www.skyscrapercenter.com/building/petronas-twin-towers/149",
+        "source_note": "CTBUH architectural height 451.9 m; occupied 375 m. Skybridge 58.4 m long at 170 m AGL, levels 41–42. OSM records the twins as one combined way (279944536); shafts are an interpretive eight-pointed-star split of that outline. Not a floor-by-floor survey.",
+        "not_measured_survey": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              101.7114257,
+              3.1577272
+            ],
+            [
+              101.711422,
+              3.1576764
+            ],
+            [
+              101.7114727,
+              3.1576802
+            ],
+            [
+              101.7114342,
+              3.157647
+            ],
+            [
+              101.7114727,
+              3.1576138
+            ],
+            [
+              101.711422,
+              3.1576176
+            ],
+            [
+              101.7114257,
+              3.1575668
+            ],
+            [
+              101.7113925,
+              3.1576053
+            ],
+            [
+              101.7113592,
+              3.1575668
+            ],
+            [
+              101.7113629,
+              3.1576176
+            ],
+            [
+              101.7113122,
+              3.1576138
+            ],
+            [
+              101.7113507,
+              3.157647
+            ],
+            [
+              101.7113122,
+              3.1576802
+            ],
+            [
+              101.7113629,
+              3.1576764
+            ],
+            [
+              101.7113592,
+              3.1577272
+            ],
+            [
+              101.7113925,
+              3.1576887
+            ],
+            [
+              101.7114257,
+              3.1577272
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "petronas-2-pinnacle-base",
+        "hero_id": "petronas-twin-towers",
+        "name": "Menara Berkembar Petronas",
+        "name_en": "Petronas Tower 2",
+        "name_ms": "Menara Petronas 2",
+        "name_zh": "国油双峰塔二号",
+        "part_label": "pinnacle base",
+        "kind": "hero_tower",
+        "height": 410,
+        "base_height": 375.0,
+        "material_color": "#dfe7ee",
+        "osm_id": 279944536,
+        "footprint_source": "OpenStreetMap way 279944536 snapshot · 2026-09-08 · interpretive star split of the combined twin outline",
+        "height_source": "Interpretive pinnacle taper inside the 451.9 m CTBUH architectural envelope",
+        "height_confidence": "interpretive-proportion",
+        "model_status": "official-envelope schematic",
+        "source": "CTBUH Petronas Twin Towers + OSM way 279944536",
+        "source_url": "https://www.skyscrapercenter.com/building/petronas-twin-towers/149",
+        "source_note": "CTBUH architectural height 451.9 m; occupied 375 m. Skybridge 58.4 m long at 170 m AGL, levels 41–42. OSM records the twins as one combined way (279944536); shafts are an interpretive eight-pointed-star split of that outline. Not a floor-by-floor survey.",
+        "not_measured_survey": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              101.7114051,
+              3.1576775
+            ],
+            [
+              101.7114037,
+              3.1576582
+            ],
+            [
+              101.711423,
+              3.1576597
+            ],
+            [
+              101.7114084,
+              3.157647
+            ],
+            [
+              101.711423,
+              3.1576343
+            ],
+            [
+              101.7114037,
+              3.1576358
+            ],
+            [
+              101.7114051,
+              3.1576165
+            ],
+            [
+              101.7113925,
+              3.1576311
+            ],
+            [
+              101.7113798,
+              3.1576165
+            ],
+            [
+              101.7113812,
+              3.1576358
+            ],
+            [
+              101.7113619,
+              3.1576343
+            ],
+            [
+              101.7113766,
+              3.157647
+            ],
+            [
+              101.7113619,
+              3.1576597
+            ],
+            [
+              101.7113812,
+              3.1576582
+            ],
+            [
+              101.7113798,
+              3.1576775
+            ],
+            [
+              101.7113925,
+              3.1576629
+            ],
+            [
+              101.7114051,
+              3.1576775
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "petronas-2-pinnacle",
+        "hero_id": "petronas-twin-towers",
+        "name": "Menara Berkembar Petronas",
+        "name_en": "Petronas Tower 2",
+        "name_ms": "Menara Petronas 2",
+        "name_zh": "国油双峰塔二号",
+        "part_label": "pinnacle",
+        "kind": "hero_tower",
+        "height": 451.9,
+        "base_height": 410,
+        "material_color": "#eef3f7",
+        "osm_id": 279944536,
+        "footprint_source": "OpenStreetMap way 279944536 snapshot · 2026-09-08 · interpretive star split of the combined twin outline",
+        "height_source": "CTBUH architectural height 451.9 m",
+        "height_confidence": "official-envelope",
+        "model_status": "official-envelope schematic",
+        "source": "CTBUH Petronas Twin Towers + OSM way 279944536",
+        "source_url": "https://www.skyscrapercenter.com/building/petronas-twin-towers/149",
+        "source_note": "CTBUH architectural height 451.9 m; occupied 375 m. Skybridge 58.4 m long at 170 m AGL, levels 41–42. OSM records the twins as one combined way (279944536); shafts are an interpretive eight-pointed-star split of that outline. Not a floor-by-floor survey.",
+        "not_measured_survey": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              101.7114246,
+              3.1576095
+            ],
+            [
+              101.7121532,
+              3.1582324
+            ],
+            [
+              101.7120889,
+              3.1583074
+            ],
+            [
+              101.7113603,
+              3.1576845
+            ],
+            [
+              101.7114246,
+              3.1576095
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "petronas-skybridge",
+        "hero_id": "petronas-twin-towers",
+        "name": "Skybridge Menara Berkembar Petronas",
+        "name_en": "Petronas skybridge",
+        "name_ms": "Jambatan langit Menara Berkembar Petronas",
+        "name_zh": "双峰塔天空桥",
+        "part_label": "skybridge levels 41–42",
+        "kind": "hero_skybridge",
+        "height": 178.0,
+        "base_height": 170.0,
+        "material_color": "#8a9aab",
+        "osm_id": 279944536,
+        "footprint_source": "Interpretive span between OSM-derived tower centroids · published length 58.4 m",
+        "height_source": "Published skybridge 170 m AGL, 58.4 m long, levels 41–42",
+        "height_confidence": "official-envelope",
+        "model_status": "official-envelope schematic",
+        "source": "CTBUH / Petronas engineering notes",
+        "source_url": "https://www.skyscrapercenter.com/building/petronas-twin-towers/149",
+        "source_note": "CTBUH architectural height 451.9 m; occupied 375 m. Skybridge 58.4 m long at 170 m AGL, levels 41–42. OSM records the twins as one combined way (279944536); shafts are an interpretive eight-pointed-star split of that outline. Not a floor-by-floor survey.",
+        "not_measured_survey": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              101.7110742,
+              3.1564845
+            ],
+            [
+              101.7113075,
+              3.1568268
+            ],
+            [
+              101.7113847,
+              3.1568233
+            ],
+            [
+              101.7115125,
+              3.1565608
+            ],
+            [
+              101.7115249,
+              3.1565355
+            ],
+            [
+              101.7115661,
+              3.1564507
+            ],
+            [
+              101.7115213,
+              3.1563878
+            ],
+            [
+              101.7111076,
+              3.1564149
+            ],
+            [
+              101.7110742,
+              3.1564845
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "menara-3-petronas-shaft",
+        "hero_id": "menara-3-petronas",
+        "name": "Menara 3 Petronas",
+        "name_en": "Menara 3 Petronas",
+        "name_ms": "Menara 3 Petronas",
+        "name_zh": "国油第三峰",
+        "part_label": "office shaft",
+        "kind": "hero_tower",
+        "height": 267.0,
+        "base_height": 0,
+        "material_color": "#9aa8b5",
+        "osm_id": 469717874,
+        "footprint_source": "OpenStreetMap way 469717874 snapshot · 2026-09-08",
+        "height_source": "OpenStreetMap height=267 tag on way 469717874",
+        "height_confidence": "osm-tagged",
+        "model_status": "OSM-tagged schematic",
+        "source": "OpenStreetMap tagged height",
+        "source_url": "https://www.openstreetmap.org/way/469717874",
+        "source_note": "OSM records height 267 m / 60 floors. Not a CTBUH architectural height for this shaft.",
+        "not_measured_survey": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              101.7004761,
+              3.1412796
+            ],
+            [
+              101.7008768,
+              3.1414849
+            ],
+            [
+              101.7008838,
+              3.1418293
+            ],
+            [
+              101.7008596,
+              3.1418454
+            ],
+            [
+              101.7008639,
+              3.1418518
+            ],
+            [
+              101.7008154,
+              3.1418847
+            ],
+            [
+              101.7008109,
+              3.1418781
+            ],
+            [
+              101.7007865,
+              3.1418945
+            ],
+            [
+              101.7004872,
+              3.1417458
+            ],
+            [
+              101.7004761,
+              3.1412796
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "merdeka-118-plinth",
+        "hero_id": "merdeka-118",
+        "name": "Menara Merdeka Maybank",
+        "name_en": "Merdeka 118",
+        "name_ms": "Menara Merdeka Maybank",
+        "name_zh": "默迪卡118",
+        "part_label": "plinth",
+        "kind": "hero_spire",
+        "height": 28,
+        "base_height": 0,
+        "material_color": "#1c242c",
+        "osm_id": 645604854,
+        "footprint_source": "OpenStreetMap way 645604854 snapshot · 2026-09-08 (coarse 10-point footprint)",
+        "height_source": "KLX interpretive taper inside the published envelope · not a measured survey",
+        "height_confidence": "interpretive-envelope",
+        "model_status": "official-envelope schematic",
+        "source": "CTBUH Menara Merdeka Maybank + OSM footprint",
+        "source_url": "https://www.skyscrapercenter.com/building/menara-merdeka-maybank/10115",
+        "source_note": "CTBUH architectural height 678.9 m, occupied 502.8 m, 118 floors (Menara Merdeka Maybank). OSM way 645604854 is a coarse 10-point footprint; the taper is interpretive so the spire reads as a spire.",
+        "not_measured_survey": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              101.700566,
+              3.1414255
+            ],
+            [
+              101.7008408,
+              3.1415662
+            ],
+            [
+              101.7008456,
+              3.1418024
+            ],
+            [
+              101.700829,
+              3.1418135
+            ],
+            [
+              101.700832,
+              3.1418179
+            ],
+            [
+              101.7007987,
+              3.1418404
+            ],
+            [
+              101.7007956,
+              3.1418359
+            ],
+            [
+              101.7007788,
+              3.1418471
+            ],
+            [
+              101.7005736,
+              3.1417452
+            ],
+            [
+              101.700566,
+              3.1414255
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "merdeka-118-body",
+        "hero_id": "merdeka-118",
+        "name": "Menara Merdeka Maybank",
+        "name_en": "Merdeka 118",
+        "name_ms": "Menara Merdeka Maybank",
+        "name_zh": "默迪卡118",
+        "part_label": "occupied shaft",
+        "kind": "hero_spire",
+        "height": 502.8,
+        "base_height": 28,
+        "material_color": "#24303a",
+        "osm_id": 645604854,
+        "footprint_source": "OpenStreetMap way 645604854 snapshot · 2026-09-08 (coarse 10-point footprint)",
+        "height_source": "CTBUH occupied height 502.8 m",
+        "height_confidence": "official-envelope",
+        "model_status": "official-envelope schematic",
+        "source": "CTBUH Menara Merdeka Maybank + OSM footprint",
+        "source_url": "https://www.skyscrapercenter.com/building/menara-merdeka-maybank/10115",
+        "source_note": "CTBUH architectural height 678.9 m, occupied 502.8 m, 118 floors (Menara Merdeka Maybank). OSM way 645604854 is a coarse 10-point footprint; the taper is interpretive so the spire reads as a spire.",
+        "not_measured_survey": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              101.7006314,
+              3.1415316
+            ],
+            [
+              101.7008146,
+              3.1416254
+            ],
+            [
+              101.7008178,
+              3.1417829
+            ],
+            [
+              101.7008068,
+              3.1417903
+            ],
+            [
+              101.7008087,
+              3.1417932
+            ],
+            [
+              101.7007866,
+              3.1418082
+            ],
+            [
+              101.7007845,
+              3.1418052
+            ],
+            [
+              101.7007733,
+              3.1418127
+            ],
+            [
+              101.7006365,
+              3.1417447
+            ],
+            [
+              101.7006314,
+              3.1415316
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "merdeka-118-waist",
+        "hero_id": "merdeka-118",
+        "name": "Menara Merdeka Maybank",
+        "name_en": "Merdeka 118",
+        "name_ms": "Menara Merdeka Maybank",
+        "name_zh": "默迪卡118",
+        "part_label": "upper occupied taper",
+        "kind": "hero_spire",
+        "height": 502.8,
+        "base_height": 280,
+        "material_color": "#2e3d4a",
+        "osm_id": 645604854,
+        "footprint_source": "OpenStreetMap way 645604854 snapshot · 2026-09-08 (coarse 10-point footprint)",
+        "height_source": "KLX interpretive taper inside the published envelope · not a measured survey",
+        "height_confidence": "interpretive-proportion",
+        "model_status": "official-envelope schematic",
+        "source": "CTBUH Menara Merdeka Maybank + OSM footprint",
+        "source_url": "https://www.skyscrapercenter.com/building/menara-merdeka-maybank/10115",
+        "source_note": "CTBUH architectural height 678.9 m, occupied 502.8 m, 118 floors (Menara Merdeka Maybank). OSM way 645604854 is a coarse 10-point footprint; the taper is interpretive so the spire reads as a spire.",
+        "not_measured_survey": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              101.7006859,
+              3.14162
+            ],
+            [
+              101.7007928,
+              3.1416747
+            ],
+            [
+              101.7007947,
+              3.1417666
+            ],
+            [
+              101.7007882,
+              3.1417709
+            ],
+            [
+              101.7007894,
+              3.1417726
+            ],
+            [
+              101.7007764,
+              3.1417814
+            ],
+            [
+              101.7007752,
+              3.1417796
+            ],
+            [
+              101.7007687,
+              3.141784
+            ],
+            [
+              101.7006889,
+              3.1417443
+            ],
+            [
+              101.7006859,
+              3.14162
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "merdeka-118-crown",
+        "hero_id": "merdeka-118",
+        "name": "Menara Merdeka Maybank",
+        "name_en": "Merdeka 118",
+        "name_ms": "Menara Merdeka Maybank",
+        "name_zh": "默迪卡118",
+        "part_label": "crown",
+        "kind": "hero_spire",
+        "height": 580,
+        "base_height": 502.8,
+        "material_color": "#3a4d5c",
+        "osm_id": 645604854,
+        "footprint_source": "OpenStreetMap way 645604854 snapshot · 2026-09-08 (coarse 10-point footprint)",
+        "height_source": "KLX interpretive taper inside the published envelope · not a measured survey",
+        "height_confidence": "interpretive-proportion",
+        "model_status": "official-envelope schematic",
+        "source": "CTBUH Menara Merdeka Maybank + OSM footprint",
+        "source_url": "https://www.skyscrapercenter.com/building/menara-merdeka-maybank/10115",
+        "source_note": "CTBUH architectural height 678.9 m, occupied 502.8 m, 118 floors (Menara Merdeka Maybank). OSM way 645604854 is a coarse 10-point footprint; the taper is interpretive so the spire reads as a spire.",
+        "not_measured_survey": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              101.7007404,
+              3.1417084
+            ],
+            [
+              101.700771,
+              3.1417241
+            ],
+            [
+              101.7007715,
+              3.1417503
+            ],
+            [
+              101.7007697,
+              3.1417515
+            ],
+            [
+              101.70077,
+              3.141752
+            ],
+            [
+              101.7007663,
+              3.1417545
+            ],
+            [
+              101.700766,
+              3.141754
+            ],
+            [
+              101.7007641,
+              3.1417553
+            ],
+            [
+              101.7007413,
+              3.1417439
+            ],
+            [
+              101.7007404,
+              3.1417084
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "merdeka-118-spire",
+        "hero_id": "merdeka-118",
+        "name": "Menara Merdeka Maybank",
+        "name_en": "Merdeka 118",
+        "name_ms": "Menara Merdeka Maybank",
+        "name_zh": "默迪卡118",
+        "part_label": "spire",
+        "kind": "hero_spire",
+        "height": 678.9,
+        "base_height": 580,
+        "material_color": "#c9a227",
+        "osm_id": 645604854,
+        "footprint_source": "OpenStreetMap way 645604854 snapshot · 2026-09-08 (coarse 10-point footprint)",
+        "height_source": "CTBUH architectural height 678.9 m",
+        "height_confidence": "official-envelope",
+        "model_status": "official-envelope schematic",
+        "source": "CTBUH Menara Merdeka Maybank + OSM footprint",
+        "source_url": "https://www.skyscrapercenter.com/building/menara-merdeka-maybank/10115",
+        "source_note": "CTBUH architectural height 678.9 m, occupied 502.8 m, 118 floors (Menara Merdeka Maybank). OSM way 645604854 is a coarse 10-point footprint; the taper is interpretive so the spire reads as a spire.",
+        "not_measured_survey": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              101.7007527,
+              3.1417283
+            ],
+            [
+              101.7007661,
+              3.1417352
+            ],
+            [
+              101.7007663,
+              3.1417466
+            ],
+            [
+              101.7007655,
+              3.1417472
+            ],
+            [
+              101.7007656,
+              3.1417474
+            ],
+            [
+              101.700764,
+              3.1417485
+            ],
+            [
+              101.7007639,
+              3.1417483
+            ],
+            [
+              101.7007631,
+              3.1417488
+            ],
+            [
+              101.7007531,
+              3.1417439
+            ],
+            [
+              101.7007527,
+              3.1417283
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "merdeka-118-needle",
+        "hero_id": "merdeka-118",
+        "name": "Menara Merdeka Maybank",
+        "name_en": "Merdeka 118",
+        "name_ms": "Menara Merdeka Maybank",
+        "name_zh": "默迪卡118",
+        "part_label": "needle",
+        "kind": "hero_spire",
+        "height": 678.9,
+        "base_height": 640,
+        "material_color": "#e0c35a",
+        "osm_id": 645604854,
+        "footprint_source": "OpenStreetMap way 645604854 snapshot · 2026-09-08 (coarse 10-point footprint)",
+        "height_source": "KLX interpretive taper inside the published envelope · not a measured survey",
+        "height_confidence": "interpretive-proportion",
+        "model_status": "official-envelope schematic",
+        "source": "CTBUH Menara Merdeka Maybank + OSM footprint",
+        "source_url": "https://www.skyscrapercenter.com/building/menara-merdeka-maybank/10115",
+        "source_note": "CTBUH architectural height 678.9 m, occupied 502.8 m, 118 floors (Menara Merdeka Maybank). OSM way 645604854 is a coarse 10-point footprint; the taper is interpretive so the spire reads as a spire.",
+        "not_measured_survey": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              101.7188033,
+              3.1422325
+            ],
+            [
+              101.7188873,
+              3.1420656
+            ],
+            [
+              101.7190384,
+              3.1417654
+            ],
+            [
+              101.7190661,
+              3.1417103
+            ],
+            [
+              101.7190385,
+              3.1416145
+            ],
+            [
+              101.7189771,
+              3.1415837
+            ],
+            [
+              101.7186753,
+              3.1414324
+            ],
+            [
+              101.7185838,
+              3.1413865
+            ],
+            [
+              101.7185323,
+              3.1414861
+            ],
+            [
+              101.7183663,
+              3.1418189
+            ],
+            [
+              101.7183596,
+              3.1418323
+            ],
+            [
+              101.7183401,
+              3.1418708
+            ],
+            [
+              101.7182882,
+              3.1419741
+            ],
+            [
+              101.7184258,
+              3.1420432
+            ],
+            [
+              101.7186836,
+              3.1421725
+            ],
+            [
+              101.7188033,
+              3.1422325
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "exchange-106-podium",
+        "hero_id": "exchange-106",
+        "name": "Menara Exchange 106",
+        "name_en": "The Exchange 106",
+        "name_ms": "Menara Exchange 106",
+        "name_zh": "交易所106",
+        "part_label": "podium",
+        "kind": "hero_tower",
+        "height": 24,
+        "base_height": 0,
+        "material_color": "#2a3a48",
+        "osm_id": 503451214,
+        "footprint_source": "OpenStreetMap way 503451214 snapshot · 2026-09-08",
+        "height_source": "KLX interpretive taper inside the published envelope",
+        "height_confidence": "interpretive-envelope",
+        "model_status": "official-envelope schematic",
+        "source": "CTBUH The Exchange 106 + OSM footprint",
+        "source_url": "https://www.skyscrapercenter.com/building/the-exchange-106/13247",
+        "source_note": "CTBUH architectural height 453.6 m, 95 floors. Some Chinese-language summaries quote 445.5 m; this model uses CTBUH 453.6 m. Intermediate tapers are interpretive.",
+        "not_measured_survey": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              101.7187819,
+              3.1421624
+            ],
+            [
+              101.7188523,
+              3.1420225
+            ],
+            [
+              101.7189789,
+              3.1417709
+            ],
+            [
+              101.7190021,
+              3.1417247
+            ],
+            [
+              101.718979,
+              3.1416444
+            ],
+            [
+              101.7189275,
+              3.1416186
+            ],
+            [
+              101.7186746,
+              3.1414918
+            ],
+            [
+              101.718598,
+              3.1414534
+            ],
+            [
+              101.7185548,
+              3.1415368
+            ],
+            [
+              101.7184156,
+              3.1418158
+            ],
+            [
+              101.71841,
+              3.1418269
+            ],
+            [
+              101.7183937,
+              3.1418592
+            ],
+            [
+              101.7183502,
+              3.1419458
+            ],
+            [
+              101.7184655,
+              3.1420037
+            ],
+            [
+              101.7186816,
+              3.142112
+            ],
+            [
+              101.7187819,
+              3.1421624
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "exchange-106-shaft",
+        "hero_id": "exchange-106",
+        "name": "Menara Exchange 106",
+        "name_en": "The Exchange 106",
+        "name_ms": "Menara Exchange 106",
+        "name_zh": "交易所106",
+        "part_label": "office shaft",
+        "kind": "hero_tower",
+        "height": 400,
+        "base_height": 24,
+        "material_color": "#3d5a73",
+        "osm_id": 503451214,
+        "footprint_source": "OpenStreetMap way 503451214 snapshot · 2026-09-08",
+        "height_source": "KLX interpretive taper inside the published envelope",
+        "height_confidence": "interpretive-proportion",
+        "model_status": "official-envelope schematic",
+        "source": "CTBUH The Exchange 106 + OSM footprint",
+        "source_url": "https://www.skyscrapercenter.com/building/the-exchange-106/13247",
+        "source_note": "CTBUH architectural height 453.6 m, 95 floors. Some Chinese-language summaries quote 445.5 m; this model uses CTBUH 453.6 m. Intermediate tapers are interpretive.",
+        "not_measured_survey": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              101.7187403,
+              3.1420262
+            ],
+            [
+              101.7187843,
+              3.1419388
+            ],
+            [
+              101.7188635,
+              3.1417815
+            ],
+            [
+              101.718878,
+              3.1417526
+            ],
+            [
+              101.7188635,
+              3.1417025
+            ],
+            [
+              101.7188313,
+              3.1416864
+            ],
+            [
+              101.7186733,
+              3.1416071
+            ],
+            [
+              101.7186254,
+              3.1415831
+            ],
+            [
+              101.7185984,
+              3.1416352
+            ],
+            [
+              101.7185114,
+              3.1418096
+            ],
+            [
+              101.7185079,
+              3.1418166
+            ],
+            [
+              101.7184977,
+              3.1418367
+            ],
+            [
+              101.7184705,
+              3.1418909
+            ],
+            [
+              101.7185426,
+              3.141927
+            ],
+            [
+              101.7186776,
+              3.1419948
+            ],
+            [
+              101.7187403,
+              3.1420262
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "exchange-106-crown",
+        "hero_id": "exchange-106",
+        "name": "Menara Exchange 106",
+        "name_en": "The Exchange 106",
+        "name_ms": "Menara Exchange 106",
+        "name_zh": "交易所106",
+        "part_label": "crown",
+        "kind": "hero_tower",
+        "height": 453.6,
+        "base_height": 400,
+        "material_color": "#4d6e8a",
+        "osm_id": 503451214,
+        "footprint_source": "OpenStreetMap way 503451214 snapshot · 2026-09-08",
+        "height_source": "CTBUH architectural height 453.6 m",
+        "height_confidence": "official-envelope",
+        "model_status": "official-envelope schematic",
+        "source": "CTBUH The Exchange 106 + OSM footprint",
+        "source_url": "https://www.skyscrapercenter.com/building/the-exchange-106/13247",
+        "source_note": "CTBUH architectural height 453.6 m, 95 floors. Some Chinese-language summaries quote 445.5 m; this model uses CTBUH 453.6 m. Intermediate tapers are interpretive.",
+        "not_measured_survey": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              101.7037604,
+              3.1529398
+            ],
+            [
+              101.7037814,
+              3.1529371
+            ],
+            [
+              101.7038009,
+              3.152929
+            ],
+            [
+              101.7038177,
+              3.1529162
+            ],
+            [
+              101.7038305,
+              3.1528994
+            ],
+            [
+              101.7038386,
+              3.1528799
+            ],
+            [
+              101.7038414,
+              3.152859
+            ],
+            [
+              101.7038386,
+              3.1528381
+            ],
+            [
+              101.7038305,
+              3.1528186
+            ],
+            [
+              101.7038177,
+              3.1528018
+            ],
+            [
+              101.7038009,
+              3.152789
+            ],
+            [
+              101.7037814,
+              3.1527809
+            ],
+            [
+              101.7037604,
+              3.1527782
+            ],
+            [
+              101.7037394,
+              3.1527809
+            ],
+            [
+              101.7037199,
+              3.152789
+            ],
+            [
+              101.7037031,
+              3.1528018
+            ],
+            [
+              101.7036903,
+              3.1528186
+            ],
+            [
+              101.7036822,
+              3.1528381
+            ],
+            [
+              101.7036794,
+              3.152859
+            ],
+            [
+              101.7036822,
+              3.1528799
+            ],
+            [
+              101.7036903,
+              3.1528994
+            ],
+            [
+              101.7037031,
+              3.1529162
+            ],
+            [
+              101.7037199,
+              3.152929
+            ],
+            [
+              101.7037394,
+              3.1529371
+            ],
+            [
+              101.7037604,
+              3.1529398
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "kl-tower-base",
+        "hero_id": "menara-kl",
+        "name": "Menara Kuala Lumpur",
+        "name_en": "Kuala Lumpur Tower",
+        "name_ms": "Menara Kuala Lumpur",
+        "name_zh": "吉隆坡塔",
+        "part_label": "shaft",
+        "kind": "hero_tower",
+        "height": 276.0,
+        "base_height": 0,
+        "material_color": "#d8cbb8",
+        "osm_id": 5839389988,
+        "footprint_source": "Interpretive circular plan constructed from OSM node 5839389988 · 2026-09-08",
+        "height_source": "Observatory 276 m (Menara KL)",
+        "height_confidence": "official-envelope",
+        "model_status": "official-envelope schematic",
+        "source": "Menara KL published heights + OSM node 5839389988",
+        "source_url": "https://www.menarakl.com.my/",
+        "source_note": "Menara KL publishes antenna 421 m, pod roof 336.5 m, observatory 276 m. OSM has only a node (5839389988), no building way — the circular shaft and bulb are an interpretive footprint constructed from that node.",
+        "not_measured_survey": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              101.7037604,
+              3.1530207
+            ],
+            [
+              101.7038023,
+              3.1530152
+            ],
+            [
+              101.7038414,
+              3.152999
+            ],
+            [
+              101.7038749,
+              3.1529733
+            ],
+            [
+              101.7039006,
+              3.1529398
+            ],
+            [
+              101.7039168,
+              3.1529009
+            ],
+            [
+              101.7039223,
+              3.152859
+            ],
+            [
+              101.7039168,
+              3.1528171
+            ],
+            [
+              101.7039006,
+              3.1527782
+            ],
+            [
+              101.7038749,
+              3.1527447
+            ],
+            [
+              101.7038414,
+              3.152719
+            ],
+            [
+              101.7038023,
+              3.1527028
+            ],
+            [
+              101.7037604,
+              3.1526973
+            ],
+            [
+              101.7037185,
+              3.1527028
+            ],
+            [
+              101.7036794,
+              3.152719
+            ],
+            [
+              101.7036459,
+              3.1527447
+            ],
+            [
+              101.7036202,
+              3.1527782
+            ],
+            [
+              101.703604,
+              3.1528171
+            ],
+            [
+              101.7035985,
+              3.152859
+            ],
+            [
+              101.703604,
+              3.1529009
+            ],
+            [
+              101.7036202,
+              3.1529398
+            ],
+            [
+              101.7036459,
+              3.1529733
+            ],
+            [
+              101.7036794,
+              3.152999
+            ],
+            [
+              101.7037185,
+              3.1530152
+            ],
+            [
+              101.7037604,
+              3.1530207
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "kl-tower-pod",
+        "hero_id": "menara-kl",
+        "name": "Menara Kuala Lumpur",
+        "name_en": "Kuala Lumpur Tower",
+        "name_ms": "Menara Kuala Lumpur",
+        "name_zh": "吉隆坡塔",
+        "part_label": "observation pod",
+        "kind": "hero_tower",
+        "height": 336.5,
+        "base_height": 276.0,
+        "material_color": "#c45c8a",
+        "osm_id": 5839389988,
+        "footprint_source": "Interpretive circular plan constructed from OSM node 5839389988 · 2026-09-08",
+        "height_source": "Pod roof 336.5 m (Menara KL)",
+        "height_confidence": "official-envelope",
+        "model_status": "official-envelope schematic",
+        "source": "Menara KL published heights + OSM node 5839389988",
+        "source_url": "https://www.menarakl.com.my/",
+        "source_note": "Menara KL publishes antenna 421 m, pod roof 336.5 m, observatory 276 m. OSM has only a node (5839389988), no building way — the circular shaft and bulb are an interpretive footprint constructed from that node.",
+        "not_measured_survey": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              101.7037604,
+              3.1528806
+            ],
+            [
+              101.703766,
+              3.1528798
+            ],
+            [
+              101.7037712,
+              3.1528777
+            ],
+            [
+              101.7037757,
+              3.1528742
+            ],
+            [
+              101.7037791,
+              3.1528698
+            ],
+            [
+              101.7037813,
+              3.1528646
+            ],
+            [
+              101.703782,
+              3.152859
+            ],
+            [
+              101.7037813,
+              3.1528534
+            ],
+            [
+              101.7037791,
+              3.1528482
+            ],
+            [
+              101.7037757,
+              3.1528438
+            ],
+            [
+              101.7037712,
+              3.1528403
+            ],
+            [
+              101.703766,
+              3.1528382
+            ],
+            [
+              101.7037604,
+              3.1528374
+            ],
+            [
+              101.7037548,
+              3.1528382
+            ],
+            [
+              101.7037496,
+              3.1528403
+            ],
+            [
+              101.7037451,
+              3.1528438
+            ],
+            [
+              101.7037417,
+              3.1528482
+            ],
+            [
+              101.7037395,
+              3.1528534
+            ],
+            [
+              101.7037388,
+              3.152859
+            ],
+            [
+              101.7037395,
+              3.1528646
+            ],
+            [
+              101.7037417,
+              3.1528698
+            ],
+            [
+              101.7037451,
+              3.1528742
+            ],
+            [
+              101.7037496,
+              3.1528777
+            ],
+            [
+              101.7037548,
+              3.1528798
+            ],
+            [
+              101.7037604,
+              3.1528806
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "kl-tower-antenna",
+        "hero_id": "menara-kl",
+        "name": "Menara Kuala Lumpur",
+        "name_en": "Kuala Lumpur Tower",
+        "name_ms": "Menara Kuala Lumpur",
+        "name_zh": "吉隆坡塔",
+        "part_label": "antenna",
+        "kind": "hero_tower",
+        "height": 421.0,
+        "base_height": 336.5,
+        "material_color": "#9aa0a6",
+        "osm_id": 5839389988,
+        "footprint_source": "Interpretive circular plan constructed from OSM node 5839389988 · 2026-09-08",
+        "height_source": "Antenna 421 m (Menara KL / OSM height tag)",
+        "height_confidence": "official-envelope",
+        "model_status": "official-envelope schematic",
+        "source": "Menara KL published heights + OSM node 5839389988",
+        "source_url": "https://www.menarakl.com.my/",
+        "source_note": "Menara KL publishes antenna 421 m, pod roof 336.5 m, observatory 276 m. OSM has only a node (5839389988), no building way — the circular shaft and bulb are an interpretive footprint constructed from that node.",
+        "not_measured_survey": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              101.6912316,
+              3.1418167
+            ],
+            [
+              101.6912713,
+              3.1419121
+            ],
+            [
+              101.6911944,
+              3.1419441
+            ],
+            [
+              101.6911946,
+              3.1419447
+            ],
+            [
+              101.6913086,
+              3.1422186
+            ],
+            [
+              101.6914537,
+              3.1425673
+            ],
+            [
+              101.69178,
+              3.1424319
+            ],
+            [
+              101.6919389,
+              3.1428138
+            ],
+            [
+              101.6920476,
+              3.1427687
+            ],
+            [
+              101.691977,
+              3.1425992
+            ],
+            [
+              101.6922611,
+              3.1424813
+            ],
+            [
+              101.6923338,
+              3.142656
+            ],
+            [
+              101.6924095,
+              3.1426246
+            ],
+            [
+              101.6924451,
+              3.1426098
+            ],
+            [
+              101.6924326,
+              3.1425797
+            ],
+            [
+              101.6922809,
+              3.1422085
+            ],
+            [
+              101.6923895,
+              3.1421643
+            ],
+            [
+              101.6922824,
+              3.1419022
+            ],
+            [
+              101.6922466,
+              3.1418143
+            ],
+            [
+              101.6921413,
+              3.1415564
+            ],
+            [
+              101.6920292,
+              3.1416021
+            ],
+            [
+              101.6919852,
+              3.1414944
+            ],
+            [
+              101.6922046,
+              3.141405
+            ],
+            [
+              101.692221,
+              3.1413984
+            ],
+            [
+              101.6921974,
+              3.1413404
+            ],
+            [
+              101.6921805,
+              3.141299
+            ],
+            [
+              101.6921447,
+              3.1413135
+            ],
+            [
+              101.6919646,
+              3.1413873
+            ],
+            [
+              101.6918589,
+              3.1411298
+            ],
+            [
+              101.6918024,
+              3.1411529
+            ],
+            [
+              101.6917349,
+              3.1411806
+            ],
+            [
+              101.6918383,
+              3.1414323
+            ],
+            [
+              101.6918824,
+              3.1415389
+            ],
+            [
+              101.6919263,
+              3.1416441
+            ],
+            [
+              101.6918682,
+              3.1416683
+            ],
+            [
+              101.6917964,
+              3.1416981
+            ],
+            [
+              101.6913942,
+              3.1418644
+            ],
+            [
+              101.6913502,
+              3.1417584
+            ],
+            [
+              101.6913063,
+              3.1416522
+            ],
+            [
+              101.6912038,
+              3.1414047
+            ],
+            [
+              101.6910918,
+              3.1414509
+            ],
+            [
+              101.6911937,
+              3.141697
+            ],
+            [
+              101.6910078,
+              3.1417737
+            ],
+            [
+              101.6909101,
+              3.1418141
+            ],
+            [
+              101.6909205,
+              3.1418378
+            ],
+            [
+              101.6909537,
+              3.141919
+            ],
+            [
+              101.6909583,
+              3.1419301
+            ],
+            [
+              101.6911516,
+              3.1418499
+            ],
+            [
+              101.6912316,
+              3.1418167
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "masjid-negara-hall",
+        "hero_id": "masjid-negara",
+        "name": "Masjid Negara",
+        "name_en": "National Mosque",
+        "name_ms": "Masjid Negara",
+        "name_zh": "国家清真寺",
+        "part_label": "prayer hall",
+        "kind": "hero_mosque",
+        "height": 12,
+        "base_height": 0,
+        "material_color": "#f4f0e6",
+        "osm_id": 585264338,
+        "footprint_source": "OpenStreetMap way 585264338 snapshot · 2026-09-08",
+        "height_source": "KLX interpretive hall envelope · not an official dimension",
+        "height_confidence": "interpretive-envelope",
+        "model_status": "survey-informed schematic",
+        "source": "OSM footprint + Tourism Malaysia identification",
+        "source_url": "https://www.malaysia.travel/explore/masjid-negara",
+        "source_note": "Tourism Malaysia publishes the 73 m minaret and the 16-point star umbrella roof. Hall height is not an official figure here. Minaret plan is interpretive, placed at the north of the OSM hall footprint.",
+        "not_measured_survey": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              101.691375,
+              3.1418287
+            ],
+            [
+              101.6914036,
+              3.1418973
+            ],
+            [
+              101.6913482,
+              3.1419204
+            ],
+            [
+              101.6913483,
+              3.1419208
+            ],
+            [
+              101.6914304,
+              3.142118
+            ],
+            [
+              101.6915349,
+              3.1423691
+            ],
+            [
+              101.6917698,
+              3.1422716
+            ],
+            [
+              101.6918842,
+              3.1425466
+            ],
+            [
+              101.6919625,
+              3.1425141
+            ],
+            [
+              101.6919117,
+              3.1423921
+            ],
+            [
+              101.6921162,
+              3.1423072
+            ],
+            [
+              101.6921686,
+              3.142433
+            ],
+            [
+              101.6922231,
+              3.1424103
+            ],
+            [
+              101.6922487,
+              3.1423997
+            ],
+            [
+              101.6922397,
+              3.142378
+            ],
+            [
+              101.6921305,
+              3.1421108
+            ],
+            [
+              101.6922087,
+              3.1420789
+            ],
+            [
+              101.6921316,
+              3.1418902
+            ],
+            [
+              101.6921058,
+              3.1418269
+            ],
+            [
+              101.69203,
+              3.1416412
+            ],
+            [
+              101.6919493,
+              3.1416741
+            ],
+            [
+              101.6919176,
+              3.1415966
+            ],
+            [
+              101.6920755,
+              3.1415322
+            ],
+            [
+              101.6920874,
+              3.1415275
+            ],
+            [
+              101.6920704,
+              3.1414857
+            ],
+            [
+              101.6920582,
+              3.1414559
+            ],
+            [
+              101.6920324,
+              3.1414664
+            ],
+            [
+              101.6919027,
+              3.1415195
+            ],
+            [
+              101.6918266,
+              3.1413341
+            ],
+            [
+              101.691786,
+              3.1413507
+            ],
+            [
+              101.6917374,
+              3.1413707
+            ],
+            [
+              101.6918118,
+              3.1415519
+            ],
+            [
+              101.6918436,
+              3.1416286
+            ],
+            [
+              101.6918752,
+              3.1417044
+            ],
+            [
+              101.6918333,
+              3.1417218
+            ],
+            [
+              101.6917816,
+              3.1417433
+            ],
+            [
+              101.6914921,
+              3.141863
+            ],
+            [
+              101.6914604,
+              3.1417867
+            ],
+            [
+              101.6914288,
+              3.1417102
+            ],
+            [
+              101.691355,
+              3.141532
+            ],
+            [
+              101.6912743,
+              3.1415653
+            ],
+            [
+              101.6913477,
+              3.1417425
+            ],
+            [
+              101.6912139,
+              3.1417977
+            ],
+            [
+              101.6911435,
+              3.1418268
+            ],
+            [
+              101.691151,
+              3.1418438
+            ],
+            [
+              101.6911749,
+              3.1419023
+            ],
+            [
+              101.6911782,
+              3.1419103
+            ],
+            [
+              101.6913174,
+              3.1418526
+            ],
+            [
+              101.691375,
+              3.1418287
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "masjid-negara-umbrella",
+        "hero_id": "masjid-negara",
+        "name": "Masjid Negara",
+        "name_en": "National Mosque umbrella roof",
+        "name_ms": "Bumbung payung Masjid Negara",
+        "name_zh": "国家清真寺折伞屋顶",
+        "part_label": "16-point umbrella roof",
+        "kind": "hero_mosque_roof",
+        "height": 28,
+        "base_height": 12,
+        "material_color": "#2f7f86",
+        "osm_id": 585264338,
+        "footprint_source": "OpenStreetMap way 585264338 snapshot · 2026-09-08",
+        "height_source": "Interpretive folded-umbrella roof on the identified 16-point star form",
+        "height_confidence": "interpretive-proportion",
+        "model_status": "survey-informed schematic",
+        "source": "Tourism Malaysia identification of the 16-point star roof",
+        "source_url": "https://www.malaysia.travel/explore/masjid-negara",
+        "source_note": "Tourism Malaysia publishes the 73 m minaret and the 16-point star umbrella roof. Hall height is not an official figure here. Minaret plan is interpretive, placed at the north of the OSM hall footprint.",
+        "not_measured_survey": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              101.6919956,
+              3.1422771
+            ],
+            [
+              101.6920111,
+              3.142274
+            ],
+            [
+              101.6920242,
+              3.1422653
+            ],
+            [
+              101.692033,
+              3.1422522
+            ],
+            [
+              101.6920361,
+              3.1422367
+            ],
+            [
+              101.692033,
+              3.1422212
+            ],
+            [
+              101.6920242,
+              3.1422081
+            ],
+            [
+              101.6920111,
+              3.1421994
+            ],
+            [
+              101.6919956,
+              3.1421963
+            ],
+            [
+              101.6919801,
+              3.1421994
+            ],
+            [
+              101.691967,
+              3.1422081
+            ],
+            [
+              101.6919582,
+              3.1422212
+            ],
+            [
+              101.6919551,
+              3.1422367
+            ],
+            [
+              101.6919582,
+              3.1422522
+            ],
+            [
+              101.691967,
+              3.1422653
+            ],
+            [
+              101.6919801,
+              3.142274
+            ],
+            [
+              101.6919956,
+              3.1422771
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "masjid-negara-minaret",
+        "hero_id": "masjid-negara",
+        "name": "Menara Masjid Negara",
+        "name_en": "National Mosque minaret",
+        "name_ms": "Menara Masjid Negara",
+        "name_zh": "国家清真寺宣礼塔",
+        "part_label": "minaret",
+        "kind": "hero_minaret",
+        "height": 73.0,
+        "base_height": 0,
+        "material_color": "#d9d2c5",
+        "osm_id": 585264338,
+        "footprint_source": "Interpretive circular minaret beside OSM hall way 585264338",
+        "height_source": "Published minaret 73 m (Tourism Malaysia)",
+        "height_confidence": "official-envelope",
+        "model_status": "official-envelope schematic",
+        "source": "Tourism Malaysia / Masjid Negara",
+        "source_url": "https://www.malaysia.travel/explore/masjid-negara",
+        "source_note": "Tourism Malaysia publishes the 73 m minaret and the 16-point star umbrella roof. Hall height is not an official figure here. Minaret plan is interpretive, placed at the north of the OSM hall footprint.",
+        "not_measured_survey": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              101.694499,
+              3.1491255
+            ],
+            [
+              101.6945037,
+              3.1491481
+            ],
+            [
+              101.6945067,
+              3.1491625
+            ],
+            [
+              101.6945247,
+              3.1492491
+            ],
+            [
+              101.6945276,
+              3.1492633
+            ],
+            [
+              101.6945323,
+              3.1492858
+            ],
+            [
+              101.6945409,
+              3.149284
+            ],
+            [
+              101.6946822,
+              3.1492548
+            ],
+            [
+              101.6946715,
+              3.1491993
+            ],
+            [
+              101.694704,
+              3.1491924
+            ],
+            [
+              101.6946555,
+              3.1489587
+            ],
+            [
+              101.6947683,
+              3.1489353
+            ],
+            [
+              101.6947912,
+              3.1489606
+            ],
+            [
+              101.6948247,
+              3.1489536
+            ],
+            [
+              101.6948356,
+              3.1489214
+            ],
+            [
+              101.6948238,
+              3.1488677
+            ],
+            [
+              101.6948101,
+              3.1488705
+            ],
+            [
+              101.6947693,
+              3.148674
+            ],
+            [
+              101.6947161,
+              3.148685
+            ],
+            [
+              101.6947097,
+              3.1486534
+            ],
+            [
+              101.6945969,
+              3.1486768
+            ],
+            [
+              101.6945806,
+              3.1485986
+            ],
+            [
+              101.6946385,
+              3.1485866
+            ],
+            [
+              101.6946042,
+              3.1484215
+            ],
+            [
+              101.6945463,
+              3.1484334
+            ],
+            [
+              101.6944824,
+              3.1481258
+            ],
+            [
+              101.6947446,
+              3.1480721
+            ],
+            [
+              101.6948193,
+              3.1484324
+            ],
+            [
+              101.6948536,
+              3.1484254
+            ],
+            [
+              101.6948577,
+              3.148445
+            ],
+            [
+              101.6948623,
+              3.1484579
+            ],
+            [
+              101.6948709,
+              3.1484687
+            ],
+            [
+              101.6948824,
+              3.1484763
+            ],
+            [
+              101.6948956,
+              3.1484799
+            ],
+            [
+              101.6949094,
+              3.1484793
+            ],
+            [
+              101.6949221,
+              3.1484745
+            ],
+            [
+              101.6949328,
+              3.148466
+            ],
+            [
+              101.6949403,
+              3.1484547
+            ],
+            [
+              101.694944,
+              3.1484416
+            ],
+            [
+              101.6949434,
+              3.148428
+            ],
+            [
+              101.6949395,
+              3.1484078
+            ],
+            [
+              101.6949739,
+              3.1484008
+            ],
+            [
+              101.6948992,
+              3.1480407
+            ],
+            [
+              101.6949863,
+              3.1480229
+            ],
+            [
+              101.6949669,
+              3.1479297
+            ],
+            [
+              101.6949793,
+              3.1479251
+            ],
+            [
+              101.6949897,
+              3.1479168
+            ],
+            [
+              101.694997,
+              3.1479058
+            ],
+            [
+              101.6950005,
+              3.147893
+            ],
+            [
+              101.6949999,
+              3.1478798
+            ],
+            [
+              101.6949952,
+              3.1478674
+            ],
+            [
+              101.6949869,
+              3.147857
+            ],
+            [
+              101.6949758,
+              3.1478497
+            ],
+            [
+              101.694963,
+              3.1478462
+            ],
+            [
+              101.6949498,
+              3.1478469
+            ],
+            [
+              101.6949374,
+              3.1478515
+            ],
+            [
+              101.6949271,
+              3.1478598
+            ],
+            [
+              101.6949198,
+              3.1478708
+            ],
+            [
+              101.6949163,
+              3.1478836
+            ],
+            [
+              101.6949168,
+              3.1478968
+            ],
+            [
+              101.6945883,
+              3.1479639
+            ],
+            [
+              101.6945831,
+              3.1479386
+            ],
+            [
+              101.6944065,
+              3.1479753
+            ],
+            [
+              101.6943876,
+              3.1478778
+            ],
+            [
+              101.6944325,
+              3.1478689
+            ],
+            [
+              101.6944111,
+              3.1477586
+            ],
+            [
+              101.6943915,
+              3.1476577
+            ],
+            [
+              101.6943791,
+              3.1475934
+            ],
+            [
+              101.6943145,
+              3.1472604
+            ],
+            [
+              101.6942316,
+              3.1472764
+            ],
+            [
+              101.6942341,
+              3.1472892
+            ],
+            [
+              101.6940971,
+              3.1473157
+            ],
+            [
+              101.6940863,
+              3.147333
+            ],
+            [
+              101.6940799,
+              3.1473432
+            ],
+            [
+              101.6940905,
+              3.1473982
+            ],
+            [
+              101.6941113,
+              3.1474094
+            ],
+            [
+              101.6941489,
+              3.1476035
+            ],
+            [
+              101.6941864,
+              3.1477975
+            ],
+            [
+              101.6941714,
+              3.1478194
+            ],
+            [
+              101.6941818,
+              3.1478737
+            ],
+            [
+              101.6941995,
+              3.1478847
+            ],
+            [
+              101.6942216,
+              3.1478984
+            ],
+            [
+              101.6943316,
+              3.1478772
+            ],
+            [
+              101.6943337,
+              3.147888
+            ],
+            [
+              101.6943507,
+              3.1478849
+            ],
+            [
+              101.6943696,
+              3.1479824
+            ],
+            [
+              101.6942745,
+              3.1480016
+            ],
+            [
+              101.6942659,
+              3.1480034
+            ],
+            [
+              101.6942706,
+              3.148026
+            ],
+            [
+              101.6942737,
+              3.1480407
+            ],
+            [
+              101.6942915,
+              3.1481268
+            ],
+            [
+              101.6942945,
+              3.1481412
+            ],
+            [
+              101.6942992,
+              3.1481637
+            ],
+            [
+              101.6943335,
+              3.1481566
+            ],
+            [
+              101.6943629,
+              3.1482984
+            ],
+            [
+              101.6943316,
+              3.1483099
+            ],
+            [
+              101.6943261,
+              3.148312
+            ],
+            [
+              101.6943209,
+              3.1483142
+            ],
+            [
+              101.6943124,
+              3.1483219
+            ],
+            [
+              101.694307,
+              3.148332
+            ],
+            [
+              101.6943053,
+              3.1483433
+            ],
+            [
+              101.6943077,
+              3.1483545
+            ],
+            [
+              101.6943137,
+              3.1483642
+            ],
+            [
+              101.6943228,
+              3.1483713
+            ],
+            [
+              101.6943336,
+              3.148375
+            ],
+            [
+              101.6943439,
+              3.1483748
+            ],
+            [
+              101.6943772,
+              3.1483669
+            ],
+            [
+              101.6944084,
+              3.1485173
+            ],
+            [
+              101.6943913,
+              3.1485208
+            ],
+            [
+              101.6943828,
+              3.1485226
+            ],
+            [
+              101.6943785,
+              3.1485235
+            ],
+            [
+              101.6943879,
+              3.1485685
+            ],
+            [
+              101.6943836,
+              3.1485695
+            ],
+            [
+              101.6943867,
+              3.1485845
+            ],
+            [
+              101.6943349,
+              3.148596
+            ],
+            [
+              101.6943335,
+              3.1485949
+            ],
+            [
+              101.6943321,
+              3.1485924
+            ],
+            [
+              101.69433,
+              3.1485906
+            ],
+            [
+              101.6943274,
+              3.1485894
+            ],
+            [
+              101.6943245,
+              3.1485892
+            ],
+            [
+              101.6943217,
+              3.1485898
+            ],
+            [
+              101.6943193,
+              3.1485912
+            ],
+            [
+              101.6943174,
+              3.1485934
+            ],
+            [
+              101.6943163,
+              3.148596
+            ],
+            [
+              101.694316,
+              3.1485988
+            ],
+            [
+              101.6943167,
+              3.1486015
+            ],
+            [
+              101.6943181,
+              3.1486039
+            ],
+            [
+              101.6943202,
+              3.1486057
+            ],
+            [
+              101.6943228,
+              3.1486069
+            ],
+            [
+              101.6943256,
+              3.1486072
+            ],
+            [
+              101.6943269,
+              3.1486082
+            ],
+            [
+              101.6943307,
+              3.1486269
+            ],
+            [
+              101.694329,
+              3.1486273
+            ],
+            [
+              101.6943266,
+              3.1486287
+            ],
+            [
+              101.6943247,
+              3.1486309
+            ],
+            [
+              101.6943236,
+              3.1486335
+            ],
+            [
+              101.6943233,
+              3.1486363
+            ],
+            [
+              101.694324,
+              3.148639
+            ],
+            [
+              101.6943254,
+              3.1486414
+            ],
+            [
+              101.6943275,
+              3.1486432
+            ],
+            [
+              101.6943301,
+              3.1486444
+            ],
+            [
+              101.6943329,
+              3.1486447
+            ],
+            [
+              101.6943345,
+              3.1486452
+            ],
+            [
+              101.6943396,
+              3.1486721
+            ],
+            [
+              101.6943387,
+              3.1486723
+            ],
+            [
+              101.6943363,
+              3.1486737
+            ],
+            [
+              101.6943344,
+              3.1486759
+            ],
+            [
+              101.6943333,
+              3.1486785
+            ],
+            [
+              101.694333,
+              3.1486813
+            ],
+            [
+              101.6943337,
+              3.148684
+            ],
+            [
+              101.6943351,
+              3.1486864
+            ],
+            [
+              101.6943372,
+              3.1486882
+            ],
+            [
+              101.6943398,
+              3.1486894
+            ],
+            [
+              101.6943426,
+              3.1486897
+            ],
+            [
+              101.6943434,
+              3.1486895
+            ],
+            [
+              101.6943475,
+              3.1487093
+            ],
+            [
+              101.694346,
+              3.1487098
+            ],
+            [
+              101.6943436,
+              3.1487112
+            ],
+            [
+              101.6943417,
+              3.1487134
+            ],
+            [
+              101.6943406,
+              3.148716
+            ],
+            [
+              101.6943403,
+              3.1487188
+            ],
+            [
+              101.694341,
+              3.1487215
+            ],
+            [
+              101.6943424,
+              3.1487239
+            ],
+            [
+              101.6943445,
+              3.1487257
+            ],
+            [
+              101.6943471,
+              3.1487269
+            ],
+            [
+              101.6943499,
+              3.1487272
+            ],
+            [
+              101.6943527,
+              3.1487265
+            ],
+            [
+              101.6943552,
+              3.1487251
+            ],
+            [
+              101.694357,
+              3.1487229
+            ],
+            [
+              101.6943581,
+              3.1487203
+            ],
+            [
+              101.6943584,
+              3.1487176
+            ],
+            [
+              101.6943594,
+              3.1487162
+            ],
+            [
+              101.6944116,
+              3.1487047
+            ],
+            [
+              101.6944147,
+              3.1487197
+            ],
+            [
+              101.694419,
+              3.1487187
+            ],
+            [
+              101.6944284,
+              3.148764
+            ],
+            [
+              101.6944327,
+              3.1487631
+            ],
+            [
+              101.6944583,
+              3.1487579
+            ],
+            [
+              101.6944883,
+              3.1489021
+            ],
+            [
+              101.6944564,
+              3.1489123
+            ],
+            [
+              101.6944509,
+              3.1489144
+            ],
+            [
+              101.6944457,
+              3.1489166
+            ],
+            [
+              101.6944372,
+              3.1489243
+            ],
+            [
+              101.6944318,
+              3.1489344
+            ],
+            [
+              101.6944301,
+              3.1489457
+            ],
+            [
+              101.6944325,
+              3.1489569
+            ],
+            [
+              101.6944385,
+              3.1489666
+            ],
+            [
+              101.6944476,
+              3.1489737
+            ],
+            [
+              101.6944584,
+              3.1489774
+            ],
+            [
+              101.6944687,
+              3.1489772
+            ],
+            [
+              101.6945024,
+              3.1489698
+            ],
+            [
+              101.6945333,
+              3.1491184
+            ],
+            [
+              101.694499,
+              3.1491255
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "sas-body",
+        "hero_id": "sultan-abdul-samad",
+        "name": "Bangunan Sultan Abdul Samad",
+        "name_en": "Sultan Abdul Samad Building",
+        "name_ms": "Bangunan Sultan Abdul Samad",
+        "name_zh": "苏丹阿都沙末大厦",
+        "part_label": "civic range",
+        "kind": "hero_civic",
+        "height": 16,
+        "base_height": 0,
+        "material_color": "#8c4a3a",
+        "osm_id": 801337963,
+        "footprint_source": "OpenStreetMap way 801337963 snapshot · 2026-09-08",
+        "height_source": "KLX interpretive civic envelope · not an official dimension",
+        "height_confidence": "interpretive-envelope",
+        "model_status": "heritage-identified schematic",
+        "source": "Jabatan Warisan Negara 2007 + OSM detailed footprint",
+        "source_url": "https://www.heritage.gov.my/ms/pengisytiharan-2007.html",
+        "source_note": "National Heritage 2007 (Jabatan Warisan Negara). Identity is heritage-confirmed. Copper-dome and clock-tower envelopes are interpretive — a secondary 41 m clock-tower figure is not treated as official here.",
+        "not_measured_survey": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              101.6944867,
+              3.1485108
+            ],
+            [
+              101.6945125,
+              3.1485057
+            ],
+            [
+              101.6945344,
+              3.1484911
+            ],
+            [
+              101.694549,
+              3.1484692
+            ],
+            [
+              101.6945542,
+              3.1484435
+            ],
+            [
+              101.694549,
+              3.1484177
+            ],
+            [
+              101.6945344,
+              3.1483958
+            ],
+            [
+              101.6945125,
+              3.1483812
+            ],
+            [
+              101.6944867,
+              3.1483761
+            ],
+            [
+              101.6944609,
+              3.1483812
+            ],
+            [
+              101.694439,
+              3.1483958
+            ],
+            [
+              101.6944244,
+              3.1484177
+            ],
+            [
+              101.6944192,
+              3.1484435
+            ],
+            [
+              101.6944244,
+              3.1484692
+            ],
+            [
+              101.694439,
+              3.1484911
+            ],
+            [
+              101.6944609,
+              3.1485057
+            ],
+            [
+              101.6944867,
+              3.1485108
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "sas-dome-1",
+        "hero_id": "sultan-abdul-samad",
+        "name": "Bangunan Sultan Abdul Samad",
+        "name_en": "Sultan Abdul Samad Building",
+        "name_ms": "Bangunan Sultan Abdul Samad",
+        "name_zh": "苏丹阿都沙末大厦",
+        "part_label": "central copper dome",
+        "kind": "hero_dome",
+        "height": 28,
+        "base_height": 16,
+        "material_color": "#b87333",
+        "osm_id": 801337963,
+        "footprint_source": "Interpretive dome discs on OSM way 801337963",
+        "height_source": "KLX interpretive copper-dome envelope · not a measured survey",
+        "height_confidence": "interpretive-envelope",
+        "model_status": "heritage-identified schematic",
+        "source": "Jabatan Warisan Negara 2007 + OSM detailed footprint",
+        "source_url": "https://www.heritage.gov.my/ms/pengisytiharan-2007.html",
+        "source_note": "National Heritage 2007 (Jabatan Warisan Negara). Identity is heritage-confirmed. Copper-dome and clock-tower envelopes are interpretive — a secondary 41 m clock-tower figure is not treated as official here.",
+        "not_measured_survey": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              101.6941448,
+              3.1485647
+            ],
+            [
+              101.6941638,
+              3.148561
+            ],
+            [
+              101.6941798,
+              3.1485503
+            ],
+            [
+              101.6941905,
+              3.1485342
+            ],
+            [
+              101.6941943,
+              3.1485153
+            ],
+            [
+              101.6941905,
+              3.1484964
+            ],
+            [
+              101.6941798,
+              3.1484804
+            ],
+            [
+              101.6941638,
+              3.1484697
+            ],
+            [
+              101.6941448,
+              3.1484659
+            ],
+            [
+              101.6941259,
+              3.1484697
+            ],
+            [
+              101.6941098,
+              3.1484804
+            ],
+            [
+              101.6940991,
+              3.1484964
+            ],
+            [
+              101.6940953,
+              3.1485153
+            ],
+            [
+              101.6940991,
+              3.1485342
+            ],
+            [
+              101.6941098,
+              3.1485503
+            ],
+            [
+              101.6941259,
+              3.148561
+            ],
+            [
+              101.6941448,
+              3.1485647
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "sas-dome-2",
+        "hero_id": "sultan-abdul-samad",
+        "name": "Bangunan Sultan Abdul Samad",
+        "name_en": "Sultan Abdul Samad Building",
+        "name_ms": "Bangunan Sultan Abdul Samad",
+        "name_zh": "苏丹阿都沙末大厦",
+        "part_label": "north copper dome",
+        "kind": "hero_dome",
+        "height": 24,
+        "base_height": 16,
+        "material_color": "#b87333",
+        "osm_id": 801337963,
+        "footprint_source": "Interpretive dome discs on OSM way 801337963",
+        "height_source": "KLX interpretive copper-dome envelope · not a measured survey",
+        "height_confidence": "interpretive-envelope",
+        "model_status": "heritage-identified schematic",
+        "source": "Jabatan Warisan Negara 2007 + OSM detailed footprint",
+        "source_url": "https://www.heritage.gov.my/ms/pengisytiharan-2007.html",
+        "source_note": "National Heritage 2007 (Jabatan Warisan Negara). Identity is heritage-confirmed. Copper-dome and clock-tower envelopes are interpretive — a secondary 41 m clock-tower figure is not treated as official here.",
+        "not_measured_survey": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              101.6948286,
+              3.148439
+            ],
+            [
+              101.6948475,
+              3.1484352
+            ],
+            [
+              101.6948636,
+              3.1484245
+            ],
+            [
+              101.6948743,
+              3.1484085
+            ],
+            [
+              101.6948781,
+              3.1483896
+            ],
+            [
+              101.6948743,
+              3.1483707
+            ],
+            [
+              101.6948636,
+              3.1483546
+            ],
+            [
+              101.6948475,
+              3.1483439
+            ],
+            [
+              101.6948286,
+              3.1483402
+            ],
+            [
+              101.6948096,
+              3.1483439
+            ],
+            [
+              101.6947936,
+              3.1483546
+            ],
+            [
+              101.6947829,
+              3.1483707
+            ],
+            [
+              101.6947791,
+              3.1483896
+            ],
+            [
+              101.6947829,
+              3.1484085
+            ],
+            [
+              101.6947936,
+              3.1484245
+            ],
+            [
+              101.6948096,
+              3.1484352
+            ],
+            [
+              101.6948286,
+              3.148439
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "sas-dome-3",
+        "hero_id": "sultan-abdul-samad",
+        "name": "Bangunan Sultan Abdul Samad",
+        "name_en": "Sultan Abdul Samad Building",
+        "name_ms": "Bangunan Sultan Abdul Samad",
+        "name_zh": "苏丹阿都沙末大厦",
+        "part_label": "south copper dome",
+        "kind": "hero_dome",
+        "height": 24,
+        "base_height": 16,
+        "material_color": "#b87333",
+        "osm_id": 801337963,
+        "footprint_source": "Interpretive dome discs on OSM way 801337963",
+        "height_source": "KLX interpretive copper-dome envelope · not a measured survey",
+        "height_confidence": "interpretive-envelope",
+        "model_status": "heritage-identified schematic",
+        "source": "Jabatan Warisan Negara 2007 + OSM detailed footprint",
+        "source_url": "https://www.heritage.gov.my/ms/pengisytiharan-2007.html",
+        "source_note": "National Heritage 2007 (Jabatan Warisan Negara). Identity is heritage-confirmed. Copper-dome and clock-tower envelopes are interpretive — a secondary 41 m clock-tower figure is not treated as official here.",
+        "not_measured_survey": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              101.6942344,
+              3.1485006
+            ],
+            [
+              101.6942713,
+              3.1484753
+            ],
+            [
+              101.6942795,
+              3.1484313
+            ],
+            [
+              101.6942541,
+              3.1483945
+            ],
+            [
+              101.6942101,
+              3.1483863
+            ],
+            [
+              101.6941732,
+              3.1484117
+            ],
+            [
+              101.6941651,
+              3.1484556
+            ],
+            [
+              101.6941904,
+              3.1484924
+            ],
+            [
+              101.6942344,
+              3.1485006
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "sas-clock-tower",
+        "hero_id": "sultan-abdul-samad",
+        "name": "Menara jam Bangunan Sultan Abdul Samad",
+        "name_en": "Sultan Abdul Samad clock tower",
+        "name_ms": "Menara jam Bangunan Sultan Abdul Samad",
+        "name_zh": "苏丹阿都沙末钟楼",
+        "part_label": "clock tower",
+        "kind": "hero_clock_tower",
+        "height": 38,
+        "base_height": 0,
+        "material_color": "#7a3f32",
+        "osm_id": 801337963,
+        "footprint_source": "Interpretive clock-tower plan on the west frontage of way 801337963",
+        "height_source": "KLX interpretive clock-tower envelope · 41 m figures in secondary copy are not used as official",
+        "height_confidence": "interpretive-envelope",
+        "model_status": "heritage-identified schematic",
+        "source": "Jabatan Warisan Negara 2007 + OSM detailed footprint",
+        "source_url": "https://www.heritage.gov.my/ms/pengisytiharan-2007.html",
+        "source_note": "National Heritage 2007 (Jabatan Warisan Negara). Identity is heritage-confirmed. Copper-dome and clock-tower envelopes are interpretive — a secondary 41 m clock-tower figure is not treated as official here.",
+        "not_measured_survey": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              101.6960746,
+              3.1494224
+            ],
+            [
+              101.6957308,
+              3.1495149
+            ],
+            [
+              101.6956081,
+              3.1495047
+            ],
+            [
+              101.6953982,
+              3.1494076
+            ],
+            [
+              101.6953554,
+              3.1492558
+            ],
+            [
+              101.6952805,
+              3.1490558
+            ],
+            [
+              101.6953316,
+              3.1488025
+            ],
+            [
+              101.6953976,
+              3.1484309
+            ],
+            [
+              101.6954633,
+              3.1480353
+            ],
+            [
+              101.6954678,
+              3.1480222
+            ],
+            [
+              101.6954824,
+              3.1480137
+            ],
+            [
+              101.6954988,
+              3.1480157
+            ],
+            [
+              101.695508,
+              3.1480225
+            ],
+            [
+              101.6958287,
+              3.1484073
+            ],
+            [
+              101.6958857,
+              3.1485084
+            ],
+            [
+              101.695951,
+              3.1486252
+            ],
+            [
+              101.6961633,
+              3.1493065
+            ],
+            [
+              101.6963176,
+              3.1494212
+            ],
+            [
+              101.6962775,
+              3.1494601
+            ],
+            [
+              101.6961368,
+              3.1496595
+            ],
+            [
+              101.6960746,
+              3.1494224
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "jamek-hall",
+        "hero_id": "masjid-jamek",
+        "name": "Masjid Jamek Kuala Lumpur",
+        "name_en": "Jamek Mosque",
+        "name_ms": "Masjid Jamek Kuala Lumpur",
+        "name_zh": "占美清真寺",
+        "part_label": "prayer hall",
+        "kind": "hero_mosque",
+        "height": 10,
+        "base_height": 0,
+        "material_color": "#f7f2e8",
+        "osm_id": 480717734,
+        "footprint_source": "OpenStreetMap way 480717734 snapshot · 2026-09-08",
+        "height_source": "KLX interpretive hall envelope · not an official dimension",
+        "height_confidence": "interpretive-envelope",
+        "model_status": "heritage-identified schematic",
+        "source": "Jabatan Warisan Negara 2009 + OSM footprint",
+        "source_url": "https://www.heritage.gov.my/ms/pengisytiharan-2009.html",
+        "source_note": "National Heritage 2009. Onion-dome and minaret envelopes are interpretive so the confluence mosque reads as itself.",
+        "not_measured_survey": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              101.6956359,
+              3.1489299
+            ],
+            [
+              101.6956548,
+              3.1489262
+            ],
+            [
+              101.6956709,
+              3.1489155
+            ],
+            [
+              101.6956816,
+              3.1488994
+            ],
+            [
+              101.6956854,
+              3.1488805
+            ],
+            [
+              101.6956816,
+              3.1488616
+            ],
+            [
+              101.6956709,
+              3.1488456
+            ],
+            [
+              101.6956548,
+              3.1488349
+            ],
+            [
+              101.6956359,
+              3.1488311
+            ],
+            [
+              101.695617,
+              3.1488349
+            ],
+            [
+              101.6956009,
+              3.1488456
+            ],
+            [
+              101.6955902,
+              3.1488616
+            ],
+            [
+              101.6955864,
+              3.1488805
+            ],
+            [
+              101.6955902,
+              3.1488994
+            ],
+            [
+              101.6956009,
+              3.1489155
+            ],
+            [
+              101.695617,
+              3.1489262
+            ],
+            [
+              101.6956359,
+              3.1489299
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "jamek-dome-1",
+        "hero_id": "masjid-jamek",
+        "name": "Masjid Jamek Kuala Lumpur",
+        "name_en": "Jamek Mosque",
+        "name_ms": "Masjid Jamek Kuala Lumpur",
+        "name_zh": "占美清真寺",
+        "part_label": "onion dome",
+        "kind": "hero_dome",
+        "height": 22,
+        "base_height": 10,
+        "material_color": "#e8d9a8",
+        "osm_id": 480717734,
+        "footprint_source": "Interpretive onion discs on OSM way 480717734",
+        "height_source": "KLX interpretive onion-dome envelope",
+        "height_confidence": "interpretive-envelope",
+        "model_status": "heritage-identified schematic",
+        "source": "Jabatan Warisan Negara 2009 + OSM footprint",
+        "source_url": "https://www.heritage.gov.my/ms/pengisytiharan-2009.html",
+        "source_note": "National Heritage 2009. Onion-dome and minaret envelopes are interpretive so the confluence mosque reads as itself.",
+        "not_measured_survey": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              101.6957079,
+              3.1489749
+            ],
+            [
+              101.6957303,
+              3.1489704
+            ],
+            [
+              101.6957492,
+              3.1489578
+            ],
+            [
+              101.6957619,
+              3.1489388
+            ],
+            [
+              101.6957664,
+              3.1489165
+            ],
+            [
+              101.6957619,
+              3.1488941
+            ],
+            [
+              101.6957492,
+              3.1488752
+            ],
+            [
+              101.6957303,
+              3.1488625
+            ],
+            [
+              101.6957079,
+              3.1488581
+            ],
+            [
+              101.6956855,
+              3.1488625
+            ],
+            [
+              101.6956665,
+              3.1488752
+            ],
+            [
+              101.6956539,
+              3.1488941
+            ],
+            [
+              101.6956494,
+              3.1489165
+            ],
+            [
+              101.6956539,
+              3.1489388
+            ],
+            [
+              101.6956665,
+              3.1489578
+            ],
+            [
+              101.6956855,
+              3.1489704
+            ],
+            [
+              101.6957079,
+              3.1489749
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "jamek-dome-2",
+        "hero_id": "masjid-jamek",
+        "name": "Masjid Jamek Kuala Lumpur",
+        "name_en": "Jamek Mosque",
+        "name_ms": "Masjid Jamek Kuala Lumpur",
+        "name_zh": "占美清真寺",
+        "part_label": "onion dome",
+        "kind": "hero_dome",
+        "height": 26,
+        "base_height": 10,
+        "material_color": "#e8d9a8",
+        "osm_id": 480717734,
+        "footprint_source": "Interpretive onion discs on OSM way 480717734",
+        "height_source": "KLX interpretive onion-dome envelope",
+        "height_confidence": "interpretive-envelope",
+        "model_status": "heritage-identified schematic",
+        "source": "Jabatan Warisan Negara 2009 + OSM footprint",
+        "source_url": "https://www.heritage.gov.my/ms/pengisytiharan-2009.html",
+        "source_note": "National Heritage 2009. Onion-dome and minaret envelopes are interpretive so the confluence mosque reads as itself.",
+        "not_measured_survey": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              101.6957799,
+              3.1489299
+            ],
+            [
+              101.6957988,
+              3.1489262
+            ],
+            [
+              101.6958148,
+              3.1489155
+            ],
+            [
+              101.6958256,
+              3.1488994
+            ],
+            [
+              101.6958293,
+              3.1488805
+            ],
+            [
+              101.6958256,
+              3.1488616
+            ],
+            [
+              101.6958148,
+              3.1488456
+            ],
+            [
+              101.6957988,
+              3.1488349
+            ],
+            [
+              101.6957799,
+              3.1488311
+            ],
+            [
+              101.6957609,
+              3.1488349
+            ],
+            [
+              101.6957449,
+              3.1488456
+            ],
+            [
+              101.6957341,
+              3.1488616
+            ],
+            [
+              101.6957304,
+              3.1488805
+            ],
+            [
+              101.6957341,
+              3.1488994
+            ],
+            [
+              101.6957449,
+              3.1489155
+            ],
+            [
+              101.6957609,
+              3.1489262
+            ],
+            [
+              101.6957799,
+              3.1489299
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "jamek-dome-3",
+        "hero_id": "masjid-jamek",
+        "name": "Masjid Jamek Kuala Lumpur",
+        "name_en": "Jamek Mosque",
+        "name_ms": "Masjid Jamek Kuala Lumpur",
+        "name_zh": "占美清真寺",
+        "part_label": "onion dome",
+        "kind": "hero_dome",
+        "height": 22,
+        "base_height": 10,
+        "material_color": "#e8d9a8",
+        "osm_id": 480717734,
+        "footprint_source": "Interpretive onion discs on OSM way 480717734",
+        "height_source": "KLX interpretive onion-dome envelope",
+        "height_confidence": "interpretive-envelope",
+        "model_status": "heritage-identified schematic",
+        "source": "Jabatan Warisan Negara 2009 + OSM footprint",
+        "source_url": "https://www.heritage.gov.my/ms/pengisytiharan-2009.html",
+        "source_note": "National Heritage 2009. Onion-dome and minaret envelopes are interpretive so the confluence mosque reads as itself.",
+        "not_measured_survey": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              101.6873893,
+              3.1216648
+            ],
+            [
+              101.6874206,
+              3.1216336
+            ],
+            [
+              101.6874287,
+              3.1216255
+            ],
+            [
+              101.6874737,
+              3.1216226
+            ],
+            [
+              101.6874906,
+              3.1216508
+            ],
+            [
+              101.687547,
+              3.1216535
+            ],
+            [
+              101.6875583,
+              3.1214849
+            ],
+            [
+              101.6877779,
+              3.1214988
+            ],
+            [
+              101.6877722,
+              3.1216395
+            ],
+            [
+              101.6878571,
+              3.121642
+            ],
+            [
+              101.687868,
+              3.1216423
+            ],
+            [
+              101.6878891,
+              3.1216605
+            ],
+            [
+              101.6879075,
+              3.1216789
+            ],
+            [
+              101.6879022,
+              3.1217566
+            ],
+            [
+              101.6879018,
+              3.1217632
+            ],
+            [
+              101.6878737,
+              3.1217914
+            ],
+            [
+              101.687868,
+              3.1219236
+            ],
+            [
+              101.6877836,
+              3.1219291
+            ],
+            [
+              101.6877779,
+              3.1219713
+            ],
+            [
+              101.6877216,
+              3.1221063
+            ],
+            [
+              101.6876822,
+              3.1221063
+            ],
+            [
+              101.6876822,
+              3.1221823
+            ],
+            [
+              101.6875752,
+              3.1221823
+            ],
+            [
+              101.6875752,
+              3.1221007
+            ],
+            [
+              101.6875188,
+              3.1220979
+            ],
+            [
+              101.6874794,
+              3.121946
+            ],
+            [
+              101.6874737,
+              3.121901
+            ],
+            [
+              101.6874175,
+              3.1218983
+            ],
+            [
+              101.6874175,
+              3.1217661
+            ],
+            [
+              101.6873893,
+              3.1217435
+            ],
+            [
+              101.6873893,
+              3.1216648
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "thean-hou-terrace",
+        "hero_id": "thean-hou",
+        "name": "Thean Hou Temple",
+        "name_en": "Thean Hou Temple",
+        "name_ms": "Kuil Thean Hou",
+        "name_zh": "天后宫",
+        "part_label": "hill terrace",
+        "kind": "hero_temple",
+        "height": 6,
+        "base_height": 0,
+        "material_color": "#8b2e2e",
+        "osm_id": 453802547,
+        "footprint_source": "OpenStreetMap way 453802547 snapshot · 2026-09-08",
+        "height_source": "KLX interpretive temple envelope from OSM levels=4 · not an official dimension",
+        "height_confidence": "interpretive-envelope",
+        "model_status": "survey-informed schematic",
+        "source": "OpenStreetMap footprint; identity from named way",
+        "source_url": "https://www.openstreetmap.org/way/453802547",
+        "source_note": "OSM way 453802547, building:levels=4. Not confirmed as National Heritage on the 2007/2009/2012 JWN lists pulled for this twin. Stacked tiers are interpretive so the hillside temple reads as a Chinese temple.",
+        "not_measured_survey": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              101.6874311,
+              3.1216881
+            ],
+            [
+              101.6874573,
+              3.1216619
+            ],
+            [
+              101.6874641,
+              3.1216552
+            ],
+            [
+              101.6875018,
+              3.1216528
+            ],
+            [
+              101.687516,
+              3.1216764
+            ],
+            [
+              101.6875633,
+              3.1216786
+            ],
+            [
+              101.6875727,
+              3.1215373
+            ],
+            [
+              101.6877568,
+              3.121549
+            ],
+            [
+              101.687752,
+              3.1216669
+            ],
+            [
+              101.6878231,
+              3.121669
+            ],
+            [
+              101.6878323,
+              3.1216692
+            ],
+            [
+              101.68785,
+              3.1216845
+            ],
+            [
+              101.6878654,
+              3.1216999
+            ],
+            [
+              101.687861,
+              3.1217651
+            ],
+            [
+              101.6878606,
+              3.1217706
+            ],
+            [
+              101.687837,
+              3.1217942
+            ],
+            [
+              101.6878323,
+              3.121905
+            ],
+            [
+              101.6877615,
+              3.1219096
+            ],
+            [
+              101.6877568,
+              3.121945
+            ],
+            [
+              101.6877096,
+              3.1220581
+            ],
+            [
+              101.6876765,
+              3.1220581
+            ],
+            [
+              101.6876765,
+              3.1221218
+            ],
+            [
+              101.6875868,
+              3.1221218
+            ],
+            [
+              101.6875868,
+              3.1220534
+            ],
+            [
+              101.6875396,
+              3.1220511
+            ],
+            [
+              101.6875066,
+              3.1219238
+            ],
+            [
+              101.6875018,
+              3.1218861
+            ],
+            [
+              101.6874547,
+              3.1218838
+            ],
+            [
+              101.6874547,
+              3.121773
+            ],
+            [
+              101.6874311,
+              3.1217541
+            ],
+            [
+              101.6874311,
+              3.1216881
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "thean-hou-hall",
+        "hero_id": "thean-hou",
+        "name": "Thean Hou Temple",
+        "name_en": "Thean Hou Temple",
+        "name_ms": "Kuil Thean Hou",
+        "name_zh": "天后宫",
+        "part_label": "prayer halls",
+        "kind": "hero_temple",
+        "height": 16,
+        "base_height": 6,
+        "material_color": "#c43c3c",
+        "osm_id": 453802547,
+        "footprint_source": "OpenStreetMap way 453802547 snapshot · 2026-09-08",
+        "height_source": "KLX interpretive temple envelope from OSM levels=4 · not an official dimension",
+        "height_confidence": "interpretive-envelope",
+        "model_status": "survey-informed schematic",
+        "source": "OpenStreetMap footprint; identity from named way",
+        "source_url": "https://www.openstreetmap.org/way/453802547",
+        "source_note": "OSM way 453802547, building:levels=4. Not confirmed as National Heritage on the 2007/2009/2012 JWN lists pulled for this twin. Stacked tiers are interpretive so the hillside temple reads as a Chinese temple.",
+        "not_measured_survey": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              101.687495,
+              3.1217238
+            ],
+            [
+              101.6875135,
+              3.1217053
+            ],
+            [
+              101.6875182,
+              3.1217005
+            ],
+            [
+              101.6875448,
+              3.1216989
+            ],
+            [
+              101.6875548,
+              3.1217155
+            ],
+            [
+              101.6875881,
+              3.1217171
+            ],
+            [
+              101.6875947,
+              3.1216175
+            ],
+            [
+              101.6877244,
+              3.1216258
+            ],
+            [
+              101.6877211,
+              3.1217088
+            ],
+            [
+              101.6877712,
+              3.1217103
+            ],
+            [
+              101.6877776,
+              3.1217105
+            ],
+            [
+              101.6877901,
+              3.1217212
+            ],
+            [
+              101.6878009,
+              3.1217321
+            ],
+            [
+              101.6877978,
+              3.121778
+            ],
+            [
+              101.6877976,
+              3.1217819
+            ],
+            [
+              101.687781,
+              3.1217985
+            ],
+            [
+              101.6877776,
+              3.1218766
+            ],
+            [
+              101.6877278,
+              3.1218798
+            ],
+            [
+              101.6877244,
+              3.1219048
+            ],
+            [
+              101.6876912,
+              3.1219844
+            ],
+            [
+              101.6876679,
+              3.1219844
+            ],
+            [
+              101.6876679,
+              3.1220293
+            ],
+            [
+              101.6876047,
+              3.1220293
+            ],
+            [
+              101.6876047,
+              3.1219812
+            ],
+            [
+              101.6875714,
+              3.1219795
+            ],
+            [
+              101.6875482,
+              3.1218898
+            ],
+            [
+              101.6875448,
+              3.1218632
+            ],
+            [
+              101.6875116,
+              3.1218616
+            ],
+            [
+              101.6875116,
+              3.1217836
+            ],
+            [
+              101.687495,
+              3.1217702
+            ],
+            [
+              101.687495,
+              3.1217238
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "thean-hou-roof",
+        "hero_id": "thean-hou",
+        "name": "Thean Hou Temple",
+        "name_en": "Thean Hou Temple",
+        "name_ms": "Kuil Thean Hou",
+        "name_zh": "天后宫",
+        "part_label": "upturned roofs",
+        "kind": "hero_temple",
+        "height": 24,
+        "base_height": 16,
+        "material_color": "#d4a017",
+        "osm_id": 453802547,
+        "footprint_source": "OpenStreetMap way 453802547 snapshot · 2026-09-08",
+        "height_source": "KLX interpretive temple envelope from OSM levels=4 · not an official dimension",
+        "height_confidence": "interpretive-envelope",
+        "model_status": "survey-informed schematic",
+        "source": "OpenStreetMap footprint; identity from named way",
+        "source_url": "https://www.openstreetmap.org/way/453802547",
+        "source_note": "OSM way 453802547, building:levels=4. Not confirmed as National Heritage on the 2007/2009/2012 JWN lists pulled for this twin. Stacked tiers are interpretive so the hillside temple reads as a Chinese temple.",
+        "not_measured_survey": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              101.6875785,
+              3.1217704
+            ],
+            [
+              101.6875869,
+              3.1217621
+            ],
+            [
+              101.687589,
+              3.1217599
+            ],
+            [
+              101.687601,
+              3.1217591
+            ],
+            [
+              101.6876055,
+              3.1217666
+            ],
+            [
+              101.6876206,
+              3.1217674
+            ],
+            [
+              101.6876236,
+              3.1217224
+            ],
+            [
+              101.6876822,
+              3.1217261
+            ],
+            [
+              101.6876806,
+              3.1217637
+            ],
+            [
+              101.6877033,
+              3.1217643
+            ],
+            [
+              101.6877062,
+              3.1217644
+            ],
+            [
+              101.6877118,
+              3.1217693
+            ],
+            [
+              101.6877167,
+              3.1217742
+            ],
+            [
+              101.6877153,
+              3.1217949
+            ],
+            [
+              101.6877152,
+              3.1217966
+            ],
+            [
+              101.6877077,
+              3.1218041
+            ],
+            [
+              101.6877062,
+              3.1218394
+            ],
+            [
+              101.6876837,
+              3.1218409
+            ],
+            [
+              101.6876822,
+              3.1218521
+            ],
+            [
+              101.6876671,
+              3.1218881
+            ],
+            [
+              101.6876566,
+              3.1218881
+            ],
+            [
+              101.6876566,
+              3.1219084
+            ],
+            [
+              101.6876281,
+              3.1219084
+            ],
+            [
+              101.6876281,
+              3.1218866
+            ],
+            [
+              101.687613,
+              3.1218859
+            ],
+            [
+              101.6876025,
+              3.1218454
+            ],
+            [
+              101.687601,
+              3.1218334
+            ],
+            [
+              101.687586,
+              3.1218326
+            ],
+            [
+              101.687586,
+              3.1217974
+            ],
+            [
+              101.6875785,
+              3.1217914
+            ],
+            [
+              101.6875785,
+              3.1217704
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "thean-hou-pagoda",
+        "hero_id": "thean-hou",
+        "name": "Thean Hou Temple",
+        "name_en": "Thean Hou Temple",
+        "name_ms": "Kuil Thean Hou",
+        "name_zh": "天后宫",
+        "part_label": "central pavilion",
+        "kind": "hero_temple",
+        "height": 32,
+        "base_height": 24,
+        "material_color": "#e8c547",
+        "osm_id": 453802547,
+        "footprint_source": "OpenStreetMap way 453802547 snapshot · 2026-09-08",
+        "height_source": "KLX interpretive temple envelope from OSM levels=4 · not an official dimension",
+        "height_confidence": "interpretive-envelope",
+        "model_status": "survey-informed schematic",
+        "source": "OpenStreetMap footprint; identity from named way",
+        "source_url": "https://www.openstreetmap.org/way/453802547",
+        "source_note": "OSM way 453802547, building:levels=4. Not confirmed as National Heritage on the 2007/2009/2012 JWN lists pulled for this twin. Stacked tiers are interpretive so the hillside temple reads as a Chinese temple.",
+        "not_measured_survey": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              101.6794861,
+              3.1499324
+            ],
+            [
+              101.6794625,
+              3.149976
+            ],
+            [
+              101.6793126,
+              3.1498953
+            ],
+            [
+              101.6793476,
+              3.1498305
+            ],
+            [
+              101.6795356,
+              3.1494819
+            ],
+            [
+              101.6795485,
+              3.1494581
+            ],
+            [
+              101.6792584,
+              3.149302
+            ],
+            [
+              101.679245,
+              3.1493268
+            ],
+            [
+              101.6790538,
+              3.1496813
+            ],
+            [
+              101.6790228,
+              3.1497388
+            ],
+            [
+              101.6788125,
+              3.1496258
+            ],
+            [
+              101.6784455,
+              3.1503061
+            ],
+            [
+              101.6785428,
+              3.1503584
+            ],
+            [
+              101.6791591,
+              3.1506899
+            ],
+            [
+              101.6792081,
+              3.1507163
+            ],
+            [
+              101.6792648,
+              3.1507468
+            ],
+            [
+              101.6793337,
+              3.1507838
+            ],
+            [
+              101.6794477,
+              3.1505725
+            ],
+            [
+              101.6794911,
+              3.1505958
+            ],
+            [
+              101.6795191,
+              3.1506109
+            ],
+            [
+              101.6796795,
+              3.1503137
+            ],
+            [
+              101.6797093,
+              3.1502585
+            ],
+            [
+              101.6796386,
+              3.1502204
+            ],
+            [
+              101.6797012,
+              3.1501046
+            ],
+            [
+              101.6795121,
+              3.1500028
+            ],
+            [
+              101.6795358,
+              3.149959
+            ],
+            [
+              101.6795594,
+              3.1499718
+            ],
+            [
+              101.6795712,
+              3.14995
+            ],
+            [
+              101.6795889,
+              3.1499173
+            ],
+            [
+              101.6794756,
+              3.1498563
+            ],
+            [
+              101.6794578,
+              3.1498893
+            ],
+            [
+              101.6794461,
+              3.1499108
+            ],
+            [
+              101.6794861,
+              3.1499324
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "parlimen-body",
+        "hero_id": "parlimen",
+        "name": "Bangunan Parlimen Malaysia",
+        "name_en": "Parliament of Malaysia",
+        "name_ms": "Bangunan Parlimen Malaysia",
+        "name_zh": "马来西亚国会大厦",
+        "part_label": "chambers",
+        "kind": "hero_civic",
+        "height": 18,
+        "base_height": 0,
+        "material_color": "#efe7d6",
+        "osm_id": 229254507,
+        "footprint_source": "OpenStreetMap way 229254507 snapshot · 2026-09-08",
+        "height_source": "KLX interpretive civic envelope · not an official dimension",
+        "height_confidence": "interpretive-envelope",
+        "model_status": "heritage-identified schematic",
+        "source": "Jabatan Warisan Negara 2007 + OSM footprint",
+        "source_url": "https://www.heritage.gov.my/ms/pengisytiharan-2007.html",
+        "source_note": "National Heritage 2007. Roof and chamber height are interpretive.",
+        "not_measured_survey": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              101.6794469,
+              3.1499713
+            ],
+            [
+              101.6794304,
+              3.1500018
+            ],
+            [
+              101.6793254,
+              3.1499453
+            ],
+            [
+              101.6793499,
+              3.1498999
+            ],
+            [
+              101.6794815,
+              3.1496559
+            ],
+            [
+              101.6794906,
+              3.1496393
+            ],
+            [
+              101.6792875,
+              3.14953
+            ],
+            [
+              101.6792781,
+              3.1495474
+            ],
+            [
+              101.6791443,
+              3.1497955
+            ],
+            [
+              101.6791226,
+              3.1498358
+            ],
+            [
+              101.6789754,
+              3.1497567
+            ],
+            [
+              101.6787185,
+              3.1502329
+            ],
+            [
+              101.6787866,
+              3.1502695
+            ],
+            [
+              101.679218,
+              3.1505015
+            ],
+            [
+              101.6792523,
+              3.15052
+            ],
+            [
+              101.679292,
+              3.1505414
+            ],
+            [
+              101.6793402,
+              3.1505673
+            ],
+            [
+              101.67942,
+              3.1504193
+            ],
+            [
+              101.6794504,
+              3.1504357
+            ],
+            [
+              101.67947,
+              3.1504462
+            ],
+            [
+              101.6795823,
+              3.1502382
+            ],
+            [
+              101.6796031,
+              3.1501995
+            ],
+            [
+              101.6795536,
+              3.1501729
+            ],
+            [
+              101.6795975,
+              3.1500918
+            ],
+            [
+              101.6794651,
+              3.1500206
+            ],
+            [
+              101.6794817,
+              3.1499899
+            ],
+            [
+              101.6794982,
+              3.1499989
+            ],
+            [
+              101.6795065,
+              3.1499836
+            ],
+            [
+              101.6795188,
+              3.1499607
+            ],
+            [
+              101.6794395,
+              3.149918
+            ],
+            [
+              101.6794271,
+              3.1499411
+            ],
+            [
+              101.6794189,
+              3.1499562
+            ],
+            [
+              101.6794469,
+              3.1499713
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "parlimen-roof",
+        "hero_id": "parlimen",
+        "name": "Bangunan Parlimen Malaysia",
+        "name_en": "Parliament of Malaysia",
+        "name_ms": "Bangunan Parlimen Malaysia",
+        "name_zh": "马来西亚国会大厦",
+        "part_label": "butterfly roof",
+        "kind": "hero_civic_roof",
+        "height": 28,
+        "base_height": 18,
+        "material_color": "#d7c7a2",
+        "osm_id": 229254507,
+        "footprint_source": "OpenStreetMap way 229254507 snapshot · 2026-09-08",
+        "height_source": "KLX interpretive roof envelope",
+        "height_confidence": "interpretive-envelope",
+        "model_status": "heritage-identified schematic",
+        "source": "Jabatan Warisan Negara 2007 + OSM footprint",
+        "source_url": "https://www.heritage.gov.my/ms/pengisytiharan-2007.html",
+        "source_note": "National Heritage 2007. Roof and chamber height are interpretive.",
+        "not_measured_survey": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              101.6837869,
+              3.1489454
+            ],
+            [
+              101.6838229,
+              3.1489357
+            ],
+            [
+              101.6838493,
+              3.1489094
+            ],
+            [
+              101.6838589,
+              3.1488735
+            ],
+            [
+              101.6838493,
+              3.1488376
+            ],
+            [
+              101.6838229,
+              3.1488113
+            ],
+            [
+              101.6837869,
+              3.1488016
+            ],
+            [
+              101.683751,
+              3.1488113
+            ],
+            [
+              101.6837246,
+              3.1488376
+            ],
+            [
+              101.683715,
+              3.1488735
+            ],
+            [
+              101.6837246,
+              3.1489094
+            ],
+            [
+              101.683751,
+              3.1489357
+            ],
+            [
+              101.6837869,
+              3.1489454
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "tugu-negara-plinth",
+        "hero_id": "tugu-negara",
+        "name": "Tugu Negara",
+        "name_en": "National Monument",
+        "name_ms": "Tugu Negara",
+        "name_zh": "国家纪念碑",
+        "part_label": "plinth",
+        "kind": "hero_monument",
+        "height": 6,
+        "base_height": 0,
+        "material_color": "#5c5146",
+        "osm_id": 1212049483,
+        "footprint_source": "Interpretive disc on OSM way 1212049483 snapshot · 2026-09-08",
+        "height_source": "KLX interpretive monument envelope",
+        "height_confidence": "interpretive-envelope",
+        "model_status": "heritage-identified schematic",
+        "source": "Jabatan Warisan Negara 2007",
+        "source_url": "https://www.heritage.gov.my/ms/pengisytiharan-2007.html",
+        "source_note": "National Heritage 2007. Bronze group envelope is interpretive; OSM way is a 5-point stub.",
+        "not_measured_survey": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              101.6837869,
+              3.1489094
+            ],
+            [
+              101.6838081,
+              3.1489026
+            ],
+            [
+              101.6838212,
+              3.1488846
+            ],
+            [
+              101.6838212,
+              3.1488624
+            ],
+            [
+              101.6838081,
+              3.1488444
+            ],
+            [
+              101.6837869,
+              3.1488376
+            ],
+            [
+              101.6837658,
+              3.1488444
+            ],
+            [
+              101.6837527,
+              3.1488624
+            ],
+            [
+              101.6837527,
+              3.1488846
+            ],
+            [
+              101.6837658,
+              3.1489026
+            ],
+            [
+              101.6837869,
+              3.1489094
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "tugu-negara-group",
+        "hero_id": "tugu-negara",
+        "name": "Tugu Negara",
+        "name_en": "National Monument",
+        "name_ms": "Tugu Negara",
+        "name_zh": "国家纪念碑",
+        "part_label": "bronze group",
+        "kind": "hero_monument",
+        "height": 15,
+        "base_height": 6,
+        "material_color": "#8a7030",
+        "osm_id": 1212049483,
+        "footprint_source": "Interpretive disc on OSM way 1212049483 snapshot · 2026-09-08",
+        "height_source": "KLX interpretive monument envelope",
+        "height_confidence": "interpretive-envelope",
+        "model_status": "heritage-identified schematic",
+        "source": "Jabatan Warisan Negara 2007",
+        "source_url": "https://www.heritage.gov.my/ms/pengisytiharan-2007.html",
+        "source_note": "National Heritage 2007. Bronze group envelope is interpretive; OSM way is a 5-point stub.",
+        "not_measured_survey": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              101.6839815,
+              3.2375311
+            ],
+            [
+              101.6840085,
+              3.2375239
+            ],
+            [
+              101.6840283,
+              3.2375041
+            ],
+            [
+              101.6840355,
+              3.2374772
+            ],
+            [
+              101.6840283,
+              3.2374503
+            ],
+            [
+              101.6840085,
+              3.2374305
+            ],
+            [
+              101.6839815,
+              3.2374233
+            ],
+            [
+              101.6839545,
+              3.2374305
+            ],
+            [
+              101.6839347,
+              3.2374503
+            ],
+            [
+              101.6839275,
+              3.2374772
+            ],
+            [
+              101.6839347,
+              3.2375041
+            ],
+            [
+              101.6839545,
+              3.2375239
+            ],
+            [
+              101.6839815,
+              3.2375311
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "murugan-plinth",
+        "hero_id": "batu-caves-murugan",
+        "name": "Patung Lord Murugan, Batu Caves",
+        "name_en": "Lord Murugan Statue, Batu Caves",
+        "name_ms": "Patung Lord Murugan, Batu Caves",
+        "name_zh": "黑风洞穆鲁甘神像",
+        "part_label": "plinth",
+        "kind": "hero_statue",
+        "height": 4,
+        "base_height": 0,
+        "material_color": "#c4b8a0",
+        "osm_id": 2911346279,
+        "footprint_source": "Interpretive disc from OSM node 2911346279 · 2026-09-08",
+        "height_source": "KLX interpretive plinth",
+        "height_confidence": "interpretive-envelope",
+        "model_status": "metro-context schematic",
+        "source": "OpenStreetMap node · Selangor / Gombak, not WP KL",
+        "source_url": "https://www.openstreetmap.org/node/2911346279",
+        "source_note": "Lord Murugan Statue at Batu Caves, Gombak, Selangor — not inside Wilayah Persekutuan Kuala Lumpur. OSM node 2911346279. A 42.7 m figure is widely repeated in tourism copy and is used here only as an interpretive envelope, not as a published official dimension.",
+        "not_measured_survey": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              101.6839815,
+              3.2375059
+            ],
+            [
+              101.6839984,
+              3.2375005
+            ],
+            [
+              101.6840089,
+              3.2374861
+            ],
+            [
+              101.6840089,
+              3.2374683
+            ],
+            [
+              101.6839984,
+              3.2374539
+            ],
+            [
+              101.6839815,
+              3.2374485
+            ],
+            [
+              101.6839646,
+              3.2374539
+            ],
+            [
+              101.6839541,
+              3.2374683
+            ],
+            [
+              101.6839541,
+              3.2374861
+            ],
+            [
+              101.6839646,
+              3.2375005
+            ],
+            [
+              101.6839815,
+              3.2375059
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "murugan-statue",
+        "hero_id": "batu-caves-murugan",
+        "name": "Patung Lord Murugan, Batu Caves",
+        "name_en": "Lord Murugan Statue, Batu Caves",
+        "name_ms": "Patung Lord Murugan, Batu Caves",
+        "name_zh": "黑风洞穆鲁甘神像",
+        "part_label": "statue",
+        "kind": "hero_statue",
+        "height": 42.7,
+        "base_height": 4,
+        "material_color": "#d4a017",
+        "osm_id": 2911346279,
+        "footprint_source": "Interpretive disc from OSM node 2911346279 · 2026-09-08",
+        "height_source": "Tourism-copy 42.7 m figure used as interpretive envelope only — not treated as official",
+        "height_confidence": "interpretive-envelope",
+        "model_status": "metro-context schematic",
+        "source": "OpenStreetMap node · Selangor / Gombak, not WP KL",
+        "source_url": "https://www.openstreetmap.org/node/2911346279",
+        "source_note": "Lord Murugan Statue at Batu Caves, Gombak, Selangor — not inside Wilayah Persekutuan Kuala Lumpur. OSM node 2911346279. A 42.7 m figure is widely repeated in tourism copy and is used here only as an interpretive envelope, not as a published official dimension.",
+        "not_measured_survey": true
+      }
+    }
+  ]
+}

@@ -76,65 +76,58 @@ test("weather keeps valid air observations when the forecast is rate-limited", a
   }
 });
 
-test("rain treats a credential error inside HTTP 200 as unavailable data", async () => {
+test("rain states JPS has no public JSON API rather than inventing a reading", async () => {
   const { handleLiveRain } = await import("../worker/live.ts");
-  const originalFetch = globalThis.fetch;
-  globalThis.fetch = async () => Response.json({ Error: "username หรือ Password ไม่ถูกต้อง" });
-
-  try {
-    const response = await handleLiveRain();
-    const body = await response.json();
-    assert.equal(body.ok, false);
-    assert.match(body.reason, /requires credentials/);
-    assert.equal(response.headers.get("x-bkkx-live"), "degraded");
-  } finally {
-    globalThis.fetch = originalFetch;
-  }
+  const response = await handleLiveRain();
+  const body = await response.json();
+  assert.equal(body.ok, false);
+  assert.match(body.reason, /no documented public JSON API/i);
+  assert.match(body.reason, /WLH/);
+  assert.equal(response.headers.get("x-bkkx-live"), "degraded");
 });
 
-test("renders the Bangkok walkthrough at /worlds", async () => {
+test("renders the Kuala Lumpur walkthrough at /worlds", async () => {
   const response = await render("/worlds");
   assert.equal(response.status, 200);
   assert.match(response.headers.get("content-type") ?? "", /^text\/html\b/i);
 
   const html = await response.text();
-  assert.match(html, /<title>The Minecraft worlds · BKKxC\(ulture\)<\/title>/i);
-  assert.match(html, /Bangkok,/);
-  assert.match(html, /block by block\./);
-  assert.match(html, /Ratchathewi/);
-  assert.match(html, /Historic Core/);
+  assert.match(html, /<title>The atlas · KLXxC\(ulture\)<\/title>/i);
+  assert.match(html, /Kuala Lumpur,/);
+  assert.match(html, /monument by monument/);
+  assert.match(html, /KLCC/);
+  assert.match(html, /Merdeka civic core/);
   assert.match(html, /Walk in 3D/);
-  assert.match(html, /\/atlas\/ratchathewi/);
+  assert.match(html, /\/atlas\/klcc/);
   assert.match(html, /application\/ld\+json/);
+  assert.doesNotMatch(html, /Download world/);
   assert.doesNotMatch(html, /codex-preview|Building your site|react-loading-skeleton/i);
 });
 
 test("renders the 3D atlas page for a district", async () => {
-  const response = await render("/atlas/ratchathewi");
+  const response = await render("/atlas/klcc");
   assert.equal(response.status, 200);
   assert.match(response.headers.get("content-type") ?? "", /^text\/html\b/i);
 
   const html = await response.text();
-  assert.match(html, /<title>Ratchathewi — 3D atlas · BKKxC\(ulture\)<\/title>/i);
-  assert.match(html, /Ratchathewi/);
-  assert.match(html, /ราชเทวี/);
-  assert.match(html, /Victory Monument/);
-  assert.match(html, /Download world/);
+  assert.match(html, /<title>KLCC &amp; Golden Triangle — 3D atlas · KLXxC\(ulture\)<\/title>/i);
+  assert.match(html, /KLCC/);
+  assert.match(html, /Petronas|Golden Triangle/);
+  assert.doesNotMatch(html, /Download world/);
   assert.match(html, /Walk in 3D|atlas-page|bkkx-marker/);
-  assert.doesNotMatch(html, /Heritage\s*\([^)]*16|Historic context/);
 });
 
-test("limits Old Town context layers to Historic Core", async () => {
-  const response = await render("/atlas/historic-core");
+test("limits Old Town context layers off the Kuala Lumpur atlas", async () => {
+  const response = await render("/atlas/klcc");
   assert.equal(response.status, 200);
 
   const html = await response.text();
-  assert.match(html, /Heritage\s*\([^)]*16/);
-  assert.match(html, /Conservation zones/);
-  assert.match(html, /Public transport/);
+  assert.match(html, /Iconic 3D/);
+  assert.match(html, /Flood corridor/);
+  assert.match(html, /Land bands/);
   assert.match(html, /Map key/);
-  assert.match(html, /Candidates\s*\(/);
-  assert.match(html, /orientation only/i);
+  assert.doesNotMatch(html, /Old Town 3D/);
+  assert.doesNotMatch(html, /Conservation zones/);
 });
 
 test("returns 404 for an unknown atlas district", async () => {
@@ -143,40 +136,23 @@ test("returns 404 for an unknown atlas district", async () => {
 });
 
 test("serves the 3D map heritage atlas as the front door", async () => {
-  // The 3D map is the homepage (2026-08-11 redesign). The Editorial
-  // register content moved to /heritage; BKK's own heritage map iframe
-  // fills the page, with the sourced rowhouse atlas first and the nine
-  // quarter jumps one tab away. No "choose your district" gate.
   const response = await render("/");
   assert.equal(response.status, 200);
   assert.match(response.headers.get("content-type") ?? "", /^text\/html\b/i);
 
   const html = await response.text();
-  // 3D map front door
   assert.match(html, /atlas-shell/);
   assert.match(html, /atlas-shell-map/);
-  assert.match(html, /src="\/atlas\/historic-core\?embed=1"/);
+  assert.match(html, /src="\/atlas\/klcc\?embed=1"/);
   assert.doesNotMatch(html, /src="https:\/\/atlas\.nonarkara\.org/i);
-  // Rowhouses are the useful default; quarters remain in the client tab.
-  assert.match(html, /Bangkok rowhouse atlas/);
-  assert.match(html, /Rowhouses 32/);
-  assert.match(html, /Quarters 9/);
-  assert.match(html, /Na Phra Lan shophouses/);
-  assert.match(html, /Hua Takhe old canal market/);
-  // Register/Walks nav connects to the real anchors on /heritage, not a
-  // dead #register on this page or a bare /heritage top scroll.
+  assert.match(html, /Quarters 9|Nine quarters|Sembilan kawasan|九个街区/);
+  assert.match(html, /Merdeka civic core/);
+  assert.match(html, /Petaling Street/);
   assert.match(html, /href="\/heritage#register"/);
   assert.match(html, /href="\/heritage#walks"/);
-  // The Minecraft-worlds CTAs and nav tab were placeholders from the
-  // pre-redesign era (worlds built before the heritage pivot) and are
-  // gone from primary chrome as of 2026-08-11 — the front door promotes
-  // the register and walks, not a world download.
   assert.doesNotMatch(html, /Walk Ratchathewi/);
-  assert.doesNotMatch(html, /Walk Old Town/);
-  assert.doesNotMatch(html, />The worlds</);
-  // Editorial register chrome (the shell) is here, the actual
-  // register moved to /heritage.
-  assert.match(html, /block by block/);
+  assert.doesNotMatch(html, /Bangkok rowhouse atlas/);
+  assert.match(html, /monument by monument/);
   assert.match(html, /application\/ld\+json/);
 });
 
@@ -381,21 +357,16 @@ test("serves an evidence-led comparative case for Old Bangkok", async () => {
 });
 
 test("keeps the editorial heritage register at /heritage", async () => {
-  // Pre-2026-08-11 the register was at /, with /heritage as a
-  // permanentRedirect. After the redesign, /heritage is the actual
-  // register page (200), and the homepage is the 3D map. Anyone who
-  // saved /heritage during the redirect-stub era now lands on the
-  // real register, not a redirect.
   const response = await render("/heritage");
   assert.equal(response.status, 200);
   assert.match(response.headers.get("content-type") ?? "", /^text\/html\b/i);
 
   const html = await response.text();
-  assert.match(html, /Bangkok&#x27;s heritage,|Bangkok's heritage,/);
+  assert.match(html, /Kuala Lumpur(?:&#x27;|&apos;|')s heritage,|Kuala Lumpur's heritage,/);
   assert.match(html, /monument by monument/);
   assert.match(html, /register-canvas/);
   assert.match(html, /register-filters/);
-  assert.match(html, /Fine Arts Department/);
+  assert.match(html, /Jabatan Warisan Negara|National Heritage/);
   assert.match(html, /application\/ld\+json/);
 });
 
@@ -407,7 +378,7 @@ test("ships a heritage register whose Minecraft coordinates are inside the world
     with: { type: "json" },
   });
 
-  assert.ok(register.counts.walkable > 100, "expected 100+ walkable monuments");
+  assert.ok(register.counts.walkable === 0, "no Minecraft world has been generated for Kuala Lumpur");
   assert.equal(
     register.sites.filter((site) => site.block).length,
     register.counts.walkable,
@@ -436,85 +407,61 @@ test("ships a heritage register whose Minecraft coordinates are inside the world
   }
 });
 
-test("serves the Bangkok-by-the-numbers about page", async () => {
-  // The /about page is the dry frame for the city: 30+ stats with
-  // source attribution on every line, then the Dr Non essay (the
-  // qualitative side). Numbers first, photos+prose second.
+test("serves the Kuala Lumpur-by-the-numbers about page", async () => {
   const response = await render("/about");
   assert.equal(response.status, 200);
   assert.match(response.headers.get("content-type") ?? "", /^text\/html\b/i);
 
   const html = await response.text();
-  // Numbers
-  assert.match(html, /Bangkok by the numbers/);
+  assert.match(html, /Kuala Lumpur by the numbers/);
   assert.match(html, /<div class="register"><header class="register-masthead">/);
   assert.match(html, /numbers-page/);
   assert.match(html, /numbers-stat-grid/);
-  // 10.54M population, 39.9M visitors, 571 monuments, 432,077 buildings
-  assert.match(html, /10\.54/);
-  assert.match(html, /39\.9/);
-  assert.match(html, /571/);
-  assert.match(html, /432,077/);
-  // The first read is intentionally short: four essential sections remain
-  // open, while the 30-measure ledger and personal essay use native,
-  // keyboard-accessible disclosure controls.
+  assert.match(html, /1,982,112/);
+  assert.match(html, /451\.9/);
+  assert.match(html, /678\.9/);
   assert.match(html, /<details class="numbers-disclosure numbers-ledger" id="full-ledger">/);
-  assert.match(html, /Open 30 more measures/);
+  assert.match(html, /Open more measures/);
   assert.match(html, /<details class="numbers-disclosure numbers-essay-disclosure" id="essay">/);
-  assert.match(html, /Read Dr Non(?:&#x27;|&apos;|')s Bangkok/);
+  assert.match(html, /Read why this exists/);
   assert.doesNotMatch(html, /<details[^>]+(?:full-ledger|essay)[^>]+open/);
-  // The 8 section eyebrows are present (the middot renders fine in HTML)
-  for (const eyebrow of [
-    "People",
-    "Economy",
-    "Tourism",
-    "Sentiment",
-    "Air",
-    "Safety",
-    "Heritage",
-    "Food (?:&|&amp;) street economy",
-  ]) {
+  for (const eyebrow of ["People", "Skyline", "Heritage", "Water"]) {
     assert.match(html, new RegExp(eyebrow));
   }
-  // Source attributions are visible on every stat
-  assert.match(html, /NSO/);
-  assert.match(html, /TAT/);
-  assert.match(html, /PCD/);
-  assert.match(html, /Numbeo/);
-  // The Dr Non essay is the qualitative second half
+  assert.match(html, /DOSM/);
+  assert.match(html, /CTBUH/);
+  assert.match(html, /JWN|Jabatan Warisan Negara|National Heritage/);
   assert.match(html, /numbers-essay/);
-  assert.match(html, /dr-non-siam-square\.jpg/);
+  assert.match(html, /klx-hero\.jpg/);
   assert.match(html, /application\/ld\+json/);
 });
 
 test("renders a heritage quarter page with photo attribution", async () => {
-  const response = await render("/areas/kudi-chin");
+  const response = await render("/areas/merdeka-core");
   assert.equal(response.status, 200);
   const html = await response.text();
-  assert.match(html, /Kudi Chin/);
-  assert.match(html, /Santa Cruz/);
+  assert.match(html, /Merdeka civic core/);
+  assert.match(html, /Sultan Abdul Samad/);
   assert.match(html, /Wikimedia Commons/);
   assert.match(html, /CC BY/i);
-  assert.match(html, /In the Fine Arts register/);
-  assert.match(html, /Arrive without a car/);
-  assert.match(html, /The nearest useful stops/);
-  assert.match(html, /See every route in 3D/);
-  assert.match(html, /Cross-river ferry|MRT Blue|Express Boat|Tourist Boat/);
+  assert.match(html, /On this register/);
+  assert.match(html, /Open in 3D/);
 });
 
 test("renders a heritage walk page with numbered stops", async () => {
-  const response = await render("/walks/six-faiths");
+  const response = await render("/walks/merdeka-civic");
   assert.equal(response.status, 200);
   const html = await response.text();
-  assert.match(html, /Six Faiths of Kudi Chin/);
-  assert.match(html, /Wat Kalayanamit/);
-  assert.match(html, /Bang Luang Mosque/);
+  assert.match(html, /Merdeka civic core/);
+  assert.match(html, /Sultan Abdul Samad/);
+  assert.match(html, /Jamek Mosque|Masjid Jamek/);
   assert.match(html, /walk-stop-n/);
-  assert.match(html, /OSRM foot profile/);
+  assert.match(html, /1\.25/);
+  assert.match(html, /great-circle/);
 });
 
 test("walk pages show real gazette and leg-distance numbers, not estimates", async () => {
-  const response = await render("/walks/six-faiths");
+  const response = await render("/walks/merdeka-civic");
   assert.equal(response.status, 200);
   const html = await response.text();
   // "By the numbers" block: gazetted/awaiting split, oldest gazette age
@@ -619,62 +566,79 @@ test("renders the About page with all nine essay photos", async () => {
   const response = await render("/about");
   assert.equal(response.status, 200);
   const html = await response.text();
-  assert.match(html, /The city that never got the plaque/);
-  assert.match(html, /Thammasat/);
-  assert.match(html, /Penang.*Kyoto.*Vienna.*Graz.*Prague.*Warsaw.*Krakow.*Wigan/s);
-  assert.match(html, /571 monuments/);
+  assert.match(html, /The city the mayors have to see/);
+  assert.match(html, /Petronas/);
+  assert.match(html, /Merdeka 118/);
   for (const file of [
-    "dr-non-siam-square.jpg", "dr-non-thammasat.jpg", "wat-arun-lasers.jpg",
-    "temples-everywhere.jpg", "foodstalls-at-night.jpg", "safe-city-night.jpg",
-    "shophouses-midnight.jpg", "alley-wat-arun-view.jpg", "bangkok-waterfront.jpg",
-    "open-space-oldtown.jpg",
+    "klx-hero.jpg", "merdeka-core.jpg", "klcc.jpg",
+    "petaling-street.jpg", "kampung-baru.jpg", "brickfields.jpg",
+    "bukit-bintang.jpg", "chow-kit.jpg", "river-of-life.jpg",
+    "thean-hou.jpg",
   ]) {
-    assert.match(html, new RegExp(`/about/${file}`), `missing photo ${file}`);
+    assert.match(html, new RegExp(`/heritage/photos/${file}`), `missing photo ${file}`);
   }
 });
 
-test("Thai translations cover every area and walk slug, with no stray keys", async () => {
+test("Malay and Chinese translations cover every area and walk slug, with no stray keys", async () => {
   const { default: places } = await import("../app/data/heritage-places.json", {
     with: { type: "json" },
   });
-  const { AREA_TH, WALK_TH, ABOUT_TH } = await import("../app/data/heritage-translations-th.ts");
+  const { AREA_MS, AREA_ZH, WALK_MS, WALK_ZH, ABOUT_MS, ABOUT_ZH } = await import(
+    "../app/data/heritage-translations.ts"
+  );
 
   const areaSlugs = new Set(places.areas.map((a) => a.slug));
   const walkSlugs = new Set(places.walks.map((w) => w.slug));
 
-  for (const slug of areaSlugs) {
-    assert.ok(AREA_TH[slug], `AREA_TH missing translation for ${slug}`);
-    assert.ok(AREA_TH[slug].prose.length >= 1, `AREA_TH[${slug}] has no prose`);
-  }
-  for (const key of Object.keys(AREA_TH)) {
-    assert.ok(areaSlugs.has(key), `AREA_TH has a stray slug not in heritage-places.json: ${key}`);
-  }
-
-  for (const walk of places.walks) {
-    const t = WALK_TH[walk.slug];
-    assert.ok(t, `WALK_TH missing translation for ${walk.slug}`);
-    for (const stop of walk.stops) {
-      assert.ok(
-        typeof t.stops[stop.name] === "string" && t.stops[stop.name].length > 0,
-        `WALK_TH[${walk.slug}] missing stop translation for "${stop.name}"`,
-      );
+  for (const pack of [
+    ["AREA_MS", AREA_MS],
+    ["AREA_ZH", AREA_ZH],
+  ]) {
+    const [name, AREA] = pack;
+    for (const slug of areaSlugs) {
+      assert.ok(AREA[slug], `${name} missing translation for ${slug}`);
+      assert.ok(AREA[slug].prose.length >= 1, `${name}[${slug}] has no prose`);
+    }
+    for (const key of Object.keys(AREA)) {
+      assert.ok(areaSlugs.has(key), `${name} has a stray slug not in heritage-places.json: ${key}`);
     }
   }
-  for (const key of Object.keys(WALK_TH)) {
-    assert.ok(walkSlugs.has(key), `WALK_TH has a stray slug not in heritage-places.json: ${key}`);
+
+  for (const pack of [
+    ["WALK_MS", WALK_MS],
+    ["WALK_ZH", WALK_ZH],
+  ]) {
+    const [name, WALK] = pack;
+    for (const walk of places.walks) {
+      const t = WALK[walk.slug];
+      assert.ok(t, `${name} missing translation for ${walk.slug}`);
+      for (const stop of walk.stops) {
+        assert.ok(
+          typeof t.stops[stop.name] === "string" && t.stops[stop.name].length > 0,
+          `${name}[${walk.slug}] missing stop translation for "${stop.name}"`,
+        );
+      }
+    }
+    for (const key of Object.keys(WALK)) {
+      assert.ok(walkSlugs.has(key), `${name} has a stray slug not in heritage-places.json: ${key}`);
+    }
   }
 
-  assert.equal(ABOUT_TH.paragraphs.length, 9, "About essay Thai translation must have exactly 9 paragraphs");
+  assert.equal(ABOUT_MS.paragraphs.length, 9, "About essay Malay translation must have exactly 9 paragraphs");
+  assert.equal(ABOUT_ZH.paragraphs.length, 9, "About essay Chinese translation must have exactly 9 paragraphs");
   for (const key of ["portrait", "thammasat", "watarun1", "temples", "foodstalls", "safecity", "shophouses", "alley", "waterfront", "openspace"]) {
-    assert.ok(ABOUT_TH.captions[key], `ABOUT_TH.captions missing "${key}"`);
+    assert.ok(ABOUT_MS.captions[key], `ABOUT_MS.captions missing "${key}"`);
+    assert.ok(ABOUT_ZH.captions[key], `ABOUT_ZH.captions missing "${key}"`);
   }
 });
 
-test("EN and TH dictionaries have exactly matching key sets", async () => {
+test("EN, MS and ZH dictionaries have exactly matching key sets", async () => {
   const { DICTIONARY } = await import("../app/i18n/dictionary.ts");
   const enKeys = Object.keys(DICTIONARY.en).sort();
-  const thKeys = Object.keys(DICTIONARY.th).sort();
-  assert.deepEqual(thKeys, enKeys, "dictionary.ts: en/th key sets diverged");
+  const msKeys = Object.keys(DICTIONARY.ms).sort();
+  const zhKeys = Object.keys(DICTIONARY.zh).sort();
+  assert.deepEqual(msKeys, enKeys, "dictionary.ts: en/ms key sets diverged");
+  assert.deepEqual(zhKeys, enKeys, "dictionary.ts: en/zh key sets diverged");
 });
 
 // ---------------------------------------------------------------------------
@@ -818,26 +782,52 @@ test("builds Wat Arun, Wat Phra Kaew and Wat Pho as sourced, evidence-labelled h
   }
 });
 
-test("the 3D atlas shell renders the 5 POI layer toggles", async () => {
-  const response = await render("/atlas/historic-core");
-  const html = await response.text();
-  // 5 layer chips — labels are short Thai/English and must show up in the markup
-  for (const label of ["Royal Temples", "National Museums", "National Archives", "National Libraries"]) {
-    assert.match(html, new RegExp(label), `chip missing in markup: ${label}`);
+test("builds Petronas, Merdeka 118 and Menara KL as sourced, evidence-labelled hero models", async () => {
+  const { readFileSync } = await import("node:fs");
+  const { fileURLToPath } = await import("node:url");
+  const heroPath = fileURLToPath(new URL("../public/data/klx-hero-monuments.geojson", import.meta.url));
+  const sourcePath = fileURLToPath(new URL("../public/data/sources/klx-osm-way-snapshot.json", import.meta.url));
+  const hero = JSON.parse(readFileSync(heroPath, "utf8"));
+  const source = JSON.parse(readFileSync(sourcePath, "utf8"));
+
+  assert.ok(source.elements.length >= 12, "KL OSM snapshot must carry the iconic ways and nodes");
+  assert.equal(hero.featureCount, 45);
+  assert.equal(hero.features.length, hero.featureCount);
+  assert.equal(hero.complexes["petronas-twin-towers"], 10);
+  assert.equal(hero.complexes["merdeka-118"], 6);
+  assert.equal(hero.complexes["menara-kl"], 3);
+  assert.match(hero.modelStatus, /not a measured conservation model/i);
+  assert.equal(Math.max(...hero.features.map((feature) => feature.properties.height)), 678.9);
+  assert.ok(hero.features.some((feature) => feature.properties.id === "petronas-1-shaft"));
+  assert.ok(hero.features.some((feature) => feature.properties.id === "petronas-2-shaft"));
+  assert.ok(hero.features.some((feature) => feature.properties.id === "petronas-skybridge"));
+  assert.ok(hero.features.some((feature) => feature.properties.id === "merdeka-118-spire"));
+  assert.ok(hero.features.some((feature) => feature.properties.id === "kl-tower-pod"));
+  const petronasTop = hero.features.find((f) => f.properties.id === "petronas-1-pinnacle");
+  assert.equal(petronasTop.properties.height, 451.9);
+  const klAntenna = hero.features.find((f) => f.properties.id === "kl-tower-antenna");
+  assert.equal(klAntenna.properties.height, 421);
+  for (const feature of hero.features) {
+    assert.ok(feature.properties.height_confidence, `${feature.properties.id}: missing height_confidence`);
+    assert.ok(feature.properties.base_height < feature.properties.height, `${feature.properties.id}: collapsed tier`);
+    const ring = feature.geometry.coordinates[0];
+    assert.deepEqual(ring[0], ring.at(-1), `${feature.properties.id}: footprint is not closed`);
   }
-  // Caption references the open-data registries
-  assert.match(html, /data\.go\.th/);
-  // 460 temples chip is opt-in (off by default) but the button still renders
-  assert.match(html, /Temples/);
-  assert.match(html, /Solid lines: high-confidence documented axes/);
-  assert.match(html, /Satellite aerosol/);
-  assert.match(html, /NASA aerosol is a dated regional optical-depth composite/);
-  assert.match(html, /Old Town 3D/);
-  assert.match(html, /9,275/);
-  assert.match(html, /full-resolution OSM footprints/);
-  assert.match(html, /evidence-labelled schematic, not measured conservation documentation/);
-  assert.match(html, /88(?:<!-- -->)? hero parts across Wat Arun, Wat Phra Kaew, Wat Pho, Loha Prasat, the palace prasats and the Golden Mount/);
-  assert.match(html, /Evidence-labelled hero model/);
+});
+
+test("the 3D atlas shell renders KL layers, not Bangkok POI chips", async () => {
+  const response = await render("/atlas/klcc");
+  const html = await response.text();
+  assert.match(html, /Iconic 3D/);
+  assert.match(html, /Evidence/);
+  assert.match(html, /Live cams/);
+  assert.match(html, /Flood corridor/);
+  assert.match(html, /Land bands/);
+  assert.match(html, /45/);
+  assert.match(html, /stacked parts|interpretive/i);
+  assert.doesNotMatch(html, /Royal Temples/);
+  assert.doesNotMatch(html, /9,275/);
+  assert.doesNotMatch(html, /Old Town 3D/);
 });
 
 test("the shophouse essay defaults to a short argument without deleting the research", async () => {
@@ -857,7 +847,7 @@ test("the shophouse essay defaults to a short argument without deleting the rese
 test("every primary public route renders successfully", async () => {
   for (const route of [
     "/", "/about", "/heritage", "/rowhouses", "/case-for-bangkok", "/worlds",
-    "/atlas/historic-core", "/areas/kudi-chin", "/walks/six-faiths",
+    "/atlas/klcc", "/areas/merdeka-core", "/walks/merdeka-civic",
     "/shophouses", "/shophouses/bible", "/shophouses/global",
     "/shophouses/print", "/shophouses/research",
   ]) {
@@ -1272,14 +1262,14 @@ test("the dataset manifest matches the files actually on disk", async () => {
 });
 
 test("the atlas offers a citable view link", async () => {
-  const response = await render("/atlas/historic-core");
+  const response = await render("/atlas/klcc");
   assert.equal(response.status, 200);
   const html = await response.text();
   assert.match(html, /Cite this view/);
 });
 
 test("the atlas console carries the operator surface", async () => {
-  const response = await render("/atlas/historic-core");
+  const response = await render("/atlas/klcc");
   const html = await response.text();
   // The citable-view control lives in the right-hand key stack (its old
   // bottom-left spot was underneath the control panel), with the cursor
@@ -1292,14 +1282,14 @@ test("the atlas console carries the operator surface", async () => {
 
 test("the ?at= parameter accepts a full camera pose and rejects garbage", async () => {
   // 5-part pose renders
-  const posed = await render("/atlas/historic-core?at=100.4914,13.75,16.5,45.0,-90.0");
+  const posed = await render("/atlas/klcc?at=101.7118,3.1579,16.5,45.0,-90.0");
   assert.equal(posed.status, 200);
   // 3-part legacy links still render
-  const legacy = await render("/atlas/historic-core?at=100.4914,13.75,16.5");
+  const legacy = await render("/atlas/klcc?at=100.4914,13.75,16.5");
   assert.equal(legacy.status, 200);
   // wrong arity or out-of-range pitch degrade to the default view, not an error
   for (const bad of ["100,13", "100.49,13.75,16.5,999,0", "a,b,c"]) {
-    const r = await render(`/atlas/historic-core?at=${bad}`);
+    const r = await render(`/atlas/klcc?at=${bad}`);
     assert.equal(r.status, 200, `bad at=${bad} must not break the page`);
   }
 });
@@ -1364,20 +1354,18 @@ test("the war room computes its figures from the shipped corpus", async () => {
   assert.match(html, /noindex/);
 });
 
-test("the war room ships all twelve water sources and never fakes a reading", async () => {
+test("the war room ships the KL water sources and never fakes a reading", async () => {
   const { WATER_SOURCES, WATER_TALLY } = await import("../app/data/water-sources.ts");
   const html = await (await render("/warroom")).text();
 
-  assert.equal(WATER_SOURCES.length, 12, "twelve datasets were nominated");
+  assert.equal(WATER_SOURCES.length, 8, "eight datasets were nominated");
   for (const s of WATER_SOURCES) {
     assert.ok(html.includes(s.id), `water source missing from the panel: ${s.id}`);
   }
-  // Nothing may claim ingestion until the ingest has actually run
-  assert.equal(WATER_TALLY.ingested, 0, "no water dataset has been ingested yet");
-  assert.equal(WATER_TALLY.awaiting, 12);
+  assert.equal(WATER_TALLY.ingested, 1, "OSM rivers are ingested as geometry");
+  assert.equal(WATER_TALLY.awaiting, 7);
   assert.match(html, /awaiting/i);
-  // The ingest route is named on the page so the next operator can run it
-  assert.match(html, /ingest-bkk-water\.py/);
+  assert.doesNotMatch(html, /ingest-bkk-water\.py/);
 });
 
 test("the camera rail renders one line and explains an empty registry", async () => {
@@ -1554,7 +1542,7 @@ test("suggest-a-location renders only on unlocated camera tiles, and never auto-
 
 test("every register entry has its own page, and an unknown id 404s", async () => {
   const { REGISTER_SITES } = await import("../app/data/heritage-register.ts");
-  assert.equal(REGISTER_SITES.length, 571);
+  assert.equal(REGISTER_SITES.length, 20);
 
   // Ids must be unique, or two monuments would fight over one URL.
   const ids = new Set(REGISTER_SITES.map((s) => s.id));
@@ -1806,8 +1794,8 @@ test("the spine's unjoined footprints are reported as a join miss, not as missin
 test("a placeholder-located camera never reaches the atlas map layer", async () => {
   const { CURATED_CAMERAS, isLocated } = await import("../app/data/cctv-cameras.ts");
 
-  // The rule the whole camera layer rests on. Three streams share one
-  // nominal Bangkok coordinate so their war-room tiles are not pinless;
+  // The rule the whole camera layer rests on. KL cameras share one
+  // nominal Kuala Lumpur coordinate so their war-room tiles are not pinless;
   // plotting that would put pins where no camera is.
   const placeholders = CURATED_CAMERAS.filter((c) => c.precision === "placeholder");
   assert.ok(placeholders.length > 0, "the fixture for this rule must exist");
@@ -1817,18 +1805,22 @@ test("a placeholder-located camera never reaches the atlas map layer", async () 
   }
 
   // Every placeholder shares one coordinate, which is what makes it
-  // unmistakably nominal rather than three separate false claims.
+  // unmistakably nominal rather than several separate false claims.
   const coords = new Set(placeholders.map((c) => `${c.lat},${c.lon}`));
   assert.equal(coords.size, 1, "placeholders must share the single nominal marker");
 
-  // And the mappable set is exactly the evidence-located one.
+  // Honest for this twin: none of the curated cameras have a confirmed mount.
   const mappable = CURATED_CAMERAS.filter(
     (c) => isLocated(c) && typeof c.lat === "number" && typeof c.lon === "number",
   );
-  assert.ok(mappable.length >= 6, "the curated half of the atlas layer must not be empty");
-  for (const c of mappable) {
-    assert.notEqual(c.precision, "placeholder");
-    assert.ok(c.locatedBy.length > 20, `${c.id}: a mapped camera must say how it was located`);
+  assert.equal(
+    mappable.length,
+    0,
+    "KL cameras are stills and portals; none belong on the atlas until a mount is confirmed",
+  );
+  for (const c of CURATED_CAMERAS) {
+    assert.equal(c.precision, "placeholder", c.id);
+    assert.equal(isLocated(c), false, c.id);
   }
 });
 
@@ -1849,7 +1841,7 @@ test("every camera records how it was located, and no two share an id", async ()
 });
 
 test("the atlas camera layer is opt-in and loads no third-party player up front", async () => {
-  const html = await (await render("/atlas/historic-core")).text();
+  const html = await (await render("/atlas/klcc")).text();
   // The layer is off by default, so no marker, card or embed may be in the
   // server-rendered HTML — and above all no YouTube iframe.
   assert.doesNotMatch(html, /bkkx-cam-marker/);

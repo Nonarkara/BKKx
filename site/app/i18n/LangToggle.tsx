@@ -16,11 +16,20 @@ export function LangToggle() {
       </button>
       <button
         type="button"
-        aria-pressed={locale === "th"}
-        className={locale === "th" ? "is-active" : undefined}
-        onClick={() => setLocale("th")}
+        aria-pressed={locale === "ms"}
+        className={locale === "ms" ? "is-active" : undefined}
+        onClick={() => setLocale("ms")}
       >
-        ไทย
+        BM
+      </button>
+      <button
+        type="button"
+        lang="zh"
+        aria-pressed={locale === "zh"}
+        className={locale === "zh" ? "is-active" : undefined}
+        onClick={() => setLocale("zh")}
+      >
+        中文
       </button>
     </div>
   );

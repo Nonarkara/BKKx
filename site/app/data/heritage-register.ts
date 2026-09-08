@@ -187,7 +187,7 @@ export function describeLocation(site: RegisterSite): string {
     case "osm":
       return `The register's published coordinate for this row was too coarse to pin, so the monument was relocated onto an OpenStreetMap feature by name — ${MATCH_MEANING[method.match]}.`;
     case "unlocated":
-      return "This monument is not pinned. The register's coordinate for it resolves to about a kilometre, and no OpenStreetMap feature matched its name, so it is listed at district precision and given no position.";
+      return "This monument is not pinned. The gazette names it; no unique OpenStreetMap feature was accepted, so it stays at district precision rather than a guess.";
     case "other":
       return `Located by an unrecognised method recorded as “${method.raw}”.`;
   }
@@ -236,9 +236,9 @@ export function districtCount(district: string): number {
  * Citation
  * ---------------------------------------------------------------- */
 
-export function citationForSite(site: RegisterSite, host = "https://bkk.nonarkara.org"): string {
+export function citationForSite(site: RegisterSite, host = "https://klx.nonarkara.org"): string {
   const retrieved = REGISTER_SOURCE.retrieved ?? "n.d.";
-  return `กรมศิลปากร [Fine Arts Department]. ${site.name} (register id ${site.id}). ข้อมูลบัญชีตำแหน่งโบราณสถาน [Data set], retrieved ${retrieved}. Relocated and published by BKKx. ${host}/heritage/${site.id}`;
+  return `Jabatan Warisan Negara. ${site.name} (register id ${site.id}). Pengisytiharan Warisan Kebangsaan [Data set], retrieved ${retrieved}. Relocated and published by KLX. ${host}/heritage/${site.id}`;
 }
 
 export function permalinkFor(site: Pick<RegisterSite, "id">): string {

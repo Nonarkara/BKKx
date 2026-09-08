@@ -13,8 +13,10 @@ function ArrowIcon() {
 }
 
 export function BangkokWalkthrough() {
-  const [worldId, setWorldId] = useState<World["id"]>("ratchathewi");
-  const [stopId, setStopId] = useState(worlds[0].stops[0].id);
+  const [worldId, setWorldId] = useState<World["id"]>("klcc");
+  const [stopId, setStopId] = useState(
+    () => worlds.find((w) => w.id === "klcc")?.stops[0].id ?? worlds[0].stops[0].id,
+  );
   const [visits, setVisits] = useState<number | null>(null);
 
   const world = useMemo(
@@ -51,14 +53,13 @@ export function BangkokWalkthrough() {
   return (
     <main>
       <header className="site-header">
-        <Link className="wordmark" href="/" aria-label="BKKxC(ulture) home">
-          <span>BKK</span><b>x</b><em>C(ulture)</em>
+        <Link className="wordmark" href="/" aria-label="KLXxC(ulture) home">
+          <span>KL</span><b>x</b><em>C(ulture)</em>
         </Link>
         <nav aria-label="Primary navigation">
           <Link href="/">Heritage register</Link>
-          <a href="#atlas">The worlds</a>
-          <Link href="/atlas/ratchathewi">3D atlas</Link>
-          <a href="#enter">Download</a>
+          <a href="#atlas">The atlas</a>
+          <Link href="/atlas/klcc">3D atlas</Link>
           <a href={REPOSITORY} target="_blank" rel="noreferrer">
             GitHub <ArrowIcon />
           </a>
@@ -69,16 +70,17 @@ export function BangkokWalkthrough() {
         <div className="hero-grid" aria-hidden="true" />
         <div className="hero-copy">
           <p className="eyebrow">
-            Digital Bangkok <span /> Minecraft Java
+            Digital Kuala Lumpur <span /> 3D atlas
           </p>
           <h1>
-            Bangkok,
+            Kuala Lumpur,
             <br />
-            <em>block by block.</em>
+            <em>monument by monument.</em>
           </h1>
           <p className="hero-lede">
-            <span lang="th">กรุงเทพฯ ทีละบล็อก</span> — an open, playable city atlas. Follow the
-            streets, cross the river, then step inside the map.
+            <span lang="ms">Kuala Lumpur, monumen demi monumen</span> — an open 3D
+            atlas. Follow the padang, the twins, the two rivers. Atlas only: no
+            Minecraft world has been generated.
           </p>
           <div className="hero-actions">
             <a className="button button-primary" href="#atlas">
@@ -95,49 +97,49 @@ export function BangkokWalkthrough() {
           </div>
         </div>
 
-        <div className="hero-map" aria-label="Minecraft overview of Ratchathewi">
+        <div className="hero-map" aria-label="Kuala Lumpur skyline">
           <Image
-            src="/images/ratchathewi.png"
-            alt="Top-down Minecraft map of Ratchathewi, Bangkok"
+            src="/heritage/photos/klcc.jpg"
+            alt="Petronas Twin Towers and KLCC Park, Kuala Lumpur"
             fill
             priority
             fetchPriority="high"
             sizes="(max-width: 900px) 92vw, 52vw"
           />
           <div className="map-scanline" />
-          <p className="map-coordinate map-coordinate-top">13.7743° N</p>
-          <p className="map-coordinate map-coordinate-bottom">100.5649° E</p>
+          <p className="map-coordinate map-coordinate-top">3.1579° N</p>
+          <p className="map-coordinate map-coordinate-bottom">101.7118° E</p>
           <div className="hero-map-label">
-            <span>WORLD 01</span>
-            <strong>RATCHATHEWI</strong>
+            <span>ATLAS 02</span>
+            <strong>KLCC</strong>
           </div>
         </div>
 
         <div className="hero-index">
-          <span>01</span>
-          <p>Two worlds online<br />Bangkok keeps growing</p>
+          <span>03</span>
+          <p>Districts on the atlas<br />Kuala Lumpur, as it stands</p>
         </div>
       </section>
 
       <section className="signal-strip" aria-label="Project statistics">
-        <div><strong>02</strong><span>Worlds online</span></div>
-        <div><strong>111</strong><span>Region files</span></div>
-        <div><strong>111,616</strong><span>Validated chunks</span></div>
-        <div><strong>1:1</strong><span>Block-to-metre scale</span></div>
+        <div><strong>03</strong><span>Atlas districts</span></div>
+        <div><strong>45</strong><span>Stacked 3D parts</span></div>
+        <div><strong>20</strong><span>Register entries</span></div>
+        <div><strong>0</strong><span>Minecraft worlds</span></div>
         <div><strong>{visits === null ? "LIVE" : visits.toLocaleString()}</strong><span>{visits === null ? "Open atlas" : "Atlas visits"}</span></div>
       </section>
 
       <section className="atlas-section" id="atlas">
         <div className="section-heading">
-          <p className="eyebrow">Field atlas / <span lang="th">สมุดภาคสนาม</span></p>
+          <p className="eyebrow">Field atlas / <span lang="ms">Atlas lapangan</span></p>
           <h2>Pick a district.<br />Follow the signals.</h2>
           <p>
-            Each marker is a chapter. Read the city from above, then download
-            the same terrain and walk it at one-block scale.
+            Each marker is a chapter. Read the city from above, then open the
+            same view in the 3D atlas. No world file ships — this branch is atlas only.
           </p>
         </div>
 
-        <div className="world-switcher" role="tablist" aria-label="Choose a world">
+        <div className="world-switcher" role="tablist" aria-label="Choose a district">
           {worlds.map((item) => (
             <button
               key={item.id}
@@ -151,7 +153,7 @@ export function BangkokWalkthrough() {
             >
               <span>{item.number}</span>
               <strong>{item.name}</strong>
-              <small lang="th">{item.thai}</small>
+              <small lang="ms">{item.thai}</small>
             </button>
           ))}
         </div>
@@ -163,13 +165,12 @@ export function BangkokWalkthrough() {
           aria-labelledby={`tab-${world.id}`}
         >
           <div>
-            <p className="world-number">WORLD {world.number}</p>
+            <p className="world-number">ATLAS {world.number}</p>
             <h3>{world.strapline}</h3>
           </div>
           <p>{world.description}</p>
           <dl>
             <div><dt>Coverage</dt><dd>{world.distance}</dd></div>
-            <div><dt>Regions</dt><dd>{world.regions}</dd></div>
             <div><dt>Chunks</dt><dd>{world.chunks}</dd></div>
           </dl>
         </article>
@@ -177,12 +178,12 @@ export function BangkokWalkthrough() {
         <div className={`map-explorer map-${world.id}`}>
           <div
             className="explorer-canvas"
-            style={{ aspectRatio: `${world.width} / ${world.height}` }}
+            style={{ aspectRatio: "4 / 3" }}
           >
             <Image
               key={world.image}
               src={world.image}
-              alt={`Top-down Minecraft map of ${world.name}, Bangkok`}
+              alt={`${world.name}, Kuala Lumpur`}
               fill
               sizes="(max-width: 1000px) 100vw, 68vw"
             />
@@ -210,7 +211,7 @@ export function BangkokWalkthrough() {
             </div>
             <p className="chapter-kicker">{stop.chapter}</p>
             <h3>{stop.name}</h3>
-            <p className="chapter-thai" lang="th">{stop.thai}</p>
+            <p className="chapter-thai" lang="ms">{stop.thai}</p>
             <p className="chapter-description">{stop.description}</p>
             <div className="field-note">
               <span>FIELD NOTE</span>
@@ -236,22 +237,22 @@ export function BangkokWalkthrough() {
 
       <section className="enter-section" id="enter">
         <div className="enter-heading">
-          <p className="eyebrow">From browser to blocks</p>
-          <h2>Enter Bangkok.</h2>
-          <p>Three steps. No mods. The city is ready when Minecraft is.</p>
+          <p className="eyebrow">From this page to the map</p>
+          <h2>Enter Kuala Lumpur.</h2>
+          <p>Open the 3D atlas in the browser. No Minecraft world ships on this branch.</p>
         </div>
         <ol className="steps">
           <li>
             <span>01</span>
-            <div><h3>Choose a world</h3><p>Start with transit-heavy Ratchathewi or cross the river through the historic core.</p></div>
+            <div><h3>Choose a district</h3><p>Start with the twins at KLCC, the padang at Merdeka, or the wider Klang Valley.</p></div>
           </li>
           <li>
             <span>02</span>
-            <div><h3>Download and unzip</h3><p>Place the world folder inside your Minecraft Java <code>saves</code> directory.</p></div>
+            <div><h3>Walk in 3D</h3><p>The same stacked monuments, rivers, flood corridor and land bands as the front door.</p></div>
           </li>
           <li>
             <span>03</span>
-            <div><h3>Walk, fly, build</h3><p>Open Minecraft Java 1.21.4+, choose Singleplayer, and enter in Creative mode.</p></div>
+            <div><h3>Read the evidence</h3><p>Every height is labelled — published envelope, OSM tag, or interpretive taper.</p></div>
           </li>
         </ol>
 
@@ -260,7 +261,7 @@ export function BangkokWalkthrough() {
             <div key={item.id} className="download-card">
               <span className="download-number">{item.number}</span>
               <div>
-                <small>Two ways in</small>
+                <small>Atlas only</small>
                 <h3>{item.name}</h3>
                 <p>{item.thai} · {item.distance}</p>
               </div>
@@ -271,15 +272,6 @@ export function BangkokWalkthrough() {
                 >
                   <span>Walk in 3D</span>
                   <small>Browser · no install</small>
-                </a>
-                <a
-                  className="download-action download-action-quiet"
-                  href={item.download}
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  <span>Download world</span>
-                  <small>Minecraft Java 1.21.4+</small>
                 </a>
               </div>
             </div>
@@ -293,12 +285,12 @@ export function BangkokWalkthrough() {
           <h2>A city model should never be a black box.</h2>
         </div>
         <div className="pipeline" aria-label="Data pipeline">
-          <span>OPEN MAP DATA</span><b>→</b><span>ARNIS</span><b>→</b><span>MINECRAFT</span><b>→</b><span>YOU</span>
+          <span>OPEN MAP DATA</span><b>→</b><span>PUBLISHED HEIGHTS</span><b>→</b><span>STACKED PARTS</span><b>→</b><span>YOU</span>
         </div>
         <p>
-          Streets, buildings, water and vegetation come from open geographic
-          data, translated into blocks by Arnis, then checked region by region.
-          The code, world manifests and future roadmap remain open on GitHub.
+          Footprints come from OpenStreetMap. Envelopes come from CTBUH, Menara KL
+          and Tourism Malaysia. Intermediate tapers are labelled interpretive.
+          The code remains open on GitHub.
         </p>
         <a className="text-link" href={REPOSITORY} target="_blank" rel="noreferrer">
           Explore the repository <ArrowIcon />
@@ -307,10 +299,10 @@ export function BangkokWalkthrough() {
 
       <section className="next-section">
         <p>THE ATLAS IS OPEN</p>
-        <h2>Bangkok is bigger than two worlds.</h2>
+        <h2>Kuala Lumpur is bigger than three districts.</h2>
         <p>
-          This is the foundation: a district-by-district walkthrough designed
-          to grow into live city layers, community stories and collaborative builds.
+          This is the mayor-demo twin: civic core, Golden Triangle, and the two
+          rivers, drawn honestly.
         </p>
         <a href={`${REPOSITORY}/issues`} target="_blank" rel="noreferrer">
           Suggest the next district <ArrowIcon />
@@ -318,11 +310,10 @@ export function BangkokWalkthrough() {
       </section>
 
       <footer className="worlds-footer">
-        <a className="wordmark footer-wordmark" href="#top"><span>BKK</span><b>x</b><em>C(ulture)</em></a>
-        <p>Bangkok, block by block.<br /><span lang="th">กรุงเทพฯ ทีละบล็อก</span></p>
+        <a className="wordmark footer-wordmark" href="#top"><span>KL</span><b>x</b><em>C(ulture)</em></a>
+        <p>Kuala Lumpur, monument by monument.<br /><span lang="ms">Kuala Lumpur, monumen demi monumen</span></p>
         <div>
           <a href={REPOSITORY} target="_blank" rel="noreferrer">GitHub</a>
-          <a href="https://github.com/louis-e/arnis" target="_blank" rel="noreferrer">Arnis</a>
           <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noreferrer">OpenStreetMap</a>
         </div>
         <small>© 2026 Non Arkara · Open city, open source.</small>

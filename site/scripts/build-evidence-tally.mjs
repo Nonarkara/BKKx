@@ -28,9 +28,9 @@ const here = dirname(fileURLToPath(import.meta.url));
 const pub = resolve(here, "../public");
 const out = resolve(here, "../app/data/evidence-tally.json");
 
-const DETAIL = "/data/bkk-heritage-detail.geojson";
-const HERO = "/data/bkk-hero-monuments.geojson";
-const LANDMARKS = "/data/bkk-landmarks.geojson";
+const DETAIL = null;
+const HERO = "/data/klx-hero-monuments.geojson";
+const LANDMARKS = null;
 
 function features(file) {
   const parsed = JSON.parse(readFileSync(resolve(pub, `.${file}`), "utf8"));
@@ -52,9 +52,9 @@ function tally(list, key) {
   return counts;
 }
 
-const detailSources = tally(features(DETAIL), "height_source");
+const detailSources = DETAIL ? tally(features(DETAIL), "height_source") : {};
 const heroConfidences = tally(features(HERO), "height_confidence");
-const landmarks = features(LANDMARKS).length;
+const landmarks = LANDMARKS ? features(LANDMARKS).length : 0;
 
 // The guard. Every value the data actually contains must be claimed by a
 // tier; the empty string is allowed only where the layer legitimately has no
@@ -89,7 +89,7 @@ writeFileSync(
   out,
   JSON.stringify(
     {
-      generatedFrom: [DETAIL, HERO, LANDMARKS],
+      generatedFrom: [HERO],
       byTier,
       detailSources,
       heroConfidences,

@@ -69,7 +69,7 @@ export function SuggestLocation({ cam }: { cam: CuratedCamera }) {
       const map = new maplibre.Map({
         container: containerRef.current,
         style: STYLE,
-        center: [100.5018, 13.7563], // Bangkok — same nominal reference as PLACEHOLDER_MARKER
+        center: [101.6869, 3.139], // Kuala Lumpur — same nominal reference as PLACEHOLDER_MARKER
         zoom: 11,
         attributionControl: { compact: true },
       });

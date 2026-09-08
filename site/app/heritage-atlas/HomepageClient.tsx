@@ -4,9 +4,7 @@ import Link from "next/link";
 import { useRef, useState } from "react";
 import { useLocale } from "../i18n/LocaleContext";
 import { LangToggle } from "../i18n/LangToggle";
-import { AREA_TH } from "../data/heritage-translations-th";
-import { OldTownPicks } from "./OldTownPicks";
-import { OLDTOWN_SPOTS } from "../data/oldtown-spots";
+import { AREA_MS, AREA_ZH } from "../data/heritage-translations";
 
 type Quarter = {
   slug: string;
@@ -23,25 +21,28 @@ type Props = {
   initialQuarter?: string;
 };
 
-const HERITAGE_MAP_BASE = "/atlas/historic-core?embed=1";
+const HERITAGE_MAP_BASE = "/atlas/klcc?embed=1";
 
 function heritageMapUrlFor(q: Quarter | null): string {
   if (!q) return HERITAGE_MAP_BASE;
   return `${HERITAGE_MAP_BASE}&at=${q.center[0]},${q.center[1]},${q.zoom}`;
 }
 
+function areaTag(locale: string, slug: string, fallback?: string): string | undefined {
+  if (locale === "ms") return AREA_MS[slug]?.tagline ?? fallback;
+  if (locale === "zh") return AREA_ZH[slug]?.tagline ?? fallback;
+  return fallback;
+}
+
 export function HomepageClient({ quarters, initialQuarter }: Props) {
   const { t, locale } = useLocale();
-  const th = locale === "th";
   const [activeSlug, setActiveSlug] = useState<string | null>(initialQuarter ?? null);
-  const [railView, setRailView] = useState<"rowhouses" | "quarters">("rowhouses");
   const [iframeKey, setIframeKey] = useState(0);
   const iframeRef = useRef<HTMLIFrameElement | null>(null);
 
   const activeQuarter = activeSlug ? quarters.find((q) => q.slug === activeSlug) : null;
   const initialSrc = heritageMapUrlFor(activeQuarter ?? null);
 
-  // Reload BKK's own embedded heritage map at the selected quarter.
   function pickQuarter(q: Quarter) {
     if (q.slug === activeSlug) return;
     setActiveSlug(q.slug);
@@ -50,23 +51,20 @@ export function HomepageClient({ quarters, initialQuarter }: Props) {
 
   return (
     <div className="atlas-shell">
-      <header className="atlas-shell-masthead" aria-label="BKKx primary">
-        <Link className="register-wordmark" href="/" aria-label="BKKxC(ulture) home">
-          <span>BKK</span>
+      <header className="atlas-shell-masthead" aria-label="KLX primary">
+        <Link className="register-wordmark" href="/" aria-label="KLXxC(ulture) home">
+          <span>KL</span>
           <b>x</b>
           <em>C(ulture)</em>
         </Link>
         <div className="atlas-shell-masthead-meta">
           <span className="register-eyebrow">
-            <span lang="th">กรุงเทพมหานคร · Bangkok</span>
+            <span lang="ms">Wilayah Persekutuan Kuala Lumpur</span>
           </span>
-          <strong>Bangkok&apos;s heritage, block by block.</strong>
+          <strong>Kuala Lumpur&apos;s heritage, monument by monument.</strong>
           <small>{t("front_door_tagline")}</small>
         </div>
         <nav className="atlas-shell-nav" aria-label="Heritage navigation">
-          <Link href="/rowhouses">Rowhouses</Link>
-          <a href="https://shophouses.nonarkara.org" title="Shophouse Metropolis — the essay, the Bible, the citywide pressure map">Shophouses</a>
-          <Link href="/case-for-bangkok">The case</Link>
           <Link href="/heritage#register">{t("nav_register")}</Link>
           <Link href="/heritage#walks">{t("nav_walks")}</Link>
           <Link href="/about">{t("nav_about")}</Link>
@@ -76,30 +74,9 @@ export function HomepageClient({ quarters, initialQuarter }: Props) {
 
       <div className="atlas-shell-body">
         <aside className="atlas-shell-quarters" aria-label="Heritage quarters">
-          <div className="atlas-shell-rail-tabs" role="tablist" aria-label="Explore Bangkok heritage">
-            <button
-              type="button"
-              role="tab"
-              aria-selected={railView === "rowhouses"}
-              className={railView === "rowhouses" ? "is-active" : ""}
-              onClick={() => setRailView("rowhouses")}
-            >
-              {th ? `ตึกแถว ${OLDTOWN_SPOTS.length}` : `Rowhouses ${OLDTOWN_SPOTS.length}`}
-            </button>
-            <button
-              type="button"
-              role="tab"
-              aria-selected={railView === "quarters"}
-              className={railView === "quarters" ? "is-active" : ""}
-              onClick={() => setRailView("quarters")}
-            >
-              {th ? "ย่าน 9" : "Quarters 9"}
-            </button>
-          </div>
-
-          {railView === "rowhouses" ? <OldTownPicks iframeRef={iframeRef} /> : <section className="atlas-shell-quarter-view">
+          <section className="atlas-shell-quarter-view">
             <header className="atlas-shell-quarter-view-head">
-              <p className="register-eyebrow">Heritage · Bangkok</p>
+              <p className="register-eyebrow">Heritage · Kuala Lumpur</p>
               <h2 className="register-section-title atlas-shell-quarters-title">
                 {t("home_quarters_heading")}
               </h2>
@@ -108,7 +85,7 @@ export function HomepageClient({ quarters, initialQuarter }: Props) {
             <ol className="atlas-shell-quarter-chips">
             {quarters.map((q) => {
               const isActive = q.slug === activeSlug;
-              const tag = th ? AREA_TH[q.slug]?.tagline ?? q.tagline : q.tagline;
+              const tag = areaTag(locale, q.slug, q.tagline);
               return (
                 <li key={q.slug}>
                   <button
@@ -135,12 +112,12 @@ export function HomepageClient({ quarters, initialQuarter }: Props) {
                     <span className="atlas-shell-quarter-body">
                       <span className="atlas-shell-quarter-name">{q.name}</span>
                       {q.thai ? (
-                        <span className="atlas-shell-quarter-thai" lang="th">
+                        <span className="atlas-shell-quarter-thai" lang={locale === "zh" ? "zh" : "ms"}>
                           {q.thai}
                         </span>
                       ) : null}
                       {tag ? (
-                        <span className="atlas-shell-quarter-tag" lang={th ? "th" : undefined}>
+                        <span className="atlas-shell-quarter-tag" lang={locale === "en" ? undefined : locale}>
                           {tag}
                         </span>
                       ) : null}
@@ -150,7 +127,7 @@ export function HomepageClient({ quarters, initialQuarter }: Props) {
               );
             })}
             </ol>
-          </section>}
+          </section>
 
           <p className="register-eyebrow atlas-shell-quarters-after">{t("home_source_label")}</p>
           <p className="atlas-shell-side">
@@ -160,15 +137,11 @@ export function HomepageClient({ quarters, initialQuarter }: Props) {
           </p>
 
           <p className="atlas-shell-footnote">
-            This heritage 3D view is one of two BKKx systems — the operational
-            city twin lives separately at{" "}
-            <a href="https://atlas.nonarkara.org" target="_blank" rel="noreferrer">
-              atlas.nonarkara.org
-            </a>
-            . Data here: OpenStreetMap (ODbL), Fine Arts Department register
-            and BMA planning context. See{" "}
-            <Link href="/heritage#register">the register</Link> for source
-            notes.
+            This is the Kuala Lumpur twin — stacked iconic monuments, the National Heritage
+            lists pulled from Jabatan Warisan Negara, OSM rivers, an interpretive flood
+            corridor, and listing-based land bands. JPS zon banjir and NAPIC parcels are
+            catalogued, not ingested. See{" "}
+            <Link href="/heritage#register">the register</Link> for source notes.
           </p>
         </aside>
 
@@ -177,7 +150,7 @@ export function HomepageClient({ quarters, initialQuarter }: Props) {
             key={iframeKey}
             ref={iframeRef}
             src={initialSrc}
-            title="Bangkok 3D atlas — heritage view"
+            title="Kuala Lumpur 3D atlas — heritage view"
             loading="eager"
             allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             referrerPolicy="strict-origin-when-cross-origin"

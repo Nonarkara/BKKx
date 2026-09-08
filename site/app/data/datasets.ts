@@ -33,10 +33,10 @@ export type DatasetNote = {
 export const DATASETS: DatasetNote[] = [
   {
     file: "/heritage-register.json",
-    title: "The Bangkok heritage register",
-    what: "All 571 Fine Arts Department registered ancient monuments in Bangkok, each relocated to building precision where the published coordinate is too coarse — with the resolution method recorded per site (register coordinate, OSM name match, or honestly left unpinned).",
-    source: "Fine Arts Department, ข้อมูลบัญชีตำแหน่งโบราณสถาน (data.go.th/dataset/gis-finearts); OpenStreetMap for coordinate relocation.",
-    license: "CC BY (Fine Arts Department source); OSM-derived coordinates ODbL, © OpenStreetMap contributors.",
+    title: "The Kuala Lumpur heritage register",
+    what: "Twenty National Heritage and named OSM landmarks in WP Kuala Lumpur, each relocated to building precision where a name match exists — with the resolution method recorded per site (OSM way/node, fuzzy match, or honestly left unpinned).",
+    source: "Jabatan Warisan Negara Pengisytiharan Warisan Kebangsaan 2007/2009/2012; OpenStreetMap for coordinate relocation.",
+    license: "Official gazette lists are government publications; OSM-derived coordinates ODbL, © OpenStreetMap contributors.",
     generator: "scripts/build-heritage-register.py",
     usedBy: ["/heritage", "/areas/:slug", "/walks/:slug", "/atlas/:district"],
   },
@@ -200,9 +200,53 @@ export const DATASETS: DatasetNote[] = [
     license: "CC BY 4.0 (BKKx curation); each record's underlying citation as noted per feature.",
     usedBy: ["/atlas/historic-core"],
   },
+  {
+    file: "/data/klx-hero-monuments.geojson",
+    title: "KLX hero monuments (3D parts)",
+    what: "45 stacked schematic parts for Petronas twins, Menara 3 Petronas, Merdeka 118, Exchange 106, Menara KL, Masjid Negara, Sultan Abdul Samad, Masjid Jamek, Thean Hou, Parlimen, Tugu Negara and the Batu Caves Murugan statue. Official published envelopes; intermediate tapers labelled interpretive.",
+    source: "CTBUH, Menara KL, Tourism Malaysia, Jabatan Warisan Negara; OpenStreetMap way snapshot checked in beside the builder.",
+    license: "ODbL for OSM-derived footprints, © OpenStreetMap contributors; cited official documents for dimensions.",
+    generator: "site/scripts/build-klx-hero-monuments.py",
+    usedBy: ["/atlas/klcc", "/atlas/merdeka-core", "/atlas/klang-valley"],
+  },
+  {
+    file: "/data/klx-rivers.geojson",
+    title: "Klang and Gombak rivers",
+    what: "OpenStreetMap river lines for Sungai Klang, Sungai Gombak and named tributaries inside the atlas extent.",
+    source: "OpenStreetMap, snapshot retrieved 2026-09-08.",
+    license: "ODbL, © OpenStreetMap contributors.",
+    generator: "site/scripts/build-klx-hero-monuments.py",
+    usedBy: ["/atlas/:district"],
+  },
+  {
+    file: "/data/klx-flood-corridor.geojson",
+    title: "Interpretive flood corridor",
+    what: "90 m buffers around the OSM rivers. Labelled interpretive. Not JPS zon banjir and not a 2003 MyGDI flood polygon.",
+    source: "Derived from the OSM river lines in klx-rivers.geojson.",
+    license: "ODbL, © OpenStreetMap contributors. Geometry is labelled interpretation.",
+    generator: "site/scripts/build-klx-hero-monuments.py",
+    usedBy: ["/atlas/:district"],
+  },
+  {
+    file: "/data/klx-land-price.geojson",
+    title: "Listing land-price bands",
+    what: "Five district boxes carrying media and listing PSF bands, converted to RM/m² (RM/psf ÷ 0.092903). Appraised value is not market value; NAPIC PDFs are catalogued, not ingested.",
+    source: "Published listing/media bands for KLCC, Bukit Bintang, TRX and neighbouring districts as cited on each feature.",
+    license: "Figures quoted from the cited sources; boxes are schematic, not cadastral parcels.",
+    generator: "site/scripts/build-klx-hero-monuments.py",
+    usedBy: ["/atlas/:district"],
+  },
+  {
+    file: "/data/sources/klx-osm-way-snapshot.json",
+    title: "KLX OSM way snapshot",
+    what: "The checked-in OpenStreetMap way and node snapshot the KL hero-monument builder starts from — kept in the repo so the 3D parts are reproducible against a fixed input.",
+    source: "OpenStreetMap, retrieved 2026-09-08.",
+    license: "ODbL, © OpenStreetMap contributors.",
+    usedBy: ["/atlas/:district"],
+  },
 ];
 
 /** How to cite a dataset — one line, filled per file on the page. */
-export function citationFor(d: DatasetNote, host = "https://bkk.nonarkara.org"): string {
-  return `Arkara, N. (2026). ${d.title} [Data set]. BKKx. ${host}${d.file}`;
+export function citationFor(d: DatasetNote, host = "https://klx.nonarkara.org"): string {
+  return `Arkara, N. (2026). ${d.title} [Data set]. KLX. ${host}${d.file}`;
 }
