@@ -93,9 +93,8 @@ export default function WarRoom() {
           <p className="wr-eyebrow">BKKx · operational picture</p>
           <h1>War room</h1>
           <p className="wr-dek">
-            Everything the system can count, without a map underneath it. Static
-            layers are computed from the shipped data at build time; the two
-            live panels poll and report their own failures.
+            Counted corpus at build time; live panels poll and name their own
+            failures rather than inventing a zero.
           </p>
         </div>
         <BangkokClock buildIso={buildIso} />

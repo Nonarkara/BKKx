@@ -37,12 +37,14 @@ export function OldTownPicks({ iframeRef }: Props) {
 
   return (
     <section className="atlas-shell-oldtown" aria-label="Bangkok rowhouse atlas">
-      <p className="register-eyebrow">BKKx · Bangkok rowhouse atlas</p>
-      <h2 className="register-section-title atlas-shell-oldtown-title">Bangkok rowhouse atlas</h2>
+      <header className="atlas-shell-oldtown-heading">
+        <h2 className="register-section-title atlas-shell-oldtown-title">Bangkok rowhouse atlas</h2>
+        <strong>{OLDTOWN_SPOTS.length}</strong>
+      </header>
       <p className="atlas-shell-oldtown-lede">
         {th
-          ? "แผนที่วัฒนธรรมของผืนผ้าตึกแถวกรุงเทพฯ — คัดสรรโดยมือ ทุกจุดมีที่มา"
-          : `A sourced cultural map of Bangkok's continuous shophouse fabric — ${OLDTOWN_SPOTS.length} hand-curated clusters with typology, evidence status and explorer notes.`}
+          ? "แผนที่วัฒนธรรมของผืนผ้าตึกแถว — คัดสรรโดยมือ ทุกจุดมีที่มา"
+          : "Sourced fabric, one cluster per card. Click to fly the map."}
       </p>
       <ol className="atlas-shell-oldtown-cards">
         {OLDTOWN_SPOTS.map((spot) => {
