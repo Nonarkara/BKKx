@@ -18,6 +18,13 @@
 // PRIVACY. Nothing here contacts Google on page load. The rail shows a poster
 // image proxied through this site's own Worker, and the YouTube player is only
 // constructed after a viewer clicks — through youtube-nocookie.com.
+//
+// LIVENESS. Two independent sessions curated this list in parallel and it was
+// reconciled by hand on 2026-09-09 — every YouTube id was re-checked against
+// the oembed endpoint before being kept. Two entries from that merge were
+// dropped as dead (an earlier El Gaucho Soi 11 stream id, and a "Sukhumvit
+// Road unplaced" placeholder), and one duplicate (two different current ids
+// for the same Sathorn/Silom broadcast) was collapsed to one.
 
 export type Precision =
   /** Pinned to the camera's actual position. */
@@ -107,17 +114,76 @@ export const CURATED_CAMERAS: CuratedCamera[] = [
     sourceUrl: "https://www.youtube.com/live/Q71sLS8h9a4",
   },
   {
-    id: "yt-sukhumvit-soi-11",
+    id: "yt-jacks-bar-chao-phraya",
+    kind: "youtube",
+    videoId: "UdDpOaGviq4",
+    title: "Chao Phraya River · Jack's Bar · live camera stream",
+    place: "Jack's Bar, end of Soi Wat Suan Phlu off Charoen Krung, on the river just south of the Shangri-La",
+    district: "Bang Rak",
+    // The operator publishes a street address (62/1 Soi Wat Suan Phlu, Bang
+    // Rak); the camera looks out across the water, so this pins the terrace
+    // it stands on, not what it sees.
+    lat: 13.7192,
+    lon: 100.5132,
+    precision: "street",
+    locatedBy:
+      "the venue publishes its address at the river end of Soi Wat Suan Phlu, Bang Rak; pinned to that soi rather than to the framing, which faces across the Chao Phraya toward Thonburi",
+    sourceUrl: "https://www.youtube.com/watch?v=UdDpOaGviq4",
+  },
+  {
+    id: "yt-el-gaucho-soi-11",
     kind: "youtube",
     videoId: "UemFRPrl1hk",
     title: "El Gaucho · Soi 11 · Sukhumvit Road · live street webcam (4K)",
-    place: "Sukhumvit Soi 11, off Sukhumvit Road, Watthana",
+    place: "Sukhumvit Soi 11, off Sukhumvit Road near Nana",
     district: "Watthana",
+    // Same operator and the same reasoning as the Soi 19 camera above: the
+    // title names the soi, which is a 400 m lane, not a building. An earlier
+    // id for this same channel (GIky-GXIBVY) went dead when the broadcast
+    // restarted; this id was re-verified live via oembed on 2026-09-09.
     lat: 13.7434,
-    lon: 100.5566,
+    lon: 100.5556,
     precision: "street",
     locatedBy: "stream title names Sukhumvit Soi 11; placed at the soi, not the premises",
     sourceUrl: "https://www.youtube.com/live/UemFRPrl1hk",
+  },
+  {
+    id: "yt-soi-cowboy",
+    kind: "youtube",
+    videoId: "ISPQCuWssKA",
+    title: "Soi Cowboy · Bangkok · live",
+    place: "Soi Cowboy, the lane between Sukhumvit Soi 21 (Asok) and Soi 23",
+    district: "Watthana",
+    // Unusually good for a street precision: Soi Cowboy is a single
+    // ~150 m pedestrian lane, so naming it places the camera more tightly
+    // than most soi names do.
+    lat: 13.7373,
+    lon: 100.5606,
+    precision: "street",
+    locatedBy:
+      "stream title names Soi Cowboy, a single 150 m lane between Sukhumvit 21 and 23; placed at its midpoint",
+    sourceUrl: "https://www.youtube.com/watch?v=ISPQCuWssKA",
+  },
+  {
+    id: "yt-sathorn-silom",
+    kind: "youtube",
+    videoId: "CW4Js-oyc58",
+    title: "Sathorn Road · Silom · Bangkok livestream 24/7 (4K)",
+    place: "Sathorn Road at Silom — the business district, exact vantage not published",
+    district: "Bang Rak",
+    // District precision, not street. Sathorn Road runs about 3 km and forms
+    // the Bang Rak / Sathon boundary; naming it plus "Silom" narrows the
+    // camera to a neighbourhood, not to a block. Pinned near the
+    // Sathorn-Naradhiwas junction, the centre of the area both names share.
+    // A second id for what is almost certainly the same broadcast
+    // (542ZL88Wovs, same channel, same title) was found during the
+    // 2026-09-09 merge and dropped rather than listing one camera twice.
+    lat: 13.722,
+    lon: 100.529,
+    precision: "district",
+    locatedBy:
+      "stream title names Sathorn Road and Silom but no vantage point; Sathorn runs ~3 km, so this is recorded at district precision near the Sathorn-Naradhiwas junction rather than sharpened to a false address",
+    sourceUrl: "https://www.youtube.com/watch?v=CW4Js-oyc58",
   },
   {
     id: "yt-petchaburi-road",
@@ -134,19 +200,6 @@ export const CURATED_CAMERAS: CuratedCamera[] = [
     locatedBy:
       "YouTube oembed title is 'Petchaburi Road, Bangkok'; webcamhopper / webcamera24 place the same stream on the Pratunam stretch. Pinned to the named road, not a building.",
     sourceUrl: "https://www.youtube.com/live/a_bUVExv_Cg",
-  },
-  {
-    id: "yt-sathorn-silom",
-    kind: "youtube",
-    videoId: "542ZL88Wovs",
-    title: "Sathorn Road / Silom · live street webcam (4K)",
-    place: "Sathorn Road at Silom, Bang Rak",
-    district: "Bang Rak",
-    lat: 13.7286,
-    lon: 100.5341,
-    precision: "street",
-    locatedBy: "stream title names Sathorn Road and Silom; placed at the named corridor, not a premises",
-    sourceUrl: "https://www.youtube.com/live/542ZL88Wovs",
   },
   {
     id: "skyline-sukhumvit",

@@ -23,6 +23,8 @@
 //    from Worker env at request time. No key is imported, committed, or shipped
 //    to the browser, and the proxy routes never echo one back.
 
+import { PRESSURE_TOTAL } from "./shophouse-pressure.ts";
+
 export type TwinCategory =
   | "terrain"
   | "weather"
@@ -31,6 +33,7 @@ export type TwinCategory =
   | "places"
   | "mobility"
   | "hazard"
+  | "civic"
   | "imagery";
 
 export type Integration =
@@ -50,6 +53,15 @@ export type TwinSource = {
   /** The twin capability this unlocks — the reason it is on the list. */
   unlocks: string;
   licence: string;
+  /** Why the licence above has NOT been read from the publisher directly.
+   *
+   *  Absent means somebody opened the source at `url` and read its terms.
+   *  Present means the statement is second-hand, and it says what stopped
+   *  the check. A source carrying this may not be wired or made ready — the
+   *  test enforces that — because publishing a figure derived from data
+   *  whose terms nobody has read is the same class of mistake as publishing
+   *  a height nobody measured. */
+  licenceUnverified?: string;
   auth: "none" | "key" | "account";
   /** Can a browser call it directly? */
   browserReachable: boolean;
@@ -70,7 +82,7 @@ export const TWIN_SOURCES: TwinSource[] = [
     category: "terrain",
     integration: "researched",
     unlocks:
-      "The floor of a real flood model. FABDEM strips forest and building bias out of Copernicus GLO-30, and in published accuracy assessments over this exact region it ranked first among free global DEMs — ~1.95 m RMSE for the Bangkok area, best-in-class in urban terrain. With it, the flood-risk polygons stop being administrative shading and start being drainage: catchments, flow direction, ponding depth, and which of the 2,311 screened footprints sit in a hollow.",
+      `The floor of a real flood model. FABDEM strips forest and building bias out of Copernicus GLO-30, and in published accuracy assessments over this exact region it ranked first among free global DEMs — ~1.95 m RMSE for the Bangkok area, best-in-class in urban terrain. With it, the flood-risk polygons stop being administrative shading and start being drainage: catchments, flow direction, ponding depth, and which of the ${PRESSURE_TOTAL.toLocaleString("en-US")} screened footprints sit in a hollow.`,
     licence:
       "Free for non-commercial and academic use (CC BY-NC-SA 4.0). NOT open for commercial redistribution — the licence, not the download, is the constraint.",
     auth: "account",
@@ -316,6 +328,26 @@ export const TWIN_SOURCES: TwinSource[] = [
     url: "https://earthquake.usgs.gov/earthquakes/feed/",
   },
 
+  /* ------------------------------------------------------------- civic */
+  {
+    id: "traffy-fondue",
+    name: "Traffy Fondue citizen reports (Bangkok)",
+    provider: "NECTEC / BMA",
+    category: "civic",
+    integration: "researched",
+    unlocks:
+      "The only source on this list where the city reports on itself. Citizens file located complaints — road, footway, flooding, lighting, safety, cleanliness — and the twin can ask a question none of the other layers can: where does the fabric report itself failing, and does that coincide with the shophouse rows this project argues are under pressure? The figure to compute first is reports per hundred screened footprints per cluster, with the building-condition categories (collapse risk, unpermitted modification, fire) held apart from the rest, so a street with many potholes is not read as a street of failing buildings.",
+    licence:
+      "Published as open data by the BMA; the specific licence text has not been read by this project.",
+    licenceUnverified:
+      "data.bangkok.go.th and traffy.in.th are both blocked by this environment's egress proxy, so the dataset page, its licence field and the CSV schema were never opened. Two dataset ids appear in search results — `traffy-fondue` and `gad0001` — and a CSV resource is tagged; neither the column list nor the terms are established here. Open the dataset page, read the licence, and record the columns before anything is wired.",
+    auth: "none",
+    browserReachable: false,
+    caveat:
+      "Complaint counts measure who reports, not what is wrong. Districts with confident, connected, Thai-literate residents will out-report districts with worse problems, so the raw count is a map of reporting behaviour first and of the city second. Normalise by something — footprints, population, street length — and say which, or the layer will quietly rank neighbourhoods by privilege. The reports also carry photographs and free text from named citizens: aggregate before publishing, and never republish a report body.",
+    url: "https://data.bangkok.go.th/en/dataset/traffy-fondue",
+  },
+
   /* ----------------------------------------------------------- imagery */
   {
     id: "esa-worldcover",
@@ -353,6 +385,7 @@ export const CATEGORY_LABEL: Record<TwinCategory, string> = {
   places: "Places",
   mobility: "Mobility",
   hazard: "Hazard",
+  civic: "Civic reports",
   imagery: "Land cover",
 };
 

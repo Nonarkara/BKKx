@@ -169,7 +169,7 @@ def query_buildings(shards: list[str], corridors: list[dict]) -> list[tuple]:
         lngs = [point[0] for point in coordinates]
         lats = [point[1] for point in coordinates]
         latitude_padding = SEARCH_RADIUS_M / 110574
-        longitude_padding = SEARCH_RADIUS_M / (111320 * math.cos(math.radians(sum(lats) / len(lats))))
+        longitude_padding = SEARCH_RADIUS_M / (111320 * math.cos(math.radians(math.fsum(lats) / len(lats))))
         clauses.append(
             "(bbox.xmin <= {east} AND bbox.xmax >= {west} AND bbox.ymin <= {north} AND bbox.ymax >= {south})".format(
                 west=min(lngs) - longitude_padding,

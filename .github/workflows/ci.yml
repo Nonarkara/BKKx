@@ -27,6 +27,60 @@ jobs:
           cache-dependency-path: site/package-lock.json
       - run: npm ci
       - run: npm run build
+      # Every generated file is committed, and the build regenerates every
+      # one of them: the geojson flags, the evidence tally, the manifest. If
+      # a build changes a committed file, what is deployed is not what was
+      # reviewed. The hero geojson once drifted from its generator by one
+      # digit and nothing noticed (AUDIT-2026-09-06.md §2.5); this notices.
+      - name: a build leaves no generated file modified
+        run: git diff --exit-code --stat -- public/data app/data
       - run: npx tsc --noEmit
       - run: npm run lint
       - run: node --test tests/rendered-html.test.mjs
+      # The world-pipeline scripts are pure arithmetic with no heavy
+      # dependency, precisely so their geometry can be checked here rather
+      # than only on an operator's machine with amulet-core installed.
+      - name: world pipeline geometry
+        working-directory: .
+        run: |
+          python3 scripts/test-build-hero-monument-blocks.py
+          python3 scripts/test-build-rattanakosin-water-and-walls.py
+          python3 scripts/test-build-shophouse-fabric.py
+          python3 scripts/test-hide-under-heroes.py
+          python3 scripts/test-flag-candidates-over-detail.py
+          python3 scripts/test-mc-ground.py
+          # The independent check that no hero model stands inside a box the
+          # atlas still draws — re-derived from the files, not from the step.
+          python3 scripts/audit-hero-occlusion.py --verify
+          # The appliers' dry runs need neither amulet nor a world, so
+          # selection, dilation and reporting are all exercised here.
+          python3 scripts/apply-hero-monuments-to-world.py --dry-run
+          python3 scripts/apply-hero-monuments-to-world.py --dry-run --min-confidence official-envelope
+          python3 scripts/apply-shophouse-fabric-to-world.py --dry-run
+          python3 scripts/apply-shophouse-fabric-to-world.py --dry-run --min-confidence overture-storeys
+      # Everything above checks a plan. This builds a world, writes the plan
+      # into it, closes it, reopens it and reads the blocks back — the only
+      # step that knows whether the pipeline puts anything in a world at all.
+      # It never ran before: the appliers had never been executed against a
+      # world, here or anywhere (AUDIT-2026-09-06.md, disposition).
+      # amulet-core is the Minecraft save library; shapely is the moat
+      # geometry.
+      #
+      # PINNED TO 3.11 ON PURPOSE. amulet-core depends on amulet-rocksdb,
+      # which publishes a cp311 wheel and no cp312 one, so on the runner's
+      # default Python it tries to build RocksDB from source and fails. The
+      # Java/Anvil path these tests use never touches RocksDB — it is a
+      # transitive dependency for Bedrock saves — but pip resolves it anyway.
+      # Only this step moves; the geometry suites above stay on the runner's
+      # own Python, which is the version that caught the sum() difference in
+      # the first place, and math.fsum now makes the output agree on both.
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: world pipeline writes
+        working-directory: .
+        run: |
+          python3 -m pip install --quiet amulet-core==1.9.45 shapely
+          python3 -c "import sys, amulet, shapely; print('python', sys.version.split()[0], '· amulet ok')"
+          python3 scripts/test-apply-to-fixture-world.py
+          python3 scripts/test-apply-rattanakosin-to-world.py

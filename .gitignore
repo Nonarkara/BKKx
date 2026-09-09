@@ -34,3 +34,11 @@ public/diagrams/
 .env
 .env.*
 !.env.example
+
+# Python bytecode from the operator-runnable scripts
+__pycache__/
+*.pyc
+
+# Fixture worlds built by scripts/make-fixture-world.py. Small, but they are
+# generated: build one where you like, do not commit it.
+/worlds/fixture-*/

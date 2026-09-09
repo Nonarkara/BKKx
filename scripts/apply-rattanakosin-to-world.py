@@ -40,9 +40,13 @@ import json
 import sys
 from pathlib import Path
 
-# amulet-core is heavy; import only when needed
-import amulet
-from amulet.api.block import Block
+# amulet-core is imported inside the functions that write, not here. It was
+# at module scope, which meant scripts/test-apply-rattanakosin-to-world.py —
+# geometry tests that write nothing — could not run at all without it, on
+# this machine or in CI. The other two appliers already import it lazily.
+def _Block(*args):
+    from amulet.api.block import Block  # noqa: PLC0415
+    return Block(*args)
 
 import shapely
 from shapely.geometry import LineString, Polygon, MultiLineString
@@ -55,8 +59,14 @@ from shapely.ops import unary_union
 DEFAULTS = {
     "moat_buffer_m": 6.0,           # 12 m total channel width
     "river_buffer_m": 100.0,        # 200 m total channel width
-    "water_floor_y": 55,            # 8 m below sea level (Minecraft y=64)
-    "water_level_y": 63,            # water surface at y=64 (top of cell at y=63)
+    # The five heights below are stated against a ground plane of y=64 and
+    # re-based at run time onto the ground the world actually has — probed
+    # with scripts/mc_ground.py, the same way the block-plan appliers do.
+    # Arnis generates these worlds as superflats with their surface near
+    # y=−62, not at sea level (AUDIT-2026-09-06.md §4.1).
+    "ground_y": 64,                 # the frame the five heights are stated in
+    "water_floor_y": 55,            # 9 blocks below the ground plane
+    "water_level_y": 63,            # water surface one below the ground plane
     "fort_base_y": 56,              # fort base
     "fort_top_y": 72,               # 8 m tall fort
     "gate_y": 64,                   # gate marker on ground
@@ -216,9 +226,19 @@ def build_synthetic_moat(gates: dict, forts: dict, moat_width_m: float) -> Polyg
 
     Identify each gate's wall by its historical position:
     - North wall: Pratu Phi, Pratu Thep Ratcha, Pratu Phutthai Sawan (smallest z, 563)
-    - South wall: Pratu Ratcha Dindam (largest z, 1563)
+    - South wall: Pratu Ratcha Dindam (z=1563)
     - West wall: Pratu Tha Phra (1253), Pratu Chakkrawat (1523)
     - East wall: Pratu Suan Mali (2808), Pratu Damrong Sawan (2873), Pratu Suan Phu (2927)
+
+    HOW WRONG THIS IS, STATED. The wall of 1782 follows Khlong Rop Krung,
+    which curves; a rectangle cannot pass through nine points on a curve.
+    Four of the nine gates end up off this rectangle — Pratu Tha Phra by
+    100 m, because at z=1675 it lies 112 blocks south of the south wall this
+    rectangle is drawn through (Ratcha Dindam, z=1563; an earlier version of
+    this docstring called that gate the largest z, which the data does not
+    support). Use gates_off_moat() to get the current list rather than
+    trusting this paragraph, and prefer the OSM fragments: this path is the
+    fallback, behind --synthetic-moat, not the default.
 
     The 2 forts are at the corners (Pom Phra Sumen is the only
     structure north of the wall, so it sits at the NW corner inside
@@ -277,6 +297,25 @@ def build_synthetic_moat(gates: dict, forts: dict, moat_width_m: float) -> Polyg
     return moat
 
 
+def gates_off_moat(moat, gates: dict, tol: float = 1.5) -> list[tuple[str, float]]:
+    """The gates this moat does not pass through, with how far off each is.
+
+    The synthetic moat is a rectangle standing in for a curve, so some gates
+    are bound to miss it. That is acceptable; not saying so is not. The
+    applier prints this list, and the self-test pins it, so the size of the
+    approximation is a number somebody can see rather than a surprise on the
+    ground.
+    """
+    import shapely.geometry  # noqa: PLC0415
+
+    off = []
+    for name, g in gates.items():
+        d = moat.boundary.distance(shapely.geometry.Point(g["mcx"], g["mcz"]))
+        if d >= tol:
+            off.append((name, round(d, 1)))
+    return sorted(off, key=lambda kv: -kv[1])
+
+
 # ---------------------------------------------------------------------------
 # Block placement
 # ---------------------------------------------------------------------------
@@ -292,7 +331,7 @@ def _get_block_safe(level, x: int, y: int, z: int) -> str:
         return "missing"
 
 
-def _set_block_safe(level, x: int, y: int, z: int, block: Block, dry_run: bool) -> bool:
+def _set_block_safe(level, x: int, y: int, z: int, block, dry_run: bool) -> bool:
     """Set a block, returning False if the chunk is absent or the write fails.
 
     Uses set_version_block with Java 1.21.4 — the world version. The
@@ -311,7 +350,7 @@ def _set_block_safe(level, x: int, y: int, z: int, block: Block, dry_run: bool) 
 
 
 def place_water(
-    level, polygon: Polygon, floor_y: int, surface_y: int, moat_block: Block,
+    level, polygon: Polygon, floor_y: int, surface_y: int, moat_block,
     dig_depth: int, dry_run: bool,
 ):
     """Fill a polygon's cells with water blocks between floor_y and surface_y.
@@ -324,7 +363,7 @@ def place_water(
     Idempotent: skips cells that are already non-air (won't overwrite
     buildings) and skips chunks that don't exist.
     """
-    air = Block("minecraft", "air")
+    air = _Block("minecraft", "air")
     minx, minz, maxx, maxz = polygon.bounds
     written = 0
     skipped = 0
@@ -356,7 +395,7 @@ def place_water(
     return written, skipped, dug
 
 
-def place_fort(level, polygon: Polygon, base_y: int, top_y: int, fort_block: Block, dry_run: bool):
+def place_fort(level, polygon: Polygon, base_y: int, top_y: int, fort_block, dry_run: bool):
     """Build the fort walls by extruding the OSM polygon upward.
 
     Only writes along the polygon boundary (1-block-thick wall).
@@ -383,12 +422,12 @@ def place_fort(level, polygon: Polygon, base_y: int, top_y: int, fort_block: Blo
     return written, skipped
 
 
-def place_gate(level, mcx: int, mcz: int, y: int, gate_block: Block, dry_run: bool):
+def place_gate(level, mcx: int, mcz: int, y: int, gate_block, dry_run: bool):
     """A 1x1x3 gate marker: gate_block at y, glowstone above for visibility."""
     written = 0
     for dy in range(0, 3):
         yi = y + dy
-        block = gate_block if dy == 0 else Block(*DEFAULTS["marker_block"])
+        block = gate_block if dy == 0 else _Block(*DEFAULTS["marker_block"])
         if _set_block_safe(level, mcx, yi, mcz, block, dry_run):
             written += 1
     return written
@@ -412,6 +451,8 @@ def main() -> int:
     ap.add_argument("--skip-moat", action="store_true", help="Skip moat placement (river only)")
     ap.add_argument("--dig-depth", type=int, default=1, help="How many blocks to dig down before placing water (default 1 for a 1m-deep moat)")
     ap.add_argument("--synthetic-moat", action="store_true", help="Build rectangular moat from forts + gates (default: use OSM fragments)")
+    ap.add_argument("--ground-y", type=int, default=None, help="Build on this ground plane instead of probing the world for it")
+    ap.add_argument("--no-probe", action="store_true", help="Trust the y=64 frame the heights are stated in instead of measuring the world")
     args = ap.parse_args()
 
     print("Rattanakosin Phase 1.5 — apply to world")
@@ -439,9 +480,11 @@ def main() -> int:
     print(f"  forts: {len(forts)}")
     print()
 
-    moat_block = Block(*DEFAULTS["moat_block"])
-    fort_block = Block(*DEFAULTS["fort_block"])
-    gate_block = Block(*DEFAULTS["gate_block"])
+    moat_block = _Block(*DEFAULTS["moat_block"])
+    fort_block = _Block(*DEFAULTS["fort_block"])
+    gate_block = _Block(*DEFAULTS["gate_block"])
+
+    import amulet  # noqa: PLC0415 — lazy, so the geometry tests need no amulet
 
     print("Loading world...")
     if args.world.endswith(".zip"):
@@ -456,6 +499,25 @@ def main() -> int:
     print(f"  loaded: {level}")
     print()
 
+    # Measure the ground and re-base every height onto it before placing
+    # anything. Reads only, so --dry-run probes too.
+    import importlib.util  # noqa: PLC0415
+    _spec = importlib.util.spec_from_file_location("mc_ground", Path(__file__).resolve().parent / "mc_ground.py")
+    mc_ground = importlib.util.module_from_spec(_spec)
+    _spec.loader.exec_module(mc_ground)
+    register = json.loads((Path(__file__).resolve().parents[1] / "site/public/heritage-register.json").read_text())
+    blocks = register["worlds"]["bangkok-historic-core-java"]["blocks"]
+    ground, how = mc_ground.resolve_ground(
+        DEFAULTS["ground_y"], level, args.ground_y, not args.no_probe,
+        mc_ground.sample_columns(blocks["maxX"], blocks["maxZ"]),
+    )
+    delta = ground - DEFAULTS["ground_y"]
+    Y = {k: DEFAULTS[k] + delta for k in ("water_floor_y", "water_level_y", "fort_base_y", "fort_top_y", "gate_y")}
+    print(f"  ground: {how}")
+    print(f"  heights re-based by {delta:+d}: water {Y['water_floor_y']}..{Y['water_level_y']}, "
+          f"forts {Y['fort_base_y']}..{Y['fort_top_y']}, gates {Y['gate_y']}")
+    print()
+
     total_written = 0
     total_skipped = 0
 
@@ -467,6 +529,12 @@ def main() -> int:
                 moat_union = build_synthetic_moat(gates, forts, args.moat_buffer * 2)
                 if moat_union is not None:
                     print(f"  bbox: {moat_union.bounds}")
+                    off = gates_off_moat(moat_union, gates)
+                    if off:
+                        print(f"  the rectangle misses {len(off)} of {len(gates)} gates — "
+                              "the wall of 1782 follows a curve and this does not:")
+                        for name, d in off:
+                            print(f"    {name:<24} {d:>6.1f} m off the moat edge")
             else:
                 print(f"[1/3] Moat — connecting {len(moat_lines)} fragments, buffering by {args.moat_buffer} m (dig {args.dig_depth} block(s) deep)...")
                 moat_chains = connect_fragments(moat_lines, snap_m=500.0)
@@ -476,7 +544,7 @@ def main() -> int:
             if moat_union is not None:
                 w, s, d = place_water(
                     level, moat_union,
-                    DEFAULTS["water_floor_y"], DEFAULTS["water_level_y"],
+                    Y["water_floor_y"], Y["water_level_y"],
                     moat_block, args.dig_depth, args.dry_run,
                 )
                 print(f"  moat: {w} water blocks, {d} ground blocks dug, {s} skipped")
@@ -493,7 +561,7 @@ def main() -> int:
             if river_union is not None:
                 w, s, d = place_water(
                     level, river_union,
-                    DEFAULTS["water_floor_y"], DEFAULTS["water_level_y"],
+                    Y["water_floor_y"], Y["water_level_y"],
                     moat_block, args.dig_depth, args.dry_run,
                 )
                 print(f"  river: {w} water blocks, {d} ground blocks dug, {s} skipped")
@@ -505,7 +573,7 @@ def main() -> int:
         print(f"[3a/3] Gates — placing {len(gates)} markers...")
         for name, g in gates.items():
             mcx, mcz = g["mcx"], g["mcz"]
-            w = place_gate(level, mcx, mcz, DEFAULTS["gate_y"], gate_block, args.dry_run)
+            w = place_gate(level, mcx, mcz, Y["gate_y"], gate_block, args.dry_run)
             total_written += w
             print(f"  ✓ {name:25s} block ({mcx}, {mcz})  {w} blocks")
         print()
@@ -521,7 +589,7 @@ def main() -> int:
                 poly = poly.buffer(0)
             w, s = place_fort(
                 level, poly,
-                DEFAULTS["fort_base_y"], DEFAULTS["fort_top_y"],
+                Y["fort_base_y"], Y["fort_top_y"],
                 fort_block, args.dry_run,
             )
             total_written += w
