@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import type { Camera, RainPayload, WeatherPayload, FirePayload } from "../../worker/live";
+import type { Camera, CctvHealthPayload, RainPayload, WeatherPayload, FirePayload } from "../../worker/live";
 import {
   CURATED_CAMERAS,
   CAMERA_TALLY,
@@ -18,7 +18,14 @@ import { SuggestLocation } from "./SuggestLocation";
    off than one with no panel at all. */
 
 type Envelope<T> = { ok: boolean; fetchedAt: string; source: string; data?: T; reason?: string };
-type CctvPayload = { cameras: Camera[]; cameraCount: number; configured: boolean };
+type CctvPayload = {
+  cameras: Camera[];
+  cameraCount: number;
+  stillCount: number;
+  configured: boolean;
+  feed: string;
+  partialReason: string | null;
+};
 
 const RAIN_POLL_MS = 300_000; // matches the edge TTL — polling faster only hits cache
 const CAM_REFRESH_MS = 30_000;
@@ -489,33 +496,39 @@ export function CctvRail() {
   const [state, setState] = useState<{ phase: "loading" | "ok" | "down"; env?: Envelope<CctvPayload> }>({
     phase: "loading",
   });
+  const [health, setHealth] = useState<Envelope<CctvHealthPayload> | null>(null);
   const [nonce, setNonce] = useState(0);
   const railRef = useRef<HTMLDivElement | null>(null);
 
-  useEffect(() => {
-    let live = true;
-    void (async () => {
-      try {
-        const res = await fetch("/api/live/cctv", { headers: { accept: "application/json" } });
-        const env = (await res.json()) as Envelope<CctvPayload>;
-        if (live) setState({ phase: env.ok ? "ok" : "down", env });
-      } catch (err) {
-        if (live)
-          setState({
-            phase: "down",
-            env: {
-              ok: false,
-              fetchedAt: new Date().toISOString(),
-              source: "/api/live/cctv",
-              reason: (err as Error).message,
-            },
-          });
-      }
-    })();
-    return () => {
-      live = false;
-    };
+  const load = useCallback(async () => {
+    try {
+      const res = await fetch("/api/live/cctv", { headers: { accept: "application/json" } });
+      const env = (await res.json()) as Envelope<CctvPayload>;
+      setState({ phase: env.ok ? "ok" : "down", env });
+    } catch (err) {
+      setState({
+        phase: "down",
+        env: {
+          ok: false,
+          fetchedAt: new Date().toISOString(),
+          source: "/api/live/cctv",
+          reason: (err as Error).message,
+        },
+      });
+    }
+    try {
+      const res = await fetch("/api/live/cctv-health", { headers: { accept: "application/json" } });
+      const env = (await res.json()) as Envelope<CctvHealthPayload>;
+      setHealth(env);
+    } catch {
+      /* health is optional — the rail still stands without it */
+    }
   }, []);
+
+  useEffect(() => {
+    const first = setTimeout(() => void load(), 0);
+    return () => clearTimeout(first);
+  }, [load]);
 
   // Snapshot cache-buster for agency stills. Paused when the tab is hidden
   // so a backgrounded war room is not quietly pulling images all afternoon.
@@ -527,7 +540,10 @@ export function CctvRail() {
   }, []);
 
   const fetched = state.env?.data?.cameras ?? [];
-  const total = CURATED_CAMERAS.length + fetched.length;
+  const stills = fetched.filter((c) => c.still && c.snapshotUrl);
+  const listed = fetched.filter((c) => !c.still);
+  const railCount = CURATED_CAMERAS.length + stills.length;
+  const h = health?.ok ? health.data : null;
 
   const scroll = (dir: -1 | 1) => {
     railRef.current?.scrollBy({ left: dir * 320, behavior: "smooth" });
@@ -537,16 +553,16 @@ export function CctvRail() {
     <section className="wr-panel wr-cctv" aria-labelledby="wr-cctv-h">
       <header className="wr-panel-head">
         <h2 id="wr-cctv-h">Cameras</h2>
-        <span className={`wr-state is-${total ? "ok" : "idle"}`}>
+        <span className={`wr-state is-${railCount ? "ok" : "idle"}`}>
           <i aria-hidden="true" />
-          {total} live
+          {railCount} on the rail
         </span>
         {CAMERA_TALLY.unconfirmed > 0 ? (
           <span className="wr-panel-meta">
             {CAMERA_TALLY.located} located · {CAMERA_TALLY.unconfirmed} awaiting a location
           </span>
         ) : null}
-        {total > 3 ? (
+        {railCount > 3 ? (
           <span className="wr-rail-nav">
             <button type="button" className="wr-btn is-icon" onClick={() => scroll(-1)} aria-label="Scroll cameras left">
               ←
@@ -562,41 +578,92 @@ export function CctvRail() {
         {CURATED_CAMERAS.map((c) => (
           <CuratedTile key={c.id} cam={c} />
         ))}
-        {fetched.map((c) => (
-          <figure key={c.id} className="wr-cam">
-            {c.snapshotUrl ? (
-              /* eslint-disable-next-line @next/next/no-img-element */
+        {stills.map((c) => {
+          const snap = c.snapshotUrl ?? "";
+          const href = c.streamUrl ?? c.pageUrl;
+          return (
+            <figure key={c.id} className="wr-cam">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
-                src={`${c.snapshotUrl}${c.snapshotUrl.includes("?") ? "&" : "?"}_=${nonce}`}
-                alt={`Live view: ${c.name}`}
+                src={`${snap}${snap.includes("?") ? "&" : "?"}_=${nonce}`}
+                alt={`Agency still: ${c.name}`}
                 loading="lazy"
                 onError={(e) => {
                   (e.currentTarget as HTMLImageElement).classList.add("is-broken");
                 }}
               />
-            ) : (
-              <div className="wr-cam-nosnap">
-                <span>no snapshot endpoint</span>
-              </div>
-            )}
-            <figcaption>
-              <b>{c.name}</b>
-              {c.district ? <small>{c.district}</small> : null}
-              {c.streamUrl || c.pageUrl ? (
-                <a href={(c.streamUrl ?? c.pageUrl)!} target="_blank" rel="noreferrer">
-                  {c.streamUrl ? "live stream ↗" : "open ↗"}
-                </a>
-              ) : null}
-            </figcaption>
-          </figure>
-        ))}
+              <figcaption>
+                <b>{c.name}</b>
+                <small>{c.attribution ?? "iTIC"}</small>
+                {href ? (
+                  <a href={href} target="_blank" rel="noreferrer">
+                    {c.streamUrl ? "live stream ↗" : "open ↗"}
+                  </a>
+                ) : null}
+              </figcaption>
+            </figure>
+          );
+        })}
       </div>
 
+      {h ? (
+        <p className="wr-panel-note wr-cctv-health">
+          Health: {h.curatedOk}/{h.curatedN} public streams reachable
+          {h.agencyN > 0 ? ` · ${h.agencyOk}/${h.agencyN} iTIC stills returning a real JPEG` : ""}
+          {health?.fetchedAt
+            ? ` · probed ${new Date(health.fetchedAt).toLocaleTimeString("en-GB", { timeZone: "Asia/Bangkok" })} ICT`
+            : ""}
+          .
+        </p>
+      ) : null}
+
+      {state.env?.data?.partialReason ? (
+        <p className="wr-panel-note">{state.env.data.partialReason}</p>
+      ) : null}
+
+      {state.phase === "down" ? (
+        <div className="wr-degraded">
+          <p className="wr-degraded-reason">{state.env?.reason ?? "Agency camera feed unavailable."}</p>
+          <button type="button" className="wr-btn" onClick={() => void load()}>
+            Retry now
+          </button>
+        </div>
+      ) : null}
+
+      {fetched.length > 0 ? (
+        <details className="wr-cctv-dir">
+          <summary>
+            iTIC / Longdo directory · {stills.length} working stills · {listed.length} listed without a
+            usable snapshot
+          </summary>
+          <p className="wr-panel-note">
+            Public feed at camera.longdo.com. Most snapshot URLs in that feed
+            are placeholders (<code>camid=X.X.X.X:YYYY</code>, a 43-byte ASCII
+            body). Those stay in this list and off the rail.
+          </p>
+          <ul className="wr-cctv-dir-list">
+            {fetched.map((c) => (
+              <li key={c.id}>
+                <b>{c.name}</b>
+                <small>
+                  {c.attribution ?? "iTIC"}
+                  {c.lat !== null && c.lon !== null ? ` · ${c.lat.toFixed(4)}, ${c.lon.toFixed(4)}` : ""}
+                </small>
+                <span className={`wr-cctv-flag is-${c.still ? "still" : "listed"}`}>
+                  {c.still ? "still" : "listed"}
+                </span>
+              </li>
+            ))}
+          </ul>
+        </details>
+      ) : null}
+
       <p className="wr-panel-note">
-        Streams play on demand: the rail shows a still proxied through this
-        site, and no request reaches Google until you press play — the same
-        rule the weather feed follows. Add agency cameras by setting{" "}
-        <code>CCTV_SOURCE_URL</code> on the Worker; they appear beside these.
+        Public streams play on demand: the rail shows a still proxied through
+        this site, and no request reaches Google until you press play. Agency
+        stills come from the public iTIC / Longdo RSS — only cameras whose
+        snapshot URL returns a real JPEG are tiled. Extra registries can still
+        be merged via <code>CCTV_SOURCE_URL</code>.
       </p>
     </section>
   );

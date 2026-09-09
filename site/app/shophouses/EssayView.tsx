@@ -46,7 +46,7 @@ export function EssayView() {
         </Link>
         <nav aria-label="Essay">
           <a href="#essay">Essay</a>
-          <a href="#research">Long read</a>
+          <a href="#research">Notes</a>
           <Link href="/shophouses/bible">The Bible</Link>
           <Link href="/shophouses/global">Global</Link>
           <Link href="/shophouses/research">Sources</Link>
@@ -211,9 +211,9 @@ export function EssayView() {
 
       <details className="sh-research-companion" id="research">
         <summary>
-          <span>Full research companion</span>
-          <strong>The argument, measured drawings, studio evidence and {FOOTNOTES.length} notes</strong>
-          <small>Open the long read ↓</small>
+          <span>Notes</span>
+          <strong>{FOOTNOTES.length} Chicago-style footnotes for the essay above</strong>
+          <small>Open the notes ↓</small>
         </summary>
         <section className="sh-sections sh-notes-wrap">
         <div className="sh-notes">

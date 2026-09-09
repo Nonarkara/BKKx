@@ -19,10 +19,7 @@ import type { CuratedCamera } from "../data/cctv-cameras";
  * slippy map, one click to drop a marker, and two outputs — a copyable
  * suggestion and a prefilled GitHub issue — neither of which writes
  * anything. A human still reviews and commits, exactly like every other
- * location in this file. Turning "someone who notices will let me know"
- * into a two-click action, without weakening the rule that got the
- * placeholder markers here in the first place: an unreviewed guess must
- * never become a confirmed location.
+ * location in this file. Used for the remaining placeholder skyline feeds.
  */
 
 const STYLE = "https://tiles.openfreemap.org/styles/dark"; // matches AtlasView's OPENFREEMAP_DARK_STYLE

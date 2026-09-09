@@ -8,6 +8,8 @@ import {
   handleLiveWeather,
   handleLiveLongdo,
   handleCameraPoster,
+  handleCameraStill,
+  handleCctvHealth,
   handleLiveFires,
 } from "./live";
 
@@ -79,6 +81,14 @@ const worker = {
     // contacted until a viewer presses play. See worker/live.ts.
     if (url.pathname === "/api/live/camera-poster" && request.method === "GET") {
       return handleCameraPoster(url.searchParams.get("v"));
+    }
+
+    if (url.pathname === "/api/live/camera-still" && request.method === "GET") {
+      return handleCameraStill(url.searchParams.get("u"));
+    }
+
+    if (url.pathname === "/api/live/cctv-health" && request.method === "GET") {
+      return handleCctvHealth();
     }
 
     if (url.pathname === "/api/live/fires" && request.method === "GET") {

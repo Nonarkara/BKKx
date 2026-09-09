@@ -32,6 +32,14 @@ export const RAIL: Record<string, RailItem[]> = {
     },
   ],
 
+  "why-the-bastards-work": [
+    {
+      kind: "fact",
+      text: "A bastard has no pedigree and no design theory — and turns out to be more inventive than the legitimate children. The same pattern shows up in policy: the thing locals rigged up for themselves outlasts the procured platform.",
+      source: "Chatpong Chuenrudeemol, Bastard Architecture; this essay",
+    },
+  ],
+
   "the-arithmetic-that-eats-a-street": [
     {
       kind: "photo",
@@ -78,6 +86,19 @@ export const RAIL: Record<string, RailItem[]> = {
       kind: "fact",
       text: "Removing a reinforced-concrete stair is legally a demolition, not a modification.",
       source: "Ministerial Regulation No. 11 B.E. 2528",
+    },
+  ],
+
+  "what-i-actually-cannot-tell-you": [
+    {
+      kind: "fact",
+      text: "There is no embodied-carbon study of the Bangkok shophouse. Every coefficient on this page is imported. Anyone who quotes a Bangkok number to two significant figures is guessing.",
+      source: "This essay; no Thai LCA of the type is in the bibliography",
+    },
+    {
+      kind: "fact",
+      text: "Gensler puts conversion around 30% cheaper than new-build. CBRE, a year later, puts it often more expensive. Both stay on the page because it depends on the building.",
+      source: "Gensler (2023); CBRE (2024) — see the notes",
     },
   ],
 
@@ -200,11 +221,24 @@ export const RAIL: Record<string, RailItem[]> = {
     },
   ],
 
+  "the-short-version": [
+    {
+      kind: "fact",
+      text: "On a great many plots, reuse is not the sentimental choice. It is the only lawful one: a demolished building cannot be rebuilt to the footprint it had.",
+      source: "Ministerial Regulation No. 55 B.E. 2543, ข้อ 41",
+    },
+    {
+      kind: "fact",
+      text: "The thing actually blocking reuse is not money. It is a stair, and a 1985 definition that calls moving it a demolition.",
+      source: "Ministerial Regulation No. 11 B.E. 2528",
+    },
+  ],
+
   "what-i-still-walk-to": [
     {
-      kind: "photo",
-      file: "/shophouses/photos/img-20251214-180905405.jpg",
-      caption: "The old town, most weeks. Less research than habit.",
+      kind: "fact",
+      text: "The author still walks the old town most weeks — temples, food stalls, cafés, bookshops, the same loop. After four decades that is less research than habit.",
+      source: "This essay",
     },
   ],
 };

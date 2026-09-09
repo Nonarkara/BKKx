@@ -1,32 +1,23 @@
 // Curated live cameras for the war room rail.
 //
 // These are hand-entered public live streams, as distinct from the cameras
-// that arrive at runtime from CCTV_SOURCE_URL. Both feed the same rail.
+// that arrive at runtime from the public Longdo / iTIC feed. Both feed the
+// same rail.
 //
 // LOCATION DISCIPLINE. This file follows the same rule as the heritage
 // register: a location is recorded at the precision actually known, with the
-// method that established it. Four of the five cameras here carry real
-// evidence (a stream title naming a soi, an operator's own listing) and are
-// placed at that evidence's precision — never sharpened to a false
-// exactness.
+// method that established it. Never sharpened to a false exactness.
 //
-// Three streams arrived with no identifying evidence at all. Per an explicit
-// operator decision (2026-08-30), those are not left pinless: each gets a
-// `placeholder` marker — a shared, clearly-nominal Bangkok reference point,
-// not a claim about where the camera actually is — so the tile has
-// *somewhere* to sit while someone who recognises the footage confirms it.
+// Two streams still have no identifying evidence beyond a city-wide title.
+// Per an explicit operator decision (2026-08-30), those are not left pinless:
+// each gets a `placeholder` marker — a shared, clearly-nominal Bangkok
+// reference point, not a claim about where the camera actually is.
 // `place` stays null for a placeholder, so the tile still reads "Location
-// not confirmed"; only the coordinate exists, as a stand-in. A true
-// `unconfirmed` entry (no marker at all) remains available for a future
-// camera with neither evidence nor an operator instruction to place it
-// anyway.
+// not confirmed"; only the coordinate exists, as a stand-in.
 //
 // PRIVACY. Nothing here contacts Google on page load. The rail shows a poster
 // image proxied through this site's own Worker, and the YouTube player is only
-// constructed after a viewer clicks — through youtube-nocookie.com. That is
-// the same reasoning applied to the weather feed: this project does not
-// collect visitor IPs, so it should not silently hand them to a third party
-// either. It also means four live players are never decoded at once.
+// constructed after a viewer clicks — through youtube-nocookie.com.
 
 export type Precision =
   /** Pinned to the camera's actual position. */
@@ -81,8 +72,8 @@ export type CuratedCamera = {
 // the same coordinate the weather feed uses for a citywide reading
 // (worker/live.ts BANGKOK). Reusing an already-documented generic point
 // rather than inventing a new one keeps the "this is not real evidence"
-// property visible: three cameras sharing one coordinate cannot be
-// mistaken for three confirmed, distinct locations.
+// property visible: two cameras sharing one coordinate cannot be
+// mistaken for two confirmed, distinct locations.
 const PLACEHOLDER_MARKER = { lat: 13.7563, lon: 100.5018 };
 
 export const CURATED_CAMERAS: CuratedCamera[] = [
@@ -109,9 +100,6 @@ export const CURATED_CAMERAS: CuratedCamera[] = [
     title: "El Gaucho · Soi 19 · Sukhumvit Road · live street webcam (4K)",
     place: "Sukhumvit Soi 19, off Sukhumvit Road near Asok",
     district: "Watthana",
-    // Street precision: the stream names the soi, which places it on a
-    // 300 m stretch, not on a building. Recorded at that precision rather
-    // than sharpened to a false exactness.
     lat: 13.7385,
     lon: 100.56,
     precision: "street",
@@ -119,45 +107,87 @@ export const CURATED_CAMERAS: CuratedCamera[] = [
     sourceUrl: "https://www.youtube.com/live/Q71sLS8h9a4",
   },
   {
-    id: "yt-unconfirmed-a_bUVExv_Cg",
+    id: "yt-sukhumvit-soi-11",
+    kind: "youtube",
+    videoId: "UemFRPrl1hk",
+    title: "El Gaucho · Soi 11 · Sukhumvit Road · live street webcam (4K)",
+    place: "Sukhumvit Soi 11, off Sukhumvit Road, Watthana",
+    district: "Watthana",
+    lat: 13.7434,
+    lon: 100.5566,
+    precision: "street",
+    locatedBy: "stream title names Sukhumvit Soi 11; placed at the soi, not the premises",
+    sourceUrl: "https://www.youtube.com/live/UemFRPrl1hk",
+  },
+  {
+    id: "yt-petchaburi-road",
     kind: "youtube",
     videoId: "a_bUVExv_Cg",
-    title: "Live stream — location not yet confirmed",
-    place: null,
-    district: null,
-    lat: PLACEHOLDER_MARKER.lat,
-    lon: PLACEHOLDER_MARKER.lon,
-    precision: "placeholder",
+    title: "Petchaburi Road, Bangkok · live traffic webcam",
+    place: "Phetchaburi Road, Pratunam stretch — near Platinum Fashion Mall",
+    district: "Ratchathewi",
+    // Stream title names the road; several public aggregators independently
+    // describe the Pratunam / Platinum stretch. Street, not a premises.
+    lat: 13.7499,
+    lon: 100.5557,
+    precision: "street",
     locatedBy:
-      "no evidence of the real location; pinned at the shared placeholder marker per an explicit operator decision (2026-08-30) rather than left without a coordinate. supplied as a live camera; the stream's own title could not be read from the build environment (youtube.com is blocked by egress policy) and it is not indexed by search. Plays correctly; awaiting a location from the operator.",
+      "YouTube oembed title is 'Petchaburi Road, Bangkok'; webcamhopper / webcamera24 place the same stream on the Pratunam stretch. Pinned to the named road, not a building.",
     sourceUrl: "https://www.youtube.com/live/a_bUVExv_Cg",
   },
   {
-    id: "yt-unconfirmed-4mfkil3LzKg",
+    id: "yt-sathorn-silom",
+    kind: "youtube",
+    videoId: "542ZL88Wovs",
+    title: "Sathorn Road / Silom · live street webcam (4K)",
+    place: "Sathorn Road at Silom, Bang Rak",
+    district: "Bang Rak",
+    lat: 13.7286,
+    lon: 100.5341,
+    precision: "street",
+    locatedBy: "stream title names Sathorn Road and Silom; placed at the named corridor, not a premises",
+    sourceUrl: "https://www.youtube.com/live/542ZL88Wovs",
+  },
+  {
+    id: "skyline-sukhumvit",
+    kind: "link",
+    videoId: "",
+    title: "Sukhumvit Road from the Landmark Bangkok (SkylineWebcams)",
+    place: "The Landmark Bangkok, Sukhumvit Road near BTS Nana",
+    district: "Watthana",
+    lat: 13.7407,
+    lon: 100.5554,
+    precision: "street",
+    locatedBy:
+      "SkylineWebcams publishes this as Sukhumvit Road, Bangkok; third-party listings identify the mount as the Landmark Hotel near BTS Nana. Pinned to the hotel, not the pan.",
+    sourceUrl: "https://www.skylinewebcams.com/en/webcam/thailand/central-thailand/bangkok/sukhumvit-road.html",
+  },
+  {
+    id: "yt-bangkok-360-a",
     kind: "youtube",
     videoId: "4mfkil3LzKg",
-    title: "Live stream — location not yet confirmed",
+    title: "Bangkok Day & Sunset · Skyline Webcam · Bangkok 360",
     place: null,
     district: null,
     lat: PLACEHOLDER_MARKER.lat,
     lon: PLACEHOLDER_MARKER.lon,
     precision: "placeholder",
     locatedBy:
-      "no evidence of the real location; pinned at the shared placeholder marker per an explicit operator decision (2026-08-30) rather than left without a coordinate. supplied as a live camera; title unreadable from this environment and not indexed. Plays correctly; awaiting a location from the operator.",
+      "oembed title is a citywide skyline; no building or soi is named. Shared placeholder marker pending a confirmed mount.",
     sourceUrl: "https://www.youtube.com/live/4mfkil3LzKg",
   },
   {
-    id: "yt-unconfirmed-pP98CQP1dg0",
+    id: "yt-bangkok-360-b",
     kind: "youtube",
     videoId: "pP98CQP1dg0",
-    title: "Live stream — location not yet confirmed",
+    title: "Bangkok Day & Sunset · Skyline Webcam · Bangkok 360 (second feed)",
     place: null,
     district: null,
     lat: PLACEHOLDER_MARKER.lat,
     lon: PLACEHOLDER_MARKER.lon,
     precision: "placeholder",
     locatedBy:
-      "no evidence of the real location; pinned at the shared placeholder marker per an explicit operator decision (2026-08-30) rather than left without a coordinate. supplied as a live camera; title unreadable from this environment and not indexed. Plays correctly; awaiting a location from the operator.",
+      "oembed title matches the other Bangkok 360 feed; no building or soi is named. Shared placeholder marker pending a confirmed mount.",
     sourceUrl: "https://www.youtube.com/live/pP98CQP1dg0",
   },
 ];

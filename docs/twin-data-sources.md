@@ -114,6 +114,14 @@ confidently wrong, and a silent merge destroys the audit trail. (BKKx keeps
 this in a per-site `locatedBy` field: `fine-arts`, `osm:<id>:<method>`, or
 `unlocated`.)
 
+The **camera list does not need a Longdo key**. `https://camera.longdo.com/feed/`
+is a public RSS of iTIC and Department of Highways cameras (title, lat/lon,
+snapshot, HLS). Most snapshot URLs are placeholders (`camid=X.X.X.X:YYYY`).
+The war room tiles only the stills that return a real JPEG and keeps the
+rest in a directory. `/api/live/cctv` is that feed, filtered to the Bangkok
+box; `/api/live/cctv-health` probes curated YouTube/EarthCam streams and
+the working agency stills.
+
 ---
 
 ## 3. Cameras: the cost trap

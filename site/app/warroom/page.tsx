@@ -23,9 +23,10 @@ import {
 /* The war room — the analytics surface that needs no map.
  *
  * Everything on this page that is a number is computed here, at build time,
- * from the files the project actually ships; nothing is transcribed. The two
- * live panels (gauges, cameras) are the only client-fetched things on the
- * page, and each states its own failure rather than rendering a zero.
+ * from the files the project actually ships; nothing is transcribed. The
+ * live panels (cameras, gauges, weather, fires) are the only client-fetched
+ * things on the page, and each states its own failure rather than rendering
+ * a zero.
  *
  * Register: CONSOLE. This is an operator's surface — dark ground, signal lime
  * for state, mono for every figure — the same register as /atlas/*, and
@@ -94,8 +95,9 @@ export default function WarRoom() {
           <h1>War room</h1>
           <p className="wr-dek">
             Everything the system can count, without a map underneath it. Static
-            layers are computed from the shipped data at build time; the two
-            live panels poll and report their own failures.
+            layers are computed from the shipped data at build time; the live
+            panels — cameras, gauges, weather, fires — poll and report their
+            own failures.
           </p>
         </div>
         <BangkokClock buildIso={buildIso} />
@@ -325,6 +327,8 @@ export default function WarRoom() {
         </p>
         <p>
           <Link href="/atlas/historic-core">Console atlas →</Link>{" "}
+          <a href="https://atlas.nonarkara.org">Operational twin →</a>{" "}
+          <a href="https://shophouses.nonarkara.org">Shophouses →</a>{" "}
           <Link href="/datasets">Datasets →</Link>{" "}
           <Link href="/heritage">The register →</Link>
         </p>

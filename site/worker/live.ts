@@ -1,3 +1,5 @@
+import { CURATED_CAMERAS } from "../app/data/cctv-cameras.ts";
+
 /**
  * Live civic feeds, proxied server-side.
  *
@@ -183,13 +185,16 @@ export async function handleLiveRain(): Promise<Response> {
 /**
  * The CCTV registry.
  *
- * Deliberately empty of hard-coded cameras. The war room's camera rail is
- * built and wired, but no camera endpoint is invented here: a fabricated
- * stream URL would be worse than an empty rail, because it would render a
- * broken tile that looks like a working system. Point CCTV_SOURCE_URL at a
- * real registry (a JSON array of cameras, or a CSV) and the rail fills.
+ * Default source is the public Longdo / iTIC RSS at camera.longdo.com/feed/
+ * — no API key. That feed lists 200+ traffic cameras nationwide. Most
+ * snapshot URLs are placeholders (`camid=X.X.X.X:YYYY`, a 43-byte ASCII
+ * body served as image/jpeg). Those are kept in the directory so the
+ * count is honest, and withheld from the rail so a dead still is never
+ * dressed up as a live camera. A camera is `still: true` only when its
+ * snapshot URL carries a real camid on a host we have seen return a
+ * JPEG. Point CCTV_SOURCE_URL at an extra JSON registry to merge more.
  *
- * Expected item shape — extra keys are passed through untouched:
+ * Expected extra-registry item shape:
  *   { id, name, district?, lat?, lon?, snapshotUrl?, pageUrl?, attribution? }
  */
 export type Camera = {
@@ -198,94 +203,259 @@ export type Camera = {
   district: string | null;
   lat: number | null;
   lon: number | null;
-  /** A still image refreshed by the client, if the source offers one. */
+  /** Proxied still, only when the upstream URL is not a placeholder. */
   snapshotUrl: string | null;
-  /** An HLS (or other) live stream. Opened on demand — never autoplayed
-      across the whole rail, which would cost more than the rest of the
-      page combined. */
+  /** An HLS (or other) live stream. Opened on demand — never autoplayed. */
   streamUrl: string | null;
   /** Where a human can watch it properly. */
   pageUrl: string | null;
   attribution: string | null;
+  /** True only when snapshotUrl points at a non-placeholder still. */
+  still: boolean;
 };
 
-export type CctvPayload = { cameras: Camera[]; cameraCount: number; configured: boolean };
+export type CctvPayload = {
+  cameras: Camera[];
+  cameraCount: number;
+  stillCount: number;
+  configured: boolean;
+  feed: string;
+  /** Present when an optional extra registry was requested and failed.
+      The public Longdo feed is still returned. */
+  partialReason: string | null;
+};
 
-export async function handleLiveCctv(sourceUrl: string | undefined): Promise<Response> {
-  const fetchedAt = new Date().toISOString();
-  if (!sourceUrl) {
-    return envelope<CctvPayload>({
-      ok: true,
-      fetchedAt,
-      source: "unconfigured",
-      data: { cameras: [], cameraCount: 0, configured: false },
+const LONGDO_CAMERA_FEED = "https://camera.longdo.com/feed/";
+const ITIC_LIVE = "https://live.iticfoundation.org/";
+const CCTV_TTL = 120;
+// Same city box as FIRMS — one Bangkok, two feeds.
+const CCTV_BBOX = { west: 100.2, south: 13.4, east: 101.0, north: 14.2 };
+const STILL_HOSTS = new Set([
+  "camera1.iticfoundation.org",
+  "camera2.iticfoundation.org",
+  "camera3.iticfoundation.org",
+  "cameras.iticfoundation.org",
+  "bma-itic1.iticfoundation.org",
+  "camera.longdo.com",
+]);
+
+function itemTag(block: string, name: string): string {
+  const open = `<${name}>`;
+  const close = `</${name}>`;
+  const i = block.indexOf(open);
+  if (i < 0) return "";
+  const j = block.indexOf(close, i + open.length);
+  if (j < 0) return "";
+  return block
+    .slice(i + open.length, j)
+    .replace(/<!\[CDATA\[([\s\S]*?)\]\]>/g, "$1")
+    .replace(/&amp;/g, "&")
+    .replace(/&lt;/g, "<")
+    .replace(/&gt;/g, ">")
+    .replace(/&quot;/g, '"')
+    .trim();
+}
+
+function rewriteStillHost(url: string): string {
+  return url
+    .replace("://camear3.iticfoundation.org", "://camera3.iticfoundation.org")
+    .replace(/^http:\/\//, "https://");
+}
+
+function isPlaceholderStill(url: string): boolean {
+  return /X\.X\.X\.X/i.test(url) || /camid=$/i.test(url) || /camid=&/i.test(url);
+}
+
+/** A still we have seen return a real JPEG: IPv4[:port] camid on an allowlisted host.
+ *  Department of Highways uses PER-* ids on a host that currently 404s. */
+function hasLiveCamid(url: string): boolean {
+  return /[?&]camid=\d{1,3}(?:\.\d{1,3}){3}(?::\d+)?(?:&|$)/i.test(url);
+}
+
+function inCctvBbox(lat: number | null, lon: number | null): boolean {
+  if (lat === null || lon === null) return false;
+  return lat >= CCTV_BBOX.south && lat <= CCTV_BBOX.north && lon >= CCTV_BBOX.west && lon <= CCTV_BBOX.east;
+}
+
+function resolveStream(hls: string, img: string): string | null {
+  if (!hls || hls === "null") return null;
+  if (isPlaceholderStill(hls)) return null;
+  if (/^https?:\/\//i.test(hls)) return rewriteStillHost(hls);
+  if (hls.endsWith(".m3u8")) {
+    try {
+      const host = new URL(rewriteStillHost(img)).host;
+      if (STILL_HOSTS.has(host)) return `https://${host}/hls/${hls}`;
+    } catch {
+      return `https://camera1.iticfoundation.org/hls/${hls}`;
+    }
+  }
+  return null;
+}
+
+function stillProxy(url: string): string {
+  return `/api/live/camera-still?u=${encodeURIComponent(url)}`;
+}
+
+/** Same gates for Longdo items and an optional extra registry: allowlisted
+ *  host, real IPv4 camid, not a placeholder, then proxied. A raw snapshot
+ *  URL never reaches the rail. */
+function gateStill(raw: string | null): { snapshotUrl: string | null; still: boolean } {
+  if (!raw) return { snapshotUrl: null, still: false };
+  const url = rewriteStillHost(raw);
+  let hostOk = false;
+  try {
+    hostOk = STILL_HOSTS.has(new URL(url).host);
+  } catch {
+    hostOk = false;
+  }
+  const still = hostOk && hasLiveCamid(url) && !isPlaceholderStill(url);
+  return { snapshotUrl: still ? stillProxy(url) : null, still };
+}
+
+function parseLongdoItems(xml: string): Camera[] {
+  const cameras: Camera[] = [];
+  const parts = xml.split("<item>");
+  for (let i = 1; i < parts.length; i += 1) {
+    const block = parts[i];
+    const name = itemTag(block, "title") || itemTag(block, "location");
+    if (!name) continue;
+    const latN = Number(itemTag(block, "latitude"));
+    const lonN = Number(itemTag(block, "longitude"));
+    const lat = Number.isFinite(latN) ? latN : null;
+    const lon = Number.isFinite(lonN) ? lonN : null;
+    if (!inCctvBbox(lat, lon)) continue;
+    const rawImg = rewriteStillHost(itemTag(block, "imgurl"));
+    const gated = gateStill(rawImg);
+    const link = itemTag(block, "link");
+    cameras.push({
+      id: itemTag(block, "camid") || `cam-${cameras.length + 1}`,
+      name,
+      district: null,
+      lat,
+      lon,
+      snapshotUrl: gated.snapshotUrl,
+      streamUrl: resolveStream(itemTag(block, "hls_url"), rawImg),
+      pageUrl: link && !isPlaceholderStill(link) ? rewriteStillHost(link) : ITIC_LIVE,
+      attribution: itemTag(block, "organization") || "iTIC / Longdo",
+      still: gated.still,
     });
   }
+  cameras.sort((a, b) => Number(b.still) - Number(a.still) || a.name.localeCompare(b.name, "th"));
+  return cameras;
+}
 
+function parseExtraRegistry(raw: unknown): Camera[] {
+  const rows: unknown[] = Array.isArray(raw)
+    ? raw
+    : Array.isArray((raw as { cameras?: unknown[] })?.cameras)
+      ? (raw as { cameras: unknown[] }).cameras
+      : [];
+  return rows.flatMap((row, i) => {
+    if (!row || typeof row !== "object") return [];
+    const o = row as Record<string, unknown>;
+    const str = (k: string[]): string | null => {
+      for (const key of Object.keys(o)) {
+        if (k.some((c) => key.toLowerCase().includes(c))) {
+          const v = o[key];
+          if (typeof v === "string" && v.trim()) return v.trim();
+        }
+      }
+      return null;
+    };
+    const num = (k: string[]): number | null => {
+      for (const key of Object.keys(o)) {
+        if (k.some((c) => key.toLowerCase().includes(c))) {
+          const n = Number(o[key]);
+          if (Number.isFinite(n)) return n;
+        }
+      }
+      return null;
+    };
+    const name = str(["name", "title", "location", "ชื่อ"]);
+    if (!name) return [];
+    const gated = gateStill(str(["snapshot", "image", "thumb", "jpg"]));
+    return [{
+      id: str(["id", "code"]) ?? `extra-${i + 1}`,
+      name,
+      district: str(["district", "area", "เขต"]),
+      lat: num(["lat"]),
+      lon: num(["lon", "lng", "long"]),
+      snapshotUrl: gated.snapshotUrl,
+      streamUrl: str(["stream", "hls", "m3u8", "video"]),
+      pageUrl: str(["page", "url", "link"]),
+      attribution: str(["attribution", "owner", "agency"]),
+      still: gated.still,
+    }];
+  });
+}
+
+async function fetchLongdoCameras(): Promise<{ cameras: Camera[]; reason?: string }> {
   const ctrl = new AbortController();
   const timer = setTimeout(() => ctrl.abort(), UPSTREAM_TIMEOUT_MS);
   try {
-    const res = await fetch(sourceUrl, { signal: ctrl.signal, headers: { accept: "application/json" } });
-    if (!res.ok) {
-      return envelope({ ok: false, fetchedAt, source: sourceUrl, reason: `Camera registry returned HTTP ${res.status}.` });
-    }
-    const raw = await res.json().catch(() => null);
-    const rows: unknown[] = Array.isArray(raw)
-      ? raw
-      : Array.isArray((raw as { cameras?: unknown[] })?.cameras)
-        ? (raw as { cameras: unknown[] }).cameras
-        : [];
-    const cameras: Camera[] = rows.flatMap((row, i) => {
-      if (!row || typeof row !== "object") return [];
-      const o = row as Record<string, unknown>;
-      const str = (k: string[]): string | null => {
-        for (const key of Object.keys(o)) {
-          if (k.some((c) => key.toLowerCase().includes(c))) {
-            const v = o[key];
-            if (typeof v === "string" && v.trim()) return v.trim();
-          }
-        }
-        return null;
-      };
-      const num = (k: string[]): number | null => {
-        for (const key of Object.keys(o)) {
-          if (k.some((c) => key.toLowerCase().includes(c))) {
-            const n = Number(o[key]);
-            if (Number.isFinite(n)) return n;
-          }
-        }
-        return null;
-      };
-      const name = str(["name", "title", "location", "ชื่อ"]);
-      if (!name) return [];
-      return [{
-        id: str(["id", "code"]) ?? `cam-${i + 1}`,
-        name,
-        district: str(["district", "area", "เขต"]),
-        lat: num(["lat"]),
-        lon: num(["lon", "lng", "long"]),
-        snapshotUrl: str(["snapshot", "image", "thumb", "jpg"]),
-        streamUrl: str(["stream", "hls", "m3u8", "video"]),
-        pageUrl: str(["page", "url", "link"]),
-        attribution: str(["attribution", "owner", "agency"]),
-      }];
+    const res = await fetch(LONGDO_CAMERA_FEED, {
+      signal: ctrl.signal,
+      headers: { accept: "application/rss+xml, application/xml, text/xml, */*" },
     });
-    return envelope<CctvPayload>({
-      ok: true,
-      fetchedAt,
-      source: sourceUrl,
-      data: { cameras, cameraCount: cameras.length, configured: true },
-    });
+    if (!res.ok) return { cameras: [], reason: `Longdo camera feed returned HTTP ${res.status}.` };
+    const xml = await res.text();
+    if (!xml.includes("<item>")) return { cameras: [], reason: "Longdo camera feed returned no <item> entries." };
+    return { cameras: parseLongdoItems(xml) };
   } catch (err) {
-    return envelope({
-      ok: false,
-      fetchedAt,
-      source: sourceUrl,
-      reason: `Camera registry unreachable: ${(err as Error)?.message ?? "unknown error"}.`,
-    });
+    return {
+      cameras: [],
+      reason: `Longdo camera feed unreachable: ${(err as Error)?.message ?? "unknown error"}.`,
+    };
   } finally {
     clearTimeout(timer);
   }
+}
+
+export async function handleLiveCctv(sourceUrl: string | undefined): Promise<Response> {
+  const fetchedAt = new Date().toISOString();
+  const publicFeed = await fetchLongdoCameras();
+  let extra: Camera[] = [];
+  let extraReason: string | null = null;
+  if (sourceUrl) {
+    const ctrl = new AbortController();
+    const timer = setTimeout(() => ctrl.abort(), UPSTREAM_TIMEOUT_MS);
+    try {
+      const res = await fetch(sourceUrl, { signal: ctrl.signal, headers: { accept: "application/json" } });
+      if (!res.ok) {
+        extraReason = `Extra camera registry returned HTTP ${res.status}.`;
+      } else {
+        extra = parseExtraRegistry(await res.json().catch(() => null));
+      }
+    } catch (err) {
+      extraReason = `Extra camera registry unreachable: ${(err as Error)?.message ?? "unknown error"}.`;
+    } finally {
+      clearTimeout(timer);
+    }
+  }
+
+  const cameras = [...publicFeed.cameras, ...extra];
+  if (cameras.length === 0) {
+    return envelope({
+      ok: false,
+      fetchedAt,
+      source: LONGDO_CAMERA_FEED,
+      reason: [publicFeed.reason, extraReason].filter(Boolean).join(" ") || "No cameras in the Bangkok box.",
+    });
+  }
+
+  return envelope<CctvPayload>({
+    ok: true,
+    fetchedAt,
+    source: LONGDO_CAMERA_FEED,
+    data: {
+      cameras,
+      cameraCount: cameras.length,
+      stillCount: cameras.filter((c) => c.still).length,
+      configured: Boolean(sourceUrl),
+      feed: LONGDO_CAMERA_FEED,
+      partialReason: extraReason,
+    },
+  }, CCTV_TTL);
 }
 
 /* ==================================================================== *
@@ -446,6 +616,12 @@ export async function handleLiveLongdo(
   query: URLSearchParams,
 ): Promise<Response> {
   const fetchedAt = new Date().toISOString();
+  if (kind === "cameras") {
+    // The keyed overlay is optional. The public RSS is the camera source
+    // the war room actually uses; this route falls through to it so a
+    // missing LONGDO_API_KEY is not a dead camera list.
+    return handleLiveCctv(undefined);
+  }
   if (!key) {
     return envelope({
       ok: false,
@@ -458,21 +634,16 @@ export async function handleLiveLongdo(
 
   // Build upstream from an allowlist of parameters. Never forward the
   // caller's query wholesale: that is how an open proxy is built by accident.
-  let upstream: string;
-  if (kind === "search") {
-    const q = (query.get("q") ?? "").slice(0, 200);
-    if (!q.trim()) {
-      return envelope({ ok: false, fetchedAt, source: "longdo", reason: "Missing search term." });
-    }
-    const p = new URLSearchParams({ keyword: q, limit: "20", key });
-    const lat = query.get("lat");
-    const lon = query.get("lon");
-    if (lat && Number.isFinite(Number(lat))) p.set("lat", lat);
-    if (lon && Number.isFinite(Number(lon))) p.set("lon", lon);
-    upstream = `https://search.longdo.com/mapsearch/json/search?${p}`;
-  } else {
-    upstream = `https://api.longdo.com/RouteService/json/camera?key=${encodeURIComponent(key)}`;
+  const q = (query.get("q") ?? "").slice(0, 200);
+  if (!q.trim()) {
+    return envelope({ ok: false, fetchedAt, source: "longdo", reason: "Missing search term." });
   }
+  const p = new URLSearchParams({ keyword: q, limit: "20", key });
+  const lat = query.get("lat");
+  const lon = query.get("lon");
+  if (lat && Number.isFinite(Number(lat))) p.set("lat", lat);
+  if (lon && Number.isFinite(Number(lon))) p.set("lon", lon);
+  const upstream = `https://search.longdo.com/mapsearch/json/search?${p}`;
 
   const ctrl = new AbortController();
   const timer = setTimeout(() => ctrl.abort(), UPSTREAM_TIMEOUT_MS);
@@ -556,6 +727,167 @@ export async function handleCameraPoster(videoId: string | null): Promise<Respon
   } finally {
     clearTimeout(timer);
   }
+}
+
+/* ==================================================================== *
+ * Agency still proxy + CCTV health.
+ *
+ * Snapshot URLs in the Longdo feed are HTTP (or a mistyped host). An
+ * HTTPS page cannot load them, and a 43-byte ASCII "jpeg" from a
+ * placeholder camid must never be shown as a picture of a street. This
+ * route allowlists hosts, rewrites the known typo, rejects placeholders,
+ * and only returns a body that is actually an image.
+ * ==================================================================== */
+
+const STILL_TTL = 30;
+const STILL_MIN_BYTES = 500;
+
+export async function handleCameraStill(rawUrl: string | null): Promise<Response> {
+  if (!rawUrl) return new Response("Missing still URL", { status: 400 });
+  let parsed: URL;
+  try {
+    parsed = new URL(rewriteStillHost(rawUrl));
+  } catch {
+    return new Response("Bad still URL", { status: 400 });
+  }
+  if (parsed.protocol !== "https:" && parsed.protocol !== "http:") {
+    return new Response("Bad still URL", { status: 400 });
+  }
+  if (!STILL_HOSTS.has(parsed.host)) return new Response("Host not allowlisted", { status: 400 });
+  if (isPlaceholderStill(parsed.href) || !hasLiveCamid(parsed.href)) {
+    return new Response("Placeholder still", { status: 404 });
+  }
+
+  const ctrl = new AbortController();
+  const timer = setTimeout(() => ctrl.abort(), UPSTREAM_TIMEOUT_MS);
+  try {
+    const res = await fetch(parsed.href, {
+      signal: ctrl.signal,
+      headers: { accept: "image/*,*/*;q=0.8", "user-agent": "BKKx/1.0 (+https://bkk.nonarkara.org)" },
+    });
+    if (!res.ok || !res.body) return new Response("Still unavailable", { status: 404 });
+    const type = res.headers.get("content-type") ?? "";
+    if (!type.startsWith("image/")) return new Response("Still was not an image", { status: 404 });
+    const buf = new Uint8Array(await res.arrayBuffer());
+    if (buf.byteLength < STILL_MIN_BYTES) return new Response("Still too small to be a frame", { status: 404 });
+    return new Response(buf, {
+      headers: {
+        "content-type": type,
+        "cache-control": `public, max-age=${STILL_TTL}, s-maxage=${STILL_TTL}, stale-while-revalidate=120`,
+        "x-bkkx-live": "still",
+      },
+    });
+  } catch {
+    return new Response("Still unreachable", { status: 504 });
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
+export type CctvHealthItem = {
+  id: string;
+  kind: "youtube" | "link" | "agency";
+  ok: boolean;
+  title?: string;
+  bytes?: number;
+  reason?: string;
+};
+
+export type CctvHealthPayload = {
+  items: CctvHealthItem[];
+  curatedOk: number;
+  curatedN: number;
+  agencyOk: number;
+  agencyN: number;
+};
+
+async function probeBytes(url: string, timeoutMs: number): Promise<{ ok: boolean; bytes: number; type: string; reason?: string }> {
+  const ctrl = new AbortController();
+  const timer = setTimeout(() => ctrl.abort(), timeoutMs);
+  try {
+    const res = await fetch(url, { signal: ctrl.signal, headers: { accept: "*/*", "user-agent": "BKKx/1.0 (+https://bkk.nonarkara.org)" } });
+    if (!res.ok) return { ok: false, bytes: 0, type: "", reason: `HTTP ${res.status}` };
+    const buf = new Uint8Array(await res.arrayBuffer());
+    return { ok: true, bytes: buf.byteLength, type: res.headers.get("content-type") ?? "" };
+  } catch (err) {
+    return { ok: false, bytes: 0, type: "", reason: (err as Error)?.name === "AbortError" ? "timeout" : ((err as Error)?.message ?? "unreachable") };
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
+export async function handleCctvHealth(): Promise<Response> {
+  const fetchedAt = new Date().toISOString();
+  const publicFeed = await fetchLongdoCameras();
+  const agency = publicFeed.cameras.filter((c) => c.still).slice(0, 20);
+
+  const curatedProbes = CURATED_CAMERAS.map(async (cam) => {
+    if (cam.kind === "link") {
+      const p = await probeBytes(cam.sourceUrl, 5_000);
+      const item: CctvHealthItem = {
+        id: cam.id,
+        kind: "link",
+        ok: p.ok,
+        title: cam.title,
+        reason: p.ok ? undefined : p.reason,
+      };
+      return item;
+    }
+    const poster = `https://i.ytimg.com/vi/${cam.videoId}/hqdefault.jpg`;
+    const oembed = `https://www.youtube.com/oembed?url=${encodeURIComponent(`https://www.youtube.com/watch?v=${cam.videoId}`)}&format=json`;
+    const [p, o] = await Promise.all([probeBytes(poster, 5_000), probeBytes(oembed, 5_000)]);
+    const title = cam.title;
+    let oembedOk = false;
+    if (o.ok && o.type.includes("json") && o.bytes > 20) {
+      oembedOk = true;
+    }
+    const item: CctvHealthItem = {
+      id: cam.id,
+      kind: "youtube",
+      ok: p.ok || oembedOk,
+      title,
+      bytes: p.bytes,
+      reason: p.ok || oembedOk ? undefined : [p.reason, o.reason].filter(Boolean).join(" · ") || "poster and oembed both failed",
+    };
+    return item;
+  });
+
+  const agencyProbes = agency.map(async (cam) => {
+    const origin = cam.snapshotUrl?.startsWith("/api/live/camera-still?u=")
+      ? decodeURIComponent(cam.snapshotUrl.slice("/api/live/camera-still?u=".length))
+      : null;
+    if (!origin) {
+      return { id: cam.id, kind: "agency" as const, ok: false, title: cam.name, reason: "no still URL" };
+    }
+    const p = await probeBytes(origin, 5_000);
+    const ok = p.ok && p.type.startsWith("image/") && p.bytes >= STILL_MIN_BYTES;
+    const item: CctvHealthItem = {
+      id: cam.id,
+      kind: "agency",
+      ok,
+      title: cam.name,
+      bytes: p.bytes,
+      reason: ok ? undefined : p.reason ?? (p.bytes < STILL_MIN_BYTES ? `still ${p.bytes} B` : "not an image"),
+    };
+    return item;
+  });
+
+  const items = await Promise.all([...curatedProbes, ...agencyProbes]);
+  const curated = items.filter((i) => i.kind !== "agency");
+  const agencyItems = items.filter((i) => i.kind === "agency");
+
+  return envelope<CctvHealthPayload>({
+    ok: true,
+    fetchedAt,
+    source: LONGDO_CAMERA_FEED,
+    data: {
+      items,
+      curatedOk: curated.filter((i) => i.ok).length,
+      curatedN: curated.length,
+      agencyOk: agencyItems.filter((i) => i.ok).length,
+      agencyN: agencyItems.length,
+    },
+  }, 180);
 }
 
 /* ==================================================================== *

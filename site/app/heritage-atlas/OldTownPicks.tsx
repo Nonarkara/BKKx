@@ -30,7 +30,7 @@ export function OldTownPicks({ iframeRef }: Props) {
     const iframe = iframeRef.current;
     if (!iframe) return;
     const [lng, lat] = spot.center;
-    const url = `/atlas/historic-core?embed=1&at=${lng},${lat},${spot.zoom}&poi=${spot.slug}`;
+    const url = `/atlas/historic-core?embed=1&at=${lng},${lat},${spot.zoom}`;
     // Use src + replace so the user can hit Back without re-firing the fly-to.
     iframe.src = url;
   }

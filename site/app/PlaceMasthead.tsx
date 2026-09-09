@@ -18,6 +18,7 @@ export function PlaceMasthead() {
       <nav className="register-nav" aria-label="Primary navigation">
         <Link href="/rowhouses">Rowhouses</Link>
         <a href="https://shophouses.nonarkara.org" title="Shophouse Metropolis — the essay, the Bible, the citywide pressure map">Shophouses</a>
+        <a href="https://atlas.nonarkara.org" title="The operational city twin — live weather, traffic and block-by-block layers">Digital twin</a>
         <Link href="/case-for-bangkok">The case</Link>
         <Link href="/datasets" title="Every public dataset — sourced, licensed, checksummed">Data</Link>
         <Link href="/warroom" title="The operational picture — live gauges, cameras and the counted corpus">War room</Link>

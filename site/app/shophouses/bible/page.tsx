@@ -14,6 +14,7 @@ import {
   OPEN_QUESTIONS,
 } from "../../data/shophouse-bible";
 import { THESES } from "../../data/shophouse-theses";
+import { READ_IN_FULL } from "../../data/shophouse-research";
 import { DimensionalSignature, QuickReference, Gazetteer } from "./BibleArtifacts";
 import { CLUSTERS } from "../../data/shophouse-gazetteer";
 import { PRESSURE_TOTAL } from "../../data/shophouse-pressure";
@@ -53,7 +54,7 @@ export default function BiblePage() {
           Anatomy, dimensions, the legal cage, the stock record — and where the sources disagree.
         </p>
         <p className="sh-byline">
-          Assembled from {THESES.length} catalogued theses and papers, of which six were read in
+          Assembled from {THESES.length} catalogued theses and papers, of which {READ_IN_FULL.length} were read in
           full. The problem this exists to solve: the research has been done, repeatedly, for forty
           years, and every new study re-derives the same measurements because the previous ones are
           unfindable. Where sources conflict, both numbers are shown — a reference that hides

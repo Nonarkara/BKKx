@@ -1925,6 +1925,9 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
         <nav className="atlas-header-nav" aria-label="Atlas navigation">
           <Link href="/">Heritage register</Link>
           <Link href="/worlds#atlas">The worlds</Link>
+          <a href="https://shophouses.nonarkara.org" title="Shophouse Metropolis">Shophouses</a>
+          <a href="https://atlas.nonarkara.org" title="The operational city twin">Digital twin</a>
+          <Link href="/warroom">War room</Link>
           <a className="atlas-download" href={world.download} target="_blank" rel="noreferrer">
             Download world <span aria-hidden="true">↓</span>
           </a>

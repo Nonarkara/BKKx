@@ -190,17 +190,18 @@ export const TWIN_SOURCES: TwinSource[] = [
     name: "Longdo traffic cameras (iTIC)",
     provider: "Longdo / iTIC Foundation",
     category: "mobility",
-    integration: "ready",
+    integration: "wired",
     unlocks:
-      "The camera rail, filled. Longdo's map API exposes a camera overlay whose Bangkok feeds come from the iTIC Foundation, delivered as HLS streams — which is the real source the war room's rail was built for and left empty rather than faked.",
-    licence: "Longdo API terms; camera imagery remains its originating agency's.",
-    auth: "key",
+      "The camera rail, filled from the public RSS at camera.longdo.com/feed/ — no API key. Bangkok-box cameras with a real snapshot URL are tiled; the rest stay in a directory so a placeholder JPEG is never dressed up as a live street.",
+    licence: "Longdo / iTIC public feed; camera imagery remains its originating agency's.",
+    auth: "none",
     browserReachable: false,
-    whyProxied: "Key protection, plus one cached camera list instead of every visitor hitting Longdo.",
+    whyProxied:
+      "The feed is HTTP-friendly XML and many stills are HTTP or a mistyped host; the Worker rewrites, allowlists, and refuses placeholder camids.",
     caveat:
-      "HLS, not still images. Decoding twenty live streams at once would cost more than the rest of the page combined, so the rail shows stills and opens a stream on demand. Camera coverage and uptime belong to the operating agencies, not to Longdo or to us.",
-    url: "https://api.longdo.com/map/doc/",
-    route: "/api/live/longdo/cameras",
+      "Most snapshot URLs in the feed are placeholders (`camid=X.X.X.X:YYYY`, a 43-byte ASCII body). Department of Highways JPEGs currently 404. Coverage and uptime belong to the operating agencies, not to Longdo or to us.",
+    url: "https://camera.longdo.com/feed/",
+    route: "/api/live/cctv",
   },
   {
     id: "longdo-routing",
@@ -224,7 +225,7 @@ export const TWIN_SOURCES: TwinSource[] = [
     name: "BMA rainfall gauge network",
     provider: "สำนักการระบายน้ำ กทม. — BMA Drainage & Sewerage",
     category: "hazard",
-    integration: "researched",
+    integration: "wired",
     unlocks:
       "Observed rainfall, station by station — the ground truth the forecast is checked against.",
     licence: "Agency endpoint; access and reuse terms are not formally published.",

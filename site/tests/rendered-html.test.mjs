@@ -34,19 +34,137 @@ async function callWorker(path, env) {
 }
 
 test("optional live feeds degrade honestly when the runtime provides no env object", async () => {
-  const cctv = await callWorker("/api/live/cctv", undefined);
-  assert.equal(cctv.status, 200);
-  const cctvBody = await cctv.json();
-  assert.equal(cctvBody.ok, true);
-  assert.equal(cctvBody.data.configured, false);
-  assert.deepEqual(cctvBody.data.cameras, []);
+  // CCTV now reads a public RSS and does not need env. FIRMS and Longdo
+  // search still do.
+  const fires = await callWorker("/api/live/fires", undefined);
+  assert.equal(fires.status, 200);
+  const firesBody = await fires.json();
+  assert.equal(firesBody.ok, false);
+  assert.match(firesBody.reason, /No .*key configured/i);
 
-  for (const path of ["/api/live/fires", "/api/live/longdo/cameras"]) {
-    const response = await callWorker(path, undefined);
-    assert.equal(response.status, 200, `${path} must return an envelope, not crash`);
+  const search = await callWorker("/api/live/longdo/search?q=%E0%B8%A7%E0%B8%B1%E0%B8%94", undefined);
+  assert.equal(search.status, 200);
+  const searchBody = await search.json();
+  assert.equal(searchBody.ok, false);
+  assert.match(searchBody.reason, /No .*key configured/i);
+});
+
+test("the public Longdo camera feed tiles real stills and lists placeholders", async () => {
+  const { handleLiveCctv, handleCameraStill } = await import("../worker/live.ts");
+  const rss = `<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0"><channel>
+<item>
+  <title>แยกสาทร-สุรศักดิ์</title>
+  <camid>ITICM_BMAMI0078</camid>
+  <latitude>13.71883</latitude>
+  <longitude>100.519854</longitude>
+  <organization>iTIC Motion</organization>
+  <imgurl>https://camera1.iticfoundation.org/jpeg2.php?camid=10.8.0.17:8002</imgurl>
+  <hls_url>https://camera1.iticfoundation.org/hls/10.8.0.17_8002.m3u8</hls_url>
+  <link>https://camera1.iticfoundation.org/mjpeg2.php?camid=10.8.0.17:8002</link>
+</item>
+<item>
+  <title>placeholder cam</title>
+  <camid>ITICM_FAKE</camid>
+  <latitude>13.75</latitude>
+  <longitude>100.55</longitude>
+  <organization>iTIC Motion</organization>
+  <imgurl>https://camera1.iticfoundation.org/jpeg2.php?camid=X.X.X.X:YYYY</imgurl>
+  <hls_url></hls_url>
+  <link>https://camera1.iticfoundation.org/mjpeg2.php?camid=X.X.X.X:YYYY</link>
+</item>
+<item>
+  <title>outside Bangkok</title>
+  <camid>DOH-FAR</camid>
+  <latitude>18.8</latitude>
+  <longitude>98.9</longitude>
+  <organization>กรมทางหลวง</organization>
+  <imgurl>https://camera1.iticfoundation.org/jpeg2.php?camid=10.1.1.1:80</imgurl>
+</item>
+</channel></rss>`;
+
+  const originalFetch = globalThis.fetch;
+  globalThis.fetch = async (input) => {
+    if (String(input).includes("camera.longdo.com/feed")) {
+      return new Response(rss, { headers: { "content-type": "application/xml" } });
+    }
+    return originalFetch(input);
+  };
+  try {
+    const response = await handleLiveCctv(undefined);
+    assert.equal(response.status, 200);
     const body = await response.json();
-    assert.equal(body.ok, false);
-    assert.match(body.reason, /No .*key configured/i);
+    assert.equal(body.ok, true);
+    assert.equal(body.data.configured, false, "configured means an extra registry was requested");
+    assert.equal(body.data.partialReason, null);
+    assert.equal(body.data.cameraCount, 2, "outside-box cameras are dropped");
+    assert.equal(body.data.stillCount, 1);
+    const still = body.data.cameras.find((c) => c.still);
+    const listed = body.data.cameras.find((c) => !c.still);
+    assert.ok(still, "the IPv4 camid is tiled");
+    assert.match(still.snapshotUrl, /\/api\/live\/camera-still\?u=/);
+    assert.equal(listed.name, "placeholder cam");
+    assert.equal(listed.snapshotUrl, null);
+
+    const blocked = await handleCameraStill("https://camera1.iticfoundation.org/jpeg2.php?camid=X.X.X.X:YYYY");
+    assert.equal(blocked.status, 404);
+    const rejected = await handleCameraStill("https://evil.example/jpeg.jpg");
+    assert.equal(rejected.status, 400);
+  } finally {
+    globalThis.fetch = originalFetch;
+  }
+});
+
+test("an extra camera registry cannot dress a placeholder as a live still, and cannot take down the public feed", async () => {
+  const { handleLiveCctv } = await import("../worker/live.ts");
+  const rss = `<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0"><channel>
+<item>
+  <title>แยกสาทร-สุรศักดิ์</title>
+  <camid>ITICM_BMAMI0078</camid>
+  <latitude>13.71883</latitude>
+  <longitude>100.519854</longitude>
+  <organization>iTIC Motion</organization>
+  <imgurl>https://camera1.iticfoundation.org/jpeg2.php?camid=10.8.0.17:8002</imgurl>
+</item>
+</channel></rss>`;
+
+  const originalFetch = globalThis.fetch;
+  globalThis.fetch = async (input) => {
+    const url = String(input);
+    if (url.includes("camera.longdo.com/feed")) {
+      return new Response(rss, { headers: { "content-type": "application/xml" } });
+    }
+    if (url.includes("extra-registry.example")) {
+      return Response.json([
+        {
+          id: "bogus",
+          name: "fake still",
+          snapshotUrl: "https://camera1.iticfoundation.org/jpeg2.php?camid=X.X.X.X:YYYY",
+        },
+      ]);
+    }
+    if (url.includes("down-registry.example")) {
+      return new Response("nope", { status: 503 });
+    }
+    return originalFetch(input);
+  };
+  try {
+    const merged = await (await handleLiveCctv("https://extra-registry.example/cams.json")).json();
+    assert.equal(merged.ok, true);
+    assert.equal(merged.data.configured, true);
+    const bogus = merged.data.cameras.find((c) => c.id === "bogus");
+    assert.ok(bogus, "extra camera is listed");
+    assert.equal(bogus.still, false);
+    assert.equal(bogus.snapshotUrl, null);
+    assert.equal(merged.data.cameras.some((c) => c.still), true, "public still survives the merge");
+
+    const degraded = await (await handleLiveCctv("https://down-registry.example/cams.json")).json();
+    assert.equal(degraded.ok, true, "a dead extra registry must not hide the public feed");
+    assert.match(degraded.data.partialReason, /HTTP 503/);
+    assert.equal(degraded.data.stillCount, 1);
+  } finally {
+    globalThis.fetch = originalFetch;
   }
 });
 
@@ -824,8 +942,8 @@ test("the shophouse essay defaults to a short argument without deleting the rese
   const html = await response.text();
   assert.match(html, /The ten-minute version/);
   assert.match(html, /run out of excuses for not counting them/);
-  assert.match(html, /Full research companion/);
-  assert.match(html, /Open the long read/);
+  assert.match(html, /Chicago-style footnotes/);
+  assert.match(html, /Open the notes/);
   assert.match(html, /documented clusters/);
   assert.match(html, /candidate footprints/);
   assert.match(html, /Open Bangkok(?:&#x27;|')s rowhouse register/);
@@ -1358,12 +1476,13 @@ test("the war room ships all twelve water sources and never fakes a reading", as
   assert.match(html, /ingest-bkk-water\.py/);
 });
 
-test("the camera rail renders one line and explains an empty registry", async () => {
+test("the camera rail renders one line and names the public feed", async () => {
   const html = await (await render("/warroom")).text();
   assert.match(html, /wr-cctv/);
   // No invented camera endpoints ship in the bundle
   assert.doesNotMatch(html, /snapshotUrl":\s*"http/);
   assert.match(html, /CCTV_SOURCE_URL/);
+  assert.match(html, /iTIC/);
 });
 
 test("the twin source register ships with honest integration status", async () => {
@@ -1416,7 +1535,7 @@ test("curated cameras render as facades and never leak to Google on load", async
   const html = await (await render("/warroom")).text();
 
   // Every supplied stream is present
-  assert.ok(CURATED_CAMERAS.length >= 5, "all supplied cameras are registered");
+  assert.equal(CURATED_CAMERAS.length, 8, "eight curated public streams are registered");
   // A camera whose operator does not licence embedding is linked, not taken
   for (const c of CURATED_CAMERAS) {
     if (c.kind === "link") {
@@ -1435,14 +1554,14 @@ test("curated cameras render as facades and never leak to Google on load", async
 });
 
 test("a placeholder camera carries a nominal marker but never a claimed place", async () => {
-  // Three cameras arrived with zero identifying evidence. Per an explicit
+  // Two citywide skyline feeds still have no mount. Per an explicit
   // operator decision they are pinned at a shared, clearly-nominal marker
   // rather than left without a coordinate — but that marker must never be
   // mistaken for evidence: no place name, no district, and the reasoning
   // must say plainly that it is a stand-in.
   const { CURATED_CAMERAS, isLocated } = await import("../app/data/cctv-cameras.ts");
   const placeholders = CURATED_CAMERAS.filter((c) => c.precision === "placeholder");
-  assert.equal(placeholders.length, 3, "three cameras were supplied with no identifying evidence");
+  assert.equal(placeholders.length, 2, "two cameras remain without identifying evidence");
 
   const markers = new Set(placeholders.map((c) => `${c.lat},${c.lon}`));
   assert.equal(markers.size, 1, "placeholder cameras must share one nominal marker, never distinct invented positions");
@@ -1497,6 +1616,10 @@ test("the twin source register includes the new hazard and mobility entries with
   const firms = TWIN_SOURCES.find((s) => s.id === "nasa-firms");
   assert.equal(firms.integration, "ready", "FIRMS has a built adapter awaiting a key");
   assert.equal(firms.route, "/api/live/fires");
+
+  const rain = TWIN_SOURCES.find((s) => s.id === "bma-gauges");
+  assert.equal(rain.integration, "wired", "the rain adapter is live; credentials fail honestly");
+  assert.equal(rain.route, "/api/live/rain");
 
   const flights = TWIN_SOURCES.find((s) => s.id === "opensky-flights");
   assert.equal(flights.integration, "researched", "flights are catalogued, not built — no thesis fit yet");

@@ -100,7 +100,7 @@ export default async function ClusterPage({ params }: Props) {
   const shareOfCorpus = ((c.n / SPINE_TOTAL) * 100).toFixed(1);
   const storeysUnknown = c.n - c.storeysKnown;
 
-  const citation = `Arkara, N. (2026). ${name} — documented shophouse cluster (${c.n} screened footprints) [Data set]. Shophouse Metropolis, BKKx. https://bkk.nonarkara.org/shophouses/cluster/${c.slug}`;
+  const citation = `Arkara, N. (2026). ${name} — documented shophouse cluster (${c.n} screened footprints) [Data set]. Shophouse Metropolis, BKKx. https://shophouses.nonarkara.org/shophouses/cluster/${c.slug}`;
 
   const structuredData = {
     "@context": "https://schema.org",
@@ -109,7 +109,7 @@ export default async function ClusterPage({ params }: Props) {
     description: `${c.n} candidate shophouse footprints in ${c.district}, screened by morphology from open data and joined to land appraisal, regulation and pressure classification.`,
     creator: { "@type": "Person", name: "Non Arkara", url: "https://nonarkara.org" },
     license: "https://creativecommons.org/licenses/by/4.0/",
-    url: `https://bkk.nonarkara.org/shophouses/cluster/${c.slug}`,
+    url: `https://shophouses.nonarkara.org/shophouses/cluster/${c.slug}`,
     ...(c.sourceUrl ? { isBasedOn: c.sourceUrl } : {}),
   };
 
