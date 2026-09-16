@@ -3281,7 +3281,7 @@ button {
  * ───────────────────────────────────────────────────────────────── */
 .atlas-shell {
   display: grid;
-  grid-template-rows: auto 1fr;
+  grid-template-rows: auto auto 1fr;
   height: 100vh;
   min-height: 100vh;
   background: var(--paper);
@@ -3340,6 +3340,69 @@ button {
 .atlas-shell-nav a:hover {
   border-bottom-color: var(--ink);
 }
+
+/* city-glance — the landing page's first line (2026-09-16).
+ *
+ * Editorial chrome: paper ground, hairline ink rules, mono figures. Five
+ * links to the war room, each a number with its source. The strip must not
+ * compete with the map — one row, ink only (the oxide seal keeps its one
+ * meaning elsewhere; an active warning reads as an inset bar and an
+ * underline, not a second accent). Horizontally
+ * scrollable on narrow screens rather than wrapping into a second row. */
+.city-glance {
+  display: flex;
+  align-items: stretch;
+  overflow-x: auto;
+  border-bottom: 1px solid var(--ink);
+  background: var(--paper);
+}
+.city-glance-item {
+  flex: 1 1 0;
+  min-width: 150px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1px;
+  padding: 7px 16px 8px;
+  text-decoration: none;
+  color: var(--ink);
+  border-left: 1px solid rgba(17, 18, 15, 0.16);
+}
+.city-glance-item:first-child { border-left: 0; }
+.city-glance-item:hover { background: rgba(17, 18, 15, 0.045); }
+.city-glance-value {
+  font-family: var(--font-mono);
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+}
+.city-glance-unit {
+  font-size: 11px;
+  font-weight: 400;
+  margin-left: 3px;
+}
+.city-glance-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: rgba(17, 18, 15, 0.62);
+  white-space: nowrap;
+}
+.city-glance-sub {
+  font-family: var(--font-body);
+  font-size: 11px;
+  line-height: 1.35;
+  color: rgba(17, 18, 15, 0.62);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.city-glance-item.is-alert .city-glance-value { text-decoration: underline; text-underline-offset: 3px; }
+.city-glance-item.is-alert { box-shadow: inset 3px 0 0 var(--ink); }
 
 .atlas-shell-body {
   display: grid;

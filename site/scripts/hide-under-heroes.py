@@ -231,6 +231,15 @@ def decide(groups: list[dict], features: list[dict], layer: str) -> dict[str, st
     return out
 
 
+# Flags owned by another build step. data:strips (flag-row-strips.py) hides
+# degenerate footprints under the `row-strip:` namespace; this step must
+# neither clear nor adopt those — it only manages hero-owned flags and
+# hand-set ones. Without this, every build would unhide the slivers that
+# data:strips hides one step later, and --check here would fight --check
+# there over the same bit.
+FOREIGN_FLAG_PREFIX = "row-strip:"
+
+
 def apply(features: list[dict], decisions: dict[str, str]) -> int:
     """Write the flags in; clear the ones this step wrote before. Returns changes."""
     changed = 0
@@ -243,6 +252,8 @@ def apply(features: list[dict], decisions: dict[str, str]) -> int:
                 p["hidden_by"] = want
                 changed += 1
         elif "hidden_by" in p:
+            if isinstance(p.get("hidden_by"), str) and p["hidden_by"].startswith(FOREIGN_FLAG_PREFIX):
+                continue
             p.pop("hidden_by", None)
             p.pop("hide_3d", None)
             changed += 1

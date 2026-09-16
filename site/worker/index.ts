@@ -7,6 +7,7 @@ import {
   handleLiveCctv,
   handleLiveWeather,
   handleLiveLongdo,
+  handleLiveThaiwaterWarnings,
   handleCameraPoster,
   handleCameraStill,
   handleCctvHealth,
@@ -64,9 +65,15 @@ const worker = {
 
     // Live civic feeds. Proxied here rather than fetched in the browser: the
     // BMA gauge feed is plain HTTP and sends no CORS headers, so only the
-    // Worker can reach it. See worker/live.ts.
+    // Worker can reach it — and it now needs credentials, so /api/live/rain
+    // reads the same agency's network through HII ThaiWater's public mirror.
+    // See worker/live.ts.
     if (url.pathname === "/api/live/rain" && request.method === "GET") {
       return handleLiveRain();
+    }
+
+    if (url.pathname === "/api/live/thaiwater-warnings" && request.method === "GET") {
+      return handleLiveThaiwaterWarnings();
     }
 
     if (url.pathname === "/api/live/cctv" && request.method === "GET") {

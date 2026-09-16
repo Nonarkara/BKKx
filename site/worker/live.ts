@@ -3,11 +3,16 @@ import { CURATED_CAMERAS } from "../app/data/cctv-cameras.ts";
 /**
  * Live civic feeds, proxied server-side.
  *
- * Two reasons this cannot be a browser fetch. The BMA drainage feed is plain
- * HTTP, and an HTTPS page may not fetch it (mixed content); and it sends no
- * CORS headers, so even over HTTPS the browser would refuse the response. The
- * Worker has neither restriction, so it fetches upstream and re-serves the
- * result same-origin, cached at the edge.
+ * Three reasons this cannot be a browser fetch. The BMA drainage feed is
+ * plain HTTP, and an HTTPS page may not fetch it (mixed content); it sends
+ * no CORS headers, so even over HTTPS the browser would refuse the
+ * response; and it now requires credentials. The Worker has none of those
+ * restrictions — but credentials were never granted, so the gauge leg of
+ * this module reads the same agency's network through its public mirror:
+ * the Hydro-Informatics Institute's ThaiWater API republishes the BMA
+ * drainage gauges (plus HII, TMD and DWR stations in Bangkok) keyless at
+ * api-v3.thaiwater.net, the same upstream the bangkok.thaiwater.net
+ * dashboard drinks from. One agency's rain, two pipes; this one is open.
  *
  * The contract with the war room is that this endpoint NEVER invents a
  * reading. Every response carries `ok`, and on failure it carries `reason` —
@@ -15,9 +20,14 @@ import { CURATED_CAMERAS } from "../app/data/cctv-cameras.ts";
  * reading and an unreachable gauge network are opposite facts.
  */
 
-const RAIN_UPSTREAM = "http://weather.bangkok.go.th/dds_webservices/api/rain/lastdata";
+const RAIN_DIRECT_UPSTREAM = "http://weather.bangkok.go.th/dds_webservices/api/rain/lastdata";
+const THAIWATER_RAIN_UPSTREAM =
+  "https://api-v3.thaiwater.net/api/v1/thaiwater30/provinces/rain24?include_zero=1&province_code=10";
+const THAIWATER_WARNINGS_UPSTREAM =
+  "https://api-v3.thaiwater.net/api/v1/thaiwater30/public/warning_province";
 const UPSTREAM_TIMEOUT_MS = 6_000;
 const TTL_SECONDS = 300;
+const THAIWATER_TTL_SECONDS = 900;
 
 export type LiveEnvelope<T> = {
   ok: boolean;
@@ -43,40 +53,44 @@ function envelope<T>(body: LiveEnvelope<T>, ttl = TTL_SECONDS, status = 200): Re
 }
 
 /**
- * Normalise whatever the gauge feed returns into a station list.
+ * Normalise the ThaiWater Bangkok rain table into a station list.
  *
- * The upstream shape is not documented and could not be observed from the
- * authoring environment, so this reads defensively: it accepts a bare array or
- * a wrapped one, and pulls the first plausible key for each field rather than
- * demanding an exact schema. Anything it cannot read becomes null, and a
- * station with no usable reading is dropped rather than defaulted to zero.
+ * Upstream shape (read 2026-09-16): `{ result: "OK", data: [...] }` where
+ * each row carries `rain_24h`, `rain_1h`, `rainfall_datetime`,
+ * `agency.agency_shortname.{th,en}`, `geocode.amphoe_name.{th,en}` and
+ * `station.tele_station_name.{th}` with `tele_station_lat/long`. Read
+ * defensively: first plausible key wins, anything
+ * unreadable becomes null, and a station with no usable reading is dropped
+ * rather than defaulted to zero.
  */
-function normaliseRain(raw: unknown): { stations: RainStation[]; parsed: number; skipped: number } {
-  const rows: unknown[] = Array.isArray(raw)
-    ? raw
-    : Array.isArray((raw as { data?: unknown[] })?.data)
-      ? ((raw as { data: unknown[] }).data)
-      : Array.isArray((raw as { result?: unknown[] })?.result)
-        ? ((raw as { result: unknown[] }).result)
-        : [];
-
-  const pickNum = (o: Record<string, unknown>, keys: string[]): number | null => {
-    for (const k of Object.keys(o)) {
-      if (keys.some((c) => k.toLowerCase().includes(c))) {
-        const n = Number(o[k]);
-        if (Number.isFinite(n)) return n;
+export function normaliseThaiwaterRain(raw: unknown): { stations: RainStation[]; parsed: number; skipped: number } {
+  const rows: unknown[] = Array.isArray((raw as { data?: unknown })?.data)
+    ? ((raw as { data: unknown[] }).data)
+    : [];
+  const th = (o: Record<string, unknown>, path: string[]): string | null => {
+    let cur: unknown = o;
+    for (const key of path) {
+      if (!cur || typeof cur !== "object") return null;
+      cur = (cur as Record<string, unknown>)[key];
+    }
+    if (typeof cur === "string" && cur.trim()) return cur.trim();
+    // ThaiWater nests { th, en }: prefer the Thai string, fall back to English.
+    if (cur && typeof cur === "object") {
+      const r = cur as Record<string, unknown>;
+      for (const k of ["th", "en"]) {
+        if (typeof r[k] === "string" && (r[k] as string).trim()) return (r[k] as string).trim();
       }
     }
     return null;
   };
-  const pickStr = (o: Record<string, unknown>, keys: string[]): string | null => {
-    for (const k of Object.keys(o)) {
-      if (keys.some((c) => k.toLowerCase().includes(c))) {
-        const v = o[k];
-        if (typeof v === "string" && v.trim()) return v.trim();
-      }
+  const num = (o: Record<string, unknown>, path: string[]): number | null => {
+    let cur: unknown = o;
+    for (const key of path) {
+      if (!cur || typeof cur !== "object") return null;
+      cur = (cur as Record<string, unknown>)[key];
     }
-    return null;
+    const n = Number(cur);
+    return Number.isFinite(n) ? n : null;
   };
 
   const stations: RainStation[] = [];
@@ -84,16 +98,21 @@ function normaliseRain(raw: unknown): { stations: RainStation[]; parsed: number;
   for (const row of rows) {
     if (!row || typeof row !== "object") { skipped += 1; continue; }
     const o = row as Record<string, unknown>;
-    const mm = pickNum(o, ["rain", "amount", "value", "mm"]);
+    const mm = num(o, ["rain_24h"]) ?? num(o, ["rain_1d"]) ?? num(o, ["rainfall"]);
     if (mm === null) { skipped += 1; continue; }
+    const station = (o["station"] ?? {}) as Record<string, unknown>;
+    const geo = (o["geocode"] ?? {}) as Record<string, unknown>;
+    const agency = (o["agency"] ?? {}) as Record<string, unknown>;
     stations.push({
-      id: pickStr(o, ["id", "code", "station"]) ?? `station-${stations.length + 1}`,
-      name: pickStr(o, ["name", "stationname", "location", "ชื่อ"]),
-      district: pickStr(o, ["district", "area", "เขต"]),
+      id: String((o["id"] as string | number | undefined) ?? (station["id"] as string | number | undefined) ?? `station-${stations.length + 1}`),
+      name: th(station, ["tele_station_name"]) ?? th(o, ["station_name"]),
+      district: th(geo, ["amphoe_name"]) ?? th(geo, ["district"]),
       mm,
-      observedAt: pickStr(o, ["time", "date", "updated", "timestamp"]),
-      lat: pickNum(o, ["lat"]),
-      lon: pickNum(o, ["lon", "lng", "long"]),
+      observedAt: th(o, ["rainfall_datetime"]) ?? th(o, ["datetime"]),
+      lat: num(station, ["tele_station_lat"]) ?? num(station, ["lat"]) ?? num(o, ["lat"]),
+      lon: num(station, ["tele_station_long"]) ?? num(station, ["lon"]) ?? num(o, ["lng"]) ?? num(o, ["lon"]),
+      hour1Mm: num(o, ["rain_1h"]),
+      agency: th(agency, ["agency_shortname"]) ?? th(agency, ["agency_name"]),
     });
   }
   return { stations, parsed: stations.length, skipped };
@@ -103,11 +122,15 @@ export type RainStation = {
   id: string;
   name: string | null;
   district: string | null;
-  /** Millimetres, as reported. */
+  /** Millimetres in the trailing 24 h, as reported. */
   mm: number;
   observedAt: string | null;
   lat: number | null;
   lon: number | null;
+  /** Millimetres in the trailing hour, when the upstream carries it. */
+  hour1Mm: number | null;
+  /** Owning network: BMA drainage, HII, TMD or DWR. */
+  agency: string | null;
 };
 
 export type RainPayload = {
@@ -123,42 +146,38 @@ export type RainPayload = {
 
 export async function handleLiveRain(): Promise<Response> {
   const fetchedAt = new Date().toISOString();
-  const base = { fetchedAt, source: RAIN_UPSTREAM };
+  const base = { fetchedAt, source: THAIWATER_RAIN_UPSTREAM };
 
   const ctrl = new AbortController();
   const timer = setTimeout(() => ctrl.abort(), UPSTREAM_TIMEOUT_MS);
   try {
-    const res = await fetch(RAIN_UPSTREAM, {
+    const res = await fetch(THAIWATER_RAIN_UPSTREAM, {
       signal: ctrl.signal,
       headers: { accept: "application/json", "user-agent": "BKKx/1.0 (+https://bkk.nonarkara.org)" },
     });
     if (!res.ok) {
-      return envelope({ ...base, ok: false, reason: `Gauge network returned HTTP ${res.status}.` });
+      return envelope({ ...base, ok: false, reason: `ThaiWater rain table returned HTTP ${res.status}.` });
     }
     const raw = await res.json().catch(() => null);
     if (raw === null) {
-      return envelope({ ...base, ok: false, reason: "Gauge network returned a body that is not JSON." });
+      return envelope({ ...base, ok: false, reason: "ThaiWater rain table returned a body that is not JSON." });
     }
-    const upstreamError =
-      raw && typeof raw === "object" && typeof (raw as Record<string, unknown>).Error === "string"
-        ? String((raw as Record<string, unknown>).Error)
-        : null;
-    if (upstreamError && /username|password|user|pass|ผู้ใช้|รหัส/i.test(upstreamError)) {
+    if (raw && typeof raw === "object" && (raw as { result?: unknown }).result !== "OK") {
       return envelope({
         ...base,
         ok: false,
-        reason:
-          "BMA's gauge endpoint now requires credentials. No rainfall reading is shown until the agency provides authorised access.",
+        reason: `ThaiWater rain table refused the query (result is not OK). The provinces/rain24 shape has probably changed — normaliseThaiwaterRain() in worker/live.ts needs updating.`,
       });
     }
-    const { stations, skipped } = normaliseRain(raw);
+    const { stations, skipped } = normaliseThaiwaterRain(raw);
     if (stations.length === 0) {
       return envelope({
         ...base,
         ok: false,
-        reason: `Gauge network responded, but no station carried a readable rainfall value (${skipped} row(s) unreadable). The upstream shape has probably changed — normaliseRain() in worker/live.ts needs updating.`,
+        reason: `ThaiWater responded, but no Bangkok station carried a readable 24 h value (${skipped} row(s) unreadable). The upstream shape has probably changed — normaliseThaiwaterRain() in worker/live.ts needs updating.`,
       });
     }
+    const agencies = [...new Set(stations.map((s) => s.agency).filter(Boolean))].sort();
     return envelope<RainPayload>({
       ...base,
       ok: true,
@@ -168,14 +187,122 @@ export async function handleLiveRain(): Promise<Response> {
         wet: stations.filter((s) => s.mm > 0).length,
         maxMm: stations.reduce((m, s) => Math.max(m, s.mm), 0),
         unreadable: skipped,
-        agency: "สำนักการระบายน้ำ กทม. · BMA Department of Drainage and Sewerage",
+        agency: `Bangkok gauges via HII ThaiWater (${agencies.join(" · ") || "agency unstated"}) — the BMA drainage network's own readings through its public mirror; the direct BMA endpoint (${RAIN_DIRECT_UPSTREAM}) now requires credentials`,
       },
-    });
+    }, THAIWATER_TTL_SECONDS);
   } catch (err) {
     const reason =
       (err as Error)?.name === "AbortError"
-        ? `Gauge network did not respond within ${UPSTREAM_TIMEOUT_MS / 1000}s.`
-        : `Gauge network unreachable: ${(err as Error)?.message ?? "unknown error"}.`;
+        ? `ThaiWater did not respond within ${UPSTREAM_TIMEOUT_MS / 1000}s.`
+        : `ThaiWater unreachable: ${(err as Error)?.message ?? "unknown error"}.`;
+    return envelope({ ...base, ok: false, reason });
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
+/* ==================================================================== *
+ * ThaiWater flash-flood warnings.
+ *
+ * The same public API's warning_province table: one row per active warning
+ * nationwide, each with a Thai message, a colour, a type and a geocode.
+ * This route keeps the national count (so "no Bangkok warning" reads as
+ * quiet, not as broken) and returns the Bangkok rows — province_code 10 —
+ * in full. Keyless, like the rain table above.
+ * ==================================================================== */
+
+export type ThaiWarning = {
+  datetime: string | null;
+  message: string;
+  province: string | null;
+  district: string | null;
+  lat: number | null;
+  lon: number | null;
+  kind: string | null;
+  color: string | null;
+};
+
+export type ThaiWarningsPayload = {
+  bangkok: ThaiWarning[];
+  bangkokCount: number;
+  nationalCount: number;
+  attribution: string;
+};
+
+export function normaliseThaiwaterWarnings(raw: unknown): { bangkok: ThaiWarning[]; national: number } {
+  const rows: unknown[] = Array.isArray((raw as { data?: unknown })?.data)
+    ? ((raw as { data: unknown[] }).data)
+    : [];
+  const str = (o: Record<string, unknown>, key: string): string | null => {
+    const v = o[key];
+    return typeof v === "string" && v.trim() ? v.trim() : null;
+  };
+  const nested = (o: Record<string, unknown>, outer: string, inner: string): string | null => {
+    const g = o[outer];
+    if (g && typeof g === "object") {
+      const v = (g as Record<string, unknown>)[inner];
+      if (typeof v === "string" && v.trim()) return v.trim();
+    }
+    return null;
+  };
+  const bangkok: ThaiWarning[] = [];
+  for (const row of rows) {
+    if (!row || typeof row !== "object") continue;
+    const o = row as Record<string, unknown>;
+    const message = str(o, "message");
+    if (!message) continue;
+    const provinceCode = nested(o, "geocode", "province_code");
+    if (provinceCode !== "10" && provinceCode !== "10499") continue;
+    const lat = Number(o["lat"]);
+    const lon = Number(o["lng"] ?? o["lon"]);
+    bangkok.push({
+      datetime: str(o, "datetime"),
+      message,
+      province: nested(o, "geocode", "province_name") ?? "กรุงเทพมหานคร",
+      district: nested(o, "geocode", "amphoe_name"),
+      lat: Number.isFinite(lat) ? lat : null,
+      lon: Number.isFinite(lon) ? lon : null,
+      kind: str(o, "type"),
+      color: str(o, "warning_color"),
+    });
+  }
+  return { bangkok, national: rows.length };
+}
+
+export async function handleLiveThaiwaterWarnings(): Promise<Response> {
+  const fetchedAt = new Date().toISOString();
+  const base = { fetchedAt, source: THAIWATER_WARNINGS_UPSTREAM };
+
+  const ctrl = new AbortController();
+  const timer = setTimeout(() => ctrl.abort(), UPSTREAM_TIMEOUT_MS);
+  try {
+    const res = await fetch(THAIWATER_WARNINGS_UPSTREAM, {
+      signal: ctrl.signal,
+      headers: { accept: "application/json", "user-agent": "BKKx/1.0 (+https://bkk.nonarkara.org)" },
+    });
+    if (!res.ok) {
+      return envelope({ ...base, ok: false, reason: `ThaiWater warning table returned HTTP ${res.status}.` });
+    }
+    const raw = await res.json().catch(() => null);
+    if (raw === null) {
+      return envelope({ ...base, ok: false, reason: "ThaiWater warning table returned a body that is not JSON." });
+    }
+    const { bangkok, national } = normaliseThaiwaterWarnings(raw);
+    return envelope<ThaiWarningsPayload>({
+      ...base,
+      ok: true,
+      data: {
+        bangkok,
+        bangkokCount: bangkok.length,
+        nationalCount: national,
+        attribution: "HII ThaiWater flash-flood warnings · สถาบันสารสนเทศทรัพยากรน้ำ",
+      },
+    }, THAIWATER_TTL_SECONDS);
+  } catch (err) {
+    const reason =
+      (err as Error)?.name === "AbortError"
+        ? `ThaiWater did not respond within ${UPSTREAM_TIMEOUT_MS / 1000}s.`
+        : `ThaiWater unreachable: ${(err as Error)?.message ?? "unknown error"}.`;
     return envelope({ ...base, ok: false, reason });
   } finally {
     clearTimeout(timer);
@@ -905,7 +1032,7 @@ export async function handleCctvHealth(): Promise<Response> {
  * The CSV column layout is read from FIRMS's own header row rather than
  * assumed — this environment could not reach firms.modaps.eosdis.nasa.gov
  * to confirm the schema at build time (egress-blocked), so the same
- * defensive discipline as normaliseRain() applies: pick columns by name,
+ * defensive discipline as normaliseThaiwaterRain() applies: pick columns by name,
  * drop what cannot be read, and report the drop count rather than hide it.
  * ==================================================================== */
 

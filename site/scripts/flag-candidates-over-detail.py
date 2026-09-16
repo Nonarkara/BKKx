@@ -27,8 +27,8 @@ This step settles which representation is drawn. For every candidate:
 The candidates file is generated from Overture by build-rowhouse-footprints.py,
 which needs the network; this step post-processes the committed file and
 rewrites it in its own serialisation, refusing a file it cannot reproduce
-byte for byte first. Runs in `npm run build` as data:candidates, after
-data:hide (which decides what the detail layer draws) and before
+byte for byte first. Runs in `npm run build` as data:candidates, after data:hide and data:strips
+(which decide what the detail layer draws) and before
 data:evidence (which counts only what is extruded).
 
     python3 scripts/flag-candidates-over-detail.py            # rewrite

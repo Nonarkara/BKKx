@@ -47,6 +47,7 @@ jobs:
           python3 scripts/test-build-rattanakosin-water-and-walls.py
           python3 scripts/test-build-shophouse-fabric.py
           python3 scripts/test-hide-under-heroes.py
+          python3 scripts/test-flag-row-strips.py
           python3 scripts/test-flag-candidates-over-detail.py
           python3 scripts/test-mc-ground.py
           # The independent check that no hero model stands inside a box the

@@ -321,9 +321,12 @@ export default function WarRoom() {
       <footer className="wr-foot">
         <p>
           Static panels computed at build from the shipped corpus. Live panels
-          poll <code>/api/live/*</code>, which the Worker proxies server-side
-          because the upstream gauge feed is plain HTTP and sends no CORS
-          headers. No panel on this page renders a number it did not receive.
+          poll <code>/api/live/*</code>, which the Worker proxies server-side:
+          the BMA gauge endpoint is plain HTTP with no CORS headers and now
+          needs credentials, so <code>/api/live/rain</code> reads the same
+          network through HII ThaiWater&apos;s public mirror; the forecast
+          routes are proxied so visitor IPs never reach a third party. No
+          panel on this page renders a number it did not receive.
         </p>
         <p>
           <Link href="/atlas/historic-core">Console atlas →</Link>{" "}

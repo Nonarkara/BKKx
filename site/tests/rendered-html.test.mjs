@@ -194,17 +194,95 @@ test("weather keeps valid air observations when the forecast is rate-limited", a
   }
 });
 
-test("rain treats a credential error inside HTTP 200 as unavailable data", async () => {
+test("rain reads the BMA network through its ThaiWater mirror, never a zero", async () => {
   const { handleLiveRain } = await import("../worker/live.ts");
   const originalFetch = globalThis.fetch;
-  globalThis.fetch = async () => Response.json({ Error: "username หรือ Password ไม่ถูกต้อง" });
+  const thaiwater = {
+    result: "OK",
+    data: [
+      {
+        id: 1,
+        rain_24h: 72.5,
+        rain_1h: 0,
+        rainfall_datetime: "2026-09-16 13:00",
+        agency: { agency_shortname: { th: "สนน กทม.", en: "BMA" } },
+        geocode: { amphoe_name: { th: "บางรัก", en: "Bang Rak" }, province_code: "10" },
+        station: { tele_station_name: { th: "สนข.บางรัก" }, tele_station_lat: 13.73, tele_station_long: 100.51 },
+      },
+      { id: 2, rain_24h: "not a number", rainfall_datetime: "2026-09-16 13:00" },
+    ],
+  };
+  globalThis.fetch = async () => Response.json(thaiwater);
+
+  try {
+    const response = await handleLiveRain();
+    const body = await response.json();
+    assert.equal(body.ok, true);
+    assert.equal(body.data.stationCount, 1, "the unreadable row is dropped, not zeroed");
+    assert.equal(body.data.unreadable, 1);
+    assert.equal(body.data.maxMm, 72.5);
+    assert.equal(body.data.stations[0].name, "สนข.บางรัก");
+    assert.equal(body.data.stations[0].district, "บางรัก");
+    assert.equal(body.data.stations[0].agency, "สนน กทม.");
+    assert.match(body.data.agency, /ThaiWater/);
+  } finally {
+    globalThis.fetch = originalFetch;
+  }
+});
+
+test("rain reports an unreadable ThaiWater shape instead of an empty city", async () => {
+  const { handleLiveRain } = await import("../worker/live.ts");
+  const originalFetch = globalThis.fetch;
+  globalThis.fetch = async () => Response.json({ result: "OK", data: [{ id: 1 }] });
 
   try {
     const response = await handleLiveRain();
     const body = await response.json();
     assert.equal(body.ok, false);
-    assert.match(body.reason, /requires credentials/);
+    assert.match(body.reason, /no Bangkok station carried a readable/);
     assert.equal(response.headers.get("x-bkkx-live"), "degraded");
+  } finally {
+    globalThis.fetch = originalFetch;
+  }
+});
+
+test("warnings keep the national count so a quiet Bangkok reads as quiet", async () => {
+  const { handleLiveThaiwaterWarnings } = await import("../worker/live.ts");
+  const originalFetch = globalThis.fetch;
+  globalThis.fetch = async () =>
+    Response.json({
+      result: "OK",
+      data: [
+        {
+          datetime: "2026-09-16 07:00",
+          message: "ฝนตกหนักมาก จ.ลำปาง",
+          type: "rain1h",
+          warning_color: "#FF0000",
+          lat: 18.5,
+          lng: 99.6,
+          geocode: { province_code: "52", province_name: "ลำปาง", amphoe_name: "แจ้ห่ม" },
+        },
+        {
+          datetime: "2026-09-16 08:00",
+          message: "ฝนตกหนัก เขตบางนา",
+          type: "raintoday",
+          warning_color: "#FFA500",
+          lat: 13.66,
+          lng: 100.6,
+          geocode: { province_code: "10", province_name: "กรุงเทพมหานคร", amphoe_name: "บางนา" },
+        },
+        { datetime: "2026-09-16 08:00", type: "raintoday" },
+      ],
+    });
+
+  try {
+    const response = await handleLiveThaiwaterWarnings();
+    const body = await response.json();
+    assert.equal(body.ok, true);
+    assert.equal(body.data.nationalCount, 3);
+    assert.equal(body.data.bangkokCount, 1, "only province_code 10; the messageless row is dropped");
+    assert.equal(body.data.bangkok[0].district, "บางนา");
+    assert.match(body.data.attribution, /ThaiWater/);
   } finally {
     globalThis.fetch = originalFetch;
   }
@@ -1792,8 +1870,9 @@ test("the evidence tally is computed from the layers and every tier is claimed",
     "candidate bases must sum to the extruded candidates",
   );
   assert.ok(tally.candidates.onDetailBox > 0, "some candidates stand on an OSM footprint and are outlined only");
-  // Boxes hidden under hero models are not extruded and so not counted.
-  assert.equal(tally.hidden.detail + tally.hidden.landmarks, 24);
+  // Boxes hidden under hero models are not extruded and so not counted —
+  // 24 under heroes plus the one degenerate sliver data:strips hides.
+  assert.equal(tally.hidden.detail + tally.hidden.landmarks, 25);
 
   // The point of the mode: a real, non-trivial share of the city is inferred.
   assert.ok(tally.byTier.inferred > 0, "if nothing were inferred the mode would have no subject");

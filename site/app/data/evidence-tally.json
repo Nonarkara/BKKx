@@ -7,14 +7,14 @@
   ],
   "byTier": {
     "official": 7,
-    "measured": 5987,
+    "measured": 5986,
     "curated": 132,
     "typological": 243,
-    "inferred": 4308
+    "inferred": 4309
   },
   "detailSources": {
     "override-id": 7,
-    "osm": 5987,
+    "osm": 5986,
     "viharn": 10,
     "chedi": 17,
     "type-default": 3220,
@@ -31,16 +31,16 @@
   },
   "landmarks": 61,
   "hidden": {
-    "detail": 12,
+    "detail": 13,
     "landmarks": 12
   },
   "candidateBases": {
-    "modal-storeys": 1022,
+    "modal-storeys": 1023,
     "overture-storeys": 243
   },
   "candidates": {
-    "extruded": 1265,
-    "onDetailBox": 1168
+    "extruded": 1266,
+    "onDetailBox": 1167
   },
   "total": 10677
 }

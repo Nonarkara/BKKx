@@ -244,11 +244,48 @@ export const TWIN_SOURCES: TwinSource[] = [
     auth: "account",
     browserReachable: false,
     whyProxied:
-      "Mandatory if access is restored: the endpoint is plain HTTP and sends no CORS headers, and credentials must never reach the browser.",
+      "Mandatory: the direct endpoint is plain HTTP and sends no CORS headers, and credentials must never reach the browser. It now also requires credentials that were never granted — so the wired route reads the same network through the ThaiWater mirror below instead of rendering the credential error as zero rain.",
     caveat:
-      "The endpoint currently returns a username/password error inside an HTTP 200 response. The Worker identifies that as unavailable and never renders it as zero rain.",
+      "The direct endpoint returns a username/password error inside an HTTP 200 response. The live route therefore serves the HII republication of these same gauges (thaiwater-rain); a reading labelled BMA-via-ThaiWater is one pipe removed from the sensor, and the route says so.",
     url: "http://weather.bangkok.go.th/dds_webservices/api/rain/lastdata",
     route: "/api/live/rain",
+  },
+  {
+    id: "thaiwater-rain",
+    name: "ThaiWater Bangkok rain table (BMA gauges republished)",
+    provider: "สถาบันสารสนเทศทรัพยากรน้ำ (องค์การมหาชน) — HII",
+    category: "hazard",
+    integration: "wired",
+    unlocks:
+      "The BMA drainage network's own readings through a pipe that is actually open: 24 h and 1 h rainfall for every Bangkok station — 118 BMA drainage gauges plus HII, TMD and DWR stations in the city — read 2026-09-16 with 133 Bangkok rows. This is the same upstream the bangkok.thaiwater.net provincial dashboard drinks from (provinces/rain24), stolen and slimmed: the dashboard ships the national blob to the browser and filters client-side; the Worker filters province_code 10 server-side and serves a kilobyte-scale slice with an honest envelope.",
+    licence:
+      "HII public dashboard API; responses carry no licence field and access and reuse terms are not formally published. Operational readings of public agencies, served keyless; attribution is rendered on every panel that shows a figure.",
+    auth: "none",
+    browserReachable: true,
+    whyProxied:
+      "The browser could call it directly, but every visitor would hand their IP to a third party and download a 147 KB national table to read a Bangkok slice. Same privacy rule as the forecast route: same-origin, edge-cached, filtered server-side.",
+    caveat:
+      "One pipe removed from the sensor: HII aggregates BMA/HII/TMD/DWR feeds, so a stale or re-shaped upstream table degrades every Bangkok rain figure at once. The route reports unreadable rows rather than hiding them, and a changed shape fails loudly with the function name to fix.",
+    url: "https://api-v3.thaiwater.net/api/v1/thaiwater30/provinces/rain24?include_zero=1&province_code=10",
+    route: "/api/live/rain",
+  },
+  {
+    id: "thaiwater-warnings",
+    name: "ThaiWater flash-flood warnings",
+    provider: "สถาบันสารสนเทศทรัพยากรน้ำ (องค์การมหาชน) — HII",
+    category: "hazard",
+    integration: "wired",
+    unlocks:
+      "The only live official warning feed on this list: active flash-flood warnings nationwide with a Bangkok slice (province_code 10), each with its Thai message, colour and type. The route keeps the national count beside the Bangkok one, so a quiet Bangkok reads as quiet rather than as a broken feed — the distinction the whole live layer is built on.",
+    licence:
+      "HII public dashboard API; responses carry no licence field and access and reuse terms are not formally published. Served keyless; attribution is rendered beside the count.",
+    auth: "none",
+    browserReachable: true,
+    whyProxied: "Same call-shape as the rain table — one upstream, one cache discipline, no visitor IPs leaving the origin.",
+    caveat:
+      "Warnings are categorical (colour + Thai message), not measurements: they say where HII is worried, not how many millimetres will fall. Never chart the national count as a Bangkok series.",
+    url: "https://api-v3.thaiwater.net/api/v1/thaiwater30/public/warning_province",
+    route: "/api/live/thaiwater-warnings",
   },
   {
     id: "bma-flood-open-data",
@@ -336,11 +373,9 @@ export const TWIN_SOURCES: TwinSource[] = [
     category: "civic",
     integration: "researched",
     unlocks:
-      "The only source on this list where the city reports on itself. Citizens file located complaints — road, footway, flooding, lighting, safety, cleanliness — and the twin can ask a question none of the other layers can: where does the fabric report itself failing, and does that coincide with the shophouse rows this project argues are under pressure? The figure to compute first is reports per hundred screened footprints per cluster, with the building-condition categories (collapse risk, unpermitted modification, fire) held apart from the rest, so a street with many potholes is not read as a street of failing buildings.",
+      "The only source on this list where the city reports on itself. Citizens file located complaints — road, footway, flooding, lighting, safety, cleanliness — and the twin can ask a question none of the other layers can: where does the fabric report itself failing, and does that coincide with the shophouse rows this project argues are under pressure? The figure to compute first is reports per hundred screened footprints per cluster, with the building-condition categories (collapse risk, unpermitted modification, fire) held apart from the rest, so a street with many potholes is not read as a street of failing buildings. Verified 2026-09-16, ready for the day terms appear: CKAN datastore is live with 54,068 rows in the 2569 file (resource 3d759b36-9944-4f16-abb0-14c35520ff98, ~100 MB CSV) and columns ticket_id, type, organization, comment, coords, photo, address, subdistrict, district, province, timestamp, state, star — everything the join needs except permission.",
     licence:
-      "Published as open data by the BMA; the specific licence text has not been read by this project.",
-    licenceUnverified:
-      "data.bangkok.go.th and traffy.in.th are both blocked by this environment's egress proxy, so the dataset page, its licence field and the CSV schema were never opened. Two dataset ids appear in search results — `traffy-fondue` and `gad0001` — and a CSV resource is tagged; neither the column list nor the terms are established here. Open the dataset page, read the licence, and record the columns before anything is wired.",
+      "No licence stated — the portal's licence field reads 'License not specified' (CKAN package_show, read 2026-09-16). Without stated terms this stays researched: no bulk ingest, no derived figure.",
     auth: "none",
     browserReachable: false,
     caveat:

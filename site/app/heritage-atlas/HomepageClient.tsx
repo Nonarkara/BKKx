@@ -5,6 +5,7 @@ import { useRef, useState } from "react";
 import { useLocale } from "../i18n/LocaleContext";
 import { LangToggle } from "../i18n/LangToggle";
 import { AREA_TH } from "../data/heritage-translations-th";
+import { CityGlance } from "./CityGlance";
 import { OldTownPicks } from "./OldTownPicks";
 import { OLDTOWN_SPOTS } from "../data/oldtown-spots";
 
@@ -75,6 +76,8 @@ export function HomepageClient({ quarters, initialQuarter }: Props) {
           <LangToggle />
         </nav>
       </header>
+
+      <CityGlance />
 
       <div className="atlas-shell-body">
         <aside className="atlas-shell-quarters" aria-label="Heritage quarters">
