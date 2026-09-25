@@ -6,8 +6,9 @@
   <meta name="description" content="Explore Bangkok DDS canals, pumps, gates and flood-risk records with the Royal Thai Navy's 2026 tide predictions.">
   <link rel="stylesheet" href="./vendor/leaflet.css">
   <link rel="stylesheet" href="./drainage.css">
+  <link rel="stylesheet" href="./briefing.css?v=4.41.2">
   <script defer src="./vendor/leaflet.js"></script>
-  <script type="module" src="./drainage.js"></script>
+  <script type="module" src="./drainage.js?v=4.41.2"></script>
 </head>
 <body>
   <header><a href="/" data-copy="back">กลับหน้าหลัก</a><button id="language" type="button">English</button></header>
@@ -27,6 +28,7 @@
       </div>
       <div class="map-area"><div id="map" aria-label="Bangkok reference map"></div><article id="detail" aria-live="polite"><p data-copy="select">เลือกจุดบนแผนที่หรือชื่อในรายการเพื่อดูข้อมูล</p></article></div>
     </section>
+    <section id="briefing" class="briefing" aria-label="DDS dated reports"></section>
     <section class="tides" aria-labelledby="tide-title">
       <div><h2 id="tide-title" data-copy="tides">น้ำขึ้นลงที่กองบัญชาการกองทัพเรือ</h2>
       <p data-copy="tideNote">ค่าทำนายทางดาราศาสตร์ ปี 2569 หน่วยเมตรจากระดับทะเลปานกลาง ไม่รวมฝนและน้ำระบายจากเขื่อน จึงใช้แทนระดับน้ำจริงไม่ได้</p>

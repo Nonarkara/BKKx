@@ -1,7 +1,9 @@
 /* global L */
+import { mountBriefing } from './briefing.js?v=4.41.2';
 const $ = id => document.getElementById(id);
 let lang = 'th', manifest, tides, map, current, selected, generation = 0, limit = 60;
 const collections = new Map();
+const renderBriefing = mountBriefing(document.getElementById('briefing'),()=>lang);
 const labels = {
   back:['กลับหน้าหลัก','Back to main site'],title:['ทางน้ำกรุงเทพฯ','Bangkok drainage & tides'],
   intro:['ดูคลอง เครื่องสูบน้ำ และจุดเสี่ยงจากสำนักการระบายน้ำ กทม. พร้อมตารางน้ำขึ้นลงปี 2569','Explore the city’s drainage infrastructure and flood-risk register, with the Navy’s 2026 tide table.'],
@@ -18,6 +20,7 @@ function node(tag, text, attrs={}) { const n=document.createElement(tag); if(tex
 function dateLabel(iso) { return iso ? new Date(iso).toLocaleDateString(lang==='th'?'th-TH':'en-GB',{timeZone:'Asia/Bangkok',year:'numeric',month:'short',day:'numeric'}) : t('ไม่ระบุ','not stated'); }
 async function json(path) { const r=await fetch(path); if(!r.ok)throw new Error(`HTTP ${r.status}`);return r.json(); }
 function translate() {
+  renderBriefing();
   document.documentElement.lang=lang;
   document.querySelectorAll('[data-copy]').forEach(n=>{n.textContent=labels[n.dataset.copy][lang==='th'?0:1];});
   $('language').textContent=lang==='th'?'English':'ไทย';
