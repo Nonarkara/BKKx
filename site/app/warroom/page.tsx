@@ -124,6 +124,17 @@ export default function WarRoom() {
 
       <FirePanel monuments={locatedMonuments} />
 
+      <section className="wr-panel" aria-labelledby="dds-reference-title">
+        <h2 id="dds-reference-title">Bangkok drainage &amp; tides · ทางน้ำกรุงเทพฯ</h2>
+        <p className="wr-panel-note">
+          Explore the DDS canal, pump, gate and flood-risk register on a map,
+          alongside the Navy’s daily tide predictions for 2026. Source dates and
+          limitations are printed with each layer. These are reference records
+          and astronomical predictions; they do not measure current flooding.
+        </p>
+        <a href="/drainage/">Open drainage map and tide table →</a>
+      </section>
+
       <div className="wr-grid-2">
         <section className="wr-panel" aria-labelledby="wr-water-h">
           <header className="wr-panel-head">

@@ -12,6 +12,8 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Unmodified upstream Leaflet distribution, retained with its licence.
+    "public/drainage/vendor/**",
   ]),
 ]);
 

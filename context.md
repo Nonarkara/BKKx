@@ -37,6 +37,16 @@ about; the worlds are what make it walkable.
 
 ## Design register
 
+### Drainage companion, 2026-09-25
+
+Design read: a Bangkok canal and tide field guide, with the map as the dominant
+surface and a compact searchable register beside it. Reference: the Royal Thai
+Navy's 2026 daily high/low-water table. Civic register, light ground, one amber
+selection accent; 2px section divisions and 1px record rules. Infrastructure is
+dated reference data; astronomical tides remain separate from observed floods.
+The portable `/drainage/` view is shared with FloodDash, with local static data
+and no dependency on the agency's runtime availability.
+
 **Root and register: EDITORIAL** (Axiom Design Core §XV; layout law §XX, the
 MoMA Grid). The reader is someone learning about Bangkok's heritage start to
 finish, by choice — not an operator watching a live system.

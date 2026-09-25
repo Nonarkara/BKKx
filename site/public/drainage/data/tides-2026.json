@@ -1,0 +1,8329 @@
+{
+  "source": "Royal Thai Navy Hydrographic Department, hosted by Bangkok DDS",
+  "url": "https://dds.bangkok.go.th/public_content/files/001/0006030_1.pdf",
+  "station": "Royal Thai Navy Headquarters",
+  "stationTh": "กองบัญชาการกองทัพเรือ",
+  "tier": "prediction",
+  "year": 2026,
+  "timeZone": "Asia/Bangkok",
+  "datum": "mean sea level",
+  "caveat": "Astronomical prediction only. Excludes rainfall and dam releases; not a measured river level or flood warning.",
+  "days": [
+    {
+      "date": "2026-01-01",
+      "page": 1,
+      "events": [
+        {
+          "kind": "high",
+          "time": "13:30",
+          "metresMsl": 1.13
+        }
+      ]
+    },
+    {
+      "date": "2026-01-02",
+      "page": 1,
+      "events": [
+        {
+          "kind": "low",
+          "time": "00:10",
+          "metresMsl": -0.55
+        },
+        {
+          "kind": "high",
+          "time": "08:47",
+          "metresMsl": 1.24
+        }
+      ]
+    },
+    {
+      "date": "2026-01-03",
+      "page": 1,
+      "events": [
+        {
+          "kind": "low",
+          "time": "01:28",
+          "metresMsl": -0.67
+        },
+        {
+          "kind": "high",
+          "time": "09:22",
+          "metresMsl": 1.35
+        }
+      ]
+    },
+    {
+      "date": "2026-01-04",
+      "page": 1,
+      "events": [
+        {
+          "kind": "low",
+          "time": "02:28",
+          "metresMsl": -0.82
+        },
+        {
+          "kind": "high",
+          "time": "10:01",
+          "metresMsl": 1.38
+        }
+      ]
+    },
+    {
+      "date": "2026-01-05",
+      "page": 1,
+      "events": [
+        {
+          "kind": "low",
+          "time": "03:14",
+          "metresMsl": -0.93
+        },
+        {
+          "kind": "high",
+          "time": "10:37",
+          "metresMsl": 1.35
+        }
+      ]
+    },
+    {
+      "date": "2026-01-06",
+      "page": 1,
+      "events": [
+        {
+          "kind": "low",
+          "time": "03:50",
+          "metresMsl": -0.98
+        },
+        {
+          "kind": "high",
+          "time": "11:06",
+          "metresMsl": 1.29
+        },
+        {
+          "kind": "low",
+          "time": "16:39",
+          "metresMsl": 0.82
+        },
+        {
+          "kind": "high",
+          "time": "19:01",
+          "metresMsl": 1
+        }
+      ]
+    },
+    {
+      "date": "2026-01-07",
+      "page": 1,
+      "events": [
+        {
+          "kind": "low",
+          "time": "04:17",
+          "metresMsl": -0.95
+        },
+        {
+          "kind": "high",
+          "time": "11:24",
+          "metresMsl": 1.21
+        },
+        {
+          "kind": "low",
+          "time": "17:03",
+          "metresMsl": 0.67
+        },
+        {
+          "kind": "high",
+          "time": "19:52",
+          "metresMsl": 0.92
+        }
+      ]
+    },
+    {
+      "date": "2026-01-08",
+      "page": 1,
+      "events": [
+        {
+          "kind": "low",
+          "time": "04:37",
+          "metresMsl": -0.83
+        },
+        {
+          "kind": "high",
+          "time": "11:32",
+          "metresMsl": 1.14
+        },
+        {
+          "kind": "low",
+          "time": "17:31",
+          "metresMsl": 0.49
+        },
+        {
+          "kind": "high",
+          "time": "20:43",
+          "metresMsl": 0.78
+        }
+      ]
+    },
+    {
+      "date": "2026-01-09",
+      "page": 1,
+      "events": [
+        {
+          "kind": "low",
+          "time": "04:46",
+          "metresMsl": -0.62
+        },
+        {
+          "kind": "high",
+          "time": "11:39",
+          "metresMsl": 1.07
+        },
+        {
+          "kind": "low",
+          "time": "18:04",
+          "metresMsl": 0.33
+        },
+        {
+          "kind": "high",
+          "time": "21:39",
+          "metresMsl": 0.61
+        }
+      ]
+    },
+    {
+      "date": "2026-01-10",
+      "page": 1,
+      "events": [
+        {
+          "kind": "low",
+          "time": "04:39",
+          "metresMsl": -0.36
+        },
+        {
+          "kind": "high",
+          "time": "11:20",
+          "metresMsl": 1.02
+        },
+        {
+          "kind": "low",
+          "time": "18:44",
+          "metresMsl": 0.19
+        },
+        {
+          "kind": "high",
+          "time": "22:43",
+          "metresMsl": 0.44
+        }
+      ]
+    },
+    {
+      "date": "2026-01-11",
+      "page": 1,
+      "events": [
+        {
+          "kind": "low",
+          "time": "04:06",
+          "metresMsl": -0.11
+        },
+        {
+          "kind": "high",
+          "time": "10:58",
+          "metresMsl": 1.03
+        },
+        {
+          "kind": "low",
+          "time": "19:34",
+          "metresMsl": 0.06
+        }
+      ]
+    },
+    {
+      "date": "2026-01-12",
+      "page": 1,
+      "events": [
+        {
+          "kind": "high",
+          "time": "00:01",
+          "metresMsl": 0.32
+        },
+        {
+          "kind": "low",
+          "time": "03:38",
+          "metresMsl": 0.15
+        },
+        {
+          "kind": "high",
+          "time": "11:00",
+          "metresMsl": 1.06
+        },
+        {
+          "kind": "low",
+          "time": "21:17",
+          "metresMsl": -0.06
+        }
+      ]
+    },
+    {
+      "date": "2026-01-13",
+      "page": 1,
+      "events": [
+        {
+          "kind": "high",
+          "time": "11:01",
+          "metresMsl": 1.07
+        },
+        {
+          "kind": "low",
+          "time": "22:20",
+          "metresMsl": -0.2
+        }
+      ]
+    },
+    {
+      "date": "2026-01-14",
+      "page": 1,
+      "events": [
+        {
+          "kind": "high",
+          "time": "10:22",
+          "metresMsl": 1.07
+        },
+        {
+          "kind": "low",
+          "time": "23:08",
+          "metresMsl": -0.31
+        }
+      ]
+    },
+    {
+      "date": "2026-01-15",
+      "page": 1,
+      "events": [
+        {
+          "kind": "high",
+          "time": "08:45",
+          "metresMsl": 1.1
+        },
+        {
+          "kind": "low",
+          "time": "23:57",
+          "metresMsl": -0.4
+        }
+      ]
+    },
+    {
+      "date": "2026-01-16",
+      "page": 1,
+      "events": [
+        {
+          "kind": "high",
+          "time": "08:26",
+          "metresMsl": 1.17
+        }
+      ]
+    },
+    {
+      "date": "2026-01-17",
+      "page": 1,
+      "events": [
+        {
+          "kind": "low",
+          "time": "00:49",
+          "metresMsl": -0.5
+        },
+        {
+          "kind": "high",
+          "time": "08:45",
+          "metresMsl": 1.2
+        }
+      ]
+    },
+    {
+      "date": "2026-01-18",
+      "page": 1,
+      "events": [
+        {
+          "kind": "low",
+          "time": "01:42",
+          "metresMsl": -0.63
+        },
+        {
+          "kind": "high",
+          "time": "09:15",
+          "metresMsl": 1.21
+        }
+      ]
+    },
+    {
+      "date": "2026-01-19",
+      "page": 1,
+      "events": [
+        {
+          "kind": "low",
+          "time": "02:27",
+          "metresMsl": -0.77
+        },
+        {
+          "kind": "high",
+          "time": "09:46",
+          "metresMsl": 1.21
+        },
+        {
+          "kind": "low",
+          "time": "13:23",
+          "metresMsl": 0.73
+        },
+        {
+          "kind": "high",
+          "time": "17:28",
+          "metresMsl": 0.86
+        }
+      ]
+    },
+    {
+      "date": "2026-01-20",
+      "page": 1,
+      "events": [
+        {
+          "kind": "low",
+          "time": "03:05",
+          "metresMsl": -0.87
+        },
+        {
+          "kind": "high",
+          "time": "10:17",
+          "metresMsl": 1.19
+        },
+        {
+          "kind": "low",
+          "time": "15:10",
+          "metresMsl": 0.64
+        },
+        {
+          "kind": "high",
+          "time": "18:07",
+          "metresMsl": 0.86
+        }
+      ]
+    },
+    {
+      "date": "2026-01-21",
+      "page": 1,
+      "events": [
+        {
+          "kind": "low",
+          "time": "03:37",
+          "metresMsl": -0.89
+        },
+        {
+          "kind": "high",
+          "time": "10:42",
+          "metresMsl": 1.14
+        },
+        {
+          "kind": "low",
+          "time": "15:35",
+          "metresMsl": 0.53
+        },
+        {
+          "kind": "high",
+          "time": "18:41",
+          "metresMsl": 0.85
+        }
+      ]
+    },
+    {
+      "date": "2026-01-22",
+      "page": 1,
+      "events": [
+        {
+          "kind": "low",
+          "time": "04:00",
+          "metresMsl": -0.81
+        },
+        {
+          "kind": "high",
+          "time": "10:55",
+          "metresMsl": 1.07
+        },
+        {
+          "kind": "low",
+          "time": "15:59",
+          "metresMsl": 0.41
+        },
+        {
+          "kind": "high",
+          "time": "19:18",
+          "metresMsl": 0.84
+        }
+      ]
+    },
+    {
+      "date": "2026-01-23",
+      "page": 1,
+      "events": [
+        {
+          "kind": "low",
+          "time": "04:03",
+          "metresMsl": -0.66
+        },
+        {
+          "kind": "high",
+          "time": "10:53",
+          "metresMsl": 1
+        },
+        {
+          "kind": "low",
+          "time": "16:22",
+          "metresMsl": 0.25
+        },
+        {
+          "kind": "high",
+          "time": "20:02",
+          "metresMsl": 0.81
+        }
+      ]
+    },
+    {
+      "date": "2026-01-24",
+      "page": 1,
+      "events": [
+        {
+          "kind": "low",
+          "time": "03:33",
+          "metresMsl": -0.51
+        },
+        {
+          "kind": "high",
+          "time": "10:31",
+          "metresMsl": 0.98
+        },
+        {
+          "kind": "low",
+          "time": "16:50",
+          "metresMsl": 0.07
+        },
+        {
+          "kind": "high",
+          "time": "21:00",
+          "metresMsl": 0.76
+        }
+      ]
+    },
+    {
+      "date": "2026-01-25",
+      "page": 1,
+      "events": [
+        {
+          "kind": "low",
+          "time": "03:27",
+          "metresMsl": -0.35
+        },
+        {
+          "kind": "high",
+          "time": "10:04",
+          "metresMsl": 1.04
+        },
+        {
+          "kind": "low",
+          "time": "17:25",
+          "metresMsl": -0.11
+        },
+        {
+          "kind": "high",
+          "time": "22:15",
+          "metresMsl": 0.68
+        }
+      ]
+    },
+    {
+      "date": "2026-01-26",
+      "page": 1,
+      "events": [
+        {
+          "kind": "low",
+          "time": "03:45",
+          "metresMsl": -0.1
+        },
+        {
+          "kind": "high",
+          "time": "10:07",
+          "metresMsl": 1.12
+        },
+        {
+          "kind": "low",
+          "time": "18:05",
+          "metresMsl": -0.24
+        },
+        {
+          "kind": "high",
+          "time": "23:42",
+          "metresMsl": 0.61
+        }
+      ]
+    },
+    {
+      "date": "2026-01-27",
+      "page": 1,
+      "events": [
+        {
+          "kind": "low",
+          "time": "04:03",
+          "metresMsl": 0.2
+        },
+        {
+          "kind": "high",
+          "time": "10:24",
+          "metresMsl": 1.17
+        },
+        {
+          "kind": "low",
+          "time": "18:55",
+          "metresMsl": -0.32
+        }
+      ]
+    },
+    {
+      "date": "2026-01-28",
+      "page": 1,
+      "events": [
+        {
+          "kind": "high",
+          "time": "01:41",
+          "metresMsl": 0.58
+        },
+        {
+          "kind": "low",
+          "time": "04:06",
+          "metresMsl": 0.49
+        },
+        {
+          "kind": "high",
+          "time": "10:45",
+          "metresMsl": 1.19
+        },
+        {
+          "kind": "low",
+          "time": "20:07",
+          "metresMsl": -0.36
+        }
+      ]
+    },
+    {
+      "date": "2026-01-29",
+      "page": 1,
+      "events": [
+        {
+          "kind": "high",
+          "time": "11:03",
+          "metresMsl": 1.17
+        },
+        {
+          "kind": "low",
+          "time": "22:14",
+          "metresMsl": -0.42
+        }
+      ]
+    },
+    {
+      "date": "2026-01-30",
+      "page": 1,
+      "events": [
+        {
+          "kind": "high",
+          "time": "08:44",
+          "metresMsl": 1.2
+        }
+      ]
+    },
+    {
+      "date": "2026-01-31",
+      "page": 1,
+      "events": [
+        {
+          "kind": "low",
+          "time": "00:02",
+          "metresMsl": -0.56
+        },
+        {
+          "kind": "high",
+          "time": "08:43",
+          "metresMsl": 1.28
+        }
+      ]
+    },
+    {
+      "date": "2026-02-01",
+      "page": 2,
+      "events": [
+        {
+          "kind": "low",
+          "time": "01:21",
+          "metresMsl": -0.74
+        },
+        {
+          "kind": "high",
+          "time": "09:07",
+          "metresMsl": 1.3
+        }
+      ]
+    },
+    {
+      "date": "2026-02-02",
+      "page": 2,
+      "events": [
+        {
+          "kind": "low",
+          "time": "02:11",
+          "metresMsl": -0.9
+        },
+        {
+          "kind": "high",
+          "time": "09:33",
+          "metresMsl": 1.26
+        },
+        {
+          "kind": "low",
+          "time": "15:10",
+          "metresMsl": 0.74
+        },
+        {
+          "kind": "high",
+          "time": "17:35",
+          "metresMsl": 0.91
+        }
+      ]
+    },
+    {
+      "date": "2026-02-03",
+      "page": 2,
+      "events": [
+        {
+          "kind": "low",
+          "time": "02:48",
+          "metresMsl": -0.96
+        },
+        {
+          "kind": "high",
+          "time": "09:51",
+          "metresMsl": 1.19
+        },
+        {
+          "kind": "low",
+          "time": "15:32",
+          "metresMsl": 0.6
+        },
+        {
+          "kind": "high",
+          "time": "18:36",
+          "metresMsl": 0.93
+        }
+      ]
+    },
+    {
+      "date": "2026-02-04",
+      "page": 2,
+      "events": [
+        {
+          "kind": "low",
+          "time": "03:17",
+          "metresMsl": -0.92
+        },
+        {
+          "kind": "high",
+          "time": "09:53",
+          "metresMsl": 1.12
+        },
+        {
+          "kind": "low",
+          "time": "15:55",
+          "metresMsl": 0.42
+        },
+        {
+          "kind": "high",
+          "time": "19:28",
+          "metresMsl": 0.92
+        }
+      ]
+    },
+    {
+      "date": "2026-02-05",
+      "page": 2,
+      "events": [
+        {
+          "kind": "low",
+          "time": "03:38",
+          "metresMsl": -0.8
+        },
+        {
+          "kind": "high",
+          "time": "09:59",
+          "metresMsl": 1.08
+        },
+        {
+          "kind": "low",
+          "time": "16:18",
+          "metresMsl": 0.24
+        },
+        {
+          "kind": "high",
+          "time": "20:15",
+          "metresMsl": 0.87
+        }
+      ]
+    },
+    {
+      "date": "2026-02-06",
+      "page": 2,
+      "events": [
+        {
+          "kind": "low",
+          "time": "03:49",
+          "metresMsl": -0.61
+        },
+        {
+          "kind": "high",
+          "time": "10:04",
+          "metresMsl": 1.04
+        },
+        {
+          "kind": "low",
+          "time": "16:45",
+          "metresMsl": 0.08
+        },
+        {
+          "kind": "high",
+          "time": "20:58",
+          "metresMsl": 0.79
+        }
+      ]
+    },
+    {
+      "date": "2026-02-07",
+      "page": 2,
+      "events": [
+        {
+          "kind": "low",
+          "time": "03:43",
+          "metresMsl": -0.38
+        },
+        {
+          "kind": "high",
+          "time": "09:49",
+          "metresMsl": 1.03
+        },
+        {
+          "kind": "low",
+          "time": "17:12",
+          "metresMsl": -0.04
+        },
+        {
+          "kind": "high",
+          "time": "21:42",
+          "metresMsl": 0.7
+        }
+      ]
+    },
+    {
+      "date": "2026-02-08",
+      "page": 2,
+      "events": [
+        {
+          "kind": "low",
+          "time": "03:25",
+          "metresMsl": -0.15
+        },
+        {
+          "kind": "high",
+          "time": "09:32",
+          "metresMsl": 1.06
+        },
+        {
+          "kind": "low",
+          "time": "17:33",
+          "metresMsl": -0.11
+        },
+        {
+          "kind": "high",
+          "time": "22:29",
+          "metresMsl": 0.62
+        }
+      ]
+    },
+    {
+      "date": "2026-02-09",
+      "page": 2,
+      "events": [
+        {
+          "kind": "low",
+          "time": "03:27",
+          "metresMsl": 0.09
+        },
+        {
+          "kind": "high",
+          "time": "09:29",
+          "metresMsl": 1.1
+        },
+        {
+          "kind": "low",
+          "time": "17:38",
+          "metresMsl": -0.17
+        },
+        {
+          "kind": "high",
+          "time": "23:26",
+          "metresMsl": 0.54
+        }
+      ]
+    },
+    {
+      "date": "2026-02-10",
+      "page": 2,
+      "events": [
+        {
+          "kind": "low",
+          "time": "03:21",
+          "metresMsl": 0.32
+        },
+        {
+          "kind": "high",
+          "time": "09:29",
+          "metresMsl": 1.12
+        },
+        {
+          "kind": "low",
+          "time": "18:00",
+          "metresMsl": -0.22
+        }
+      ]
+    },
+    {
+      "date": "2026-02-11",
+      "page": 2,
+      "events": [
+        {
+          "kind": "high",
+          "time": "09:25",
+          "metresMsl": 1.11
+        },
+        {
+          "kind": "low",
+          "time": "18:51",
+          "metresMsl": -0.24
+        }
+      ]
+    },
+    {
+      "date": "2026-02-12",
+      "page": 2,
+      "events": [
+        {
+          "kind": "high",
+          "time": "09:11",
+          "metresMsl": 1.09
+        },
+        {
+          "kind": "low",
+          "time": "20:15",
+          "metresMsl": -0.25
+        }
+      ]
+    },
+    {
+      "date": "2026-02-13",
+      "page": 2,
+      "events": [
+        {
+          "kind": "high",
+          "time": "08:04",
+          "metresMsl": 1.1
+        },
+        {
+          "kind": "low",
+          "time": "23:02",
+          "metresMsl": -0.35
+        }
+      ]
+    },
+    {
+      "date": "2026-02-14",
+      "page": 2,
+      "events": [
+        {
+          "kind": "high",
+          "time": "07:56",
+          "metresMsl": 1.15
+        }
+      ]
+    },
+    {
+      "date": "2026-02-15",
+      "page": 2,
+      "events": [
+        {
+          "kind": "low",
+          "time": "00:15",
+          "metresMsl": -0.51
+        },
+        {
+          "kind": "high",
+          "time": "08:15",
+          "metresMsl": 1.16
+        }
+      ]
+    },
+    {
+      "date": "2026-02-16",
+      "page": 2,
+      "events": [
+        {
+          "kind": "low",
+          "time": "01:11",
+          "metresMsl": -0.68
+        },
+        {
+          "kind": "high",
+          "time": "08:39",
+          "metresMsl": 1.15
+        },
+        {
+          "kind": "low",
+          "time": "14:15",
+          "metresMsl": 0.6
+        },
+        {
+          "kind": "high",
+          "time": "16:45",
+          "metresMsl": 0.7
+        }
+      ]
+    },
+    {
+      "date": "2026-02-17",
+      "page": 2,
+      "events": [
+        {
+          "kind": "low",
+          "time": "01:54",
+          "metresMsl": -0.8
+        },
+        {
+          "kind": "high",
+          "time": "09:00",
+          "metresMsl": 1.12
+        },
+        {
+          "kind": "low",
+          "time": "14:14",
+          "metresMsl": 0.45
+        },
+        {
+          "kind": "high",
+          "time": "17:34",
+          "metresMsl": 0.74
+        }
+      ]
+    },
+    {
+      "date": "2026-02-18",
+      "page": 2,
+      "events": [
+        {
+          "kind": "low",
+          "time": "02:30",
+          "metresMsl": -0.83
+        },
+        {
+          "kind": "high",
+          "time": "09:14",
+          "metresMsl": 1.07
+        },
+        {
+          "kind": "low",
+          "time": "14:39",
+          "metresMsl": 0.3
+        },
+        {
+          "kind": "high",
+          "time": "18:13",
+          "metresMsl": 0.79
+        }
+      ]
+    },
+    {
+      "date": "2026-02-19",
+      "page": 2,
+      "events": [
+        {
+          "kind": "low",
+          "time": "03:00",
+          "metresMsl": -0.75
+        },
+        {
+          "kind": "high",
+          "time": "09:20",
+          "metresMsl": 1
+        },
+        {
+          "kind": "low",
+          "time": "15:06",
+          "metresMsl": 0.14
+        },
+        {
+          "kind": "high",
+          "time": "18:52",
+          "metresMsl": 0.84
+        }
+      ]
+    },
+    {
+      "date": "2026-02-20",
+      "page": 2,
+      "events": [
+        {
+          "kind": "low",
+          "time": "03:18",
+          "metresMsl": -0.57
+        },
+        {
+          "kind": "high",
+          "time": "09:20",
+          "metresMsl": 0.95
+        },
+        {
+          "kind": "low",
+          "time": "15:30",
+          "metresMsl": -0.03
+        },
+        {
+          "kind": "high",
+          "time": "19:38",
+          "metresMsl": 0.89
+        }
+      ]
+    },
+    {
+      "date": "2026-02-21",
+      "page": 2,
+      "events": [
+        {
+          "kind": "low",
+          "time": "03:06",
+          "metresMsl": -0.38
+        },
+        {
+          "kind": "high",
+          "time": "09:00",
+          "metresMsl": 0.95
+        },
+        {
+          "kind": "low",
+          "time": "15:55",
+          "metresMsl": -0.2
+        },
+        {
+          "kind": "high",
+          "time": "20:33",
+          "metresMsl": 0.93
+        }
+      ]
+    },
+    {
+      "date": "2026-02-22",
+      "page": 2,
+      "events": [
+        {
+          "kind": "low",
+          "time": "02:47",
+          "metresMsl": -0.22
+        },
+        {
+          "kind": "high",
+          "time": "08:31",
+          "metresMsl": 1.03
+        },
+        {
+          "kind": "low",
+          "time": "16:22",
+          "metresMsl": -0.36
+        },
+        {
+          "kind": "high",
+          "time": "21:32",
+          "metresMsl": 0.94
+        }
+      ]
+    },
+    {
+      "date": "2026-02-23",
+      "page": 2,
+      "events": [
+        {
+          "kind": "low",
+          "time": "03:08",
+          "metresMsl": -0.02
+        },
+        {
+          "kind": "high",
+          "time": "08:41",
+          "metresMsl": 1.14
+        },
+        {
+          "kind": "low",
+          "time": "16:56",
+          "metresMsl": -0.46
+        },
+        {
+          "kind": "high",
+          "time": "22:33",
+          "metresMsl": 0.9
+        }
+      ]
+    },
+    {
+      "date": "2026-02-24",
+      "page": 2,
+      "events": [
+        {
+          "kind": "low",
+          "time": "03:35",
+          "metresMsl": 0.23
+        },
+        {
+          "kind": "high",
+          "time": "09:01",
+          "metresMsl": 1.2
+        },
+        {
+          "kind": "low",
+          "time": "17:39",
+          "metresMsl": -0.5
+        },
+        {
+          "kind": "high",
+          "time": "23:48",
+          "metresMsl": 0.8
+        }
+      ]
+    },
+    {
+      "date": "2026-02-25",
+      "page": 2,
+      "events": [
+        {
+          "kind": "low",
+          "time": "03:57",
+          "metresMsl": 0.48
+        },
+        {
+          "kind": "high",
+          "time": "09:25",
+          "metresMsl": 1.21
+        },
+        {
+          "kind": "low",
+          "time": "18:31",
+          "metresMsl": -0.49
+        }
+      ]
+    },
+    {
+      "date": "2026-02-26",
+      "page": 2,
+      "events": [
+        {
+          "kind": "high",
+          "time": "09:44",
+          "metresMsl": 1.18
+        },
+        {
+          "kind": "low",
+          "time": "19:46",
+          "metresMsl": -0.45
+        }
+      ]
+    },
+    {
+      "date": "2026-02-27",
+      "page": 2,
+      "events": [
+        {
+          "kind": "high",
+          "time": "08:31",
+          "metresMsl": 1.12
+        },
+        {
+          "kind": "low",
+          "time": "21:30",
+          "metresMsl": -0.45
+        }
+      ]
+    },
+    {
+      "date": "2026-02-28",
+      "page": 2,
+      "events": [
+        {
+          "kind": "high",
+          "time": "07:59",
+          "metresMsl": 1.15
+        },
+        {
+          "kind": "low",
+          "time": "23:22",
+          "metresMsl": -0.55
+        }
+      ]
+    },
+    {
+      "date": "2026-03-01",
+      "page": 3,
+      "events": [
+        {
+          "kind": "high",
+          "time": "08:01",
+          "metresMsl": 1.17
+        }
+      ]
+    },
+    {
+      "date": "2026-03-02",
+      "page": 3,
+      "events": [
+        {
+          "kind": "low",
+          "time": "00:47",
+          "metresMsl": -0.69
+        },
+        {
+          "kind": "high",
+          "time": "08:10",
+          "metresMsl": 1.15
+        },
+        {
+          "kind": "low",
+          "time": "13:57",
+          "metresMsl": 0.49
+        },
+        {
+          "kind": "high",
+          "time": "17:14",
+          "metresMsl": 0.76
+        }
+      ]
+    },
+    {
+      "date": "2026-03-03",
+      "page": 3,
+      "events": [
+        {
+          "kind": "low",
+          "time": "01:34",
+          "metresMsl": -0.77
+        },
+        {
+          "kind": "high",
+          "time": "08:06",
+          "metresMsl": 1.11
+        },
+        {
+          "kind": "low",
+          "time": "14:22",
+          "metresMsl": 0.29
+        },
+        {
+          "kind": "high",
+          "time": "18:15",
+          "metresMsl": 0.85
+        }
+      ]
+    },
+    {
+      "date": "2026-03-04",
+      "page": 3,
+      "events": [
+        {
+          "kind": "low",
+          "time": "02:08",
+          "metresMsl": -0.74
+        },
+        {
+          "kind": "high",
+          "time": "08:12",
+          "metresMsl": 1.07
+        },
+        {
+          "kind": "low",
+          "time": "14:48",
+          "metresMsl": 0.1
+        },
+        {
+          "kind": "high",
+          "time": "19:04",
+          "metresMsl": 0.9
+        }
+      ]
+    },
+    {
+      "date": "2026-03-05",
+      "page": 3,
+      "events": [
+        {
+          "kind": "low",
+          "time": "02:34",
+          "metresMsl": -0.62
+        },
+        {
+          "kind": "high",
+          "time": "08:24",
+          "metresMsl": 1.04
+        },
+        {
+          "kind": "low",
+          "time": "15:15",
+          "metresMsl": -0.07
+        },
+        {
+          "kind": "high",
+          "time": "19:48",
+          "metresMsl": 0.92
+        }
+      ]
+    },
+    {
+      "date": "2026-03-06",
+      "page": 3,
+      "events": [
+        {
+          "kind": "low",
+          "time": "02:48",
+          "metresMsl": -0.45
+        },
+        {
+          "kind": "high",
+          "time": "08:30",
+          "metresMsl": 1.01
+        },
+        {
+          "kind": "low",
+          "time": "15:42",
+          "metresMsl": -0.2
+        },
+        {
+          "kind": "high",
+          "time": "20:27",
+          "metresMsl": 0.93
+        }
+      ]
+    },
+    {
+      "date": "2026-03-07",
+      "page": 3,
+      "events": [
+        {
+          "kind": "low",
+          "time": "02:51",
+          "metresMsl": -0.25
+        },
+        {
+          "kind": "high",
+          "time": "08:23",
+          "metresMsl": 1.02
+        },
+        {
+          "kind": "low",
+          "time": "16:07",
+          "metresMsl": -0.28
+        },
+        {
+          "kind": "high",
+          "time": "21:00",
+          "metresMsl": 0.93
+        }
+      ]
+    },
+    {
+      "date": "2026-03-08",
+      "page": 3,
+      "events": [
+        {
+          "kind": "low",
+          "time": "02:52",
+          "metresMsl": -0.06
+        },
+        {
+          "kind": "high",
+          "time": "08:15",
+          "metresMsl": 1.05
+        },
+        {
+          "kind": "low",
+          "time": "16:28",
+          "metresMsl": -0.33
+        },
+        {
+          "kind": "high",
+          "time": "21:34",
+          "metresMsl": 0.91
+        }
+      ]
+    },
+    {
+      "date": "2026-03-09",
+      "page": 3,
+      "events": [
+        {
+          "kind": "low",
+          "time": "03:08",
+          "metresMsl": 0.13
+        },
+        {
+          "kind": "high",
+          "time": "08:19",
+          "metresMsl": 1.08
+        },
+        {
+          "kind": "low",
+          "time": "16:39",
+          "metresMsl": -0.37
+        },
+        {
+          "kind": "high",
+          "time": "22:13",
+          "metresMsl": 0.88
+        }
+      ]
+    },
+    {
+      "date": "2026-03-10",
+      "page": 3,
+      "events": [
+        {
+          "kind": "low",
+          "time": "03:31",
+          "metresMsl": 0.32
+        },
+        {
+          "kind": "high",
+          "time": "08:29",
+          "metresMsl": 1.09
+        },
+        {
+          "kind": "low",
+          "time": "16:59",
+          "metresMsl": -0.4
+        },
+        {
+          "kind": "high",
+          "time": "22:59",
+          "metresMsl": 0.8
+        }
+      ]
+    },
+    {
+      "date": "2026-03-11",
+      "page": 3,
+      "events": [
+        {
+          "kind": "low",
+          "time": "03:50",
+          "metresMsl": 0.52
+        },
+        {
+          "kind": "high",
+          "time": "08:38",
+          "metresMsl": 1.08
+        },
+        {
+          "kind": "low",
+          "time": "17:42",
+          "metresMsl": -0.41
+        }
+      ]
+    },
+    {
+      "date": "2026-03-12",
+      "page": 3,
+      "events": [
+        {
+          "kind": "high",
+          "time": "08:47",
+          "metresMsl": 1.04
+        },
+        {
+          "kind": "low",
+          "time": "18:36",
+          "metresMsl": -0.41
+        }
+      ]
+    },
+    {
+      "date": "2026-03-13",
+      "page": 3,
+      "events": [
+        {
+          "kind": "high",
+          "time": "08:38",
+          "metresMsl": 0.98
+        },
+        {
+          "kind": "low",
+          "time": "19:41",
+          "metresMsl": -0.4
+        }
+      ]
+    },
+    {
+      "date": "2026-03-14",
+      "page": 3,
+      "events": [
+        {
+          "kind": "high",
+          "time": "06:50",
+          "metresMsl": 1.02
+        },
+        {
+          "kind": "low",
+          "time": "21:03",
+          "metresMsl": -0.41
+        }
+      ]
+    },
+    {
+      "date": "2026-03-15",
+      "page": 3,
+      "events": [
+        {
+          "kind": "high",
+          "time": "07:04",
+          "metresMsl": 1.07
+        },
+        {
+          "kind": "low",
+          "time": "22:57",
+          "metresMsl": -0.47
+        }
+      ]
+    },
+    {
+      "date": "2026-03-16",
+      "page": 3,
+      "events": [
+        {
+          "kind": "high",
+          "time": "07:22",
+          "metresMsl": 1.07
+        }
+      ]
+    },
+    {
+      "date": "2026-03-17",
+      "page": 3,
+      "events": [
+        {
+          "kind": "low",
+          "time": "00:16",
+          "metresMsl": -0.56
+        },
+        {
+          "kind": "high",
+          "time": "07:27",
+          "metresMsl": 1.04
+        },
+        {
+          "kind": "low",
+          "time": "13:08",
+          "metresMsl": 0.25
+        },
+        {
+          "kind": "high",
+          "time": "17:15",
+          "metresMsl": 0.54
+        }
+      ]
+    },
+    {
+      "date": "2026-03-18",
+      "page": 3,
+      "events": [
+        {
+          "kind": "low",
+          "time": "01:04",
+          "metresMsl": -0.59
+        },
+        {
+          "kind": "high",
+          "time": "07:25",
+          "metresMsl": 1
+        },
+        {
+          "kind": "low",
+          "time": "13:30",
+          "metresMsl": 0.04
+        },
+        {
+          "kind": "high",
+          "time": "18:08",
+          "metresMsl": 0.67
+        }
+      ]
+    },
+    {
+      "date": "2026-03-19",
+      "page": 3,
+      "events": [
+        {
+          "kind": "low",
+          "time": "01:43",
+          "metresMsl": -0.54
+        },
+        {
+          "kind": "high",
+          "time": "07:31",
+          "metresMsl": 0.96
+        },
+        {
+          "kind": "low",
+          "time": "14:00",
+          "metresMsl": -0.15
+        },
+        {
+          "kind": "high",
+          "time": "18:52",
+          "metresMsl": 0.82
+        }
+      ]
+    },
+    {
+      "date": "2026-03-20",
+      "page": 3,
+      "events": [
+        {
+          "kind": "low",
+          "time": "02:13",
+          "metresMsl": -0.39
+        },
+        {
+          "kind": "high",
+          "time": "07:30",
+          "metresMsl": 0.93
+        },
+        {
+          "kind": "low",
+          "time": "14:32",
+          "metresMsl": -0.33
+        },
+        {
+          "kind": "high",
+          "time": "19:33",
+          "metresMsl": 0.96
+        }
+      ]
+    },
+    {
+      "date": "2026-03-21",
+      "page": 3,
+      "events": [
+        {
+          "kind": "low",
+          "time": "02:30",
+          "metresMsl": -0.2
+        },
+        {
+          "kind": "high",
+          "time": "07:06",
+          "metresMsl": 0.96
+        },
+        {
+          "kind": "low",
+          "time": "15:03",
+          "metresMsl": -0.47
+        },
+        {
+          "kind": "high",
+          "time": "20:17",
+          "metresMsl": 1.08
+        }
+      ]
+    },
+    {
+      "date": "2026-03-22",
+      "page": 3,
+      "events": [
+        {
+          "kind": "low",
+          "time": "02:24",
+          "metresMsl": -0.01
+        },
+        {
+          "kind": "high",
+          "time": "07:13",
+          "metresMsl": 1.04
+        },
+        {
+          "kind": "low",
+          "time": "15:34",
+          "metresMsl": -0.59
+        },
+        {
+          "kind": "high",
+          "time": "21:02",
+          "metresMsl": 1.14
+        }
+      ]
+    },
+    {
+      "date": "2026-03-23",
+      "page": 3,
+      "events": [
+        {
+          "kind": "low",
+          "time": "02:39",
+          "metresMsl": 0.16
+        },
+        {
+          "kind": "high",
+          "time": "07:33",
+          "metresMsl": 1.12
+        },
+        {
+          "kind": "low",
+          "time": "16:10",
+          "metresMsl": -0.66
+        },
+        {
+          "kind": "high",
+          "time": "21:51",
+          "metresMsl": 1.14
+        }
+      ]
+    },
+    {
+      "date": "2026-03-24",
+      "page": 3,
+      "events": [
+        {
+          "kind": "low",
+          "time": "03:11",
+          "metresMsl": 0.34
+        },
+        {
+          "kind": "high",
+          "time": "08:00",
+          "metresMsl": 1.15
+        },
+        {
+          "kind": "low",
+          "time": "16:51",
+          "metresMsl": -0.69
+        },
+        {
+          "kind": "high",
+          "time": "22:48",
+          "metresMsl": 1.04
+        }
+      ]
+    },
+    {
+      "date": "2026-03-25",
+      "page": 3,
+      "events": [
+        {
+          "kind": "low",
+          "time": "03:45",
+          "metresMsl": 0.53
+        },
+        {
+          "kind": "high",
+          "time": "08:28",
+          "metresMsl": 1.15
+        },
+        {
+          "kind": "low",
+          "time": "17:39",
+          "metresMsl": -0.67
+        }
+      ]
+    },
+    {
+      "date": "2026-03-26",
+      "page": 3,
+      "events": [
+        {
+          "kind": "high",
+          "time": "00:36",
+          "metresMsl": 0.91
+        },
+        {
+          "kind": "low",
+          "time": "04:17",
+          "metresMsl": 0.71
+        },
+        {
+          "kind": "high",
+          "time": "08:51",
+          "metresMsl": 1.09
+        },
+        {
+          "kind": "low",
+          "time": "18:32",
+          "metresMsl": -0.62
+        }
+      ]
+    },
+    {
+      "date": "2026-03-27",
+      "page": 3,
+      "events": [
+        {
+          "kind": "high",
+          "time": "08:01",
+          "metresMsl": 1.01
+        },
+        {
+          "kind": "low",
+          "time": "19:34",
+          "metresMsl": -0.57
+        }
+      ]
+    },
+    {
+      "date": "2026-03-28",
+      "page": 3,
+      "events": [
+        {
+          "kind": "high",
+          "time": "07:14",
+          "metresMsl": 0.98
+        },
+        {
+          "kind": "low",
+          "time": "20:45",
+          "metresMsl": -0.52
+        }
+      ]
+    },
+    {
+      "date": "2026-03-29",
+      "page": 3,
+      "events": [
+        {
+          "kind": "high",
+          "time": "05:24",
+          "metresMsl": 1
+        },
+        {
+          "kind": "low",
+          "time": "22:05",
+          "metresMsl": -0.49
+        }
+      ]
+    },
+    {
+      "date": "2026-03-30",
+      "page": 3,
+      "events": [
+        {
+          "kind": "high",
+          "time": "05:46",
+          "metresMsl": 1.03
+        },
+        {
+          "kind": "low",
+          "time": "12:32",
+          "metresMsl": 0.26
+        },
+        {
+          "kind": "high",
+          "time": "16:24",
+          "metresMsl": 0.56
+        },
+        {
+          "kind": "low",
+          "time": "23:36",
+          "metresMsl": -0.48
+        }
+      ]
+    },
+    {
+      "date": "2026-03-31",
+      "page": 3,
+      "events": [
+        {
+          "kind": "high",
+          "time": "06:10",
+          "metresMsl": 1.05
+        },
+        {
+          "kind": "low",
+          "time": "13:04",
+          "metresMsl": -0.01
+        },
+        {
+          "kind": "high",
+          "time": "17:36",
+          "metresMsl": 0.69
+        }
+      ]
+    },
+    {
+      "date": "2026-04-01",
+      "page": 4,
+      "events": [
+        {
+          "kind": "low",
+          "time": "00:39",
+          "metresMsl": -0.44
+        },
+        {
+          "kind": "high",
+          "time": "06:30",
+          "metresMsl": 1.03
+        },
+        {
+          "kind": "low",
+          "time": "13:39",
+          "metresMsl": -0.24
+        },
+        {
+          "kind": "high",
+          "time": "18:32",
+          "metresMsl": 0.81
+        }
+      ]
+    },
+    {
+      "date": "2026-04-02",
+      "page": 4,
+      "events": [
+        {
+          "kind": "low",
+          "time": "01:17",
+          "metresMsl": -0.33
+        },
+        {
+          "kind": "high",
+          "time": "06:46",
+          "metresMsl": 1
+        },
+        {
+          "kind": "low",
+          "time": "14:13",
+          "metresMsl": -0.4
+        },
+        {
+          "kind": "high",
+          "time": "19:21",
+          "metresMsl": 0.91
+        }
+      ]
+    },
+    {
+      "date": "2026-04-03",
+      "page": 4,
+      "events": [
+        {
+          "kind": "low",
+          "time": "01:43",
+          "metresMsl": -0.18
+        },
+        {
+          "kind": "high",
+          "time": "06:53",
+          "metresMsl": 0.97
+        },
+        {
+          "kind": "low",
+          "time": "14:45",
+          "metresMsl": -0.48
+        },
+        {
+          "kind": "high",
+          "time": "20:01",
+          "metresMsl": 0.98
+        }
+      ]
+    },
+    {
+      "date": "2026-04-04",
+      "page": 4,
+      "events": [
+        {
+          "kind": "low",
+          "time": "01:59",
+          "metresMsl": -0.02
+        },
+        {
+          "kind": "high",
+          "time": "06:55",
+          "metresMsl": 0.96
+        },
+        {
+          "kind": "low",
+          "time": "15:14",
+          "metresMsl": -0.51
+        },
+        {
+          "kind": "high",
+          "time": "20:32",
+          "metresMsl": 1.02
+        }
+      ]
+    },
+    {
+      "date": "2026-04-05",
+      "page": 4,
+      "events": [
+        {
+          "kind": "low",
+          "time": "02:15",
+          "metresMsl": 0.12
+        },
+        {
+          "kind": "high",
+          "time": "07:00",
+          "metresMsl": 0.98
+        },
+        {
+          "kind": "low",
+          "time": "15:41",
+          "metresMsl": -0.51
+        },
+        {
+          "kind": "high",
+          "time": "20:57",
+          "metresMsl": 1.05
+        }
+      ]
+    },
+    {
+      "date": "2026-04-06",
+      "page": 4,
+      "events": [
+        {
+          "kind": "low",
+          "time": "02:39",
+          "metresMsl": 0.24
+        },
+        {
+          "kind": "high",
+          "time": "07:14",
+          "metresMsl": 1
+        },
+        {
+          "kind": "low",
+          "time": "16:05",
+          "metresMsl": -0.52
+        },
+        {
+          "kind": "high",
+          "time": "21:25",
+          "metresMsl": 1.06
+        }
+      ]
+    },
+    {
+      "date": "2026-04-07",
+      "page": 4,
+      "events": [
+        {
+          "kind": "low",
+          "time": "03:11",
+          "metresMsl": 0.34
+        },
+        {
+          "kind": "high",
+          "time": "07:32",
+          "metresMsl": 0.99
+        },
+        {
+          "kind": "low",
+          "time": "16:30",
+          "metresMsl": -0.55
+        },
+        {
+          "kind": "high",
+          "time": "22:00",
+          "metresMsl": 1.03
+        }
+      ]
+    },
+    {
+      "date": "2026-04-08",
+      "page": 4,
+      "events": [
+        {
+          "kind": "low",
+          "time": "03:48",
+          "metresMsl": 0.44
+        },
+        {
+          "kind": "high",
+          "time": "07:51",
+          "metresMsl": 0.97
+        },
+        {
+          "kind": "low",
+          "time": "17:01",
+          "metresMsl": -0.6
+        },
+        {
+          "kind": "high",
+          "time": "22:49",
+          "metresMsl": 0.95
+        }
+      ]
+    },
+    {
+      "date": "2026-04-09",
+      "page": 4,
+      "events": [
+        {
+          "kind": "low",
+          "time": "04:30",
+          "metresMsl": 0.56
+        },
+        {
+          "kind": "high",
+          "time": "08:12",
+          "metresMsl": 0.93
+        },
+        {
+          "kind": "low",
+          "time": "17:41",
+          "metresMsl": -0.64
+        }
+      ]
+    },
+    {
+      "date": "2026-04-10",
+      "page": 4,
+      "events": [
+        {
+          "kind": "high",
+          "time": "01:20",
+          "metresMsl": 0.86
+        },
+        {
+          "kind": "low",
+          "time": "05:21",
+          "metresMsl": 0.68
+        },
+        {
+          "kind": "high",
+          "time": "08:30",
+          "metresMsl": 0.86
+        },
+        {
+          "kind": "low",
+          "time": "18:24",
+          "metresMsl": -0.64
+        }
+      ]
+    },
+    {
+      "date": "2026-04-11",
+      "page": 4,
+      "events": [
+        {
+          "kind": "high",
+          "time": "03:00",
+          "metresMsl": 0.87
+        },
+        {
+          "kind": "low",
+          "time": "19:11",
+          "metresMsl": -0.59
+        }
+      ]
+    },
+    {
+      "date": "2026-04-12",
+      "page": 4,
+      "events": [
+        {
+          "kind": "high",
+          "time": "04:56",
+          "metresMsl": 0.92
+        },
+        {
+          "kind": "low",
+          "time": "20:04",
+          "metresMsl": -0.51
+        }
+      ]
+    },
+    {
+      "date": "2026-04-13",
+      "page": 4,
+      "events": [
+        {
+          "kind": "high",
+          "time": "05:23",
+          "metresMsl": 0.95
+        },
+        {
+          "kind": "low",
+          "time": "21:12",
+          "metresMsl": -0.39
+        }
+      ]
+    },
+    {
+      "date": "2026-04-14",
+      "page": 4,
+      "events": [
+        {
+          "kind": "high",
+          "time": "05:30",
+          "metresMsl": 0.93
+        },
+        {
+          "kind": "low",
+          "time": "12:07",
+          "metresMsl": 0.09
+        },
+        {
+          "kind": "high",
+          "time": "16:41",
+          "metresMsl": 0.25
+        },
+        {
+          "kind": "low",
+          "time": "23:06",
+          "metresMsl": -0.31
+        }
+      ]
+    },
+    {
+      "date": "2026-04-15",
+      "page": 4,
+      "events": [
+        {
+          "kind": "high",
+          "time": "05:42",
+          "metresMsl": 0.91
+        },
+        {
+          "kind": "low",
+          "time": "12:24",
+          "metresMsl": -0.15
+        },
+        {
+          "kind": "high",
+          "time": "17:49",
+          "metresMsl": 0.46
+        }
+      ]
+    },
+    {
+      "date": "2026-04-16",
+      "page": 4,
+      "events": [
+        {
+          "kind": "low",
+          "time": "00:13",
+          "metresMsl": -0.23
+        },
+        {
+          "kind": "high",
+          "time": "05:45",
+          "metresMsl": 0.88
+        },
+        {
+          "kind": "low",
+          "time": "12:54",
+          "metresMsl": -0.39
+        },
+        {
+          "kind": "high",
+          "time": "18:36",
+          "metresMsl": 0.71
+        }
+      ]
+    },
+    {
+      "date": "2026-04-17",
+      "page": 4,
+      "events": [
+        {
+          "kind": "low",
+          "time": "00:57",
+          "metresMsl": -0.12
+        },
+        {
+          "kind": "high",
+          "time": "05:22",
+          "metresMsl": 0.91
+        },
+        {
+          "kind": "low",
+          "time": "13:29",
+          "metresMsl": -0.57
+        },
+        {
+          "kind": "high",
+          "time": "19:17",
+          "metresMsl": 0.93
+        }
+      ]
+    },
+    {
+      "date": "2026-04-18",
+      "page": 4,
+      "events": [
+        {
+          "kind": "low",
+          "time": "01:30",
+          "metresMsl": 0.04
+        },
+        {
+          "kind": "high",
+          "time": "05:33",
+          "metresMsl": 0.97
+        },
+        {
+          "kind": "low",
+          "time": "14:07",
+          "metresMsl": -0.7
+        },
+        {
+          "kind": "high",
+          "time": "19:57",
+          "metresMsl": 1.11
+        }
+      ]
+    },
+    {
+      "date": "2026-04-19",
+      "page": 4,
+      "events": [
+        {
+          "kind": "low",
+          "time": "01:50",
+          "metresMsl": 0.2
+        },
+        {
+          "kind": "high",
+          "time": "05:59",
+          "metresMsl": 1.03
+        },
+        {
+          "kind": "low",
+          "time": "14:48",
+          "metresMsl": -0.78
+        },
+        {
+          "kind": "high",
+          "time": "20:39",
+          "metresMsl": 1.21
+        }
+      ]
+    },
+    {
+      "date": "2026-04-20",
+      "page": 4,
+      "events": [
+        {
+          "kind": "low",
+          "time": "02:08",
+          "metresMsl": 0.35
+        },
+        {
+          "kind": "high",
+          "time": "06:30",
+          "metresMsl": 1.06
+        },
+        {
+          "kind": "low",
+          "time": "15:34",
+          "metresMsl": -0.83
+        },
+        {
+          "kind": "high",
+          "time": "21:29",
+          "metresMsl": 1.22
+        }
+      ]
+    },
+    {
+      "date": "2026-04-21",
+      "page": 4,
+      "events": [
+        {
+          "kind": "low",
+          "time": "02:38",
+          "metresMsl": 0.47
+        },
+        {
+          "kind": "high",
+          "time": "07:02",
+          "metresMsl": 1.05
+        },
+        {
+          "kind": "low",
+          "time": "16:21",
+          "metresMsl": -0.87
+        },
+        {
+          "kind": "high",
+          "time": "22:38",
+          "metresMsl": 1.16
+        }
+      ]
+    },
+    {
+      "date": "2026-04-22",
+      "page": 4,
+      "events": [
+        {
+          "kind": "low",
+          "time": "03:16",
+          "metresMsl": 0.59
+        },
+        {
+          "kind": "high",
+          "time": "07:37",
+          "metresMsl": 1.02
+        },
+        {
+          "kind": "low",
+          "time": "17:06",
+          "metresMsl": -0.89
+        }
+      ]
+    },
+    {
+      "date": "2026-04-23",
+      "page": 4,
+      "events": [
+        {
+          "kind": "high",
+          "time": "00:13",
+          "metresMsl": 1.08
+        },
+        {
+          "kind": "low",
+          "time": "03:58",
+          "metresMsl": 0.69
+        },
+        {
+          "kind": "high",
+          "time": "08:13",
+          "metresMsl": 0.95
+        },
+        {
+          "kind": "low",
+          "time": "17:49",
+          "metresMsl": -0.87
+        }
+      ]
+    },
+    {
+      "date": "2026-04-24",
+      "page": 4,
+      "events": [
+        {
+          "kind": "high",
+          "time": "01:32",
+          "metresMsl": 1.03
+        },
+        {
+          "kind": "low",
+          "time": "18:30",
+          "metresMsl": -0.81
+        }
+      ]
+    },
+    {
+      "date": "2026-04-25",
+      "page": 4,
+      "events": [
+        {
+          "kind": "high",
+          "time": "02:32",
+          "metresMsl": 0.99
+        },
+        {
+          "kind": "low",
+          "time": "19:10",
+          "metresMsl": -0.71
+        }
+      ]
+    },
+    {
+      "date": "2026-04-26",
+      "page": 4,
+      "events": [
+        {
+          "kind": "high",
+          "time": "03:20",
+          "metresMsl": 0.97
+        },
+        {
+          "kind": "low",
+          "time": "19:54",
+          "metresMsl": -0.56
+        }
+      ]
+    },
+    {
+      "date": "2026-04-27",
+      "page": 4,
+      "events": [
+        {
+          "kind": "high",
+          "time": "03:57",
+          "metresMsl": 0.95
+        },
+        {
+          "kind": "low",
+          "time": "11:07",
+          "metresMsl": 0.09
+        },
+        {
+          "kind": "high",
+          "time": "14:25",
+          "metresMsl": 0.31
+        },
+        {
+          "kind": "low",
+          "time": "20:47",
+          "metresMsl": -0.37
+        }
+      ]
+    },
+    {
+      "date": "2026-04-28",
+      "page": 4,
+      "events": [
+        {
+          "kind": "high",
+          "time": "04:25",
+          "metresMsl": 0.94
+        },
+        {
+          "kind": "low",
+          "time": "11:46",
+          "metresMsl": -0.22
+        },
+        {
+          "kind": "high",
+          "time": "16:37",
+          "metresMsl": 0.42
+        },
+        {
+          "kind": "low",
+          "time": "21:59",
+          "metresMsl": -0.18
+        }
+      ]
+    },
+    {
+      "date": "2026-04-29",
+      "page": 4,
+      "events": [
+        {
+          "kind": "high",
+          "time": "04:46",
+          "metresMsl": 0.93
+        },
+        {
+          "kind": "low",
+          "time": "12:27",
+          "metresMsl": -0.49
+        },
+        {
+          "kind": "high",
+          "time": "17:54",
+          "metresMsl": 0.6
+        },
+        {
+          "kind": "low",
+          "time": "23:33",
+          "metresMsl": -0.02
+        }
+      ]
+    },
+    {
+      "date": "2026-04-30",
+      "page": 4,
+      "events": [
+        {
+          "kind": "high",
+          "time": "05:01",
+          "metresMsl": 0.9
+        },
+        {
+          "kind": "low",
+          "time": "13:05",
+          "metresMsl": -0.66
+        },
+        {
+          "kind": "high",
+          "time": "18:59",
+          "metresMsl": 0.79
+        }
+      ]
+    },
+    {
+      "date": "2026-05-01",
+      "page": 5,
+      "events": [
+        {
+          "kind": "low",
+          "time": "00:29",
+          "metresMsl": 0.12
+        },
+        {
+          "kind": "high",
+          "time": "05:11",
+          "metresMsl": 0.88
+        },
+        {
+          "kind": "low",
+          "time": "13:44",
+          "metresMsl": -0.73
+        },
+        {
+          "kind": "high",
+          "time": "19:51",
+          "metresMsl": 0.93
+        }
+      ]
+    },
+    {
+      "date": "2026-05-02",
+      "page": 5,
+      "events": [
+        {
+          "kind": "low",
+          "time": "01:02",
+          "metresMsl": 0.24
+        },
+        {
+          "kind": "high",
+          "time": "05:23",
+          "metresMsl": 0.87
+        },
+        {
+          "kind": "low",
+          "time": "14:20",
+          "metresMsl": -0.72
+        },
+        {
+          "kind": "high",
+          "time": "20:35",
+          "metresMsl": 1.01
+        }
+      ]
+    },
+    {
+      "date": "2026-05-03",
+      "page": 5,
+      "events": [
+        {
+          "kind": "low",
+          "time": "01:30",
+          "metresMsl": 0.33
+        },
+        {
+          "kind": "high",
+          "time": "05:42",
+          "metresMsl": 0.86
+        },
+        {
+          "kind": "low",
+          "time": "14:55",
+          "metresMsl": -0.69
+        },
+        {
+          "kind": "high",
+          "time": "21:12",
+          "metresMsl": 1.04
+        }
+      ]
+    },
+    {
+      "date": "2026-05-04",
+      "page": 5,
+      "events": [
+        {
+          "kind": "low",
+          "time": "01:58",
+          "metresMsl": 0.38
+        },
+        {
+          "kind": "high",
+          "time": "06:07",
+          "metresMsl": 0.86
+        },
+        {
+          "kind": "low",
+          "time": "15:29",
+          "metresMsl": -0.67
+        },
+        {
+          "kind": "high",
+          "time": "21:30",
+          "metresMsl": 1.04
+        }
+      ]
+    },
+    {
+      "date": "2026-05-05",
+      "page": 5,
+      "events": [
+        {
+          "kind": "low",
+          "time": "02:32",
+          "metresMsl": 0.39
+        },
+        {
+          "kind": "high",
+          "time": "06:35",
+          "metresMsl": 0.84
+        },
+        {
+          "kind": "low",
+          "time": "16:01",
+          "metresMsl": -0.7
+        },
+        {
+          "kind": "high",
+          "time": "21:42",
+          "metresMsl": 1.03
+        }
+      ]
+    },
+    {
+      "date": "2026-05-06",
+      "page": 5,
+      "events": [
+        {
+          "kind": "low",
+          "time": "03:11",
+          "metresMsl": 0.41
+        },
+        {
+          "kind": "high",
+          "time": "07:04",
+          "metresMsl": 0.82
+        },
+        {
+          "kind": "low",
+          "time": "16:31",
+          "metresMsl": -0.77
+        },
+        {
+          "kind": "high",
+          "time": "23:01",
+          "metresMsl": 0.99
+        }
+      ]
+    },
+    {
+      "date": "2026-05-07",
+      "page": 5,
+      "events": [
+        {
+          "kind": "low",
+          "time": "03:54",
+          "metresMsl": 0.43
+        },
+        {
+          "kind": "high",
+          "time": "07:32",
+          "metresMsl": 0.77
+        },
+        {
+          "kind": "low",
+          "time": "17:01",
+          "metresMsl": -0.85
+        }
+      ]
+    },
+    {
+      "date": "2026-05-08",
+      "page": 5,
+      "events": [
+        {
+          "kind": "high",
+          "time": "00:14",
+          "metresMsl": 0.97
+        },
+        {
+          "kind": "low",
+          "time": "04:42",
+          "metresMsl": 0.47
+        },
+        {
+          "kind": "high",
+          "time": "07:59",
+          "metresMsl": 0.71
+        },
+        {
+          "kind": "low",
+          "time": "17:32",
+          "metresMsl": -0.9
+        }
+      ]
+    },
+    {
+      "date": "2026-05-09",
+      "page": 5,
+      "events": [
+        {
+          "kind": "high",
+          "time": "01:12",
+          "metresMsl": 0.94
+        },
+        {
+          "kind": "low",
+          "time": "05:45",
+          "metresMsl": 0.51
+        },
+        {
+          "kind": "high",
+          "time": "08:22",
+          "metresMsl": 0.62
+        },
+        {
+          "kind": "low",
+          "time": "18:02",
+          "metresMsl": -0.87
+        }
+      ]
+    },
+    {
+      "date": "2026-05-10",
+      "page": 5,
+      "events": [
+        {
+          "kind": "high",
+          "time": "02:06",
+          "metresMsl": 0.92
+        },
+        {
+          "kind": "low",
+          "time": "18:31",
+          "metresMsl": -0.75
+        }
+      ]
+    },
+    {
+      "date": "2026-05-11",
+      "page": 5,
+      "events": [
+        {
+          "kind": "high",
+          "time": "02:55",
+          "metresMsl": 0.88
+        },
+        {
+          "kind": "low",
+          "time": "19:00",
+          "metresMsl": -0.55
+        }
+      ]
+    },
+    {
+      "date": "2026-05-12",
+      "page": 5,
+      "events": [
+        {
+          "kind": "high",
+          "time": "03:33",
+          "metresMsl": 0.83
+        },
+        {
+          "kind": "low",
+          "time": "19:36",
+          "metresMsl": -0.29
+        }
+      ]
+    },
+    {
+      "date": "2026-05-13",
+      "page": 5,
+      "events": [
+        {
+          "kind": "high",
+          "time": "03:49",
+          "metresMsl": 0.77
+        },
+        {
+          "kind": "low",
+          "time": "11:15",
+          "metresMsl": -0.26
+        },
+        {
+          "kind": "high",
+          "time": "16:58",
+          "metresMsl": 0.17
+        },
+        {
+          "kind": "low",
+          "time": "20:32",
+          "metresMsl": -0.02
+        }
+      ]
+    },
+    {
+      "date": "2026-05-14",
+      "page": 5,
+      "events": [
+        {
+          "kind": "high",
+          "time": "03:25",
+          "metresMsl": 0.77
+        },
+        {
+          "kind": "low",
+          "time": "11:45",
+          "metresMsl": -0.51
+        },
+        {
+          "kind": "high",
+          "time": "18:04",
+          "metresMsl": 0.48
+        },
+        {
+          "kind": "low",
+          "time": "23:32",
+          "metresMsl": 0.18
+        }
+      ]
+    },
+    {
+      "date": "2026-05-15",
+      "page": 5,
+      "events": [
+        {
+          "kind": "high",
+          "time": "03:38",
+          "metresMsl": 0.83
+        },
+        {
+          "kind": "low",
+          "time": "12:21",
+          "metresMsl": -0.71
+        },
+        {
+          "kind": "high",
+          "time": "18:53",
+          "metresMsl": 0.77
+        }
+      ]
+    },
+    {
+      "date": "2026-05-16",
+      "page": 5,
+      "events": [
+        {
+          "kind": "low",
+          "time": "00:23",
+          "metresMsl": 0.3
+        },
+        {
+          "kind": "high",
+          "time": "04:08",
+          "metresMsl": 0.9
+        },
+        {
+          "kind": "low",
+          "time": "13:04",
+          "metresMsl": -0.84
+        },
+        {
+          "kind": "high",
+          "time": "19:40",
+          "metresMsl": 1
+        }
+      ]
+    },
+    {
+      "date": "2026-05-17",
+      "page": 5,
+      "events": [
+        {
+          "kind": "low",
+          "time": "00:59",
+          "metresMsl": 0.42
+        },
+        {
+          "kind": "high",
+          "time": "04:43",
+          "metresMsl": 0.94
+        },
+        {
+          "kind": "low",
+          "time": "13:57",
+          "metresMsl": -0.91
+        },
+        {
+          "kind": "high",
+          "time": "20:33",
+          "metresMsl": 1.13
+        }
+      ]
+    },
+    {
+      "date": "2026-05-18",
+      "page": 5,
+      "events": [
+        {
+          "kind": "low",
+          "time": "01:26",
+          "metresMsl": 0.53
+        },
+        {
+          "kind": "high",
+          "time": "05:19",
+          "metresMsl": 0.95
+        },
+        {
+          "kind": "low",
+          "time": "14:54",
+          "metresMsl": -0.98
+        },
+        {
+          "kind": "high",
+          "time": "21:38",
+          "metresMsl": 1.19
+        }
+      ]
+    },
+    {
+      "date": "2026-05-19",
+      "page": 5,
+      "events": [
+        {
+          "kind": "low",
+          "time": "01:55",
+          "metresMsl": 0.61
+        },
+        {
+          "kind": "high",
+          "time": "06:00",
+          "metresMsl": 0.93
+        },
+        {
+          "kind": "low",
+          "time": "15:46",
+          "metresMsl": -1.05
+        },
+        {
+          "kind": "high",
+          "time": "22:45",
+          "metresMsl": 1.2
+        }
+      ]
+    },
+    {
+      "date": "2026-05-20",
+      "page": 5,
+      "events": [
+        {
+          "kind": "low",
+          "time": "02:34",
+          "metresMsl": 0.66
+        },
+        {
+          "kind": "high",
+          "time": "06:45",
+          "metresMsl": 0.88
+        },
+        {
+          "kind": "low",
+          "time": "16:32",
+          "metresMsl": -1.13
+        },
+        {
+          "kind": "high",
+          "time": "23:45",
+          "metresMsl": 1.19
+        }
+      ]
+    },
+    {
+      "date": "2026-05-21",
+      "page": 5,
+      "events": [
+        {
+          "kind": "low",
+          "time": "03:20",
+          "metresMsl": 0.67
+        },
+        {
+          "kind": "high",
+          "time": "07:36",
+          "metresMsl": 0.81
+        },
+        {
+          "kind": "low",
+          "time": "17:12",
+          "metresMsl": -1.15
+        }
+      ]
+    },
+    {
+      "date": "2026-05-22",
+      "page": 5,
+      "events": [
+        {
+          "kind": "high",
+          "time": "00:33",
+          "metresMsl": 1.14
+        },
+        {
+          "kind": "low",
+          "time": "06:17",
+          "metresMsl": 0.61
+        },
+        {
+          "kind": "high",
+          "time": "08:39",
+          "metresMsl": 0.7
+        },
+        {
+          "kind": "low",
+          "time": "17:44",
+          "metresMsl": -1.11
+        }
+      ]
+    },
+    {
+      "date": "2026-05-23",
+      "page": 5,
+      "events": [
+        {
+          "kind": "high",
+          "time": "01:15",
+          "metresMsl": 1.07
+        },
+        {
+          "kind": "low",
+          "time": "07:16",
+          "metresMsl": 0.47
+        },
+        {
+          "kind": "high",
+          "time": "09:47",
+          "metresMsl": 0.54
+        },
+        {
+          "kind": "low",
+          "time": "18:10",
+          "metresMsl": -0.98
+        }
+      ]
+    },
+    {
+      "date": "2026-05-24",
+      "page": 5,
+      "events": [
+        {
+          "kind": "high",
+          "time": "01:48",
+          "metresMsl": 0.99
+        },
+        {
+          "kind": "low",
+          "time": "08:33",
+          "metresMsl": 0.27
+        },
+        {
+          "kind": "high",
+          "time": "11:00",
+          "metresMsl": 0.35
+        },
+        {
+          "kind": "low",
+          "time": "18:33",
+          "metresMsl": -0.77
+        }
+      ]
+    },
+    {
+      "date": "2026-05-25",
+      "page": 5,
+      "events": [
+        {
+          "kind": "high",
+          "time": "02:15",
+          "metresMsl": 0.9
+        },
+        {
+          "kind": "low",
+          "time": "09:41",
+          "metresMsl": -0.01
+        },
+        {
+          "kind": "high",
+          "time": "12:31",
+          "metresMsl": 0.18
+        },
+        {
+          "kind": "low",
+          "time": "19:00",
+          "metresMsl": -0.49
+        }
+      ]
+    },
+    {
+      "date": "2026-05-26",
+      "page": 5,
+      "events": [
+        {
+          "kind": "high",
+          "time": "02:31",
+          "metresMsl": 0.84
+        },
+        {
+          "kind": "low",
+          "time": "10:29",
+          "metresMsl": -0.31
+        },
+        {
+          "kind": "high",
+          "time": "14:41",
+          "metresMsl": 0.13
+        },
+        {
+          "kind": "low",
+          "time": "19:37",
+          "metresMsl": -0.16
+        }
+      ]
+    },
+    {
+      "date": "2026-05-27",
+      "page": 5,
+      "events": [
+        {
+          "kind": "high",
+          "time": "02:41",
+          "metresMsl": 0.81
+        },
+        {
+          "kind": "low",
+          "time": "11:12",
+          "metresMsl": -0.59
+        },
+        {
+          "kind": "high",
+          "time": "17:18",
+          "metresMsl": 0.3
+        },
+        {
+          "kind": "low",
+          "time": "20:37",
+          "metresMsl": 0.16
+        }
+      ]
+    },
+    {
+      "date": "2026-05-28",
+      "page": 5,
+      "events": [
+        {
+          "kind": "high",
+          "time": "02:54",
+          "metresMsl": 0.79
+        },
+        {
+          "kind": "low",
+          "time": "11:53",
+          "metresMsl": -0.77
+        },
+        {
+          "kind": "high",
+          "time": "18:49",
+          "metresMsl": 0.58
+        },
+        {
+          "kind": "low",
+          "time": "22:53",
+          "metresMsl": 0.39
+        }
+      ]
+    },
+    {
+      "date": "2026-05-29",
+      "page": 5,
+      "events": [
+        {
+          "kind": "high",
+          "time": "03:17",
+          "metresMsl": 0.77
+        },
+        {
+          "kind": "low",
+          "time": "12:35",
+          "metresMsl": -0.85
+        },
+        {
+          "kind": "high",
+          "time": "19:44",
+          "metresMsl": 0.81
+        }
+      ]
+    },
+    {
+      "date": "2026-05-30",
+      "page": 5,
+      "events": [
+        {
+          "kind": "low",
+          "time": "00:03",
+          "metresMsl": 0.48
+        },
+        {
+          "kind": "high",
+          "time": "03:45",
+          "metresMsl": 0.75
+        },
+        {
+          "kind": "low",
+          "time": "13:17",
+          "metresMsl": -0.86
+        },
+        {
+          "kind": "high",
+          "time": "20:29",
+          "metresMsl": 0.95
+        }
+      ]
+    },
+    {
+      "date": "2026-05-31",
+      "page": 5,
+      "events": [
+        {
+          "kind": "low",
+          "time": "00:39",
+          "metresMsl": 0.52
+        },
+        {
+          "kind": "high",
+          "time": "04:17",
+          "metresMsl": 0.74
+        },
+        {
+          "kind": "low",
+          "time": "14:01",
+          "metresMsl": -0.83
+        },
+        {
+          "kind": "high",
+          "time": "21:10",
+          "metresMsl": 1.02
+        }
+      ]
+    },
+    {
+      "date": "2026-06-01",
+      "page": 6,
+      "events": [
+        {
+          "kind": "low",
+          "time": "01:10",
+          "metresMsl": 0.51
+        },
+        {
+          "kind": "high",
+          "time": "04:54",
+          "metresMsl": 0.72
+        },
+        {
+          "kind": "low",
+          "time": "14:44",
+          "metresMsl": -0.83
+        },
+        {
+          "kind": "high",
+          "time": "21:49",
+          "metresMsl": 1.03
+        }
+      ]
+    },
+    {
+      "date": "2026-06-02",
+      "page": 6,
+      "events": [
+        {
+          "kind": "low",
+          "time": "01:45",
+          "metresMsl": 0.47
+        },
+        {
+          "kind": "high",
+          "time": "05:37",
+          "metresMsl": 0.69
+        },
+        {
+          "kind": "low",
+          "time": "15:24",
+          "metresMsl": -0.89
+        },
+        {
+          "kind": "high",
+          "time": "22:28",
+          "metresMsl": 1.03
+        }
+      ]
+    },
+    {
+      "date": "2026-06-03",
+      "page": 6,
+      "events": [
+        {
+          "kind": "low",
+          "time": "02:25",
+          "metresMsl": 0.42
+        },
+        {
+          "kind": "high",
+          "time": "06:23",
+          "metresMsl": 0.66
+        },
+        {
+          "kind": "low",
+          "time": "16:00",
+          "metresMsl": -0.98
+        },
+        {
+          "kind": "high",
+          "time": "23:05",
+          "metresMsl": 1.03
+        }
+      ]
+    },
+    {
+      "date": "2026-06-04",
+      "page": 6,
+      "events": [
+        {
+          "kind": "low",
+          "time": "03:11",
+          "metresMsl": 0.38
+        },
+        {
+          "kind": "high",
+          "time": "07:01",
+          "metresMsl": 0.61
+        },
+        {
+          "kind": "low",
+          "time": "16:30",
+          "metresMsl": -1.06
+        },
+        {
+          "kind": "high",
+          "time": "23:40",
+          "metresMsl": 1.02
+        }
+      ]
+    },
+    {
+      "date": "2026-06-05",
+      "page": 6,
+      "events": [
+        {
+          "kind": "low",
+          "time": "04:02",
+          "metresMsl": 0.34
+        },
+        {
+          "kind": "high",
+          "time": "07:30",
+          "metresMsl": 0.56
+        },
+        {
+          "kind": "low",
+          "time": "16:55",
+          "metresMsl": -1.11
+        }
+      ]
+    },
+    {
+      "date": "2026-06-06",
+      "page": 6,
+      "events": [
+        {
+          "kind": "high",
+          "time": "00:13",
+          "metresMsl": 1
+        },
+        {
+          "kind": "low",
+          "time": "05:00",
+          "metresMsl": 0.31
+        },
+        {
+          "kind": "high",
+          "time": "07:58",
+          "metresMsl": 0.48
+        },
+        {
+          "kind": "low",
+          "time": "17:14",
+          "metresMsl": -1.08
+        }
+      ]
+    },
+    {
+      "date": "2026-06-07",
+      "page": 6,
+      "events": [
+        {
+          "kind": "high",
+          "time": "00:44",
+          "metresMsl": 0.95
+        },
+        {
+          "kind": "low",
+          "time": "06:00",
+          "metresMsl": 0.24
+        },
+        {
+          "kind": "high",
+          "time": "08:30",
+          "metresMsl": 0.37
+        },
+        {
+          "kind": "low",
+          "time": "17:29",
+          "metresMsl": -0.96
+        }
+      ]
+    },
+    {
+      "date": "2026-06-08",
+      "page": 6,
+      "events": [
+        {
+          "kind": "high",
+          "time": "01:12",
+          "metresMsl": 0.88
+        },
+        {
+          "kind": "low",
+          "time": "07:02",
+          "metresMsl": 0.14
+        },
+        {
+          "kind": "high",
+          "time": "09:13",
+          "metresMsl": 0.21
+        },
+        {
+          "kind": "low",
+          "time": "17:39",
+          "metresMsl": -0.76
+        }
+      ]
+    },
+    {
+      "date": "2026-06-09",
+      "page": 6,
+      "events": [
+        {
+          "kind": "high",
+          "time": "01:28",
+          "metresMsl": 0.79
+        },
+        {
+          "kind": "low",
+          "time": "08:13",
+          "metresMsl": -0.03
+        },
+        {
+          "kind": "high",
+          "time": "11:15",
+          "metresMsl": 0.04
+        },
+        {
+          "kind": "low",
+          "time": "17:49",
+          "metresMsl": -0.48
+        }
+      ]
+    },
+    {
+      "date": "2026-06-10",
+      "page": 6,
+      "events": [
+        {
+          "kind": "high",
+          "time": "01:13",
+          "metresMsl": 0.73
+        },
+        {
+          "kind": "low",
+          "time": "09:28",
+          "metresMsl": -0.26
+        },
+        {
+          "kind": "high",
+          "time": "13:23",
+          "metresMsl": 0.01
+        },
+        {
+          "kind": "low",
+          "time": "18:06",
+          "metresMsl": -0.15
+        }
+      ]
+    },
+    {
+      "date": "2026-06-11",
+      "page": 6,
+      "events": [
+        {
+          "kind": "high",
+          "time": "01:19",
+          "metresMsl": 0.74
+        },
+        {
+          "kind": "low",
+          "time": "10:17",
+          "metresMsl": -0.51
+        }
+      ]
+    },
+    {
+      "date": "2026-06-12",
+      "page": 6,
+      "events": [
+        {
+          "kind": "high",
+          "time": "01:50",
+          "metresMsl": 0.78
+        },
+        {
+          "kind": "low",
+          "time": "11:02",
+          "metresMsl": -0.72
+        }
+      ]
+    },
+    {
+      "date": "2026-06-13",
+      "page": 6,
+      "events": [
+        {
+          "kind": "high",
+          "time": "02:30",
+          "metresMsl": 0.81
+        },
+        {
+          "kind": "low",
+          "time": "11:51",
+          "metresMsl": -0.87
+        },
+        {
+          "kind": "high",
+          "time": "19:53",
+          "metresMsl": 0.84
+        }
+      ]
+    },
+    {
+      "date": "2026-06-14",
+      "page": 6,
+      "events": [
+        {
+          "kind": "low",
+          "time": "00:02",
+          "metresMsl": 0.63
+        },
+        {
+          "kind": "high",
+          "time": "03:13",
+          "metresMsl": 0.82
+        },
+        {
+          "kind": "low",
+          "time": "12:53",
+          "metresMsl": -0.97
+        },
+        {
+          "kind": "high",
+          "time": "20:44",
+          "metresMsl": 1.04
+        }
+      ]
+    },
+    {
+      "date": "2026-06-15",
+      "page": 6,
+      "events": [
+        {
+          "kind": "low",
+          "time": "00:42",
+          "metresMsl": 0.7
+        },
+        {
+          "kind": "high",
+          "time": "03:59",
+          "metresMsl": 0.81
+        },
+        {
+          "kind": "low",
+          "time": "14:03",
+          "metresMsl": -1.06
+        },
+        {
+          "kind": "high",
+          "time": "21:34",
+          "metresMsl": 1.16
+        }
+      ]
+    },
+    {
+      "date": "2026-06-16",
+      "page": 6,
+      "events": [
+        {
+          "kind": "low",
+          "time": "15:01",
+          "metresMsl": -1.19
+        },
+        {
+          "kind": "high",
+          "time": "22:21",
+          "metresMsl": 1.21
+        }
+      ]
+    },
+    {
+      "date": "2026-06-17",
+      "page": 6,
+      "events": [
+        {
+          "kind": "low",
+          "time": "15:48",
+          "metresMsl": -1.31
+        },
+        {
+          "kind": "high",
+          "time": "23:01",
+          "metresMsl": 1.21
+        }
+      ]
+    },
+    {
+      "date": "2026-06-18",
+      "page": 6,
+      "events": [
+        {
+          "kind": "low",
+          "time": "04:45",
+          "metresMsl": 0.58
+        },
+        {
+          "kind": "high",
+          "time": "06:45",
+          "metresMsl": 0.7
+        },
+        {
+          "kind": "low",
+          "time": "16:26",
+          "metresMsl": -1.37
+        },
+        {
+          "kind": "high",
+          "time": "23:37",
+          "metresMsl": 1.18
+        }
+      ]
+    },
+    {
+      "date": "2026-06-19",
+      "page": 6,
+      "events": [
+        {
+          "kind": "low",
+          "time": "05:20",
+          "metresMsl": 0.45
+        },
+        {
+          "kind": "high",
+          "time": "07:54",
+          "metresMsl": 0.62
+        },
+        {
+          "kind": "low",
+          "time": "16:56",
+          "metresMsl": -1.34
+        }
+      ]
+    },
+    {
+      "date": "2026-06-20",
+      "page": 6,
+      "events": [
+        {
+          "kind": "high",
+          "time": "00:04",
+          "metresMsl": 1.11
+        },
+        {
+          "kind": "low",
+          "time": "05:56",
+          "metresMsl": 0.28
+        },
+        {
+          "kind": "high",
+          "time": "09:00",
+          "metresMsl": 0.5
+        },
+        {
+          "kind": "low",
+          "time": "17:19",
+          "metresMsl": -1.19
+        }
+      ]
+    },
+    {
+      "date": "2026-06-21",
+      "page": 6,
+      "events": [
+        {
+          "kind": "high",
+          "time": "00:24",
+          "metresMsl": 1.02
+        },
+        {
+          "kind": "low",
+          "time": "06:35",
+          "metresMsl": 0.09
+        },
+        {
+          "kind": "high",
+          "time": "10:05",
+          "metresMsl": 0.35
+        },
+        {
+          "kind": "low",
+          "time": "17:36",
+          "metresMsl": -0.95
+        }
+      ]
+    },
+    {
+      "date": "2026-06-22",
+      "page": 6,
+      "events": [
+        {
+          "kind": "high",
+          "time": "00:39",
+          "metresMsl": 0.92
+        },
+        {
+          "kind": "low",
+          "time": "07:24",
+          "metresMsl": -0.11
+        },
+        {
+          "kind": "high",
+          "time": "11:15",
+          "metresMsl": 0.18
+        },
+        {
+          "kind": "low",
+          "time": "17:47",
+          "metresMsl": -0.64
+        }
+      ]
+    },
+    {
+      "date": "2026-06-23",
+      "page": 6,
+      "events": [
+        {
+          "kind": "high",
+          "time": "00:43",
+          "metresMsl": 0.84
+        },
+        {
+          "kind": "low",
+          "time": "08:31",
+          "metresMsl": -0.32
+        },
+        {
+          "kind": "high",
+          "time": "12:40",
+          "metresMsl": 0.06
+        },
+        {
+          "kind": "low",
+          "time": "17:50",
+          "metresMsl": -0.28
+        }
+      ]
+    },
+    {
+      "date": "2026-06-24",
+      "page": 6,
+      "events": [
+        {
+          "kind": "high",
+          "time": "00:31",
+          "metresMsl": 0.8
+        },
+        {
+          "kind": "low",
+          "time": "09:41",
+          "metresMsl": -0.54
+        }
+      ]
+    },
+    {
+      "date": "2026-06-25",
+      "page": 6,
+      "events": [
+        {
+          "kind": "high",
+          "time": "00:42",
+          "metresMsl": 0.78
+        },
+        {
+          "kind": "low",
+          "time": "10:31",
+          "metresMsl": -0.71
+        }
+      ]
+    },
+    {
+      "date": "2026-06-26",
+      "page": 6,
+      "events": [
+        {
+          "kind": "high",
+          "time": "01:01",
+          "metresMsl": 0.74
+        },
+        {
+          "kind": "low",
+          "time": "11:17",
+          "metresMsl": -0.82
+        }
+      ]
+    },
+    {
+      "date": "2026-06-27",
+      "page": 6,
+      "events": [
+        {
+          "kind": "high",
+          "time": "01:10",
+          "metresMsl": 0.71
+        },
+        {
+          "kind": "low",
+          "time": "12:03",
+          "metresMsl": -0.86
+        },
+        {
+          "kind": "high",
+          "time": "20:17",
+          "metresMsl": 0.9
+        }
+      ]
+    },
+    {
+      "date": "2026-06-28",
+      "page": 6,
+      "events": [
+        {
+          "kind": "low",
+          "time": "12:53",
+          "metresMsl": -0.88
+        },
+        {
+          "kind": "high",
+          "time": "20:43",
+          "metresMsl": 0.99
+        }
+      ]
+    },
+    {
+      "date": "2026-06-29",
+      "page": 6,
+      "events": [
+        {
+          "kind": "low",
+          "time": "13:45",
+          "metresMsl": -0.92
+        },
+        {
+          "kind": "high",
+          "time": "21:14",
+          "metresMsl": 1.03
+        }
+      ]
+    },
+    {
+      "date": "2026-06-30",
+      "page": 6,
+      "events": [
+        {
+          "kind": "low",
+          "time": "14:31",
+          "metresMsl": -1.02
+        },
+        {
+          "kind": "high",
+          "time": "21:46",
+          "metresMsl": 1.04
+        }
+      ]
+    },
+    {
+      "date": "2026-07-01",
+      "page": 7,
+      "events": [
+        {
+          "kind": "low",
+          "time": "01:38",
+          "metresMsl": 0.46
+        },
+        {
+          "kind": "high",
+          "time": "05:46",
+          "metresMsl": 0.56
+        },
+        {
+          "kind": "low",
+          "time": "15:12",
+          "metresMsl": -1.14
+        },
+        {
+          "kind": "high",
+          "time": "22:20",
+          "metresMsl": 1.06
+        }
+      ]
+    },
+    {
+      "date": "2026-07-02",
+      "page": 7,
+      "events": [
+        {
+          "kind": "low",
+          "time": "03:33",
+          "metresMsl": 0.36
+        },
+        {
+          "kind": "high",
+          "time": "06:36",
+          "metresMsl": 0.52
+        },
+        {
+          "kind": "low",
+          "time": "15:46",
+          "metresMsl": -1.23
+        },
+        {
+          "kind": "high",
+          "time": "22:51",
+          "metresMsl": 1.06
+        }
+      ]
+    },
+    {
+      "date": "2026-07-03",
+      "page": 7,
+      "events": [
+        {
+          "kind": "low",
+          "time": "04:07",
+          "metresMsl": 0.26
+        },
+        {
+          "kind": "high",
+          "time": "07:07",
+          "metresMsl": 0.46
+        },
+        {
+          "kind": "low",
+          "time": "16:15",
+          "metresMsl": -1.25
+        },
+        {
+          "kind": "high",
+          "time": "23:18",
+          "metresMsl": 1.04
+        }
+      ]
+    },
+    {
+      "date": "2026-07-04",
+      "page": 7,
+      "events": [
+        {
+          "kind": "low",
+          "time": "04:39",
+          "metresMsl": 0.16
+        },
+        {
+          "kind": "high",
+          "time": "07:30",
+          "metresMsl": 0.4
+        },
+        {
+          "kind": "low",
+          "time": "16:36",
+          "metresMsl": -1.17
+        },
+        {
+          "kind": "high",
+          "time": "23:40",
+          "metresMsl": 0.98
+        }
+      ]
+    },
+    {
+      "date": "2026-07-05",
+      "page": 7,
+      "events": [
+        {
+          "kind": "low",
+          "time": "05:10",
+          "metresMsl": 0.06
+        },
+        {
+          "kind": "high",
+          "time": "08:02",
+          "metresMsl": 0.33
+        },
+        {
+          "kind": "low",
+          "time": "16:45",
+          "metresMsl": -1.02
+        },
+        {
+          "kind": "high",
+          "time": "23:53",
+          "metresMsl": 0.9
+        }
+      ]
+    },
+    {
+      "date": "2026-07-06",
+      "page": 7,
+      "events": [
+        {
+          "kind": "low",
+          "time": "05:41",
+          "metresMsl": -0.07
+        },
+        {
+          "kind": "high",
+          "time": "08:48",
+          "metresMsl": 0.25
+        },
+        {
+          "kind": "low",
+          "time": "16:42",
+          "metresMsl": -0.82
+        },
+        {
+          "kind": "high",
+          "time": "23:53",
+          "metresMsl": 0.82
+        }
+      ]
+    },
+    {
+      "date": "2026-07-07",
+      "page": 7,
+      "events": [
+        {
+          "kind": "low",
+          "time": "06:15",
+          "metresMsl": -0.21
+        },
+        {
+          "kind": "high",
+          "time": "10:09",
+          "metresMsl": 0.16
+        },
+        {
+          "kind": "low",
+          "time": "16:36",
+          "metresMsl": -0.58
+        },
+        {
+          "kind": "high",
+          "time": "23:28",
+          "metresMsl": 0.79
+        }
+      ]
+    },
+    {
+      "date": "2026-07-08",
+      "page": 7,
+      "events": [
+        {
+          "kind": "low",
+          "time": "06:55",
+          "metresMsl": -0.37
+        },
+        {
+          "kind": "high",
+          "time": "11:45",
+          "metresMsl": 0.11
+        },
+        {
+          "kind": "low",
+          "time": "16:37",
+          "metresMsl": -0.29
+        },
+        {
+          "kind": "high",
+          "time": "23:30",
+          "metresMsl": 0.81
+        }
+      ]
+    },
+    {
+      "date": "2026-07-09",
+      "page": 7,
+      "events": [
+        {
+          "kind": "low",
+          "time": "07:41",
+          "metresMsl": -0.53
+        },
+        {
+          "kind": "high",
+          "time": "13:32",
+          "metresMsl": 0.16
+        },
+        {
+          "kind": "low",
+          "time": "16:34",
+          "metresMsl": 0.04
+        },
+        {
+          "kind": "high",
+          "time": "23:48",
+          "metresMsl": 0.83
+        }
+      ]
+    },
+    {
+      "date": "2026-07-10",
+      "page": 7,
+      "events": [
+        {
+          "kind": "low",
+          "time": "08:42",
+          "metresMsl": -0.67
+        }
+      ]
+    },
+    {
+      "date": "2026-07-11",
+      "page": 7,
+      "events": [
+        {
+          "kind": "high",
+          "time": "00:10",
+          "metresMsl": 0.83
+        },
+        {
+          "kind": "low",
+          "time": "10:04",
+          "metresMsl": -0.79
+        }
+      ]
+    },
+    {
+      "date": "2026-07-12",
+      "page": 7,
+      "events": [
+        {
+          "kind": "high",
+          "time": "00:12",
+          "metresMsl": 0.83
+        },
+        {
+          "kind": "low",
+          "time": "11:24",
+          "metresMsl": -0.9
+        },
+        {
+          "kind": "high",
+          "time": "20:38",
+          "metresMsl": 1.02
+        }
+      ]
+    },
+    {
+      "date": "2026-07-13",
+      "page": 7,
+      "events": [
+        {
+          "kind": "low",
+          "time": "12:54",
+          "metresMsl": -1.02
+        },
+        {
+          "kind": "high",
+          "time": "21:04",
+          "metresMsl": 1.15
+        }
+      ]
+    },
+    {
+      "date": "2026-07-14",
+      "page": 7,
+      "events": [
+        {
+          "kind": "low",
+          "time": "14:02",
+          "metresMsl": -1.2
+        },
+        {
+          "kind": "high",
+          "time": "21:37",
+          "metresMsl": 1.21
+        }
+      ]
+    },
+    {
+      "date": "2026-07-15",
+      "page": 7,
+      "events": [
+        {
+          "kind": "low",
+          "time": "14:52",
+          "metresMsl": -1.35
+        },
+        {
+          "kind": "high",
+          "time": "22:10",
+          "metresMsl": 1.21
+        }
+      ]
+    },
+    {
+      "date": "2026-07-16",
+      "page": 7,
+      "events": [
+        {
+          "kind": "low",
+          "time": "03:52",
+          "metresMsl": 0.5
+        },
+        {
+          "kind": "high",
+          "time": "05:59",
+          "metresMsl": 0.63
+        },
+        {
+          "kind": "low",
+          "time": "15:30",
+          "metresMsl": -1.42
+        },
+        {
+          "kind": "high",
+          "time": "22:35",
+          "metresMsl": 1.17
+        }
+      ]
+    },
+    {
+      "date": "2026-07-17",
+      "page": 7,
+      "events": [
+        {
+          "kind": "low",
+          "time": "04:19",
+          "metresMsl": 0.34
+        },
+        {
+          "kind": "high",
+          "time": "07:10",
+          "metresMsl": 0.6
+        },
+        {
+          "kind": "low",
+          "time": "16:01",
+          "metresMsl": -1.38
+        },
+        {
+          "kind": "high",
+          "time": "22:50",
+          "metresMsl": 1.11
+        }
+      ]
+    },
+    {
+      "date": "2026-07-18",
+      "page": 7,
+      "events": [
+        {
+          "kind": "low",
+          "time": "04:46",
+          "metresMsl": 0.14
+        },
+        {
+          "kind": "high",
+          "time": "08:14",
+          "metresMsl": 0.54
+        },
+        {
+          "kind": "low",
+          "time": "16:25",
+          "metresMsl": -1.23
+        },
+        {
+          "kind": "high",
+          "time": "23:02",
+          "metresMsl": 1.05
+        }
+      ]
+    },
+    {
+      "date": "2026-07-19",
+      "page": 7,
+      "events": [
+        {
+          "kind": "low",
+          "time": "05:16",
+          "metresMsl": -0.07
+        },
+        {
+          "kind": "high",
+          "time": "09:14",
+          "metresMsl": 0.45
+        },
+        {
+          "kind": "low",
+          "time": "16:42",
+          "metresMsl": -0.99
+        },
+        {
+          "kind": "high",
+          "time": "23:15",
+          "metresMsl": 0.98
+        }
+      ]
+    },
+    {
+      "date": "2026-07-20",
+      "page": 7,
+      "events": [
+        {
+          "kind": "low",
+          "time": "05:51",
+          "metresMsl": -0.25
+        },
+        {
+          "kind": "high",
+          "time": "10:12",
+          "metresMsl": 0.34
+        },
+        {
+          "kind": "low",
+          "time": "16:50",
+          "metresMsl": -0.68
+        },
+        {
+          "kind": "high",
+          "time": "23:16",
+          "metresMsl": 0.9
+        }
+      ]
+    },
+    {
+      "date": "2026-07-21",
+      "page": 7,
+      "events": [
+        {
+          "kind": "low",
+          "time": "06:30",
+          "metresMsl": -0.4
+        },
+        {
+          "kind": "high",
+          "time": "11:14",
+          "metresMsl": 0.23
+        },
+        {
+          "kind": "low",
+          "time": "16:43",
+          "metresMsl": -0.34
+        },
+        {
+          "kind": "high",
+          "time": "22:59",
+          "metresMsl": 0.87
+        }
+      ]
+    },
+    {
+      "date": "2026-07-22",
+      "page": 7,
+      "events": [
+        {
+          "kind": "low",
+          "time": "07:15",
+          "metresMsl": -0.5
+        },
+        {
+          "kind": "high",
+          "time": "12:33",
+          "metresMsl": 0.16
+        },
+        {
+          "kind": "low",
+          "time": "16:15",
+          "metresMsl": -0.02
+        },
+        {
+          "kind": "high",
+          "time": "22:58",
+          "metresMsl": 0.87
+        }
+      ]
+    },
+    {
+      "date": "2026-07-23",
+      "page": 7,
+      "events": [
+        {
+          "kind": "low",
+          "time": "08:13",
+          "metresMsl": -0.57
+        },
+        {
+          "kind": "high",
+          "time": "22:58",
+          "metresMsl": 0.85
+        }
+      ]
+    },
+    {
+      "date": "2026-07-24",
+      "page": 7,
+      "events": [
+        {
+          "kind": "low",
+          "time": "09:28",
+          "metresMsl": -0.63
+        },
+        {
+          "kind": "high",
+          "time": "21:52",
+          "metresMsl": 0.84
+        }
+      ]
+    },
+    {
+      "date": "2026-07-25",
+      "page": 7,
+      "events": [
+        {
+          "kind": "low",
+          "time": "10:29",
+          "metresMsl": -0.7
+        },
+        {
+          "kind": "high",
+          "time": "20:26",
+          "metresMsl": 0.9
+        }
+      ]
+    },
+    {
+      "date": "2026-07-26",
+      "page": 7,
+      "events": [
+        {
+          "kind": "low",
+          "time": "11:25",
+          "metresMsl": -0.76
+        },
+        {
+          "kind": "high",
+          "time": "20:10",
+          "metresMsl": 0.98
+        }
+      ]
+    },
+    {
+      "date": "2026-07-27",
+      "page": 7,
+      "events": [
+        {
+          "kind": "low",
+          "time": "12:24",
+          "metresMsl": -0.84
+        },
+        {
+          "kind": "high",
+          "time": "20:27",
+          "metresMsl": 1.04
+        }
+      ]
+    },
+    {
+      "date": "2026-07-28",
+      "page": 7,
+      "events": [
+        {
+          "kind": "low",
+          "time": "13:22",
+          "metresMsl": -0.97
+        },
+        {
+          "kind": "high",
+          "time": "20:53",
+          "metresMsl": 1.06
+        }
+      ]
+    },
+    {
+      "date": "2026-07-29",
+      "page": 7,
+      "events": [
+        {
+          "kind": "low",
+          "time": "02:53",
+          "metresMsl": 0.44
+        },
+        {
+          "kind": "high",
+          "time": "05:03",
+          "metresMsl": 0.51
+        },
+        {
+          "kind": "low",
+          "time": "14:08",
+          "metresMsl": -1.11
+        },
+        {
+          "kind": "high",
+          "time": "21:21",
+          "metresMsl": 1.08
+        }
+      ]
+    },
+    {
+      "date": "2026-07-30",
+      "page": 7,
+      "events": [
+        {
+          "kind": "low",
+          "time": "03:00",
+          "metresMsl": 0.32
+        },
+        {
+          "kind": "high",
+          "time": "06:00",
+          "metresMsl": 0.51
+        },
+        {
+          "kind": "low",
+          "time": "14:47",
+          "metresMsl": -1.21
+        },
+        {
+          "kind": "high",
+          "time": "21:48",
+          "metresMsl": 1.09
+        }
+      ]
+    },
+    {
+      "date": "2026-07-31",
+      "page": 7,
+      "events": [
+        {
+          "kind": "low",
+          "time": "03:21",
+          "metresMsl": 0.18
+        },
+        {
+          "kind": "high",
+          "time": "06:41",
+          "metresMsl": 0.48
+        },
+        {
+          "kind": "low",
+          "time": "15:21",
+          "metresMsl": -1.22
+        },
+        {
+          "kind": "high",
+          "time": "22:12",
+          "metresMsl": 1.07
+        }
+      ]
+    },
+    {
+      "date": "2026-08-01",
+      "page": 8,
+      "events": [
+        {
+          "kind": "low",
+          "time": "03:48",
+          "metresMsl": 0.05
+        },
+        {
+          "kind": "high",
+          "time": "07:10",
+          "metresMsl": 0.44
+        },
+        {
+          "kind": "low",
+          "time": "15:48",
+          "metresMsl": -1.12
+        },
+        {
+          "kind": "high",
+          "time": "22:30",
+          "metresMsl": 1.01
+        }
+      ]
+    },
+    {
+      "date": "2026-08-02",
+      "page": 8,
+      "events": [
+        {
+          "kind": "low",
+          "time": "04:15",
+          "metresMsl": -0.08
+        },
+        {
+          "kind": "high",
+          "time": "07:38",
+          "metresMsl": 0.4
+        },
+        {
+          "kind": "low",
+          "time": "16:05",
+          "metresMsl": -0.92
+        },
+        {
+          "kind": "high",
+          "time": "22:40",
+          "metresMsl": 0.92
+        }
+      ]
+    },
+    {
+      "date": "2026-08-03",
+      "page": 8,
+      "events": [
+        {
+          "kind": "low",
+          "time": "04:40",
+          "metresMsl": -0.2
+        },
+        {
+          "kind": "high",
+          "time": "08:20",
+          "metresMsl": 0.39
+        },
+        {
+          "kind": "low",
+          "time": "16:02",
+          "metresMsl": -0.69
+        },
+        {
+          "kind": "high",
+          "time": "22:40",
+          "metresMsl": 0.85
+        }
+      ]
+    },
+    {
+      "date": "2026-08-04",
+      "page": 8,
+      "events": [
+        {
+          "kind": "low",
+          "time": "05:05",
+          "metresMsl": -0.34
+        },
+        {
+          "kind": "high",
+          "time": "09:25",
+          "metresMsl": 0.39
+        },
+        {
+          "kind": "low",
+          "time": "15:48",
+          "metresMsl": -0.48
+        },
+        {
+          "kind": "high",
+          "time": "22:16",
+          "metresMsl": 0.84
+        }
+      ]
+    },
+    {
+      "date": "2026-08-05",
+      "page": 8,
+      "events": [
+        {
+          "kind": "low",
+          "time": "05:34",
+          "metresMsl": -0.48
+        },
+        {
+          "kind": "high",
+          "time": "10:36",
+          "metresMsl": 0.4
+        },
+        {
+          "kind": "low",
+          "time": "15:51",
+          "metresMsl": -0.23
+        },
+        {
+          "kind": "high",
+          "time": "21:53",
+          "metresMsl": 0.89
+        }
+      ]
+    },
+    {
+      "date": "2026-08-06",
+      "page": 8,
+      "events": [
+        {
+          "kind": "low",
+          "time": "06:10",
+          "metresMsl": -0.6
+        },
+        {
+          "kind": "high",
+          "time": "11:54",
+          "metresMsl": 0.4
+        },
+        {
+          "kind": "low",
+          "time": "16:05",
+          "metresMsl": 0.05
+        },
+        {
+          "kind": "high",
+          "time": "21:56",
+          "metresMsl": 0.95
+        }
+      ]
+    },
+    {
+      "date": "2026-08-07",
+      "page": 8,
+      "events": [
+        {
+          "kind": "low",
+          "time": "06:54",
+          "metresMsl": -0.67
+        },
+        {
+          "kind": "high",
+          "time": "13:32",
+          "metresMsl": 0.42
+        },
+        {
+          "kind": "low",
+          "time": "16:09",
+          "metresMsl": 0.33
+        },
+        {
+          "kind": "high",
+          "time": "22:11",
+          "metresMsl": 0.99
+        }
+      ]
+    },
+    {
+      "date": "2026-08-08",
+      "page": 8,
+      "events": [
+        {
+          "kind": "low",
+          "time": "07:54",
+          "metresMsl": -0.72
+        },
+        {
+          "kind": "high",
+          "time": "22:22",
+          "metresMsl": 0.98
+        }
+      ]
+    },
+    {
+      "date": "2026-08-09",
+      "page": 8,
+      "events": [
+        {
+          "kind": "low",
+          "time": "09:19",
+          "metresMsl": -0.76
+        },
+        {
+          "kind": "high",
+          "time": "20:29",
+          "metresMsl": 1.02
+        }
+      ]
+    },
+    {
+      "date": "2026-08-10",
+      "page": 8,
+      "events": [
+        {
+          "kind": "low",
+          "time": "10:56",
+          "metresMsl": -0.85
+        },
+        {
+          "kind": "high",
+          "time": "20:22",
+          "metresMsl": 1.13
+        }
+      ]
+    },
+    {
+      "date": "2026-08-11",
+      "page": 8,
+      "events": [
+        {
+          "kind": "low",
+          "time": "12:39",
+          "metresMsl": -1
+        },
+        {
+          "kind": "high",
+          "time": "20:42",
+          "metresMsl": 1.2
+        }
+      ]
+    },
+    {
+      "date": "2026-08-12",
+      "page": 8,
+      "events": [
+        {
+          "kind": "low",
+          "time": "13:41",
+          "metresMsl": -1.16
+        },
+        {
+          "kind": "high",
+          "time": "21:04",
+          "metresMsl": 1.2
+        }
+      ]
+    },
+    {
+      "date": "2026-08-13",
+      "page": 8,
+      "events": [
+        {
+          "kind": "low",
+          "time": "02:45",
+          "metresMsl": 0.42
+        },
+        {
+          "kind": "high",
+          "time": "05:32",
+          "metresMsl": 0.63
+        },
+        {
+          "kind": "low",
+          "time": "14:24",
+          "metresMsl": -1.24
+        },
+        {
+          "kind": "high",
+          "time": "21:20",
+          "metresMsl": 1.16
+        }
+      ]
+    },
+    {
+      "date": "2026-08-14",
+      "page": 8,
+      "events": [
+        {
+          "kind": "low",
+          "time": "03:11",
+          "metresMsl": 0.23
+        },
+        {
+          "kind": "high",
+          "time": "06:40",
+          "metresMsl": 0.66
+        },
+        {
+          "kind": "low",
+          "time": "14:58",
+          "metresMsl": -1.19
+        },
+        {
+          "kind": "high",
+          "time": "21:28",
+          "metresMsl": 1.11
+        }
+      ]
+    },
+    {
+      "date": "2026-08-15",
+      "page": 8,
+      "events": [
+        {
+          "kind": "low",
+          "time": "03:39",
+          "metresMsl": 0.02
+        },
+        {
+          "kind": "high",
+          "time": "07:36",
+          "metresMsl": 0.67
+        },
+        {
+          "kind": "low",
+          "time": "15:25",
+          "metresMsl": -1.05
+        },
+        {
+          "kind": "high",
+          "time": "21:40",
+          "metresMsl": 1.08
+        }
+      ]
+    },
+    {
+      "date": "2026-08-16",
+      "page": 8,
+      "events": [
+        {
+          "kind": "low",
+          "time": "04:08",
+          "metresMsl": -0.17
+        },
+        {
+          "kind": "high",
+          "time": "08:29",
+          "metresMsl": 0.65
+        },
+        {
+          "kind": "low",
+          "time": "15:45",
+          "metresMsl": -0.82
+        },
+        {
+          "kind": "high",
+          "time": "21:54",
+          "metresMsl": 1.03
+        }
+      ]
+    },
+    {
+      "date": "2026-08-17",
+      "page": 8,
+      "events": [
+        {
+          "kind": "low",
+          "time": "04:39",
+          "metresMsl": -0.34
+        },
+        {
+          "kind": "high",
+          "time": "09:18",
+          "metresMsl": 0.6
+        },
+        {
+          "kind": "low",
+          "time": "15:56",
+          "metresMsl": -0.54
+        },
+        {
+          "kind": "high",
+          "time": "21:56",
+          "metresMsl": 0.98
+        }
+      ]
+    },
+    {
+      "date": "2026-08-18",
+      "page": 8,
+      "events": [
+        {
+          "kind": "low",
+          "time": "05:11",
+          "metresMsl": -0.45
+        },
+        {
+          "kind": "high",
+          "time": "10:06",
+          "metresMsl": 0.55
+        },
+        {
+          "kind": "low",
+          "time": "15:55",
+          "metresMsl": -0.24
+        },
+        {
+          "kind": "high",
+          "time": "21:44",
+          "metresMsl": 0.96
+        }
+      ]
+    },
+    {
+      "date": "2026-08-19",
+      "page": 8,
+      "events": [
+        {
+          "kind": "low",
+          "time": "05:45",
+          "metresMsl": -0.51
+        },
+        {
+          "kind": "high",
+          "time": "10:57",
+          "metresMsl": 0.49
+        },
+        {
+          "kind": "low",
+          "time": "15:52",
+          "metresMsl": 0.04
+        },
+        {
+          "kind": "high",
+          "time": "21:41",
+          "metresMsl": 0.97
+        }
+      ]
+    },
+    {
+      "date": "2026-08-20",
+      "page": 8,
+      "events": [
+        {
+          "kind": "low",
+          "time": "06:17",
+          "metresMsl": -0.53
+        },
+        {
+          "kind": "high",
+          "time": "12:12",
+          "metresMsl": 0.44
+        },
+        {
+          "kind": "low",
+          "time": "15:54",
+          "metresMsl": 0.29
+        },
+        {
+          "kind": "high",
+          "time": "21:38",
+          "metresMsl": 0.97
+        }
+      ]
+    },
+    {
+      "date": "2026-08-21",
+      "page": 8,
+      "events": [
+        {
+          "kind": "low",
+          "time": "06:52",
+          "metresMsl": -0.53
+        },
+        {
+          "kind": "high",
+          "time": "21:21",
+          "metresMsl": 0.95
+        }
+      ]
+    },
+    {
+      "date": "2026-08-22",
+      "page": 8,
+      "events": [
+        {
+          "kind": "low",
+          "time": "07:38",
+          "metresMsl": -0.53
+        },
+        {
+          "kind": "high",
+          "time": "20:48",
+          "metresMsl": 0.94
+        }
+      ]
+    },
+    {
+      "date": "2026-08-23",
+      "page": 8,
+      "events": [
+        {
+          "kind": "low",
+          "time": "08:47",
+          "metresMsl": -0.56
+        },
+        {
+          "kind": "high",
+          "time": "19:39",
+          "metresMsl": 0.98
+        }
+      ]
+    },
+    {
+      "date": "2026-08-24",
+      "page": 8,
+      "events": [
+        {
+          "kind": "low",
+          "time": "10:17",
+          "metresMsl": -0.62
+        },
+        {
+          "kind": "high",
+          "time": "19:30",
+          "metresMsl": 1.06
+        }
+      ]
+    },
+    {
+      "date": "2026-08-25",
+      "page": 8,
+      "events": [
+        {
+          "kind": "low",
+          "time": "11:37",
+          "metresMsl": -0.73
+        },
+        {
+          "kind": "high",
+          "time": "19:50",
+          "metresMsl": 1.1
+        }
+      ]
+    },
+    {
+      "date": "2026-08-26",
+      "page": 8,
+      "events": [
+        {
+          "kind": "low",
+          "time": "12:42",
+          "metresMsl": -0.85
+        },
+        {
+          "kind": "high",
+          "time": "20:14",
+          "metresMsl": 1.11
+        }
+      ]
+    },
+    {
+      "date": "2026-08-27",
+      "page": 8,
+      "events": [
+        {
+          "kind": "low",
+          "time": "02:07",
+          "metresMsl": 0.31
+        },
+        {
+          "kind": "high",
+          "time": "05:22",
+          "metresMsl": 0.5
+        },
+        {
+          "kind": "low",
+          "time": "13:30",
+          "metresMsl": -0.94
+        },
+        {
+          "kind": "high",
+          "time": "20:34",
+          "metresMsl": 1.1
+        }
+      ]
+    },
+    {
+      "date": "2026-08-28",
+      "page": 8,
+      "events": [
+        {
+          "kind": "low",
+          "time": "02:15",
+          "metresMsl": 0.15
+        },
+        {
+          "kind": "high",
+          "time": "06:13",
+          "metresMsl": 0.54
+        },
+        {
+          "kind": "low",
+          "time": "14:10",
+          "metresMsl": -0.95
+        },
+        {
+          "kind": "high",
+          "time": "20:50",
+          "metresMsl": 1.07
+        }
+      ]
+    },
+    {
+      "date": "2026-08-29",
+      "page": 8,
+      "events": [
+        {
+          "kind": "low",
+          "time": "02:39",
+          "metresMsl": -0.02
+        },
+        {
+          "kind": "high",
+          "time": "06:58",
+          "metresMsl": 0.57
+        },
+        {
+          "kind": "low",
+          "time": "14:44",
+          "metresMsl": -0.86
+        },
+        {
+          "kind": "high",
+          "time": "21:04",
+          "metresMsl": 1.02
+        }
+      ]
+    },
+    {
+      "date": "2026-08-30",
+      "page": 8,
+      "events": [
+        {
+          "kind": "low",
+          "time": "03:07",
+          "metresMsl": -0.17
+        },
+        {
+          "kind": "high",
+          "time": "07:36",
+          "metresMsl": 0.6
+        },
+        {
+          "kind": "low",
+          "time": "15:11",
+          "metresMsl": -0.67
+        },
+        {
+          "kind": "high",
+          "time": "21:15",
+          "metresMsl": 0.95
+        }
+      ]
+    },
+    {
+      "date": "2026-08-31",
+      "page": 8,
+      "events": [
+        {
+          "kind": "low",
+          "time": "03:36",
+          "metresMsl": -0.3
+        },
+        {
+          "kind": "high",
+          "time": "08:14",
+          "metresMsl": 0.66
+        },
+        {
+          "kind": "low",
+          "time": "15:24",
+          "metresMsl": -0.43
+        },
+        {
+          "kind": "high",
+          "time": "21:18",
+          "metresMsl": 0.9
+        }
+      ]
+    },
+    {
+      "date": "2026-09-01",
+      "page": 9,
+      "events": [
+        {
+          "kind": "low",
+          "time": "04:03",
+          "metresMsl": -0.41
+        },
+        {
+          "kind": "high",
+          "time": "08:57",
+          "metresMsl": 0.72
+        },
+        {
+          "kind": "low",
+          "time": "15:15",
+          "metresMsl": -0.21
+        },
+        {
+          "kind": "high",
+          "time": "20:50",
+          "metresMsl": 0.9
+        }
+      ]
+    },
+    {
+      "date": "2026-09-02",
+      "page": 9,
+      "events": [
+        {
+          "kind": "low",
+          "time": "04:31",
+          "metresMsl": -0.52
+        },
+        {
+          "kind": "high",
+          "time": "09:45",
+          "metresMsl": 0.78
+        },
+        {
+          "kind": "low",
+          "time": "15:19",
+          "metresMsl": -0.01
+        },
+        {
+          "kind": "high",
+          "time": "20:28",
+          "metresMsl": 0.99
+        }
+      ]
+    },
+    {
+      "date": "2026-09-03",
+      "page": 9,
+      "events": [
+        {
+          "kind": "low",
+          "time": "05:04",
+          "metresMsl": -0.61
+        },
+        {
+          "kind": "high",
+          "time": "10:42",
+          "metresMsl": 0.79
+        },
+        {
+          "kind": "low",
+          "time": "15:40",
+          "metresMsl": 0.22
+        },
+        {
+          "kind": "high",
+          "time": "20:43",
+          "metresMsl": 1.07
+        }
+      ]
+    },
+    {
+      "date": "2026-09-04",
+      "page": 9,
+      "events": [
+        {
+          "kind": "low",
+          "time": "05:45",
+          "metresMsl": -0.66
+        },
+        {
+          "kind": "high",
+          "time": "11:58",
+          "metresMsl": 0.74
+        },
+        {
+          "kind": "low",
+          "time": "16:03",
+          "metresMsl": 0.45
+        },
+        {
+          "kind": "high",
+          "time": "21:04",
+          "metresMsl": 1.1
+        }
+      ]
+    },
+    {
+      "date": "2026-09-05",
+      "page": 9,
+      "events": [
+        {
+          "kind": "low",
+          "time": "06:34",
+          "metresMsl": -0.67
+        },
+        {
+          "kind": "high",
+          "time": "14:00",
+          "metresMsl": 0.71
+        },
+        {
+          "kind": "low",
+          "time": "16:15",
+          "metresMsl": 0.66
+        },
+        {
+          "kind": "high",
+          "time": "21:25",
+          "metresMsl": 1.09
+        }
+      ]
+    },
+    {
+      "date": "2026-09-06",
+      "page": 9,
+      "events": [
+        {
+          "kind": "low",
+          "time": "07:36",
+          "metresMsl": -0.66
+        },
+        {
+          "kind": "high",
+          "time": "20:27",
+          "metresMsl": 1.05
+        }
+      ]
+    },
+    {
+      "date": "2026-09-07",
+      "page": 9,
+      "events": [
+        {
+          "kind": "low",
+          "time": "08:52",
+          "metresMsl": -0.67
+        },
+        {
+          "kind": "high",
+          "time": "19:41",
+          "metresMsl": 1.09
+        }
+      ]
+    },
+    {
+      "date": "2026-09-08",
+      "page": 9,
+      "events": [
+        {
+          "kind": "low",
+          "time": "10:16",
+          "metresMsl": -0.72
+        },
+        {
+          "kind": "high",
+          "time": "19:35",
+          "metresMsl": 1.13
+        }
+      ]
+    },
+    {
+      "date": "2026-09-09",
+      "page": 9,
+      "events": [
+        {
+          "kind": "low",
+          "time": "11:49",
+          "metresMsl": -0.8
+        },
+        {
+          "kind": "high",
+          "time": "19:36",
+          "metresMsl": 1.16
+        }
+      ]
+    },
+    {
+      "date": "2026-09-10",
+      "page": 9,
+      "events": [
+        {
+          "kind": "low",
+          "time": "01:28",
+          "metresMsl": 0.36
+        },
+        {
+          "kind": "high",
+          "time": "05:00",
+          "metresMsl": 0.66
+        },
+        {
+          "kind": "low",
+          "time": "12:57",
+          "metresMsl": -0.85
+        },
+        {
+          "kind": "high",
+          "time": "19:37",
+          "metresMsl": 1.16
+        }
+      ]
+    },
+    {
+      "date": "2026-09-11",
+      "page": 9,
+      "events": [
+        {
+          "kind": "low",
+          "time": "01:56",
+          "metresMsl": 0.11
+        },
+        {
+          "kind": "high",
+          "time": "06:05",
+          "metresMsl": 0.76
+        },
+        {
+          "kind": "low",
+          "time": "13:42",
+          "metresMsl": -0.81
+        },
+        {
+          "kind": "high",
+          "time": "19:52",
+          "metresMsl": 1.15
+        }
+      ]
+    },
+    {
+      "date": "2026-09-12",
+      "page": 9,
+      "events": [
+        {
+          "kind": "low",
+          "time": "02:29",
+          "metresMsl": -0.12
+        },
+        {
+          "kind": "high",
+          "time": "07:00",
+          "metresMsl": 0.83
+        },
+        {
+          "kind": "low",
+          "time": "14:16",
+          "metresMsl": -0.67
+        },
+        {
+          "kind": "high",
+          "time": "20:11",
+          "metresMsl": 1.12
+        }
+      ]
+    },
+    {
+      "date": "2026-09-13",
+      "page": 9,
+      "events": [
+        {
+          "kind": "low",
+          "time": "03:01",
+          "metresMsl": -0.29
+        },
+        {
+          "kind": "high",
+          "time": "07:49",
+          "metresMsl": 0.88
+        },
+        {
+          "kind": "low",
+          "time": "14:42",
+          "metresMsl": -0.46
+        },
+        {
+          "kind": "high",
+          "time": "20:25",
+          "metresMsl": 1.07
+        }
+      ]
+    },
+    {
+      "date": "2026-09-14",
+      "page": 9,
+      "events": [
+        {
+          "kind": "low",
+          "time": "03:34",
+          "metresMsl": -0.41
+        },
+        {
+          "kind": "high",
+          "time": "08:34",
+          "metresMsl": 0.89
+        },
+        {
+          "kind": "low",
+          "time": "14:58",
+          "metresMsl": -0.22
+        },
+        {
+          "kind": "high",
+          "time": "20:26",
+          "metresMsl": 1.03
+        }
+      ]
+    },
+    {
+      "date": "2026-09-15",
+      "page": 9,
+      "events": [
+        {
+          "kind": "low",
+          "time": "04:06",
+          "metresMsl": -0.46
+        },
+        {
+          "kind": "high",
+          "time": "09:15",
+          "metresMsl": 0.89
+        },
+        {
+          "kind": "low",
+          "time": "15:06",
+          "metresMsl": 0.01
+        },
+        {
+          "kind": "high",
+          "time": "20:24",
+          "metresMsl": 1.03
+        }
+      ]
+    },
+    {
+      "date": "2026-09-16",
+      "page": 9,
+      "events": [
+        {
+          "kind": "low",
+          "time": "04:36",
+          "metresMsl": -0.48
+        },
+        {
+          "kind": "high",
+          "time": "09:49",
+          "metresMsl": 0.87
+        },
+        {
+          "kind": "low",
+          "time": "15:19",
+          "metresMsl": 0.21
+        },
+        {
+          "kind": "high",
+          "time": "20:27",
+          "metresMsl": 1.05
+        }
+      ]
+    },
+    {
+      "date": "2026-09-17",
+      "page": 9,
+      "events": [
+        {
+          "kind": "low",
+          "time": "05:05",
+          "metresMsl": -0.47
+        },
+        {
+          "kind": "high",
+          "time": "10:27",
+          "metresMsl": 0.83
+        },
+        {
+          "kind": "low",
+          "time": "15:43",
+          "metresMsl": 0.4
+        },
+        {
+          "kind": "high",
+          "time": "20:32",
+          "metresMsl": 1.05
+        }
+      ]
+    },
+    {
+      "date": "2026-09-18",
+      "page": 9,
+      "events": [
+        {
+          "kind": "low",
+          "time": "05:33",
+          "metresMsl": -0.47
+        },
+        {
+          "kind": "high",
+          "time": "11:31",
+          "metresMsl": 0.78
+        },
+        {
+          "kind": "low",
+          "time": "16:12",
+          "metresMsl": 0.57
+        },
+        {
+          "kind": "high",
+          "time": "20:35",
+          "metresMsl": 1.04
+        }
+      ]
+    },
+    {
+      "date": "2026-09-19",
+      "page": 9,
+      "events": [
+        {
+          "kind": "low",
+          "time": "06:06",
+          "metresMsl": -0.49
+        },
+        {
+          "kind": "high",
+          "time": "20:37",
+          "metresMsl": 1
+        }
+      ]
+    },
+    {
+      "date": "2026-09-20",
+      "page": 9,
+      "events": [
+        {
+          "kind": "low",
+          "time": "06:50",
+          "metresMsl": -0.5
+        },
+        {
+          "kind": "high",
+          "time": "20:16",
+          "metresMsl": 0.95
+        }
+      ]
+    },
+    {
+      "date": "2026-09-21",
+      "page": 9,
+      "events": [
+        {
+          "kind": "low",
+          "time": "07:45",
+          "metresMsl": -0.51
+        },
+        {
+          "kind": "high",
+          "time": "18:03",
+          "metresMsl": 1.02
+        }
+      ]
+    },
+    {
+      "date": "2026-09-22",
+      "page": 9,
+      "events": [
+        {
+          "kind": "low",
+          "time": "08:52",
+          "metresMsl": -0.51
+        },
+        {
+          "kind": "high",
+          "time": "18:31",
+          "metresMsl": 1.1
+        }
+      ]
+    },
+    {
+      "date": "2026-09-23",
+      "page": 9,
+      "events": [
+        {
+          "kind": "low",
+          "time": "10:17",
+          "metresMsl": -0.51
+        },
+        {
+          "kind": "high",
+          "time": "18:55",
+          "metresMsl": 1.13
+        }
+      ]
+    },
+    {
+      "date": "2026-09-24",
+      "page": 9,
+      "events": [
+        {
+          "kind": "low",
+          "time": "01:26",
+          "metresMsl": 0.31
+        },
+        {
+          "kind": "high",
+          "time": "04:42",
+          "metresMsl": 0.42
+        },
+        {
+          "kind": "low",
+          "time": "11:45",
+          "metresMsl": -0.53
+        },
+        {
+          "kind": "high",
+          "time": "19:08",
+          "metresMsl": 1.1
+        }
+      ]
+    },
+    {
+      "date": "2026-09-25",
+      "page": 9,
+      "events": [
+        {
+          "kind": "low",
+          "time": "01:07",
+          "metresMsl": 0.14
+        },
+        {
+          "kind": "high",
+          "time": "05:43",
+          "metresMsl": 0.53
+        },
+        {
+          "kind": "low",
+          "time": "12:41",
+          "metresMsl": -0.51
+        },
+        {
+          "kind": "high",
+          "time": "19:15",
+          "metresMsl": 1.06
+        }
+      ]
+    },
+    {
+      "date": "2026-09-26",
+      "page": 9,
+      "events": [
+        {
+          "kind": "low",
+          "time": "01:26",
+          "metresMsl": -0.05
+        },
+        {
+          "kind": "high",
+          "time": "06:32",
+          "metresMsl": 0.66
+        },
+        {
+          "kind": "low",
+          "time": "13:25",
+          "metresMsl": -0.43
+        },
+        {
+          "kind": "high",
+          "time": "19:25",
+          "metresMsl": 1.01
+        }
+      ]
+    },
+    {
+      "date": "2026-09-27",
+      "page": 9,
+      "events": [
+        {
+          "kind": "low",
+          "time": "01:55",
+          "metresMsl": -0.22
+        },
+        {
+          "kind": "high",
+          "time": "07:14",
+          "metresMsl": 0.79
+        },
+        {
+          "kind": "low",
+          "time": "14:00",
+          "metresMsl": -0.27
+        },
+        {
+          "kind": "high",
+          "time": "19:31",
+          "metresMsl": 0.96
+        }
+      ]
+    },
+    {
+      "date": "2026-09-28",
+      "page": 9,
+      "events": [
+        {
+          "kind": "low",
+          "time": "02:27",
+          "metresMsl": -0.36
+        },
+        {
+          "kind": "high",
+          "time": "07:49",
+          "metresMsl": 0.92
+        },
+        {
+          "kind": "low",
+          "time": "14:27",
+          "metresMsl": -0.07
+        },
+        {
+          "kind": "high",
+          "time": "19:04",
+          "metresMsl": 0.96
+        }
+      ]
+    },
+    {
+      "date": "2026-09-29",
+      "page": 9,
+      "events": [
+        {
+          "kind": "low",
+          "time": "03:00",
+          "metresMsl": -0.46
+        },
+        {
+          "kind": "high",
+          "time": "08:23",
+          "metresMsl": 1.04
+        },
+        {
+          "kind": "low",
+          "time": "14:38",
+          "metresMsl": 0.13
+        },
+        {
+          "kind": "high",
+          "time": "18:57",
+          "metresMsl": 1.02
+        }
+      ]
+    },
+    {
+      "date": "2026-09-30",
+      "page": 9,
+      "events": [
+        {
+          "kind": "low",
+          "time": "03:34",
+          "metresMsl": -0.53
+        },
+        {
+          "kind": "high",
+          "time": "09:02",
+          "metresMsl": 1.12
+        },
+        {
+          "kind": "low",
+          "time": "14:45",
+          "metresMsl": 0.3
+        },
+        {
+          "kind": "high",
+          "time": "19:15",
+          "metresMsl": 1.09
+        }
+      ]
+    },
+    {
+      "date": "2026-10-01",
+      "page": 10,
+      "events": [
+        {
+          "kind": "low",
+          "time": "04:11",
+          "metresMsl": -0.58
+        },
+        {
+          "kind": "high",
+          "time": "09:50",
+          "metresMsl": 1.13
+        },
+        {
+          "kind": "low",
+          "time": "15:09",
+          "metresMsl": 0.46
+        },
+        {
+          "kind": "high",
+          "time": "19:41",
+          "metresMsl": 1.14
+        }
+      ]
+    },
+    {
+      "date": "2026-10-02",
+      "page": 10,
+      "events": [
+        {
+          "kind": "low",
+          "time": "04:53",
+          "metresMsl": -0.62
+        },
+        {
+          "kind": "high",
+          "time": "10:56",
+          "metresMsl": 1.07
+        },
+        {
+          "kind": "low",
+          "time": "15:42",
+          "metresMsl": 0.62
+        },
+        {
+          "kind": "high",
+          "time": "20:09",
+          "metresMsl": 1.16
+        }
+      ]
+    },
+    {
+      "date": "2026-10-03",
+      "page": 10,
+      "events": [
+        {
+          "kind": "low",
+          "time": "05:38",
+          "metresMsl": -0.64
+        },
+        {
+          "kind": "high",
+          "time": "12:49",
+          "metresMsl": 1.01
+        },
+        {
+          "kind": "low",
+          "time": "16:16",
+          "metresMsl": 0.78
+        },
+        {
+          "kind": "high",
+          "time": "20:35",
+          "metresMsl": 1.14
+        }
+      ]
+    },
+    {
+      "date": "2026-10-04",
+      "page": 10,
+      "events": [
+        {
+          "kind": "low",
+          "time": "06:28",
+          "metresMsl": -0.63
+        },
+        {
+          "kind": "high",
+          "time": "14:30",
+          "metresMsl": 1.01
+        },
+        {
+          "kind": "low",
+          "time": "16:49",
+          "metresMsl": 0.91
+        },
+        {
+          "kind": "high",
+          "time": "20:42",
+          "metresMsl": 1.06
+        }
+      ]
+    },
+    {
+      "date": "2026-10-05",
+      "page": 10,
+      "events": [
+        {
+          "kind": "low",
+          "time": "07:20",
+          "metresMsl": -0.61
+        },
+        {
+          "kind": "high",
+          "time": "15:42",
+          "metresMsl": 1.04
+        }
+      ]
+    },
+    {
+      "date": "2026-10-06",
+      "page": 10,
+      "events": [
+        {
+          "kind": "low",
+          "time": "08:18",
+          "metresMsl": -0.56
+        },
+        {
+          "kind": "high",
+          "time": "16:37",
+          "metresMsl": 1.09
+        }
+      ]
+    },
+    {
+      "date": "2026-10-07",
+      "page": 10,
+      "events": [
+        {
+          "kind": "low",
+          "time": "09:23",
+          "metresMsl": -0.49
+        },
+        {
+          "kind": "high",
+          "time": "17:15",
+          "metresMsl": 1.14
+        }
+      ]
+    },
+    {
+      "date": "2026-10-08",
+      "page": 10,
+      "events": [
+        {
+          "kind": "low",
+          "time": "00:03",
+          "metresMsl": 0.33
+        },
+        {
+          "kind": "high",
+          "time": "03:58",
+          "metresMsl": 0.6
+        },
+        {
+          "kind": "low",
+          "time": "10:42",
+          "metresMsl": -0.41
+        },
+        {
+          "kind": "high",
+          "time": "17:44",
+          "metresMsl": 1.16
+        }
+      ]
+    },
+    {
+      "date": "2026-10-09",
+      "page": 10,
+      "events": [
+        {
+          "kind": "low",
+          "time": "00:38",
+          "metresMsl": 0.02
+        },
+        {
+          "kind": "high",
+          "time": "05:17",
+          "metresMsl": 0.75
+        },
+        {
+          "kind": "low",
+          "time": "11:59",
+          "metresMsl": -0.32
+        },
+        {
+          "kind": "high",
+          "time": "18:11",
+          "metresMsl": 1.16
+        }
+      ]
+    },
+    {
+      "date": "2026-10-10",
+      "page": 10,
+      "events": [
+        {
+          "kind": "low",
+          "time": "01:16",
+          "metresMsl": -0.24
+        },
+        {
+          "kind": "high",
+          "time": "06:18",
+          "metresMsl": 0.9
+        },
+        {
+          "kind": "low",
+          "time": "12:52",
+          "metresMsl": -0.18
+        },
+        {
+          "kind": "high",
+          "time": "18:31",
+          "metresMsl": 1.13
+        }
+      ]
+    },
+    {
+      "date": "2026-10-11",
+      "page": 10,
+      "events": [
+        {
+          "kind": "low",
+          "time": "01:55",
+          "metresMsl": -0.41
+        },
+        {
+          "kind": "high",
+          "time": "07:13",
+          "metresMsl": 1.02
+        },
+        {
+          "kind": "low",
+          "time": "13:30",
+          "metresMsl": 0
+        },
+        {
+          "kind": "high",
+          "time": "18:42",
+          "metresMsl": 1.08
+        }
+      ]
+    },
+    {
+      "date": "2026-10-12",
+      "page": 10,
+      "events": [
+        {
+          "kind": "low",
+          "time": "02:31",
+          "metresMsl": -0.48
+        },
+        {
+          "kind": "high",
+          "time": "08:02",
+          "metresMsl": 1.09
+        },
+        {
+          "kind": "low",
+          "time": "13:54",
+          "metresMsl": 0.19
+        },
+        {
+          "kind": "high",
+          "time": "18:46",
+          "metresMsl": 1.06
+        }
+      ]
+    },
+    {
+      "date": "2026-10-13",
+      "page": 10,
+      "events": [
+        {
+          "kind": "low",
+          "time": "03:07",
+          "metresMsl": -0.48
+        },
+        {
+          "kind": "high",
+          "time": "08:46",
+          "metresMsl": 1.12
+        },
+        {
+          "kind": "low",
+          "time": "14:12",
+          "metresMsl": 0.35
+        },
+        {
+          "kind": "high",
+          "time": "18:53",
+          "metresMsl": 1.07
+        }
+      ]
+    },
+    {
+      "date": "2026-10-14",
+      "page": 10,
+      "events": [
+        {
+          "kind": "low",
+          "time": "03:41",
+          "metresMsl": -0.44
+        },
+        {
+          "kind": "high",
+          "time": "09:19",
+          "metresMsl": 1.11
+        },
+        {
+          "kind": "low",
+          "time": "14:34",
+          "metresMsl": 0.47
+        },
+        {
+          "kind": "high",
+          "time": "19:07",
+          "metresMsl": 1.08
+        }
+      ]
+    },
+    {
+      "date": "2026-10-15",
+      "page": 10,
+      "events": [
+        {
+          "kind": "low",
+          "time": "04:12",
+          "metresMsl": -0.41
+        },
+        {
+          "kind": "high",
+          "time": "09:34",
+          "metresMsl": 1.09
+        },
+        {
+          "kind": "low",
+          "time": "15:04",
+          "metresMsl": 0.56
+        },
+        {
+          "kind": "high",
+          "time": "19:26",
+          "metresMsl": 1.09
+        }
+      ]
+    },
+    {
+      "date": "2026-10-16",
+      "page": 10,
+      "events": [
+        {
+          "kind": "low",
+          "time": "04:41",
+          "metresMsl": -0.42
+        },
+        {
+          "kind": "high",
+          "time": "10:07",
+          "metresMsl": 1.05
+        },
+        {
+          "kind": "low",
+          "time": "15:40",
+          "metresMsl": 0.64
+        },
+        {
+          "kind": "high",
+          "time": "19:44",
+          "metresMsl": 1.08
+        }
+      ]
+    },
+    {
+      "date": "2026-10-17",
+      "page": 10,
+      "events": [
+        {
+          "kind": "low",
+          "time": "05:10",
+          "metresMsl": -0.46
+        },
+        {
+          "kind": "high",
+          "time": "12:26",
+          "metresMsl": 1.01
+        },
+        {
+          "kind": "low",
+          "time": "16:20",
+          "metresMsl": 0.72
+        },
+        {
+          "kind": "high",
+          "time": "20:01",
+          "metresMsl": 1.05
+        }
+      ]
+    },
+    {
+      "date": "2026-10-18",
+      "page": 10,
+      "events": [
+        {
+          "kind": "low",
+          "time": "05:43",
+          "metresMsl": -0.51
+        },
+        {
+          "kind": "high",
+          "time": "13:36",
+          "metresMsl": 1.01
+        },
+        {
+          "kind": "low",
+          "time": "17:09",
+          "metresMsl": 0.81
+        },
+        {
+          "kind": "high",
+          "time": "20:16",
+          "metresMsl": 0.98
+        }
+      ]
+    },
+    {
+      "date": "2026-10-19",
+      "page": 10,
+      "events": [
+        {
+          "kind": "low",
+          "time": "06:20",
+          "metresMsl": -0.53
+        },
+        {
+          "kind": "high",
+          "time": "14:45",
+          "metresMsl": 1.03
+        }
+      ]
+    },
+    {
+      "date": "2026-10-20",
+      "page": 10,
+      "events": [
+        {
+          "kind": "low",
+          "time": "07:03",
+          "metresMsl": -0.49
+        },
+        {
+          "kind": "high",
+          "time": "16:04",
+          "metresMsl": 1.07
+        }
+      ]
+    },
+    {
+      "date": "2026-10-21",
+      "page": 10,
+      "events": [
+        {
+          "kind": "low",
+          "time": "07:51",
+          "metresMsl": -0.38
+        },
+        {
+          "kind": "high",
+          "time": "16:56",
+          "metresMsl": 1.09
+        }
+      ]
+    },
+    {
+      "date": "2026-10-22",
+      "page": 10,
+      "events": [
+        {
+          "kind": "low",
+          "time": "08:50",
+          "metresMsl": -0.22
+        },
+        {
+          "kind": "high",
+          "time": "17:16",
+          "metresMsl": 1.07
+        }
+      ]
+    },
+    {
+      "date": "2026-10-23",
+      "page": 10,
+      "events": [
+        {
+          "kind": "low",
+          "time": "00:08",
+          "metresMsl": 0.17
+        },
+        {
+          "kind": "high",
+          "time": "04:59",
+          "metresMsl": 0.39
+        },
+        {
+          "kind": "low",
+          "time": "10:34",
+          "metresMsl": -0.07
+        },
+        {
+          "kind": "high",
+          "time": "17:31",
+          "metresMsl": 1.03
+        }
+      ]
+    },
+    {
+      "date": "2026-10-24",
+      "page": 10,
+      "events": [
+        {
+          "kind": "low",
+          "time": "00:19",
+          "metresMsl": -0.05
+        },
+        {
+          "kind": "high",
+          "time": "05:58",
+          "metresMsl": 0.6
+        },
+        {
+          "kind": "low",
+          "time": "11:54",
+          "metresMsl": 0.05
+        },
+        {
+          "kind": "high",
+          "time": "17:34",
+          "metresMsl": 0.97
+        }
+      ]
+    },
+    {
+      "date": "2026-10-25",
+      "page": 10,
+      "events": [
+        {
+          "kind": "low",
+          "time": "00:45",
+          "metresMsl": -0.24
+        },
+        {
+          "kind": "high",
+          "time": "06:41",
+          "metresMsl": 0.82
+        },
+        {
+          "kind": "low",
+          "time": "12:41",
+          "metresMsl": 0.18
+        },
+        {
+          "kind": "high",
+          "time": "16:51",
+          "metresMsl": 0.99
+        }
+      ]
+    },
+    {
+      "date": "2026-10-26",
+      "page": 10,
+      "events": [
+        {
+          "kind": "low",
+          "time": "01:17",
+          "metresMsl": -0.39
+        },
+        {
+          "kind": "high",
+          "time": "07:17",
+          "metresMsl": 1.03
+        },
+        {
+          "kind": "low",
+          "time": "13:17",
+          "metresMsl": 0.33
+        },
+        {
+          "kind": "high",
+          "time": "17:06",
+          "metresMsl": 1.07
+        }
+      ]
+    },
+    {
+      "date": "2026-10-27",
+      "page": 10,
+      "events": [
+        {
+          "kind": "low",
+          "time": "01:55",
+          "metresMsl": -0.48
+        },
+        {
+          "kind": "high",
+          "time": "07:51",
+          "metresMsl": 1.19
+        },
+        {
+          "kind": "low",
+          "time": "13:41",
+          "metresMsl": 0.49
+        },
+        {
+          "kind": "high",
+          "time": "17:32",
+          "metresMsl": 1.13
+        }
+      ]
+    },
+    {
+      "date": "2026-10-28",
+      "page": 10,
+      "events": [
+        {
+          "kind": "low",
+          "time": "02:37",
+          "metresMsl": -0.53
+        },
+        {
+          "kind": "high",
+          "time": "08:29",
+          "metresMsl": 1.28
+        },
+        {
+          "kind": "low",
+          "time": "13:55",
+          "metresMsl": 0.62
+        },
+        {
+          "kind": "high",
+          "time": "18:04",
+          "metresMsl": 1.18
+        }
+      ]
+    },
+    {
+      "date": "2026-10-29",
+      "page": 10,
+      "events": [
+        {
+          "kind": "low",
+          "time": "03:23",
+          "metresMsl": -0.58
+        },
+        {
+          "kind": "high",
+          "time": "09:21",
+          "metresMsl": 1.29
+        },
+        {
+          "kind": "low",
+          "time": "14:22",
+          "metresMsl": 0.72
+        },
+        {
+          "kind": "high",
+          "time": "18:38",
+          "metresMsl": 1.2
+        }
+      ]
+    },
+    {
+      "date": "2026-10-30",
+      "page": 10,
+      "events": [
+        {
+          "kind": "low",
+          "time": "04:11",
+          "metresMsl": -0.63
+        },
+        {
+          "kind": "high",
+          "time": "10:51",
+          "metresMsl": 1.27
+        },
+        {
+          "kind": "low",
+          "time": "14:59",
+          "metresMsl": 0.81
+        },
+        {
+          "kind": "high",
+          "time": "19:15",
+          "metresMsl": 1.19
+        }
+      ]
+    },
+    {
+      "date": "2026-10-31",
+      "page": 10,
+      "events": [
+        {
+          "kind": "low",
+          "time": "04:57",
+          "metresMsl": -0.68
+        },
+        {
+          "kind": "high",
+          "time": "12:16",
+          "metresMsl": 1.25
+        },
+        {
+          "kind": "low",
+          "time": "15:40",
+          "metresMsl": 0.88
+        },
+        {
+          "kind": "high",
+          "time": "19:51",
+          "metresMsl": 1.15
+        }
+      ]
+    },
+    {
+      "date": "2026-11-01",
+      "page": 11,
+      "events": [
+        {
+          "kind": "low",
+          "time": "05:39",
+          "metresMsl": -0.7
+        },
+        {
+          "kind": "high",
+          "time": "13:19",
+          "metresMsl": 1.23
+        },
+        {
+          "kind": "low",
+          "time": "16:26",
+          "metresMsl": 0.93
+        },
+        {
+          "kind": "high",
+          "time": "20:24",
+          "metresMsl": 1.05
+        }
+      ]
+    },
+    {
+      "date": "2026-11-02",
+      "page": 11,
+      "events": [
+        {
+          "kind": "low",
+          "time": "06:17",
+          "metresMsl": -0.66
+        },
+        {
+          "kind": "high",
+          "time": "14:11",
+          "metresMsl": 1.2
+        }
+      ]
+    },
+    {
+      "date": "2026-11-03",
+      "page": 11,
+      "events": [
+        {
+          "kind": "low",
+          "time": "06:53",
+          "metresMsl": -0.56
+        },
+        {
+          "kind": "high",
+          "time": "14:54",
+          "metresMsl": 1.16
+        }
+      ]
+    },
+    {
+      "date": "2026-11-04",
+      "page": 11,
+      "events": [
+        {
+          "kind": "low",
+          "time": "07:32",
+          "metresMsl": -0.4
+        },
+        {
+          "kind": "high",
+          "time": "15:29",
+          "metresMsl": 1.14
+        },
+        {
+          "kind": "low",
+          "time": "22:45",
+          "metresMsl": 0.33
+        }
+      ]
+    },
+    {
+      "date": "2026-11-05",
+      "page": 11,
+      "events": [
+        {
+          "kind": "high",
+          "time": "01:33",
+          "metresMsl": 0.49
+        },
+        {
+          "kind": "low",
+          "time": "08:18",
+          "metresMsl": -0.18
+        },
+        {
+          "kind": "high",
+          "time": "15:57",
+          "metresMsl": 1.12
+        },
+        {
+          "kind": "low",
+          "time": "23:24",
+          "metresMsl": 0
+        }
+      ]
+    },
+    {
+      "date": "2026-11-06",
+      "page": 11,
+      "events": [
+        {
+          "kind": "high",
+          "time": "04:15",
+          "metresMsl": 0.58
+        },
+        {
+          "kind": "low",
+          "time": "09:20",
+          "metresMsl": 0.06
+        },
+        {
+          "kind": "high",
+          "time": "16:18",
+          "metresMsl": 1.11
+        }
+      ]
+    },
+    {
+      "date": "2026-11-07",
+      "page": 11,
+      "events": [
+        {
+          "kind": "low",
+          "time": "00:05",
+          "metresMsl": -0.29
+        },
+        {
+          "kind": "high",
+          "time": "05:39",
+          "metresMsl": 0.78
+        },
+        {
+          "kind": "low",
+          "time": "10:57",
+          "metresMsl": 0.28
+        },
+        {
+          "kind": "high",
+          "time": "16:32",
+          "metresMsl": 1.09
+        }
+      ]
+    },
+    {
+      "date": "2026-11-08",
+      "page": 11,
+      "events": [
+        {
+          "kind": "low",
+          "time": "00:46",
+          "metresMsl": -0.47
+        },
+        {
+          "kind": "high",
+          "time": "06:49",
+          "metresMsl": 0.99
+        },
+        {
+          "kind": "low",
+          "time": "12:06",
+          "metresMsl": 0.44
+        },
+        {
+          "kind": "high",
+          "time": "16:42",
+          "metresMsl": 1.07
+        }
+      ]
+    },
+    {
+      "date": "2026-11-09",
+      "page": 11,
+      "events": [
+        {
+          "kind": "low",
+          "time": "01:29",
+          "metresMsl": -0.54
+        },
+        {
+          "kind": "high",
+          "time": "07:48",
+          "metresMsl": 1.14
+        },
+        {
+          "kind": "low",
+          "time": "12:45",
+          "metresMsl": 0.58
+        },
+        {
+          "kind": "high",
+          "time": "16:59",
+          "metresMsl": 1.06
+        }
+      ]
+    },
+    {
+      "date": "2026-11-10",
+      "page": 11,
+      "events": [
+        {
+          "kind": "low",
+          "time": "02:10",
+          "metresMsl": -0.51
+        },
+        {
+          "kind": "high",
+          "time": "08:41",
+          "metresMsl": 1.21
+        },
+        {
+          "kind": "low",
+          "time": "13:10",
+          "metresMsl": 0.68
+        },
+        {
+          "kind": "high",
+          "time": "17:21",
+          "metresMsl": 1.07
+        }
+      ]
+    },
+    {
+      "date": "2026-11-11",
+      "page": 11,
+      "events": [
+        {
+          "kind": "low",
+          "time": "02:49",
+          "metresMsl": -0.46
+        },
+        {
+          "kind": "high",
+          "time": "09:30",
+          "metresMsl": 1.22
+        },
+        {
+          "kind": "low",
+          "time": "13:37",
+          "metresMsl": 0.73
+        },
+        {
+          "kind": "high",
+          "time": "17:48",
+          "metresMsl": 1.07
+        }
+      ]
+    },
+    {
+      "date": "2026-11-12",
+      "page": 11,
+      "events": [
+        {
+          "kind": "low",
+          "time": "03:26",
+          "metresMsl": -0.42
+        },
+        {
+          "kind": "high",
+          "time": "10:18",
+          "metresMsl": 1.21
+        },
+        {
+          "kind": "low",
+          "time": "14:11",
+          "metresMsl": 0.74
+        },
+        {
+          "kind": "high",
+          "time": "18:19",
+          "metresMsl": 1.07
+        }
+      ]
+    },
+    {
+      "date": "2026-11-13",
+      "page": 11,
+      "events": [
+        {
+          "kind": "low",
+          "time": "04:00",
+          "metresMsl": -0.44
+        },
+        {
+          "kind": "high",
+          "time": "11:03",
+          "metresMsl": 1.18
+        },
+        {
+          "kind": "low",
+          "time": "14:49",
+          "metresMsl": 0.73
+        },
+        {
+          "kind": "high",
+          "time": "18:50",
+          "metresMsl": 1.06
+        }
+      ]
+    },
+    {
+      "date": "2026-11-14",
+      "page": 11,
+      "events": [
+        {
+          "kind": "low",
+          "time": "04:30",
+          "metresMsl": -0.5
+        },
+        {
+          "kind": "high",
+          "time": "11:46",
+          "metresMsl": 1.16
+        },
+        {
+          "kind": "low",
+          "time": "15:31",
+          "metresMsl": 0.73
+        },
+        {
+          "kind": "high",
+          "time": "19:19",
+          "metresMsl": 1.04
+        }
+      ]
+    },
+    {
+      "date": "2026-11-15",
+      "page": 11,
+      "events": [
+        {
+          "kind": "low",
+          "time": "04:56",
+          "metresMsl": -0.57
+        },
+        {
+          "kind": "high",
+          "time": "12:26",
+          "metresMsl": 1.14
+        },
+        {
+          "kind": "low",
+          "time": "16:17",
+          "metresMsl": 0.74
+        },
+        {
+          "kind": "high",
+          "time": "19:45",
+          "metresMsl": 0.99
+        }
+      ]
+    },
+    {
+      "date": "2026-11-16",
+      "page": 11,
+      "events": [
+        {
+          "kind": "low",
+          "time": "05:21",
+          "metresMsl": -0.62
+        },
+        {
+          "kind": "high",
+          "time": "13:06",
+          "metresMsl": 1.13
+        },
+        {
+          "kind": "low",
+          "time": "17:12",
+          "metresMsl": 0.76
+        },
+        {
+          "kind": "high",
+          "time": "20:09",
+          "metresMsl": 0.9
+        }
+      ]
+    },
+    {
+      "date": "2026-11-17",
+      "page": 11,
+      "events": [
+        {
+          "kind": "low",
+          "time": "05:46",
+          "metresMsl": -0.59
+        },
+        {
+          "kind": "high",
+          "time": "13:47",
+          "metresMsl": 1.11
+        }
+      ]
+    },
+    {
+      "date": "2026-11-18",
+      "page": 11,
+      "events": [
+        {
+          "kind": "low",
+          "time": "06:11",
+          "metresMsl": -0.46
+        },
+        {
+          "kind": "high",
+          "time": "14:29",
+          "metresMsl": 1.07
+        }
+      ]
+    },
+    {
+      "date": "2026-11-19",
+      "page": 11,
+      "events": [
+        {
+          "kind": "low",
+          "time": "06:35",
+          "metresMsl": -0.24
+        },
+        {
+          "kind": "high",
+          "time": "15:05",
+          "metresMsl": 1.01
+        }
+      ]
+    },
+    {
+      "date": "2026-11-20",
+      "page": 11,
+      "events": [
+        {
+          "kind": "low",
+          "time": "07:03",
+          "metresMsl": 0.03
+        },
+        {
+          "kind": "high",
+          "time": "15:14",
+          "metresMsl": 0.94
+        },
+        {
+          "kind": "low",
+          "time": "23:13",
+          "metresMsl": 0.04
+        }
+      ]
+    },
+    {
+      "date": "2026-11-21",
+      "page": 11,
+      "events": [
+        {
+          "kind": "high",
+          "time": "05:21",
+          "metresMsl": 0.38
+        },
+        {
+          "kind": "low",
+          "time": "07:47",
+          "metresMsl": 0.32
+        },
+        {
+          "kind": "high",
+          "time": "14:41",
+          "metresMsl": 0.95
+        },
+        {
+          "kind": "low",
+          "time": "23:36",
+          "metresMsl": -0.19
+        }
+      ]
+    },
+    {
+      "date": "2026-11-22",
+      "page": 11,
+      "events": [
+        {
+          "kind": "high",
+          "time": "06:17",
+          "metresMsl": 0.68
+        },
+        {
+          "kind": "low",
+          "time": "11:09",
+          "metresMsl": 0.57
+        },
+        {
+          "kind": "high",
+          "time": "15:00",
+          "metresMsl": 1.02
+        }
+      ]
+    },
+    {
+      "date": "2026-11-23",
+      "page": 11,
+      "events": [
+        {
+          "kind": "low",
+          "time": "00:09",
+          "metresMsl": -0.36
+        },
+        {
+          "kind": "high",
+          "time": "06:58",
+          "metresMsl": 0.94
+        },
+        {
+          "kind": "low",
+          "time": "12:02",
+          "metresMsl": 0.69
+        },
+        {
+          "kind": "high",
+          "time": "15:32",
+          "metresMsl": 1.1
+        }
+      ]
+    },
+    {
+      "date": "2026-11-24",
+      "page": 11,
+      "events": [
+        {
+          "kind": "low",
+          "time": "00:48",
+          "metresMsl": -0.48
+        },
+        {
+          "kind": "high",
+          "time": "07:40",
+          "metresMsl": 1.14
+        },
+        {
+          "kind": "low",
+          "time": "12:35",
+          "metresMsl": 0.8
+        },
+        {
+          "kind": "high",
+          "time": "16:09",
+          "metresMsl": 1.16
+        }
+      ]
+    },
+    {
+      "date": "2026-11-25",
+      "page": 11,
+      "events": [
+        {
+          "kind": "low",
+          "time": "01:38",
+          "metresMsl": -0.55
+        },
+        {
+          "kind": "high",
+          "time": "08:35",
+          "metresMsl": 1.26
+        },
+        {
+          "kind": "low",
+          "time": "12:56",
+          "metresMsl": 0.89
+        },
+        {
+          "kind": "high",
+          "time": "16:48",
+          "metresMsl": 1.2
+        }
+      ]
+    },
+    {
+      "date": "2026-11-26",
+      "page": 11,
+      "events": [
+        {
+          "kind": "low",
+          "time": "02:35",
+          "metresMsl": -0.61
+        },
+        {
+          "kind": "high",
+          "time": "09:45",
+          "metresMsl": 1.32
+        },
+        {
+          "kind": "low",
+          "time": "13:23",
+          "metresMsl": 0.95
+        },
+        {
+          "kind": "high",
+          "time": "17:30",
+          "metresMsl": 1.2
+        }
+      ]
+    },
+    {
+      "date": "2026-11-27",
+      "page": 11,
+      "events": [
+        {
+          "kind": "low",
+          "time": "03:30",
+          "metresMsl": -0.7
+        },
+        {
+          "kind": "high",
+          "time": "10:47",
+          "metresMsl": 1.35
+        },
+        {
+          "kind": "low",
+          "time": "14:00",
+          "metresMsl": 0.98
+        },
+        {
+          "kind": "high",
+          "time": "18:15",
+          "metresMsl": 1.19
+        }
+      ]
+    },
+    {
+      "date": "2026-11-28",
+      "page": 11,
+      "events": [
+        {
+          "kind": "low",
+          "time": "04:15",
+          "metresMsl": -0.79
+        },
+        {
+          "kind": "high",
+          "time": "11:38",
+          "metresMsl": 1.36
+        },
+        {
+          "kind": "low",
+          "time": "14:46",
+          "metresMsl": 0.98
+        },
+        {
+          "kind": "high",
+          "time": "19:02",
+          "metresMsl": 1.15
+        }
+      ]
+    },
+    {
+      "date": "2026-11-29",
+      "page": 11,
+      "events": [
+        {
+          "kind": "low",
+          "time": "04:54",
+          "metresMsl": -0.84
+        },
+        {
+          "kind": "high",
+          "time": "12:21",
+          "metresMsl": 1.34
+        },
+        {
+          "kind": "low",
+          "time": "17:42",
+          "metresMsl": 0.94
+        },
+        {
+          "kind": "high",
+          "time": "19:54",
+          "metresMsl": 1.05
+        }
+      ]
+    },
+    {
+      "date": "2026-11-30",
+      "page": 11,
+      "events": [
+        {
+          "kind": "low",
+          "time": "05:26",
+          "metresMsl": -0.82
+        },
+        {
+          "kind": "high",
+          "time": "12:57",
+          "metresMsl": 1.29
+        },
+        {
+          "kind": "low",
+          "time": "18:31",
+          "metresMsl": 0.81
+        },
+        {
+          "kind": "high",
+          "time": "20:54",
+          "metresMsl": 0.9
+        }
+      ]
+    },
+    {
+      "date": "2026-12-01",
+      "page": 12,
+      "events": [
+        {
+          "kind": "low",
+          "time": "05:51",
+          "metresMsl": -0.69
+        },
+        {
+          "kind": "high",
+          "time": "13:26",
+          "metresMsl": 1.21
+        },
+        {
+          "kind": "low",
+          "time": "19:33",
+          "metresMsl": 0.63
+        },
+        {
+          "kind": "high",
+          "time": "22:15",
+          "metresMsl": 0.69
+        }
+      ]
+    },
+    {
+      "date": "2026-12-02",
+      "page": 12,
+      "events": [
+        {
+          "kind": "low",
+          "time": "06:12",
+          "metresMsl": -0.47
+        },
+        {
+          "kind": "high",
+          "time": "13:46",
+          "metresMsl": 1.13
+        },
+        {
+          "kind": "low",
+          "time": "21:11",
+          "metresMsl": 0.37
+        },
+        {
+          "kind": "high",
+          "time": "23:42",
+          "metresMsl": 0.48
+        }
+      ]
+    },
+    {
+      "date": "2026-12-03",
+      "page": 12,
+      "events": [
+        {
+          "kind": "low",
+          "time": "06:34",
+          "metresMsl": -0.18
+        },
+        {
+          "kind": "high",
+          "time": "13:58",
+          "metresMsl": 1.07
+        },
+        {
+          "kind": "low",
+          "time": "22:08",
+          "metresMsl": 0.06
+        }
+      ]
+    },
+    {
+      "date": "2026-12-04",
+      "page": 12,
+      "events": [
+        {
+          "kind": "high",
+          "time": "01:50",
+          "metresMsl": 0.37
+        },
+        {
+          "kind": "low",
+          "time": "07:02",
+          "metresMsl": 0.16
+        },
+        {
+          "kind": "high",
+          "time": "13:56",
+          "metresMsl": 1.04
+        },
+        {
+          "kind": "low",
+          "time": "22:53",
+          "metresMsl": -0.22
+        }
+      ]
+    },
+    {
+      "date": "2026-12-05",
+      "page": 12,
+      "events": [
+        {
+          "kind": "high",
+          "time": "14:08",
+          "metresMsl": 1.04
+        },
+        {
+          "kind": "low",
+          "time": "23:37",
+          "metresMsl": -0.42
+        }
+      ]
+    },
+    {
+      "date": "2026-12-06",
+      "page": 12,
+      "events": [
+        {
+          "kind": "high",
+          "time": "07:00",
+          "metresMsl": 0.84
+        },
+        {
+          "kind": "low",
+          "time": "09:39",
+          "metresMsl": 0.78
+        },
+        {
+          "kind": "high",
+          "time": "14:35",
+          "metresMsl": 1.03
+        }
+      ]
+    },
+    {
+      "date": "2026-12-07",
+      "page": 12,
+      "events": [
+        {
+          "kind": "low",
+          "time": "00:22",
+          "metresMsl": -0.51
+        },
+        {
+          "kind": "high",
+          "time": "07:49",
+          "metresMsl": 1.07
+        },
+        {
+          "kind": "low",
+          "time": "11:39",
+          "metresMsl": 0.88
+        },
+        {
+          "kind": "high",
+          "time": "15:08",
+          "metresMsl": 1.03
+        }
+      ]
+    },
+    {
+      "date": "2026-12-08",
+      "page": 12,
+      "events": [
+        {
+          "kind": "low",
+          "time": "01:08",
+          "metresMsl": -0.52
+        },
+        {
+          "kind": "high",
+          "time": "08:31",
+          "metresMsl": 1.2
+        },
+        {
+          "kind": "low",
+          "time": "12:10",
+          "metresMsl": 0.93
+        },
+        {
+          "kind": "high",
+          "time": "15:43",
+          "metresMsl": 1.02
+        }
+      ]
+    },
+    {
+      "date": "2026-12-09",
+      "page": 12,
+      "events": [
+        {
+          "kind": "low",
+          "time": "01:54",
+          "metresMsl": -0.5
+        },
+        {
+          "kind": "high",
+          "time": "09:13",
+          "metresMsl": 1.24
+        },
+        {
+          "kind": "low",
+          "time": "12:36",
+          "metresMsl": 0.91
+        },
+        {
+          "kind": "high",
+          "time": "16:25",
+          "metresMsl": 1.03
+        }
+      ]
+    },
+    {
+      "date": "2026-12-10",
+      "page": 12,
+      "events": [
+        {
+          "kind": "low",
+          "time": "02:37",
+          "metresMsl": -0.5
+        },
+        {
+          "kind": "high",
+          "time": "09:52",
+          "metresMsl": 1.23
+        },
+        {
+          "kind": "low",
+          "time": "13:10",
+          "metresMsl": 0.86
+        },
+        {
+          "kind": "high",
+          "time": "17:15",
+          "metresMsl": 1.02
+        }
+      ]
+    },
+    {
+      "date": "2026-12-11",
+      "page": 12,
+      "events": [
+        {
+          "kind": "low",
+          "time": "03:15",
+          "metresMsl": -0.54
+        },
+        {
+          "kind": "high",
+          "time": "10:29",
+          "metresMsl": 1.21
+        },
+        {
+          "kind": "low",
+          "time": "13:49",
+          "metresMsl": 0.8
+        },
+        {
+          "kind": "high",
+          "time": "18:06",
+          "metresMsl": 1.01
+        }
+      ]
+    },
+    {
+      "date": "2026-12-12",
+      "page": 12,
+      "events": [
+        {
+          "kind": "low",
+          "time": "03:48",
+          "metresMsl": -0.62
+        },
+        {
+          "kind": "high",
+          "time": "11:03",
+          "metresMsl": 1.2
+        },
+        {
+          "kind": "low",
+          "time": "14:34",
+          "metresMsl": 0.74
+        },
+        {
+          "kind": "high",
+          "time": "18:45",
+          "metresMsl": 0.99
+        }
+      ]
+    },
+    {
+      "date": "2026-12-13",
+      "page": 12,
+      "events": [
+        {
+          "kind": "low",
+          "time": "04:16",
+          "metresMsl": -0.7
+        },
+        {
+          "kind": "high",
+          "time": "11:34",
+          "metresMsl": 1.19
+        },
+        {
+          "kind": "low",
+          "time": "15:23",
+          "metresMsl": 0.69
+        },
+        {
+          "kind": "high",
+          "time": "19:14",
+          "metresMsl": 0.94
+        }
+      ]
+    },
+    {
+      "date": "2026-12-14",
+      "page": 12,
+      "events": [
+        {
+          "kind": "low",
+          "time": "04:39",
+          "metresMsl": -0.73
+        },
+        {
+          "kind": "high",
+          "time": "12:01",
+          "metresMsl": 1.17
+        },
+        {
+          "kind": "low",
+          "time": "16:15",
+          "metresMsl": 0.64
+        },
+        {
+          "kind": "high",
+          "time": "19:41",
+          "metresMsl": 0.88
+        }
+      ]
+    },
+    {
+      "date": "2026-12-15",
+      "page": 12,
+      "events": [
+        {
+          "kind": "low",
+          "time": "04:53",
+          "metresMsl": -0.69
+        },
+        {
+          "kind": "high",
+          "time": "12:24",
+          "metresMsl": 1.12
+        },
+        {
+          "kind": "low",
+          "time": "17:10",
+          "metresMsl": 0.58
+        },
+        {
+          "kind": "high",
+          "time": "20:11",
+          "metresMsl": 0.78
+        }
+      ]
+    },
+    {
+      "date": "2026-12-16",
+      "page": 12,
+      "events": [
+        {
+          "kind": "low",
+          "time": "04:58",
+          "metresMsl": -0.58
+        },
+        {
+          "kind": "high",
+          "time": "12:42",
+          "metresMsl": 1.06
+        },
+        {
+          "kind": "low",
+          "time": "18:05",
+          "metresMsl": 0.49
+        },
+        {
+          "kind": "high",
+          "time": "20:45",
+          "metresMsl": 0.63
+        }
+      ]
+    },
+    {
+      "date": "2026-12-17",
+      "page": 12,
+      "events": [
+        {
+          "kind": "low",
+          "time": "04:56",
+          "metresMsl": -0.4
+        },
+        {
+          "kind": "high",
+          "time": "12:41",
+          "metresMsl": 0.98
+        },
+        {
+          "kind": "low",
+          "time": "19:04",
+          "metresMsl": 0.36
+        },
+        {
+          "kind": "high",
+          "time": "21:30",
+          "metresMsl": 0.44
+        }
+      ]
+    },
+    {
+      "date": "2026-12-18",
+      "page": 12,
+      "events": [
+        {
+          "kind": "low",
+          "time": "04:39",
+          "metresMsl": -0.16
+        },
+        {
+          "kind": "high",
+          "time": "12:04",
+          "metresMsl": 0.96
+        },
+        {
+          "kind": "low",
+          "time": "20:22",
+          "metresMsl": 0.19
+        }
+      ]
+    },
+    {
+      "date": "2026-12-19",
+      "page": 12,
+      "events": [
+        {
+          "kind": "high",
+          "time": "00:05",
+          "metresMsl": 0.29
+        },
+        {
+          "kind": "low",
+          "time": "04:23",
+          "metresMsl": 0.12
+        },
+        {
+          "kind": "high",
+          "time": "12:22",
+          "metresMsl": 0.99
+        },
+        {
+          "kind": "low",
+          "time": "21:52",
+          "metresMsl": -0.03
+        }
+      ]
+    },
+    {
+      "date": "2026-12-20",
+      "page": 12,
+      "events": [
+        {
+          "kind": "high",
+          "time": "12:56",
+          "metresMsl": 1.04
+        },
+        {
+          "kind": "low",
+          "time": "22:43",
+          "metresMsl": -0.23
+        }
+      ]
+    },
+    {
+      "date": "2026-12-21",
+      "page": 12,
+      "events": [
+        {
+          "kind": "high",
+          "time": "13:36",
+          "metresMsl": 1.08
+        },
+        {
+          "kind": "low",
+          "time": "23:31",
+          "metresMsl": -0.4
+        }
+      ]
+    },
+    {
+      "date": "2026-12-22",
+      "page": 12,
+      "events": [
+        {
+          "kind": "high",
+          "time": "14:21",
+          "metresMsl": 1.11
+        }
+      ]
+    },
+    {
+      "date": "2026-12-23",
+      "page": 12,
+      "events": [
+        {
+          "kind": "low",
+          "time": "00:30",
+          "metresMsl": -0.52
+        },
+        {
+          "kind": "high",
+          "time": "08:54",
+          "metresMsl": 1.22
+        },
+        {
+          "kind": "low",
+          "time": "12:00",
+          "metresMsl": 1.06
+        },
+        {
+          "kind": "high",
+          "time": "15:12",
+          "metresMsl": 1.13
+        }
+      ]
+    },
+    {
+      "date": "2026-12-24",
+      "page": 12,
+      "events": [
+        {
+          "kind": "low",
+          "time": "01:40",
+          "metresMsl": -0.64
+        },
+        {
+          "kind": "high",
+          "time": "09:32",
+          "metresMsl": 1.32
+        }
+      ]
+    },
+    {
+      "date": "2026-12-25",
+      "page": 12,
+      "events": [
+        {
+          "kind": "low",
+          "time": "02:39",
+          "metresMsl": -0.78
+        },
+        {
+          "kind": "high",
+          "time": "10:14",
+          "metresMsl": 1.36
+        }
+      ]
+    },
+    {
+      "date": "2026-12-26",
+      "page": 12,
+      "events": [
+        {
+          "kind": "low",
+          "time": "03:26",
+          "metresMsl": -0.92
+        },
+        {
+          "kind": "high",
+          "time": "10:51",
+          "metresMsl": 1.35
+        },
+        {
+          "kind": "low",
+          "time": "13:46",
+          "metresMsl": 1.02
+        },
+        {
+          "kind": "high",
+          "time": "18:09",
+          "metresMsl": 1.11
+        }
+      ]
+    },
+    {
+      "date": "2026-12-27",
+      "page": 12,
+      "events": [
+        {
+          "kind": "low",
+          "time": "04:04",
+          "metresMsl": -0.98
+        },
+        {
+          "kind": "high",
+          "time": "11:23",
+          "metresMsl": 1.32
+        },
+        {
+          "kind": "low",
+          "time": "16:47",
+          "metresMsl": 0.86
+        },
+        {
+          "kind": "high",
+          "time": "19:07",
+          "metresMsl": 1.05
+        }
+      ]
+    },
+    {
+      "date": "2026-12-28",
+      "page": 12,
+      "events": [
+        {
+          "kind": "low",
+          "time": "04:34",
+          "metresMsl": -0.96
+        },
+        {
+          "kind": "high",
+          "time": "11:45",
+          "metresMsl": 1.26
+        },
+        {
+          "kind": "low",
+          "time": "17:17",
+          "metresMsl": 0.69
+        },
+        {
+          "kind": "high",
+          "time": "20:08",
+          "metresMsl": 0.94
+        }
+      ]
+    },
+    {
+      "date": "2026-12-29",
+      "page": 12,
+      "events": [
+        {
+          "kind": "low",
+          "time": "04:57",
+          "metresMsl": -0.82
+        },
+        {
+          "kind": "high",
+          "time": "11:57",
+          "metresMsl": 1.19
+        },
+        {
+          "kind": "low",
+          "time": "17:53",
+          "metresMsl": 0.48
+        },
+        {
+          "kind": "high",
+          "time": "21:15",
+          "metresMsl": 0.78
+        }
+      ]
+    },
+    {
+      "date": "2026-12-30",
+      "page": 12,
+      "events": [
+        {
+          "kind": "low",
+          "time": "05:10",
+          "metresMsl": -0.58
+        },
+        {
+          "kind": "high",
+          "time": "12:07",
+          "metresMsl": 1.12
+        },
+        {
+          "kind": "low",
+          "time": "18:36",
+          "metresMsl": 0.28
+        },
+        {
+          "kind": "high",
+          "time": "22:23",
+          "metresMsl": 0.59
+        }
+      ]
+    },
+    {
+      "date": "2026-12-31",
+      "page": 12,
+      "events": [
+        {
+          "kind": "low",
+          "time": "05:15",
+          "metresMsl": -0.28
+        },
+        {
+          "kind": "high",
+          "time": "12:00",
+          "metresMsl": 1.06
+        },
+        {
+          "kind": "low",
+          "time": "19:32",
+          "metresMsl": 0.11
+        },
+        {
+          "kind": "high",
+          "time": "23:40",
+          "metresMsl": 0.42
+        }
+      ]
+    }
+  ],
+  "fetchedAt": "2026-09-25T08:34:30.494Z"
+}

@@ -83,6 +83,7 @@ export default function DatasetsPage() {
         <article className="datasets-lede">
           <p className="register-eyebrow">Open data</p>
           <h1>The datasets</h1>
+          <p><a href="/drainage/">Bangkok DDS drainage map, downloadable reference layers and 2026 Navy tide table →</a></p>
           <p className="datasets-standfirst">
             Everything this project asserts, it asserts from a file you can
             download. This shelf is all of them — what each one is, where its

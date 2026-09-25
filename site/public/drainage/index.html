@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>ทางน้ำกรุงเทพฯ · Bangkok drainage & tides</title>
+  <meta name="description" content="Explore Bangkok DDS canals, pumps, gates and flood-risk records with the Royal Thai Navy's 2026 tide predictions.">
+  <link rel="stylesheet" href="./vendor/leaflet.css">
+  <link rel="stylesheet" href="./drainage.css">
+  <script defer src="./vendor/leaflet.js"></script>
+  <script type="module" src="./drainage.js"></script>
+</head>
+<body>
+  <header><a href="/" data-copy="back">กลับหน้าหลัก</a><button id="language" type="button">English</button></header>
+  <main>
+    <h1 data-copy="title">ทางน้ำกรุงเทพฯ</h1>
+    <p class="lede" data-copy="intro">ดูคลอง เครื่องสูบน้ำ และจุดเสี่ยงจากสำนักการระบายน้ำ กทม. พร้อมตารางน้ำขึ้นลงปี 2569</p>
+    <p class="notice" data-copy="reference">ข้อมูลอ้างอิง ไม่ใช่สถานการณ์น้ำท่วมปัจจุบัน ไม่ใช่ประกาศราชการ · เหตุฉุกเฉิน ปภ. 1784</p>
+    <section class="explorer" aria-label="Drainage map and records">
+      <div class="controls">
+        <label for="layer" data-copy="layer">ชั้นข้อมูล</label><select id="layer" disabled></select>
+        <label for="search" data-copy="search">ค้นหาชื่อหรือเขต</label><input id="search" type="search" autocomplete="off">
+        <p id="status" role="status" aria-live="polite">กำลังโหลด…</p>
+        <p id="provenance" class="meta"></p>
+        <a id="download" download data-copy="download">ดาวน์โหลด GeoJSON</a>
+        <div id="records" aria-label="Matching records"></div>
+        <button id="more" type="button" hidden data-copy="more">แสดงเพิ่ม</button>
+      </div>
+      <div class="map-area"><div id="map" aria-label="Bangkok reference map"></div><article id="detail" aria-live="polite"><p data-copy="select">เลือกจุดบนแผนที่หรือชื่อในรายการเพื่อดูข้อมูล</p></article></div>
+    </section>
+    <section class="tides" aria-labelledby="tide-title">
+      <div><h2 id="tide-title" data-copy="tides">น้ำขึ้นลงที่กองบัญชาการกองทัพเรือ</h2>
+      <p data-copy="tideNote">ค่าทำนายทางดาราศาสตร์ ปี 2569 หน่วยเมตรจากระดับทะเลปานกลาง ไม่รวมฝนและน้ำระบายจากเขื่อน จึงใช้แทนระดับน้ำจริงไม่ได้</p>
+      <label for="tide-date" data-copy="date">วันที่ · เวลากรุงเทพฯ</label> <input id="tide-date" type="date" min="2026-01-01" max="2026-12-31">
+      <p id="tide-age" class="meta"></p><a id="tide-source" href="https://dds.bangkok.go.th/public_content/files/001/0006030_1.pdf" target="_blank" rel="noreferrer" data-copy="pdf">ตรวจตารางต้นฉบับ กรมอุทกศาสตร์</a></div>
+      <div id="tide-events" aria-live="polite"></div>
+    </section>
+    <section class="documents"><h2 data-copy="sources">เอกสารและข้อจำกัดของข้อมูล</h2><div id="sources"></div></section>
+  </main>
+  <footer><a href="https://bkk.nonarkara.org/">BKKx</a> · <a href="https://flood.nonarkara.org/">FloodDash</a> · <span data-copy="footer">สำนักการระบายน้ำ กทม. / กรมอุทกศาสตร์</span></footer>
+</body></html>

@@ -1,0 +1,94 @@
+{
+  "source": "BMA Department of Drainage and Sewerage",
+  "tier": "reference",
+  "fetchedAt": "2026-09-25T08:34:25.154Z",
+  "observationDate": null,
+  "licence": "Publicly accessible agency data; no explicit reuse licence supplied by these services.",
+  "caveat": "Infrastructure and risk inventory; no current flooding, pump operation or gate position is measured here.",
+  "layers": [
+    {
+      "id": "risk",
+      "th": "จุดเสี่ยงน้ำท่วม",
+      "en": "Flood-risk locations",
+      "url": "https://bmasedgis.bangkok.go.th/sedgis/rest/services/Hosted/จุดเสี่ยงรวม_737_expo68/FeatureServer/0",
+      "file": "risk-ae6675e34c26.geojson",
+      "count": 737,
+      "upstreamCount": 737,
+      "excludedGeometry": 0,
+      "sha256": "f274157f388579022745c9ee20ce82dc1a2ebd512475626cf5b4491747690ce3",
+      "sourceEditedAt": "2026-05-25T07:38:39.063Z"
+    },
+    {
+      "id": "canals",
+      "th": "คลอง",
+      "en": "Canals",
+      "url": "https://bmasedgis.bangkok.go.th/sedgis/rest/services/Hosted/drainage_200268_gdb/FeatureServer/4",
+      "file": "canals-972ca0c0326f.geojson",
+      "count": 3187,
+      "upstreamCount": 3187,
+      "excludedGeometry": 0,
+      "sha256": "f775123a902a421de25e5e1ef74db1a5aea28e180545909c1f396c8857bf0d1b",
+      "sourceEditedAt": "2025-02-20T09:31:31.720Z"
+    },
+    {
+      "id": "pumps",
+      "th": "สถานีสูบน้ำ",
+      "en": "Pumping stations",
+      "url": "https://bmasedgis.bangkok.go.th/sedgis/rest/services/Hosted/drainage_200268_gdb/FeatureServer/2",
+      "file": "pumps-3f8ff8b24866.geojson",
+      "count": 191,
+      "upstreamCount": 191,
+      "excludedGeometry": 0,
+      "sha256": "c4cd4f19d26d307509485673573957fc3724a3656a3fb8fd6afe5bda058078a2",
+      "sourceEditedAt": "2025-02-20T09:31:32.405Z"
+    },
+    {
+      "id": "gates",
+      "th": "ประตูระบายน้ำ",
+      "en": "Water gates",
+      "url": "https://bmasedgis.bangkok.go.th/sedgis/rest/services/Hosted/drainage_200268_gdb/FeatureServer/1",
+      "file": "gates-95176a05e9a1.geojson",
+      "count": 241,
+      "upstreamCount": 241,
+      "excludedGeometry": 0,
+      "sha256": "b28f6b9db686f34ddbd5e179de57f8d5f8813a0650155c0e0a2e9cf7f11770f3",
+      "sourceEditedAt": "2026-08-26T09:35:13.749Z"
+    },
+    {
+      "id": "sumps",
+      "th": "บ่อสูบน้ำ",
+      "en": "Pump sumps",
+      "url": "https://bmasedgis.bangkok.go.th/sedgis/rest/services/Hosted/drainage_200268_gdb/FeatureServer/3",
+      "file": "sumps-d353674ad724.geojson",
+      "count": 323,
+      "upstreamCount": 323,
+      "excludedGeometry": 0,
+      "sha256": "2e11890cd971b545b6ebcee0b29b04a34dfcb58dccb7a6dd626fe9a847ee2888",
+      "sourceEditedAt": "2025-02-20T09:31:27.473Z"
+    },
+    {
+      "id": "tunnels",
+      "th": "อุโมงค์ระบายน้ำ",
+      "en": "Drainage tunnels",
+      "url": "https://bmasedgis.bangkok.go.th/sedgis/rest/services/Hosted/drainage_200268_gdb/FeatureServer/7",
+      "file": "tunnels-69a6e078bcd5.geojson",
+      "count": 9,
+      "upstreamCount": 9,
+      "excludedGeometry": 0,
+      "sha256": "2e24ff924ec5133deab922b866199ab4cd60e36ce6e97ec3627705e20b1be0ba",
+      "sourceEditedAt": "2025-02-20T09:31:40.834Z"
+    },
+    {
+      "id": "protection",
+      "th": "พื้นที่ป้องกันน้ำท่วม",
+      "en": "Flood-protection areas",
+      "url": "https://bmasedgis.bangkok.go.th/sedgis/rest/services/Hosted/drainage_200268_gdb/FeatureServer/8",
+      "file": "protection-722ff7715cc8.geojson",
+      "count": 38,
+      "upstreamCount": 38,
+      "excludedGeometry": 0,
+      "sha256": "6993a58ef876eb4f3d21e700f9ab97e753121e464eb2d69cff11900f442bb1e5",
+      "sourceEditedAt": "2025-02-20T09:31:29.054Z"
+    }
+  ]
+}
