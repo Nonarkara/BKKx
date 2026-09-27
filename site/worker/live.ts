@@ -89,6 +89,7 @@ export function normaliseThaiwaterRain(raw: unknown): { stations: RainStation[];
       if (!cur || typeof cur !== "object") return null;
       cur = (cur as Record<string, unknown>)[key];
     }
+    if ((typeof cur !== "number" && typeof cur !== "string") || (typeof cur === "string" && !cur.trim())) return null;
     const n = Number(cur);
     return Number.isFinite(n) ? n : null;
   };
@@ -99,7 +100,7 @@ export function normaliseThaiwaterRain(raw: unknown): { stations: RainStation[];
     if (!row || typeof row !== "object") { skipped += 1; continue; }
     const o = row as Record<string, unknown>;
     const mm = num(o, ["rain_24h"]) ?? num(o, ["rain_1d"]) ?? num(o, ["rainfall"]);
-    if (mm === null) { skipped += 1; continue; }
+    if (mm === null || mm < 0) { skipped += 1; continue; }
     const station = (o["station"] ?? {}) as Record<string, unknown>;
     const geo = (o["geocode"] ?? {}) as Record<string, unknown>;
     const agency = (o["agency"] ?? {}) as Record<string, unknown>;
@@ -111,7 +112,7 @@ export function normaliseThaiwaterRain(raw: unknown): { stations: RainStation[];
       observedAt: th(o, ["rainfall_datetime"]) ?? th(o, ["datetime"]),
       lat: num(station, ["tele_station_lat"]) ?? num(station, ["lat"]) ?? num(o, ["lat"]),
       lon: num(station, ["tele_station_long"]) ?? num(station, ["lon"]) ?? num(o, ["lng"]) ?? num(o, ["lon"]),
-      hour1Mm: num(o, ["rain_1h"]),
+      hour1Mm: (() => { const n = num(o, ["rain_1h"]); return n !== null && n >= 0 ? n : null; })(),
       agency: th(agency, ["agency_shortname"]) ?? th(agency, ["agency_name"]),
     });
   }

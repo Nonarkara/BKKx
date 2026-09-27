@@ -3,6 +3,7 @@ import Link from 'next/link';
 import {useEffect,useMemo,useState,type RefObject} from 'react';
 import type {Map as MapLibreMap,MapLayerMouseEvent,GeoJSONSource} from 'maplibre-gl';
 import {evidenceIsFresh,type FloodEvidence as Evidence,type FloodReport} from './evidence';
+import {FloodContext} from './FloodContext';
 const source='flood-evidence',pulse='flood-evidence-pulse',points='flood-evidence-points';
 export function FloodEvidence({mapRef,ready}:{mapRef:RefObject<MapLibreMap|null>;ready:boolean}){
   const [data,setData]=useState<Evidence|null>(null),[error,setError]=useState(false),[busy,setBusy]=useState(true);
@@ -42,6 +43,7 @@ export function FloodEvidence({mapRef,ready}:{mapRef:RefObject<MapLibreMap|null>
     <label>{t('ช่วงเวลารายงาน','Report window')}<select value={hours} onChange={e=>setHours(Number(e.target.value))}>{[1,3,6,24].map(h=><option key={h} value={h}>{h} {t('ชั่วโมง','hours')}</option>)}</select></label>
     <p>{reports.length} {t('รายงานที่ตรงกัน · กรุงเทพฯ และปริมณฑล','matching reports · Bangkok region')}</p>
     {selected&&<section className="flood-inspector"><button onClick={()=>setSelected(null)}>{t('ปิดรายละเอียด','Close details')}</button><h2>{selected.title}</h2><dl><dt>{t('เวลารายงาน','Reported')}</dt><dd>{stamp(selected.start)}</dd><dt>{t('ความลึกตามรายงาน','Reported depth')}</dt><dd>{selected.depthCm===null?t('ไม่ระบุ','Unknown'):selected.depthCm+' cm'}</dd><dt>{t('สถานะปัจจุบัน','Current status')}</dt><dd>{t('ยังไม่ยืนยันการคลี่คลายหรือการผ่านได้','Resolution and passability unverified')}</dd><dt>{t('ตำแหน่ง','Location')}</dt><dd>{t('พิกัดจากรายงาน · ความแม่นยำไม่ระบุ','Source report coordinate · accuracy unspecified')}</dd></dl><a href="https://traffic.longdo.com/" target="_blank" rel="noreferrer">{t('ตรวจสอบกับ Longdo Traffic','Check Longdo Traffic')}</a></section>}
+    <FloodContext mapRef={mapRef} ready={ready} selected={selected} thai={thai} now={now} reload={reload} reduced={reduced}/>
     <div className="flood-list">{reports.map(r=><button key={r.id} onClick={()=>focus(r)} aria-pressed={selected?.id===r.id}><strong>{r.title}</strong><span>{stamp(r.start)}</span></button>)}</div>
     {!reports.length&&!busy&&<p>{t('ไม่มีรายงานตรงตัวกรอง ไม่ได้แปลว่าไม่มีน้ำท่วม','No matching reports—not evidence of no flooding.')}</p>}
     <details><summary>{t('ข้อจำกัดและข้อมูลเชิงลึก','Limitations & deeper evidence')}</summary><p>{t('หลายรายงานอาจกล่าวถึงเหตุเดียวกัน จำนวนจุดไม่เท่ากับความรุนแรง ยังไม่มีข้อมูลยืนยันกระแสน้ำ การปิดถนน หรือสถานะคำขอช่วยเหลือในชั้นนี้','Several reports may describe one event. Counts are not severity. Verified currents, road closures and assistance-request status are not available in this layer.')}</p><a href="/drainage/">{t('ฝน ระดับคลอง และระบบระบายน้ำ','Rain, canal levels & drainage')}</a><br/><a href="/warroom">{t('กล้องและข้อมูลสถานการณ์','Cameras & operational evidence')}</a></details>

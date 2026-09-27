@@ -5,7 +5,7 @@ test('Flood Edition preserves the 3D atlas and exposes evidence controls', async
   const response=await render('/flood');
   assert.equal(response.status,200);
   const html=await response.text();
-  for(const text of ['Flood evidence','3D map of','iTIC / Longdo','1784']) assert.ok(html.includes(text),text);
+  for(const text of ['Flood evidence','3D map of','iTIC / Longdo','1784','Rain and drainage evidence']) assert.ok(html.includes(text),text);
 });
 
 async function render(path = "/") {
