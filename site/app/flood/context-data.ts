@@ -38,3 +38,30 @@ export function parseBulletin(raw:unknown):{date:string;fetchedAt:string|null;st
   for(const v of b.stations){const s=obj(v),level=number(s.levelMsl),critical=number(s.criticalMsl);if(!text(s.name)||level===null||critical===null)continue;stations.push({name:text(s.name),level,critical,observedAt:observationTime(s.observedAt)});}
   return {date:text(b.date),fetchedAt:observationTime(b.fetchedAt),stale:b.stale===true,stations};
 }
+export type RoadRecord = {id:string;date:string|null;district:string|null;road:string|null;location:string|null;depthCm:number|null;lengthM:number|null;lanes:string|null;floodedAt:string|null;clearedAt:string|null;status:string};
+// The Worker's /api/flood/bulletin envelope around the same DDS briefing:
+// {ok,fetchedAt,data:{date,bulletinFetchedAt,stale,errors,stations,roads,rain}}.
+// Stations are mapped back onto the raw briefing shape so parseBulletin stays
+// the single validator for canal levels; roads are validated here.
+export function parseProxiedBulletin(raw:unknown):{bulletin:ReturnType<typeof parseBulletin>;roads:RoadRecord[];stale:boolean;errors:Record<string,string>;fetchedAt:string|null} {
+  const root=obj(raw),data=obj(root.data);
+  if(root.ok!==true)throw Error(text(root.reason)||'DDS briefing unavailable');
+  const bulletin=parseBulletin({source:'Bangkok DDS',bulletin:{date:data.date??null,fetchedAt:data.bulletinFetchedAt??null,stale:data.stale===true,
+    stations:(Array.isArray(data.stations)?data.stations:[]).map(v=>{const s=obj(v);return{name:s.name,levelMsl:s.level,criticalMsl:s.critical,observedAt:s.observedAt};})}});
+  const roads:RoadRecord[]=[],seen=new Set<string>();
+  if(Array.isArray(data.roads))for(const v of data.roads){
+    const s=obj(v),id=text(s.id);
+    if(!id||seen.has(id))continue;
+    seen.add(id);
+    const depth=number(s.depthCm),length=number(s.lengthM);
+    roads.push({id,date:text(s.date)||null,district:text(s.district)||null,road:text(s.road)||null,location:text(s.location)||null,
+      depthCm:depth!==null&&depth>=0?depth:null,lengthM:length!==null&&length>=0?length:null,lanes:text(s.lanes)||null,
+      floodedAt:observationTime(s.floodedAt),clearedAt:observationTime(s.clearedAt),status:text(s.status)||'unknown'});
+  }
+  // Clearance unknown first (possibly still flooded), then newest first.
+  // Counts are records, not severity: several rows can describe one street.
+  roads.sort((a,b)=>(a.clearedAt===null?0:1)-(b.clearedAt===null?0:1)||String(b.floodedAt??'').localeCompare(String(a.floodedAt??'')));
+  const errors:Record<string,string>={};
+  for(const[k,v]of Object.entries(obj(data.errors)))if(typeof v==='string'&&v)errors[k]=v;
+  return {bulletin,roads,stale:data.stale===true,errors,fetchedAt:observationTime(root.fetchedAt)};
+}

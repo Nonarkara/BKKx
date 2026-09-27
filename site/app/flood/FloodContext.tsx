@@ -1,18 +1,24 @@
 "use client";
 import {useEffect,useMemo,useState,type RefObject} from 'react';
 import type {Map as MapLibreMap,GeoJSONSource,MapLayerMouseEvent} from 'maplibre-gl';
-import {nearbyGauges,parseRain,parseBulletin,readingCurrent,type Gauge} from './context-data';
+import {nearbyGauges,parseRain,parseBulletin,parseProxiedBulletin,readingCurrent,type Gauge,type RoadRecord} from './context-data';
 import type {FloodReport} from './evidence';
 const source='flood-rain-gauges',layer='flood-rain-points';
 export function FloodContext({mapRef,ready,selected,thai,now,reload,reduced}:{mapRef:RefObject<MapLibreMap|null>;ready:boolean;selected:FloodReport|null;thai:boolean;now:number;reload:number;reduced:boolean}){
   const [rain,setRain]=useState<ReturnType<typeof parseRain>|null>(null),[bulletin,setBulletin]=useState<ReturnType<typeof parseBulletin>|null>(null);
+  const [roads,setRoads]=useState<RoadRecord[]>([]),[briefStale,setBriefStale]=useState(false),[briefErrors,setBriefErrors]=useState<Record<string,string>>({});
+  const [recurrence,setRecurrence]=useState<{roads:{district:string;road:string;areas:string[];years:string[];events:number;maxHeightCm:number|null}[];fetchedAt:string}|null>(null);
   const [rainError,setRainError]=useState(false),[ddsError,setDdsError]=useState(false),[show,setShow]=useState(true),[gauge,setGauge]=useState<Gauge|null>(null);
   const t=(th:string,en:string)=>thai?th:en;
   const stamp=(s:string|null)=>s?new Date(s).toLocaleString(thai?'th-TH':'en-GB',{timeZone:'Asia/Bangkok',dateStyle:'short',timeStyle:'short'}):t('ไม่ระบุเวลา','Time unknown');
   useEffect(()=>{let active=true;const ctrl=new AbortController();
     async function load(){await Promise.all([
       (async()=>{try{const r=await fetch('/api/live/rain',{signal:AbortSignal.any([ctrl.signal,AbortSignal.timeout(12000)])});if(!r.ok)throw Error();const j=parseRain(await r.json());if(active){setRain(j);setRainError(false);}}catch{if(active)setRainError(true);}})(),
-      (async()=>{try{const r=await fetch('https://flood.nonarkara.org/api/dds/briefing',{signal:AbortSignal.any([ctrl.signal,AbortSignal.timeout(15000)])});if(!r.ok)throw Error();const j=parseBulletin(await r.json());if(active){setBulletin(j);setDdsError(false);}}catch{if(active)setDdsError(true);}})(),
+      (async()=>{try{const r=await fetch('/api/flood/bulletin',{signal:AbortSignal.any([ctrl.signal,AbortSignal.timeout(15000)])});if(!r.ok)throw Error();const j=parseProxiedBulletin(await r.json());if(active){setBulletin(j.bulletin);setRoads(j.roads);setBriefStale(j.stale);setBriefErrors(j.errors);setDdsError(false);}}catch{if(active)setDdsError(true);}})(),
+      // Five-year recurrence is a validated snapshot, not a live feed: it
+      // changes when a yearly table drops, not by the minute. A failed fetch
+      // hides the section; it never invents a dry history.
+      (async()=>{try{const r=await fetch('/data/flood-road-recurrence.json',{signal:ctrl.signal});if(!r.ok)return;const j=await r.json() as {roads?:unknown[];fetchedAt?:unknown};if(!Array.isArray(j.roads))return;const rows=j.roads.filter((v):v is NonNullable<typeof recurrence>['roads'][number]=>!!v&&typeof v==='object'&&(v as {district?:unknown}).district!==undefined);if(active&&rows.length)setRecurrence({roads:rows.slice(0,15),fetchedAt:typeof j.fetchedAt==='string'?j.fetchedAt:''});}catch{/* section stays hidden */}})(),
     ]);}
     void load();const timer=setInterval(load,300000);return()=>{active=false;ctrl.abort();clearInterval(timer);};
   },[reload]);
@@ -46,5 +52,25 @@ export function FloodContext({mapRef,ready,selected,thai,now,reload,reduced}:{ma
       {bulletin&&<><p className="flood-meta">DDS → FloodDash · {t('ฉบับวันที่','Bulletin dated')} {bulletin.date||'—'} · {t('ดึงเมื่อ','retrieved')} {stamp(bulletin.fetchedAt)}{bulletin.stale||ddsError||!readingCurrent(bulletin.fetchedAt,now)?t(' · สำเนาเก่า',' · STALE COPY'):''}</p><p>{t('ม.รทก. = ความสูงเทียบระดับทะเล ไม่ใช่ความลึกบนถนน','m MSL = height relative to mean sea level, not street flood depth')}</p><dl className="flood-canal-list">{bulletin.stations.map((s,i)=><div key={i}><dt>{s.name}</dt><dd>{s.level.toFixed(2)} m MSL · {t('ระดับวิกฤตที่เผยแพร่','published critical level')} {s.critical.toFixed(2)} m MSL<br/><span className="flood-meta">{t('วัดเมื่อ','Observed')} {stamp(s.observedAt)}</span></dd></div>)}</dl></>}
       <a href="https://dds.bangkok.go.th/public_content/files/001/0004901_1.pdf" target="_blank" rel="noreferrer">{t('PDF ต้นฉบับ สนน.','Original DDS PDF')}</a> · <a href="/drainage/">{t('รายงานถนนและระบบระบายน้ำ','Road reports & drainage')}</a>
     </details>
+    <details><summary>{t('ถนนที่ สนน. รายงานว่าท่วม','Roads DDS reported flooded')} {roads.length||'—'}</summary>
+      <p>{t('บันทึกวันที่จากรายงานเช้า สนน. · ไม่ใช่คำสั่งปิดถนน และไม่ใช่การบอกว่าเส้นไหนผ่านได้','Dated DDS morning-report records · not closure orders and not passability advice')}</p>
+      {(briefStale||ddsError)&&<p role="status">{t('สำเนาเก่า / ดึงไม่ได้ · อย่าอ่านเป็นสถานการณ์ขณะนี้','STALE COPY / unreachable · do not read as the current situation')}</p>}
+      {Object.keys(briefErrors).length>0&&<p className="flood-meta">{t('ต้นทางแจ้งข้อจำกัดเอง','The source flags its own limits')}: {Object.entries(briefErrors).map(([k,v])=>`${k}: ${v}`).join(' · ')}</p>}
+      <div className="flood-list">{roads.map(r=><div key={r.id} className="flood-road-record">
+        <strong>{[r.district,r.road].filter(Boolean).join(' · ')||t('ไม่ระบุถนน','Road unnamed')}</strong>
+        {r.location&&<span>{r.location}</span>}
+        <span>{r.depthCm!==null?`${r.depthCm} cm`:t('ไม่ระบุความลึก','depth unknown')}{r.lengthM!==null?` · ${r.lengthM} m`:''}{r.lanes?` · ${r.lanes}`:''}</span>
+        <span>{t('ท่วม','Flooded')} {stamp(r.floodedAt)} → {r.clearedAt?stamp(r.clearedAt):t('ยังไม่บันทึกการคลี่คลาย · อาจยังท่วมอยู่','clearance unrecorded · possibly still flooded')}</span>
+      </div>)}</div>
+      {!roads.length&&!ddsError&&<p>{t('ไม่มีบันทึกถนนในช่วงรายงานนี้ ไม่ได้แปลว่าถนนแห้ง','No road records in this bulletin window — not evidence of dry roads.')}</p>}
+    </details>
+    {recurrence&&<details><summary>{t('ถนนที่ท่วมซ้ำทุกปี','Roads that flood every year')}</summary>
+      <p>{t('บันทึก สนน. รายปี 2021–2025 (CC-BY) · ความถี่ในอดีต ไม่ใช่สถานการณ์ขณะนี้','Annual DDS records 2021–2025 (CC-BY) · past frequency, not the current situation')}</p>
+      <div className="flood-list">{recurrence.roads.map((r,i)=><div key={i} className="flood-road-record">
+        <strong>{r.road} · {r.district}</strong>
+        <span>{r.years.join(' · ')} — {r.events} {t('ครั้งใน 5 ปี','events in 5 years')}{r.maxHeightCm!==null?` · ${t('สูงสุด','max')} ${r.maxHeightCm} cm`:''}</span>
+      </div>)}</div>
+      <p className="flood-meta">BMA Drainage & Sewerage via data.bangkok.go.th · {t('สแนปช็อต','snapshot')} {stamp(recurrence.fetchedAt)}</p>
+    </details>}
   </section>;
 }
