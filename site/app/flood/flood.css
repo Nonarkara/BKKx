@@ -1,0 +1,15 @@
+.flood-edition{--flood-water:#58b8db;--flood-line:#454640;--flood-ground:#171914;--flood-text:#f2f1e8;--flood-muted:#c3c4b8;--flood-space:16px;position:relative;min-height:100dvh}
+.flood-edition .atlas-page.is-flood{grid-template-columns:minmax(0,1fr) minmax(300px,360px);grid-template-areas:"map panel"}
+.flood-edition .atlas-map{min-width:0;overflow:hidden}
+.flood-edition .atlas-embed-tools{max-width:calc(100% - 60px);flex-wrap:wrap}
+.flood-edition .atlas-embed-tools button,.flood-edition .atlas-embed-tools summary{min-height:44px}
+.flood-rail{grid-area:panel;overflow:auto;background:var(--flood-ground);color:var(--flood-text);padding:var(--flood-space);border-left:2px solid var(--flood-line);font-size:16px;line-height:1.5;z-index:30;min-width:0}
+.flood-rail header,.flood-actions{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.flood-rail h1{font-size:26px;line-height:1.2;margin:16px 0}.flood-rail h2{font-size:20px;line-height:1.3}
+.flood-rail p{margin:12px 0}.flood-rail a{text-decoration:underline;text-underline-offset:3px}.flood-warning{border-left:3px solid var(--flood-water);padding-left:12px}
+.flood-rail button,.flood-rail input,.flood-rail select,.flood-rail summary{min-height:44px;font:inherit;color:inherit;background:transparent;border:1px solid var(--flood-line);padding:8px;cursor:pointer;border-radius:0}
+.flood-rail button:hover,.flood-rail button[aria-pressed=true]{border-color:var(--flood-water);background:#252b29}.flood-rail button:active{background:#343c39}.flood-rail button:disabled{opacity:.5;cursor:wait}.flood-rail :focus-visible{outline:2px solid var(--flood-water);outline-offset:2px}
+.flood-rail label{display:block;margin:12px 0}.flood-rail input,.flood-rail select{display:block;width:100%;background:var(--flood-ground)}
+.flood-meta,.flood-list span{font-size:13px;color:var(--flood-muted)}.flood-list{max-height:38dvh;overflow:auto;border-top:2px solid var(--flood-line)}.flood-list button{display:block;width:100%;text-align:left;border:0;border-bottom:1px solid var(--flood-line);padding:12px 8px}.flood-list strong,.flood-list span{display:block}.flood-list strong{font-weight:500}
+.flood-inspector{border-top:2px solid var(--flood-water);padding:12px 0}.flood-inspector dl{margin:12px 0}.flood-inspector dt{color:var(--flood-muted);font-size:13px}.flood-inspector dd{margin:0 0 8px}.flood-rail details,.flood-rail footer{margin-top:16px}.flood-rail summary{list-style-position:inside}
+@media(max-width:700px){.flood-edition .atlas-page.is-flood{position:relative;height:auto;min-height:100dvh;grid-template-columns:minmax(0,1fr);grid-template-rows:55dvh auto;grid-template-areas:"map" "panel"}.flood-rail{overflow:visible;border-left:0;border-top:2px solid var(--flood-line)}.flood-list{max-height:35dvh}}

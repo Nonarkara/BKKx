@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { FloodEvidence } from "../../flood/FloodEvidence";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type maplibregl from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
@@ -58,6 +59,7 @@ const HISTORIC_CORE_WALK_SLUGS = [
 type Props = {
   world: World;
   embedded?: boolean;
+  floodEdition?: boolean;
   initialView?: { center: LngLat; zoom: number; pitch?: number; bearing?: number };
 };
 
@@ -659,7 +661,7 @@ const ROWHOUSE_FABRIC_GEOJSON = {
   })),
 };
 
-export function AtlasView({ world, embedded = false, initialView }: Props) {
+export function AtlasView({ world, embedded = false, initialView, floodEdition = false }: Props) {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const mapRef = useRef<maplibregl.Map | null>(null);
   // The type-only top-level `maplibregl` import has no runtime value —
@@ -934,7 +936,7 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
       map.getPitch().toFixed(1),
       map.getBearing().toFixed(1),
     ].join(",");
-    const url = `${window.location.origin}/atlas/${world.id}?at=${at}`;
+    const url = `${window.location.origin}${floodEdition ? "/flood" : `/atlas/${world.id}`}?at=${at}`;
     navigator.clipboard
       .writeText(url)
       .then(() => {
@@ -942,7 +944,7 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
         setTimeout(() => setViewLinkCopied(false), 2000);
       })
       .catch((err) => console.error("Could not copy view link", err));
-  }, [world.id]);
+  }, [world.id, floodEdition]);
 
   // Operator keys. Layer toggles on single letters, C for the view link,
   // ? for the card that lists them. Nothing fires while a form control has
@@ -1332,6 +1334,7 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
               id: "bkkx-zoning-line",
               type: "line",
               source: "bkkx-zoning-src",
+              filter: ["!=", ["get", "category"], "Conservation"],
               paint: {
                 "line-color": ["get", "strokeColor"],
                 "line-width": [
@@ -1342,14 +1345,15 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
                   3.0,
                   2.0,
                 ],
-                "line-dasharray": [
-                  "case",
-                  ["==", ["get", "category"], "Conservation"],
-                  ["literal", [2, 2]],
-                  ["literal", [1, 0]],
-                ],
                 "line-opacity": 0.9,
               },
+            });
+            // MapLibre 4 does not support feature-driven dash arrays.
+            map.addLayer({
+              id: "bkkx-zoning-conservation-line",
+              type: "line", source: "bkkx-zoning-src",
+              filter: ["==", ["get", "category"], "Conservation"],
+              paint: { "line-color": ["get", "strokeColor"], "line-width": 2, "line-dasharray": [2, 2], "line-opacity": 0.9 },
             });
           } catch (err) {
             console.warn("bkkx: zoning layer failed", err);
@@ -1993,6 +1997,9 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
     if (map.getLayer("bkkx-zoning-line")) {
       map.setLayoutProperty("bkkx-zoning-line", "visibility", showZoning ? "visible" : "none");
     }
+    if (map.getLayer("bkkx-zoning-conservation-line")) {
+      map.setLayoutProperty("bkkx-zoning-conservation-line", "visibility", showZoning ? "visible" : "none");
+    }
   }, [showZoning, mapReady]);
 
   // Synchronize the walk-route line: draw the selected walk's real geometry
@@ -2136,7 +2143,7 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
   }, [weatherMode, pm25]);
 
   return (
-    <main className={`atlas-page${embedded ? " is-embedded" : ""}`}>
+    <main className={`atlas-page${embedded ? " is-embedded" : ""}${floodEdition ? " is-flood" : ""}`}>
       {!embedded && <header className="atlas-header">
         <Link className="wordmark" href="/" aria-label="BKKxC(ulture) home">
           <span>BKK</span>
@@ -2307,7 +2314,7 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
             </details>
           )}
           {hasHistoricContext && (
-            <details className="atlas-map-key" open>
+            <details className="atlas-map-key" open={!floodEdition}>
             <summary>Map key</summary>
             <div>
               {showArchitecturalDetail && !evidenceMode ? <span><i className="key-building key-fabric" />Old Town full footprints</span> : null}
@@ -3014,6 +3021,7 @@ export function AtlasView({ world, embedded = false, initialView }: Props) {
         })()}
       </div>
 
+      {floodEdition && <FloodEvidence mapRef={mapRef} ready={mapReady} />}
       {!embedded && <aside className="atlas-panel" aria-live="polite">
         <p className="atlas-panel-eyebrow">{activeStop.chapter}</p>
         <h2>{activeStop.name}</h2>

@@ -142,6 +142,8 @@ first; it is not cached.
 
 ## Domains
 
+Flood Edition design read: Bangkok's existing oblique city map carries water-blue report pulses, with a compact evidence rail rather than a simulated inundation surface. Reference: the existing BKKx Console atlas and FloodDash's source-labelled place dossier. Dials: variance 4 / motion 3 / density 6; animation directs attention to reported locations, never invents current, depth or safe passage. Heritage geometry and controls remain intact.
+
 `bkk.nonarkara.org` → this site. `atlas.nonarkara.org` → `bkk-3d-atlas`.
 The edge proxy once claimed **both** and 308-redirected the first to the second,
 which stole the route from the atlas Worker and made the two flap on every

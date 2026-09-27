@@ -133,6 +133,7 @@ export default function WarRoom() {
           and astronomical predictions; they do not measure current flooding.
         </p>
         <a href="/drainage/">Open drainage map and tide table →</a>
+        <p><Link href="/flood">Flood Edition — reported flooding on the 3D city map →</Link></p>
       </section>
 
       <div className="wr-grid-2">
