@@ -88,3 +88,17 @@ test('recurrence snapshot is licensed, dated and shaped', async () => {
   }
   assert.ok(s.roads[0].years.length >= s.roads[Math.min(10, s.roads.length - 1)].years.length, 'sorted by recurrence');
 });
+
+test('flooded roads: shape-checked, outside-Bangkok and malformed stretches dropped, no false calm', async () => {
+  const { normalizeRoads, roadsAreFresh } = await import('../app/flood/roads.ts');
+  const line = { type: 'Feature', geometry: { type: 'LineString', coordinates: [[100.6, 13.75], [100.601, 13.751]] },
+    properties: { road: 'ถนนลาดพร้าว', n: 2, traffy: 2, itic: 0, dds: 0, depth: 4, depthEn: 'knee', depthTh: 'หัวเข่า', closed: false, latest: '2026-09-27T11:00:00Z', score: 0.6, placed: 'report' } };
+  const raw = { tool: 'flood-roads', fetchedAt: '2026-09-27T12:00:00Z', sources: { traffy: { ok: true, count: 900, error: null } },
+    roads: { features: [line, { ...line, geometry: { type: 'LineString', coordinates: [[10, 10], [11, 11]] } }, { ...line, properties: { ...line.properties, score: 7 } }, { ...line, geometry: { type: 'Point', coordinates: [100.6, 13.75] } }] },
+    heat: { features: [{ type: 'Feature', geometry: { type: 'Point', coordinates: [100.6, 13.75] }, properties: { w: 0.8, n: 3 } }, { type: 'Feature', geometry: { type: 'Point', coordinates: [100.6, 13.75] }, properties: { w: -1 } }] } };
+  const j = normalizeRoads(raw);
+  assert.equal(j.stretches, 1); assert.equal(j.heat.features.length, 1); assert.equal(j.roads.features[0].properties.depthEn, 'knee');
+  assert.equal(j.sources.traffy.count, 900);
+  for (const bad of [null, {}, { tool: 'other' }, { ...raw, fetchedAt: 'yesterday' }, { ...raw, roads: {} }]) assert.throws(() => normalizeRoads(bad));
+  assert.equal(roadsAreFresh(raw.fetchedAt, now), true); assert.equal(roadsAreFresh(raw.fetchedAt, now + 21 * 60000), false); assert.equal(roadsAreFresh(null, now), false);
+});

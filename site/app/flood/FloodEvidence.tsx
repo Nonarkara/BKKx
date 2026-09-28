@@ -4,6 +4,7 @@ import {useEffect,useMemo,useState,type RefObject} from 'react';
 import type {Map as MapLibreMap,MapLayerMouseEvent,GeoJSONSource} from 'maplibre-gl';
 import {evidenceIsFresh,type FloodEvidence as Evidence,type FloodReport} from './evidence';
 import {FloodContext} from './FloodContext';
+import {FloodRoads} from './FloodRoads';
 const source='flood-evidence',pulse='flood-evidence-pulse',points='flood-evidence-points';
 export function FloodEvidence({mapRef,ready}:{mapRef:RefObject<MapLibreMap|null>;ready:boolean}){
   const [data,setData]=useState<Evidence|null>(null),[error,setError]=useState(false),[busy,setBusy]=useState(true);
@@ -39,6 +40,7 @@ export function FloodEvidence({mapRef,ready}:{mapRef:RefObject<MapLibreMap|null>
     <div className="flood-actions"><button onClick={()=>setMotion(!motion)} aria-pressed={motion&&!reduced}>{t('ภาพเคลื่อนไหว','Animation')}: {motion&&!reduced?'ON':'OFF'}</button><button disabled={busy} onClick={()=>setReload(v=>v+1)}>{busy?t('กำลังตรวจ…','Checking…'):t('ตรวจอีกครั้ง','Refresh')}</button></div>
     <p role="status">{error?t('เชื่อมต่อไม่ได้ · สำเนาเดิมถ้ามี','Connection failed · previous copy if available'):data?(fresh?t('สำเนาล่าสุดจากต้นทาง','Recent source copy'):t('ข้อมูลเก่า / ไม่ทราบอายุ','Stale / age unknown')):t('กำลังโหลดรายงาน','Loading reports')}{data?.fetchedAt?' · '+stamp(data.fetchedAt):''}</p>
     <p className="flood-meta">iTIC / Longdo → FloodDash · {t('รายงานสาธารณะ ไม่ใช่การสำรวจยืนยัน','Public reports, not verified surveys')}</p>
+    <FloodRoads mapRef={mapRef} ready={ready} motion={motion} reduced={reduced} thai={thai} now={now}/>
     <label>{t('ค้นหาถนนหรือสถานที่','Find road or place')}<input type="search" value={query} onChange={e=>setQuery(e.target.value)}/></label>
     <label>{t('ช่วงเวลารายงาน','Report window')}<select value={hours} onChange={e=>setHours(Number(e.target.value))}>{[1,3,6,24].map(h=><option key={h} value={h}>{h} {t('ชั่วโมง','hours')}</option>)}</select></label>
     <p>{reports.length} {t('รายงานที่ตรงกัน · กรุงเทพฯ และปริมณฑล','matching reports · Bangkok region')}</p>

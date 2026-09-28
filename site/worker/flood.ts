@@ -1,4 +1,5 @@
 import {normalizeTraffic} from '../app/flood/evidence.ts';
+import {normalizeRoads} from '../app/flood/roads.ts';
 const DDS_BRIEFING='https://flood.nonarkara.org/api/dds/briefing';
 export async function floodEvidenceResponse():Promise<Response> {
   try {
@@ -74,5 +75,19 @@ export async function floodBulletinResponse():Promise<Response>{
     return Response.json({ok:true,fetchedAt,source:DDS_BRIEFING,data},{headers:{'Cache-Control':'public, max-age=900, s-maxage=900, stale-while-revalidate=3600','x-bkkx-live':'hit'}});
   }catch(e){
     return Response.json({ok:false,fetchedAt,source:DDS_BRIEFING,reason:`DDS briefing unreachable: ${(e as Error)?.message??'unknown error'}. Dated records unavailable; this says nothing about current water.`},{headers:{'Cache-Control':'no-store'}});
+  }
+}
+
+// Flooded roads: the engine runs on atlas.nonarkara.org (it holds the
+// OpenStreetMap road index and the cron). Proxied same-origin like the
+// other flood feeds, shape-checked, never trimmed into a false calm.
+const FLOOD_ROADS='https://atlas.nonarkara.org/api/flood/roads';
+export async function floodRoadsResponse():Promise<Response>{
+  try{
+    const r=await fetch(FLOOD_ROADS,{signal:AbortSignal.timeout(15000),headers:{accept:'application/json','user-agent':'BKKx/1.0 (+https://bkk.nonarkara.org)'}});
+    if(!r.ok)throw Error(`HTTP ${r.status}`);
+    return Response.json(normalizeRoads(await r.json()),{headers:{'Cache-Control':'public, max-age=60'}});
+  }catch(e){
+    return Response.json({error:`Flooded roads unavailable (${(e as Error)?.message??'unknown'}); absence does not mean dry streets.`},{status:503,headers:{'Cache-Control':'no-store'}});
   }
 }
