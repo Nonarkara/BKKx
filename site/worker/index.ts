@@ -131,8 +131,71 @@ const worker = {
       }, allowedWidths);
     }
 
-    return handler.fetch(request, env, ctx);
+    const upstream = await handler.fetch(request, env, ctx);
+    return withSecurityHeaders(upstream, url);
   },
 };
+
+// ── BKKx 1.0.0 security headers ─────────────────────────────────────
+// v1.0 ships real defense-in-depth headers on every response. The atlas
+// got this layer (Kimi K3 audit, 2026-10-03); the site is catching up.
+//
+// Rules, derived from the live origin inventory:
+//   script-src      self + YouTube iframe + Cloudflare analytics beacon
+//                   (the zone injects static.cloudflareinsights.com/beacon.min.js
+//                   — without an allowlist CSP would silently kill it)
+//   frame-src       YouTube only (the heritage video embeds and the YouTube
+//                   live cams in the war room; nothing else embeds)
+//   frame-ancestors self (so other sites cannot iframe the heritage shell)
+//   object-src      'none'  (no <embed>, <applet>, etc.)
+//   base-uri        self      (no rogue <base> rewrites)
+//   form-action     none      (no <form> targets)
+//   connect-src     self + https: (worker proxy APIs + Cloudflare)
+//   media-src       self + blob + iTIC (HLS .m3u8 segments + poster jpegs)
+//   img-src         self + https: data: (iTIC camera snapshots, OpenFreeMap)
+//   worker-src      self + blob (vinext streaming SSR)
+//   font-src        self + tiles.openfreemap.org + data: (Sao Chingcha + fallback)
+//   style-src       self + 'unsafe-inline' (vinext + Tailwind inline) + unpkg
+//                   (MapLibre CSS pinned with SRI)
+//
+// Also: nosniff, SAMEORIGIN, Referrer-Policy strict-origin-when-cross-origin,
+// Permissions-Policy off for camera/mic/geo (we don't need any of them).
+// All third-party scripts are pinned with SRI (handled in app/loading.tsx).
+function withSecurityHeaders(res: Response, url: URL): Response {
+  // Skip API + asset endpoints — only HTML/JSON consumed by browsers
+  // needs CSP, and adding it to /assets/*.css or *.js breaks the
+  // browser's own parser without buying anything.
+  const ct = res.headers.get("content-type") ?? "";
+  const isHtml = ct.includes("text/html");
+  const isJson = ct.includes("json");
+  if (!isHtml && !isJson && url.pathname.startsWith("/assets/")) return res;
+
+  const headers = new Headers(res.headers);
+  if (isHtml) {
+    headers.set(
+      "content-security-policy",
+      [
+        "default-src 'self'",
+        "script-src 'self' 'unsafe-inline' https://unpkg.com https://cdn.jsdelivr.net https://www.youtube.com https://static.cloudflareinsights.com",
+        "style-src 'self' 'unsafe-inline' https://unpkg.com",
+        "img-src 'self' https: data: blob:",
+        "font-src 'self' https://tiles.openfreemap.org data:",
+        "connect-src 'self' https:",
+        "worker-src 'self' blob:",
+        "media-src 'self' blob: https://camerai.iticfoundation.org",
+        "frame-src https://www.youtube.com https://www.youtube-nocookie.com",
+        "object-src 'none'",
+        "base-uri 'self'",
+        "form-action 'none'",
+        "frame-ancestors 'self'",
+      ].join("; ")
+    );
+  }
+  headers.set("x-content-type-options", "nosniff");
+  headers.set("x-frame-options", "SAMEORIGIN");
+  headers.set("referrer-policy", "strict-origin-when-cross-origin");
+  headers.set("permissions-policy", "camera=(), microphone=(), geolocation=()");
+  return new Response(res.body, { status: res.status, statusText: res.statusText, headers });
+}
 
 export default worker;

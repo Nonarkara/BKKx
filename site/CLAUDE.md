@@ -7,11 +7,23 @@
 - Use `#c9ff38` only for signals, selected state and primary actions — and
   only on the dark Console surfaces (`/worlds`, `/atlas/*`). The Editorial
   register surfaces use one accent, the oxide seal `#8c2f23`.
+- **BKKx 1.0.0** also exposes the Dao × Palette tokens in `:root` —
+  `--palette-rail-blue`, `--palette-paper-*`, `--palette-seal[-deep]`,
+  `--palette-gold`, `--palette-jade`, `--palette-signal-yellow`. The
+  case-for-bangkok page opts into the Palette seal as its accent;
+  the heritage register stays on the oxide seal until a page chooses
+  Palette explicitly.
 - The site typeface is **Sao Chingcha** (self-hosted, `public/fonts/`,
   three weights, declared in `globals.css`). IBM Plex Sans Thai is its
   fallback; JetBrains Mono carries coordinates and block numbers. Never
   Inter/Roboto/Poppins/Montserrat/Open Sans/Lato.
 - Preserve keyboard access and reduced-motion behavior when adding interactions.
+- **BKKx 1.0.0** ships a real defense-in-depth header set on every HTML
+  page from the worker (worker/index.ts `withSecurityHeaders`): CSP
+  built from the actual origin inventory, nosniff, SAMEORIGIN,
+  Referrer-Policy strict-origin-when-cross-origin, Permissions-Policy
+  off for camera/mic/geo. Atlas sister project did this in
+  eed2077 / 84b4428 / 0f9c0bd; BKKx 1.0 ships the same set.
 - D1 stores pageview events only — path, referrer, country, language,
   timestamp. Never IP addresses, user-agent strings or credentials, and
   nothing that identifies a person across requests.
