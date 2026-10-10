@@ -46,7 +46,7 @@ const VERDICT_INK: Record<Town["score"]["verdict"], string> = {
   thriving: "#14140f",
   stable: "#14140f",
   vulnerable: "#14140f",
-  lost: "#fffdf5",
+  lost: "#14140f" /* ink on orange: white read 2.8:1 */,
 };
 
 type SortKey = "composite" | (typeof METRICS)[number];
@@ -234,7 +234,7 @@ function CompositeBar({ score }: { score: number }) {
 function ScoreCell({ value }: { value: number }) {
   // Five pips, filled up to value
   return (
-    <div className="sh-rank-pips" aria-label={`${value} of 5`}>
+    <div className="sh-rank-pips" role="img" aria-label={`${value} of 5`}>
       {[1, 2, 3, 4, 5].map((n) => (
         <span
           key={n}

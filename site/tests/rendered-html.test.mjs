@@ -359,6 +359,12 @@ test("serves the 3D map heritage atlas as the front door", async () => {
   assert.match(html, /atlas-shell/);
   assert.match(html, /atlas-shell-map/);
   assert.match(html, /src="\/atlas\/historic-core\?embed=1"/);
+  // The page frames itself, so its own policy must allow that. 1.0.0
+  // shipped frame-src with YouTube only and the front-door map was
+  // refused by the browser: the HTML was right and the page was empty.
+  const csp = response.headers.get("content-security-policy") ?? "";
+  const frameSrc = csp.split(";").map((d) => d.trim()).find((d) => d.startsWith("frame-src")) ?? "";
+  assert.match(frameSrc, /'self'/, `front-door iframe blocked by CSP: ${frameSrc}`);
   assert.doesNotMatch(html, /src="https:\/\/atlas\.nonarkara\.org/i);
   // Rowhouses are the useful default; quarters remain in the client tab.
   assert.match(html, /Bangkok rowhouse atlas/);
@@ -2127,4 +2133,13 @@ test("the atlas camera layer is opt-in and loads no third-party player up front"
   assert.doesNotMatch(html, /youtube-nocookie\.com\/embed/);
   // The control exists, though, or the layer would be unreachable.
   assert.match(html, /Live cams/);
+});
+
+test("the pageview counter says it is off when there is no D1 binding", async () => {
+  // A local or preview run has no DB; /worlds asked for stats and got a 500.
+  for (const env of [undefined, {}]) {
+    const stats = await callWorker("/api/stats", env);
+    assert.equal(stats.status, 503);
+    assert.match((await stats.json()).reason, /not configured/);
+  }
 });

@@ -17,7 +17,7 @@ import {
 
 interface Env {
   ASSETS: Fetcher;
-  DB: D1Database;
+  DB: D1Database; // absent in local/preview runs; see the guard on /api/pageview
   /** Optional: a JSON camera registry for the war room's CCTV rail. */
   CCTV_SOURCE_URL?: string;
   /** Optional: Longdo Map API key. Env only — never committed. */
@@ -50,6 +50,15 @@ const worker = {
     if (url.pathname === "/api/flood/evidence" && request.method === "GET") return floodEvidenceResponse();
     if (url.pathname === "/api/flood/bulletin" && request.method === "GET") return floodBulletinResponse();
     if (url.pathname === "/api/flood/roads" && request.method === "GET") return floodRoadsResponse();
+
+    // Without the D1 binding (a local or preview run) the counter is off,
+    // and says so, rather than throwing a 500 from inside the handler.
+    if ((url.pathname === "/api/pageview" || url.pathname === "/api/stats") && !env?.DB) {
+      return Response.json(
+        { ok: false, reason: "pageview store not configured (no D1 binding)" },
+        { status: 503, headers: { "cache-control": "no-store" } },
+      );
+    }
 
     if (url.pathname === "/api/pageview" && request.method === "POST") {
       const body = await request.json().catch(() => ({})) as {
@@ -144,8 +153,10 @@ const worker = {
 //   script-src      self + YouTube iframe + Cloudflare analytics beacon
 //                   (the zone injects static.cloudflareinsights.com/beacon.min.js
 //                   — without an allowlist CSP would silently kill it)
-//   frame-src       YouTube only (the heritage video embeds and the YouTube
-//                   live cams in the war room; nothing else embeds)
+//   frame-src       self + YouTube. 'self' is the front door: app/page.tsx
+//                   frames /atlas/historic-core?embed=1, and without it the
+//                   homepage map was refused by its own policy. YouTube is
+//                   the video embeds and the war room's live cams.
 //   frame-ancestors self (so other sites cannot iframe the heritage shell)
 //   object-src      'none'  (no <embed>, <applet>, etc.)
 //   base-uri        self      (no rogue <base> rewrites)
@@ -183,7 +194,7 @@ function withSecurityHeaders(res: Response, url: URL): Response {
         "connect-src 'self' https:",
         "worker-src 'self' blob:",
         "media-src 'self' blob: https://camerai.iticfoundation.org",
-        "frame-src https://www.youtube.com https://www.youtube-nocookie.com",
+        "frame-src 'self' https://www.youtube.com https://www.youtube-nocookie.com",
         "object-src 'none'",
         "base-uri 'self'",
         "form-action 'none'",

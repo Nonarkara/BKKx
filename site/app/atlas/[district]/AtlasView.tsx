@@ -67,6 +67,30 @@ type LngLat = [number, number];
 
 const OPENFREEMAP_DARK_STYLE = "https://tiles.openfreemap.org/styles/dark";
 
+/* Every heritage layer is served from this site; only the basemap is not.
+   If the basemap style cannot be fetched, MapLibre never fires "load" and
+   none of them would be added. So the style is fetched first, and on
+   failure the atlas starts from a bare dark ground and says so. The glyph
+   URL is kept so label layers stay valid (they simply draw no text). */
+const BASEMAP_TIMEOUT_MS = 8000;
+const FALLBACK_STYLE: maplibregl.StyleSpecification = {
+  version: 8,
+  glyphs: "https://tiles.openfreemap.org/fonts/{fontstack}/{range}.pbf",
+  sources: {},
+  layers: [{ id: "bkkx-fallback-ground", type: "background", paint: { "background-color": "#0b0c0a" } }],
+};
+
+async function resolveBasemapStyle(): Promise<{ style: string | maplibregl.StyleSpecification; down: boolean }> {
+  try {
+    const res = await fetch(OPENFREEMAP_DARK_STYLE, { signal: AbortSignal.timeout(BASEMAP_TIMEOUT_MS) });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    return { style: (await res.json()) as maplibregl.StyleSpecification, down: false };
+  } catch (err) {
+    console.warn("bkkx: basemap style unavailable, using the bare ground", err);
+    return { style: FALLBACK_STYLE, down: true };
+  }
+}
+
 const BUILDING_SOURCE_CANDIDATES = ["openfreemap", "openmaptiles"];
 
 // Real Bangkok over the OpenFreeMap dark base. Esri World Imagery is free
@@ -704,6 +728,7 @@ export function AtlasView({ world, embedded = false, initialView, floodEdition =
   // Live cameras. Off by default: the map's first job is the city, and a
   // camera layer is a question you ask of it, not the answer it opens with.
   const [showCameras, setShowCameras] = useState(false);
+  const [basemapDown, setBasemapDown] = useState(false);
   const [registryCameras, setRegistryCameras] = useState<AtlasCamera[] | null>(null);
   const [cameraFeedReason, setCameraFeedReason] = useState<string | null>(null);
   const [selectedCamera, setSelectedCamera] = useState<AtlasCamera | null>(null);
@@ -1005,14 +1030,15 @@ export function AtlasView({ world, embedded = false, initialView, floodEdition =
       oldtown: [...poiMarkerRefs.current.oldtown],
     };
 
-    import("maplibre-gl").then((MapLibreModule) => {
+    Promise.all([import("maplibre-gl"), resolveBasemapStyle()]).then(([MapLibreModule, basemap]) => {
       if (!active) return;
       const maplibregl = MapLibreModule.default;
       maplibreModuleRef.current = maplibregl;
+      setBasemapDown(basemap.down);
 
       const map = new maplibregl.Map({
         container: containerRef.current!,
-        style: OPENFREEMAP_DARK_STYLE,
+        style: basemap.style,
         center: initialView?.center ?? districtCenter(world.stops),
         zoom: initialView?.zoom ?? 15.4,
         pitch: initialView?.pitch ?? 60,
@@ -2389,9 +2415,17 @@ export function AtlasView({ world, embedded = false, initialView, floodEdition =
           >
             {viewLinkCopied ? "✓ View link copied" : "⧉ Cite this view"}
           </button>
-          <p className="atlas-cursor-readout" aria-hidden="true">
-            <span ref={cursorReadoutRef}>—</span>
-            <span ref={zoomReadoutRef} className="atlas-cursor-zoom">z —</span>
+          {/* The live coordinates are hidden from screen readers (they change
+              on every mouse move); the shortcuts button beside them is not. */}
+          {basemapDown ? (
+            <p className="atlas-basemap-down" role="status">
+              Basemap unreachable — streets and the city&rsquo;s generic buildings are missing.
+              Every BKKx layer is served from this site and still shown.
+            </p>
+          ) : null}
+          <p className="atlas-cursor-readout">
+            <span ref={cursorReadoutRef} aria-hidden="true">—</span>
+            <span ref={zoomReadoutRef} className="atlas-cursor-zoom" aria-hidden="true">z —</span>
             <button
               type="button"
               className="atlas-shortcuts-hint"

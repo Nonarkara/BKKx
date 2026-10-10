@@ -110,7 +110,8 @@ export default function PressureAtlasPage() {
             clearing and deep enough to survive the setback. Districts are
             ordered by candidate count.
           </p>
-          <div className="sh-district-scroll">
+          {/* Focusable so a keyboard can scroll the table sideways on a phone. */}
+          <div className="sh-district-scroll" tabIndex={0} role="region" aria-labelledby="districts">
             <table className="sh-district-table">
               <thead>
                 <tr>

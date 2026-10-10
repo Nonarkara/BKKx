@@ -82,18 +82,14 @@ export function OldTownPicks({ iframeRef }: Props) {
                     {kind.icon} {th ? kind.th : kind.en}
                     {spot.units ? <> · {spot.units} units</> : null}
                     {spot.period ? <> · {spot.period}</> : null}
-                    {" · "}
-                    <a
-                      href={spot.sourceUrl}
-                      target="_blank"
-                      rel="noreferrer"
-                      onClick={(e) => e.stopPropagation()}
-                    >
-                      {spot.source}
-                    </a>
                   </span>
                 </span>
               </button>
+              {/* A sibling of the card's button, not inside it: a link nested
+                  in a button is invalid HTML and unreachable by keyboard. */}
+              <a className="atlas-shell-oldtown-source" href={spot.sourceUrl} target="_blank" rel="noreferrer">
+                {spot.source} ↗
+              </a>
             </li>
           );
         })}

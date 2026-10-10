@@ -63,7 +63,9 @@ export function GlobalMap() {
       <svg
         className="sh-section-svg"
         viewBox={`0 0 ${VB_W} ${VB_H}`}
-        role="img"
+        // "group", not "img": the town markers inside are focusable, and an
+        // image role would hide them from assistive technology.
+        role="group"
         aria-label="Map of East and Southeast Asia showing origin ports, shophouse towns and migration routes."
       >
         {/* Frame */}
