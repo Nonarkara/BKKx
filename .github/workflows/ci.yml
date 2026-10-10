@@ -37,6 +37,9 @@ jobs:
       - run: npx tsc --noEmit
       - run: npm run lint
       - run: node --test tests/rendered-html.test.mjs
+      # The flood-evidence rules and the camera water screening ported from
+      # FloodDash (app/cv). Pure functions over synthetic frames: no network.
+      - run: node --experimental-strip-types --test tests/flood-evidence.test.mjs tests/cv/detect.test.mjs tests/cv/flood-evidence.test.mjs
       # The world-pipeline scripts are pure arithmetic with no heavy
       # dependency, precisely so their geometry can be checked here rather
       # than only on an operator's machine with amulet-core installed.

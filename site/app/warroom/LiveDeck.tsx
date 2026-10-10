@@ -11,6 +11,13 @@ import {
   type CuratedCamera,
 } from "../data/cctv-cameras";
 import { SuggestLocation } from "./SuggestLocation";
+import {
+  createStillScreen,
+  currentStillEvidence,
+  readStill,
+  stillEvidenceText,
+  type StillEvidence,
+} from "../cv/stillScreen";
 
 /* The live half of the war room: the clock, the gauge network, and the
    camera rail. Everything here degrades to a stated reason rather than a
@@ -492,12 +499,121 @@ function CuratedTile({ cam }: { cam: CuratedCamera }) {
   );
 }
 
+/* One agency still. With water screening on, each refreshed still also goes
+   through FloodDash's detector in this browser (app/cv/stillScreen.ts): the
+   tile then says what the pictures do and do not show, and outlines the
+   patch it is watching. The picture is letterboxed so the outline sits on
+   the pixels that were measured, not on a crop of them. */
+function AgencyTile({
+  c,
+  nonce,
+  clock,
+  screening,
+  onState,
+}: {
+  c: Camera;
+  nonce: number;
+  clock: number;
+  screening: boolean;
+  onState: (id: string, state: StillEvidence["state"]) => void;
+}) {
+  const screenRef = useRef<ReturnType<typeof createStillScreen> | null>(null);
+  const [evidence, setEvidence] = useState<StillEvidence | null>(null);
+  const [aspect, setAspect] = useState<number | null>(null);
+  const snap = c.snapshotUrl ?? "";
+  const href = c.streamUrl ?? c.pageUrl;
+
+  const screen = () => (screenRef.current ??= createStillScreen());
+  const onLoad = (img: HTMLImageElement) => {
+    if (img.naturalWidth && img.naturalHeight) setAspect(img.naturalWidth / img.naturalHeight);
+    if (!screening) return;
+    const frame = readStill(img);
+    const at = Date.now();
+    const next = frame ? screen().push(frame, at) : screen().unreadable(at);
+    setEvidence(next);
+    onState(c.id, next.state);
+  };
+
+  const shown = screening && evidence ? currentStillEvidence(evidence, Math.max(clock, evidence.at ?? 0)) : null;
+  const state = screening ? (shown?.state ?? "unknown") : null;
+  const region = shown?.state !== "unknown" ? shown?.region : undefined;
+  const frame = shown?.frame;
+
+  const img = (
+    /* eslint-disable-next-line @next/next/no-img-element */
+    <img
+      src={`${snap}${snap.includes("?") ? "&" : "?"}_=${nonce}`}
+      alt={`Agency still: ${c.name}`}
+      // Screening is for every agency still, not only the ones scrolled
+      // into view, so an opted-in viewer loads them all.
+      loading={screening ? "eager" : "lazy"}
+      onLoad={(e) => onLoad(e.currentTarget)}
+      onError={(e) => {
+        (e.currentTarget as HTMLImageElement).classList.add("is-broken");
+        if (screening) {
+          setEvidence(screen().unreadable(Date.now()));
+          onState(c.id, "unknown");
+        }
+      }}
+    />
+  );
+
+  return (
+    <figure className={`wr-cam${screening ? " is-screening" : ""}`} data-cam={c.id}>
+      {screening ? (
+        <div className="wr-cam-screen">
+          <div className="wr-cam-screen-frame" style={aspect ? { aspectRatio: String(aspect) } : undefined}>
+            {img}
+            {region && frame ? (
+              <span
+                className={`wr-cam-water is-${state}`}
+                aria-hidden="true"
+                style={{
+                  left: `${(region.x0 / frame.w) * 100}%`,
+                  top: `${(region.y0 / frame.h) * 100}%`,
+                  width: `${((region.x1 - region.x0 + 1) / frame.w) * 100}%`,
+                  height: `${((region.y1 - region.y0 + 1) / frame.h) * 100}%`,
+                }}
+              />
+            ) : null}
+          </div>
+        </div>
+      ) : (
+        img
+      )}
+      <figcaption>
+        <b>{c.name}</b>
+        <small>{c.attribution ?? "iTIC"}</small>
+        {state ? (
+          <span className={`wr-cam-flood is-${state}`} title={region?.evidence ?? undefined}>
+            {stillEvidenceText(shown)}
+            {shown?.samples && shown.state !== "unknown"
+              ? ` · ${shown.samples} still${shown.samples === 1 ? "" : "s"}`
+              : ""}
+          </span>
+        ) : null}
+        {href ? (
+          <a href={href} target="_blank" rel="noreferrer">
+            {c.streamUrl ? "live stream ↗" : "open ↗"}
+          </a>
+        ) : null}
+      </figcaption>
+    </figure>
+  );
+}
+
 export function CctvRail() {
   const [state, setState] = useState<{ phase: "loading" | "ok" | "down"; env?: Envelope<CctvPayload> }>({
     phase: "loading",
   });
   const [health, setHealth] = useState<Envelope<CctvHealthPayload> | null>(null);
   const [nonce, setNonce] = useState(0);
+  const [clock, setClock] = useState(0);
+  const [screening, setScreening] = useState(false);
+  const [screenStates, setScreenStates] = useState<Record<string, StillEvidence["state"]>>({});
+  const onScreenState = useCallback((id: string, st: StillEvidence["state"]) => {
+    setScreenStates((prev) => (prev[id] === st ? prev : { ...prev, [id]: st }));
+  }, []);
   const railRef = useRef<HTMLDivElement | null>(null);
 
   const load = useCallback(async () => {
@@ -534,6 +650,9 @@ export function CctvRail() {
   // so a backgrounded war room is not quietly pulling images all afternoon.
   useEffect(() => {
     const t = setInterval(() => {
+      // The clock runs while hidden too, so screening evidence ages out
+      // rather than greeting a returning viewer as if it were current.
+      setClock(Date.now());
       if (document.visibilityState === "visible") setNonce((n) => n + 1);
     }, CAM_REFRESH_MS);
     return () => clearInterval(t);
@@ -544,6 +663,20 @@ export function CctvRail() {
   const listed = fetched.filter((c) => !c.still);
   const railCount = CURATED_CAMERAS.length + stills.length;
   const h = health?.ok ? health.data : null;
+
+  // Agency stills sit at the end of the rail, so a flag is summarised up top.
+  const tally = { possible_flooding: [] as string[], checking: 0, unknown: 0 };
+  for (const c of stills) {
+    const st = screenStates[c.id] ?? "unknown";
+    if (st === "possible_flooding") tally.possible_flooding.push(c.id);
+    else if (st === "checking") tally.checking += 1;
+    else tally.unknown += 1;
+  }
+  const jumpTo = (id: string) => {
+    railRef.current
+      ?.querySelector(`[data-cam="${CSS.escape(id)}"]`)
+      ?.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "start" });
+  };
 
   const scroll = (dir: -1 | 1) => {
     railRef.current?.scrollBy({ left: dir * 320, behavior: "smooth" });
@@ -562,6 +695,20 @@ export function CctvRail() {
             {CAMERA_TALLY.located} located · {CAMERA_TALLY.unconfirmed} awaiting a location
           </span>
         ) : null}
+        {stills.length > 0 ? (
+          <button
+            type="button"
+            className="wr-btn is-icon wr-screen-toggle"
+            aria-pressed={screening}
+            onClick={() => {
+              setScreening((on) => !on);
+              setScreenStates({});
+            }}
+            title="Screen agency stills for standing water in this browser (FloodDash's heuristic)"
+          >
+            Water screening: {screening ? "on" : "off"}
+          </button>
+        ) : null}
         {railCount > 3 ? (
           <span className="wr-rail-nav">
             <button type="button" className="wr-btn is-icon" onClick={() => scroll(-1)} aria-label="Scroll cameras left">
@@ -578,33 +725,32 @@ export function CctvRail() {
         {CURATED_CAMERAS.map((c) => (
           <CuratedTile key={c.id} cam={c} />
         ))}
-        {stills.map((c) => {
-          const snap = c.snapshotUrl ?? "";
-          const href = c.streamUrl ?? c.pageUrl;
-          return (
-            <figure key={c.id} className="wr-cam">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={`${snap}${snap.includes("?") ? "&" : "?"}_=${nonce}`}
-                alt={`Agency still: ${c.name}`}
-                loading="lazy"
-                onError={(e) => {
-                  (e.currentTarget as HTMLImageElement).classList.add("is-broken");
-                }}
-              />
-              <figcaption>
-                <b>{c.name}</b>
-                <small>{c.attribution ?? "iTIC"}</small>
-                {href ? (
-                  <a href={href} target="_blank" rel="noreferrer">
-                    {c.streamUrl ? "live stream ↗" : "open ↗"}
-                  </a>
-                ) : null}
-              </figcaption>
-            </figure>
-          );
-        })}
+        {stills.map((c) => (
+          <AgencyTile
+            key={c.id}
+            c={c}
+            nonce={nonce}
+            clock={clock}
+            screening={screening}
+            onState={onScreenState}
+          />
+        ))}
       </div>
+
+      {screening ? (
+        <p className="wr-panel-note wr-screen-tally" aria-live="polite">
+          Water screening over {stills.length} agency still{stills.length === 1 ? "" : "s"}:{" "}
+          {tally.possible_flooding.length > 0 ? (
+            <button type="button" className="wr-screen-jump" onClick={() => jumpTo(tally.possible_flooding[0])}>
+              {tally.possible_flooding.length} possible flooding — show
+            </button>
+          ) : (
+            "none flagged"
+          )}
+          {" · "}
+          {tally.checking} checking · {tally.unknown} unknown (not an all-clear)
+        </p>
+      ) : null}
 
       {h ? (
         <p className="wr-panel-note wr-cctv-health">
@@ -665,6 +811,17 @@ export function CctvRail() {
         snapshot URL returns a real JPEG are tiled. Extra registries can still
         be merged via <code>CCTV_SOURCE_URL</code>.
       </p>
+      {screening ? (
+        <p className="wr-panel-note">
+          Water screening is FloodDash&rsquo;s reflective-surface heuristic, run in this
+          browser on the stills above: a bright, smooth, blue-biased patch low in the
+          frame, covering at least 5% of it, must hold in the same place across three
+          refreshed stills over a minute. That is a reason to look at the picture, not a
+          flood reading. Brown or night water is missed; glare, wet roads and canals can
+          trigger it; a still that stops changing reads unknown. Capture time upstream is
+          not known. Nothing is uploaded, and unknown is never an all-clear.
+        </p>
+      ) : null}
     </section>
   );
 }

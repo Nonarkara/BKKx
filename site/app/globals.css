@@ -7639,3 +7639,18 @@ body:has(.sh-figexport) { background: #fff !important; }
   font-size: 8px;
   line-height: 1.45;
 }
+
+/* War-room water screening (app/cv/stillScreen.ts). The frame is letterboxed
+   to the still's own aspect so the outlined patch sits on measured pixels. */
+.wr-screen-toggle { margin-top: 0; }
+.wr-screen-toggle[aria-pressed="true"] { border-color: var(--signal); color: var(--signal); }
+.wr-cam-screen { height: 130px; display: flex; justify-content: center; background: #000; }
+.wr-cam-screen-frame { position: relative; height: 100%; max-width: 100%; aspect-ratio: 16 / 9; }
+.wr-cam-screen-frame img { width: 100%; height: 100%; object-fit: fill; }
+.wr-cam-water { position: absolute; border: 1.5px dashed var(--wr-quiet); pointer-events: none; }
+.wr-cam-water.is-possible_flooding { border: 2px solid var(--wr-crit); }
+.wr-cam-flood { font-family: var(--font-mono); font-size: 10px; line-height: 1.35; color: var(--wr-quiet); }
+.wr-cam-flood.is-checking { color: var(--wr-ink); }
+.wr-cam-flood.is-possible_flooding { color: var(--wr-crit); font-weight: 600; }
+.wr-screen-jump { padding: 0; border: 0; background: none; font: inherit; color: var(--wr-crit); font-weight: 600; text-decoration: underline; cursor: pointer; }
+.wr-screen-jump:focus-visible { outline: 1px solid var(--wr-crit); outline-offset: 2px; }
