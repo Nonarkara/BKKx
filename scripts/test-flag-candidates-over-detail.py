@@ -127,7 +127,9 @@ def test_the_tally_counts_only_extruded_candidates() -> None:
           sum(tally.get("candidateBases", {}).values()) == len(extruded), str(tally.get("candidateBases")))
     landmarks = json.loads((SITE / "public/data/bkk-landmarks.geojson").read_text(encoding="utf-8"))["features"]
     heroes = json.loads((SITE / "public/data/bkk-hero-monuments.geojson").read_text(encoding="utf-8"))["features"]
-    drawn_detail = sum(1 for f in detail if f["properties"].get("hide_3d") is not True)
+    # A box re-massed by build-temple-roofs.py is still one extruded building.
+    drawn_detail = sum(1 for f in detail if f["properties"].get("hide_3d") is not True
+                       or str(f["properties"].get("hidden_by", "")).startswith("temple-roof:"))
     drawn_landmarks = sum(1 for f in landmarks if f["properties"].get("hide_3d") is not True)
     check("the tally's total is every extruded feature across the four layers",
           tally["total"] == drawn_detail + drawn_landmarks + len(heroes) + len(extruded),

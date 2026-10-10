@@ -121,7 +121,11 @@ def test_plan_is_whole_and_inside_the_world() -> None:
     world = json.loads((ROOT / "site/public/heritage-register.json").read_text())["worlds"][hb.WORLD_ID]
     max_x, max_z = world["blocks"]["maxX"], world["blocks"]["maxZ"]
 
-    check("all hero parts are planned", plan["counts"]["parts"] == 88, str(plan["counts"]))
+    # Derived from the file the builder reads, not typed: these were pinned
+    # at 67, then 88, and went stale each time the model grew.
+    source = json.loads((ROOT / "site/public/data/bkk-hero-monuments.geojson").read_text())["features"]
+    check("every hero part in the geojson is planned", plan["counts"]["parts"] == len(source),
+          f"plan={plan['counts']['parts']} geojson={len(source)}")
     check("nothing was refused", plan["counts"]["refused"] == 0, str(plan["refused"]))
 
     outside = [
@@ -140,7 +144,19 @@ def test_plan_is_whole_and_inside_the_world() -> None:
     # Sub-block finials are snapped, and the plan must admit it rather than
     # presenting a one-block column as a measured footprint.
     snapped = [p["id"] for p in plan["parts"] if p["snappedToOneColumn"]]
-    check("sub-block finials are snapped, not dropped", len(snapped) == 2, str(snapped))
+    # A snap is legitimate only where the footprint is genuinely narrower than
+    # a block: check each against its own ring, in metres.
+    import math as _m
+    by_id = {f["properties"]["id"]: f for f in source}
+
+    def width_m(fid):
+        ring = by_id[fid]["geometry"]["coordinates"][0]
+        lat0 = ring[0][1]
+        xs = [q[0] * _m.cos(_m.radians(lat0)) * 111320 for q in ring]
+        ys = [q[1] * 110540 for q in ring]
+        return min(max(xs) - min(xs), max(ys) - min(ys))
+    wide = [(fid, round(width_m(fid), 2)) for fid in snapped if width_m(fid) >= 1.5]
+    check("only sub-block parts are snapped, not dropped", snapped and not wide, str(wide or snapped))
     check(
         "a snapped part is one column only",
         all(len(p["spans"]) == 1 and p["spans"][0][1] == p["spans"][0][2]
@@ -156,11 +172,8 @@ def test_plan_is_whole_and_inside_the_world() -> None:
     # The grading the atlas already publishes must survive into the plan.
     check(
         "the three evidence grades are carried, not flattened",
-        plan["counts"]["byConfidence"] == {
-            "interpretive-envelope": 65,
-            "interpretive-proportion": 16,
-            "official-envelope": 7,
-        },
+        plan["counts"]["byConfidence"] == dict(sorted(
+            __import__("collections").Counter(f["properties"]["height_confidence"] for f in source).items())),
         str(plan["counts"]["byConfidence"]),
     )
 

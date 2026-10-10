@@ -59,14 +59,25 @@ function tally(list, key) {
   return counts;
 }
 
+// A detail box flagged by build-temple-roofs.py is still ONE extruded
+// building — drawn as walls and a roof from bkk-temple-roofs.geojson, up to
+// the same height, carrying the same height_source — so it is counted here,
+// once, by that source. Its twin in the landmark layer is the same building
+// drawn a second time, so that copy is not.
+const ROOFED = "temple-roof:";
+const roofed = (f) => String(f.properties?.hidden_by ?? "").startsWith(ROOFED);
 const drawn = (f) => f.properties?.hide_3d !== true;
 const detailAll = features(DETAIL);
 const landmarksAll = features(LANDMARKS);
-const detailDrawn = detailAll.filter(drawn);
+const detailDrawn = detailAll.filter((f) => drawn(f) || roofed(f));
 const landmarksDrawn = landmarksAll.filter(drawn);
 const hidden = {
   detail: detailAll.length - detailDrawn.length,
-  landmarks: landmarksAll.length - landmarksDrawn.length,
+  landmarks: landmarksAll.filter((f) => !drawn(f) && !roofed(f)).length,
+};
+const roofedCounts = {
+  detail: detailAll.filter(roofed).length,
+  landmarkTwins: landmarksAll.filter(roofed).length,
 };
 
 // A candidate standing on a drawn OSM footprint is outlined, not extruded
@@ -127,6 +138,7 @@ writeFileSync(
       heroConfidences,
       landmarks,
       hidden,
+      roofed: roofedCounts,
       candidateBases,
       candidates,
       total,
@@ -139,6 +151,7 @@ writeFileSync(
 console.log(
   `build-evidence-tally: ${total} extruded features · ` +
     EVIDENCE_TIERS.map((t) => `${t.tier} ${byTier[t.tier]}`).join(" · ") +
-    ` · ${hidden.detail + hidden.landmarks} hidden under hero models` +
+    ` · ${hidden.detail + hidden.landmarks} hidden under hero models or as strips` +
+    ` · ${roofedCounts.detail} drawn with a typological roof (${roofedCounts.landmarkTwins} landmark twins dropped)` +
     ` · ${candidates.extruded} candidates extruded, ${candidates.onDetailBox} outlined on an OSM footprint`,
 );

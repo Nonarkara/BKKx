@@ -159,8 +159,13 @@ def top_of(layer: str, p: dict) -> float:
 
 
 def is_drawn(layer: str, p: dict) -> bool:
-    """What the map's layer filter admits: not hidden, and (detail) taller than 0."""
-    if p.get("hide_3d") is True:
+    """Whether the map draws massing on this footprint.
+
+    A box hidden by a hero model or a row-strip flag is not drawn. A box
+    hidden by build-temple-roofs.py still is — as walls and a roof up to the
+    same height — so for occlusion and double-extrusion it remains solid.
+    """
+    if p.get("hide_3d") is True and not str(p.get("hidden_by", "")).startswith("temple-roof:"):
         return False
     return layer != "detail" or detail_height(p) > 0
 
@@ -237,7 +242,10 @@ def decide(groups: list[dict], features: list[dict], layer: str) -> dict[str, st
 # hand-set ones. Without this, every build would unhide the slivers that
 # data:strips hides one step later, and --check here would fight --check
 # there over the same bit.
-FOREIGN_FLAG_PREFIX = "row-strip:"
+# Namespaces owned by later steps. This step never clears their flags, and
+# they never clear this one's: flag-row-strips.py ("row-strip:") and
+# build-temple-roofs.py ("temple-roof:").
+FOREIGN_FLAG_PREFIX = ("row-strip:", "temple-roof:")
 
 
 def apply(features: list[dict], decisions: dict[str, str]) -> int:

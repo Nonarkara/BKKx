@@ -86,6 +86,177 @@ def scale_ring(ring: list[list[float]], factor: float) -> list[list[float]]:
     ]
 
 
+# ---------------------------------------------------------------------------
+# Wat Arun at architectural resolution.
+#
+# The first model was seven stacked copies of the OSM ring, which reads as a
+# stepped cone. A Khmer-derived prang is not a cone: it is a REDENTED plan —
+# a square whose corners are stepped back twice, so each face carries three
+# vertical ribs — standing on three terraces, rising as a bulging "corn cob"
+# (fak kham) and ending in a metal trident finial. Four smaller prangs stand
+# on the diagonals and four mondops on the cardinal faces.
+#
+# What is evidence and what is not, part by part:
+#   * the 82 m overall height        — Fine Arts Department publication
+#   * the footprints and orientation — OpenStreetMap ways (checked-in snapshot):
+#     a 34 m square turned 17.5 degrees, satellites 8.3 m, ~29 m out on the
+#     diagonals
+#   * the redented plan, three terraces, corn-cob profile and the four
+#     cardinal mondops — the documented TYPE of the monument, not a survey;
+#     every tier height below is a proportion, and graded as one.
+# ---------------------------------------------------------------------------
+
+def _local_frame(ring: list[list[float]]):
+    lon0, lat0 = centroid(ring)
+    kx = math.cos(math.radians(lat0)) * 111320.0
+    ky = 110540.0
+    def to_m(lon, lat):
+        return ((lon - lon0) * kx, (lat - lat0) * ky)
+    def to_ll(x, y):
+        return [round(lon0 + x / kx, 7), round(lat0 + y / ky, 7)]
+    return to_m, to_ll
+
+
+def redented_square(cx: float, cy: float, half: float, notch: float, angle_deg: float, to_ll) -> list[list[float]]:
+    """A square of half-size `half` whose four corners are stepped back twice by `notch`.
+
+    20 vertices; the plan of a Khmer-derived prang. A plain square tier reads as a
+    box and a scaled OSM ring reads as a cone — the stepped corners are what make
+    the silhouette catch light in ribs, which is how the monument is recognised.
+    """
+    a, n = half, min(notch, half / 3.2)
+    corner = [(a, a - 2 * n), (a - n, a - 2 * n), (a - n, a - n), (a - 2 * n, a - n), (a - 2 * n, a)]
+    pts = []
+    for q in range(4):
+        th = q * math.pi / 2
+        c, sn = math.cos(th), math.sin(th)
+        pts += [(x * c - y * sn, x * sn + y * c) for x, y in corner]
+    th = math.radians(angle_deg)
+    c, sn = math.cos(th), math.sin(th)
+    ring = [to_ll(cx + x * c - y * sn, cy + x * sn + y * c) for x, y in pts]
+    return ring + [ring[0]]
+
+
+# (tier id, label, base m, top m, half-size as a fraction of the footprint's
+#  half-size, notch fraction, colour). Wat Arun is clad in broken porcelain:
+#  it reads pale, near-white with a grey-blue cast, not gold.
+_PRANG_TERRACES = [
+    ("base", "first terrace", 0.0, 6.0, 1.00, 0.07, "#d9d4c6"),
+    ("terrace-2", "second terrace", 6.0, 13.0, 0.86, 0.07, "#e2ddd0"),
+    ("terrace-3", "third terrace", 13.0, 20.0, 0.73, 0.07, "#d9d4c6"),
+    ("plinth", "tower plinth", 20.0, 25.0, 0.60, 0.08, "#ece8de"),
+    ("body", "redented tower body", 25.0, 38.0, 0.53, 0.09, "#efece4"),
+    ("niche", "niche level (Indra on Erawan)", 38.0, 42.0, 0.49, 0.09, "#dfe3e4"),
+]
+_CORN_COB_TIERS = 11          # the fak kham, 42 m to 75 m
+_CORN_COB_BASE, _CORN_COB_TOP = 42.0, 75.0
+_PRANG_FINIAL = [
+    ("neck", "neck", 75.0, 77.0, 0.075, 0.0, "#d4d0c4"),
+    ("finial", "trident finial (nopphasun)", 77.0, 82.0, 0.035, 0.0, "#c9b26a"),
+]
+
+
+def prang_profile(height: float) -> list[tuple]:
+    """The full tier list for a prang of `height` metres, scaled from 82 m."""
+    k = height / 82.0
+    rows = [(t, l, b * k, h * k, f, n, c) for t, l, b, h, f, n, c in _PRANG_TERRACES]
+    span = (_CORN_COB_TOP - _CORN_COB_BASE) / _CORN_COB_TIERS
+    for i in range(_CORN_COB_TIERS):
+        t = (i + 0.5) / _CORN_COB_TIERS
+        # A bullet, not a cone: the tower stays nearly full for most of its
+        # height and closes fast near the top. (1 - t^2.2) is ~0.78 at mid
+        # height; a linear taper would already be at 0.5 — the first version
+        # used one and the render read as a pyramid.
+        frac = 0.47 * (1.0 - (0.97 * t) ** 2.2) ** 0.85
+        b = _CORN_COB_BASE + i * span
+        shade = "#eef0ed" if i % 2 == 0 else "#dfe5e6"
+        rows.append((f"cob-{i + 1}", f"corn-cob tier {i + 1}", b * k, (b + span) * k, frac, 0.10, shade))
+    rows += [(t, l, b * k, h * k, f, n, c) for t, l, b, h, f, n, c in _PRANG_FINIAL]
+    return rows
+
+
+def _min_area_angle(pts_m: list[tuple[float, float]]) -> tuple[float, float]:
+    """Orientation (degrees) and half of the shorter side of the min-area rectangle."""
+    best = None
+    for tenth in range(0, 900, 5):
+        a = math.radians(tenth / 10)
+        c, sn = math.cos(a), math.sin(a)
+        us = [x * c + y * sn for x, y in pts_m]
+        vs = [-x * sn + y * c for x, y in pts_m]
+        w, h = max(us) - min(us), max(vs) - min(vs)
+        if best is None or w * h < best[0]:
+            best = (w * h, tenth / 10, min(w, h) / 2)
+    return best[1], best[2]
+
+
+def wat_arun_parts(by_id: dict, main_ring: list[list[float]]) -> list[dict]:
+    to_m, to_ll = _local_frame(main_ring)
+    main_m = [to_m(*p) for p in main_ring]
+    angle, half = _min_area_angle(main_m)
+    cx = math.fsum(x for x, _ in main_m[:-1]) / (len(main_m) - 1)
+    cy = math.fsum(y for _, y in main_m[:-1]) / (len(main_m) - 1)
+
+    out: list[dict] = []
+
+    def emit(osm_id, ring, part_id, label, base, top, color, central, kind=None,
+             confidence=None, height_source=None):
+        f = part(osm_id=osm_id, ring=main_ring, part_id=part_id, part_label=label,
+                 base=round(base, 2), height=round(top, 2), scale=1.0, color=color, central=central)
+        f["geometry"] = {"type": "Polygon", "coordinates": [ring]}
+        pr = f["properties"]
+        pr["footprint_source"] = (
+            "Plan generated from the OSM way's extent and orientation (snapshot 2026-08-17): "
+            "redented square, documented type of a Khmer-derived prang"
+        )
+        if kind:
+            pr["kind"] = kind
+        if confidence:
+            pr["height_confidence"] = confidence
+        if height_source:
+            pr["height_source"] = height_source
+        out.append(f)
+
+    for tid, label, base, top, frac, notch, color in prang_profile(82.0):
+        emit(23482275, redented_square(cx, cy, half * frac, half * notch, angle, to_ll),
+             f"wat-arun-central-{tid}", label, base, top, color, True)
+
+    # Satellite prangs: same type, 42 m (51% of the central envelope), each on
+    # its own OSM footprint.
+    sat_centres = []
+    for index, osm_id in enumerate([1148151954, 1148151955, 1148151956, 1148151957], start=1):
+        ring_m = [to_m(*p) for p in ring_for(by_id[osm_id])]
+        sx = math.fsum(x for x, _ in ring_m[:-1]) / (len(ring_m) - 1)
+        sy = math.fsum(y for _, y in ring_m[:-1]) / (len(ring_m) - 1)
+        s_angle, s_half = _min_area_angle(ring_m)
+        sat_centres.append((sx, sy))
+        for tid, label, base, top, frac, notch, color in prang_profile(42.0):
+            emit(osm_id, redented_square(sx, sy, s_half * frac, s_half * notch, s_angle, to_ll),
+                 f"wat-arun-satellite-{index}-{tid}", f"satellite {index} · {label}",
+                 base, top, color, False)
+
+    # Four mondops on the cardinal faces, midway between neighbouring satellite
+    # prangs — where the plan puts them. Their heights are an envelope, nothing more.
+    order = sorted(sat_centres, key=lambda p: math.atan2(p[1] - cy, p[0] - cx))
+    mondop = [
+        ("base", "mondop base", 0.0, 4.0, 3.6, "#d9d4c6"),
+        ("hall", "mondop hall", 4.0, 9.0, 2.8, "#efece4"),
+        ("roof-1", "mondop roof tier 1", 9.0, 11.0, 2.4, "#dfe5e6"),
+        ("roof-2", "mondop roof tier 2", 11.0, 13.0, 1.7, "#eef0ed"),
+        ("roof-3", "mondop roof tier 3", 13.0, 14.5, 1.1, "#dfe5e6"),
+        ("spire", "mondop spire", 14.5, 17.0, 0.45, "#c9b26a"),
+    ]
+    for i in range(4):
+        (ax, ay), (bx, by) = order[i], order[(i + 1) % 4]
+        mx, my = (ax + bx) / 2, (ay + by) / 2
+        for tid, label, base, top, h, color in mondop:
+            emit(23482275, redented_square(mx, my, h, h * 0.12, angle, to_ll),
+                 f"wat-arun-mondop-{i + 1}-{tid}", f"mondop {i + 1} · {label}",
+                 base, top, color, False, kind="hero_mondop",
+                 confidence="interpretive-envelope",
+                 height_source="documented type (four cardinal mondops); 17 m envelope is an estimate")
+    return out
+
+
 def part(
     *,
     osm_id: int,
@@ -266,6 +437,26 @@ def wat_pho_part(
     }
 
 
+COMPLEX_OF = {
+    "grand-palace-siratana-chedi": "wat-phra-kaew-hero-structures",
+    "grand-palace-phra-mondop": "wat-phra-kaew-hero-structures",
+    "grand-palace-thepbidorn": "wat-phra-kaew-hero-structures",
+    "wat-pho-srisanphetdayan": "wat-pho-four-great-chedis",
+    "wat-pho-dilok": "wat-pho-four-great-chedis",
+    "wat-pho-munibat": "wat-pho-four-great-chedis",
+    "wat-pho-srisuriyothai": "wat-pho-four-great-chedis",
+}
+
+
+def complexes(features: list[dict]) -> dict:
+    out: dict[str, int] = {}
+    for f in features:
+        hero = f["properties"]["hero_id"]
+        key = COMPLEX_OF.get(hero, hero)
+        out[key] = out.get(key, 0) + 1
+    return out
+
+
 def main() -> None:
     source = json.loads(SOURCE.read_text())
     by_id = {element["id"]: element for element in source["elements"]}
@@ -273,52 +464,7 @@ def main() -> None:
     landmark_by_id = {feature["properties"]["id"]: feature for feature in landmark_source["features"]}
 
     main_ring = ring_for(by_id[23482275])
-    central_tiers = [
-        ("base", "stepped base", 0, 12, 1.00, "#e7d4aa"),
-        ("terrace", "processional terrace", 12, 24, 0.86, "#c9ad78"),
-        ("body", "central prang body", 24, 56, 0.60, "#eee2c5"),
-        ("shoulder", "upper shoulder", 56, 68, 0.39, "#b8a77e"),
-        ("crown", "crown", 68, 74, 0.27, "#e9d39d"),
-        ("spire", "spire", 74, 79, 0.16, "#d8b85e"),
-        ("finial", "gilded finial", 79, 82, 0.075, "#f4c84d"),
-    ]
-    features = [
-        part(
-            osm_id=23482275,
-            ring=main_ring,
-            part_id=f"wat-arun-central-{tier_id}",
-            part_label=label,
-            base=base,
-            height=height,
-            scale=scale,
-            color=color,
-            central=True,
-        )
-        for tier_id, label, base, height, scale, color in central_tiers
-    ]
-
-    satellite_tiers = [
-        ("base", "satellite base", 0, 10, 1.00, "#d9c69f"),
-        ("body", "satellite body", 10, 28, 0.64, "#e9ddc1"),
-        ("crown", "satellite crown", 28, 36, 0.34, "#c5aa74"),
-        ("spire", "satellite spire", 36, 42, 0.12, "#e8bd50"),
-    ]
-    for index, osm_id in enumerate([1148151954, 1148151955, 1148151956, 1148151957], start=1):
-        ring = ring_for(by_id[osm_id])
-        for tier_id, label, base, height, scale, color in satellite_tiers:
-            features.append(
-                part(
-                    osm_id=osm_id,
-                    ring=ring,
-                    part_id=f"wat-arun-satellite-{index}-{tier_id}",
-                    part_label=f"{label} {index}",
-                    base=base,
-                    height=height,
-                    scale=scale,
-                    color=color,
-                    central=False,
-                )
-            )
+    features = wat_arun_parts(by_id, main_ring)
 
     palace_models = [
         {
@@ -576,16 +722,9 @@ def main() -> None:
             {"label": "Tourism Authority of Thailand · Wat Ratchanaddaram", "url": LOHA_PRASAT_SOURCE},
             {"label": "Tourism Authority of Thailand · Wat Saket", "url": GOLDEN_MOUNT_SOURCE},
         ],
-        "complexes": {
-            "wat-arun-prang-group": 23,
-            "wat-phra-kaew-hero-structures": 20,
-            "wat-pho-four-great-chedis": 24,
-            "loha-prasat": 4,
-            "dusit-maha-prasat": 5,
-            "aphonphimok-prasat": 4,
-            "siwalai-maha-prasat": 4,
-            "golden-mount-chedi": 4,
-        },
+        # Derived, not typed: the last hand-written version of this said 23
+        # parts for Wat Arun after the model had grown.
+        "complexes": complexes(features),
         "featureCount": len(features),
         "features": features,
     }

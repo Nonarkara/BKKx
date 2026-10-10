@@ -70,11 +70,6 @@
     "block": "minecraft:terracotta",
     "parts": 1
    },
-   "#b8a77e": {
-    "family": "plaster",
-    "block": "minecraft:smooth_sandstone",
-    "parts": 1
-   },
    "#b8a88a": {
     "family": "plaster",
     "block": "minecraft:smooth_sandstone",
@@ -85,11 +80,6 @@
     "block": "minecraft:gold_block",
     "parts": 1
    },
-   "#c5aa74": {
-    "family": "plaster",
-    "block": "minecraft:smooth_sandstone",
-    "parts": 4
-   },
    "#c89236": {
     "family": "gilt",
     "block": "minecraft:gold_block",
@@ -98,7 +88,17 @@
    "#c9ad78": {
     "family": "plaster",
     "block": "minecraft:smooth_sandstone",
-    "parts": 2
+    "parts": 1
+   },
+   "#c9b26a": {
+    "family": "plaster",
+    "block": "minecraft:smooth_sandstone",
+    "parts": 9
+   },
+   "#d4d0c4": {
+    "family": "whitewash",
+    "block": "minecraft:smooth_quartz",
+    "parts": 5
    },
    "#d5a53e": {
     "family": "gilt",
@@ -110,25 +110,35 @@
     "block": "minecraft:gold_block",
     "parts": 2
    },
-   "#d8b85e": {
-    "family": "gilt",
-    "block": "minecraft:gold_block",
-    "parts": 1
-   },
    "#d9b75e": {
     "family": "gilt",
     "block": "minecraft:gold_block",
     "parts": 2
    },
-   "#d9c69f": {
-    "family": "plaster",
-    "block": "minecraft:smooth_sandstone",
-    "parts": 4
+   "#d9d4c6": {
+    "family": "whitewash",
+    "block": "minecraft:smooth_quartz",
+    "parts": 14
    },
    "#dcb445": {
     "family": "gilt",
     "block": "minecraft:gold_block",
     "parts": 1
+   },
+   "#dfe3e4": {
+    "family": "glaze_blue",
+    "block": "minecraft:blue_terracotta",
+    "parts": 5
+   },
+   "#dfe5e6": {
+    "family": "glaze_blue",
+    "block": "minecraft:blue_terracotta",
+    "parts": 33
+   },
+   "#e2ddd0": {
+    "family": "whitewash",
+    "block": "minecraft:smooth_quartz",
+    "parts": 5
    },
    "#e4bd47": {
     "family": "gilt",
@@ -138,42 +148,52 @@
    "#e7d4aa": {
     "family": "whitewash",
     "block": "minecraft:smooth_quartz",
-    "parts": 2
+    "parts": 1
    },
    "#e8bd50": {
     "family": "gilt",
     "block": "minecraft:gold_block",
-    "parts": 6
-   },
-   "#e9d39d": {
-    "family": "plaster",
-    "block": "minecraft:smooth_sandstone",
-    "parts": 1
+    "parts": 2
    },
    "#e9ddc1": {
     "family": "whitewash",
     "block": "minecraft:smooth_quartz",
-    "parts": 5
+    "parts": 1
    },
    "#ebca6e": {
     "family": "gilt",
     "block": "minecraft:gold_block",
     "parts": 2
    },
+   "#ece8de": {
+    "family": "whitewash",
+    "block": "minecraft:smooth_quartz",
+    "parts": 5
+   },
    "#eee2c5": {
     "family": "whitewash",
     "block": "minecraft:smooth_quartz",
-    "parts": 2
+    "parts": 1
    },
    "#eee7d5": {
     "family": "whitewash",
     "block": "minecraft:smooth_quartz",
     "parts": 6
    },
+   "#eef0ed": {
+    "family": "glaze_green",
+    "block": "minecraft:green_terracotta",
+    "parts": 34
+   },
    "#efc757": {
     "family": "gilt",
     "block": "minecraft:gold_block",
     "parts": 3
+   },
+   "#efece4": {
+    "family": "whitewash",
+    "block": "minecraft:smooth_quartz",
+    "parts": 9
    },
    "#f0c95a": {
     "family": "gilt",
@@ -190,11 +210,6 @@
     "block": "minecraft:gold_block",
     "parts": 1
    },
-   "#f4c84d": {
-    "family": "gilt",
-    "block": "minecraft:gold_block",
-    "parts": 1
-   },
    "#f7df83": {
     "family": "gilt",
     "block": "minecraft:gold_block",
@@ -203,14 +218,14 @@
   }
  },
  "counts": {
-  "parts": 88,
-  "snappedToOneColumn": 2,
+  "parts": 184,
+  "snappedToOneColumn": 9,
   "refused": 0,
-  "blocks": 130876,
+  "blocks": 125809,
   "byConfidence": {
-   "interpretive-envelope": 65,
-   "interpretive-proportion": 16,
-   "official-envelope": 7
+   "interpretive-envelope": 89,
+   "interpretive-proportion": 76,
+   "official-envelope": 19
   }
  },
  "refused": [],
@@ -265,8 +280,8 @@
   },
   "wat-arun-prang-group": {
    "minX": 1049,
-   "minZ": 2456,
-   "maxX": 1110,
+   "minZ": 2455,
+   "maxX": 1111,
    "maxZ": 2517
   },
   "wat-pho-dilok": {
@@ -3907,94 +3922,109 @@
    "id": "wat-arun-central-base",
    "heroId": "wat-arun-prang-group",
    "name": "Wat Arun prang group",
-   "partLabel": "stepped base",
+   "partLabel": "first terrace",
    "block": "minecraft:smooth_quartz",
    "family": "whitewash",
-   "materialColor": "#e7d4aa",
+   "materialColor": "#d9d4c6",
    "yFrom": -61,
-   "yTo": -50,
+   "yTo": -56,
    "heightConfidence": "official-envelope",
    "heightSource": "Fine Arts Department publication \u00b7 82 m overall envelope",
    "notMeasuredSurvey": true,
    "spans": [
     [
+     2466,
+     1087,
+     1089
+    ],
+    [
+     2467,
+     1084,
+     1090
+    ],
+    [
+     2467,
+     1092,
+     1092
+    ],
+    [
      2468,
      1081,
-     1082
+     1092
     ],
     [
      2469,
      1077,
-     1084
+     1092
     ],
     [
      2470,
      1074,
-     1086
+     1093
     ],
     [
      2471,
      1071,
-     1088
+     1093
     ],
     [
      2472,
-     1069,
-     1090
+     1068,
+     1093
     ],
     [
      2473,
-     1068,
-     1092
+     1065,
+     1093
     ],
     [
      2474,
-     1068,
+     1062,
      1094
     ],
     [
      2475,
-     1067,
+     1062,
      1094
     ],
     [
      2476,
-     1067,
+     1061,
      1094
     ],
     [
      2477,
-     1066,
+     1060,
      1095
     ],
     [
      2478,
-     1066,
+     1061,
      1095
     ],
     [
      2479,
-     1065,
+     1061,
      1095
     ],
     [
      2480,
-     1065,
+     1061,
      1096
     ],
     [
      2481,
-     1064,
+     1062,
      1096
     ],
     [
      2482,
-     1064,
+     1062,
      1096
     ],
     [
      2483,
-     1063,
+     1062,
      1097
     ],
     [
@@ -4025,92 +4055,107 @@
     [
      2489,
      1064,
-     1097
+     1098
     ],
     [
      2490,
      1064,
-     1097
+     1099
     ],
     [
      2491,
      1065,
-     1096
+     1099
     ],
     [
      2492,
      1065,
-     1096
+     1099
     ],
     [
      2493,
      1065,
-     1095
+     1100
     ],
     [
      2494,
      1066,
-     1095
+     1100
     ],
     [
      2495,
      1066,
-     1094
+     1099
     ],
     [
      2496,
      1066,
-     1094
+     1099
     ],
     [
      2497,
-     1066,
-     1093
+     1067,
+     1098
     ],
     [
      2498,
      1067,
-     1093
+     1098
     ],
     [
      2499,
-     1069,
-     1092
+     1067,
+     1094
     ],
     [
      2500,
-     1071,
+     1067,
      1091
     ],
     [
      2501,
-     1073,
+     1068,
      1088
     ],
     [
      2502,
-     1075,
+     1068,
      1085
     ],
     [
      2503,
-     1077,
+     1068,
      1082
+    ],
+    [
+     2504,
+     1069,
+     1079
+    ],
+    [
+     2505,
+     1070,
+     1075
+    ],
+    [
+     2506,
+     1072,
+     1072
     ]
    ],
-   "blocks": 11484,
+   "blocks": 6792,
    "snappedToOneColumn": false
   },
   {
    "id": "wat-arun-satellite-1-base",
    "heroId": "wat-arun-prang-group",
    "name": "Wat Arun prang group",
-   "partLabel": "satellite base 1",
-   "block": "minecraft:smooth_sandstone",
-   "family": "plaster",
-   "materialColor": "#d9c69f",
+   "partLabel": "satellite 1 \u00b7 first terrace",
+   "block": "minecraft:smooth_quartz",
+   "family": "whitewash",
+   "materialColor": "#d9d4c6",
    "yFrom": -61,
-   "yTo": -52,
+   "yTo": -59,
    "heightConfidence": "interpretive-proportion",
    "heightSource": "proportional schematic \u00b7 51% of central envelope",
    "notMeasuredSurvey": true,
@@ -4118,11 +4163,11 @@
     [
      2469,
      1052,
-     1055
+     1056
     ],
     [
      2470,
-     1050,
+     1049,
      1056
     ],
     [
@@ -4148,44 +4193,49 @@
     [
      2475,
      1050,
-     1057
+     1058
     ],
     [
      2476,
      1050,
-     1056
+     1057
     ],
     [
      2477,
-     1052,
+     1051,
      1053
     ]
    ],
-   "blocks": 620,
+   "blocks": 201,
    "snappedToOneColumn": false
   },
   {
    "id": "wat-arun-satellite-2-base",
    "heroId": "wat-arun-prang-group",
    "name": "Wat Arun prang group",
-   "partLabel": "satellite base 2",
-   "block": "minecraft:smooth_sandstone",
-   "family": "plaster",
-   "materialColor": "#d9c69f",
+   "partLabel": "satellite 2 \u00b7 first terrace",
+   "block": "minecraft:smooth_quartz",
+   "family": "whitewash",
+   "materialColor": "#d9d4c6",
    "yFrom": -61,
-   "yTo": -52,
+   "yTo": -59,
    "heightConfidence": "interpretive-proportion",
    "heightSource": "proportional schematic \u00b7 51% of central envelope",
    "notMeasuredSurvey": true,
    "spans": [
     [
-     2456,
-     1092,
+     2455,
+     1095,
      1095
     ],
     [
+     2456,
+     1092,
+     1096
+    ],
+    [
      2457,
-     1090,
+     1089,
      1096
     ],
     [
@@ -4220,23 +4270,23 @@
     ],
     [
      2464,
-     1092,
+     1090,
      1093
     ]
    ],
-   "blocks": 620,
+   "blocks": 201,
    "snappedToOneColumn": false
   },
   {
    "id": "wat-arun-satellite-3-base",
    "heroId": "wat-arun-prang-group",
    "name": "Wat Arun prang group",
-   "partLabel": "satellite base 3",
-   "block": "minecraft:smooth_sandstone",
-   "family": "plaster",
-   "materialColor": "#d9c69f",
+   "partLabel": "satellite 3 \u00b7 first terrace",
+   "block": "minecraft:smooth_quartz",
+   "family": "whitewash",
+   "materialColor": "#d9d4c6",
    "yFrom": -61,
-   "yTo": -52,
+   "yTo": -59,
    "heightConfidence": "interpretive-proportion",
    "heightSource": "proportional schematic \u00b7 51% of central envelope",
    "notMeasuredSurvey": true,
@@ -4244,7 +4294,7 @@
     [
      2495,
      1107,
-     1108
+     1109
     ],
     [
      2496,
@@ -4253,7 +4303,7 @@
     ],
     [
      2497,
-     1103,
+     1102,
      1110
     ],
     [
@@ -4274,44 +4324,54 @@
     [
      2501,
      1103,
-     1110
+     1111
     ],
     [
      2502,
      1103,
-     1110
+     1111
     ],
     [
      2503,
      1104,
      1108
+    ],
+    [
+     2504,
+     1104,
+     1105
     ]
    ],
-   "blocks": 640,
+   "blocks": 210,
    "snappedToOneColumn": false
   },
   {
    "id": "wat-arun-satellite-4-base",
    "heroId": "wat-arun-prang-group",
    "name": "Wat Arun prang group",
-   "partLabel": "satellite base 4",
-   "block": "minecraft:smooth_sandstone",
-   "family": "plaster",
-   "materialColor": "#d9c69f",
+   "partLabel": "satellite 4 \u00b7 first terrace",
+   "block": "minecraft:smooth_quartz",
+   "family": "whitewash",
+   "materialColor": "#d9d4c6",
    "yFrom": -61,
-   "yTo": -52,
+   "yTo": -59,
    "heightConfidence": "interpretive-proportion",
    "heightSource": "proportional schematic \u00b7 51% of central envelope",
    "notMeasuredSurvey": true,
    "spans": [
     [
-     2509,
-     1066,
+     2508,
+     1069,
      1069
     ],
     [
+     2509,
+     1065,
+     1070
+    ],
+    [
      2510,
-     1064,
+     1063,
      1070
     ],
     [
@@ -4322,7 +4382,7 @@
     [
      2512,
      1063,
-     1071
+     1070
     ],
     [
      2513,
@@ -4337,7 +4397,7 @@
     [
      2515,
      1064,
-     1070
+     1071
     ],
     [
      2516,
@@ -4346,32 +4406,1310 @@
     ],
     [
      2517,
-     1065,
+     1064,
      1067
     ]
    ],
-   "blocks": 630,
+   "blocks": 204,
    "snappedToOneColumn": false
   },
   {
-   "id": "wat-arun-satellite-1-body",
+   "id": "wat-arun-mondop-1-base",
    "heroId": "wat-arun-prang-group",
    "name": "Wat Arun prang group",
-   "partLabel": "satellite body 1",
+   "partLabel": "mondop 1 \u00b7 mondop base",
    "block": "minecraft:smooth_quartz",
    "family": "whitewash",
-   "materialColor": "#e9ddc1",
-   "yFrom": -51,
-   "yTo": -34,
+   "materialColor": "#d9d4c6",
+   "yFrom": -61,
+   "yTo": -58,
+   "heightConfidence": "interpretive-envelope",
+   "heightSource": "documented type (four cardinal mondops); 17 m envelope is an estimate",
+   "notMeasuredSurvey": true,
+   "spans": [
+    [
+     2502,
+     1088,
+     1088
+    ],
+    [
+     2503,
+     1085,
+     1089
+    ],
+    [
+     2504,
+     1083,
+     1089
+    ],
+    [
+     2505,
+     1083,
+     1090
+    ],
+    [
+     2506,
+     1083,
+     1090
+    ],
+    [
+     2507,
+     1084,
+     1090
+    ],
+    [
+     2508,
+     1084,
+     1090
+    ],
+    [
+     2509,
+     1084,
+     1089
+    ],
+    [
+     2510,
+     1086,
+     1086
+    ]
+   ],
+   "blocks": 200,
+   "snappedToOneColumn": false
+  },
+  {
+   "id": "wat-arun-mondop-2-base",
+   "heroId": "wat-arun-prang-group",
+   "name": "Wat Arun prang group",
+   "partLabel": "mondop 2 \u00b7 mondop base",
+   "block": "minecraft:smooth_quartz",
+   "family": "whitewash",
+   "materialColor": "#d9d4c6",
+   "yFrom": -61,
+   "yTo": -58,
+   "heightConfidence": "interpretive-envelope",
+   "heightSource": "documented type (four cardinal mondops); 17 m envelope is an estimate",
+   "notMeasuredSurvey": true,
+   "spans": [
+    [
+     2476,
+     1099,
+     1102
+    ],
+    [
+     2477,
+     1097,
+     1102
+    ],
+    [
+     2478,
+     1096,
+     1102
+    ],
+    [
+     2479,
+     1096,
+     1103
+    ],
+    [
+     2480,
+     1097,
+     1103
+    ],
+    [
+     2481,
+     1097,
+     1103
+    ],
+    [
+     2482,
+     1097,
+     1103
+    ],
+    [
+     2483,
+     1097,
+     1100
+    ]
+   ],
+   "blocks": 200,
+   "snappedToOneColumn": false
+  },
+  {
+   "id": "wat-arun-mondop-3-base",
+   "heroId": "wat-arun-prang-group",
+   "name": "Wat Arun prang group",
+   "partLabel": "mondop 3 \u00b7 mondop base",
+   "block": "minecraft:smooth_quartz",
+   "family": "whitewash",
+   "materialColor": "#d9d4c6",
+   "yFrom": -61,
+   "yTo": -58,
+   "heightConfidence": "interpretive-envelope",
+   "heightSource": "documented type (four cardinal mondops); 17 m envelope is an estimate",
+   "notMeasuredSurvey": true,
+   "spans": [
+    [
+     2463,
+     1072,
+     1075
+    ],
+    [
+     2464,
+     1070,
+     1076
+    ],
+    [
+     2465,
+     1069,
+     1076
+    ],
+    [
+     2466,
+     1070,
+     1076
+    ],
+    [
+     2467,
+     1070,
+     1077
+    ],
+    [
+     2468,
+     1070,
+     1076
+    ],
+    [
+     2469,
+     1071,
+     1076
+    ],
+    [
+     2470,
+     1071,
+     1073
+    ]
+   ],
+   "blocks": 200,
+   "snappedToOneColumn": false
+  },
+  {
+   "id": "wat-arun-mondop-4-base",
+   "heroId": "wat-arun-prang-group",
+   "name": "Wat Arun prang group",
+   "partLabel": "mondop 4 \u00b7 mondop base",
+   "block": "minecraft:smooth_quartz",
+   "family": "whitewash",
+   "materialColor": "#d9d4c6",
+   "yFrom": -61,
+   "yTo": -58,
+   "heightConfidence": "interpretive-envelope",
+   "heightSource": "documented type (four cardinal mondops); 17 m envelope is an estimate",
+   "notMeasuredSurvey": true,
+   "spans": [
+    [
+     2489,
+     1061,
+     1062
+    ],
+    [
+     2490,
+     1057,
+     1062
+    ],
+    [
+     2491,
+     1057,
+     1063
+    ],
+    [
+     2492,
+     1056,
+     1063
+    ],
+    [
+     2493,
+     1057,
+     1063
+    ],
+    [
+     2494,
+     1057,
+     1064
+    ],
+    [
+     2495,
+     1057,
+     1063
+    ],
+    [
+     2496,
+     1058,
+     1061
+    ]
+   ],
+   "blocks": 196,
+   "snappedToOneColumn": false
+  },
+  {
+   "id": "wat-arun-satellite-1-terrace-2",
+   "heroId": "wat-arun-prang-group",
+   "name": "Wat Arun prang group",
+   "partLabel": "satellite 1 \u00b7 second terrace",
+   "block": "minecraft:smooth_quartz",
+   "family": "whitewash",
+   "materialColor": "#e2ddd0",
+   "yFrom": -58,
+   "yTo": -55,
+   "heightConfidence": "interpretive-proportion",
+   "heightSource": "proportional schematic \u00b7 51% of central envelope",
+   "notMeasuredSurvey": true,
+   "spans": [
+    [
+     2469,
+     1054,
+     1055
+    ],
+    [
+     2470,
+     1051,
+     1056
+    ],
+    [
+     2471,
+     1049,
+     1056
+    ],
+    [
+     2472,
+     1050,
+     1056
+    ],
+    [
+     2473,
+     1050,
+     1056
+    ],
+    [
+     2474,
+     1050,
+     1057
+    ],
+    [
+     2475,
+     1051,
+     1057
+    ],
+    [
+     2476,
+     1051,
+     1055
+    ]
+   ],
+   "blocks": 200,
+   "snappedToOneColumn": false
+  },
+  {
+   "id": "wat-arun-satellite-2-terrace-2",
+   "heroId": "wat-arun-prang-group",
+   "name": "Wat Arun prang group",
+   "partLabel": "satellite 2 \u00b7 second terrace",
+   "block": "minecraft:smooth_quartz",
+   "family": "whitewash",
+   "materialColor": "#e2ddd0",
+   "yFrom": -58,
+   "yTo": -55,
+   "heightConfidence": "interpretive-proportion",
+   "heightSource": "proportional schematic \u00b7 51% of central envelope",
+   "notMeasuredSurvey": true,
+   "spans": [
+    [
+     2456,
+     1094,
+     1095
+    ],
+    [
+     2457,
+     1090,
+     1095
+    ],
+    [
+     2458,
+     1089,
+     1096
+    ],
+    [
+     2459,
+     1090,
+     1096
+    ],
+    [
+     2460,
+     1090,
+     1096
+    ],
+    [
+     2461,
+     1090,
+     1097
+    ],
+    [
+     2462,
+     1090,
+     1097
+    ],
+    [
+     2463,
+     1091,
+     1094
+    ]
+   ],
+   "blocks": 200,
+   "snappedToOneColumn": false
+  },
+  {
+   "id": "wat-arun-satellite-3-terrace-2",
+   "heroId": "wat-arun-prang-group",
+   "name": "Wat Arun prang group",
+   "partLabel": "satellite 3 \u00b7 second terrace",
+   "block": "minecraft:smooth_quartz",
+   "family": "whitewash",
+   "materialColor": "#e2ddd0",
+   "yFrom": -58,
+   "yTo": -55,
+   "heightConfidence": "interpretive-proportion",
+   "heightSource": "proportional schematic \u00b7 51% of central envelope",
+   "notMeasuredSurvey": true,
+   "spans": [
+    [
+     2496,
+     1106,
+     1109
+    ],
+    [
+     2497,
+     1103,
+     1109
+    ],
+    [
+     2498,
+     1103,
+     1109
+    ],
+    [
+     2499,
+     1103,
+     1109
+    ],
+    [
+     2500,
+     1103,
+     1110
+    ],
+    [
+     2501,
+     1104,
+     1110
+    ],
+    [
+     2502,
+     1104,
+     1110
+    ],
+    [
+     2503,
+     1104,
+     1106
+    ]
+   ],
+   "blocks": 200,
+   "snappedToOneColumn": false
+  },
+  {
+   "id": "wat-arun-satellite-4-terrace-2",
+   "heroId": "wat-arun-prang-group",
+   "name": "Wat Arun prang group",
+   "partLabel": "satellite 4 \u00b7 second terrace",
+   "block": "minecraft:smooth_quartz",
+   "family": "whitewash",
+   "materialColor": "#e2ddd0",
+   "yFrom": -58,
+   "yTo": -55,
+   "heightConfidence": "interpretive-proportion",
+   "heightSource": "proportional schematic \u00b7 51% of central envelope",
+   "notMeasuredSurvey": true,
+   "spans": [
+    [
+     2509,
+     1068,
+     1069
+    ],
+    [
+     2510,
+     1064,
+     1069
+    ],
+    [
+     2511,
+     1063,
+     1070
+    ],
+    [
+     2512,
+     1064,
+     1070
+    ],
+    [
+     2513,
+     1064,
+     1070
+    ],
+    [
+     2514,
+     1064,
+     1070
+    ],
+    [
+     2515,
+     1064,
+     1070
+    ],
+    [
+     2516,
+     1065,
+     1068
+    ]
+   ],
+   "blocks": 192,
+   "snappedToOneColumn": false
+  },
+  {
+   "id": "wat-arun-mondop-1-hall",
+   "heroId": "wat-arun-prang-group",
+   "name": "Wat Arun prang group",
+   "partLabel": "mondop 1 \u00b7 mondop hall",
+   "block": "minecraft:smooth_quartz",
+   "family": "whitewash",
+   "materialColor": "#efece4",
+   "yFrom": -57,
+   "yTo": -53,
+   "heightConfidence": "interpretive-envelope",
+   "heightSource": "documented type (four cardinal mondops); 17 m envelope is an estimate",
+   "notMeasuredSurvey": true,
+   "spans": [
+    [
+     2503,
+     1087,
+     1087
+    ],
+    [
+     2504,
+     1084,
+     1088
+    ],
+    [
+     2505,
+     1084,
+     1089
+    ],
+    [
+     2506,
+     1084,
+     1089
+    ],
+    [
+     2507,
+     1085,
+     1089
+    ],
+    [
+     2508,
+     1085,
+     1089
+    ],
+    [
+     2509,
+     1085,
+     1086
+    ]
+   ],
+   "blocks": 150,
+   "snappedToOneColumn": false
+  },
+  {
+   "id": "wat-arun-mondop-2-hall",
+   "heroId": "wat-arun-prang-group",
+   "name": "Wat Arun prang group",
+   "partLabel": "mondop 2 \u00b7 mondop hall",
+   "block": "minecraft:smooth_quartz",
+   "family": "whitewash",
+   "materialColor": "#efece4",
+   "yFrom": -57,
+   "yTo": -53,
+   "heightConfidence": "interpretive-envelope",
+   "heightSource": "documented type (four cardinal mondops); 17 m envelope is an estimate",
+   "notMeasuredSurvey": true,
+   "spans": [
+    [
+     2477,
+     1099,
+     1101
+    ],
+    [
+     2478,
+     1097,
+     1102
+    ],
+    [
+     2479,
+     1097,
+     1102
+    ],
+    [
+     2480,
+     1097,
+     1102
+    ],
+    [
+     2481,
+     1098,
+     1102
+    ],
+    [
+     2482,
+     1098,
+     1101
+    ]
+   ],
+   "blocks": 150,
+   "snappedToOneColumn": false
+  },
+  {
+   "id": "wat-arun-mondop-3-hall",
+   "heroId": "wat-arun-prang-group",
+   "name": "Wat Arun prang group",
+   "partLabel": "mondop 3 \u00b7 mondop hall",
+   "block": "minecraft:smooth_quartz",
+   "family": "whitewash",
+   "materialColor": "#efece4",
+   "yFrom": -57,
+   "yTo": -53,
+   "heightConfidence": "interpretive-envelope",
+   "heightSource": "documented type (four cardinal mondops); 17 m envelope is an estimate",
+   "notMeasuredSurvey": true,
+   "spans": [
+    [
+     2464,
+     1072,
+     1075
+    ],
+    [
+     2465,
+     1071,
+     1075
+    ],
+    [
+     2466,
+     1071,
+     1075
+    ],
+    [
+     2467,
+     1071,
+     1076
+    ],
+    [
+     2468,
+     1071,
+     1076
+    ],
+    [
+     2469,
+     1071,
+     1073
+    ]
+   ],
+   "blocks": 145,
+   "snappedToOneColumn": false
+  },
+  {
+   "id": "wat-arun-mondop-4-hall",
+   "heroId": "wat-arun-prang-group",
+   "name": "Wat Arun prang group",
+   "partLabel": "mondop 4 \u00b7 mondop hall",
+   "block": "minecraft:smooth_quartz",
+   "family": "whitewash",
+   "materialColor": "#efece4",
+   "yFrom": -57,
+   "yTo": -53,
+   "heightConfidence": "interpretive-envelope",
+   "heightSource": "documented type (four cardinal mondops); 17 m envelope is an estimate",
+   "notMeasuredSurvey": true,
+   "spans": [
+    [
+     2490,
+     1060,
+     1061
+    ],
+    [
+     2490,
+     1062,
+     1062
+    ],
+    [
+     2491,
+     1058,
+     1062
+    ],
+    [
+     2492,
+     1057,
+     1062
+    ],
+    [
+     2493,
+     1058,
+     1063
+    ],
+    [
+     2494,
+     1058,
+     1063
+    ],
+    [
+     2495,
+     1058,
+     1062
+    ],
+    [
+     2496,
+     1059,
+     1059
+    ]
+   ],
+   "blocks": 160,
+   "snappedToOneColumn": false
+  },
+  {
+   "id": "wat-arun-central-terrace-2",
+   "heroId": "wat-arun-prang-group",
+   "name": "Wat Arun prang group",
+   "partLabel": "second terrace",
+   "block": "minecraft:smooth_quartz",
+   "family": "whitewash",
+   "materialColor": "#e2ddd0",
+   "yFrom": -55,
+   "yTo": -49,
+   "heightConfidence": "official-envelope",
+   "heightSource": "Fine Arts Department publication \u00b7 82 m overall envelope",
+   "notMeasuredSurvey": true,
+   "spans": [
+    [
+     2469,
+     1085,
+     1087
+    ],
+    [
+     2470,
+     1082,
+     1089
+    ],
+    [
+     2470,
+     1090,
+     1090
+    ],
+    [
+     2471,
+     1079,
+     1090
+    ],
+    [
+     2472,
+     1076,
+     1091
+    ],
+    [
+     2473,
+     1073,
+     1091
+    ],
+    [
+     2474,
+     1069,
+     1091
+    ],
+    [
+     2475,
+     1066,
+     1092
+    ],
+    [
+     2476,
+     1065,
+     1092
+    ],
+    [
+     2477,
+     1064,
+     1092
+    ],
+    [
+     2478,
+     1064,
+     1093
+    ],
+    [
+     2479,
+     1063,
+     1093
+    ],
+    [
+     2480,
+     1064,
+     1093
+    ],
+    [
+     2481,
+     1064,
+     1093
+    ],
+    [
+     2482,
+     1064,
+     1094
+    ],
+    [
+     2483,
+     1065,
+     1094
+    ],
+    [
+     2484,
+     1065,
+     1094
+    ],
+    [
+     2485,
+     1065,
+     1095
+    ],
+    [
+     2486,
+     1066,
+     1095
+    ],
+    [
+     2487,
+     1066,
+     1095
+    ],
+    [
+     2488,
+     1066,
+     1096
+    ],
+    [
+     2489,
+     1066,
+     1096
+    ],
+    [
+     2490,
+     1067,
+     1096
+    ],
+    [
+     2491,
+     1067,
+     1097
+    ],
+    [
+     2492,
+     1067,
+     1097
+    ],
+    [
+     2493,
+     1068,
+     1097
+    ],
+    [
+     2494,
+     1068,
+     1096
+    ],
+    [
+     2495,
+     1068,
+     1095
+    ],
+    [
+     2496,
+     1069,
+     1096
+    ],
+    [
+     2497,
+     1069,
+     1093
+    ],
+    [
+     2498,
+     1069,
+     1090
+    ],
+    [
+     2499,
+     1070,
+     1086
+    ],
+    [
+     2500,
+     1070,
+     1083
+    ],
+    [
+     2501,
+     1070,
+     1080
+    ],
+    [
+     2502,
+     1072,
+     1077
+    ],
+    [
+     2503,
+     1073,
+     1074
+    ]
+   ],
+   "blocks": 5845,
+   "snappedToOneColumn": false
+  },
+  {
+   "id": "wat-arun-satellite-1-terrace-3",
+   "heroId": "wat-arun-prang-group",
+   "name": "Wat Arun prang group",
+   "partLabel": "satellite 1 \u00b7 third terrace",
+   "block": "minecraft:smooth_quartz",
+   "family": "whitewash",
+   "materialColor": "#d9d4c6",
+   "yFrom": -54,
+   "yTo": -52,
    "heightConfidence": "interpretive-proportion",
    "heightSource": "proportional schematic \u00b7 51% of central envelope",
    "notMeasuredSurvey": true,
    "spans": [
     [
      2470,
-     1054,
-     1054
+     1053,
+     1055
     ],
+    [
+     2471,
+     1050,
+     1055
+    ],
+    [
+     2472,
+     1050,
+     1056
+    ],
+    [
+     2473,
+     1051,
+     1056
+    ],
+    [
+     2474,
+     1051,
+     1056
+    ],
+    [
+     2475,
+     1051,
+     1056
+    ],
+    [
+     2476,
+     1051,
+     1051
+    ],
+    [
+     2476,
+     1052,
+     1053
+    ]
+   ],
+   "blocks": 111,
+   "snappedToOneColumn": false
+  },
+  {
+   "id": "wat-arun-satellite-2-terrace-3",
+   "heroId": "wat-arun-prang-group",
+   "name": "Wat Arun prang group",
+   "partLabel": "satellite 2 \u00b7 third terrace",
+   "block": "minecraft:smooth_quartz",
+   "family": "whitewash",
+   "materialColor": "#d9d4c6",
+   "yFrom": -54,
+   "yTo": -52,
+   "heightConfidence": "interpretive-proportion",
+   "heightSource": "proportional schematic \u00b7 51% of central envelope",
+   "notMeasuredSurvey": true,
+   "spans": [
+    [
+     2457,
+     1092,
+     1095
+    ],
+    [
+     2458,
+     1090,
+     1095
+    ],
+    [
+     2459,
+     1090,
+     1095
+    ],
+    [
+     2460,
+     1090,
+     1096
+    ],
+    [
+     2461,
+     1091,
+     1096
+    ],
+    [
+     2462,
+     1091,
+     1096
+    ],
+    [
+     2463,
+     1092,
+     1092
+    ]
+   ],
+   "blocks": 108,
+   "snappedToOneColumn": false
+  },
+  {
+   "id": "wat-arun-satellite-3-terrace-3",
+   "heroId": "wat-arun-prang-group",
+   "name": "Wat Arun prang group",
+   "partLabel": "satellite 3 \u00b7 third terrace",
+   "block": "minecraft:smooth_quartz",
+   "family": "whitewash",
+   "materialColor": "#d9d4c6",
+   "yFrom": -54,
+   "yTo": -52,
+   "heightConfidence": "interpretive-proportion",
+   "heightSource": "proportional schematic \u00b7 51% of central envelope",
+   "notMeasuredSurvey": true,
+   "spans": [
+    [
+     2496,
+     1107,
+     1107
+    ],
+    [
+     2497,
+     1104,
+     1108
+    ],
+    [
+     2498,
+     1103,
+     1109
+    ],
+    [
+     2499,
+     1104,
+     1109
+    ],
+    [
+     2500,
+     1104,
+     1109
+    ],
+    [
+     2501,
+     1104,
+     1109
+    ],
+    [
+     2502,
+     1104,
+     1108
+    ]
+   ],
+   "blocks": 108,
+   "snappedToOneColumn": false
+  },
+  {
+   "id": "wat-arun-satellite-4-terrace-3",
+   "heroId": "wat-arun-prang-group",
+   "name": "Wat Arun prang group",
+   "partLabel": "satellite 4 \u00b7 third terrace",
+   "block": "minecraft:smooth_quartz",
+   "family": "whitewash",
+   "materialColor": "#d9d4c6",
+   "yFrom": -54,
+   "yTo": -52,
+   "heightConfidence": "interpretive-proportion",
+   "heightSource": "proportional schematic \u00b7 51% of central envelope",
+   "notMeasuredSurvey": true,
+   "spans": [
+    [
+     2510,
+     1066,
+     1069
+    ],
+    [
+     2511,
+     1064,
+     1069
+    ],
+    [
+     2512,
+     1064,
+     1069
+    ],
+    [
+     2513,
+     1064,
+     1070
+    ],
+    [
+     2514,
+     1065,
+     1070
+    ],
+    [
+     2515,
+     1065,
+     1070
+    ],
+    [
+     2516,
+     1066,
+     1066
+    ]
+   ],
+   "blocks": 108,
+   "snappedToOneColumn": false
+  },
+  {
+   "id": "wat-arun-mondop-1-roof-1",
+   "heroId": "wat-arun-prang-group",
+   "name": "Wat Arun prang group",
+   "partLabel": "mondop 1 \u00b7 mondop roof tier 1",
+   "block": "minecraft:blue_terracotta",
+   "family": "glaze_blue",
+   "materialColor": "#dfe5e6",
+   "yFrom": -52,
+   "yTo": -51,
+   "heightConfidence": "interpretive-envelope",
+   "heightSource": "documented type (four cardinal mondops); 17 m envelope is an estimate",
+   "notMeasuredSurvey": true,
+   "spans": [
+    [
+     2504,
+     1086,
+     1088
+    ],
+    [
+     2505,
+     1084,
+     1088
+    ],
+    [
+     2506,
+     1085,
+     1089
+    ],
+    [
+     2507,
+     1085,
+     1089
+    ],
+    [
+     2508,
+     1085,
+     1088
+    ]
+   ],
+   "blocks": 44,
+   "snappedToOneColumn": false
+  },
+  {
+   "id": "wat-arun-mondop-2-roof-1",
+   "heroId": "wat-arun-prang-group",
+   "name": "Wat Arun prang group",
+   "partLabel": "mondop 2 \u00b7 mondop roof tier 1",
+   "block": "minecraft:blue_terracotta",
+   "family": "glaze_blue",
+   "materialColor": "#dfe5e6",
+   "yFrom": -52,
+   "yTo": -51,
+   "heightConfidence": "interpretive-envelope",
+   "heightSource": "documented type (four cardinal mondops); 17 m envelope is an estimate",
+   "notMeasuredSurvey": true,
+   "spans": [
+    [
+     2477,
+     1100,
+     1101
+    ],
+    [
+     2478,
+     1098,
+     1101
+    ],
+    [
+     2479,
+     1097,
+     1102
+    ],
+    [
+     2480,
+     1098,
+     1102
+    ],
+    [
+     2481,
+     1098,
+     1102
+    ],
+    [
+     2482,
+     1098,
+     1098
+    ],
+    [
+     2482,
+     1099,
+     1100
+    ]
+   ],
+   "blocks": 50,
+   "snappedToOneColumn": false
+  },
+  {
+   "id": "wat-arun-mondop-3-roof-1",
+   "heroId": "wat-arun-prang-group",
+   "name": "Wat Arun prang group",
+   "partLabel": "mondop 3 \u00b7 mondop roof tier 1",
+   "block": "minecraft:blue_terracotta",
+   "family": "glaze_blue",
+   "materialColor": "#dfe5e6",
+   "yFrom": -52,
+   "yTo": -51,
+   "heightConfidence": "interpretive-envelope",
+   "heightSource": "documented type (four cardinal mondops); 17 m envelope is an estimate",
+   "notMeasuredSurvey": true,
+   "spans": [
+    [
+     2464,
+     1073,
+     1074
+    ],
+    [
+     2465,
+     1071,
+     1075
+    ],
+    [
+     2466,
+     1071,
+     1075
+    ],
+    [
+     2467,
+     1071,
+     1075
+    ],
+    [
+     2468,
+     1072,
+     1075
+    ],
+    [
+     2469,
+     1072,
+     1072
+    ]
+   ],
+   "blocks": 44,
+   "snappedToOneColumn": false
+  },
+  {
+   "id": "wat-arun-mondop-4-roof-1",
+   "heroId": "wat-arun-prang-group",
+   "name": "Wat Arun prang group",
+   "partLabel": "mondop 4 \u00b7 mondop roof tier 1",
+   "block": "minecraft:blue_terracotta",
+   "family": "glaze_blue",
+   "materialColor": "#dfe5e6",
+   "yFrom": -52,
+   "yTo": -51,
+   "heightConfidence": "interpretive-envelope",
+   "heightSource": "documented type (four cardinal mondops); 17 m envelope is an estimate",
+   "notMeasuredSurvey": true,
+   "spans": [
+    [
+     2490,
+     1061,
+     1061
+    ],
+    [
+     2491,
+     1058,
+     1061
+    ],
+    [
+     2492,
+     1058,
+     1062
+    ],
+    [
+     2493,
+     1058,
+     1062
+    ],
+    [
+     2494,
+     1058,
+     1062
+    ],
+    [
+     2495,
+     1059,
+     1061
+    ]
+   ],
+   "blocks": 46,
+   "snappedToOneColumn": false
+  },
+  {
+   "id": "wat-arun-satellite-1-plinth",
+   "heroId": "wat-arun-prang-group",
+   "name": "Wat Arun prang group",
+   "partLabel": "satellite 1 \u00b7 tower plinth",
+   "block": "minecraft:smooth_quartz",
+   "family": "whitewash",
+   "materialColor": "#ece8de",
+   "yFrom": -51,
+   "yTo": -49,
+   "heightConfidence": "interpretive-proportion",
+   "heightSource": "proportional schematic \u00b7 51% of central envelope",
+   "notMeasuredSurvey": true,
+   "spans": [
     [
      2471,
      1051,
@@ -4394,23 +5732,23 @@
     ],
     [
      2475,
-     1051,
-     1055
+     1052,
+     1054
     ]
    ],
-   "blocks": 468,
+   "blocks": 69,
    "snappedToOneColumn": false
   },
   {
-   "id": "wat-arun-satellite-2-body",
+   "id": "wat-arun-satellite-2-plinth",
    "heroId": "wat-arun-prang-group",
    "name": "Wat Arun prang group",
-   "partLabel": "satellite body 2",
+   "partLabel": "satellite 2 \u00b7 tower plinth",
    "block": "minecraft:smooth_quartz",
    "family": "whitewash",
-   "materialColor": "#e9ddc1",
+   "materialColor": "#ece8de",
    "yFrom": -51,
-   "yTo": -34,
+   "yTo": -49,
    "heightConfidence": "interpretive-proportion",
    "heightSource": "proportional schematic \u00b7 51% of central envelope",
    "notMeasuredSurvey": true,
@@ -4442,30 +5780,30 @@
     ],
     [
      2462,
-     1091,
+     1092,
      1094
     ]
    ],
-   "blocks": 450,
+   "blocks": 72,
    "snappedToOneColumn": false
   },
   {
-   "id": "wat-arun-satellite-3-body",
+   "id": "wat-arun-satellite-3-plinth",
    "heroId": "wat-arun-prang-group",
    "name": "Wat Arun prang group",
-   "partLabel": "satellite body 3",
+   "partLabel": "satellite 3 \u00b7 tower plinth",
    "block": "minecraft:smooth_quartz",
    "family": "whitewash",
-   "materialColor": "#e9ddc1",
+   "materialColor": "#ece8de",
    "yFrom": -51,
-   "yTo": -34,
+   "yTo": -49,
    "heightConfidence": "interpretive-proportion",
    "heightSource": "proportional schematic \u00b7 51% of central envelope",
    "notMeasuredSurvey": true,
    "spans": [
     [
      2497,
-     1105,
+     1106,
      1108
     ],
     [
@@ -4476,7 +5814,7 @@
     [
      2499,
      1104,
-     1109
+     1108
     ],
     [
      2500,
@@ -4494,36 +5832,36 @@
      1106
     ]
    ],
-   "blocks": 468,
+   "blocks": 72,
    "snappedToOneColumn": false
   },
   {
-   "id": "wat-arun-satellite-4-body",
+   "id": "wat-arun-satellite-4-plinth",
    "heroId": "wat-arun-prang-group",
    "name": "Wat Arun prang group",
-   "partLabel": "satellite body 4",
+   "partLabel": "satellite 4 \u00b7 tower plinth",
    "block": "minecraft:smooth_quartz",
    "family": "whitewash",
-   "materialColor": "#e9ddc1",
+   "materialColor": "#ece8de",
    "yFrom": -51,
-   "yTo": -34,
+   "yTo": -49,
    "heightConfidence": "interpretive-proportion",
    "heightSource": "proportional schematic \u00b7 51% of central envelope",
    "notMeasuredSurvey": true,
    "spans": [
     [
      2510,
-     1067,
+     1068,
      1068
     ],
     [
      2511,
      1065,
-     1069
+     1068
     ],
     [
      2512,
-     1064,
+     1065,
      1069
     ],
     [
@@ -4542,320 +5880,1771 @@
      1068
     ]
    ],
-   "blocks": 486,
+   "blocks": 72,
    "snappedToOneColumn": false
   },
   {
-   "id": "wat-arun-central-terrace",
+   "id": "wat-arun-mondop-1-roof-2",
    "heroId": "wat-arun-prang-group",
    "name": "Wat Arun prang group",
-   "partLabel": "processional terrace",
-   "block": "minecraft:smooth_sandstone",
-   "family": "plaster",
-   "materialColor": "#c9ad78",
-   "yFrom": -49,
-   "yTo": -38,
+   "partLabel": "mondop 1 \u00b7 mondop roof tier 2",
+   "block": "minecraft:green_terracotta",
+   "family": "glaze_green",
+   "materialColor": "#eef0ed",
+   "yFrom": -50,
+   "yTo": -49,
+   "heightConfidence": "interpretive-envelope",
+   "heightSource": "documented type (four cardinal mondops); 17 m envelope is an estimate",
+   "notMeasuredSurvey": true,
+   "spans": [
+    [
+     2505,
+     1085,
+     1088
+    ],
+    [
+     2506,
+     1085,
+     1088
+    ],
+    [
+     2507,
+     1086,
+     1088
+    ],
+    [
+     2508,
+     1086,
+     1086
+    ]
+   ],
+   "blocks": 24,
+   "snappedToOneColumn": false
+  },
+  {
+   "id": "wat-arun-mondop-2-roof-2",
+   "heroId": "wat-arun-prang-group",
+   "name": "Wat Arun prang group",
+   "partLabel": "mondop 2 \u00b7 mondop roof tier 2",
+   "block": "minecraft:green_terracotta",
+   "family": "glaze_green",
+   "materialColor": "#eef0ed",
+   "yFrom": -50,
+   "yTo": -49,
+   "heightConfidence": "interpretive-envelope",
+   "heightSource": "documented type (four cardinal mondops); 17 m envelope is an estimate",
+   "notMeasuredSurvey": true,
+   "spans": [
+    [
+     2478,
+     1100,
+     1100
+    ],
+    [
+     2479,
+     1098,
+     1101
+    ],
+    [
+     2480,
+     1099,
+     1101
+    ],
+    [
+     2481,
+     1099,
+     1100
+    ]
+   ],
+   "blocks": 20,
+   "snappedToOneColumn": false
+  },
+  {
+   "id": "wat-arun-mondop-3-roof-2",
+   "heroId": "wat-arun-prang-group",
+   "name": "Wat Arun prang group",
+   "partLabel": "mondop 3 \u00b7 mondop roof tier 2",
+   "block": "minecraft:green_terracotta",
+   "family": "glaze_green",
+   "materialColor": "#eef0ed",
+   "yFrom": -50,
+   "yTo": -49,
+   "heightConfidence": "interpretive-envelope",
+   "heightSource": "documented type (four cardinal mondops); 17 m envelope is an estimate",
+   "notMeasuredSurvey": true,
+   "spans": [
+    [
+     2465,
+     1072,
+     1074
+    ],
+    [
+     2466,
+     1072,
+     1074
+    ],
+    [
+     2467,
+     1072,
+     1075
+    ],
+    [
+     2468,
+     1072,
+     1073
+    ]
+   ],
+   "blocks": 24,
+   "snappedToOneColumn": false
+  },
+  {
+   "id": "wat-arun-mondop-4-roof-2",
+   "heroId": "wat-arun-prang-group",
+   "name": "Wat Arun prang group",
+   "partLabel": "mondop 4 \u00b7 mondop roof tier 2",
+   "block": "minecraft:green_terracotta",
+   "family": "glaze_green",
+   "materialColor": "#eef0ed",
+   "yFrom": -50,
+   "yTo": -49,
+   "heightConfidence": "interpretive-envelope",
+   "heightSource": "documented type (four cardinal mondops); 17 m envelope is an estimate",
+   "notMeasuredSurvey": true,
+   "spans": [
+    [
+     2491,
+     1061,
+     1061
+    ],
+    [
+     2492,
+     1059,
+     1061
+    ],
+    [
+     2493,
+     1059,
+     1061
+    ],
+    [
+     2494,
+     1059,
+     1061
+    ]
+   ],
+   "blocks": 20,
+   "snappedToOneColumn": false
+  },
+  {
+   "id": "wat-arun-central-terrace-3",
+   "heroId": "wat-arun-prang-group",
+   "name": "Wat Arun prang group",
+   "partLabel": "third terrace",
+   "block": "minecraft:smooth_quartz",
+   "family": "whitewash",
+   "materialColor": "#d9d4c6",
+   "yFrom": -48,
+   "yTo": -42,
    "heightConfidence": "official-envelope",
    "heightSource": "Fine Arts Department publication \u00b7 82 m overall envelope",
    "notMeasuredSurvey": true,
    "spans": [
     [
      2471,
-     1079,
-     1083
+     1086,
+     1086
     ],
     [
      2472,
-     1076,
-     1085
+     1083,
+     1086
     ],
     [
-     2473,
-     1073,
+     2472,
+     1087,
      1087
     ],
     [
+     2473,
+     1080,
+     1089
+    ],
+    [
      2474,
-     1070,
+     1077,
      1089
     ],
     [
      2475,
-     1070,
-     1091
+     1074,
+     1089
     ],
     [
      2476,
-     1069,
-     1092
-    ],
-    [
-     2477,
-     1069,
-     1092
-    ],
-    [
-     2478,
-     1068,
-     1093
-    ],
-    [
-     2479,
-     1068,
-     1093
-    ],
-    [
-     2480,
-     1067,
-     1093
-    ],
-    [
-     2481,
-     1067,
-     1094
-    ],
-    [
-     2482,
-     1066,
-     1094
-    ],
-    [
-     2483,
-     1066,
-     1094
-    ],
-    [
-     2484,
-     1065,
-     1095
-    ],
-    [
-     2485,
-     1065,
-     1095
-    ],
-    [
-     2486,
-     1065,
-     1095
-    ],
-    [
-     2487,
-     1066,
-     1095
-    ],
-    [
-     2488,
-     1066,
-     1095
-    ],
-    [
-     2489,
-     1066,
-     1095
-    ],
-    [
-     2490,
-     1067,
-     1094
-    ],
-    [
-     2491,
-     1067,
-     1094
-    ],
-    [
-     2492,
-     1067,
-     1093
-    ],
-    [
-     2493,
-     1068,
-     1092
-    ],
-    [
-     2494,
-     1068,
-     1092
-    ],
-    [
-     2495,
-     1068,
-     1091
-    ],
-    [
-     2496,
-     1069,
-     1091
-    ],
-    [
-     2497,
      1071,
      1090
     ],
     [
-     2498,
-     1073,
+     2477,
+     1068,
      1090
     ],
     [
+     2478,
+     1068,
+     1090
+    ],
+    [
+     2479,
+     1067,
+     1091
+    ],
+    [
+     2480,
+     1066,
+     1091
+    ],
+    [
+     2481,
+     1066,
+     1091
+    ],
+    [
+     2482,
+     1067,
+     1091
+    ],
+    [
+     2483,
+     1067,
+     1092
+    ],
+    [
+     2484,
+     1067,
+     1092
+    ],
+    [
+     2485,
+     1068,
+     1092
+    ],
+    [
+     2486,
+     1068,
+     1093
+    ],
+    [
+     2487,
+     1068,
+     1093
+    ],
+    [
+     2488,
+     1068,
+     1093
+    ],
+    [
+     2489,
+     1069,
+     1094
+    ],
+    [
+     2490,
+     1069,
+     1094
+    ],
+    [
+     2491,
+     1069,
+     1094
+    ],
+    [
+     2492,
+     1070,
+     1093
+    ],
+    [
+     2493,
+     1070,
+     1094
+    ],
+    [
+     2494,
+     1070,
+     1093
+    ],
+    [
+     2495,
+     1071,
+     1092
+    ],
+    [
+     2496,
+     1071,
+     1089
+    ],
+    [
+     2497,
+     1071,
+     1085
+    ],
+    [
+     2498,
+     1072,
+     1082
+    ],
+    [
      2499,
-     1074,
-     1086
+     1073,
+     1079
     ],
     [
      2500,
-     1076,
-     1083
+     1075,
+     1076
+    ]
+   ],
+   "blocks": 4165,
+   "snappedToOneColumn": false
+  },
+  {
+   "id": "wat-arun-satellite-1-body",
+   "heroId": "wat-arun-prang-group",
+   "name": "Wat Arun prang group",
+   "partLabel": "satellite 1 \u00b7 redented tower body",
+   "block": "minecraft:smooth_quartz",
+   "family": "whitewash",
+   "materialColor": "#efece4",
+   "yFrom": -48,
+   "yTo": -43,
+   "heightConfidence": "interpretive-proportion",
+   "heightSource": "proportional schematic \u00b7 51% of central envelope",
+   "notMeasuredSurvey": true,
+   "spans": [
+    [
+     2471,
+     1052,
+     1054
+    ],
+    [
+     2472,
+     1051,
+     1055
+    ],
+    [
+     2473,
+     1051,
+     1055
+    ],
+    [
+     2474,
+     1052,
+     1055
+    ],
+    [
+     2475,
+     1052,
+     1053
+    ]
+   ],
+   "blocks": 114,
+   "snappedToOneColumn": false
+  },
+  {
+   "id": "wat-arun-satellite-2-body",
+   "heroId": "wat-arun-prang-group",
+   "name": "Wat Arun prang group",
+   "partLabel": "satellite 2 \u00b7 redented tower body",
+   "block": "minecraft:smooth_quartz",
+   "family": "whitewash",
+   "materialColor": "#efece4",
+   "yFrom": -48,
+   "yTo": -43,
+   "heightConfidence": "interpretive-proportion",
+   "heightSource": "proportional schematic \u00b7 51% of central envelope",
+   "notMeasuredSurvey": true,
+   "spans": [
+    [
+     2458,
+     1092,
+     1094
+    ],
+    [
+     2459,
+     1091,
+     1095
+    ],
+    [
+     2460,
+     1091,
+     1095
+    ],
+    [
+     2461,
+     1092,
+     1095
+    ],
+    [
+     2462,
+     1092,
+     1092
+    ],
+    [
+     2462,
+     1093,
+     1093
+    ]
+   ],
+   "blocks": 114,
+   "snappedToOneColumn": false
+  },
+  {
+   "id": "wat-arun-satellite-3-body",
+   "heroId": "wat-arun-prang-group",
+   "name": "Wat Arun prang group",
+   "partLabel": "satellite 3 \u00b7 redented tower body",
+   "block": "minecraft:smooth_quartz",
+   "family": "whitewash",
+   "materialColor": "#efece4",
+   "yFrom": -48,
+   "yTo": -43,
+   "heightConfidence": "interpretive-proportion",
+   "heightSource": "proportional schematic \u00b7 51% of central envelope",
+   "notMeasuredSurvey": true,
+   "spans": [
+    [
+     2497,
+     1107,
+     1107
+    ],
+    [
+     2498,
+     1105,
+     1108
+    ],
+    [
+     2499,
+     1104,
+     1108
+    ],
+    [
+     2500,
+     1105,
+     1108
     ],
     [
      2501,
-     1078,
-     1080
+     1105,
+     1108
     ]
    ],
-   "blocks": 8520,
+   "blocks": 108,
+   "snappedToOneColumn": false
+  },
+  {
+   "id": "wat-arun-satellite-4-body",
+   "heroId": "wat-arun-prang-group",
+   "name": "Wat Arun prang group",
+   "partLabel": "satellite 4 \u00b7 redented tower body",
+   "block": "minecraft:smooth_quartz",
+   "family": "whitewash",
+   "materialColor": "#efece4",
+   "yFrom": -48,
+   "yTo": -43,
+   "heightConfidence": "interpretive-proportion",
+   "heightSource": "proportional schematic \u00b7 51% of central envelope",
+   "notMeasuredSurvey": true,
+   "spans": [
+    [
+     2511,
+     1066,
+     1068
+    ],
+    [
+     2512,
+     1065,
+     1068
+    ],
+    [
+     2513,
+     1065,
+     1069
+    ],
+    [
+     2514,
+     1065,
+     1069
+    ],
+    [
+     2515,
+     1067,
+     1067
+    ]
+   ],
+   "blocks": 108,
+   "snappedToOneColumn": false
+  },
+  {
+   "id": "wat-arun-mondop-1-roof-3",
+   "heroId": "wat-arun-prang-group",
+   "name": "Wat Arun prang group",
+   "partLabel": "mondop 1 \u00b7 mondop roof tier 3",
+   "block": "minecraft:blue_terracotta",
+   "family": "glaze_blue",
+   "materialColor": "#dfe5e6",
+   "yFrom": -48,
+   "yTo": -48,
+   "heightConfidence": "interpretive-envelope",
+   "heightSource": "documented type (four cardinal mondops); 17 m envelope is an estimate",
+   "notMeasuredSurvey": true,
+   "spans": [
+    [
+     2505,
+     1087,
+     1087
+    ],
+    [
+     2506,
+     1086,
+     1087
+    ],
+    [
+     2507,
+     1086,
+     1087
+    ]
+   ],
+   "blocks": 5,
+   "snappedToOneColumn": false
+  },
+  {
+   "id": "wat-arun-mondop-2-roof-3",
+   "heroId": "wat-arun-prang-group",
+   "name": "Wat Arun prang group",
+   "partLabel": "mondop 2 \u00b7 mondop roof tier 3",
+   "block": "minecraft:blue_terracotta",
+   "family": "glaze_blue",
+   "materialColor": "#dfe5e6",
+   "yFrom": -48,
+   "yTo": -48,
+   "heightConfidence": "interpretive-envelope",
+   "heightSource": "documented type (four cardinal mondops); 17 m envelope is an estimate",
+   "notMeasuredSurvey": true,
+   "spans": [
+    [
+     2479,
+     1099,
+     1100
+    ],
+    [
+     2480,
+     1099,
+     1100
+    ]
+   ],
+   "blocks": 4,
+   "snappedToOneColumn": false
+  },
+  {
+   "id": "wat-arun-mondop-3-roof-3",
+   "heroId": "wat-arun-prang-group",
+   "name": "Wat Arun prang group",
+   "partLabel": "mondop 3 \u00b7 mondop roof tier 3",
+   "block": "minecraft:blue_terracotta",
+   "family": "glaze_blue",
+   "materialColor": "#dfe5e6",
+   "yFrom": -48,
+   "yTo": -48,
+   "heightConfidence": "interpretive-envelope",
+   "heightSource": "documented type (four cardinal mondops); 17 m envelope is an estimate",
+   "notMeasuredSurvey": true,
+   "spans": [
+    [
+     2466,
+     1072,
+     1074
+    ],
+    [
+     2467,
+     1073,
+     1074
+    ]
+   ],
+   "blocks": 5,
+   "snappedToOneColumn": false
+  },
+  {
+   "id": "wat-arun-mondop-4-roof-3",
+   "heroId": "wat-arun-prang-group",
+   "name": "Wat Arun prang group",
+   "partLabel": "mondop 4 \u00b7 mondop roof tier 3",
+   "block": "minecraft:blue_terracotta",
+   "family": "glaze_blue",
+   "materialColor": "#dfe5e6",
+   "yFrom": -48,
+   "yTo": -48,
+   "heightConfidence": "interpretive-envelope",
+   "heightSource": "documented type (four cardinal mondops); 17 m envelope is an estimate",
+   "notMeasuredSurvey": true,
+   "spans": [
+    [
+     2492,
+     1059,
+     1060
+    ],
+    [
+     2493,
+     1059,
+     1061
+    ]
+   ],
+   "blocks": 5,
+   "snappedToOneColumn": false
+  },
+  {
+   "id": "wat-arun-mondop-1-spire",
+   "heroId": "wat-arun-prang-group",
+   "name": "Wat Arun prang group",
+   "partLabel": "mondop 1 \u00b7 mondop spire",
+   "block": "minecraft:smooth_sandstone",
+   "family": "plaster",
+   "materialColor": "#c9b26a",
+   "yFrom": -47,
+   "yTo": -45,
+   "heightConfidence": "interpretive-envelope",
+   "heightSource": "documented type (four cardinal mondops); 17 m envelope is an estimate",
+   "notMeasuredSurvey": true,
+   "spans": [
+    [
+     2506,
+     1087,
+     1087
+    ]
+   ],
+   "blocks": 3,
+   "snappedToOneColumn": false
+  },
+  {
+   "id": "wat-arun-mondop-2-spire",
+   "heroId": "wat-arun-prang-group",
+   "name": "Wat Arun prang group",
+   "partLabel": "mondop 2 \u00b7 mondop spire",
+   "block": "minecraft:smooth_sandstone",
+   "family": "plaster",
+   "materialColor": "#c9b26a",
+   "yFrom": -47,
+   "yTo": -45,
+   "heightConfidence": "interpretive-envelope",
+   "heightSource": "documented type (four cardinal mondops); 17 m envelope is an estimate",
+   "notMeasuredSurvey": true,
+   "spans": [
+    [
+     2480,
+     1100,
+     1100
+    ]
+   ],
+   "blocks": 3,
+   "snappedToOneColumn": true
+  },
+  {
+   "id": "wat-arun-mondop-3-spire",
+   "heroId": "wat-arun-prang-group",
+   "name": "Wat Arun prang group",
+   "partLabel": "mondop 3 \u00b7 mondop spire",
+   "block": "minecraft:smooth_sandstone",
+   "family": "plaster",
+   "materialColor": "#c9b26a",
+   "yFrom": -47,
+   "yTo": -45,
+   "heightConfidence": "interpretive-envelope",
+   "heightSource": "documented type (four cardinal mondops); 17 m envelope is an estimate",
+   "notMeasuredSurvey": true,
+   "spans": [
+    [
+     2466,
+     1073,
+     1073
+    ]
+   ],
+   "blocks": 3,
+   "snappedToOneColumn": false
+  },
+  {
+   "id": "wat-arun-mondop-4-spire",
+   "heroId": "wat-arun-prang-group",
+   "name": "Wat Arun prang group",
+   "partLabel": "mondop 4 \u00b7 mondop spire",
+   "block": "minecraft:smooth_sandstone",
+   "family": "plaster",
+   "materialColor": "#c9b26a",
+   "yFrom": -47,
+   "yTo": -45,
+   "heightConfidence": "interpretive-envelope",
+   "heightSource": "documented type (four cardinal mondops); 17 m envelope is an estimate",
+   "notMeasuredSurvey": true,
+   "spans": [
+    [
+     2493,
+     1060,
+     1060
+    ]
+   ],
+   "blocks": 3,
+   "snappedToOneColumn": false
+  },
+  {
+   "id": "wat-arun-satellite-1-niche",
+   "heroId": "wat-arun-prang-group",
+   "name": "Wat Arun prang group",
+   "partLabel": "satellite 1 \u00b7 niche level (Indra on Erawan)",
+   "block": "minecraft:blue_terracotta",
+   "family": "glaze_blue",
+   "materialColor": "#dfe3e4",
+   "yFrom": -42,
+   "yTo": -40,
+   "heightConfidence": "interpretive-proportion",
+   "heightSource": "proportional schematic \u00b7 51% of central envelope",
+   "notMeasuredSurvey": true,
+   "spans": [
+    [
+     2471,
+     1053,
+     1054
+    ],
+    [
+     2472,
+     1052,
+     1054
+    ],
+    [
+     2473,
+     1052,
+     1055
+    ],
+    [
+     2474,
+     1052,
+     1055
+    ],
+    [
+     2475,
+     1053,
+     1053
+    ]
+   ],
+   "blocks": 42,
+   "snappedToOneColumn": false
+  },
+  {
+   "id": "wat-arun-satellite-2-niche",
+   "heroId": "wat-arun-prang-group",
+   "name": "Wat Arun prang group",
+   "partLabel": "satellite 2 \u00b7 niche level (Indra on Erawan)",
+   "block": "minecraft:blue_terracotta",
+   "family": "glaze_blue",
+   "materialColor": "#dfe3e4",
+   "yFrom": -42,
+   "yTo": -40,
+   "heightConfidence": "interpretive-proportion",
+   "heightSource": "proportional schematic \u00b7 51% of central envelope",
+   "notMeasuredSurvey": true,
+   "spans": [
+    [
+     2458,
+     1092,
+     1094
+    ],
+    [
+     2459,
+     1092,
+     1094
+    ],
+    [
+     2460,
+     1091,
+     1095
+    ],
+    [
+     2461,
+     1092,
+     1094
+    ]
+   ],
+   "blocks": 42,
+   "snappedToOneColumn": false
+  },
+  {
+   "id": "wat-arun-satellite-3-niche",
+   "heroId": "wat-arun-prang-group",
+   "name": "Wat Arun prang group",
+   "partLabel": "satellite 3 \u00b7 niche level (Indra on Erawan)",
+   "block": "minecraft:blue_terracotta",
+   "family": "glaze_blue",
+   "materialColor": "#dfe3e4",
+   "yFrom": -42,
+   "yTo": -40,
+   "heightConfidence": "interpretive-proportion",
+   "heightSource": "proportional schematic \u00b7 51% of central envelope",
+   "notMeasuredSurvey": true,
+   "spans": [
+    [
+     2498,
+     1105,
+     1108
+    ],
+    [
+     2499,
+     1105,
+     1108
+    ],
+    [
+     2500,
+     1105,
+     1108
+    ],
+    [
+     2501,
+     1105,
+     1107
+    ]
+   ],
+   "blocks": 45,
+   "snappedToOneColumn": false
+  },
+  {
+   "id": "wat-arun-satellite-4-niche",
+   "heroId": "wat-arun-prang-group",
+   "name": "Wat Arun prang group",
+   "partLabel": "satellite 4 \u00b7 niche level (Indra on Erawan)",
+   "block": "minecraft:blue_terracotta",
+   "family": "glaze_blue",
+   "materialColor": "#dfe3e4",
+   "yFrom": -42,
+   "yTo": -40,
+   "heightConfidence": "interpretive-proportion",
+   "heightSource": "proportional schematic \u00b7 51% of central envelope",
+   "notMeasuredSurvey": true,
+   "spans": [
+    [
+     2511,
+     1066,
+     1068
+    ],
+    [
+     2512,
+     1065,
+     1068
+    ],
+    [
+     2513,
+     1065,
+     1069
+    ],
+    [
+     2514,
+     1066,
+     1068
+    ]
+   ],
+   "blocks": 45,
+   "snappedToOneColumn": false
+  },
+  {
+   "id": "wat-arun-central-plinth",
+   "heroId": "wat-arun-prang-group",
+   "name": "Wat Arun prang group",
+   "partLabel": "tower plinth",
+   "block": "minecraft:smooth_quartz",
+   "family": "whitewash",
+   "materialColor": "#ece8de",
+   "yFrom": -41,
+   "yTo": -37,
+   "heightConfidence": "official-envelope",
+   "heightSource": "Fine Arts Department publication \u00b7 82 m overall envelope",
+   "notMeasuredSurvey": true,
+   "spans": [
+    [
+     2474,
+     1084,
+     1084
+    ],
+    [
+     2475,
+     1081,
+     1084
+    ],
+    [
+     2475,
+     1085,
+     1086
+    ],
+    [
+     2476,
+     1078,
+     1087
+    ],
+    [
+     2477,
+     1075,
+     1088
+    ],
+    [
+     2478,
+     1072,
+     1088
+    ],
+    [
+     2479,
+     1071,
+     1088
+    ],
+    [
+     2480,
+     1070,
+     1089
+    ],
+    [
+     2481,
+     1070,
+     1089
+    ],
+    [
+     2482,
+     1069,
+     1089
+    ],
+    [
+     2483,
+     1069,
+     1090
+    ],
+    [
+     2484,
+     1070,
+     1090
+    ],
+    [
+     2485,
+     1070,
+     1090
+    ],
+    [
+     2486,
+     1070,
+     1090
+    ],
+    [
+     2487,
+     1070,
+     1091
+    ],
+    [
+     2488,
+     1071,
+     1091
+    ],
+    [
+     2489,
+     1071,
+     1091
+    ],
+    [
+     2490,
+     1071,
+     1091
+    ],
+    [
+     2491,
+     1072,
+     1091
+    ],
+    [
+     2492,
+     1072,
+     1089
+    ],
+    [
+     2493,
+     1072,
+     1090
+    ],
+    [
+     2494,
+     1073,
+     1088
+    ],
+    [
+     2495,
+     1073,
+     1084
+    ],
+    [
+     2496,
+     1075,
+     1081
+    ],
+    [
+     2497,
+     1076,
+     1078
+    ]
+   ],
+   "blocks": 1960,
+   "snappedToOneColumn": false
+  },
+  {
+   "id": "wat-arun-satellite-1-cob-1",
+   "heroId": "wat-arun-prang-group",
+   "name": "Wat Arun prang group",
+   "partLabel": "satellite 1 \u00b7 corn-cob tier 1",
+   "block": "minecraft:green_terracotta",
+   "family": "glaze_green",
+   "materialColor": "#eef0ed",
+   "yFrom": -39,
+   "yTo": -39,
+   "heightConfidence": "interpretive-proportion",
+   "heightSource": "proportional schematic \u00b7 51% of central envelope",
+   "notMeasuredSurvey": true,
+   "spans": [
+    [
+     2471,
+     1053,
+     1053
+    ],
+    [
+     2472,
+     1052,
+     1054
+    ],
+    [
+     2473,
+     1052,
+     1055
+    ],
+    [
+     2474,
+     1052,
+     1054
+    ]
+   ],
+   "blocks": 11,
+   "snappedToOneColumn": false
+  },
+  {
+   "id": "wat-arun-satellite-2-cob-1",
+   "heroId": "wat-arun-prang-group",
+   "name": "Wat Arun prang group",
+   "partLabel": "satellite 2 \u00b7 corn-cob tier 1",
+   "block": "minecraft:green_terracotta",
+   "family": "glaze_green",
+   "materialColor": "#eef0ed",
+   "yFrom": -39,
+   "yTo": -39,
+   "heightConfidence": "interpretive-proportion",
+   "heightSource": "proportional schematic \u00b7 51% of central envelope",
+   "notMeasuredSurvey": true,
+   "spans": [
+    [
+     2458,
+     1093,
+     1093
+    ],
+    [
+     2458,
+     1094,
+     1094
+    ],
+    [
+     2459,
+     1092,
+     1094
+    ],
+    [
+     2460,
+     1092,
+     1095
+    ],
+    [
+     2461,
+     1092,
+     1094
+    ]
+   ],
+   "blocks": 12,
+   "snappedToOneColumn": false
+  },
+  {
+   "id": "wat-arun-satellite-3-cob-1",
+   "heroId": "wat-arun-prang-group",
+   "name": "Wat Arun prang group",
+   "partLabel": "satellite 3 \u00b7 corn-cob tier 1",
+   "block": "minecraft:green_terracotta",
+   "family": "glaze_green",
+   "materialColor": "#eef0ed",
+   "yFrom": -39,
+   "yTo": -39,
+   "heightConfidence": "interpretive-proportion",
+   "heightSource": "proportional schematic \u00b7 51% of central envelope",
+   "notMeasuredSurvey": true,
+   "spans": [
+    [
+     2498,
+     1105,
+     1108
+    ],
+    [
+     2499,
+     1105,
+     1108
+    ],
+    [
+     2500,
+     1105,
+     1108
+    ],
+    [
+     2501,
+     1106,
+     1107
+    ]
+   ],
+   "blocks": 14,
+   "snappedToOneColumn": false
+  },
+  {
+   "id": "wat-arun-satellite-4-cob-1",
+   "heroId": "wat-arun-prang-group",
+   "name": "Wat Arun prang group",
+   "partLabel": "satellite 4 \u00b7 corn-cob tier 1",
+   "block": "minecraft:green_terracotta",
+   "family": "glaze_green",
+   "materialColor": "#eef0ed",
+   "yFrom": -39,
+   "yTo": -39,
+   "heightConfidence": "interpretive-proportion",
+   "heightSource": "proportional schematic \u00b7 51% of central envelope",
+   "notMeasuredSurvey": true,
+   "spans": [
+    [
+     2511,
+     1067,
+     1068
+    ],
+    [
+     2512,
+     1066,
+     1068
+    ],
+    [
+     2513,
+     1065,
+     1068
+    ],
+    [
+     2514,
+     1066,
+     1068
+    ]
+   ],
+   "blocks": 12,
+   "snappedToOneColumn": false
+  },
+  {
+   "id": "wat-arun-satellite-1-cob-2",
+   "heroId": "wat-arun-prang-group",
+   "name": "Wat Arun prang group",
+   "partLabel": "satellite 1 \u00b7 corn-cob tier 2",
+   "block": "minecraft:blue_terracotta",
+   "family": "glaze_blue",
+   "materialColor": "#dfe5e6",
+   "yFrom": -38,
+   "yTo": -37,
+   "heightConfidence": "interpretive-proportion",
+   "heightSource": "proportional schematic \u00b7 51% of central envelope",
+   "notMeasuredSurvey": true,
+   "spans": [
+    [
+     2471,
+     1053,
+     1053
+    ],
+    [
+     2472,
+     1052,
+     1054
+    ],
+    [
+     2473,
+     1052,
+     1055
+    ],
+    [
+     2474,
+     1052,
+     1054
+    ]
+   ],
+   "blocks": 22,
+   "snappedToOneColumn": false
+  },
+  {
+   "id": "wat-arun-satellite-2-cob-2",
+   "heroId": "wat-arun-prang-group",
+   "name": "Wat Arun prang group",
+   "partLabel": "satellite 2 \u00b7 corn-cob tier 2",
+   "block": "minecraft:blue_terracotta",
+   "family": "glaze_blue",
+   "materialColor": "#dfe5e6",
+   "yFrom": -38,
+   "yTo": -37,
+   "heightConfidence": "interpretive-proportion",
+   "heightSource": "proportional schematic \u00b7 51% of central envelope",
+   "notMeasuredSurvey": true,
+   "spans": [
+    [
+     2458,
+     1093,
+     1093
+    ],
+    [
+     2458,
+     1094,
+     1094
+    ],
+    [
+     2459,
+     1092,
+     1094
+    ],
+    [
+     2460,
+     1092,
+     1095
+    ],
+    [
+     2461,
+     1092,
+     1094
+    ]
+   ],
+   "blocks": 24,
+   "snappedToOneColumn": false
+  },
+  {
+   "id": "wat-arun-satellite-3-cob-2",
+   "heroId": "wat-arun-prang-group",
+   "name": "Wat Arun prang group",
+   "partLabel": "satellite 3 \u00b7 corn-cob tier 2",
+   "block": "minecraft:blue_terracotta",
+   "family": "glaze_blue",
+   "materialColor": "#dfe5e6",
+   "yFrom": -38,
+   "yTo": -37,
+   "heightConfidence": "interpretive-proportion",
+   "heightSource": "proportional schematic \u00b7 51% of central envelope",
+   "notMeasuredSurvey": true,
+   "spans": [
+    [
+     2498,
+     1105,
+     1107
+    ],
+    [
+     2499,
+     1105,
+     1108
+    ],
+    [
+     2500,
+     1105,
+     1108
+    ],
+    [
+     2501,
+     1106,
+     1107
+    ]
+   ],
+   "blocks": 26,
+   "snappedToOneColumn": false
+  },
+  {
+   "id": "wat-arun-satellite-4-cob-2",
+   "heroId": "wat-arun-prang-group",
+   "name": "Wat Arun prang group",
+   "partLabel": "satellite 4 \u00b7 corn-cob tier 2",
+   "block": "minecraft:blue_terracotta",
+   "family": "glaze_blue",
+   "materialColor": "#dfe5e6",
+   "yFrom": -38,
+   "yTo": -37,
+   "heightConfidence": "interpretive-proportion",
+   "heightSource": "proportional schematic \u00b7 51% of central envelope",
+   "notMeasuredSurvey": true,
+   "spans": [
+    [
+     2511,
+     1067,
+     1067
+    ],
+    [
+     2512,
+     1066,
+     1068
+    ],
+    [
+     2513,
+     1065,
+     1068
+    ],
+    [
+     2514,
+     1066,
+     1068
+    ]
+   ],
+   "blocks": 22,
    "snappedToOneColumn": false
   },
   {
    "id": "wat-arun-central-body",
    "heroId": "wat-arun-prang-group",
    "name": "Wat Arun prang group",
-   "partLabel": "central prang body",
+   "partLabel": "redented tower body",
    "block": "minecraft:smooth_quartz",
    "family": "whitewash",
-   "materialColor": "#eee2c5",
-   "yFrom": -37,
-   "yTo": -6,
+   "materialColor": "#efece4",
+   "yFrom": -36,
+   "yTo": -24,
    "heightConfidence": "official-envelope",
    "heightSource": "Fine Arts Department publication \u00b7 82 m overall envelope",
    "notMeasuredSurvey": true,
    "spans": [
     [
-     2475,
-     1081,
-     1081
-    ],
-    [
      2476,
-     1078,
+     1082,
      1083
     ],
     [
      2477,
-     1075,
+     1079,
      1085
     ],
     [
      2478,
-     1073,
+     1075,
      1087
     ],
     [
      2479,
-     1073,
-     1088
+     1072,
+     1087
     ],
     [
      2480,
-     1072,
-     1089
+     1073,
+     1087
     ],
     [
      2481,
-     1072,
-     1089
+     1071,
+     1088
     ],
     [
      2482,
+     1072,
+     1088
+    ],
+    [
+     2483,
+     1070,
+     1088
+    ],
+    [
+     2484,
      1071,
      1089
     ],
     [
-     2483,
-     1071,
-     1090
-    ],
-    [
-     2484,
-     1070,
-     1090
-    ],
-    [
      2485,
-     1070,
-     1090
+     1071,
+     1089
     ],
     [
      2486,
-     1070,
-     1091
+     1071,
+     1089
     ],
     [
      2487,
-     1070,
-     1091
+     1072,
+     1090
     ],
     [
      2488,
-     1071,
+     1072,
      1090
     ],
     [
      2489,
-     1071,
-     1090
+     1072,
+     1089
     ],
     [
      2490,
-     1071,
+     1073,
      1089
     ],
     [
      2491,
-     1072,
-     1089
+     1073,
+     1088
     ],
     [
      2492,
-     1072,
+     1073,
      1088
     ],
     [
      2493,
-     1073,
+     1074,
      1087
     ],
     [
      2494,
      1074,
-     1087
+     1074
     ],
     [
-     2495,
+     2494,
      1076,
      1084
     ],
     [
-     2496,
-     1078,
+     2495,
+     1077,
      1081
     ]
    ],
-   "blocks": 11072,
+   "blocks": 3874,
    "snappedToOneColumn": false
   },
   {
-   "id": "wat-arun-satellite-1-crown",
+   "id": "wat-arun-satellite-1-cob-3",
    "heroId": "wat-arun-prang-group",
    "name": "Wat Arun prang group",
-   "partLabel": "satellite crown 1",
-   "block": "minecraft:smooth_sandstone",
-   "family": "plaster",
-   "materialColor": "#c5aa74",
+   "partLabel": "satellite 1 \u00b7 corn-cob tier 3",
+   "block": "minecraft:green_terracotta",
+   "family": "glaze_green",
+   "materialColor": "#eef0ed",
+   "yFrom": -36,
+   "yTo": -36,
+   "heightConfidence": "interpretive-proportion",
+   "heightSource": "proportional schematic \u00b7 51% of central envelope",
+   "notMeasuredSurvey": true,
+   "spans": [
+    [
+     2471,
+     1053,
+     1053
+    ],
+    [
+     2472,
+     1052,
+     1054
+    ],
+    [
+     2473,
+     1052,
+     1055
+    ],
+    [
+     2474,
+     1052,
+     1054
+    ]
+   ],
+   "blocks": 11,
+   "snappedToOneColumn": false
+  },
+  {
+   "id": "wat-arun-satellite-2-cob-3",
+   "heroId": "wat-arun-prang-group",
+   "name": "Wat Arun prang group",
+   "partLabel": "satellite 2 \u00b7 corn-cob tier 3",
+   "block": "minecraft:green_terracotta",
+   "family": "glaze_green",
+   "materialColor": "#eef0ed",
+   "yFrom": -36,
+   "yTo": -36,
+   "heightConfidence": "interpretive-proportion",
+   "heightSource": "proportional schematic \u00b7 51% of central envelope",
+   "notMeasuredSurvey": true,
+   "spans": [
+    [
+     2458,
+     1093,
+     1093
+    ],
+    [
+     2458,
+     1094,
+     1094
+    ],
+    [
+     2459,
+     1092,
+     1094
+    ],
+    [
+     2460,
+     1092,
+     1095
+    ],
+    [
+     2461,
+     1092,
+     1094
+    ]
+   ],
+   "blocks": 12,
+   "snappedToOneColumn": false
+  },
+  {
+   "id": "wat-arun-satellite-3-cob-3",
+   "heroId": "wat-arun-prang-group",
+   "name": "Wat Arun prang group",
+   "partLabel": "satellite 3 \u00b7 corn-cob tier 3",
+   "block": "minecraft:green_terracotta",
+   "family": "glaze_green",
+   "materialColor": "#eef0ed",
+   "yFrom": -36,
+   "yTo": -36,
+   "heightConfidence": "interpretive-proportion",
+   "heightSource": "proportional schematic \u00b7 51% of central envelope",
+   "notMeasuredSurvey": true,
+   "spans": [
+    [
+     2498,
+     1105,
+     1107
+    ],
+    [
+     2499,
+     1105,
+     1108
+    ],
+    [
+     2500,
+     1105,
+     1108
+    ],
+    [
+     2501,
+     1106,
+     1107
+    ]
+   ],
+   "blocks": 13,
+   "snappedToOneColumn": false
+  },
+  {
+   "id": "wat-arun-satellite-4-cob-3",
+   "heroId": "wat-arun-prang-group",
+   "name": "Wat Arun prang group",
+   "partLabel": "satellite 4 \u00b7 corn-cob tier 3",
+   "block": "minecraft:green_terracotta",
+   "family": "glaze_green",
+   "materialColor": "#eef0ed",
+   "yFrom": -36,
+   "yTo": -36,
+   "heightConfidence": "interpretive-proportion",
+   "heightSource": "proportional schematic \u00b7 51% of central envelope",
+   "notMeasuredSurvey": true,
+   "spans": [
+    [
+     2511,
+     1067,
+     1067
+    ],
+    [
+     2512,
+     1066,
+     1068
+    ],
+    [
+     2513,
+     1066,
+     1068
+    ],
+    [
+     2514,
+     1066,
+     1068
+    ]
+   ],
+   "blocks": 10,
+   "snappedToOneColumn": false
+  },
+  {
+   "id": "wat-arun-satellite-1-cob-4",
+   "heroId": "wat-arun-prang-group",
+   "name": "Wat Arun prang group",
+   "partLabel": "satellite 1 \u00b7 corn-cob tier 4",
+   "block": "minecraft:blue_terracotta",
+   "family": "glaze_blue",
+   "materialColor": "#dfe5e6",
+   "yFrom": -35,
+   "yTo": -34,
+   "heightConfidence": "interpretive-proportion",
+   "heightSource": "proportional schematic \u00b7 51% of central envelope",
+   "notMeasuredSurvey": true,
+   "spans": [
+    [
+     2472,
+     1052,
+     1054
+    ],
+    [
+     2473,
+     1052,
+     1055
+    ],
+    [
+     2474,
+     1052,
+     1054
+    ]
+   ],
+   "blocks": 20,
+   "snappedToOneColumn": false
+  },
+  {
+   "id": "wat-arun-satellite-2-cob-4",
+   "heroId": "wat-arun-prang-group",
+   "name": "Wat Arun prang group",
+   "partLabel": "satellite 2 \u00b7 corn-cob tier 4",
+   "block": "minecraft:blue_terracotta",
+   "family": "glaze_blue",
+   "materialColor": "#dfe5e6",
+   "yFrom": -35,
+   "yTo": -34,
+   "heightConfidence": "interpretive-proportion",
+   "heightSource": "proportional schematic \u00b7 51% of central envelope",
+   "notMeasuredSurvey": true,
+   "spans": [
+    [
+     2458,
+     1093,
+     1093
+    ],
+    [
+     2459,
+     1092,
+     1094
+    ],
+    [
+     2460,
+     1092,
+     1094
+    ],
+    [
+     2461,
+     1092,
+     1094
+    ]
+   ],
+   "blocks": 20,
+   "snappedToOneColumn": false
+  },
+  {
+   "id": "wat-arun-satellite-3-cob-4",
+   "heroId": "wat-arun-prang-group",
+   "name": "Wat Arun prang group",
+   "partLabel": "satellite 3 \u00b7 corn-cob tier 4",
+   "block": "minecraft:blue_terracotta",
+   "family": "glaze_blue",
+   "materialColor": "#dfe5e6",
+   "yFrom": -35,
+   "yTo": -34,
+   "heightConfidence": "interpretive-proportion",
+   "heightSource": "proportional schematic \u00b7 51% of central envelope",
+   "notMeasuredSurvey": true,
+   "spans": [
+    [
+     2498,
+     1105,
+     1107
+    ],
+    [
+     2499,
+     1105,
+     1108
+    ],
+    [
+     2500,
+     1105,
+     1108
+    ],
+    [
+     2501,
+     1106,
+     1107
+    ]
+   ],
+   "blocks": 26,
+   "snappedToOneColumn": false
+  },
+  {
+   "id": "wat-arun-satellite-4-cob-4",
+   "heroId": "wat-arun-prang-group",
+   "name": "Wat Arun prang group",
+   "partLabel": "satellite 4 \u00b7 corn-cob tier 4",
+   "block": "minecraft:blue_terracotta",
+   "family": "glaze_blue",
+   "materialColor": "#dfe5e6",
+   "yFrom": -35,
+   "yTo": -34,
+   "heightConfidence": "interpretive-proportion",
+   "heightSource": "proportional schematic \u00b7 51% of central envelope",
+   "notMeasuredSurvey": true,
+   "spans": [
+    [
+     2511,
+     1067,
+     1067
+    ],
+    [
+     2512,
+     1066,
+     1068
+    ],
+    [
+     2513,
+     1066,
+     1068
+    ],
+    [
+     2514,
+     1066,
+     1068
+    ]
+   ],
+   "blocks": 20,
+   "snappedToOneColumn": false
+  },
+  {
+   "id": "wat-arun-satellite-1-cob-5",
+   "heroId": "wat-arun-prang-group",
+   "name": "Wat Arun prang group",
+   "partLabel": "satellite 1 \u00b7 corn-cob tier 5",
+   "block": "minecraft:green_terracotta",
+   "family": "glaze_green",
+   "materialColor": "#eef0ed",
    "yFrom": -33,
-   "yTo": -26,
+   "yTo": -33,
    "heightConfidence": "interpretive-proportion",
    "heightSource": "proportional schematic \u00b7 51% of central envelope",
    "notMeasuredSurvey": true,
@@ -4876,19 +7665,19 @@
      1054
     ]
    ],
-   "blocks": 72,
+   "blocks": 9,
    "snappedToOneColumn": false
   },
   {
-   "id": "wat-arun-satellite-2-crown",
+   "id": "wat-arun-satellite-2-cob-5",
    "heroId": "wat-arun-prang-group",
    "name": "Wat Arun prang group",
-   "partLabel": "satellite crown 2",
-   "block": "minecraft:smooth_sandstone",
-   "family": "plaster",
-   "materialColor": "#c5aa74",
+   "partLabel": "satellite 2 \u00b7 corn-cob tier 5",
+   "block": "minecraft:green_terracotta",
+   "family": "glaze_green",
+   "materialColor": "#eef0ed",
    "yFrom": -33,
-   "yTo": -26,
+   "yTo": -33,
    "heightConfidence": "interpretive-proportion",
    "heightSource": "proportional schematic \u00b7 51% of central envelope",
    "notMeasuredSurvey": true,
@@ -4906,22 +7695,169 @@
     [
      2461,
      1092,
-     1093
+     1094
     ]
    ],
-   "blocks": 64,
+   "blocks": 9,
    "snappedToOneColumn": false
   },
   {
-   "id": "wat-arun-satellite-3-crown",
+   "id": "wat-arun-satellite-3-cob-5",
    "heroId": "wat-arun-prang-group",
    "name": "Wat Arun prang group",
-   "partLabel": "satellite crown 3",
-   "block": "minecraft:smooth_sandstone",
-   "family": "plaster",
-   "materialColor": "#c5aa74",
+   "partLabel": "satellite 3 \u00b7 corn-cob tier 5",
+   "block": "minecraft:green_terracotta",
+   "family": "glaze_green",
+   "materialColor": "#eef0ed",
    "yFrom": -33,
-   "yTo": -26,
+   "yTo": -33,
+   "heightConfidence": "interpretive-proportion",
+   "heightSource": "proportional schematic \u00b7 51% of central envelope",
+   "notMeasuredSurvey": true,
+   "spans": [
+    [
+     2498,
+     1106,
+     1107
+    ],
+    [
+     2499,
+     1105,
+     1108
+    ],
+    [
+     2500,
+     1105,
+     1107
+    ],
+    [
+     2501,
+     1106,
+     1106
+    ]
+   ],
+   "blocks": 10,
+   "snappedToOneColumn": false
+  },
+  {
+   "id": "wat-arun-satellite-4-cob-5",
+   "heroId": "wat-arun-prang-group",
+   "name": "Wat Arun prang group",
+   "partLabel": "satellite 4 \u00b7 corn-cob tier 5",
+   "block": "minecraft:green_terracotta",
+   "family": "glaze_green",
+   "materialColor": "#eef0ed",
+   "yFrom": -33,
+   "yTo": -33,
+   "heightConfidence": "interpretive-proportion",
+   "heightSource": "proportional schematic \u00b7 51% of central envelope",
+   "notMeasuredSurvey": true,
+   "spans": [
+    [
+     2511,
+     1067,
+     1067
+    ],
+    [
+     2512,
+     1066,
+     1068
+    ],
+    [
+     2513,
+     1066,
+     1068
+    ],
+    [
+     2514,
+     1066,
+     1068
+    ]
+   ],
+   "blocks": 10,
+   "snappedToOneColumn": false
+  },
+  {
+   "id": "wat-arun-satellite-1-cob-6",
+   "heroId": "wat-arun-prang-group",
+   "name": "Wat Arun prang group",
+   "partLabel": "satellite 1 \u00b7 corn-cob tier 6",
+   "block": "minecraft:blue_terracotta",
+   "family": "glaze_blue",
+   "materialColor": "#dfe5e6",
+   "yFrom": -32,
+   "yTo": -31,
+   "heightConfidence": "interpretive-proportion",
+   "heightSource": "proportional schematic \u00b7 51% of central envelope",
+   "notMeasuredSurvey": true,
+   "spans": [
+    [
+     2472,
+     1052,
+     1054
+    ],
+    [
+     2473,
+     1052,
+     1054
+    ],
+    [
+     2474,
+     1052,
+     1052
+    ],
+    [
+     2474,
+     1053,
+     1054
+    ]
+   ],
+   "blocks": 18,
+   "snappedToOneColumn": false
+  },
+  {
+   "id": "wat-arun-satellite-2-cob-6",
+   "heroId": "wat-arun-prang-group",
+   "name": "Wat Arun prang group",
+   "partLabel": "satellite 2 \u00b7 corn-cob tier 6",
+   "block": "minecraft:blue_terracotta",
+   "family": "glaze_blue",
+   "materialColor": "#dfe5e6",
+   "yFrom": -32,
+   "yTo": -31,
+   "heightConfidence": "interpretive-proportion",
+   "heightSource": "proportional schematic \u00b7 51% of central envelope",
+   "notMeasuredSurvey": true,
+   "spans": [
+    [
+     2459,
+     1092,
+     1094
+    ],
+    [
+     2460,
+     1092,
+     1094
+    ],
+    [
+     2461,
+     1093,
+     1094
+    ]
+   ],
+   "blocks": 16,
+   "snappedToOneColumn": false
+  },
+  {
+   "id": "wat-arun-satellite-3-cob-6",
+   "heroId": "wat-arun-prang-group",
+   "name": "Wat Arun prang group",
+   "partLabel": "satellite 3 \u00b7 corn-cob tier 6",
+   "block": "minecraft:blue_terracotta",
+   "family": "glaze_blue",
+   "materialColor": "#dfe5e6",
+   "yFrom": -32,
+   "yTo": -31,
    "heightConfidence": "interpretive-proportion",
    "heightSource": "proportional schematic \u00b7 51% of central envelope",
    "notMeasuredSurvey": true,
@@ -4938,23 +7874,23 @@
     ],
     [
      2500,
-     1106,
+     1105,
      1107
     ]
    ],
-   "blocks": 56,
+   "blocks": 16,
    "snappedToOneColumn": false
   },
   {
-   "id": "wat-arun-satellite-4-crown",
+   "id": "wat-arun-satellite-4-cob-6",
    "heroId": "wat-arun-prang-group",
    "name": "Wat Arun prang group",
-   "partLabel": "satellite crown 4",
-   "block": "minecraft:smooth_sandstone",
-   "family": "plaster",
-   "materialColor": "#c5aa74",
-   "yFrom": -33,
-   "yTo": -26,
+   "partLabel": "satellite 4 \u00b7 corn-cob tier 6",
+   "block": "minecraft:blue_terracotta",
+   "family": "glaze_blue",
+   "materialColor": "#dfe5e6",
+   "yFrom": -32,
+   "yTo": -31,
    "heightConfidence": "interpretive-proportion",
    "heightSource": "proportional schematic \u00b7 51% of central envelope",
    "notMeasuredSurvey": true,
@@ -4971,22 +7907,797 @@
     ],
     [
      2514,
+     1067,
+     1068
+    ]
+   ],
+   "blocks": 16,
+   "snappedToOneColumn": false
+  },
+  {
+   "id": "wat-arun-satellite-1-cob-7",
+   "heroId": "wat-arun-prang-group",
+   "name": "Wat Arun prang group",
+   "partLabel": "satellite 1 \u00b7 corn-cob tier 7",
+   "block": "minecraft:green_terracotta",
+   "family": "glaze_green",
+   "materialColor": "#eef0ed",
+   "yFrom": -30,
+   "yTo": -30,
+   "heightConfidence": "interpretive-proportion",
+   "heightSource": "proportional schematic \u00b7 51% of central envelope",
+   "notMeasuredSurvey": true,
+   "spans": [
+    [
+     2472,
+     1053,
+     1054
+    ],
+    [
+     2473,
+     1052,
+     1054
+    ],
+    [
+     2474,
+     1053,
+     1054
+    ]
+   ],
+   "blocks": 7,
+   "snappedToOneColumn": false
+  },
+  {
+   "id": "wat-arun-satellite-2-cob-7",
+   "heroId": "wat-arun-prang-group",
+   "name": "Wat Arun prang group",
+   "partLabel": "satellite 2 \u00b7 corn-cob tier 7",
+   "block": "minecraft:green_terracotta",
+   "family": "glaze_green",
+   "materialColor": "#eef0ed",
+   "yFrom": -30,
+   "yTo": -30,
+   "heightConfidence": "interpretive-proportion",
+   "heightSource": "proportional schematic \u00b7 51% of central envelope",
+   "notMeasuredSurvey": true,
+   "spans": [
+    [
+     2459,
+     1093,
+     1094
+    ],
+    [
+     2460,
+     1092,
+     1094
+    ],
+    [
+     2461,
+     1093,
+     1094
+    ]
+   ],
+   "blocks": 7,
+   "snappedToOneColumn": false
+  },
+  {
+   "id": "wat-arun-satellite-3-cob-7",
+   "heroId": "wat-arun-prang-group",
+   "name": "Wat Arun prang group",
+   "partLabel": "satellite 3 \u00b7 corn-cob tier 7",
+   "block": "minecraft:green_terracotta",
+   "family": "glaze_green",
+   "materialColor": "#eef0ed",
+   "yFrom": -30,
+   "yTo": -30,
+   "heightConfidence": "interpretive-proportion",
+   "heightSource": "proportional schematic \u00b7 51% of central envelope",
+   "notMeasuredSurvey": true,
+   "spans": [
+    [
+     2498,
+     1106,
+     1106
+    ],
+    [
+     2499,
+     1106,
+     1107
+    ],
+    [
+     2500,
+     1106,
+     1107
+    ]
+   ],
+   "blocks": 5,
+   "snappedToOneColumn": false
+  },
+  {
+   "id": "wat-arun-satellite-4-cob-7",
+   "heroId": "wat-arun-prang-group",
+   "name": "Wat Arun prang group",
+   "partLabel": "satellite 4 \u00b7 corn-cob tier 7",
+   "block": "minecraft:green_terracotta",
+   "family": "glaze_green",
+   "materialColor": "#eef0ed",
+   "yFrom": -30,
+   "yTo": -30,
+   "heightConfidence": "interpretive-proportion",
+   "heightSource": "proportional schematic \u00b7 51% of central envelope",
+   "notMeasuredSurvey": true,
+   "spans": [
+    [
+     2512,
+     1066,
+     1068
+    ],
+    [
+     2513,
+     1066,
+     1068
+    ],
+    [
+     2514,
+     1067,
+     1067
+    ]
+   ],
+   "blocks": 7,
+   "snappedToOneColumn": false
+  },
+  {
+   "id": "wat-arun-satellite-1-cob-8",
+   "heroId": "wat-arun-prang-group",
+   "name": "Wat Arun prang group",
+   "partLabel": "satellite 1 \u00b7 corn-cob tier 8",
+   "block": "minecraft:blue_terracotta",
+   "family": "glaze_blue",
+   "materialColor": "#dfe5e6",
+   "yFrom": -29,
+   "yTo": -28,
+   "heightConfidence": "interpretive-proportion",
+   "heightSource": "proportional schematic \u00b7 51% of central envelope",
+   "notMeasuredSurvey": true,
+   "spans": [
+    [
+     2472,
+     1053,
+     1053
+    ],
+    [
+     2473,
+     1052,
+     1054
+    ],
+    [
+     2474,
+     1053,
+     1053
+    ]
+   ],
+   "blocks": 10,
+   "snappedToOneColumn": false
+  },
+  {
+   "id": "wat-arun-satellite-2-cob-8",
+   "heroId": "wat-arun-prang-group",
+   "name": "Wat Arun prang group",
+   "partLabel": "satellite 2 \u00b7 corn-cob tier 8",
+   "block": "minecraft:blue_terracotta",
+   "family": "glaze_blue",
+   "materialColor": "#dfe5e6",
+   "yFrom": -29,
+   "yTo": -28,
+   "heightConfidence": "interpretive-proportion",
+   "heightSource": "proportional schematic \u00b7 51% of central envelope",
+   "notMeasuredSurvey": true,
+   "spans": [
+    [
+     2459,
+     1093,
+     1093
+    ],
+    [
+     2460,
+     1092,
+     1094
+    ],
+    [
+     2461,
+     1093,
+     1093
+    ]
+   ],
+   "blocks": 10,
+   "snappedToOneColumn": false
+  },
+  {
+   "id": "wat-arun-satellite-3-cob-8",
+   "heroId": "wat-arun-prang-group",
+   "name": "Wat Arun prang group",
+   "partLabel": "satellite 3 \u00b7 corn-cob tier 8",
+   "block": "minecraft:blue_terracotta",
+   "family": "glaze_blue",
+   "materialColor": "#dfe5e6",
+   "yFrom": -29,
+   "yTo": -28,
+   "heightConfidence": "interpretive-proportion",
+   "heightSource": "proportional schematic \u00b7 51% of central envelope",
+   "notMeasuredSurvey": true,
+   "spans": [
+    [
+     2499,
+     1106,
+     1107
+    ],
+    [
+     2500,
+     1106,
+     1107
+    ]
+   ],
+   "blocks": 8,
+   "snappedToOneColumn": false
+  },
+  {
+   "id": "wat-arun-satellite-4-cob-8",
+   "heroId": "wat-arun-prang-group",
+   "name": "Wat Arun prang group",
+   "partLabel": "satellite 4 \u00b7 corn-cob tier 8",
+   "block": "minecraft:blue_terracotta",
+   "family": "glaze_blue",
+   "materialColor": "#dfe5e6",
+   "yFrom": -29,
+   "yTo": -28,
+   "heightConfidence": "interpretive-proportion",
+   "heightSource": "proportional schematic \u00b7 51% of central envelope",
+   "notMeasuredSurvey": true,
+   "spans": [
+    [
+     2512,
+     1067,
+     1067
+    ],
+    [
+     2512,
+     1068,
+     1068
+    ],
+    [
+     2513,
+     1066,
+     1067
+    ],
+    [
+     2514,
+     1067,
+     1067
+    ]
+   ],
+   "blocks": 10,
+   "snappedToOneColumn": false
+  },
+  {
+   "id": "wat-arun-satellite-1-cob-9",
+   "heroId": "wat-arun-prang-group",
+   "name": "Wat Arun prang group",
+   "partLabel": "satellite 1 \u00b7 corn-cob tier 9",
+   "block": "minecraft:green_terracotta",
+   "family": "glaze_green",
+   "materialColor": "#eef0ed",
+   "yFrom": -27,
+   "yTo": -27,
+   "heightConfidence": "interpretive-proportion",
+   "heightSource": "proportional schematic \u00b7 51% of central envelope",
+   "notMeasuredSurvey": true,
+   "spans": [
+    [
+     2472,
+     1053,
+     1053
+    ],
+    [
+     2473,
+     1053,
+     1054
+    ]
+   ],
+   "blocks": 3,
+   "snappedToOneColumn": false
+  },
+  {
+   "id": "wat-arun-satellite-2-cob-9",
+   "heroId": "wat-arun-prang-group",
+   "name": "Wat Arun prang group",
+   "partLabel": "satellite 2 \u00b7 corn-cob tier 9",
+   "block": "minecraft:green_terracotta",
+   "family": "glaze_green",
+   "materialColor": "#eef0ed",
+   "yFrom": -27,
+   "yTo": -27,
+   "heightConfidence": "interpretive-proportion",
+   "heightSource": "proportional schematic \u00b7 51% of central envelope",
+   "notMeasuredSurvey": true,
+   "spans": [
+    [
+     2459,
+     1093,
+     1093
+    ],
+    [
+     2460,
+     1093,
+     1093
+    ]
+   ],
+   "blocks": 2,
+   "snappedToOneColumn": false
+  },
+  {
+   "id": "wat-arun-satellite-3-cob-9",
+   "heroId": "wat-arun-prang-group",
+   "name": "Wat Arun prang group",
+   "partLabel": "satellite 3 \u00b7 corn-cob tier 9",
+   "block": "minecraft:green_terracotta",
+   "family": "glaze_green",
+   "materialColor": "#eef0ed",
+   "yFrom": -27,
+   "yTo": -27,
+   "heightConfidence": "interpretive-proportion",
+   "heightSource": "proportional schematic \u00b7 51% of central envelope",
+   "notMeasuredSurvey": true,
+   "spans": [
+    [
+     2499,
+     1106,
+     1107
+    ],
+    [
+     2500,
+     1106,
+     1106
+    ]
+   ],
+   "blocks": 3,
+   "snappedToOneColumn": false
+  },
+  {
+   "id": "wat-arun-satellite-4-cob-9",
+   "heroId": "wat-arun-prang-group",
+   "name": "Wat Arun prang group",
+   "partLabel": "satellite 4 \u00b7 corn-cob tier 9",
+   "block": "minecraft:green_terracotta",
+   "family": "glaze_green",
+   "materialColor": "#eef0ed",
+   "yFrom": -27,
+   "yTo": -27,
+   "heightConfidence": "interpretive-proportion",
+   "heightSource": "proportional schematic \u00b7 51% of central envelope",
+   "notMeasuredSurvey": true,
+   "spans": [
+    [
+     2512,
+     1067,
+     1067
+    ],
+    [
+     2513,
      1066,
      1067
     ]
    ],
-   "blocks": 64,
+   "blocks": 3,
    "snappedToOneColumn": false
   },
   {
-   "id": "wat-arun-satellite-1-spire",
+   "id": "wat-arun-satellite-1-cob-10",
    "heroId": "wat-arun-prang-group",
    "name": "Wat Arun prang group",
-   "partLabel": "satellite spire 1",
-   "block": "minecraft:gold_block",
-   "family": "gilt",
-   "materialColor": "#e8bd50",
-   "yFrom": -25,
+   "partLabel": "satellite 1 \u00b7 corn-cob tier 10",
+   "block": "minecraft:blue_terracotta",
+   "family": "glaze_blue",
+   "materialColor": "#dfe5e6",
+   "yFrom": -26,
+   "yTo": -25,
+   "heightConfidence": "interpretive-proportion",
+   "heightSource": "proportional schematic \u00b7 51% of central envelope",
+   "notMeasuredSurvey": true,
+   "spans": [
+    [
+     2473,
+     1053,
+     1053
+    ]
+   ],
+   "blocks": 2,
+   "snappedToOneColumn": false
+  },
+  {
+   "id": "wat-arun-satellite-2-cob-10",
+   "heroId": "wat-arun-prang-group",
+   "name": "Wat Arun prang group",
+   "partLabel": "satellite 2 \u00b7 corn-cob tier 10",
+   "block": "minecraft:blue_terracotta",
+   "family": "glaze_blue",
+   "materialColor": "#dfe5e6",
+   "yFrom": -26,
+   "yTo": -25,
+   "heightConfidence": "interpretive-proportion",
+   "heightSource": "proportional schematic \u00b7 51% of central envelope",
+   "notMeasuredSurvey": true,
+   "spans": [
+    [
+     2460,
+     1093,
+     1093
+    ]
+   ],
+   "blocks": 2,
+   "snappedToOneColumn": false
+  },
+  {
+   "id": "wat-arun-satellite-3-cob-10",
+   "heroId": "wat-arun-prang-group",
+   "name": "Wat Arun prang group",
+   "partLabel": "satellite 3 \u00b7 corn-cob tier 10",
+   "block": "minecraft:blue_terracotta",
+   "family": "glaze_blue",
+   "materialColor": "#dfe5e6",
+   "yFrom": -26,
+   "yTo": -25,
+   "heightConfidence": "interpretive-proportion",
+   "heightSource": "proportional schematic \u00b7 51% of central envelope",
+   "notMeasuredSurvey": true,
+   "spans": [
+    [
+     2499,
+     1106,
+     1107
+    ]
+   ],
+   "blocks": 4,
+   "snappedToOneColumn": false
+  },
+  {
+   "id": "wat-arun-satellite-4-cob-10",
+   "heroId": "wat-arun-prang-group",
+   "name": "Wat Arun prang group",
+   "partLabel": "satellite 4 \u00b7 corn-cob tier 10",
+   "block": "minecraft:blue_terracotta",
+   "family": "glaze_blue",
+   "materialColor": "#dfe5e6",
+   "yFrom": -26,
+   "yTo": -25,
+   "heightConfidence": "interpretive-proportion",
+   "heightSource": "proportional schematic \u00b7 51% of central envelope",
+   "notMeasuredSurvey": true,
+   "spans": [
+    [
+     2513,
+     1067,
+     1067
+    ]
+   ],
+   "blocks": 2,
+   "snappedToOneColumn": false
+  },
+  {
+   "id": "wat-arun-satellite-1-cob-11",
+   "heroId": "wat-arun-prang-group",
+   "name": "Wat Arun prang group",
+   "partLabel": "satellite 1 \u00b7 corn-cob tier 11",
+   "block": "minecraft:green_terracotta",
+   "family": "glaze_green",
+   "materialColor": "#eef0ed",
+   "yFrom": -24,
+   "yTo": -24,
+   "heightConfidence": "interpretive-proportion",
+   "heightSource": "proportional schematic \u00b7 51% of central envelope",
+   "notMeasuredSurvey": true,
+   "spans": [
+    [
+     2473,
+     1053,
+     1053
+    ]
+   ],
+   "blocks": 1,
+   "snappedToOneColumn": false
+  },
+  {
+   "id": "wat-arun-satellite-2-cob-11",
+   "heroId": "wat-arun-prang-group",
+   "name": "Wat Arun prang group",
+   "partLabel": "satellite 2 \u00b7 corn-cob tier 11",
+   "block": "minecraft:green_terracotta",
+   "family": "glaze_green",
+   "materialColor": "#eef0ed",
+   "yFrom": -24,
+   "yTo": -24,
+   "heightConfidence": "interpretive-proportion",
+   "heightSource": "proportional schematic \u00b7 51% of central envelope",
+   "notMeasuredSurvey": true,
+   "spans": [
+    [
+     2460,
+     1093,
+     1093
+    ]
+   ],
+   "blocks": 1,
+   "snappedToOneColumn": false
+  },
+  {
+   "id": "wat-arun-satellite-3-cob-11",
+   "heroId": "wat-arun-prang-group",
+   "name": "Wat Arun prang group",
+   "partLabel": "satellite 3 \u00b7 corn-cob tier 11",
+   "block": "minecraft:green_terracotta",
+   "family": "glaze_green",
+   "materialColor": "#eef0ed",
+   "yFrom": -24,
+   "yTo": -24,
+   "heightConfidence": "interpretive-proportion",
+   "heightSource": "proportional schematic \u00b7 51% of central envelope",
+   "notMeasuredSurvey": true,
+   "spans": [
+    [
+     2499,
+     1106,
+     1106
+    ]
+   ],
+   "blocks": 1,
+   "snappedToOneColumn": true
+  },
+  {
+   "id": "wat-arun-satellite-4-cob-11",
+   "heroId": "wat-arun-prang-group",
+   "name": "Wat Arun prang group",
+   "partLabel": "satellite 4 \u00b7 corn-cob tier 11",
+   "block": "minecraft:green_terracotta",
+   "family": "glaze_green",
+   "materialColor": "#eef0ed",
+   "yFrom": -24,
+   "yTo": -24,
+   "heightConfidence": "interpretive-proportion",
+   "heightSource": "proportional schematic \u00b7 51% of central envelope",
+   "notMeasuredSurvey": true,
+   "spans": [
+    [
+     2513,
+     1067,
+     1067
+    ]
+   ],
+   "blocks": 1,
+   "snappedToOneColumn": false
+  },
+  {
+   "id": "wat-arun-central-niche",
+   "heroId": "wat-arun-prang-group",
+   "name": "Wat Arun prang group",
+   "partLabel": "niche level (Indra on Erawan)",
+   "block": "minecraft:blue_terracotta",
+   "family": "glaze_blue",
+   "materialColor": "#dfe3e4",
+   "yFrom": -23,
+   "yTo": -20,
+   "heightConfidence": "official-envelope",
+   "heightSource": "Fine Arts Department publication \u00b7 82 m overall envelope",
+   "notMeasuredSurvey": true,
+   "spans": [
+    [
+     2477,
+     1081,
+     1082
+    ],
+    [
+     2478,
+     1078,
+     1084
+    ],
+    [
+     2479,
+     1075,
+     1086
+    ],
+    [
+     2480,
+     1073,
+     1087
+    ],
+    [
+     2481,
+     1073,
+     1087
+    ],
+    [
+     2482,
+     1072,
+     1087
+    ],
+    [
+     2483,
+     1072,
+     1088
+    ],
+    [
+     2484,
+     1071,
+     1088
+    ],
+    [
+     2485,
+     1072,
+     1088
+    ],
+    [
+     2486,
+     1072,
+     1088
+    ],
+    [
+     2487,
+     1072,
+     1089
+    ],
+    [
+     2488,
+     1073,
+     1089
+    ],
+    [
+     2489,
+     1073,
+     1088
+    ],
+    [
+     2490,
+     1073,
+     1088
+    ],
+    [
+     2491,
+     1074,
+     1087
+    ],
+    [
+     2492,
+     1074,
+     1087
+    ],
+    [
+     2493,
+     1074,
+     1074
+    ],
+    [
+     2493,
+     1076,
+     1085
+    ],
+    [
+     2494,
+     1076,
+     1076
+    ],
+    [
+     2494,
+     1078,
+     1081
+    ],
+    [
+     2495,
+     1078,
+     1078
+    ]
+   ],
+   "blocks": 992,
+   "snappedToOneColumn": false
+  },
+  {
+   "id": "wat-arun-satellite-1-neck",
+   "heroId": "wat-arun-prang-group",
+   "name": "Wat Arun prang group",
+   "partLabel": "satellite 1 \u00b7 neck",
+   "block": "minecraft:smooth_quartz",
+   "family": "whitewash",
+   "materialColor": "#d4d0c4",
+   "yFrom": -23,
+   "yTo": -23,
+   "heightConfidence": "interpretive-proportion",
+   "heightSource": "proportional schematic \u00b7 51% of central envelope",
+   "notMeasuredSurvey": true,
+   "spans": [
+    [
+     2473,
+     1053,
+     1053
+    ]
+   ],
+   "blocks": 1,
+   "snappedToOneColumn": false
+  },
+  {
+   "id": "wat-arun-satellite-2-neck",
+   "heroId": "wat-arun-prang-group",
+   "name": "Wat Arun prang group",
+   "partLabel": "satellite 2 \u00b7 neck",
+   "block": "minecraft:smooth_quartz",
+   "family": "whitewash",
+   "materialColor": "#d4d0c4",
+   "yFrom": -23,
+   "yTo": -23,
+   "heightConfidence": "interpretive-proportion",
+   "heightSource": "proportional schematic \u00b7 51% of central envelope",
+   "notMeasuredSurvey": true,
+   "spans": [
+    [
+     2460,
+     1093,
+     1093
+    ]
+   ],
+   "blocks": 1,
+   "snappedToOneColumn": false
+  },
+  {
+   "id": "wat-arun-satellite-3-neck",
+   "heroId": "wat-arun-prang-group",
+   "name": "Wat Arun prang group",
+   "partLabel": "satellite 3 \u00b7 neck",
+   "block": "minecraft:smooth_quartz",
+   "family": "whitewash",
+   "materialColor": "#d4d0c4",
+   "yFrom": -23,
+   "yTo": -23,
+   "heightConfidence": "interpretive-proportion",
+   "heightSource": "proportional schematic \u00b7 51% of central envelope",
+   "notMeasuredSurvey": true,
+   "spans": [
+    [
+     2499,
+     1106,
+     1106
+    ]
+   ],
+   "blocks": 1,
+   "snappedToOneColumn": true
+  },
+  {
+   "id": "wat-arun-satellite-4-neck",
+   "heroId": "wat-arun-prang-group",
+   "name": "Wat Arun prang group",
+   "partLabel": "satellite 4 \u00b7 neck",
+   "block": "minecraft:smooth_quartz",
+   "family": "whitewash",
+   "materialColor": "#d4d0c4",
+   "yFrom": -23,
+   "yTo": -23,
+   "heightConfidence": "interpretive-proportion",
+   "heightSource": "proportional schematic \u00b7 51% of central envelope",
+   "notMeasuredSurvey": true,
+   "spans": [
+    [
+     2513,
+     1067,
+     1067
+    ]
+   ],
+   "blocks": 1,
+   "snappedToOneColumn": false
+  },
+  {
+   "id": "wat-arun-satellite-1-finial",
+   "heroId": "wat-arun-prang-group",
+   "name": "Wat Arun prang group",
+   "partLabel": "satellite 1 \u00b7 trident finial (nopphasun)",
+   "block": "minecraft:smooth_sandstone",
+   "family": "plaster",
+   "materialColor": "#c9b26a",
+   "yFrom": -22,
    "yTo": -20,
    "heightConfidence": "interpretive-proportion",
    "heightSource": "proportional schematic \u00b7 51% of central envelope",
@@ -4998,18 +8709,18 @@
      1053
     ]
    ],
-   "blocks": 6,
-   "snappedToOneColumn": false
+   "blocks": 3,
+   "snappedToOneColumn": true
   },
   {
-   "id": "wat-arun-satellite-2-spire",
+   "id": "wat-arun-satellite-2-finial",
    "heroId": "wat-arun-prang-group",
    "name": "Wat Arun prang group",
-   "partLabel": "satellite spire 2",
-   "block": "minecraft:gold_block",
-   "family": "gilt",
-   "materialColor": "#e8bd50",
-   "yFrom": -25,
+   "partLabel": "satellite 2 \u00b7 trident finial (nopphasun)",
+   "block": "minecraft:smooth_sandstone",
+   "family": "plaster",
+   "materialColor": "#c9b26a",
+   "yFrom": -22,
    "yTo": -20,
    "heightConfidence": "interpretive-proportion",
    "heightSource": "proportional schematic \u00b7 51% of central envelope",
@@ -5021,18 +8732,18 @@
      1093
     ]
    ],
-   "blocks": 6,
-   "snappedToOneColumn": false
+   "blocks": 3,
+   "snappedToOneColumn": true
   },
   {
-   "id": "wat-arun-satellite-3-spire",
+   "id": "wat-arun-satellite-3-finial",
    "heroId": "wat-arun-prang-group",
    "name": "Wat Arun prang group",
-   "partLabel": "satellite spire 3",
-   "block": "minecraft:gold_block",
-   "family": "gilt",
-   "materialColor": "#e8bd50",
-   "yFrom": -25,
+   "partLabel": "satellite 3 \u00b7 trident finial (nopphasun)",
+   "block": "minecraft:smooth_sandstone",
+   "family": "plaster",
+   "materialColor": "#c9b26a",
+   "yFrom": -22,
    "yTo": -20,
    "heightConfidence": "interpretive-proportion",
    "heightSource": "proportional schematic \u00b7 51% of central envelope",
@@ -5044,18 +8755,18 @@
      1106
     ]
    ],
-   "blocks": 6,
-   "snappedToOneColumn": false
+   "blocks": 3,
+   "snappedToOneColumn": true
   },
   {
-   "id": "wat-arun-satellite-4-spire",
+   "id": "wat-arun-satellite-4-finial",
    "heroId": "wat-arun-prang-group",
    "name": "Wat Arun prang group",
-   "partLabel": "satellite spire 4",
-   "block": "minecraft:gold_block",
-   "family": "gilt",
-   "materialColor": "#e8bd50",
-   "yFrom": -25,
+   "partLabel": "satellite 4 \u00b7 trident finial (nopphasun)",
+   "block": "minecraft:smooth_sandstone",
+   "family": "plaster",
+   "materialColor": "#c9b26a",
+   "yFrom": -22,
    "yTo": -20,
    "heightConfidence": "interpretive-proportion",
    "heightSource": "proportional schematic \u00b7 51% of central envelope",
@@ -5067,19 +8778,569 @@
      1067
     ]
    ],
-   "blocks": 6,
+   "blocks": 3,
+   "snappedToOneColumn": true
+  },
+  {
+   "id": "wat-arun-central-cob-1",
+   "heroId": "wat-arun-prang-group",
+   "name": "Wat Arun prang group",
+   "partLabel": "corn-cob tier 1",
+   "block": "minecraft:green_terracotta",
+   "family": "glaze_green",
+   "materialColor": "#eef0ed",
+   "yFrom": -19,
+   "yTo": -17,
+   "heightConfidence": "official-envelope",
+   "heightSource": "Fine Arts Department publication \u00b7 82 m overall envelope",
+   "notMeasuredSurvey": true,
+   "spans": [
+    [
+     2477,
+     1082,
+     1082
+    ],
+    [
+     2478,
+     1079,
+     1082
+    ],
+    [
+     2478,
+     1084,
+     1084
+    ],
+    [
+     2479,
+     1076,
+     1084
+    ],
+    [
+     2480,
+     1074,
+     1086
+    ],
+    [
+     2481,
+     1074,
+     1087
+    ],
+    [
+     2482,
+     1073,
+     1087
+    ],
+    [
+     2483,
+     1073,
+     1087
+    ],
+    [
+     2484,
+     1072,
+     1088
+    ],
+    [
+     2485,
+     1072,
+     1088
+    ],
+    [
+     2486,
+     1072,
+     1088
+    ],
+    [
+     2487,
+     1073,
+     1088
+    ],
+    [
+     2488,
+     1073,
+     1088
+    ],
+    [
+     2489,
+     1073,
+     1087
+    ],
+    [
+     2490,
+     1074,
+     1087
+    ],
+    [
+     2491,
+     1074,
+     1086
+    ],
+    [
+     2492,
+     1074,
+     1086
+    ],
+    [
+     2493,
+     1076,
+     1083
+    ],
+    [
+     2494,
+     1079,
+     1080
+    ]
+   ],
+   "blocks": 660,
    "snappedToOneColumn": false
   },
   {
-   "id": "wat-arun-central-shoulder",
+   "id": "wat-arun-central-cob-2",
    "heroId": "wat-arun-prang-group",
    "name": "Wat Arun prang group",
-   "partLabel": "upper shoulder",
-   "block": "minecraft:smooth_sandstone",
-   "family": "plaster",
-   "materialColor": "#b8a77e",
-   "yFrom": -5,
-   "yTo": 6,
+   "partLabel": "corn-cob tier 2",
+   "block": "minecraft:blue_terracotta",
+   "family": "glaze_blue",
+   "materialColor": "#dfe5e6",
+   "yFrom": -16,
+   "yTo": -14,
+   "heightConfidence": "official-envelope",
+   "heightSource": "Fine Arts Department publication \u00b7 82 m overall envelope",
+   "notMeasuredSurvey": true,
+   "spans": [
+    [
+     2477,
+     1082,
+     1082
+    ],
+    [
+     2478,
+     1079,
+     1082
+    ],
+    [
+     2479,
+     1076,
+     1084
+    ],
+    [
+     2480,
+     1074,
+     1086
+    ],
+    [
+     2481,
+     1075,
+     1086
+    ],
+    [
+     2482,
+     1073,
+     1087
+    ],
+    [
+     2483,
+     1073,
+     1087
+    ],
+    [
+     2484,
+     1072,
+     1087
+    ],
+    [
+     2485,
+     1072,
+     1088
+    ],
+    [
+     2486,
+     1073,
+     1088
+    ],
+    [
+     2487,
+     1073,
+     1088
+    ],
+    [
+     2488,
+     1073,
+     1088
+    ],
+    [
+     2489,
+     1073,
+     1087
+    ],
+    [
+     2490,
+     1074,
+     1087
+    ],
+    [
+     2491,
+     1074,
+     1086
+    ],
+    [
+     2492,
+     1074,
+     1075
+    ],
+    [
+     2492,
+     1076,
+     1086
+    ],
+    [
+     2493,
+     1077,
+     1083
+    ],
+    [
+     2494,
+     1079,
+     1080
+    ]
+   ],
+   "blocks": 642,
+   "snappedToOneColumn": false
+  },
+  {
+   "id": "wat-arun-central-cob-3",
+   "heroId": "wat-arun-prang-group",
+   "name": "Wat Arun prang group",
+   "partLabel": "corn-cob tier 3",
+   "block": "minecraft:green_terracotta",
+   "family": "glaze_green",
+   "materialColor": "#eef0ed",
+   "yFrom": -13,
+   "yTo": -11,
+   "heightConfidence": "official-envelope",
+   "heightSource": "Fine Arts Department publication \u00b7 82 m overall envelope",
+   "notMeasuredSurvey": true,
+   "spans": [
+    [
+     2478,
+     1080,
+     1082
+    ],
+    [
+     2479,
+     1076,
+     1084
+    ],
+    [
+     2480,
+     1074,
+     1086
+    ],
+    [
+     2481,
+     1075,
+     1086
+    ],
+    [
+     2482,
+     1073,
+     1087
+    ],
+    [
+     2483,
+     1074,
+     1087
+    ],
+    [
+     2484,
+     1072,
+     1087
+    ],
+    [
+     2485,
+     1072,
+     1088
+    ],
+    [
+     2486,
+     1073,
+     1088
+    ],
+    [
+     2487,
+     1073,
+     1088
+    ],
+    [
+     2488,
+     1073,
+     1087
+    ],
+    [
+     2489,
+     1074,
+     1087
+    ],
+    [
+     2490,
+     1074,
+     1086
+    ],
+    [
+     2491,
+     1074,
+     1086
+    ],
+    [
+     2492,
+     1075,
+     1075
+    ],
+    [
+     2492,
+     1076,
+     1086
+    ],
+    [
+     2493,
+     1077,
+     1077
+    ],
+    [
+     2493,
+     1078,
+     1083
+    ],
+    [
+     2494,
+     1079,
+     1080
+    ]
+   ],
+   "blocks": 621,
+   "snappedToOneColumn": false
+  },
+  {
+   "id": "wat-arun-central-cob-4",
+   "heroId": "wat-arun-prang-group",
+   "name": "Wat Arun prang group",
+   "partLabel": "corn-cob tier 4",
+   "block": "minecraft:blue_terracotta",
+   "family": "glaze_blue",
+   "materialColor": "#dfe5e6",
+   "yFrom": -10,
+   "yTo": -8,
+   "heightConfidence": "official-envelope",
+   "heightSource": "Fine Arts Department publication \u00b7 82 m overall envelope",
+   "notMeasuredSurvey": true,
+   "spans": [
+    [
+     2478,
+     1081,
+     1082
+    ],
+    [
+     2479,
+     1077,
+     1082
+    ],
+    [
+     2479,
+     1083,
+     1084
+    ],
+    [
+     2480,
+     1075,
+     1084
+    ],
+    [
+     2480,
+     1085,
+     1086
+    ],
+    [
+     2481,
+     1075,
+     1086
+    ],
+    [
+     2482,
+     1074,
+     1086
+    ],
+    [
+     2483,
+     1074,
+     1087
+    ],
+    [
+     2484,
+     1073,
+     1087
+    ],
+    [
+     2485,
+     1073,
+     1087
+    ],
+    [
+     2486,
+     1073,
+     1088
+    ],
+    [
+     2487,
+     1073,
+     1088
+    ],
+    [
+     2488,
+     1074,
+     1086
+    ],
+    [
+     2489,
+     1074,
+     1087
+    ],
+    [
+     2490,
+     1074,
+     1086
+    ],
+    [
+     2491,
+     1075,
+     1086
+    ],
+    [
+     2492,
+     1077,
+     1085
+    ],
+    [
+     2493,
+     1079,
+     1082
+    ],
+    [
+     2494,
+     1079,
+     1079
+    ]
+   ],
+   "blocks": 567,
+   "snappedToOneColumn": false
+  },
+  {
+   "id": "wat-arun-central-cob-5",
+   "heroId": "wat-arun-prang-group",
+   "name": "Wat Arun prang group",
+   "partLabel": "corn-cob tier 5",
+   "block": "minecraft:green_terracotta",
+   "family": "glaze_green",
+   "materialColor": "#eef0ed",
+   "yFrom": -7,
+   "yTo": -5,
+   "heightConfidence": "official-envelope",
+   "heightSource": "Fine Arts Department publication \u00b7 82 m overall envelope",
+   "notMeasuredSurvey": true,
+   "spans": [
+    [
+     2479,
+     1079,
+     1081
+    ],
+    [
+     2480,
+     1075,
+     1084
+    ],
+    [
+     2481,
+     1075,
+     1086
+    ],
+    [
+     2482,
+     1075,
+     1086
+    ],
+    [
+     2483,
+     1074,
+     1086
+    ],
+    [
+     2484,
+     1074,
+     1087
+    ],
+    [
+     2485,
+     1073,
+     1087
+    ],
+    [
+     2486,
+     1073,
+     1087
+    ],
+    [
+     2487,
+     1074,
+     1088
+    ],
+    [
+     2488,
+     1074,
+     1086
+    ],
+    [
+     2489,
+     1074,
+     1086
+    ],
+    [
+     2490,
+     1075,
+     1085
+    ],
+    [
+     2491,
+     1075,
+     1076
+    ],
+    [
+     2491,
+     1077,
+     1085
+    ],
+    [
+     2492,
+     1077,
+     1084
+    ],
+    [
+     2493,
+     1079,
+     1081
+    ]
+   ],
+   "blocks": 504,
+   "snappedToOneColumn": false
+  },
+  {
+   "id": "wat-arun-central-cob-6",
+   "heroId": "wat-arun-prang-group",
+   "name": "Wat Arun prang group",
+   "partLabel": "corn-cob tier 6",
+   "block": "minecraft:blue_terracotta",
+   "family": "glaze_blue",
+   "materialColor": "#dfe5e6",
+   "yFrom": -4,
+   "yTo": -2,
    "heightConfidence": "official-envelope",
    "heightSource": "Fine Arts Department publication \u00b7 82 m overall envelope",
    "notMeasuredSurvey": true,
@@ -5092,16 +9353,26 @@
     [
      2480,
      1077,
+     1081
+    ],
+    [
+     2480,
+     1083,
      1083
     ],
     [
      2481,
      1076,
+     1083
+    ],
+    [
+     2481,
+     1085,
      1085
     ],
     [
      2482,
-     1075,
+     1076,
      1085
     ],
     [
@@ -5111,7 +9382,7 @@
     ],
     [
      2484,
-     1074,
+     1075,
      1086
     ],
     [
@@ -5127,11 +9398,11 @@
     [
      2487,
      1074,
-     1087
+     1086
     ],
     [
      2488,
-     1074,
+     1075,
      1086
     ],
     [
@@ -5142,78 +9413,15 @@
     [
      2490,
      1075,
-     1085
+     1084
     ],
     [
      2491,
-     1076,
+     1077,
      1085
     ],
     [
      2492,
-     1078,
-     1082
-    ]
-   ],
-   "blocks": 1764,
-   "snappedToOneColumn": false
-  },
-  {
-   "id": "wat-arun-central-crown",
-   "heroId": "wat-arun-prang-group",
-   "name": "Wat Arun prang group",
-   "partLabel": "crown",
-   "block": "minecraft:smooth_sandstone",
-   "family": "plaster",
-   "materialColor": "#e9d39d",
-   "yFrom": 7,
-   "yTo": 12,
-   "heightConfidence": "official-envelope",
-   "heightSource": "Fine Arts Department publication \u00b7 82 m overall envelope",
-   "notMeasuredSurvey": true,
-   "spans": [
-    [
-     2482,
-     1078,
-     1082
-    ],
-    [
-     2483,
-     1077,
-     1084
-    ],
-    [
-     2484,
-     1076,
-     1084
-    ],
-    [
-     2485,
-     1076,
-     1084
-    ],
-    [
-     2486,
-     1076,
-     1085
-    ],
-    [
-     2487,
-     1076,
-     1084
-    ],
-    [
-     2488,
-     1077,
-     1084
-    ],
-    [
-     2489,
-     1077,
-     1083
-    ],
-    [
-     2490,
      1079,
      1082
     ]
@@ -5222,28 +9430,267 @@
    "snappedToOneColumn": false
   },
   {
-   "id": "wat-arun-central-spire",
+   "id": "wat-arun-central-cob-7",
    "heroId": "wat-arun-prang-group",
    "name": "Wat Arun prang group",
-   "partLabel": "spire",
-   "block": "minecraft:gold_block",
-   "family": "gilt",
-   "materialColor": "#d8b85e",
-   "yFrom": 13,
-   "yTo": 17,
+   "partLabel": "corn-cob tier 7",
+   "block": "minecraft:green_terracotta",
+   "family": "glaze_green",
+   "materialColor": "#eef0ed",
+   "yFrom": -1,
+   "yTo": 1,
    "heightConfidence": "official-envelope",
    "heightSource": "Fine Arts Department publication \u00b7 82 m overall envelope",
    "notMeasuredSurvey": true,
    "spans": [
     [
+     2480,
+     1079,
+     1081
+    ],
+    [
+     2481,
+     1077,
+     1083
+    ],
+    [
+     2482,
+     1077,
+     1083
+    ],
+    [
+     2482,
+     1084,
+     1085
+    ],
+    [
+     2483,
+     1075,
+     1085
+    ],
+    [
      2484,
+     1076,
+     1085
+    ],
+    [
+     2485,
+     1075,
+     1086
+    ],
+    [
+     2486,
+     1075,
+     1086
+    ],
+    [
+     2487,
+     1075,
+     1085
+    ],
+    [
+     2488,
+     1075,
+     1085
+    ],
+    [
+     2489,
+     1076,
+     1084
+    ],
+    [
+     2490,
+     1078,
+     1084
+    ],
+    [
+     2491,
+     1080,
+     1083
+    ],
+    [
+     2492,
+     1080,
+     1080
+    ]
+   ],
+   "blocks": 321,
+   "snappedToOneColumn": false
+  },
+  {
+   "id": "wat-arun-central-cob-8",
+   "heroId": "wat-arun-prang-group",
+   "name": "Wat Arun prang group",
+   "partLabel": "corn-cob tier 8",
+   "block": "minecraft:blue_terracotta",
+   "family": "glaze_blue",
+   "materialColor": "#dfe5e6",
+   "yFrom": 2,
+   "yTo": 4,
+   "heightConfidence": "official-envelope",
+   "heightSource": "Fine Arts Department publication \u00b7 82 m overall envelope",
+   "notMeasuredSurvey": true,
+   "spans": [
+    [
+     2481,
+     1079,
+     1080
+    ],
+    [
+     2482,
+     1078,
+     1082
+    ],
+    [
+     2483,
+     1078,
+     1084
+    ],
+    [
+     2484,
+     1076,
+     1085
+    ],
+    [
+     2485,
+     1077,
+     1085
+    ],
+    [
+     2486,
+     1075,
+     1085
+    ],
+    [
+     2487,
+     1076,
+     1084
+    ],
+    [
+     2488,
+     1076,
+     1084
+    ],
+    [
+     2489,
+     1076,
+     1076
+    ],
+    [
+     2489,
+     1078,
+     1083
+    ],
+    [
+     2490,
+     1078,
+     1078
+    ],
+    [
+     2490,
+     1080,
+     1083
+    ],
+    [
+     2491,
+     1080,
+     1080
+    ]
+   ],
+   "blocks": 225,
+   "snappedToOneColumn": false
+  },
+  {
+   "id": "wat-arun-central-cob-9",
+   "heroId": "wat-arun-prang-group",
+   "name": "Wat Arun prang group",
+   "partLabel": "corn-cob tier 9",
+   "block": "minecraft:green_terracotta",
+   "family": "glaze_green",
+   "materialColor": "#eef0ed",
+   "yFrom": 5,
+   "yTo": 7,
+   "heightConfidence": "official-envelope",
+   "heightSource": "Fine Arts Department publication \u00b7 82 m overall envelope",
+   "notMeasuredSurvey": true,
+   "spans": [
+    [
+     2482,
+     1079,
+     1080
+    ],
+    [
+     2483,
+     1078,
+     1082
+    ],
+    [
+     2484,
+     1077,
+     1084
+    ],
+    [
+     2485,
+     1077,
+     1084
+    ],
+    [
+     2486,
+     1076,
+     1084
+    ],
+    [
+     2487,
+     1077,
+     1083
+    ],
+    [
+     2488,
+     1077,
+     1082
+    ],
+    [
+     2489,
      1079,
      1082
     ],
     [
+     2490,
+     1080,
+     1080
+    ]
+   ],
+   "blocks": 150,
+   "snappedToOneColumn": false
+  },
+  {
+   "id": "wat-arun-central-cob-10",
+   "heroId": "wat-arun-prang-group",
+   "name": "Wat Arun prang group",
+   "partLabel": "corn-cob tier 10",
+   "block": "minecraft:blue_terracotta",
+   "family": "glaze_blue",
+   "materialColor": "#dfe5e6",
+   "yFrom": 8,
+   "yTo": 10,
+   "heightConfidence": "official-envelope",
+   "heightSource": "Fine Arts Department publication \u00b7 82 m overall envelope",
+   "notMeasuredSurvey": true,
+   "spans": [
+    [
+     2483,
+     1079,
+     1080
+    ],
+    [
+     2484,
+     1079,
+     1081
+    ],
+    [
      2485,
      1078,
-     1082
+     1083
     ],
     [
      2486,
@@ -5261,26 +9708,59 @@
      1082
     ]
    ],
-   "blocks": 120,
+   "blocks": 78,
    "snappedToOneColumn": false
   },
   {
-   "id": "wat-arun-central-finial",
+   "id": "wat-arun-central-cob-11",
    "heroId": "wat-arun-prang-group",
    "name": "Wat Arun prang group",
-   "partLabel": "gilded finial",
-   "block": "minecraft:gold_block",
-   "family": "gilt",
-   "materialColor": "#f4c84d",
-   "yFrom": 18,
-   "yTo": 20,
+   "partLabel": "corn-cob tier 11",
+   "block": "minecraft:green_terracotta",
+   "family": "glaze_green",
+   "materialColor": "#eef0ed",
+   "yFrom": 11,
+   "yTo": 13,
    "heightConfidence": "official-envelope",
    "heightSource": "Fine Arts Department publication \u00b7 82 m overall envelope",
    "notMeasuredSurvey": true,
    "spans": [
     [
      2485,
+     1079,
+     1081
+    ],
+    [
+     2486,
+     1079,
+     1081
+    ],
+    [
+     2487,
      1080,
+     1081
+    ]
+   ],
+   "blocks": 24,
+   "snappedToOneColumn": false
+  },
+  {
+   "id": "wat-arun-central-neck",
+   "heroId": "wat-arun-prang-group",
+   "name": "Wat Arun prang group",
+   "partLabel": "neck",
+   "block": "minecraft:smooth_quartz",
+   "family": "whitewash",
+   "materialColor": "#d4d0c4",
+   "yFrom": 14,
+   "yTo": 15,
+   "heightConfidence": "official-envelope",
+   "heightSource": "Fine Arts Department publication \u00b7 82 m overall envelope",
+   "notMeasuredSurvey": true,
+   "spans": [
+    [
+     2485,
+     1079,
      1081
     ],
     [
@@ -5294,7 +9774,30 @@
      1080
     ]
    ],
-   "blocks": 18,
+   "blocks": 14,
+   "snappedToOneColumn": false
+  },
+  {
+   "id": "wat-arun-central-finial",
+   "heroId": "wat-arun-prang-group",
+   "name": "Wat Arun prang group",
+   "partLabel": "trident finial (nopphasun)",
+   "block": "minecraft:smooth_sandstone",
+   "family": "plaster",
+   "materialColor": "#c9b26a",
+   "yFrom": 16,
+   "yTo": 20,
+   "heightConfidence": "official-envelope",
+   "heightSource": "Fine Arts Department publication \u00b7 82 m overall envelope",
+   "notMeasuredSurvey": true,
+   "spans": [
+    [
+     2486,
+     1080,
+     1080
+    ]
+   ],
+   "blocks": 5,
    "snappedToOneColumn": false
   },
   {

@@ -140,11 +140,17 @@ def test_the_height_port_matches_the_atlas() -> None:
 def test_hidden_boxes_are_not_counted_as_evidence() -> None:
     tally = json.loads((SITE / "app/data/evidence-tally.json").read_text(encoding="utf-8"))
     _, layers = load_all()
-    hidden = {layer: sum(1 for f in feats if f["properties"].get("hide_3d") is True) for layer, feats in layers.items()}
+    # A box re-massed by build-temple-roofs.py is still drawn (as walls and a
+    # roof) and counted once, in detail; its landmark twin is a duplicate and
+    # is not drawn. Neither is "hidden" in the sense the tally reports.
+    def roofed(f):
+        return str(f["properties"].get("hidden_by", "")).startswith("temple-roof:")
+    hidden = {layer: sum(1 for f in feats if f["properties"].get("hide_3d") is True and not roofed(f))
+              for layer, feats in layers.items()}
     check("evidence-tally.json records the hidden counts", tally.get("hidden") == hidden,
           f"tally={tally.get('hidden')} files={hidden}")
     drawn_detail = len(layers["detail"]) - hidden["detail"]
-    drawn_landmarks = len(layers["landmarks"]) - hidden["landmarks"]
+    drawn_landmarks = sum(1 for f in layers["landmarks"] if f["properties"].get("hide_3d") is not True)
     heroes = len(json.loads(H.HERO.read_text(encoding="utf-8"))["features"])
     # The fourth extruded layer, the screened shophouses, is counted where it
     # is extruded; test-flag-candidates-over-detail.py checks that half.

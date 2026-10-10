@@ -6,11 +6,11 @@
     "/data/bangkok-rowhouse-footprint-candidates.geojson"
   ],
   "byTier": {
-    "official": 7,
+    "official": 19,
     "measured": 5986,
-    "curated": 132,
+    "curated": 147,
     "typological": 243,
-    "inferred": 4309
+    "inferred": 4333
   },
   "detailSources": {
     "override-id": 7,
@@ -25,14 +25,18 @@
     "clamped": 1
   },
   "heroConfidences": {
-    "official-envelope": 7,
-    "interpretive-proportion": 16,
-    "interpretive-envelope": 65
+    "official-envelope": 19,
+    "interpretive-proportion": 76,
+    "interpretive-envelope": 89
   },
-  "landmarks": 61,
+  "landmarks": 16,
   "hidden": {
     "detail": 13,
     "landmarks": 12
+  },
+  "roofed": {
+    "detail": 367,
+    "landmarkTwins": 45
   },
   "candidateBases": {
     "modal-storeys": 1023,
@@ -42,5 +46,5 @@
     "extruded": 1266,
     "onDetailBox": 1167
   },
-  "total": 10677
+  "total": 10728
 }

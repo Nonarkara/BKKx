@@ -981,24 +981,50 @@ test("builds Wat Arun, Wat Phra Kaew and Wat Pho as sourced, evidence-labelled h
   assert.equal(source.elements.length, 5, "Wat Arun source snapshot must carry one central and four satellite footprints");
   assert.match(source.attribution, /OpenStreetMap contributors/);
   assert.equal(source.retrieved_at, "2026-08-17");
-  assert.equal(hero.featureCount, 88);
   assert.equal(hero.features.length, hero.featureCount);
-  assert.deepEqual(hero.complexes, {
-    "wat-arun-prang-group": 23,
-    "wat-phra-kaew-hero-structures": 20,
-    "wat-pho-four-great-chedis": 24,
-    "loha-prasat": 4,
-    "dusit-maha-prasat": 5,
-    "aphonphimok-prasat": 4,
-    "siwalai-maha-prasat": 4,
-    "golden-mount-chedi": 4,
-  });
+  // The per-complex totals are derived by the generator, so they must add up
+  // to the file rather than to a number someone typed (it said 23 for Wat
+  // Arun after the model had grown to 119).
+  const derived = {};
+  const COMPLEX_OF = {
+    "grand-palace-siratana-chedi": "wat-phra-kaew-hero-structures",
+    "grand-palace-phra-mondop": "wat-phra-kaew-hero-structures",
+    "grand-palace-thepbidorn": "wat-phra-kaew-hero-structures",
+    "wat-pho-srisanphetdayan": "wat-pho-four-great-chedis",
+    "wat-pho-dilok": "wat-pho-four-great-chedis",
+    "wat-pho-munibat": "wat-pho-four-great-chedis",
+    "wat-pho-srisuriyothai": "wat-pho-four-great-chedis",
+  };
+  for (const f of hero.features) {
+    const key = COMPLEX_OF[f.properties.hero_id] ?? f.properties.hero_id;
+    derived[key] = (derived[key] ?? 0) + 1;
+  }
+  assert.deepEqual(hero.complexes, derived);
+  // Wat Arun at architectural resolution: one central prang and four
+  // satellites built to the same redented profile (terraces, body, niche,
+  // eleven corn-cob tiers, neck, finial), and four cardinal mondops.
+  const arun = hero.features.filter((f) => f.properties.hero_id === "wat-arun-prang-group");
+  const central = arun.filter((f) => f.properties.kind === "hero_prang");
+  const satellites = arun.filter((f) => f.properties.kind === "satellite_prang");
+  const mondops = arun.filter((f) => f.properties.kind === "hero_mondop");
+  assert.equal(central.filter((f) => /-cob-/.test(f.properties.id)).length, 11, "eleven corn-cob tiers");
+  assert.equal(satellites.length, central.length * 4, "four satellites on the central profile");
+  assert.equal(new Set(mondops.map((f) => f.properties.id.split("-").slice(0, 4).join("-"))).size, 4, "four mondops");
+  assert.ok(central.every((f) => f.geometry.coordinates[0].length === 21), "central tiers are redented: 20 vertices + closure");
+  assert.ok(mondops.every((f) => f.properties.height_confidence === "interpretive-envelope"),
+    "mondop heights are an envelope, not a published dimension");
+  const cob = central.filter((f) => /-cob-/.test(f.properties.id))
+    .sort((a, b) => a.properties.base_height - b.properties.base_height);
+  const width = (f) => {
+    const xs = f.geometry.coordinates[0].map((q) => q[0]);
+    return Math.max(...xs) - Math.min(...xs);
+  };
+  assert.ok(cob.every((f, i) => i === 0 || width(f) <= width(cob[i - 1])), "the corn-cob narrows upward");
+  assert.ok(width(cob[5]) > 0.7 * width(cob[0]), "and stays full at mid-height: a bullet, not a cone");
   assert.match(hero.modelStatus, /not a measured conservation model/i);
   assert.match(hero.sourceConflict, /Fine Arts: 82 m/);
   assert.match(hero.sourceConflict, /BMA Bangkok Yai: 67 m/);
   assert.equal(Math.max(...hero.features.map((feature) => feature.properties.height)), 82);
-  assert.equal(hero.features.filter((feature) => feature.properties.kind === "hero_prang").length, 7);
-  assert.equal(hero.features.filter((feature) => feature.properties.kind === "satellite_prang").length, 16);
   assert.equal(hero.features.filter((feature) => feature.properties.model_status === "official-plan matched schematic").length, 33);
   assert.equal(hero.features.filter((feature) => feature.properties.kind === "hero_wat_pho_chedi").length, 24);
   assert.equal(new Set(hero.features.filter((feature) => feature.properties.kind === "hero_wat_pho_chedi").map((feature) => feature.properties.hero_id)).size, 4);
@@ -1039,7 +1065,9 @@ test("the 3D atlas shell renders the 5 POI layer toggles", async () => {
   assert.match(html, /9,275/);
   assert.match(html, /full-resolution OSM footprints/);
   assert.match(html, /evidence-labelled schematic, not measured conservation documentation/);
-  assert.match(html, /88(?:<!-- -->)? hero parts across Wat Arun, Wat Phra Kaew, Wat Pho, Loha Prasat, the palace prasats and the Golden Mount/);
+  // Count read from the hero file, not typed: it was pinned at 88.
+  const heroParts = JSON.parse((await import("node:fs")).readFileSync(new URL("../public/data/bkk-hero-monuments.geojson", import.meta.url), "utf8")).features.length;
+  assert.match(html, new RegExp(`${heroParts}(?:<!-- -->)? hero parts across Wat Arun, Wat Phra Kaew, Wat Pho, Loha Prasat, the palace prasats and the Golden Mount`));
   assert.match(html, /Evidence-labelled hero model/);
 });
 

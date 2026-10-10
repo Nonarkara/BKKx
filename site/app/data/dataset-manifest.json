@@ -17,17 +17,17 @@
     ]
   },
   "/data/bkk-heritage-detail.geojson": {
-    "bytes": 3803678,
-    "sha256": "60cf55f1acdfeb62ebea7de7bcfffd0beab30c967a9a934ca8fd9db7cacc62fc",
+    "bytes": 3820577,
+    "sha256": "9d8bb2341cd4edb8e6dea2ed7216f6733d4f94b7f71c2fd9522e14c2b1d4910b",
     "features": 9275,
     "kinds": [
       "Polygon"
     ]
   },
   "/data/bkk-hero-monuments.geojson": {
-    "bytes": 116441,
-    "sha256": "048edc268ddb71de1200d69c1486baa1bd52b10a2c5c13c07407a1257b693bb6",
-    "features": 88,
+    "bytes": 281116,
+    "sha256": "70bccc73a759d106bf703598ff8959b17d0358a3af4e380f190cc3f0c415f640",
+    "features": 184,
     "kinds": [
       "Polygon"
     ]
@@ -41,9 +41,17 @@
     ]
   },
   "/data/bkk-landmarks.geojson": {
-    "bytes": 43609,
-    "sha256": "a9af463d96687f7f9483ce100bb896b38c8ebdad1735e9e94d1d7f122857b654",
+    "bytes": 45696,
+    "sha256": "2ba983c667d215c50e829637e604d26fc81fbb921c986aa42f80303c91242cf8",
     "features": 73,
+    "kinds": [
+      "Polygon"
+    ]
+  },
+  "/data/bkk-temple-roofs.geojson": {
+    "bytes": 1719353,
+    "sha256": "cfb9bd81288767bf3e64d289a611e98dcfeac09803ae68a5f72d3e78c8421afa",
+    "features": 2315,
     "kinds": [
       "Polygon"
     ]

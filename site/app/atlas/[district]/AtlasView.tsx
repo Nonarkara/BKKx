@@ -83,7 +83,7 @@ const NASA_AEROSOL_SOURCE =
 
 const HERITAGE_DETAIL_COUNT = 9_275;
 const HERITAGE_LANDMARK_PART_COUNT = 73;
-const HERO_MONUMENT_PART_COUNT = 88;
+
 const HERITAGE_DETAIL_NOTE =
   "Full-resolution OpenStreetMap footprints with curated typology heights. Hero monuments use official records and OSM footprints; tiering remains evidence-labelled schematic, not measured conservation documentation. Screened shophouse candidates extrude at the legal storey height (3.5 m ground floor, 3 m above) where Overture is silent — that default is the modal known value, not a survey of the openings.";
 
@@ -234,6 +234,11 @@ const EVIDENCE_INFERRED_SHARE = Math.round(
 // Boxes a hero model replaced. Flagged at build time by
 // scripts/hide-under-heroes.py, filtered out of the detail and landmark
 // layers above, and therefore absent from every count in this legend.
+// Hero parts, counted at build time from the hero layer itself (the evidence
+// tally tallies every part by height_confidence). This was a typed 88 and
+// went stale the day Wat Arun was rebuilt at 119 parts.
+const HERO_MONUMENT_PART_COUNT = Object.values(EVIDENCE_TALLY.heroConfidences).reduce((a, b) => a + b, 0);
+const ROOFED_BUILDINGS = EVIDENCE_TALLY.roofed.detail;
 const EVIDENCE_HIDDEN = EVIDENCE_TALLY.hidden.detail + EVIDENCE_TALLY.hidden.landmarks;
 // The screened shophouses: extruded at statutory storey heights where no OSM
 // footprint stands, outlined only where one does. Counted the same way.
@@ -1184,6 +1189,15 @@ export function AtlasView({ world, embedded = false, initialView, floodEdition =
               data: "/data/bkk-landmarks.geojson",
               attribution: "BKKx interpretive landmark massing",
             });
+            // Temple halls, chedis and the eight Atthamaha prangs re-massed by
+            // type (scripts/build-temple-roofs.py). Each replaces a detail box
+            // flagged hide_3d, so a building is drawn once; the height and its
+            // source are the detail layer's own.
+            map.addSource("bkkx-temple-roofs-src", {
+              type: "geojson",
+              data: "/data/bkk-temple-roofs.geojson",
+              attribution: "© OpenStreetMap contributors · BKKx typological roofs",
+            });
             map.addSource("bkkx-hero-monuments-src", {
               type: "geojson",
               data: "/data/bkk-hero-monuments.geojson",
@@ -1222,6 +1236,19 @@ export function AtlasView({ world, embedded = false, initialView, floodEdition =
               filter: ["!=", ["get", "hide_3d"], true],
               paint: {
                 "fill-extrusion-color": HERITAGE_LANDMARK_COLOR,
+                "fill-extrusion-height": ["coalesce", ["get", "height"], 12],
+                "fill-extrusion-base": ["coalesce", ["get", "base_height"], 0],
+                "fill-extrusion-opacity": 1,
+                "fill-extrusion-vertical-gradient": true,
+              },
+            });
+            map.addLayer({
+              id: "bkkx-temple-roofs",
+              type: "fill-extrusion",
+              source: "bkkx-temple-roofs-src",
+              minzoom: 13.5,
+              paint: {
+                "fill-extrusion-color": ["coalesce", ["get", "material_color"], "#c4572c"],
                 "fill-extrusion-height": ["coalesce", ["get", "height"], 12],
                 "fill-extrusion-base": ["coalesce", ["get", "base_height"], 0],
                 "fill-extrusion-opacity": 1,
@@ -1301,7 +1328,7 @@ export function AtlasView({ world, embedded = false, initialView, floodEdition =
               setSelectedCandidate(null);
               setSelectedMobility(null);
             };
-            for (const layerId of ["bkkx-heritage-landmarks", "bkkx-hero-monuments"]) {
+            for (const layerId of ["bkkx-heritage-landmarks", "bkkx-temple-roofs", "bkkx-hero-monuments"]) {
               map.on("click", layerId, inspectArchitecture);
               map.on("mouseenter", layerId, () => { map.getCanvas().style.cursor = "pointer"; });
               map.on("mouseleave", layerId, () => { map.getCanvas().style.cursor = ""; });
@@ -1942,6 +1969,7 @@ export function AtlasView({ world, embedded = false, initialView, floodEdition =
       "bkkx-heritage-detail",
       "bkkx-heritage-landmarks",
       "bkkx-heritage-landmark-labels",
+      "bkkx-temple-roofs",
       "bkkx-hero-monuments",
       "bkkx-hero-monument-labels",
     ]) {
@@ -1959,6 +1987,14 @@ export function AtlasView({ world, embedded = false, initialView, floodEdition =
     const repaint: [string, maplibregl.ExpressionSpecification | string][] = [
       ["bkkx-heritage-detail", evidenceMode ? EVIDENCE_DETAIL_COLOR : HERITAGE_DETAIL_COLOR],
       ["bkkx-heritage-landmarks", evidenceMode ? EVIDENCE_LANDMARK_COLOR : HERITAGE_LANDMARK_COLOR],
+      // Same expression as the detail layer: every roof part carries its
+      // building's height_source, so a roofed hall keeps its evidence colour.
+      [
+        "bkkx-temple-roofs",
+        evidenceMode
+          ? EVIDENCE_DETAIL_COLOR
+          : (["coalesce", ["get", "material_color"], "#c4572c"] as maplibregl.ExpressionSpecification),
+      ],
       [
         "bkkx-hero-monuments",
         evidenceMode
@@ -2320,6 +2356,7 @@ export function AtlasView({ world, embedded = false, initialView, floodEdition =
               {showArchitecturalDetail && !evidenceMode ? <span><i className="key-building key-fabric" />Old Town full footprints</span> : null}
               {showArchitecturalDetail && !evidenceMode ? <span><i className="key-building key-landmark" />Curated landmark massing</span> : null}
               {showArchitecturalDetail && !evidenceMode ? <span><i className="key-building key-hero" />Evidence-labelled hero model</span> : null}
+              {showArchitecturalDetail && !evidenceMode ? <span><i className="key-building key-roof" />Temple hall · roof by type</span> : null}
               {showArchitecturalDetail && showRowhouseCandidates && !evidenceMode ? <span><i className="key-building key-candidate" />Screened shophouses · statutory storeys</span> : null}
               {showPoi.oldtown ? <span><i className="key-line key-rowhouse" />Documented rowhouse</span> : null}
               {showPoi.oldtown ? <span><i className="key-line key-rowhouse key-dashed" />Interpretive corridor</span> : null}
@@ -2564,7 +2601,7 @@ export function AtlasView({ world, embedded = false, initialView, floodEdition =
                   </button>
                 </div>
                 <small className="control-source-note">
-                  Old Town 3D: {HERITAGE_DETAIL_COUNT.toLocaleString()} full-resolution OSM footprints + {HERITAGE_LANDMARK_PART_COUNT} curated landmark parts + {HERO_MONUMENT_PART_COUNT} hero parts across Wat Arun, Wat Phra Kaew, Wat Pho, Loha Prasat, the palace prasats and the Golden Mount, with the {EVIDENCE_HIDDEN} boxes the hero models replace hidden; {EVIDENCE_CANDIDATES.extruded.toLocaleString()} screened shophouses extruded at statutory storey heights where no OSM footprint stands, {EVIDENCE_CANDIDATES.onDetailBox.toLocaleString()} outlined only where one does.
+                  Old Town 3D: {HERITAGE_DETAIL_COUNT.toLocaleString()} full-resolution OSM footprints + {HERITAGE_LANDMARK_PART_COUNT} curated landmark parts + {HERO_MONUMENT_PART_COUNT} hero parts across Wat Arun, Wat Phra Kaew, Wat Pho, Loha Prasat, the palace prasats and the Golden Mount, {ROOFED_BUILDINGS} temple halls and chedis re-massed with roofs by type, with the {EVIDENCE_HIDDEN} boxes the hero models replace hidden; {EVIDENCE_CANDIDATES.extruded.toLocaleString()} screened shophouses extruded at statutory storey heights where no OSM footprint stands, {EVIDENCE_CANDIDATES.onDetailBox.toLocaleString()} outlined only where one does.
                   {" "}{HERITAGE_DETAIL_NOTE}{" "}
                   Conservation geometry is off by default and illustrative. {BKK_URBAN_ZONING_NOTE}
                   {" "}{HERITAGE_MOBILITY_NOTE} NASA aerosol is a dated regional optical-depth

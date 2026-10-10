@@ -71,10 +71,19 @@ export const DATASETS: DatasetNote[] = [
   {
     file: "/data/bkk-hero-monuments.geojson",
     title: "Hero monuments (3D parts)",
-    what: "88 transparent, survey-informed 3D parts for Wat Arun, Wat Phra Kaew, Wat Pho's Four Great Chedis, Loha Prasat, Dusit Maha Prasat, Aphonphimok Prasat, Siwalai Maha Prasat and the Golden Mount chedi. Official published dimensions define the envelopes; intermediate tiers are labelled proportional interpretation, not measurement.",
+    what: "Transparent, survey-informed 3D parts for Wat Arun, Wat Phra Kaew, Wat Pho's Four Great Chedis, Loha Prasat, Dusit Maha Prasat, Aphonphimok Prasat, Siwalai Maha Prasat and the Golden Mount chedi. Wat Arun is modelled at architectural resolution — redented plan, three terraces, corn-cob tower, four satellite prangs and four mondops. Official published dimensions define the envelopes; intermediate tiers are labelled proportional interpretation, not measurement.",
     source: "Fine Arts Department and BMA publications, the Grand Palace plan, watpho.com architecture records, TAT identification of Loha Prasat and the Golden Mount, and a checked-in OSM way snapshot.",
     license: "ODbL for OSM-derived footprints, © OpenStreetMap contributors; cited official documents for dimensions.",
     generator: "site/scripts/build-hero-monuments.py",
+    usedBy: ["/atlas/historic-core"],
+  },
+  {
+    file: "/data/bkk-temple-roofs.geojson",
+    title: "Temple halls and chedis, re-massed by type",
+    what: "The Old Town's rectangular temple halls (ubosot, viharn, throne halls) as walls on the real footprint under a tiered Thai gable on its oriented rectangle, ridge on the long axis; chedis as bell stacks; the eight Atthamaha prangs at Wat Phra Kaew as prangs. Each building's overall height and its height_source are the detail layer's own — only the form inside that envelope is typology, and every part says so.",
+    source: "OpenStreetMap footprints and heights from bkk-heritage-detail.geojson; roof and stack forms from the documented building types.",
+    license: "ODbL, © OpenStreetMap contributors; BKKx typological massing CC BY 4.0.",
+    generator: "site/scripts/build-temple-roofs.py",
     usedBy: ["/atlas/historic-core"],
   },
   {

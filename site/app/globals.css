@@ -1345,6 +1345,7 @@ button {
 }
 .key-fabric { background: #b99064; }
 .key-landmark { background: #ffd04d; }
+.key-roof { background: linear-gradient(180deg, #c4572c 0 55%, #2f6f52 55% 70%, #ece5d3 70%); }
 .key-candidate { background: #d4a056; }
 .key-hero {
   background: linear-gradient(90deg, #e7d4aa 0 40%, #eee2c5 40% 72%, #f4c84d 72%);

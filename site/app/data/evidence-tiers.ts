@@ -144,6 +144,9 @@ export type EvidenceTally = {
   /** Features flagged hide_3d by scripts/hide-under-heroes.py: standing under
    *  a hero model, not drawn, and so not counted above. */
   hidden: { detail: number; landmarks: number };
+  /** Buildings re-massed by scripts/build-temple-roofs.py: still drawn and
+   *  counted once (in detail), and their landmark twins, which are not. */
+  roofed: { detail: number; landmarkTwins: number };
   /** Raw `height_basis` counts over the candidates that are extruded. */
   candidateBases: Record<string, number>;
   /** Screened shophouse candidates: extruded where no OSM footprint stands,
