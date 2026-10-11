@@ -25,6 +25,14 @@ public/photos/
 # ours to republish. The essay cites them; the files stay local.
 public/studio references/
 
+# Dr Non's source essay drafts (DOCX) used as references for the heritage
+# register's prose. Citable, not ours to republish; the published essay
+# pages draw from these. The originals stay local as the source, not
+# duplicated into git history.
+docs/*-essay*.docx
+docs/*.docx
+!docs/.gitkeep
+
 # Source photo/diagram originals — resized copies ship in site/public/shophouses/
 public/non in bangkok/
 public/shophouses bangkok/
