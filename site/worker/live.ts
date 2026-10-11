@@ -358,10 +358,18 @@ const ITIC_LIVE = "https://live.iticfoundation.org/";
 const CCTV_TTL = 120;
 // Same city box as FIRMS — one Bangkok, two feeds.
 const CCTV_BBOX = { west: 100.2, south: 13.4, east: 101.0, north: 14.2 };
+// STILL_HOSTS = every host the upstream cameras actually publish on.
+// Longdo's RSS uses both `camera1.iticfoundation.org` (the jpeg host)
+// and `camerai1.iticfoundation.org` (the HLS host — note the `i` before
+// the `1`). Missing one of these silently rejects ~25% of the BKKx
+// rail as "Host not allowlisted" even when the camera is live.
 const STILL_HOSTS = new Set([
   "camera1.iticfoundation.org",
   "camera2.iticfoundation.org",
   "camera3.iticfoundation.org",
+  "camerai1.iticfoundation.org",
+  "camerai2.iticfoundation.org",
+  "camerai3.iticfoundation.org",
   "cameras.iticfoundation.org",
   "bma-itic1.iticfoundation.org",
   "camera.longdo.com",
@@ -828,33 +836,36 @@ export async function handleCameraPoster(videoId: string | null): Promise<Respon
     `https://i.ytimg.com/vi/${videoId}/hqdefault.jpg`,
   ];
 
-  const ctrl = new AbortController();
-  const timer = setTimeout(() => ctrl.abort(), UPSTREAM_TIMEOUT_MS);
-  try {
-    for (const url of candidates) {
-      let res: Response;
-      try {
-        res = await fetch(url, { signal: ctrl.signal });
-      } catch {
-        continue;
-      }
-      if (!res.ok || !res.body) continue;
-      const type = res.headers.get("content-type") ?? "image/jpeg";
-      if (!type.startsWith("image/")) continue;
-      return new Response(res.body, {
-        headers: {
-          "content-type": type,
-          "cache-control": `public, max-age=${POSTER_TTL}, s-maxage=${POSTER_TTL}, stale-while-revalidate=1800`,
-          "x-bkkx-live": "poster",
-        },
-      });
+  // Per-candidate timeout. Sharing one AbortController across the
+  // fallback loop is a real bug: when the timer fires for the first
+  // candidate, every subsequent fetch() with the same already-aborted
+  // signal throws synchronously, so the loop never reaches candidates
+  // 2 and 3 even if candidate 1 timed out for a one-time reason.
+  for (const url of candidates) {
+    const ctrl = new AbortController();
+    const timer = setTimeout(() => ctrl.abort(), UPSTREAM_TIMEOUT_MS);
+    let res: Response;
+    try {
+      res = await fetch(url, { signal: ctrl.signal });
+    } catch {
+      clearTimeout(timer);
+      continue;
     }
-    // No poster is not an error worth breaking the rail over — the tile
-    // falls back to its label.
-    return new Response("No poster available", { status: 404 });
-  } finally {
     clearTimeout(timer);
+    if (!res.ok || !res.body) continue;
+    const type = res.headers.get("content-type") ?? "image/jpeg";
+    if (!type.startsWith("image/")) continue;
+    return new Response(res.body, {
+      headers: {
+        "content-type": type,
+        "cache-control": `public, max-age=${POSTER_TTL}, s-maxage=${POSTER_TTL}, stale-while-revalidate=1800`,
+        "x-bkkx-live": "poster",
+      },
+    });
   }
+  // No poster is not an error worth breaking the rail over — the tile
+  // falls back to its label.
+  return new Response("No poster available", { status: 404 });
 }
 
 /* ==================================================================== *
