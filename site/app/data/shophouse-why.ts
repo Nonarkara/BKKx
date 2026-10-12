@@ -363,4 +363,26 @@ export const SOURCES: WhySource[] = [
     usedFor:
       "Another market comparison: a new-build premium near 27 percent per square foot since 1996, against Dorchester’s second-hand market. It does not agree with the Knight Frank figure. Neither is evidence about a Bangkok shophouse.",
   },
+  {
+    id: "jacobs",
+    citation:
+      "Jacobs, Jane. 1961. The Death and Life of Great American Cities. New York: Random House.",
+    usedFor:
+      "Eyes on the street, the phrase used in “Where I grew up”. Cited for that idea. He is not signing the preservation that freezes a low-rise street.",
+  },
+  {
+    id: "glaeser",
+    citation:
+      "Glaeser, Edward L. 2011. Triumph of the City: How Our Greatest Invention Makes Us Richer, Smarter, Greener, Healthier, and Happier. New York: Penguin Press.",
+    usedFor:
+      "The density critique he agrees with: holding prime land as low-rise makes it expensive, and more people living there requires more building. Glaeser is an economist at Harvard. No page is cited. The sentence is his agreement, not a quotation.",
+  },
+  {
+    id: "salerno",
+    citation:
+      "Ünaldi, Serhat. 2016. Working Towards the Monarchy: The Politics of Space in Downtown Bangkok. Honolulu: University of Hawaiʻi Press, pp. 149–151. ISBN 9780824855758. The Neal Prince archive at the New York School of Interior Design credits the Siam Inter-Continental Hotel: “Architecture by Joseph P. Salerno, AIA (1915–1981)”.",
+    url: "https://nealprince.omeka.net/items/show/71",
+    usedFor:
+      "Joseph P. Salerno as architect of the Siam Intercontinental, later demolished for Siam Paragon. “A disciple of Frank Lloyd Wright” is his wording. The published note, from Ünaldi p. 149, is softer: a student and admirer who probably spent a summer apprenticing at Taliesin. The New York Times obituary of 5 April 1981 records Salerno’s Yale training and his work for Inter-Continental Hotels, and does not mention Wright.",
+  },
 ];

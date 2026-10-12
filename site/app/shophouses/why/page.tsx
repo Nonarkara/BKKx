@@ -23,6 +23,7 @@ export default function WhyShophousesPage() {
           Shophouse<em>Metropolis</em>
         </Link>
         <nav aria-label="Why shophouses">
+          <a href="#grew-up">Where I grew up</a>
           <a href="#measures">Measures</a>
           <a href="#principles">Nine principles</a>
           <a href="#sources">Sources</a>
@@ -176,14 +177,120 @@ export default function WhyShophousesPage() {
         </div>
       </section>
 
+      <section className="sh-why-close sh-why-grew" id="grew-up" aria-labelledby="grew-up-title">
+        <p className="sh-why-byline">Non Arkara</p>
+        <h2 id="grew-up-title">
+          <span lang="th">บ้านที่ผมโตมา</span>
+          <span lang="en">Where I grew up</span>
+        </h2>
+        <div className="sh-why-lede">
+          <p lang="th">
+            ผมโตในตึกแถวคอนกรีตเสริมเหล็ก สร้างราวทศวรรษ 1960 ถึง 1970 หน้ากว้างราวสี่เมตร สี่ชั้น
+            พอได้เรียนสถาปัตย์ ผมถึงเข้าใจว่าสี่ชั้นคือสูงสุดที่ทำได้ ก่อนกฎหมายอาคารจะบังคับให้มีลิฟต์
+            และลิฟต์ในตึกแถวหน้ากว้างสี่เมตรมันไม่คุ้มที่จะติด เท่าที่ผมอ่านจากกฎหมายอาคารได้
+            ผมไม่ได้กลับไปไล่ข้อกฎหมายแบบนักกฎหมาย
+          </p>
+          <p lang="en">
+            I grew up in a reinforced-concrete shophouse from the 1960s or the 1970s. The front was about
+            four metres. It was four storeys. Later, studying architecture, I came to think four storeys was
+            the maximum before the building code required a lift, and a lift in a four-metre row house is not
+            economical. That is as far as I could tell from the building code. I have not checked it the way
+            a lawyer would.
+          </p>
+        </div>
+        <div className="sh-why-lede">
+          <p lang="th">
+            ตาและยายเป็นคนซื้อ เขาเป็นคนนครราชสีมา ซื้อไว้ให้ลูก ๆ รวมทั้งแม่ผม ได้มีที่อยู่ระหว่างมาเรียนที่กรุงเทพฯ
+            ตึกอยู่ติดกับที่วันนี้เป็นสยามดิสคัฟเวอรี่กับย่านสยาม ผมเกิดห่างจากนั้นไม่ถึงหนึ่งกิโลเมตร
+            ที่โรงพยาบาลพญาไท คนกรุงเทพฯ เต็มตัว
+          </p>
+          <p lang="en">
+            My mother&apos;s parents bought it. They were from Nakhon Ratchasima. They bought it so their
+            children, my mother among them, would have a place to stay while they studied in Bangkok. The row
+            stood right beside where Siam Discovery and the Siam area are now. I was born less than a kilometre
+            away, at Phaya Thai Hospital. Bangkok, the whole way.
+          </p>
+        </div>
+        <div className="sh-why-lede">
+          <p lang="th">
+            สยามช่วงทศวรรษ 1980 ยังไม่พัฒนา มีห้างใหญ่ห้างเดียว คือสยามเซ็นเตอร์ อาคารบรูทัลลิสต์ นอกนั้นเป็นสวน เป็นวัด
+            และโรงแรมสยามอินเตอร์คอนติเนนตัล คนออกแบบคือ <a href="#salerno">Joseph P. Salerno</a>{" "}
+            ผมเข้าใจว่าเขาเป็นศิษย์ของ Frank Lloyd Wright โรงแรมหลังนั้นถูกรื้อไปสร้างสยามพารากอน
+          </p>
+          <p lang="en">
+            Siam in the 1980s was not yet developed. There was one big mall, Siam Center, and it was brutalist.
+            Around it were parks, temples, and the Siam Intercontinental Hotel.{" "}
+            <a href="#salerno">Joseph P. Salerno</a> designed it. I understood him to be a disciple of Frank Lloyd
+            Wright. The hotel was later demolished for Siam Paragon.
+          </p>
+        </div>
+        <div className="sh-why-lede">
+          <p lang="th">
+            ครอบครัวต้องย้าย เพราะที่ตรงนั้นถูกเวนคืนไปทำทางลงทางด่วนที่ไม่ได้สร้าง ได้ค่าเวนคืน แล้วไปสร้างบ้านที่ชานเมือง
+            ตึกแถวยังยืนอยู่ ตอนนี้มีคนย้ายถิ่นมาอยู่แบบไม่เป็นทางการ ได้ไฟฟ้ากับน้ำมาใช้ ไม่ทราบว่าจัดกันอย่างไร
+            เป็นพื้นที่สีเทาทางกฎหมายที่เมืองยังไม่ได้จัดการ
+          </p>
+          <p lang="en">
+            The family was moved out by eminent domain, for an expressway landing that was never built. The
+            family was paid, and they built their house in the suburbs. The shophouses are still standing.
+            Migrants live in them now, informally. They have somehow got electricity and water. It is a legal
+            grey area the city has not resolved.
+          </p>
+        </div>
+        <div className="sh-why-lede">
+          <p lang="th">
+            ทุกคนรู้จักกัน อยู่ชิดขนาดนั้น จะเป็นศัตรูกันไม่ได้ เพื่อนบ้านคอยดูแลกัน และคอยดูคนแปลกหน้าด้วย
+            มีร้านตัดผม มีร้านข้าวผัดที่ผมยังแวะกินอยู่
+          </p>
+          <p lang="en">
+            Everyone knew everyone. You lived that close, so you could not be enemies. Neighbours watched out
+            for each other, and they watched out for strangers. There was a barber. There is a fried-rice shop
+            I still eat at.
+          </p>
+        </div>
+        <div className="sh-why-lede">
+          <p lang="th">
+            ทุกข้อในงานวิจัยเมืองเก่าด้านบน ผมเห็นด้วยหมด ขนาดที่ยังเป็นของคน ชุมชน เพื่อนบ้านที่เคลียร์เรื่องกันเอง
+            และตาบนถนน ซึ่งเป็นคำของ Jane Jacobs จาก{" "}
+            <a href="#jacobs">The Death and Life of Great American Cities</a> ปี 1961
+            แต่ผมไม่ได้เป็นแฟนของ Jacobs การอนุรักษ์ที่แช่แข็งย่านตึกต่ำบนทำเลดี ทำให้ที่นั่นแพง
+            และทำให้คนในย่านเป็น NIMBY ถ้าจะให้คนมาอยู่ตรงนั้นได้มากขึ้น ตรงนั้นต้องหนาแน่นขึ้น
+            นั่นคือข้อที่ Edward Glaeser จากฮาร์วาร์ด เถียงไว้ ใน{" "}
+            <a href="#glaeser">Triumph of the City</a> ปี 2011 และผมเห็นด้วย
+          </p>
+          <p lang="en">
+            I recognise every point in the old-town research above. Human scale. Community. Neighbours
+            reconciling a conflict. Eyes on the street, Jane Jacobs&apos;s phrase, from{" "}
+            <a href="#jacobs">The Death and Life of Great American Cities</a> (1961). I am not a Jacobs fan as
+            such. Preservation that freezes low-rise streets on prime land makes them expensive, and it turns
+            the neighbours into NIMBYs. To let more people live there, you need density. That is Edward
+            Glaeser&apos;s critique. He is at Harvard. The book is{" "}
+            <a href="#glaeser">Triumph of the City</a> (2011), and I agree with it.
+          </p>
+        </div>
+        <div className="sh-why-lede">
+          <p lang="th">
+            แต่ของที่ชุมชนตึกต่ำทำได้จริง ผมไม่ทิ้ง เรื่องขัดแย้งเคลียร์กันได้ คนอยากรู้จักกัน
+            เทศกาลกับอะไรที่ทำด้วยกันเกิดขึ้นเอง เพราะมีคนบนถนนลงมือจัด
+            นั่นคือวิธีที่คนแปลกหน้าอยู่ด้วยกันได้ ผมไม่ได้ทำให้มันโรแมนติก
+          </p>
+          <p lang="en">
+            A low-rise community still does something I will not give up. Conflicts get sorted. People want to
+            know each other. Festivals, and the things a street does together, start because someone on the
+            street decided to. That is how strangers manage to live together. I am not romanticising it.
+          </p>
+        </div>
+      </section>
+
       <section className="sh-why-sources" id="sources" aria-labelledby="sources-title">
         <h2 id="sources-title">
-          <span lang="th">แหล่งที่ภาพวาดอ้าง และรายละเอียดที่ตรวจแล้ว</span>
+          <span lang="th">แหล่งที่อ้าง และรายละเอียดที่ตรวจแล้ว</span>
           <span lang="en">Sources, checked against the publications</span>
         </h2>
         <p className="sh-why-sources-note" lang="en">
           Names, years and page ranges below were checked against the publications, not copied off the
-          diagrams. Where a diagram rounds a figure, the entry says so.
+          diagrams. Where a diagram rounds a figure, the entry says so. The last three entries belong to
+          the section above, not to the drawings.
         </p>
         <ol>
           {SOURCES.map((s) => (
