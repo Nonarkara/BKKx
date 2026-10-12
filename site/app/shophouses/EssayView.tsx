@@ -47,6 +47,7 @@ export function EssayView() {
         <nav aria-label="Essay">
           <a href="#essay">Essay</a>
           <a href="#research">Long read</a>
+          <Link href="/shophouses/why">Why</Link>
           <Link href="/shophouses/bible">The Bible</Link>
           <Link href="/shophouses/global">Global</Link>
           <Link href="/shophouses/research">Sources</Link>
@@ -205,6 +206,7 @@ export function EssayView() {
         </p>
         <div className="sh-brief-actions">
           <a href="https://bkk.nonarkara.org/rowhouses" target="_blank" rel="noreferrer">Open Bangkok&apos;s rowhouse register ↗</a>
+          <Link href="/shophouses/why">Why shophouses are good for cities →</Link>
           <Link href="/shophouses/bible">Use the field Bible →</Link>
         </div>
       </section>
