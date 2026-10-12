@@ -23,6 +23,7 @@ export default function ManuscriptPage() {
           Shophouse<em>Metropolis</em>
         </Link>
         <nav aria-label="Manuscript">
+          <Link href="/shophouses/why">Why</Link>
           <Link href="/shophouses">Essay</Link>
           <Link href="/shophouses/bible">Bible</Link>
           <Link href="/shophouses/research">Sources</Link>

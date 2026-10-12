@@ -106,6 +106,7 @@ export default function GlobalPage() {
           <a href="#map">Map</a>
           <a href="#ranking">Index</a>
           <a href="#global-dossiers">Town dossiers</a>
+          <Link href="/shophouses/why">Why</Link>
           <Link href="/shophouses">Essay</Link>
           <Link href="/shophouses/bible">Bible</Link>
           <Link href="/shophouses/research">Sources</Link>

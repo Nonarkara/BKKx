@@ -818,6 +818,25 @@ test("the 3D atlas shell renders the 5 POI layer toggles", async () => {
   assert.match(html, /Evidence-labelled hero model/);
 });
 
+test("why shophouses are good for cities is a bilingual section with credited diagrams", async () => {
+  const response = await render("/shophouses/why");
+  assert.equal(response.status, 200);
+  const html = await response.text();
+  assert.match(html, /Why shophouses are good for cities/);
+  assert.match(html, /ทำไมตึกแถวจึงดีต่อเมือง/);
+  assert.match(html, /Diagram: Abhinav Bhardwaj @abhinavbwj/);
+  assert.match(html, /instagram\.com\/p\/DdydSbEkqR-/);
+  assert.match(html, /slide-7\.png/);
+  assert.match(html, /slide-12\.png/);
+  assert.match(html, /20\.0/);
+  assert.match(html, /2,311/);
+  assert.match(html, /Close encounters with buildings/);
+  assert.match(html, /Kaefer/);
+  assert.match(html, /not a controlled study/);
+  assert.match(html, /reproduced with credit for educational commentary/);
+  assert.match(html, /lang="th"/);
+});
+
 test("the shophouse essay defaults to a short argument without deleting the research", async () => {
   const response = await render("/shophouses");
   assert.equal(response.status, 200);
@@ -836,7 +855,7 @@ test("every primary public route renders successfully", async () => {
   for (const route of [
     "/", "/about", "/heritage", "/rowhouses", "/case-for-bangkok", "/worlds",
     "/atlas/historic-core", "/areas/kudi-chin", "/walks/six-faiths",
-    "/shophouses", "/shophouses/bible", "/shophouses/global",
+    "/shophouses", "/shophouses/why", "/shophouses/bible", "/shophouses/global",
     "/shophouses/print", "/shophouses/research",
   ]) {
     const response = await render(route);
