@@ -835,6 +835,13 @@ test("why shophouses are good for cities is a bilingual section with credited di
   assert.match(html, /not a controlled study/);
   assert.match(html, /reproduced with credit for educational commentary/);
   assert.match(html, /lang="th"/);
+  assert.match(html, /href="#grew-up"/);
+  assert.match(html, /Where I grew up/);
+  assert.match(html, /บ้านที่ผมโตมา/);
+  assert.match(html, /The Death and Life of Great American Cities/);
+  assert.match(html, /Triumph of the City/);
+  assert.match(html, /Joseph P\. Salerno/);
+  assert.match(html, /as far as I could tell from the building code/i);
 });
 
 test("the shophouse essay defaults to a short argument without deleting the research", async () => {

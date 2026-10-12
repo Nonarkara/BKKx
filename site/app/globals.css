@@ -7686,6 +7686,18 @@ body:has(.sh-why) {
 }
 .sh-why-close h2 { max-width: 16ch; margin-bottom: 1rem; }
 
+.sh-why-grew h2 { max-width: none; }
+.sh-why-byline {
+  margin: 0 0 0.55rem;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--sh-seal);
+}
+.sh-why-grew .sh-why-lede + .sh-why-lede { margin-top: 1.35rem; }
+
 .sh-why-sources { padding-top: calc(var(--sh-page) * 1.6); padding-bottom: 12px; }
 .sh-why-sources h2 { max-width: 18ch; }
 .sh-why-sources-note {
