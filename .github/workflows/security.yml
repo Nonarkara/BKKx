@@ -1,0 +1,104 @@
+name: Security
+
+on:
+  pull_request:
+  workflow_dispatch:
+  schedule:
+    # Weekly, Monday 06:17 UTC.
+    - cron: "17 6 * * 1"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: security-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  security:
+    name: Report-only scan
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: read
+      security-events: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      # Semgrep OSS 1.180.0. The semgrep/semgrep-action repository is deprecated
+      # (last release pins Semgrep 1.36), so the scan uses the official image
+      # pinned by digest. Registry packs match the repo: JavaScript, TypeScript,
+      # and Python, plus p/secrets and p/github-actions. There is no p/bash pack
+      # (the registry returns 404). Metrics, version checks, and secret
+      # validation stay off so the job does not call Semgrep telemetry or live
+      # secret-validation services. --error is not set, so findings exit 0.
+      - name: Semgrep OSS
+        env:
+          SEMGREP_IMAGE: semgrep/semgrep:1.180.0@sha256:529ee8a277ec8adc5b534d7c74eea0a47e9de21d62852b6ba7ac6ba9566845c3
+        run: |
+          set -eu
+          docker run --rm \
+            -v "${GITHUB_WORKSPACE}:/src" \
+            -w /src \
+            -e SEMGREP_SEND_METRICS=off \
+            -e HOME=/tmp \
+            "${SEMGREP_IMAGE}" \
+            sh -c '
+              semgrep scan \
+                --metrics=off \
+                --disable-version-check \
+                --oss-only \
+                --no-secrets-validation \
+                --config p/javascript \
+                --config p/typescript \
+                --config p/python \
+                --config p/secrets \
+                --config p/github-actions \
+                --sarif \
+                --output /src/semgrep.sarif \
+                --quiet \
+                .
+              code=$?
+              if [ -f /src/semgrep.sarif ]; then
+                chmod a+rw /src/semgrep.sarif
+              fi
+              exit "$code"
+            '
+
+      - name: Trivy filesystem scan
+        uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25 # v0.36.0
+        with:
+          scan-type: fs
+          scan-ref: .
+          scanners: vuln,secret,misconfig
+          format: sarif
+          output: trivy.sarif
+          exit-code: "0"
+          severity: UNKNOWN,LOW,MEDIUM,HIGH,CRITICAL
+          version: v0.70.0
+          cache: "false"
+          skip-dirs: .git
+
+      - name: Write job summary
+        id: summary
+        if: always()
+        run: python3 .github/security-summary.py semgrep:semgrep.sarif trivy:trivy.sarif
+
+      - name: Upload Semgrep SARIF
+        if: steps.summary.outcome == 'success' && hashFiles('semgrep.sarif') != ''
+        uses: github/codeql-action/upload-sarif@24c54180a607b1449ed407dd24f251e4e9147c8d # v4.38.3
+        with:
+          sarif_file: semgrep.sarif
+          category: semgrep-oss
+          checkout_path: ${{ github.workspace }}
+
+      - name: Upload Trivy SARIF
+        if: steps.summary.outcome == 'success' && hashFiles('trivy.sarif') != ''
+        uses: github/codeql-action/upload-sarif@24c54180a607b1449ed407dd24f251e4e9147c8d # v4.38.3
+        with:
+          sarif_file: trivy.sarif
+          category: trivy-fs
+          checkout_path: ${{ github.workspace }}
