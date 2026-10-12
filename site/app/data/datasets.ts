@@ -79,8 +79,8 @@ export const DATASETS: DatasetNote[] = [
   },
   {
     file: "/data/bkk-temple-roofs.geojson",
-    title: "Temple halls and chedis, re-massed by type",
-    what: "The Old Town's rectangular temple halls (ubosot, viharn, throne halls) as walls on the real footprint under a tiered Thai gable on its oriented rectangle, ridge on the long axis; chedis as bell stacks; the eight Atthamaha prangs at Wat Phra Kaew as prangs. Each building's overall height and its height_source are the detail layer's own — only the form inside that envelope is typology, and every part says so.",
+    title: "Temple halls, pavilions and chedis, re-massed by type",
+    what: "The Old Town's rectangular temple halls (ubosot, viharn, throne halls) as walls on the real footprint under a tiered Thai gable on its oriented rectangle, ridge on the long axis; the small pavilions around them (12–60 m²) as a low body under a three-tier roof; chedis as bell stacks; the eight Atthamaha prangs at Wat Phra Kaew as prangs. Each building's overall height and its height_source are the detail layer's own — only the form inside that envelope is typology, and every part says so. Where that height is a category default, it is first capped to the footprint (site/scripts/cap-default-heights.py: ridge ≤ 1.25 × span + 2 m), with the original kept as type_default_height.",
     source: "OpenStreetMap footprints and heights from bkk-heritage-detail.geojson; roof and stack forms from the documented building types.",
     license: "ODbL, © OpenStreetMap contributors; BKKx typological massing CC BY 4.0.",
     generator: "site/scripts/build-temple-roofs.py",

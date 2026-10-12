@@ -2635,7 +2635,7 @@ export function AtlasView({ world, embedded = false, initialView, floodEdition =
                   </button>
                 </div>
                 <small className="control-source-note">
-                  Old Town 3D: {HERITAGE_DETAIL_COUNT.toLocaleString()} full-resolution OSM footprints + {HERITAGE_LANDMARK_PART_COUNT} curated landmark parts + {HERO_MONUMENT_PART_COUNT} hero parts across Wat Arun, Wat Phra Kaew, Wat Pho, Loha Prasat, the palace prasats and the Golden Mount, {ROOFED_BUILDINGS} temple halls and chedis re-massed with roofs by type, with the {EVIDENCE_HIDDEN} boxes the hero models replace hidden; {EVIDENCE_CANDIDATES.extruded.toLocaleString()} screened shophouses extruded at statutory storey heights where no OSM footprint stands, {EVIDENCE_CANDIDATES.onDetailBox.toLocaleString()} outlined only where one does.
+                  Old Town 3D: {HERITAGE_DETAIL_COUNT.toLocaleString()} full-resolution OSM footprints + {HERITAGE_LANDMARK_PART_COUNT} curated landmark parts + {HERO_MONUMENT_PART_COUNT} hero parts across Wat Arun, Wat Phra Kaew, Wat Pho, Loha Prasat, the palace prasats and the Golden Mount, {ROOFED_BUILDINGS} temple halls, pavilions and chedis re-massed with roofs by type, with the {EVIDENCE_HIDDEN} boxes the hero models replace hidden; {EVIDENCE_CANDIDATES.extruded.toLocaleString()} screened shophouses extruded at statutory storey heights where no OSM footprint stands, {EVIDENCE_CANDIDATES.onDetailBox.toLocaleString()} outlined only where one does.
                   {" "}{HERITAGE_DETAIL_NOTE}{" "}
                   Conservation geometry is off by default and illustrative. {BKK_URBAN_ZONING_NOTE}
                   {" "}{HERITAGE_MOBILITY_NOTE} NASA aerosol is a dated regional optical-depth

@@ -17,8 +17,8 @@
     ]
   },
   "/data/bkk-heritage-detail.geojson": {
-    "bytes": 3820577,
-    "sha256": "9d8bb2341cd4edb8e6dea2ed7216f6733d4f94b7f71c2fd9522e14c2b1d4910b",
+    "bytes": 3882283,
+    "sha256": "604e8d6a4afc19a5b1df906b633d10f786610a8060d47016bc3cfe3f5d327d05",
     "features": 9275,
     "kinds": [
       "Polygon"
@@ -41,17 +41,17 @@
     ]
   },
   "/data/bkk-landmarks.geojson": {
-    "bytes": 45696,
-    "sha256": "2ba983c667d215c50e829637e604d26fc81fbb921c986aa42f80303c91242cf8",
+    "bytes": 47116,
+    "sha256": "357cbe4312478806150fc910dca3174badb54ef2d3628be380dbdfe903a88099",
     "features": 73,
     "kinds": [
       "Polygon"
     ]
   },
   "/data/bkk-temple-roofs.geojson": {
-    "bytes": 1719353,
-    "sha256": "cfb9bd81288767bf3e64d289a611e98dcfeac09803ae68a5f72d3e78c8421afa",
-    "features": 2315,
+    "bytes": 1984477,
+    "sha256": "b78e2072e186cb00324e327c23af31abc1d29b9ff6472dfbd5f7ec4ddfdd46f8",
+    "features": 2703,
     "kinds": [
       "Polygon"
     ]

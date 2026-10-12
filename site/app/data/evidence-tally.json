@@ -8,7 +8,7 @@
   "byTier": {
     "official": 19,
     "measured": 5986,
-    "curated": 147,
+    "curated": 143,
     "typological": 243,
     "inferred": 4333
   },
@@ -29,14 +29,14 @@
     "interpretive-proportion": 76,
     "interpretive-envelope": 89
   },
-  "landmarks": 16,
+  "landmarks": 12,
   "hidden": {
     "detail": 13,
     "landmarks": 12
   },
   "roofed": {
-    "detail": 367,
-    "landmarkTwins": 45
+    "detail": 464,
+    "landmarkTwins": 49
   },
   "candidateBases": {
     "modal-storeys": 1023,
@@ -46,5 +46,5 @@
     "extruded": 1266,
     "onDetailBox": 1167
   },
-  "total": 10728
+  "total": 10724
 }

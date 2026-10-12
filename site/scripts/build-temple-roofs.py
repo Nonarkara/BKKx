@@ -75,6 +75,17 @@ HALL_SOURCES = {"ubosot", "viharn", "throne"}
 PRANG_IDS = {f"bkk-building-{n}" for n in range(23482991, 23482999)}
 PRANG_COLOURS = ["#e7e3d8", "#4f7fb3", "#d0b04a", "#4e8a66", "#b8574a", "#7a5aa0", "#c98a3a", "#5f9aa8"]
 MIN_AREA_M2 = 60.0
+# Pavilions: the sala, bell towers and small shrines that stand around a hall.
+# Below a hall's size they take a lower body and a three-tier roof, so they
+# read at their own scale instead of as pillars (see cap-default-heights.py).
+PAVILION_MIN_M2 = 12.0
+PAVILION_MAX_ASPECT = 3.0
+RELIGIOUS_TYPES = {"temple", "chapel", "shrine"}
+PAVILION_TIERS = [        # (long-axis scale, short-axis scale, colour)
+    (1.12, 1.12, "#2f6f52"),   # eaves skirt, wider than the body
+    (0.90, 0.62, "#c4572c"),
+    (0.76, 0.30, "#d8a54a"),   # ridge, gilt
+]
 MIN_FILL = 0.78
 ASPECT = (1.15, 4.5)
 CHEDI_MIN_COMPACT = 0.6
@@ -183,7 +194,7 @@ def classify(f: dict):
     if not ring or len(ring) < 4:
         return None, "not a single polygon"
     src = p.get("height_source")
-    is_temple = (p.get("building") or p.get("building_type")) == "temple"
+    is_temple = (p.get("building") or p.get("building_type")) in RELIGIOUS_TYPES
     if p.get("id") in PRANG_IDS:
         return "prang", "documented prang"
     if src == "chedi":
@@ -198,10 +209,13 @@ def classify(f: dict):
     if du * dv == 0:
         return None, "degenerate"
     fp = area(pts)
-    if fp < MIN_AREA_M2:
+    if fp < PAVILION_MIN_M2:
         return None, "too small"
     if fp / (du * dv) < MIN_FILL:
         return None, "not rectangular"
+    if fp < MIN_AREA_M2:
+        aspect = max(du, dv) / min(du, dv)
+        return ("pavilion", "pavilion") if aspect <= PAVILION_MAX_ASPECT else (None, "proportions not a pavilion")
     aspect = max(du, dv) / min(du, dv)
     if not (ASPECT[0] <= aspect <= ASPECT[1]):
         return None, "proportions not a hall"
@@ -237,6 +251,18 @@ def massing(f: dict, kind: str) -> list[dict]:
     half_long, half_short = (du, dv) if long_u else (dv, du)
     half_long, half_short = half_long / 2, half_short / 2
     span = top - base
+    if kind == "pavilion":
+        eave = base + max(2.4, 0.42 * span)
+        out.append(feature(f, 0, "body", ring if ring[0] == ring[-1] else ring + [ring[0]],
+                           base, eave, WALL, "typology: Thai pavilion"))
+        step = (top - eave) / len(PAVILION_TIERS)
+        for i, (kl, ks, color) in enumerate(PAVILION_TIERS):
+            hl, hs = half_long * kl, half_short * ks
+            hu, hv = (hl, hs) if long_u else (hs, hl)
+            out.append(feature(f, i + 1, f"roof tier {i + 1}", rect_ring(a, cu, cv, hu, hv, to_ll),
+                               eave + i * step, eave + (i + 1) * step, color,
+                               "typology: tiered Thai pavilion roof"))
+        return out
     wall_top = base + min(max(0.4 * span, 3.5), 11.0)
     wall_top = min(wall_top, base + 0.7 * span)
     # Walls on the REAL footprint; roof tiers on its oriented rectangle.
@@ -263,7 +289,7 @@ def run(write: bool) -> dict:
         raise SystemExit(f"{DETAIL.name}: cannot reproduce byte for byte; not rewriting it.")
     feats = detail["features"]
     parts: list[dict] = []
-    counts = {"hall": 0, "chedi": 0, "prang": 0}
+    counts = {"hall": 0, "pavilion": 0, "chedi": 0, "prang": 0}
     skipped: dict[str, int] = {}
     changed = 0
     for f in feats:
@@ -340,7 +366,7 @@ def main() -> int:
     a = ap.parse_args()
     r = run(write=not a.check)
     c = r["counts"]
-    print(f"build-temple-roofs: {c['hall']} halls roofed, {c['chedi']} chedis stacked, {c['prang']} prangs, "
+    print(f"build-temple-roofs: {c['hall']} halls roofed, {c['pavilion']} pavilions, {c['chedi']} chedis stacked, {c['prang']} prangs, "
           f"{c['landmarkTwinsHidden']} landmark twins hidden, {c['parts']} parts · "
           f"left as boxes: {c['leftAsBoxes']} · flags changed {r['changed']}")
     if a.check and r["stale"]:
