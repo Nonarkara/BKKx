@@ -57,6 +57,9 @@ export default defineConfig(async () => {
       sites(),
       cloudflare({
         viteEnvironment: { name: "rsc", childEnvironments: ["ssr"] },
+        // Pageview caps and the PageviewLimiter binding. This file is read
+        // first; `config` below still supplies the D1 binding and the entry.
+        configPath: "./wrangler.toml",
         config: localBindingConfig,
       }),
     ],

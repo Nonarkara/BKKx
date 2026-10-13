@@ -26,7 +26,10 @@
   eed2077 / 84b4428 / 0f9c0bd; BKKx 1.0 ships the same set.
 - D1 stores pageview events only — path, referrer, country, language,
   timestamp. Never IP addresses, user-agent strings or credentials, and
-  nothing that identifies a person across requests.
+  nothing that identifies a person across requests. `POST /api/pageview`
+  accepts that write only from this site, and only inside the caps in
+  `wrangler.toml`. The connecting address is a key in the PageviewLimiter
+  Durable Object and is never copied into D1.
 
 ## The new front door (2026-08-11)
 

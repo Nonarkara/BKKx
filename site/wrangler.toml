@@ -1,0 +1,28 @@
+# Pageview write guards for POST /api/pageview.
+#
+# Cloudflare does not enforce a hard spend cap. These counters are the cap
+# for the public analytics write. A day is midnight to midnight in
+# Asia/Bangkok. GLOBAL_DAILY_CAP = "0" refuses every write and leaves the
+# D1 table in place.
+#
+# Workers Free allows 100,000 requests a day and D1 Free allows 100,000
+# writes a day. The global cap stays under both, so a loop on this route
+# cannot by itself push the account onto paid usage. A person loading
+# /worlds still records one page view.
+#
+# The limiter is one SQLite Durable Object, which the Workers Free plan
+# can create. Do not replace it with a paid storage namespace.
+
+[vars]
+RATE_LIMIT_PER_MINUTE = "10"
+RATE_LIMIT_PER_DAY = "100"
+GLOBAL_DAILY_CAP = "10000"
+ALLOWED_ORIGINS = "https://bkk.nonarkara.org"
+
+[[durable_objects.bindings]]
+name = "PAGEVIEW_LIMITER"
+class_name = "PageviewLimiter"
+
+[[migrations]]
+tag = "v1-pageview-limiter"
+new_sqlite_classes = ["PageviewLimiter"]
