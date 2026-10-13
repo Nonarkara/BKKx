@@ -36,6 +36,7 @@ jobs:
         run: git diff --exit-code --stat -- public/data app/data
       - run: npx tsc --noEmit
       - run: npm run lint
+      - run: node --experimental-strip-types --test tests/pageview-guards.test.mjs
       - run: node --test tests/rendered-html.test.mjs
       # The world-pipeline scripts are pure arithmetic with no heavy
       # dependency, precisely so their geometry can be checked here rather

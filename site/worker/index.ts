@@ -1,7 +1,9 @@
 /** Cloudflare Worker entry point for the vinext-starter template. */
 import { handleImageOptimization, DEFAULT_DEVICE_SIZES, DEFAULT_IMAGE_SIZES } from "vinext/server/image-optimization";
 import handler from "vinext/server/app-router-entry";
-import { pageviewStats, recordPageview } from "./pageviews";
+import { handlePageviewPost } from "./pageview-guard";
+import { pageviewStats } from "./pageviews";
+import { PageviewLimiter } from "./pageview-limiter";
 import { floodBulletinResponse, floodEvidenceResponse, floodRoadsResponse } from "./flood";
 import {
   handleLiveRain,
@@ -18,6 +20,16 @@ import {
 interface Env {
   ASSETS: Fetcher;
   DB: D1Database;
+  /** SQLite Durable Object that counts pageview writes. Missing binding fails closed. */
+  PAGEVIEW_LIMITER?: DurableObjectNamespace;
+  /** Per-IP token bucket. See wrangler.toml. */
+  RATE_LIMIT_PER_MINUTE?: string;
+  /** Per-IP writes per Bangkok day. See wrangler.toml. */
+  RATE_LIMIT_PER_DAY?: string;
+  /** Writes for every caller per Bangkok day. See wrangler.toml. */
+  GLOBAL_DAILY_CAP?: string;
+  /** Comma-separated origins allowed to record a page view. */
+  ALLOWED_ORIGINS?: string;
   /** Optional: a JSON camera registry for the war room's CCTV rail. */
   CCTV_SOURCE_URL?: string;
   /** Optional: Longdo Map API key. Env only — never committed. */
@@ -51,20 +63,10 @@ const worker = {
     if (url.pathname === "/api/flood/bulletin" && request.method === "GET") return floodBulletinResponse();
     if (url.pathname === "/api/flood/roads" && request.method === "GET") return floodRoadsResponse();
 
+    // Public analytics write. Origin, per-IP, and global caps run before D1.
+    // Limits live in wrangler.toml. A missing limiter refuses the write.
     if (url.pathname === "/api/pageview" && request.method === "POST") {
-      const body = await request.json().catch(() => ({})) as {
-        path?: unknown;
-        referrer?: unknown;
-      };
-      const cloudflareRequest = request as Request & { cf?: { country?: string } };
-
-      await recordPageview(env.DB, {
-        path: typeof body.path === "string" ? body.path : "/",
-        referrer: typeof body.referrer === "string" ? body.referrer : null,
-        country: cloudflareRequest.cf?.country ?? null,
-        language: request.headers.get("accept-language"),
-      });
-      return Response.json({ ok: true }, { status: 201 });
+      return handlePageviewPost(request, env);
     }
 
     // Live civic feeds. Proxied here rather than fetched in the browser: the
@@ -198,4 +200,5 @@ function withSecurityHeaders(res: Response, url: URL): Response {
   return new Response(res.body, { status: res.status, statusText: res.statusText, headers });
 }
 
+export { PageviewLimiter };
 export default worker;
