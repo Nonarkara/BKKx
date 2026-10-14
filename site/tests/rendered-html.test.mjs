@@ -1169,7 +1169,14 @@ test("the shophouse typology library credits its sources and does not copy the d
   assert.match(html, /id="typology-map"/);
   assert.match(html, /https:\/\/urbancreature\.co\/shophouse-supply\//);
   assert.match(html, /https:\/\/www\.instagram\.com\/p\/DeG4utWGjvO\//);
+  assert.match(html, /https:\/\/www\.instagram\.com\/p\/DeaILEpk_xF\//);
   assert.match(html, /https:\/\/www\.instagram\.com\/shophouse\.supply\//);
+  assert.match(html, /blockquote/);
+  assert.match(html, /instagram-media/);
+  assert.match(html, /Pheangporn Khanti/);
+  assert.match(html, /Abhinav Bhardwaj/);
+  assert.match(html, /img_index=3/);
+  assert.doesNotMatch(html, /<script[^>]+instagram\.com\/embed\.js/);
   assert.doesNotMatch(html, /urbancreature\.co\/wp-content/);
   assert.match(html, /typo-top/);
   assert.match(html, /typo-bottom/);

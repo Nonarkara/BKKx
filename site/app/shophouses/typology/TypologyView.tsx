@@ -3,7 +3,11 @@
 import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
 import {
+  CREATOR,
+  JACOBS_POST,
   SHOPHOUSE_TYPES,
+  TYPOLOGY_CREDITS,
+  TYPOLOGY_RECORD,
   TYPOLOGY_STANCE,
   typologyPoints,
   type ConfirmPart,
@@ -11,6 +15,7 @@ import {
   type ShophouseTypeEntry,
 } from "../../data/shophouse-typology";
 import { TypeElevation } from "./elevations";
+import { InstagramEmbed } from "./InstagramEmbed";
 
 // Raster tiles, drawn by Leaflet. The OpenFreeMap vector style throws when a
 // numeric field is null, which blanked this map. CARTO's raster host now
@@ -267,6 +272,11 @@ export function TypologyView() {
                 </li>
               ))}
             </ul>
+            <InstagramEmbed
+              embed={TYPOLOGY_STANCE.embed}
+              name={JACOBS_POST.name}
+              handle={JACOBS_POST.handle}
+            />
           </aside>
           <ul className="typo-switch">
             {SHOPHOUSE_TYPES.map((entry) => (
@@ -281,6 +291,21 @@ export function TypologyView() {
             ))}
           </ul>
           {selected ? <Detail entry={selected} lang={lang} /> : null}
+          <section className="typo-record" lang={htmlLang(lang)}>
+            <h2>{chrome.sources}</h2>
+            {TYPOLOGY_RECORD[lang].split("\n\n").map((paragraph) => (
+              <p key={paragraph.slice(0, 24)}>{paragraph}</p>
+            ))}
+            <ul>
+              {[...TYPOLOGY_CREDITS, ...TYPOLOGY_STANCE.sources].map((source) => (
+                <li key={source.url}>
+                  <a href={source.url}>{source.title}</a>
+                  {" — "}
+                  {source.credit}
+                </li>
+              ))}
+            </ul>
+          </section>
         </div>
       </div>
 
@@ -339,7 +364,17 @@ function Detail({ entry, lang }: { entry: ShophouseTypeEntry; lang: Lang }) {
       lang={htmlLang(lang)}
       aria-live="polite"
     >
-      <TypeElevation id={entry.elevation} title={entry.name[lang]} caption={entry.era[lang]} />
+      <div className="typo-pair">
+        <TypeElevation id={entry.elevation} title={entry.name[lang]} caption={entry.era[lang]} />
+        {entry.embed ? (
+          <InstagramEmbed
+            embed={entry.embed}
+            name={`${CREATOR.name} (${CREATOR.nameTh})`}
+            handle={CREATOR.handle}
+            article={CREATOR.article}
+          />
+        ) : null}
+      </div>
       {entry.featured ? <p className="typo-kicker">{entry.featured[lang]}</p> : null}
       <h2>{entry.name[lang]}</h2>
       <p>{entry.description[lang]}</p>

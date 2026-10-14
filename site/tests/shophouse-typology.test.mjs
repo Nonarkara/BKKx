@@ -2,9 +2,12 @@ import assert from "node:assert/strict";
 import test from "node:test";
 import { readFileSync } from "node:fs";
 import {
+  CREATOR,
   ELEVATION_IDS,
+  JACOBS_POST,
   SHOPHOUSE_TYPES,
   TO_CONFIRM,
+  TYPOLOGY_RECORD,
   TYPOLOGY_STANCE,
   typologyPoints,
 } from "../app/data/shophouse-typology.ts";
@@ -12,6 +15,7 @@ import {
 const LANGS = ["en", "th", "zh"];
 const ARTICLE = "https://urbancreature.co/shophouse-supply/";
 const POST = "https://www.instagram.com/p/DeG4utWGjvO/";
+const POST_2 = "https://www.instagram.com/p/DeaILEpk_xF/";
 const BANGKOK = { lat: [13.4, 14.2], lng: [100.2, 101.1] };
 
 function text(value, label) {
@@ -43,6 +47,16 @@ test("every shophouse type is one complete trilingual entry", () => {
     const urls = entry.sources.map((source) => source.url);
     assert.ok(urls.includes(ARTICLE), `${entry.id} missing the Urban Creature article`);
     assert.ok(urls.includes(POST), `${entry.id} missing the Instagram post`);
+    assert.ok(urls.includes(POST_2), `${entry.id} missing the Jacobs post`);
+    const creditBlob = entry.sources.map((source) => `${source.title} ${source.credit}`).join(" ");
+    assert.match(creditBlob, /Pheangporn Khanti/);
+    assert.match(creditBlob, /@shophouse\.supply/);
+    assert.match(creditBlob, /Abhinav Bhardwaj/);
+    assert.match(creditBlob, /@abhinavbwj/);
+    assert.ok(entry.embed, `${entry.id} embed`);
+    assert.equal(entry.embed.postUrl, POST);
+    assert.equal(Number.isInteger(entry.embed.imageIndex), true);
+    assert.ok(entry.embed.imageIndex >= 1, entry.id);
     for (const source of entry.sources) {
       assert.ok(source.url.startsWith("https://"), source.url);
       assert.ok(!source.url.includes("/wp-content/"), `${entry.id} must link, not copy, her image`);
@@ -84,12 +98,16 @@ test("Lat Phrao is the type Non grew up in, and its facade is not guessed", () =
   assert.equal(entry.street.th, "ถนนลาดพร้าว");
   assert.match(entry.street.zh, /拉抛/);
   assert.ok(!entry.toConfirm.includes("street"));
-  for (const part of ["era", "district", "facade", "point"]) {
+  for (const part of ["era", "district", "point"]) {
     assert.ok(entry.toConfirm.includes(part), part);
   }
   assert.equal(entry.lat, undefined);
   assert.equal(entry.lng, undefined);
-  assert.match(entry.description.en, /not guessed|not a label|stay open/i);
+  assert.match(entry.description.en, /stay open/i);
+  assert.equal(entry.embed.imageIndex, 3);
+  assert.equal(entry.elevation, "lat-phrao-row");
+  assert.ok(!entry.toConfirm.includes("facade"));
+  assert.match(entry.description.en, /two-storey/i);
 });
 
 test("the intro asks how a city houses people, and each type teaches a density lesson", () => {
@@ -136,11 +154,37 @@ test("the cover types name the facades we can see, and no street we cannot", () 
   assert.match(features(arch), /Columns/);
   assert.match(features(brick), /Brick facade/);
   assert.match(features(brick), /Paired windows/);
-  for (const entry of [fin, arch, brick]) {
-    assert.deepEqual(entry.street, TO_CONFIRM);
-    assert.ok(entry.toConfirm.includes("street"));
+  assert.equal(fin.street.th, "ถนนบรรทัดทอง");
+  assert.equal(fin.embed.imageIndex, 2);
+  assert.equal(arch.street.th, "ย่านพระราม 4");
+  assert.equal(arch.embed.imageIndex, 6);
+  assert.deepEqual(brick.street, TO_CONFIRM);
+  assert.equal(brick.embed.imageIndex, 1);
+  const pratunam = SHOPHOUSE_TYPES.find((item) => item.id === "pratunam");
+  assert.equal(pratunam.street.th, "ย่านประตูน้ำ");
+  assert.equal(pratunam.embed.imageIndex, 5);
+  for (const entry of [fin, arch, brick, pratunam]) {
     assert.ok(!entry.toConfirm.includes("facade"));
   }
+});
+
+test("the record keeps the article and both posts, and the embed script stays lazy", () => {
+  assert.match(TYPOLOGY_RECORD.en, /857,000/);
+  assert.match(TYPOLOGY_RECORD.en, /infrastructure for small business/);
+  assert.match(TYPOLOGY_RECORD.en, /Singapore/);
+  assert.match(TYPOLOGY_RECORD.th, /เพียงพร/);
+  assert.match(TYPOLOGY_RECORD.zh, /857,000/);
+  assert.equal(TYPOLOGY_STANCE.embed.postUrl, JACOBS_POST.post);
+  assert.equal(TYPOLOGY_STANCE.embed.imageIndex, 8);
+  assert.equal(CREATOR.post, POST);
+  const view = readFileSync(new URL("../app/shophouses/typology/InstagramEmbed.tsx", import.meta.url), "utf8");
+  assert.match(view, /blockquote/);
+  assert.match(view, /instagram-media/);
+  assert.match(view, /embed\.js/);
+  assert.match(view, /IntersectionObserver/);
+  const worker = readFileSync(new URL("../worker/index.ts", import.meta.url), "utf8");
+  assert.match(worker, /script-src[^"]*https:\/\/www\.instagram\.com/);
+  assert.match(worker, /frame-src[^"]*https:\/\/www\.instagram\.com/);
 });
 
 test("a pin exists only for an entry that has both coordinates", () => {

@@ -175,10 +175,46 @@ function ToConfirm({ title, caption }: PlateProps) {
   );
 }
 
+function LatPhraoRow({ title }: PlateProps) {
+  return (
+    <Plate title={title}>
+      <polygon points="22,78 160,74 164,230 18,232" fill={DEEP} stroke={INK} strokeWidth="1.6" />
+      {BRICKS.map(([x, y, w, fill], i) => (
+        <rect key={i} x={x} y={y + 8} width={w} height="7" fill={fill} />
+      ))}
+      <rect x="48" y="96" width="22" height="34" fill={PAPER} stroke={INK} strokeWidth="1.1" />
+      <path d="M46 96 H74 V108 Q60 92 46 108 Z" fill={PAPER} stroke={INK} strokeWidth="1.1" />
+      <rect x="112" y="98" width="16" height="22" fill={PAPER} stroke={INK} strokeWidth="1" />
+      <rect x="132" y="98" width="16" height="22" fill={PAPER} stroke={INK} strokeWidth="1" />
+      <rect x="46" y="168" width="10" height="48" fill={GOLD_DEEP} />
+      <rect x="86" y="168" width="10" height="48" fill={GOLD_DEEP} />
+      <rect x="56" y="176" width="30" height="40" fill={RAIL} stroke={INK} strokeWidth="1.1" />
+      <line x1="16" y1="234" x2="168" y2="238" stroke={INK} strokeWidth="1.4" strokeLinecap="round" />
+    </Plate>
+  );
+}
+
+function AwningRow({ title }: PlateProps) {
+  return (
+    <Plate title={title}>
+      <polygon points="36,36 150,32 156,228 30,230" fill={PAPER_SOFT} stroke={INK} strokeWidth="1.6" />
+      {[0, 1, 2].map((i) => (
+        <rect key={i} x={48 + (i % 2)} y={52 + i * 36} width="86" height="18" fill={RAIL} />
+      ))}
+      <polygon points="28,168 158,162 154,178 32,184" fill={GOLD} stroke={INK} strokeWidth="1.1" />
+      <rect x="58" y="186" width="28" height="36" fill={SEAL} stroke={INK} strokeWidth="1" />
+      <rect x="100" y="188" width="28" height="34" fill={JADE} stroke={INK} strokeWidth="1" />
+      <line x1="18" y1="234" x2="166" y2="238" stroke={INK} strokeWidth="1.4" strokeLinecap="round" />
+    </Plate>
+  );
+}
+
 const DRAWINGS: Record<ElevationId, (props: PlateProps) => React.ReactElement> = {
   "fin-and-flowerbox": FinAndFlowerbox,
   "arch-and-column": ArchAndColumn,
   "paired-window-brick": PairedWindowBrick,
+  "lat-phrao-row": LatPhraoRow,
+  "awning-row": AwningRow,
   "to-confirm": ToConfirm,
 };
 
