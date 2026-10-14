@@ -1163,6 +1163,9 @@ test("the shophouse typology library credits its sources and does not copy the d
   assert.match(html, /The type Non grew up in/);
   assert.match(html, /Lat Phrao Road/);
   assert.match(html, /ถนนลาดพร้าว/);
+  assert.match(html, /keep its core identity/);
+  assert.match(html, /https:\/\/www\.penguinrandomhouse\.com\/books\/303439\/triumph-of-the-city-by-edward-glaeser\//);
+  assert.match(html, /https:\/\/web\.archive\.org\/web\/20231226060819\/http:\/\/sigus\.mit\.edu\/about\.php/);
   assert.match(html, /id="typology-map"/);
   assert.match(html, /https:\/\/urbancreature\.co\/shophouse-supply\//);
   assert.match(html, /https:\/\/www\.instagram\.com\/p\/DeG4utWGjvO\//);

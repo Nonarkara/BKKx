@@ -140,6 +140,30 @@
   overflow: auto;
 }
 
+.typo-intro {
+  background: #f4ebd5;
+  color: #15140f;
+  border: 1px solid #15140f;
+  box-shadow: 3px 3px 0 #254f82;
+  padding: 8px 10px;
+}
+
+.typo-intro p,
+.typo-intro li {
+  margin: 0 0 6px;
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+.typo-intro ul {
+  margin: 0;
+  padding-left: 16px;
+}
+
+.typo-intro a {
+  color: #254f82;
+}
+
 .typo-switch {
   list-style: none;
   margin: 0;
@@ -294,6 +318,7 @@
 .typo-top a:focus-visible,
 .typo-bottom a:focus-visible,
 .typo-detail summary:focus-visible,
+.typo-intro a:focus-visible,
 .typo-sources a:focus-visible {
   outline: 2px solid #d2a14e;
   outline-offset: 2px;
@@ -309,7 +334,14 @@
     max-height: 46%;
   }
 
+  .typo-intro {
+    max-height: 7.5rem;
+    overflow: auto;
+    flex: 0 1 auto;
+  }
+
   .typo-switch {
+    flex: 0 0 auto;
     flex-direction: row;
     overflow-x: auto;
   }

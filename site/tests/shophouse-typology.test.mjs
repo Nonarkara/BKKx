@@ -5,6 +5,7 @@ import {
   ELEVATION_IDS,
   SHOPHOUSE_TYPES,
   TO_CONFIRM,
+  TYPOLOGY_STANCE,
   typologyPoints,
 } from "../app/data/shophouse-typology.ts";
 
@@ -89,6 +90,38 @@ test("Lat Phrao is the type Non grew up in, and its facade is not guessed", () =
   assert.equal(entry.lat, undefined);
   assert.equal(entry.lng, undefined);
   assert.match(entry.description.en, /not guessed|not a label|stay open/i);
+});
+
+test("the intro asks how a city houses people, and each type teaches a density lesson", () => {
+  const { intro, sources } = TYPOLOGY_STANCE;
+  text(intro, "intro");
+  assert.match(intro.en, /large number of people/);
+  assert.match(intro.en, /core identity/);
+  assert.match(intro.en, /Glaeser/);
+  assert.match(intro.en, /Goethert/);
+  assert.match(intro.en, /middle-class NIMBYism/);
+  assert.match(intro.th, /หนาแน่น/);
+  assert.notEqual(intro.th, intro.en);
+  assert.match(intro.zh, /密度/);
+  assert.match(intro.zh, /\p{Script=Han}/u);
+  assert.notEqual(intro.zh, intro.en);
+  const urls = sources.map((source) => source.url);
+  assert.ok(urls.includes("https://www.penguinrandomhouse.com/books/303439/triumph-of-the-city-by-edward-glaeser/"));
+  assert.ok(urls.includes("https://web.archive.org/web/20231226060819/http://sigus.mit.edu/about.php"));
+  assert.ok(urls.includes("https://web.archive.org/web/20241223082938/http://web.mit.edu/incrementalhousing/"));
+  for (const source of sources) {
+    assert.ok(source.url.startsWith("https://"), source.url);
+    assert.ok(source.credit.includes("2026") || source.credit.includes("2011"), source.title);
+  }
+  for (const entry of SHOPHOUSE_TYPES) {
+    assert.match(entry.description.en, /lesson/i, entry.id);
+    assert.match(entry.description.th, /บทเรียน/, entry.id);
+    assert.match(entry.description.zh, /课/, entry.id);
+    assert.match(entry.description.en, /densit|adaptab/i, entry.id);
+  }
+  const contributing = readFileSync(new URL("../../CONTRIBUTING.md", import.meta.url), "utf8");
+  assert.match(contributing, /Triumph of the City/);
+  assert.match(contributing, /SIGUS/);
 });
 
 test("the cover types name the facades we can see, and no street we cannot", () => {

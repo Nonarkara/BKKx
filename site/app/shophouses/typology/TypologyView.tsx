@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
 import {
   SHOPHOUSE_TYPES,
+  TYPOLOGY_STANCE,
   typologyPoints,
   type ConfirmPart,
   type Lang,
@@ -255,6 +256,18 @@ export function TypologyView() {
       <div className="typo-stage">
         <div ref={containerRef} id="typology-map" className="typo-map" />
         <div className="typo-rail">
+          <aside className="typo-intro" lang={htmlLang(lang)}>
+            {TYPOLOGY_STANCE.intro[lang].split("\n\n").map((paragraph) => (
+              <p key={paragraph}>{paragraph}</p>
+            ))}
+            <ul>
+              {TYPOLOGY_STANCE.sources.map((source) => (
+                <li key={source.url}>
+                  <a href={source.url}>{source.title}</a>
+                </li>
+              ))}
+            </ul>
+          </aside>
           <ul className="typo-switch">
             {SHOPHOUSE_TYPES.map((entry) => (
               <li key={entry.id}>

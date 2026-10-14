@@ -18,6 +18,8 @@ Keep each chapter factual and navigable. Landmark descriptions should explain ho
 
 The public typology is `/shophouses/typology`. Adding a type means adding one object to `site/app/data/shophouse-typology.ts`. If the facade is confirmed, point `elevation` at a drawing in `site/app/shophouses/typology/elevations.tsx`, or add one id there. Do not add a new page per type.
 
-Write the name, era, street, district, facade and description in English, Thai and Chinese. Set `lat` and `lng` together, or leave both off. A pin is drawn only when both are set. If a street label on a source drawing cannot be read clearly, use “To confirm” / “ยังไม่ยืนยัน” / “待确认” and list that part in `toConfirm`. Credit the drawing and link it. Do not copy the image into this repository.
+Write the name, era, street, district, facade and description in English, Thai and Chinese. In the description, say what the type teaches about density and adaptability: a household and a livelihood on the same lot, changed one bay at a time. The library’s question is how a city houses a large number of people and keeps its core identity, following Edward Glaeser, Triumph of the City (Penguin, 2011), and Reinhard Goethert’s incremental housing at MIT SIGUS. Do not argue for freezing the street.
+
+Set `lat` and `lng` together, or leave both off. A pin is drawn only when both are set. If a street label on a source drawing cannot be read clearly, use “To confirm” / “ยังไม่ยืนยัน” / “待确认” and list that part in `toConfirm`. Credit the drawing and link it. Do not copy the image into this repository.
 
 Lat Phrao Road is the type Non grew up in. No drawing in the 5 October 2026 Urban Creature article is clearly labelled ถนนลาดพร้าว, so that entry’s facade stays unconfirmed until one is.

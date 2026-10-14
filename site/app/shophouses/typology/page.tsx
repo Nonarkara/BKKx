@@ -15,7 +15,7 @@ const zh = localFont({
 export const metadata: Metadata = {
   title: "Shophouse typology · Shophouse Metropolis",
   description:
-    "A public library of Bangkok shophouse types. The first entries are read from Pheangporn Khanti’s drawings, as published by Urban Creature on 5 October 2026, and drawn again here. Lat Phrao Road is the type Non grew up in.",
+    "A public library of Bangkok shophouse types, read as dense, mixed-use, incremental housing. The question is how a city houses many people and keeps its core identity. Lat Phrao Road is the type Non grew up in.",
   alternates: { canonical: "/shophouses/typology" },
   openGraph: {
     title: "Shophouse typology",
@@ -40,6 +40,9 @@ const structuredData = {
     "https://urbancreature.co/shophouse-supply/",
     "https://www.instagram.com/p/DeG4utWGjvO/",
     "https://www.instagram.com/shophouse.supply/",
+    "https://www.penguinrandomhouse.com/books/303439/triumph-of-the-city-by-edward-glaeser/",
+    "https://web.archive.org/web/20231226060819/http://sigus.mit.edu/about.php",
+    "https://web.archive.org/web/20241223082938/http://web.mit.edu/incrementalhousing/",
   ],
   hasPart: SHOPHOUSE_TYPES.map((entry) => ({
     "@type": "CreativeWork",
