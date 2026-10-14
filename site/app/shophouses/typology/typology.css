@@ -87,11 +87,44 @@
   position: absolute;
   inset: 0;
   background: #ecdfc1;
+  z-index: 0;
 }
 
-.typo-map .maplibregl-ctrl-top-right {
-  top: 8px;
-  right: 8px;
+.typo-map.leaflet-container {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  height: 100%;
+  width: 100%;
+  background: #ecdfc1;
+  font-family: "Sao Chingcha", var(--font-zh), var(--font-plex-thai), sans-serif;
+}
+
+.typo-map .leaflet-tile {
+  max-width: none !important;
+  max-height: none !important;
+}
+
+.typo-map .leaflet-control-zoom {
+  border: 1px solid #15140f;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.typo-map .leaflet-control-zoom a {
+  width: 28px;
+  height: 28px;
+  line-height: 28px;
+  color: #15140f;
+  background: #f4ebd5;
+  border-bottom-color: #15140f;
+}
+
+.typo-map .leaflet-control-attribution {
+  background: rgba(244, 235, 213, 0.92);
+  color: #15140f;
+  font-size: 11px;
+  max-width: 46%;
 }
 
 .typo-rail {

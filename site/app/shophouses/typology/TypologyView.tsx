@@ -2,8 +2,6 @@
 
 import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
-import type maplibregl from "maplibre-gl";
-import "maplibre-gl/dist/maplibre-gl.css";
 import {
   SHOPHOUSE_TYPES,
   typologyPoints,
@@ -13,9 +11,62 @@ import {
 } from "../../data/shophouse-typology";
 import { TypeElevation } from "./elevations";
 
-const STYLE = "https://tiles.openfreemap.org/styles/positron";
+// Raster tiles, drawn by Leaflet. The OpenFreeMap vector style throws when a
+// numeric field is null, which blanked this map. CARTO's raster host now
+// returns an API-key watermark. OpenStreetMap's standard tiles still draw
+// the city; the page attributes them.
+const TILES = "https://tile.openstreetmap.org/{z}/{x}/{y}.png";
 const SEAL = "#a83332";
 const INK = "#15140f";
+
+type LeafletMap = {
+  setView: (latlng: [number, number], zoom: number) => void;
+  flyTo: (latlng: [number, number], zoom: number, options?: { duration: number }) => void;
+  remove: () => void;
+  invalidateSize: () => void;
+};
+
+type LeafletNs = {
+  map: (el: HTMLElement, options: Record<string, unknown>) => LeafletMap;
+  tileLayer: (url: string, options: Record<string, unknown>) => { addTo: (map: LeafletMap) => void };
+  circleMarker: (
+    latlng: [number, number],
+    options: Record<string, unknown>,
+  ) => { addTo: (map: LeafletMap) => { on: (event: string, fn: () => void) => void } };
+  control: { zoom: (options: { position: string }) => { addTo: (map: LeafletMap) => void } };
+};
+
+declare global {
+  interface Window {
+    L?: LeafletNs;
+  }
+}
+
+function loadLeaflet(): Promise<LeafletNs> {
+  if (window.L) return Promise.resolve(window.L);
+  return new Promise((resolve, reject) => {
+    if (!document.getElementById("typology-leaflet-css")) {
+      const link = document.createElement("link");
+      link.id = "typology-leaflet-css";
+      link.rel = "stylesheet";
+      link.href = "/drainage/vendor/leaflet.css";
+      document.head.appendChild(link);
+    }
+    const existing = document.querySelector<HTMLScriptElement>("script[data-typology-leaflet]");
+    const finish = () => (window.L ? resolve(window.L) : reject(new Error("Leaflet missing")));
+    if (existing) {
+      if (window.L) finish();
+      else existing.addEventListener("load", finish, { once: true });
+      return;
+    }
+    const script = document.createElement("script");
+    script.src = "/drainage/vendor/leaflet.js";
+    script.dataset.typologyLeaflet = "1";
+    script.onload = finish;
+    script.onerror = () => reject(new Error("Leaflet failed to load"));
+    document.body.appendChild(script);
+  });
+}
 
 const CHROME: Record<
   Lang,
@@ -113,7 +164,7 @@ function htmlLang(lang: Lang): string {
 
 export function TypologyView() {
   const containerRef = useRef<HTMLDivElement | null>(null);
-  const mapRef = useRef<maplibregl.Map | null>(null);
+  const mapRef = useRef<LeafletMap | null>(null);
   const [lang, setLang] = useState<Lang>("en");
   const [selectedId, setSelectedId] = useState(SHOPHOUSE_TYPES[0]?.id ?? "");
   const chrome = CHROME[lang];
@@ -126,46 +177,39 @@ export function TypologyView() {
     let disposed = false;
 
     void (async () => {
-      const maplibre = (await import("maplibre-gl")).default;
+      let L: LeafletNs;
+      try {
+        L = await loadLeaflet();
+      } catch {
+        return;
+      }
       if (disposed || !containerRef.current) return;
-      const map = new maplibre.Map({
-        container: containerRef.current,
-        style: STYLE,
-        center: [100.55, 13.756],
-        zoom: 11,
+      const map = L.map(containerRef.current, {
+        zoomControl: false,
         minZoom: 9,
         maxZoom: 17,
-        renderWorldCopies: false,
-        attributionControl: false,
+        attributionControl: true,
       });
+      map.setView([13.756, 100.55], 11);
       mapRef.current = map;
-      map.addControl(new maplibre.NavigationControl({ showCompass: false }), "top-right");
-      map.addControl(new maplibre.AttributionControl({ compact: true }), "bottom-right");
-      map.on("load", () => {
-        if (disposed) return;
-        map.addSource("typology", { type: "geojson", data: typologyPoints() });
-        map.addLayer({
-          id: "typology-pins",
-          type: "circle",
-          source: "typology",
-          paint: {
-            "circle-radius": 7,
-            "circle-color": SEAL,
-            "circle-stroke-width": 1.5,
-            "circle-stroke-color": INK,
-          },
-        });
-        map.on("click", "typology-pins", (event) => {
-          const id = event.features?.[0]?.properties?.id;
-          if (typeof id === "string") setSelectedId(id);
-        });
-        map.on("mouseenter", "typology-pins", () => {
-          map.getCanvas().style.cursor = "pointer";
-        });
-        map.on("mouseleave", "typology-pins", () => {
-          map.getCanvas().style.cursor = "";
-        });
-      });
+      L.tileLayer(TILES, {
+        attribution:
+          '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+        maxZoom: 20,
+      }).addTo(map);
+      L.control.zoom({ position: "topright" }).addTo(map);
+      for (const entry of SHOPHOUSE_TYPES) {
+        if (entry.lat == null || entry.lng == null) continue;
+        const marker = L.circleMarker([entry.lat, entry.lng], {
+          radius: 7,
+          color: INK,
+          weight: 1.5,
+          fillColor: SEAL,
+          fillOpacity: 1,
+        }).addTo(map);
+        marker.on("click", () => setSelectedId(entry.id));
+      }
+      window.setTimeout(() => map.invalidateSize(), 0);
     })();
 
     return () => {
@@ -177,11 +221,11 @@ export function TypologyView() {
 
   useEffect(() => {
     const map = mapRef.current;
-    if (!map || !map.isStyleLoaded() || !selected || selected.lat == null || selected.lng == null) return;
+    if (!map || !selected || selected.lat == null || selected.lng == null) return;
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const center: [number, number] = [selected.lng, selected.lat];
-    if (reduced) map.jumpTo({ center, zoom: 15 });
-    else map.flyTo({ center, zoom: 15 });
+    const center: [number, number] = [selected.lat, selected.lng];
+    if (reduced) map.setView(center, 15);
+    else map.flyTo(center, 15, { duration: 0.6 });
   }, [selected]);
 
   return (
