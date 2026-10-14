@@ -25,3 +25,5 @@ Write the name, era, street, district, facade and description in English, Thai a
 Set `lat` and `lng` together, or leave both off. A pin is drawn only when both are set. If a street label on a source drawing cannot be read clearly, use “To confirm” / “ยังไม่ยืนยัน” / “待确认” and list that part in `toConfirm`. Credit the drawing and link it. Do not copy the image into this repository.
 
 Lat Phrao Road is the type Non grew up in. The 5 October 2026 carousel image 3 is titled ถนนลาดพร้าว, so that facade is filed. The decade, the district and the map point stay open. Two other sheets in that carousel did not yield a place name clear enough to file; leave those out rather than guess.
+
+Abhinav Bhardwaj’s “Climate responsive Urbanism!” carousel is a street-climate toolkit, not a set of Bangkok facades. Use the moves that bear on a row — street height against width, shade against felt heat — and say when a ratio has not been measured. The neighbourhood plan on that carousel is an illustration, not a real site. Embed the post; do not copy the drawings.

@@ -41,6 +41,7 @@ const structuredData = {
     "https://www.instagram.com/p/DeG4utWGjvO/",
     "https://www.instagram.com/shophouse.supply/",
     "https://www.instagram.com/p/DeaILEpk_xF/",
+    "https://www.instagram.com/p/DeUKkA8kvDF/",
     "https://www.instagram.com/abhinavbwj/",
     "https://www.penguinrandomhouse.com/books/303439/triumph-of-the-city-by-edward-glaeser/",
     "https://web.archive.org/web/20231226060819/http://sigus.mit.edu/about.php",
