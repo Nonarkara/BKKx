@@ -1171,6 +1171,9 @@ test("the shophouse typology library credits its sources and does not copy the d
   assert.match(html, /https:\/\/www\.instagram\.com\/p\/DeG4utWGjvO\//);
   assert.match(html, /https:\/\/www\.instagram\.com\/p\/DeaILEpk_xF\//);
   assert.match(html, /https:\/\/www\.instagram\.com\/p\/DeUKkA8kvDF\//);
+  assert.match(html, /https:\/\/www\.instagram\.com\/p\/Dedgqo9jFOM\//);
+  assert.match(html, /@avanidoesart/);
+  assert.match(html, /@urbanistcomix/);
   assert.match(html, /img_index=4/);
   assert.match(html, /https:\/\/www\.instagram\.com\/shophouse\.supply\//);
   assert.match(html, /blockquote/);

@@ -5,6 +5,7 @@ import {
   CREATOR,
   ELEVATION_IDS,
   CLIMATE_POST,
+  SAFETY_POST,
   JACOBS_POST,
   SHOPHOUSE_TYPES,
   TO_CONFIRM,
@@ -18,6 +19,7 @@ const ARTICLE = "https://urbancreature.co/shophouse-supply/";
 const POST = "https://www.instagram.com/p/DeG4utWGjvO/";
 const POST_2 = "https://www.instagram.com/p/DeaILEpk_xF/";
 const POST_3 = "https://www.instagram.com/p/DeUKkA8kvDF/";
+const POST_4 = "https://www.instagram.com/p/Dedgqo9jFOM/";
 const BANGKOK = { lat: [13.4, 14.2], lng: [100.2, 101.1] };
 
 function text(value, label) {
@@ -51,7 +53,10 @@ test("every shophouse type is one complete trilingual entry", () => {
     assert.ok(urls.includes(POST), `${entry.id} missing the Instagram post`);
     assert.ok(urls.includes(POST_2), `${entry.id} missing the Jacobs post`);
     assert.ok(urls.includes(POST_3), `${entry.id} missing the climate post`);
+    assert.ok(urls.includes(POST_4), `${entry.id} missing the safety comic`);
     const creditBlob = entry.sources.map((source) => `${source.title} ${source.credit}`).join(" ");
+    assert.match(creditBlob, /@avanidoesart/);
+    assert.match(creditBlob, /@urbanistcomix/);
     assert.match(creditBlob, /Pheangporn Khanti/);
     assert.match(creditBlob, /@shophouse\.supply/);
     assert.match(creditBlob, /Abhinav Bhardwaj/);
@@ -184,7 +189,16 @@ test("the record keeps the article and both posts, and the embed script stays la
   assert.match(TYPOLOGY_RECORD.zh, /0\.4 到 0\.6/);
   assert.equal(CLIMATE_POST.post, POST_3);
   assert.equal(CLIMATE_POST.imageIndex, 4);
+  assert.match(TYPOLOGY_RECORD.en, /@avanidoesart/);
+  assert.match(TYPOLOGY_RECORD.en, /@urbanistcomix/);
+  assert.match(TYPOLOGY_RECORD.en, /line of sight/);
+  assert.match(TYPOLOGY_RECORD.en, /Freezing the buildings/);
+  assert.match(TYPOLOGY_RECORD.th, /@avanidoesart/);
+  assert.match(TYPOLOGY_RECORD.zh, /@urbanistcomix/);
+  assert.equal(SAFETY_POST.post, POST_4);
+  assert.equal(SAFETY_POST.imageIndex, 3);
   const page = readFileSync(new URL("../app/shophouses/typology/TypologyView.tsx", import.meta.url), "utf8");
+  assert.match(page, /SAFETY_POST/);
   assert.match(page, /CLIMATE_POST/);
   assert.equal(TYPOLOGY_STANCE.embed.postUrl, JACOBS_POST.post);
   assert.equal(TYPOLOGY_STANCE.embed.imageIndex, 8);

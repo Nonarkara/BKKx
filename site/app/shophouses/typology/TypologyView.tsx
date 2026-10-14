@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
 import {
   CLIMATE_POST,
+  SAFETY_POST,
   CREATOR,
   JACOBS_POST,
   SHOPHOUSE_TYPES,
@@ -301,6 +302,11 @@ export function TypologyView() {
               embed={{ postUrl: CLIMATE_POST.post, imageIndex: CLIMATE_POST.imageIndex }}
               name={CLIMATE_POST.name}
               handle={CLIMATE_POST.handle}
+            />
+            <InstagramEmbed
+              embed={{ postUrl: SAFETY_POST.post, imageIndex: SAFETY_POST.imageIndex }}
+              name={SAFETY_POST.name}
+              handle={SAFETY_POST.handle}
             />
             <ul>
               {[...TYPOLOGY_CREDITS, ...TYPOLOGY_STANCE.sources].map((source) => (

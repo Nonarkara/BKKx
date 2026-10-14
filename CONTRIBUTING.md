@@ -27,3 +27,5 @@ Set `lat` and `lng` together, or leave both off. A pin is drawn only when both a
 Lat Phrao Road is the type Non grew up in. The 5 October 2026 carousel image 3 is titled ถนนลาดพร้าว, so that facade is filed. The decade, the district and the map point stay open. Two other sheets in that carousel did not yield a place name clear enough to file; leave those out rather than guess.
 
 Abhinav Bhardwaj’s “Climate responsive Urbanism!” carousel is a street-climate toolkit, not a set of Bangkok facades. Use the moves that bear on a row — street height against width, shade against felt heat — and say when a ratio has not been measured. The neighbourhood plan on that carousel is an illustration, not a real site. Embed the post; do not copy the drawings.
+
+The comic “We need to talk about the basics now” is by @avanidoesart and posted by @urbanistcomix (Leewardists). Use it where a row is a street someone walks: light, a line of sight from the rooms above, a ground floor that stays occupied. Credit both handles. Embed the post; do not copy the panels. Housing many people over working shops is the safety in that argument. Do not turn it into a case for freezing the street.
