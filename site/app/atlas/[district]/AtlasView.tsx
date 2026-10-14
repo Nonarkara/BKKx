@@ -108,6 +108,29 @@ const HERITAGE_DETAIL_HEIGHT: maplibregl.ExpressionSpecification = [
   ],
 ];
 
+const HERITAGE_DETAIL_FILTER: maplibregl.FilterSpecification = ["all", ["!=", ["get", "hide_3d"], true], [">", HERITAGE_DETAIL_HEIGHT, 0]];
+
+// Thai forms (heritage-forms.ts): from this zoom the Old Town's temples,
+// chedis, prangs, mondops, throne halls and forts are drawn as their forms
+// instead of boxes. Below it the boxes stay — at city scale a tiered roof is
+// a few pixels and three.js would be weight for nothing.
+const FORMS_MIN_ZOOM = 15;
+const FORM_KIND_LABEL: Record<string, (f: { tiers: number; spires: number }) => string> = {
+  hall: (f) => `Ubosot / wihan hall · ${f.tiers} roof tier${f.tiers > 1 ? "s" : ""}`,
+  sala: () => "Sala · open pavilion",
+  chedi: () => "Bell chedi",
+  prang: () => "Prang",
+  mondop: () => "Mondop · stepped spire",
+  prasat: () => "Prasat · cruciform, prang at the crossing",
+  throne: (f) => `Throne hall · ${f.spires} spire${f.spires > 1 ? "s" : ""}`,
+  fort: () => "Fort · parapet and pavilion",
+};
+const FORM_CONFIDENCE_NOTE: Record<string, string> = {
+  named: "Type from the building's name; plan from its OpenStreetMap footprint. Roof tiers, profiles and proportions are typological, not measured.",
+  inferred: "Unnamed temple building: type read from its footprint shape (a long hall or a round chedi). Tiers and proportions are typological, not measured.",
+  envelope: "Overall height from the published survey envelope; the profile between base and finial is typological, not measured.",
+};
+
 const HERITAGE_DETAIL_COLOR: maplibregl.ExpressionSpecification = [
   "match",
   ["coalesce", ["get", "building"], ["get", "building_type"], ""],
@@ -708,6 +731,8 @@ export function AtlasView({ world, embedded = false, initialView, floodEdition =
   const [selectedArchitecture, setSelectedArchitecture] = useState<ArchitecturalDetail | null>(null);
   const [selectedCandidate, setSelectedCandidate] = useState<RowhouseCandidate | null>(null);
   const [selectedMobility, setSelectedMobility] = useState<{ kind: "service" | "stop"; id: string } | null>(null);
+  // Detail and hero ids the Thai forms replace (filled when the forms load).
+  const formsReplacedRef = useRef<{ detail: string[]; hero: string[] } | null>(null);
   const heritageMarkerRefs = useRef<maplibregl.Marker[]>([]);
   const [selectedWalkSlug, setSelectedWalkSlug] = useState<string | null>(null);
   const [walkGeometry, setWalkGeometry] = useState<Record<string, { line: LngLat[] }> | null>(null);
@@ -1194,7 +1219,7 @@ export function AtlasView({ world, embedded = false, initialView, floodEdition =
               type: "fill-extrusion",
               source: "bkkx-heritage-detail-src",
               minzoom: 13.5,
-              filter: ["all", ["!=", ["get", "hide_3d"], true], [">", HERITAGE_DETAIL_HEIGHT, 0]],
+              filter: HERITAGE_DETAIL_FILTER,
               paint: {
                 "fill-extrusion-color": HERITAGE_DETAIL_COLOR,
                 "fill-extrusion-height": HERITAGE_DETAIL_HEIGHT,
@@ -1948,6 +1973,115 @@ export function AtlasView({ world, embedded = false, initialView, floodEdition =
       if (map.getLayer(layerId)) map.setLayoutProperty(layerId, "visibility", visibility);
     }
   }, [showArchitecturalDetail, mapReady]);
+
+  // Thai forms. Loaded the first time the Old Town is in view at street
+  // zoom; shown only with Old Town 3D on and Evidence mode off (Evidence
+  // recolours the boxes by how each height was established — that question
+  // is answered on the boxes, so the forms step aside for it).
+  useEffect(() => {
+    const map = mapRef.current;
+    const ml = maplibreModuleRef.current;
+    if (!map || !ml || !mapReady || !hasHistoricContext) return;
+    let cancelled = false;
+    let loading = false;
+    const wanted = () => showArchitecturalDetail && !evidenceMode && map.getZoom() >= FORMS_MIN_ZOOM;
+    const apply = (on: boolean) => {
+      if (map.getLayer("bkkx-heritage-forms")) map.setLayoutProperty("bkkx-heritage-forms", "visibility", on ? "visible" : "none");
+      if (map.getLayer("bkkx-heritage-forms-hit")) map.setLayoutProperty("bkkx-heritage-forms-hit", "visibility", on ? "visible" : "none");
+      const replaced = formsReplacedRef.current;
+      if (!replaced) return;
+      if (map.getLayer("bkkx-heritage-detail")) {
+        map.setFilter("bkkx-heritage-detail", on
+          ? ["all", HERITAGE_DETAIL_FILTER, ["!", ["in", ["get", "id"], ["literal", replaced.detail]]]] as maplibregl.FilterSpecification
+          : HERITAGE_DETAIL_FILTER);
+      }
+      // The curated landmark layer draws some of the same buildings under the
+      // same ids; a form replaces both copies.
+      if (map.getLayer("bkkx-heritage-landmarks")) {
+        map.setFilter("bkkx-heritage-landmarks", on
+          ? ["all", ["!=", ["get", "hide_3d"], true], ["!", ["in", ["get", "id"], ["literal", replaced.detail]]]] as maplibregl.FilterSpecification
+          : ["!=", ["get", "hide_3d"], true]);
+      }
+      if (map.getLayer("bkkx-hero-monuments")) {
+        map.setFilter("bkkx-hero-monuments", on
+          ? ["!", ["in", ["get", "id"], ["literal", replaced.hero]]] as maplibregl.FilterSpecification
+          : null);
+      }
+    };
+    const ensure = async () => {
+      if (map.getLayer("bkkx-heritage-forms") || loading) return;
+      loading = true;
+      try {
+        const [res, mod] = await Promise.all([fetch("/data/bkk-heritage-forms.json"), import("./heritage-forms-layer")]);
+        if (!res.ok) throw new Error(`forms HTTP ${res.status}`);
+        const data = (await res.json()) as { forms: import("./heritage-forms").FormSpec[] };
+        if (cancelled || map.getLayer(mod.FORMS_LAYER_ID)) return;
+        formsReplacedRef.current = {
+          detail: data.forms.flatMap((f) => f.replaces.detail),
+          hero: data.forms.flatMap((f) => f.replaces.hero),
+        };
+        const before = map.getLayer("bkkx-heritage-landmark-labels") ? "bkkx-heritage-landmark-labels" : undefined;
+        map.addLayer(mod.createFormsLayer(ml, data.forms), before);
+        // An invisible footprint layer makes each form clickable through the
+        // same inspect card as the boxes.
+        map.addSource("bkkx-heritage-forms-hit-src", {
+          type: "geojson",
+          data: {
+            type: "FeatureCollection",
+            features: data.forms.map((f) => ({
+              type: "Feature" as const,
+              geometry: { type: "Polygon" as const, coordinates: [f.ring] },
+              properties: {
+                id: f.id,
+                name: f.name ?? undefined,
+                name_en: f.nameEn ?? undefined,
+                kind: FORM_KIND_LABEL[f.kind]?.(f) ?? f.kind,
+                height: Math.round(f.base + f.height),
+                model_status: "Interpretive Thai form",
+                source_note: FORM_CONFIDENCE_NOTE[f.confidence],
+                height_source: f.heightSource ?? undefined,
+                height_confidence: f.heightConfidence ?? undefined,
+                osm_id: f.osmId ?? undefined,
+              },
+            })),
+          },
+        });
+        map.addLayer({
+          id: "bkkx-heritage-forms-hit",
+          type: "fill",
+          source: "bkkx-heritage-forms-hit-src",
+          minzoom: FORMS_MIN_ZOOM,
+          paint: { "fill-color": "#000", "fill-opacity": 0 },
+        }, before);
+        map.on("click", "bkkx-heritage-forms-hit", (event) => {
+          const properties = event.features?.[0]?.properties;
+          if (!properties) return;
+          setSelectedArchitecture(properties as unknown as ArchitecturalDetail);
+          setSelectedHeritage(null);
+          setSelectedPoi(null);
+          setSelectedCandidate(null);
+          setSelectedMobility(null);
+        });
+        map.on("mouseenter", "bkkx-heritage-forms-hit", () => { map.getCanvas().style.cursor = "pointer"; });
+        map.on("mouseleave", "bkkx-heritage-forms-hit", () => { map.getCanvas().style.cursor = ""; });
+      } catch (err) {
+        console.warn("bkkx: heritage forms failed; the boxes stay", err);
+      } finally {
+        loading = false;
+      }
+      if (!cancelled) apply(wanted());
+    };
+    const sync = () => {
+      if (wanted()) void ensure().then(() => { if (!cancelled) apply(wanted()); });
+      else apply(false);
+    };
+    sync();
+    map.on("zoomend", sync);
+    return () => {
+      cancelled = true;
+      map.off("zoomend", sync);
+    };
+  }, [mapReady, hasHistoricContext, showArchitecturalDetail, evidenceMode]);
 
   // Evidence mode: the same geometry, recoloured by how each height was
   // established. Only the paint changes — no layer is hidden and no
