@@ -13,3 +13,11 @@ BKKx grows one testable Bangkok chapter at a time. Open an issue before generati
 7. Run the site build, type check, lint and rendered HTML test documented in the README.
 
 Keep each chapter factual and navigable. Landmark descriptions should explain how to read the surrounding city, not just repeat encyclopedia facts.
+
+## A shophouse type
+
+The public typology is `/shophouses/typology`. Adding a type means adding one object to `site/app/data/shophouse-typology.ts`. If the facade is confirmed, point `elevation` at a drawing in `site/app/shophouses/typology/elevations.tsx`, or add one id there. Do not add a new page per type.
+
+Write the name, era, street, district, facade and description in English, Thai and Chinese. Set `lat` and `lng` together, or leave both off. A pin is drawn only when both are set. If a street label on a source drawing cannot be read clearly, use “To confirm” / “ยังไม่ยืนยัน” / “待确认” and list that part in `toConfirm`. Credit the drawing and link it. Do not copy the image into this repository.
+
+Lat Phrao Road is the type Non grew up in. No drawing in the 5 October 2026 Urban Creature article is clearly labelled ถนนลาดพร้าว, so that entry’s facade stays unconfirmed until one is.

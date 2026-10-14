@@ -1,0 +1,308 @@
+/* Typology library. Map is the field. Palette paper cards float on it.
+   Top bar is 48px. Bottom bar is 56px. Flat colour only. */
+
+.typo-shell {
+  height: 100dvh;
+  display: grid;
+  grid-template-rows: 48px minmax(0, 1fr) 56px;
+  background: #15140f;
+  color: #15140f;
+  font-family: "Sao Chingcha", var(--font-zh), var(--font-plex-thai), sans-serif;
+}
+
+.typo-top {
+  height: 48px;
+  max-height: 48px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 12px;
+  background: #15140f;
+  color: #f4ebd5;
+  overflow: hidden;
+}
+
+.typo-mark {
+  color: #f4ebd5;
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.typo-top h1 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 400;
+  letter-spacing: 0;
+  color: #d2a14e;
+  white-space: nowrap;
+}
+
+.typo-top nav {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.typo-top a {
+  color: #f4ebd5;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+.typo-lang {
+  display: flex;
+  gap: 4px;
+}
+
+.typo-lang button,
+.typo-card,
+.typo-detail summary {
+  font: inherit;
+  cursor: pointer;
+}
+
+.typo-lang button {
+  min-width: 36px;
+  height: 28px;
+  padding: 0 8px;
+  border: 1px solid #f4ebd5;
+  background: transparent;
+  color: #f4ebd5;
+}
+
+.typo-lang button[aria-pressed="true"] {
+  background: #f4ebd5;
+  color: #15140f;
+}
+
+.typo-stage {
+  position: relative;
+  min-height: 0;
+}
+
+.typo-map {
+  position: absolute;
+  inset: 0;
+  background: #ecdfc1;
+}
+
+.typo-map .maplibregl-ctrl-top-right {
+  top: 8px;
+  right: 8px;
+}
+
+.typo-rail {
+  position: absolute;
+  z-index: 2;
+  top: 10px;
+  left: 10px;
+  width: min(360px, calc(100% - 20px));
+  max-height: calc(100% - 20px);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  overflow: auto;
+}
+
+.typo-switch {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  overflow: auto;
+}
+
+.typo-card {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  width: 100%;
+  padding: 6px;
+  text-align: left;
+  background: #f4ebd5;
+  color: #15140f;
+  border: 1px solid #15140f;
+  box-shadow: 3px 3px 0 #254f82;
+}
+
+.typo-card[aria-pressed="true"] {
+  border-color: #254f82;
+  border-width: 2px;
+}
+
+.typo-card.is-featured {
+  box-shadow: 3px 3px 0 #a83332;
+}
+
+.typo-card-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.typo-kicker {
+  color: #a83332;
+  font-size: 12px;
+  font-style: normal;
+}
+
+.typo-name {
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+.typo-place {
+  font-size: 13px;
+  color: #2c2820;
+}
+
+.typo-elev {
+  width: 72px;
+  height: 96px;
+  flex: 0 0 auto;
+  display: block;
+}
+
+.typo-elev text {
+  font-family: inherit;
+}
+
+.typo-detail {
+  background: #f4ebd5;
+  color: #15140f;
+  border: 1px solid #15140f;
+  box-shadow: 3px 3px 0 #254f82;
+  padding: 10px 12px;
+  overflow: auto;
+  min-height: 0;
+}
+
+.typo-detail.is-featured {
+  box-shadow: 3px 3px 0 #a83332;
+}
+
+.typo-detail .typo-elev {
+  display: none;
+}
+
+.typo-detail h2 {
+  margin: 0 0 6px;
+  font-size: 18px;
+  line-height: 1.3;
+}
+
+.typo-detail p,
+.typo-detail li {
+  margin: 0 0 6px;
+  font-size: 14px;
+  line-height: 1.45;
+}
+
+.typo-features {
+  margin: 0 0 6px;
+  padding-left: 18px;
+}
+
+.typo-open {
+  color: #7a2222;
+}
+
+.typo-sources summary {
+  font-size: 14px;
+}
+
+.typo-sources ul {
+  margin: 6px 0 0;
+  padding-left: 18px;
+}
+
+.typo-sources a {
+  color: #254f82;
+}
+
+.typo-bottom {
+  height: 56px;
+  max-height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 0 12px;
+  background: #f4ebd5;
+  color: #15140f;
+  border-top: 1px solid #15140f;
+  overflow: hidden;
+}
+
+.typo-bottom p {
+  margin: 0;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 13px;
+}
+
+.typo-bottom a {
+  flex: 0 0 auto;
+  color: #254f82;
+  font-size: 13px;
+  white-space: nowrap;
+}
+
+.typo-card:focus-visible,
+.typo-lang button:focus-visible,
+.typo-top a:focus-visible,
+.typo-bottom a:focus-visible,
+.typo-detail summary:focus-visible,
+.typo-sources a:focus-visible {
+  outline: 2px solid #d2a14e;
+  outline-offset: 2px;
+}
+
+@media (max-width: 720px) {
+  .typo-rail {
+    top: auto;
+    bottom: 8px;
+    left: 8px;
+    right: 8px;
+    width: auto;
+    max-height: 46%;
+  }
+
+  .typo-switch {
+    flex-direction: row;
+    overflow-x: auto;
+  }
+
+  .typo-card {
+    width: 132px;
+    flex: 0 0 auto;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .typo-elev {
+    width: 100%;
+    height: 64px;
+  }
+
+  .typo-detail .typo-elev {
+    display: block;
+    width: 120px;
+    height: 148px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .typo-switch,
+  .typo-detail {
+    scroll-behavior: auto;
+  }
+}

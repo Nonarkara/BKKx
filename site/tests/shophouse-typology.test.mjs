@@ -1,0 +1,137 @@
+import assert from "node:assert/strict";
+import test from "node:test";
+import { readFileSync } from "node:fs";
+import {
+  ELEVATION_IDS,
+  SHOPHOUSE_TYPES,
+  TO_CONFIRM,
+  typologyPoints,
+} from "../app/data/shophouse-typology.ts";
+
+const LANGS = ["en", "th", "zh"];
+const ARTICLE = "https://urbancreature.co/shophouse-supply/";
+const POST = "https://www.instagram.com/p/DeG4utWGjvO/";
+const BANGKOK = { lat: [13.4, 14.2], lng: [100.2, 101.1] };
+
+function text(value, label) {
+  assert.equal(typeof value, "object", label);
+  for (const lang of LANGS) {
+    assert.equal(typeof value[lang], "string", `${label}.${lang}`);
+    assert.ok(value[lang].trim().length > 0, `${label}.${lang} is empty`);
+  }
+}
+
+test("every shophouse type is one complete trilingual entry", () => {
+  assert.ok(SHOPHOUSE_TYPES.length >= 4);
+  const ids = new Set();
+  for (const entry of SHOPHOUSE_TYPES) {
+    assert.match(entry.id, /^[a-z0-9]+(?:-[a-z0-9]+)*$/, entry.id);
+    assert.ok(!ids.has(entry.id), `duplicate id ${entry.id}`);
+    ids.add(entry.id);
+    text(entry.name, `${entry.id} name`);
+    text(entry.era, `${entry.id} era`);
+    text(entry.street, `${entry.id} street`);
+    text(entry.district, `${entry.id} district`);
+    text(entry.description, `${entry.id} description`);
+    text(entry.drawingRef, `${entry.id} drawingRef`);
+    assert.ok(entry.description.en.length >= 40, `${entry.id} description is thin`);
+    assert.ok(entry.facade.length >= 1, `${entry.id} facade`);
+    for (const feature of entry.facade) text(feature, `${entry.id} facade`);
+    assert.ok(ELEVATION_IDS.includes(entry.elevation), `${entry.id} elevation`);
+    assert.ok(entry.sources.length >= 1, `${entry.id} sources`);
+    const urls = entry.sources.map((source) => source.url);
+    assert.ok(urls.includes(ARTICLE), `${entry.id} missing the Urban Creature article`);
+    assert.ok(urls.includes(POST), `${entry.id} missing the Instagram post`);
+    for (const source of entry.sources) {
+      assert.ok(source.url.startsWith("https://"), source.url);
+      assert.ok(!source.url.includes("/wp-content/"), `${entry.id} must link, not copy, her image`);
+      assert.ok(source.title.trim().length > 0 && source.credit.trim().length > 0, source.url);
+    }
+    assert.match(entry.drawingRef.en, /not reproduced/i, entry.id);
+    const hasLat = typeof entry.lat === "number";
+    const hasLng = typeof entry.lng === "number";
+    assert.equal(hasLat, hasLng, `${entry.id} lat and lng are a pair`);
+    if (hasLat) {
+      assert.ok(entry.lat > BANGKOK.lat[0] && entry.lat < BANGKOK.lat[1], entry.id);
+      assert.ok(entry.lng > BANGKOK.lng[0] && entry.lng < BANGKOK.lng[1], entry.id);
+      assert.ok(!entry.toConfirm.includes("point"), `${entry.id} has a point and still marks it open`);
+    } else {
+      assert.ok(entry.toConfirm.includes("point"), `${entry.id} has no point`);
+    }
+    if (entry.toConfirm.includes("street")) assert.deepEqual(entry.street, TO_CONFIRM);
+    if (entry.toConfirm.includes("district")) assert.deepEqual(entry.district, TO_CONFIRM);
+    if (entry.toConfirm.includes("era")) assert.deepEqual(entry.era, TO_CONFIRM);
+    if (entry.toConfirm.includes("facade")) {
+      assert.equal(entry.facade.length, 1);
+      assert.deepEqual(entry.facade[0], TO_CONFIRM);
+      assert.equal(entry.elevation, "to-confirm");
+    }
+  }
+});
+
+test("Lat Phrao is the type Non grew up in, and its facade is not guessed", () => {
+  const entry = SHOPHOUSE_TYPES.find((item) => item.id === "lat-phrao");
+  assert.ok(entry, "lat-phrao");
+  assert.equal(entry.featured.en, "The type Non grew up in");
+  assert.match(entry.featured.th, /นน/);
+  assert.match(entry.featured.th, /[ก-๙]/);
+  assert.notEqual(entry.featured.th, entry.featured.en);
+  assert.match(entry.featured.zh, /Non/);
+  assert.match(entry.featured.zh, /\p{Script=Han}/u);
+  assert.notEqual(entry.featured.zh, entry.featured.en);
+  assert.equal(entry.street.en, "Lat Phrao Road");
+  assert.equal(entry.street.th, "ถนนลาดพร้าว");
+  assert.match(entry.street.zh, /拉抛/);
+  assert.ok(!entry.toConfirm.includes("street"));
+  for (const part of ["era", "district", "facade", "point"]) {
+    assert.ok(entry.toConfirm.includes(part), part);
+  }
+  assert.equal(entry.lat, undefined);
+  assert.equal(entry.lng, undefined);
+  assert.match(entry.description.en, /not guessed|not a label|stay open/i);
+});
+
+test("the cover types name the facades we can see, and no street we cannot", () => {
+  const fin = SHOPHOUSE_TYPES.find((item) => item.id === "fin-and-flowerbox");
+  const arch = SHOPHOUSE_TYPES.find((item) => item.id === "arch-and-column");
+  const brick = SHOPHOUSE_TYPES.find((item) => item.id === "paired-window-brick");
+  const features = (entry) => entry.facade.map((item) => item.en).join(" ");
+  assert.match(features(fin), /Vertical fins/);
+  assert.match(features(fin), /Flower-box balconies/);
+  assert.match(features(fin), /Folding steel door/);
+  assert.match(features(arch), /Arched upper windows/);
+  assert.match(features(arch), /Columns/);
+  assert.match(features(brick), /Brick facade/);
+  assert.match(features(brick), /Paired windows/);
+  for (const entry of [fin, arch, brick]) {
+    assert.deepEqual(entry.street, TO_CONFIRM);
+    assert.ok(entry.toConfirm.includes("street"));
+    assert.ok(!entry.toConfirm.includes("facade"));
+  }
+});
+
+test("a pin exists only for an entry that has both coordinates", () => {
+  assert.equal(typologyPoints().features.length, 0);
+  const pinned = typologyPoints([
+    {
+      ...SHOPHOUSE_TYPES[1],
+      lat: 13.75,
+      lng: 100.5,
+      toConfirm: ["street"],
+    },
+  ]);
+  assert.equal(pinned.features.length, 1);
+  assert.deepEqual(pinned.features[0].geometry.coordinates, [100.5, 13.75]);
+});
+
+test("the library tells a contributor to add one entry, and the map chrome stays short", () => {
+  const contributing = readFileSync(new URL("../../CONTRIBUTING.md", import.meta.url), "utf8");
+  assert.match(contributing, /shophouse-typology\.ts/);
+  assert.match(contributing, /To confirm/);
+  const css = readFileSync(new URL("../app/shophouses/typology/typology.css", import.meta.url), "utf8");
+  assert.match(css, /\.typo-top\s*\{[^}]*height:\s*48px/);
+  assert.match(css, /\.typo-bottom\s*\{[^}]*height:\s*56px/);
+  assert.doesNotMatch(css, /linear-gradient|radial-gradient/);
+  const drawings = readFileSync(new URL("../app/shophouses/typology/elevations.tsx", import.meta.url), "utf8");
+  assert.doesNotMatch(drawings, /linear-gradient|radial-gradient|foreignObject/);
+});
