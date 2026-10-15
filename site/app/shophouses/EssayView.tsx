@@ -47,6 +47,7 @@ export function EssayView() {
         <nav aria-label="Essay">
           <a href="#essay">Essay</a>
           <a href="#research">Notes</a>
+          <Link href="/shophouses/typology">Typology</Link>
           <Link href="/shophouses/bible">The Bible</Link>
           <Link href="/shophouses/global">Global</Link>
           <Link href="/shophouses/research">Sources</Link>

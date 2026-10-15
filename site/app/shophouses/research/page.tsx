@@ -34,6 +34,7 @@ export default function ResearchPage() {
           Shophouse<em>Metropolis</em>
         </Link>
         <nav aria-label="Research">
+          <Link href="/shophouses/typology">Typology</Link>
           <Link href="/shophouses">The essay</Link>
           <Link href="/shophouses/bible">The Bible</Link>
           <a href="#facts">Did you know</a>

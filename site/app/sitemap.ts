@@ -31,6 +31,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       "/case-for-bangkok",
       "/datasets",
       "/shophouses",
+      "/shophouses/typology",
       "/shophouses/atlas",
       "/shophouses/bible",
       "/shophouses/global",

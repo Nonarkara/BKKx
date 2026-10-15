@@ -1061,7 +1061,7 @@ test("every primary public route renders successfully", async () => {
   for (const route of [
     "/", "/about", "/heritage", "/rowhouses", "/case-for-bangkok", "/worlds",
     "/atlas/historic-core", "/areas/kudi-chin", "/walks/six-faiths",
-    "/shophouses", "/shophouses/bible", "/shophouses/global",
+    "/shophouses", "/shophouses/typology", "/shophouses/bible", "/shophouses/global",
     "/shophouses/print", "/shophouses/research",
   ]) {
     const response = await render(route);
@@ -1153,6 +1153,50 @@ test("the essay masthead has a Global nav link", async () => {
   const response = await render("/shophouses");
   const html = await response.text();
   assert.match(html, /href="\/shophouses\/global"/, "essay masthead missing Global link");
+  assert.match(html, /href="\/shophouses\/typology"/, "essay masthead missing Typology link");
+});
+
+test("the shophouse typology library credits its sources and does not copy the drawings", async () => {
+  const response = await render("/shophouses/typology");
+  assert.equal(response.status, 200);
+  const html = await response.text();
+  assert.match(html, /The type Non grew up in/);
+  assert.match(html, /Lat Phrao Road/);
+  assert.match(html, /ถนนลาดพร้าว/);
+  assert.match(html, /keep its core identity/);
+  assert.match(html, /https:\/\/www\.penguinrandomhouse\.com\/books\/303439\/triumph-of-the-city-by-edward-glaeser\//);
+  assert.match(html, /https:\/\/web\.archive\.org\/web\/20231226060819\/http:\/\/sigus\.mit\.edu\/about\.php/);
+  assert.match(html, /id="typology-map"/);
+  assert.match(html, /https:\/\/urbancreature\.co\/shophouse-supply\//);
+  assert.match(html, /https:\/\/www\.instagram\.com\/p\/DeG4utWGjvO\//);
+  assert.match(html, /https:\/\/www\.instagram\.com\/p\/DeaILEpk_xF\//);
+  assert.match(html, /https:\/\/www\.instagram\.com\/p\/DeUKkA8kvDF\//);
+  assert.match(html, /https:\/\/www\.instagram\.com\/p\/Dedgqo9jFOM\//);
+  assert.match(html, /@avanidoesart/);
+  assert.match(html, /@urbanistcomix/);
+  assert.match(html, /img_index=4/);
+  assert.match(html, /https:\/\/www\.instagram\.com\/shophouse\.supply\//);
+  assert.match(html, /blockquote/);
+  assert.match(html, /instagram-media/);
+  assert.match(html, /Pheangporn Khanti/);
+  assert.match(html, /Abhinav Bhardwaj/);
+  assert.match(html, /img_index=3/);
+  assert.match(html, /https:\/\/www\.instagram\.com\/p\/DeNAO6ZEvAV\//);
+  assert.match(html, /img_index=14/);
+  assert.match(html, /Social capital/);
+  assert.match(html, /usage is her own/);
+  assert.match(html, /typo-funfact/);
+  assert.match(html, /Fun fact/);
+  assert.match(html, /typo-social-pair/);
+  assert.match(html, /Hanifan/);
+  assert.match(html, /unrelated/);
+  assert.doesNotMatch(html, /typo-social-note/);
+  assert.doesNotMatch(html, /first known use/);
+  assert.doesNotMatch(html, /did not invent/);
+  assert.doesNotMatch(html, /<script[^>]+instagram\.com\/embed\.js/);
+  assert.doesNotMatch(html, /urbancreature\.co\/wp-content/);
+  assert.match(html, /typo-top/);
+  assert.match(html, /typo-bottom/);
 });
 
 test("the Shophouse Health Index renders the ranking, comparison, and the Singapore caution", async () => {
