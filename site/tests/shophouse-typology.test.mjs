@@ -210,17 +210,25 @@ test("the record keeps the article and both posts, and the embed script stays la
   assert.equal(SOCIAL_CAPITAL.title.en, "Social capital");
   assert.equal(SOCIAL_CAPITAL.title.th, "ทุนทางสังคม");
   assert.equal(SOCIAL_CAPITAL.title.zh, "社会资本");
-  assert.match(SOCIAL_CAPITAL.body.en, /Hanifan/);
-  assert.match(SOCIAL_CAPITAL.body.en, /first known use/);
-  assert.match(SOCIAL_CAPITAL.body.en, /not Jane Jacobs/);
+  assert.match(SOCIAL_CAPITAL.body.en, /usage is her own/);
+  assert.match(SOCIAL_CAPITAL.body.en, /Death and Life/);
+  assert.doesNotMatch(SOCIAL_CAPITAL.body.en, /Hanifan|first known use|did not invent|borrowed/);
+  assert.match(SOCIAL_CAPITAL.note.en, /Hanifan/);
+  assert.match(SOCIAL_CAPITAL.note.en, /unrelated/);
+  assert.match(SOCIAL_CAPITAL.note.en, /different/);
   assert.match(SOCIAL_CAPITAL.body.en, /Bowling Alone/);
   assert.match(SOCIAL_CAPITAL.body.en, /The Forms of Capital/);
   assert.match(SOCIAL_CAPITAL.body.en, /does not treat it as settled/);
   assert.match(SOCIAL_CAPITAL.body.en, /large number of people/);
   assert.match(SOCIAL_CAPITAL.body.en, /@abhinavbwj/);
-  assert.match(SOCIAL_CAPITAL.body.th, /Hanifan/);
-  assert.match(SOCIAL_CAPITAL.body.zh, /Hanifan/);
-  assert.match(SOCIAL_CAPITAL.body.zh, /不是 Jane Jacobs 造的/);
+  assert.match(SOCIAL_CAPITAL.body.th, /เป็นของเธอเอง/);
+  assert.doesNotMatch(SOCIAL_CAPITAL.body.th, /Hanifan/);
+  assert.match(SOCIAL_CAPITAL.note.th, /Hanifan/);
+  assert.match(SOCIAL_CAPITAL.note.th, /ไม่เกี่ยวกับ/);
+  assert.match(SOCIAL_CAPITAL.body.zh, /她自己的用法/);
+  assert.doesNotMatch(SOCIAL_CAPITAL.body.zh, /Hanifan|没有发明|不是 Jane Jacobs 造的/);
+  assert.match(SOCIAL_CAPITAL.note.zh, /Hanifan/);
+  assert.match(SOCIAL_CAPITAL.note.zh, /无关/);
   for (const source of SOCIAL_CAPITAL.sources) {
     assert.ok(/1916|1961|2000|1986/.test(source.credit), source.title);
   }
