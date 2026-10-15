@@ -177,16 +177,40 @@
   color: #254f82;
 }
 
-.typo-social-note {
+.typo-social-pair {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr);
+  gap: 8px;
   margin: 8px 0 6px;
-  padding-top: 6px;
-  border-top: 1px solid #15140f;
-  font-size: 11px;
+  align-items: start;
+}
+
+.typo-social-credit {
+  margin: 0;
+  font-size: 13px;
   line-height: 1.4;
 }
 
-.typo-social-note sup {
-  font-size: 9px;
+.typo-funfact {
+  margin: 0;
+  padding: 6px 8px;
+  border: 1px solid #15140f;
+  background: #efe4c4;
+  font-size: 11px;
+  line-height: 1.35;
+}
+
+.typo-funfact-kicker {
+  margin: 0 0 4px;
+  font-size: 11px;
+  font-weight: 700;
+  color: #254f82;
+}
+
+.typo-funfact p {
+  margin: 0;
+  font-size: 11px;
+  line-height: 1.35;
 }
 
 .typo-intro p,
@@ -410,6 +434,7 @@
 .typo-bottom a:focus-visible,
 .typo-detail summary:focus-visible,
 .typo-intro a:focus-visible,
+.typo-social a:focus-visible,
 .typo-sources a:focus-visible {
   outline: 2px solid #d2a14e;
   outline-offset: 2px;
@@ -449,7 +474,8 @@
     height: 64px;
   }
 
-  .typo-pair {
+  .typo-pair,
+  .typo-social-pair {
     grid-template-columns: 1fr;
   }
 

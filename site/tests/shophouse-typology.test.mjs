@@ -210,6 +210,9 @@ test("the record keeps the article and both posts, and the embed script stays la
   assert.equal(SOCIAL_CAPITAL.title.en, "Social capital");
   assert.equal(SOCIAL_CAPITAL.title.th, "ทุนทางสังคม");
   assert.equal(SOCIAL_CAPITAL.title.zh, "社会资本");
+  assert.equal(SOCIAL_CAPITAL.funFact.en, "Fun fact");
+  assert.equal(SOCIAL_CAPITAL.funFact.th, "เรื่องน่ารู้");
+  assert.equal(SOCIAL_CAPITAL.funFact.zh, "冷知识");
   assert.match(SOCIAL_CAPITAL.body.en, /usage is her own/);
   assert.match(SOCIAL_CAPITAL.body.en, /Death and Life/);
   assert.doesNotMatch(SOCIAL_CAPITAL.body.en, /Hanifan|first known use|did not invent|borrowed/);
@@ -239,6 +242,9 @@ test("the record keeps the article and both posts, and the embed script stays la
   assert.match(page, /CLIMATE_POST/);
   assert.match(page, /SOCIAL_CAPITAL/);
   assert.match(page, /PLACES_POST/);
+  assert.match(page, /typo-funfact/);
+  assert.match(page, /sources\[1\]/);
+  assert.doesNotMatch(page, /typo-social-note/);
   assert.equal(TYPOLOGY_STANCE.embed.postUrl, JACOBS_POST.post);
   assert.equal(TYPOLOGY_STANCE.embed.imageIndex, 8);
   assert.equal(CREATOR.post, POST);

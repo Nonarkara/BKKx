@@ -299,12 +299,20 @@ export function TypologyView() {
             {SOCIAL_CAPITAL.body[lang].split("\n\n").map((paragraph) => (
               <p key={paragraph.slice(0, 24)}>{paragraph}</p>
             ))}
-            <p className="typo-social-note">
-              <sup>1</sup> {SOCIAL_CAPITAL.note[lang]}{" "}
-              <a href={SOCIAL_CAPITAL.sources[0].url}>{SOCIAL_CAPITAL.sources[0].title}</a>
-            </p>
+            <div className="typo-social-pair">
+              <p className="typo-social-credit">
+                <a href={SOCIAL_CAPITAL.sources[1].url}>{SOCIAL_CAPITAL.sources[1].title}</a>
+              </p>
+              <aside className="typo-funfact">
+                <p className="typo-funfact-kicker">{SOCIAL_CAPITAL.funFact[lang]}</p>
+                <p>
+                  {SOCIAL_CAPITAL.note[lang]}{" "}
+                  <a href={SOCIAL_CAPITAL.sources[0].url}>{SOCIAL_CAPITAL.sources[0].title}</a>
+                </p>
+              </aside>
+            </div>
             <ul>
-              {SOCIAL_CAPITAL.sources.slice(1).map((source) => (
+              {SOCIAL_CAPITAL.sources.slice(2).map((source) => (
                 <li key={source.url}>
                   <a href={source.url}>{source.title}</a>
                 </li>

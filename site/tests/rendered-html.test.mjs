@@ -1185,9 +1185,12 @@ test("the shophouse typology library credits its sources and does not copy the d
   assert.match(html, /img_index=14/);
   assert.match(html, /Social capital/);
   assert.match(html, /usage is her own/);
-  assert.match(html, /typo-social-note/);
+  assert.match(html, /typo-funfact/);
+  assert.match(html, /Fun fact/);
+  assert.match(html, /typo-social-pair/);
   assert.match(html, /Hanifan/);
   assert.match(html, /unrelated/);
+  assert.doesNotMatch(html, /typo-social-note/);
   assert.doesNotMatch(html, /first known use/);
   assert.doesNotMatch(html, /did not invent/);
   assert.doesNotMatch(html, /<script[^>]+instagram\.com\/embed\.js/);

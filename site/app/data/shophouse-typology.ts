@@ -213,12 +213,13 @@ export const TYPOLOGY_STANCE: {
 };
 
 // Social capital, in Non's framing. The urban concept is Jacobs's own
-// usage in Death and Life (1961). Hanifan 1916 is a footnote only: an
-// earlier, unrelated use of the same phrase, with a different meaning.
-// Pages below were fetched on 15 October 2026.
+// usage in Death and Life (1961). Hanifan 1916 is a fun-fact aside
+// beside that credit: an earlier, unrelated use of the same phrase,
+// with a different meaning. Pages below were fetched on 15 October 2026.
 export const SOCIAL_CAPITAL: {
   title: Trilingual;
   body: Trilingual;
+  funFact: Trilingual;
   note: Trilingual;
   sources: TypologyCredit[];
   embed: TypologyEmbed;
@@ -234,6 +235,11 @@ export const SOCIAL_CAPITAL: {
     th: "ตึกแถวสร้างทุนทางสังคม คือความไว้ใจและความคุ้นเคยที่เกิดจากการรู้จักเพื่อนบ้าน มันซื้อสิ่งที่เงินซื้อไม่ได้ รวมถึงความปลอดภัยแบบหนึ่ง คือสายตาบนถนน กล้องแทนคนที่รู้จักเด็ก และรู้จักว่าปกติร้านเปิดกี่โมง ไม่ได้\n\nแนวคิดเรื่องเมืองของทุนทางสังคมเป็นของ Jane Jacobs ใน The Death and Life of Great American Cities (1961) และการใช้นั้นเป็นของเธอเอง เครือข่ายเพื่อนบ้านคือทุนทางสังคมของเมือง ความไว้ใจที่งอกบนทางเท้า สูญได้เร็ว และค่อยๆ สร้างกลับได้เท่านั้น Robert Putnam ใน Bowling Alone (2000) เขียนถึงการลดลง และภาพของเขาคือลีกโบว์ลิ่ง Pierre Bourdieu ใน “The Forms of Capital” (1986) อธิบายทุนทางวัฒนธรรมว่าเป็นสิ่งที่ต้องใช้เวลา เงินส่งมอบให้ในพริบตาไม่ได้\n\nแผ่น “Saturday at the bowling alley” ของ @abhinavbwj นับห้อง ไม่ได้นับลีก ญี่ปุ่นมีศูนย์โบว์ลิ่ง 3,697 แห่งในปี 1972 และ 621 แห่งตอนสิ้นปี 2025 คารูเซลเดียวกันจำโรงอาบน้ำที่ทั้งถนนใช้ร่วมกัน ผับหัวมุม และครัวริมถนน ถ้าอ่านเป็นข้อถกเถียง Jacobs และ Putnam ต่างถือว่าชีวิตที่ขาดจากเพื่อนบ้านเป็นการสูญเสีย เธอพูดถึงถนนที่โครงการทำให้ว่าง เขาพูดถึงลีกที่เลิกประชุม และคนที่ไปโบว์ลิ่งคนเดียว ความโดดเดี่ยวในตึกสูงคือข้อถกเถียงนั้น ห้องสมุดนี้ไม่ถือว่ามันยุติแล้ว สิ่งที่ยังอยู่คือคำถามของ Glaeser และของ Goethert จะให้คนจำนวนมากอยู่ใกล้กัน และยังรักษาชีวิตของถนนไว้ได้อย่างไร การแช่แข็งอาคารไม่ใช่คำตอบนั้น",
     zh: "店屋排屋积累社会资本。那是认识邻居之后的信任和熟稔。它买到钱买不到的东西，其中一种是安全：街上有眼睛。摄像头代替不了认得孩子的人，也代替不了知道这家店平常几点开门的人。\n\n城市里的社会资本这个概念，是 Jane Jacobs 在 The Death and Life of Great American Cities（1961）里的用法，而且是她自己的用法。邻里网络是一座城市的社会资本：人行道上长出来的信任，失去得快，再积起来很慢。Robert Putnam 的 Bowling Alone（2000）写的是这种资本的下降，他的图像是保龄球联盟。Pierre Bourdieu 在 “The Forms of Capital”（1986）里写文化资本：它要时间，钱不能在一瞬间交到手里。\n\n@abhinavbwj 的 “Saturday at the bowling alley” 数的是场地，不是联盟。日本 1972 年有 3,697 家保龄球馆，2025 年底剩下 621 家。同一组图也记得整条街共用的澡堂、街角的酒馆，和街头的厨房。当作论点来读，Jacobs 和 Putnam 都把与邻居隔开的生活看成一种损失：她说的是被项目腾空的街，他说的是不再聚会的联盟，人们一个人去打保龄球。高层里的隔绝，是这个论点。这个馆不把它当成已经定案的事实。留下来的仍是 Glaeser 和 Goethert 的问题：让很多人住得很近，同时保住街上的生活。把房子冻住，不是这个答案。",
   },
+  funFact: {
+    en: "Fun fact",
+    th: "เรื่องน่ารู้",
+    zh: "冷知识",
+  },
   note: {
     en: "L. J. Hanifan (1916) used the same phrase earlier, for the goodwill, fellowship and social intercourse among the families of a rural school district. That use is unrelated. The meaning is different.",
     th: "L. J. Hanifan (1916) ใช้วลีเดียวกันมาก่อน สำหรับไมตรี จิตใจร่วม และการคบหากันของครอบครัวในเขตโรงเรียนชนบท การใช้นั้นไม่เกี่ยวกับเรื่องนี้ และความหมายคนละอย่าง",
@@ -244,7 +250,7 @@ export const SOCIAL_CAPITAL: {
       title: "The Rural School Community Center",
       url: "https://archive.org/details/jstor-1013498",
       credit:
-        "L. J. Hanifan, “The Rural School Community Center,” The Annals of the American Academy of Political and Social Science 67 (September 1916), pp. 130–138. Internet Archive copy fetched on 15 October 2026. A footnote only: an earlier, unrelated use of the same phrase, for goodwill, fellowship, mutual sympathy and social intercourse among the families of a rural place. A different meaning from the urban concept.",
+        "L. J. Hanifan, “The Rural School Community Center,” The Annals of the American Academy of Political and Social Science 67 (September 1916), pp. 130–138. Internet Archive copy fetched on 15 October 2026. A fun-fact aside beside the Jacobs credit: an earlier, unrelated use of the same phrase, for goodwill, fellowship, mutual sympathy and social intercourse among the families of a rural place. A different meaning from the urban concept.",
     },
     {
       title: "The Death and Life of Great American Cities",
