@@ -1181,6 +1181,11 @@ test("the shophouse typology library credits its sources and does not copy the d
   assert.match(html, /Pheangporn Khanti/);
   assert.match(html, /Abhinav Bhardwaj/);
   assert.match(html, /img_index=3/);
+  assert.match(html, /https:\/\/www\.instagram\.com\/p\/DeNAO6ZEvAV\//);
+  assert.match(html, /img_index=14/);
+  assert.match(html, /Social capital/);
+  assert.match(html, /Hanifan/);
+  assert.match(html, /first known use/);
   assert.doesNotMatch(html, /<script[^>]+instagram\.com\/embed\.js/);
   assert.doesNotMatch(html, /urbancreature\.co\/wp-content/);
   assert.match(html, /typo-top/);

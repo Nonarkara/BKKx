@@ -151,6 +151,32 @@
   flex: 0 0 auto;
 }
 
+.typo-social {
+  background: #f4ebd5;
+  color: #15140f;
+  border: 1px solid #15140f;
+  box-shadow: 3px 3px 0 #254f82;
+  padding: 8px 10px;
+  flex: 0 0 auto;
+}
+
+.typo-social h2 {
+  margin: 0 0 6px;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.typo-social p,
+.typo-social li {
+  margin: 0 0 6px;
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+.typo-social a {
+  color: #254f82;
+}
+
 .typo-intro p,
 .typo-intro li {
   margin: 0 0 6px;

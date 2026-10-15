@@ -5,7 +5,9 @@ import {
   CREATOR,
   ELEVATION_IDS,
   CLIMATE_POST,
+  PLACES_POST,
   SAFETY_POST,
+  SOCIAL_CAPITAL,
   JACOBS_POST,
   SHOPHOUSE_TYPES,
   TO_CONFIRM,
@@ -20,6 +22,7 @@ const POST = "https://www.instagram.com/p/DeG4utWGjvO/";
 const POST_2 = "https://www.instagram.com/p/DeaILEpk_xF/";
 const POST_3 = "https://www.instagram.com/p/DeUKkA8kvDF/";
 const POST_4 = "https://www.instagram.com/p/Dedgqo9jFOM/";
+const POST_5 = "https://www.instagram.com/p/DeNAO6ZEvAV/";
 const BANGKOK = { lat: [13.4, 14.2], lng: [100.2, 101.1] };
 
 function text(value, label) {
@@ -54,6 +57,7 @@ test("every shophouse type is one complete trilingual entry", () => {
     assert.ok(urls.includes(POST_2), `${entry.id} missing the Jacobs post`);
     assert.ok(urls.includes(POST_3), `${entry.id} missing the climate post`);
     assert.ok(urls.includes(POST_4), `${entry.id} missing the safety comic`);
+    assert.ok(urls.includes(POST_5), `${entry.id} missing the places carousel`);
     const creditBlob = entry.sources.map((source) => `${source.title} ${source.credit}`).join(" ");
     assert.match(creditBlob, /@avanidoesart/);
     assert.match(creditBlob, /@urbanistcomix/);
@@ -197,9 +201,36 @@ test("the record keeps the article and both posts, and the embed script stays la
   assert.match(TYPOLOGY_RECORD.zh, /@urbanistcomix/);
   assert.equal(SAFETY_POST.post, POST_4);
   assert.equal(SAFETY_POST.imageIndex, 3);
+  assert.match(TYPOLOGY_RECORD.en, /3,697/);
+  assert.match(TYPOLOGY_RECORD.en, /not counted the Bangkok rows/);
+  assert.match(TYPOLOGY_RECORD.th, /3,697/);
+  assert.match(TYPOLOGY_RECORD.zh, /3,697/);
+  assert.equal(PLACES_POST.post, POST_5);
+  assert.equal(PLACES_POST.imageIndex, 14);
+  assert.equal(SOCIAL_CAPITAL.title.en, "Social capital");
+  assert.equal(SOCIAL_CAPITAL.title.th, "ทุนทางสังคม");
+  assert.equal(SOCIAL_CAPITAL.title.zh, "社会资本");
+  assert.match(SOCIAL_CAPITAL.body.en, /Hanifan/);
+  assert.match(SOCIAL_CAPITAL.body.en, /first known use/);
+  assert.match(SOCIAL_CAPITAL.body.en, /not Jane Jacobs/);
+  assert.match(SOCIAL_CAPITAL.body.en, /Bowling Alone/);
+  assert.match(SOCIAL_CAPITAL.body.en, /The Forms of Capital/);
+  assert.match(SOCIAL_CAPITAL.body.en, /does not treat it as settled/);
+  assert.match(SOCIAL_CAPITAL.body.en, /large number of people/);
+  assert.match(SOCIAL_CAPITAL.body.en, /@abhinavbwj/);
+  assert.match(SOCIAL_CAPITAL.body.th, /Hanifan/);
+  assert.match(SOCIAL_CAPITAL.body.zh, /Hanifan/);
+  assert.match(SOCIAL_CAPITAL.body.zh, /不是 Jane Jacobs 造的/);
+  for (const source of SOCIAL_CAPITAL.sources) {
+    assert.ok(/1916|1961|2000|1986/.test(source.credit), source.title);
+  }
+  assert.equal(SOCIAL_CAPITAL.embed.imageIndex, 14);
+  assert.equal(SOCIAL_CAPITAL.embed.postUrl, POST_5);
   const page = readFileSync(new URL("../app/shophouses/typology/TypologyView.tsx", import.meta.url), "utf8");
   assert.match(page, /SAFETY_POST/);
   assert.match(page, /CLIMATE_POST/);
+  assert.match(page, /SOCIAL_CAPITAL/);
+  assert.match(page, /PLACES_POST/);
   assert.equal(TYPOLOGY_STANCE.embed.postUrl, JACOBS_POST.post);
   assert.equal(TYPOLOGY_STANCE.embed.imageIndex, 8);
   assert.equal(CREATOR.post, POST);

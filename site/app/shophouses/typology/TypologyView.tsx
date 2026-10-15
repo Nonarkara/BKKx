@@ -4,7 +4,9 @@ import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
 import {
   CLIMATE_POST,
+  PLACES_POST,
   SAFETY_POST,
+  SOCIAL_CAPITAL,
   CREATOR,
   JACOBS_POST,
   SHOPHOUSE_TYPES,
@@ -292,6 +294,24 @@ export function TypologyView() {
               </li>
             ))}
           </ul>
+          <section className="typo-social" lang={htmlLang(lang)}>
+            <h2>{SOCIAL_CAPITAL.title[lang]}</h2>
+            {SOCIAL_CAPITAL.body[lang].split("\n\n").map((paragraph) => (
+              <p key={paragraph.slice(0, 24)}>{paragraph}</p>
+            ))}
+            <ul>
+              {SOCIAL_CAPITAL.sources.map((source) => (
+                <li key={source.url}>
+                  <a href={source.url}>{source.title}</a>
+                </li>
+              ))}
+            </ul>
+            <InstagramEmbed
+              embed={SOCIAL_CAPITAL.embed}
+              name={PLACES_POST.name}
+              handle={PLACES_POST.handle}
+            />
+          </section>
           {selected ? <Detail entry={selected} lang={lang} /> : null}
           <section className="typo-record" lang={htmlLang(lang)}>
             <h2>{chrome.sources}</h2>
@@ -309,7 +329,7 @@ export function TypologyView() {
               handle={SAFETY_POST.handle}
             />
             <ul>
-              {[...TYPOLOGY_CREDITS, ...TYPOLOGY_STANCE.sources].map((source) => (
+              {[...TYPOLOGY_CREDITS, ...TYPOLOGY_STANCE.sources, ...SOCIAL_CAPITAL.sources].map((source) => (
                 <li key={source.url}>
                   <a href={source.url}>{source.title}</a>
                   {" — "}
