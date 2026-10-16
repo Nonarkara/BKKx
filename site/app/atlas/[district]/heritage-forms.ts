@@ -447,7 +447,10 @@ export function classify(f: Feature): Omit<FormSpec, "replaces"> | null {
   }
   if (n.includes("ปราสาท")) return spec("prasat");
   if (n.includes("เจดีย์")) return spec("chedi", { finish: n.includes("พระมหาเจดีย์") ? "ceramic" : "white" });
-  if (n.includes("มณฑป") || n.includes("หอไตร") || n.includes("หอระฆัง")) return spec("mondop");
+  // มณเฑียร (a scripture repository / library, as at Wat Suthat) is a mondop,
+  // not a hall. Its name starts "หอ", which the hall rule below would otherwise
+  // claim — so without this, หอพระธาตุมณเฑียร was published as kind "hall".
+  if (n.includes("มณฑป") || n.includes("มณเฑียร") || n.includes("หอไตร") || n.includes("หอระฆัง")) return spec("mondop");
   if (n.includes("ป้อม")) return spec("fort");
   if (/อุโบสถ|โบสถ์|วิหาร/.test(n)) return spec("hall", { tiers: s.area < 150 ? 2 : 3 });
   if (n.includes("หอพระ")) return spec("hall", { tiers: 2 });

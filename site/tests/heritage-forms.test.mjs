@@ -26,6 +26,36 @@ test('names decide before shapes; a named non-temple building is never given a t
   assert.equal(classify(f({ name: null, render_height: 1 })), null, 'too low to carry a form');
 });
 
+test('a mondop name is never claimed by the hall rule', () => {
+  // มณเฑียร (scripture repository) is a mondop. Its name begins "หอ", and the
+  // hall rule for "หอพระ" sits *after* the mondop rule, so a missing spelling
+  // does not fail loudly — it quietly becomes a hall, or matches nothing and
+  // disappears from the published file. Both happened:
+  //   หอพระธาตุมณเฑียร  was published as kind "hall"
+  //   หอมณเฑียรธรรม   matched no rule at all and was dropped from the file
+  const ring = [[100.5, 13.75], [100.5003, 13.75], [100.5003, 13.7501], [100.5, 13.7501], [100.5, 13.75]];
+  const f = (name) => ({ geometry: { type: 'Polygon', coordinates: [ring] }, properties: { id: 'x', building: 'temple', render_height: 16, name } });
+  for (const name of ['พระมณฑป', 'มณฑป', 'หอพระธาตุมณเฑียร', 'หอมณเฑียรธรรม', 'หอมณเฑียรวัดสุทัศน', 'หอระฆัง', 'หอไตร']) {
+    assert.equal(classify(f(name))?.kind, 'mondop', `${name} must read as a mondop`);
+  }
+});
+
+test('the published file agrees: no mondop name is shipped as another form', () => {
+  // Assert on the artefact, not just the function — the defect that shipped was
+  // baked into bkk-heritage-forms.json, and a classifier test alone would not
+  // have caught a stale or hand-edited data file.
+  for (const f of forms) {
+    if (!f.name) continue;
+    if (/มณฑป|มณเฑียร/.test(f.name)) {
+      assert.equal(f.kind, 'mondop', `${f.name} is published as ${f.kind}`);
+    }
+  }
+  // And the building that was dropped entirely must be back.
+  assert.ok(byName('หอมณเฑียรธรรม'), 'หอมณเฑียรธรรม must be present in the published forms');
+  assert.equal(byName('หอมณเฑียรธรรม')?.kind, 'mondop');
+  assert.equal(byName('หอพระธาตุมณเฑียร')?.kind, 'mondop');
+});
+
 test('every form builds finite geometry that stays inside its envelope', () => {
   for (const spec of forms) {
     const { positions, colors } = buildForm(spec);
