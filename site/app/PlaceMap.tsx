@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import type maplibregl from "maplibre-gl";
+import type * as maplibregl from "maplibre-gl"; // v6 has named exports only
 import "maplibre-gl/dist/maplibre-gl.css";
 
 // Light editorial map for area and walk pages. Same ground and accent as the
@@ -42,7 +42,7 @@ export function PlaceMap({ center, zoom, markers, routeSlug, fit }: Props) {
     let observer: ResizeObserver | null = null;
 
     void (async () => {
-      const maplibre = (await import("maplibre-gl")).default;
+      const maplibre = await import("maplibre-gl");
       if (disposed || !containerRef.current) return;
 
       map = new maplibre.Map({
@@ -53,7 +53,7 @@ export function PlaceMap({ center, zoom, markers, routeSlug, fit }: Props) {
         minZoom: 10,
         renderWorldCopies: false,
         attributionControl: false,
-        antialias: true,
+        canvasContextAttributes: { antialias: true },
       });
       map.addControl(new maplibre.NavigationControl({ showCompass: false }), "top-right");
       map.addControl(new maplibre.AttributionControl({ compact: true }), "bottom-right");

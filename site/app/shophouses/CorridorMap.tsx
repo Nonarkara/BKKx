@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import type maplibregl from "maplibre-gl";
+import type * as maplibregl from "maplibre-gl"; // v6 has named exports only
 import "maplibre-gl/dist/maplibre-gl.css";
 import { PROJECTS } from "../data/shophouse-studio";
 
@@ -35,7 +35,7 @@ export function CorridorMap() {
     let observer: ResizeObserver | null = null;
 
     void (async () => {
-      const maplibre = (await import("maplibre-gl")).default;
+      const maplibre = await import("maplibre-gl");
       if (disposed || !containerRef.current) return;
 
       const map = new maplibre.Map({
@@ -46,7 +46,7 @@ export function CorridorMap() {
         minZoom: 11,
         renderWorldCopies: false,
         attributionControl: false,
-        antialias: true,
+        canvasContextAttributes: { antialias: true },
       });
       mapRef.current = map;
       map.addControl(new maplibre.NavigationControl({ showCompass: false }), "top-right");

@@ -5,6 +5,7 @@
 // stops with the Animation toggle and for reduced motion.
 import {useEffect,useState,type RefObject} from 'react';
 import type {Map as MapLibreMap,GeoJSONSource,MapLayerMouseEvent} from 'maplibre-gl';
+import type * as GeoJSON from 'geojson';
 import {roadsAreFresh,type FloodRoads as Roads,type RoadProps} from './roads';
 const roadSrc='flood-roads',heatSrc='flood-roads-heat';
 const heatL='flood-roads-heat',closedL='flood-roads-closed',waterL='flood-roads-water',flowL='flood-roads-flow';
