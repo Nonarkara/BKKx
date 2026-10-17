@@ -1139,6 +1139,8 @@ button {
 .control-toggle:hover,
 .control-toggle:focus-visible { color: var(--paper); outline: none; }
 .control-toggle:focus-visible { box-shadow: 0 0 0 1px var(--signal); }
+.control-toggle-glyph::after { content: "Hide"; }
+.atlas-control-overlay.is-closed .control-toggle-glyph::after { content: "Show"; }
 .control-toggle-glyph {
   padding: 2px 6px;
   border: 1px solid rgba(255, 255, 255, 0.18);
@@ -1789,6 +1791,7 @@ button {
      deck flash open over the map. */
   .atlas-control-overlay:not(.is-open) .control-body { display: none; }
   .atlas-control-overlay:not(.is-open) .control-toggle { border-bottom: 0; }
+  .atlas-control-overlay:not(.is-open) .control-toggle-glyph::after { content: "Show"; }
   .atlas-control-overlay .control-body { gap: 8px; padding: 10px 0 14px; }
   .atlas-control-overlay .control-label { font-size: 9px; }
   .atlas-control-overlay .tour-play-btn { min-height: 36px; font-size: 11px; }
@@ -1798,18 +1801,31 @@ button {
     min-height: 36px;
     font-size: 11px;
   }
-  .atlas-control-overlay .btn-group-walks .layer-toggle-btn { min-height: 32px; font-size: 10px; }
+  .atlas-control-overlay .btn-group-walks .layer-toggle-btn { min-height: 36px; font-size: 10px; }
   .atlas-control-overlay .control-source-note { font-size: 10.5px; line-height: 1.5; }
   .atlas-control-overlay .control-notes > summary { padding: 8px 0; font-size: 11px; }
 
   /* Everything that sits on the bottom edge of the map moves up by the
-     sheet handle, so the handle never covers credits or controls. */
-  .atlas-map .maplibregl-ctrl-bottom-left,
-  .atlas-map .maplibregl-ctrl-bottom-right { bottom: 41px; }
-  .atlas-key-stack { bottom: 76px; }
+     sheet handle, so the handle never covers credits or controls. Only the
+     standalone atlas has the sheet; embedded maps (homepage iframe, /flood)
+     keep their controls on the bottom edge. */
+  .atlas-page:not(.is-embedded) .atlas-map .maplibregl-ctrl-bottom-left,
+  .atlas-page:not(.is-embedded) .atlas-map .maplibregl-ctrl-bottom-right { bottom: 41px; }
+  /* Opened credits read above the map's own label markers. */
+  .atlas-page:not(.is-embedded) .atlas-map .maplibregl-ctrl-bottom-right { z-index: 12; }
+  /* With the sheet open, the scale and the credit (i) ride on top of it so
+     the credits stay tappable (the sheet is z 26, MapLibre controls z 2). */
+  .atlas-page:not(.is-embedded) .atlas-map:has(.atlas-control-overlay.is-open) .maplibregl-ctrl-bottom-left,
+  .atlas-page:not(.is-embedded) .atlas-map:has(.atlas-control-overlay.is-open) .maplibregl-ctrl-bottom-right {
+    bottom: min(45dvh, calc(100% - 8px));
+  }
+  .atlas-page:not(.is-embedded) .atlas-key-stack { bottom: 76px; }
+  /* First paint, before hydration folds the map key on a phone: keep its
+     body hidden so it never shows open over the map. */
+  .atlas-page:not(.is-hydrated) .atlas-map-key > div { display: none; }
   .atlas-shortcuts-hint { display: none; }
+  .atlas-page:not(.is-embedded) .atlas-map .heritage-inspector-card { bottom: 52px; }
   .atlas-map .heritage-inspector-card {
-    bottom: 52px;
     left: 8px;
     right: 8px;
     max-height: calc(100% - 64px);

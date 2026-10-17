@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { FloodEvidence } from "../../flood/FloodEvidence";
-import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
 import type maplibregl from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
 import type { Stop, World } from "../../walkthrough-data";
@@ -832,6 +832,16 @@ export function AtlasView({ world, embedded = false, initialView, floodEdition =
   // Before hydration the class is empty and CSS decides (closed on a phone,
   // open on desktop), so a phone never flashes the full deck over the map.
   const deckStateClass = hydrated ? (deckOpen ? " is-open" : " is-closed") : "";
+  // The map key ships with its desktop default (open) and the native
+  // <details> owns it from then on; React never re-passes `open`. A phone
+  // folds it once, before the hydrated class lifts the CSS that hides its
+  // body on first paint, so the key never shows open over the map.
+  const mapKeyRef = useRef<HTMLDetailsElement | null>(null);
+  useLayoutEffect(() => {
+    if (mapKeyRef.current && window.matchMedia(NARROW_QUERY).matches) {
+      mapKeyRef.current.open = false;
+    }
+  }, []);
   // The cursor/zoom readout writes straight into these nodes on mousemove —
   // routing a 60 Hz stream through React state would re-render the whole
   // console for every pixel of mouse travel.
@@ -1088,13 +1098,28 @@ export function AtlasView({ world, embedded = false, initialView, floodEdition =
       // first drag, which on a 390 px screen is a white box over a third of
       // the map. Fold it once the map settles; every credit stays one tap
       // away behind the (i) button, exactly as after a drag.
-      map.once("idle", () => {
-        if (!window.matchMedia(NARROW_QUERY).matches) return;
+      // Runs on load and on every idle (MapLibre can re-expand it when the
+      // style or sources update), but stops for good once the reader taps
+      // the (i) button: from then on the credits are theirs to open or close.
+      let creditsTouched = false;
+      map.getContainer().addEventListener(
+        "click",
+        (event) => {
+          if ((event.target as Element | null)?.closest?.(".maplibregl-ctrl-attrib-button")) {
+            creditsTouched = true;
+          }
+        },
+        { capture: true },
+      );
+      const foldCredits = () => {
+        if (creditsTouched || !window.matchMedia(NARROW_QUERY).matches) return;
         map
           .getContainer()
           .querySelector(".maplibregl-ctrl-attrib.maplibregl-compact-show")
           ?.classList.remove("maplibregl-compact-show");
-      });
+      };
+      map.on("load", foldCredits);
+      map.on("idle", foldCredits);
 
       // Pause tour on map manipulation
       const handleMapInteract = () => {
@@ -2335,7 +2360,7 @@ export function AtlasView({ world, embedded = false, initialView, floodEdition =
   }, [weatherMode, pm25]);
 
   return (
-    <main className={`atlas-page${embedded ? " is-embedded" : ""}${floodEdition ? " is-flood" : ""}`}>
+    <main className={`atlas-page${embedded ? " is-embedded" : ""}${floodEdition ? " is-flood" : ""}${hydrated ? " is-hydrated" : ""}`}>
       {!embedded && <header className="atlas-header">
         <Link className="wordmark" href="/" aria-label="BKKxC(ulture) home">
           <span>BKK</span>
@@ -2512,7 +2537,7 @@ export function AtlasView({ world, embedded = false, initialView, floodEdition =
             </details>
           )}
           {hasHistoricContext && (
-            <details className="atlas-map-key" open={!floodEdition && !isNarrow}>
+            <details ref={mapKeyRef} className="atlas-map-key" open={!floodEdition}>
             <summary>Map key</summary>
             <div>
               {showArchitecturalDetail && !evidenceMode ? <span><i className="key-building key-fabric" />Old Town full footprints</span> : null}
@@ -2600,13 +2625,13 @@ export function AtlasView({ world, embedded = false, initialView, floodEdition =
             <button
               type="button"
               className="control-header control-toggle"
-              aria-expanded={deckOpen}
+              aria-expanded={hydrated ? deckOpen : undefined}
               aria-controls="atlas-deck-body"
               onClick={() => setDeckChoice(!deckOpen)}
             >
               <span>Atmosphere &amp; layers</span>
               {isTourPlaying && <span className="tour-live-badge">TOUR ACTIVE</span>}
-              <span className="control-toggle-glyph" aria-hidden="true">{deckOpen ? "Hide" : "Show"}</span>
+              <span className="control-toggle-glyph" aria-hidden="true" />
             </button>
 
             <div className="control-body" id="atlas-deck-body">
