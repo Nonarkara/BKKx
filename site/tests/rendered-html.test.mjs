@@ -340,6 +340,21 @@ test("limits Old Town context layers to Historic Core", async () => {
   assert.match(html, /orientation only/i);
 });
 
+test("the atlas deck folds away on a phone and keeps its notes one tap away", async () => {
+  // 2026-10-17 phone fix: the deck is a toggle (closed by default under
+  // 760 px), the long layer note sits behind a summary instead of printing
+  // as a wall of text, and the deck's buttons carry no emoji.
+  const response = await render("/atlas/historic-core");
+  const html = await response.text();
+  assert.match(html, /class="control-header control-toggle"[^>]*aria-controls="atlas-deck-body"/);
+  assert.match(html, /id="atlas-deck-body"/);
+  assert.match(html, /<details class="control-notes"><summary>About these layers · sources<\/summary>/);
+  assert.match(html, /class="atlas-download-label">Download world</);
+  const deck = html.slice(html.indexOf('id="atlas-deck-body"'), html.indexOf("atlas-panel"));
+  assert.ok(deck.length > 0, "deck markup found");
+  assert.doesNotMatch(deck, /[\p{Emoji_Presentation}\uFE0F]/u, "no emoji in the Atmosphere deck");
+});
+
 test("returns 404 for an unknown atlas district", async () => {
   const response = await render("/atlas/atlantis");
   assert.equal(response.status, 404);
