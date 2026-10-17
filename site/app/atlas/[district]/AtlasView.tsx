@@ -7,6 +7,7 @@ import type maplibregl from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
 import type { Stop, World } from "../../walkthrough-data";
 import type { Camera } from "../../../worker/live";
+import { baseBuildingFilter } from "./old-town-cover";
 import {
   FINEARTS_HERITAGE_SITES,
   FINEARTS_HERITAGE_SOURCE,
@@ -1958,6 +1959,21 @@ export function AtlasView({ world, embedded = false, initialView, floodEdition =
     if (!map || !mapReady || !map.getLayer("bkkx-aerosol")) return;
     map.setLayoutProperty("bkkx-aerosol", "visibility", showAerosol ? "visible" : "none");
   }, [showAerosol, mapReady]);
+
+  // Where the Old Town's own 3D draws, the base map's plain boxes step aside
+  // (old-town-cover.ts); with Old Town 3D off they come back.
+  useEffect(() => {
+    const map = mapRef.current;
+    if (!map || !mapReady || !hasHistoricContext || !map.getLayer("bkkx-3d-buildings")) return;
+    try {
+      map.setFilter(
+        "bkkx-3d-buildings",
+        baseBuildingFilter(showArchitecturalDetail) as maplibregl.FilterSpecification | null,
+      );
+    } catch (err) {
+      console.warn("bkkx: base-building cover filter failed", err);
+    }
+  }, [showArchitecturalDetail, mapReady, hasHistoricContext]);
 
   useEffect(() => {
     const map = mapRef.current;
