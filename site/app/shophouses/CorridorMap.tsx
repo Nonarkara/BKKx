@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import type maplibregl from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
 import { PROJECTS } from "../data/shophouse-studio";
+import { dataUrl } from "../data/data-url";
 
 // Sukhumvit 71 corridor map. Editorial register: light ground, one accent
 // (the oxide seal), no decorative colour. The candidate footprints carry the
@@ -13,7 +14,7 @@ import { PROJECTS } from "../data/shophouse-studio";
 // as broken rather than zoomed out.
 
 const STYLE = "https://tiles.openfreemap.org/styles/positron";
-const DATA = "/data/sukhumvit71-corridor.geojson";
+const DATA = dataUrl("/data/sukhumvit71-corridor.geojson");
 const SEAL = "#8c2f23";
 const INK = "#14140f";
 const PAPER = "#f4f2ec";

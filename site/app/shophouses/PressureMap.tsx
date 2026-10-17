@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import type maplibregl from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
 import { QUADRANTS, PRESSURE_TOTAL, SPLITS } from "../data/shophouse-pressure";
+import { dataUrl } from "../data/data-url";
 
 // Every candidate shophouse in the screened set, laid over the Treasury land
 // appraisal that decides its fate. The choropleth is the pressure; the dots
@@ -17,8 +18,8 @@ import { QUADRANTS, PRESSURE_TOTAL, SPLITS } from "../data/shophouse-pressure";
 // minZoom per §11.9: below 9 the world repeats and the map reads as broken.
 
 const STYLE = "https://tiles.openfreemap.org/styles/positron";
-const POINTS = "/data/shophouse-pressure.geojson";
-const DISTRICTS = "/data/bkk-land-price.geojson";
+const POINTS = dataUrl("/data/shophouse-pressure.geojson");
+const DISTRICTS = dataUrl("/data/bkk-land-price.geojson");
 const INK = "#111014";
 
 type Q = (typeof QUADRANTS)[number]["id"];
