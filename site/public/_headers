@@ -1,0 +1,11 @@
+# Cloudflare static-asset headers. vinext writes the /assets/* rule itself only
+# when no _headers file exists, so it is kept here alongside ours.
+
+# Content-hashed build assets.
+/assets/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# Content-addressed data copies (scripts/publish-immutable-data.mjs). A changed
+# file lands in a new folder, so a cached copy can never be stale.
+/data/v/*
+  Cache-Control: public, max-age=31536000, immutable

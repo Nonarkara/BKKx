@@ -50,3 +50,8 @@ __pycache__/
 # Fixture worlds built by scripts/make-fixture-world.py. Small, but they are
 # generated: build one where you like, do not commit it.
 /worlds/fixture-*/
+
+# Content-addressed copies of the runtime data files, rebuilt on every
+# build by site/scripts/publish-immutable-data.mjs (the pointer,
+# site/app/data/data-urls.json, is committed).
+site/public/data/v/
