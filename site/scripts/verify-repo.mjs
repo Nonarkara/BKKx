@@ -100,6 +100,21 @@ if (!problems.length) pass(`${files.length} workflow(s) — actions on commit SH
     fail(`the test script no longer runs node --test: "${testCmd}" — assert a runner this repo does not use`);
   }
 
+  // Direction four: CI must run what npm test runs. This workflow used to run
+  // only rendered-html.test.mjs, so four of five test files never executed in CI
+  // and a narrowed test command could merge green. CI naming the same files as
+  // the test script is what keeps the two from drifting apart.
+  const ciPath = join(site, "..", ".github", "workflows", "ci.yml");
+  if (existsSync(ciPath)) {
+    const ci = readFileSync(ciPath, "utf8");
+    for (const f of onDisk) {
+      if (!ci.includes(f)) fail(`CI never runs tests/${f} — npm test does, so CI is weaker than the suite`);
+    }
+    if (!/verify:repo|verify-repo\.mjs/.test(ci)) {
+      fail("CI does not run the repo guard — a broken test command could merge green");
+    }
+  }
+
   if (!problems.length) {
     pass(`${onDisk.length} test file(s) all named in npm test: ${onDisk.join(", ")}`);
   }

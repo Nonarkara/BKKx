@@ -42,6 +42,12 @@ jobs:
         run: git diff --exit-code --stat -- public/data app/data
       - run: npx tsc --noEmit
       - run: npm run lint
+      # The repo guard runs first, then every test file. CI previously ran only
+      # rendered-html.test.mjs, so four of five test files never ran here and a
+      # broken test command could merge green. verify-repo checks that this
+      # workflow names the same files `npm test` names, so the two cannot drift.
+      - run: npm run verify:repo
+      - run: node --experimental-strip-types --test tests/flood-evidence.test.mjs tests/heritage-forms.test.mjs tests/old-town-cover.test.mjs tests/immutable-data.test.mjs
       - run: node --test tests/rendered-html.test.mjs
       # The world-pipeline scripts are pure arithmetic with no heavy
       # dependency, precisely so their geometry can be checked here rather
