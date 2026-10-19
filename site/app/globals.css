@@ -884,6 +884,16 @@ button {
   box-shadow: none;
 }
 
+/* Heritage markers are z-index 10 and POI markers 8. Their 44px hit
+   pads then cover zoom, whose corner is only z-index 2. Keep the
+   corners above the markers and below the layer strip (25) and key (24). */
+.atlas-map .maplibregl-ctrl-top-left,
+.atlas-map .maplibregl-ctrl-top-right,
+.atlas-map .maplibregl-ctrl-bottom-left,
+.atlas-map .maplibregl-ctrl-bottom-right {
+  z-index: 12;
+}
+
 .atlas-map :where(.maplibregl-ctrl button) {
   background-color: transparent;
   filter: invert(1) hue-rotate(180deg);
@@ -4254,6 +4264,19 @@ body:has(.atlas-page.is-embedded.is-phone-chrome) {
     width: auto;
     max-height: none;
     overflow: visible;
+  }
+}
+
+/* A 1024×768 tablet's map is about 624px wide, which is not phone
+   chrome. Pin the layer row and drop the EXPLORE label so the row
+   fits the frame. Phones scroll that row instead. */
+@media (max-width: 760px) {
+  .atlas-page.is-embedded:not(.is-phone-chrome) .atlas-embed-tools {
+    right: 10px;
+    max-width: calc(100% - 20px);
+  }
+  .atlas-page.is-embedded:not(.is-phone-chrome) .atlas-embed-tools-label {
+    display: none;
   }
 }
 
