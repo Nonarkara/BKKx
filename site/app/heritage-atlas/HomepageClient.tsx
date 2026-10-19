@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useLocale } from "../i18n/LocaleContext";
 import { LangToggle } from "../i18n/LangToggle";
 import { AREA_TH } from "../data/heritage-translations-th";
@@ -37,7 +37,17 @@ export function HomepageClient({ quarters, initialQuarter }: Props) {
   const [activeSlug, setActiveSlug] = useState<string | null>(initialQuarter ?? null);
   const [railView, setRailView] = useState<"rowhouses" | "quarters">("rowhouses");
   const [iframeKey, setIframeKey] = useState(0);
+  const [indexOpen, setIndexOpen] = useState(false);
   const iframeRef = useRef<HTMLIFrameElement | null>(null);
+
+  useEffect(() => {
+    if (!indexOpen) return;
+    function onKey(event: KeyboardEvent) {
+      if (event.key === "Escape") setIndexOpen(false);
+    }
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [indexOpen]);
 
   const activeQuarter = activeSlug ? quarters.find((q) => q.slug === activeSlug) : null;
   const initialSrc = heritageMapUrlFor(activeQuarter ?? null);
@@ -50,7 +60,7 @@ export function HomepageClient({ quarters, initialQuarter }: Props) {
   }
 
   return (
-    <div className="atlas-shell">
+    <div className={indexOpen ? "atlas-shell is-index-open" : "atlas-shell"}>
       <header className="atlas-shell-masthead" aria-label="BKKx primary">
         <Link className="register-wordmark" href="/" aria-label="BKKxC(ulture) home">
           <span>BKK</span>
@@ -64,6 +74,15 @@ export function HomepageClient({ quarters, initialQuarter }: Props) {
           <strong>Bangkok&apos;s heritage, block by block.</strong>
           <small>{t("front_door_tagline")}</small>
         </div>
+        <button
+          type="button"
+          className="atlas-shell-index-toggle"
+          aria-expanded={indexOpen}
+          aria-controls="atlas-shell-index"
+          onClick={() => setIndexOpen((open) => !open)}
+        >
+          {indexOpen ? (th ? "แผนที่" : "Map") : (th ? "สารบัญ" : "Index")}
+        </button>
         <nav className="atlas-shell-nav" aria-label="Heritage navigation">
           <Link href="/rowhouses">Rowhouses</Link>
           <a href="https://shophouses.nonarkara.org" title="Shophouse Metropolis — the essay, the Bible, the citywide pressure map">Shophouses</a>
@@ -77,10 +96,10 @@ export function HomepageClient({ quarters, initialQuarter }: Props) {
         </nav>
       </header>
 
-      <CityGlance />
-
-      <div className="atlas-shell-body">
-        <aside className="atlas-shell-quarters" aria-label="Heritage quarters">
+      <div className="atlas-shell-stage">
+        <div id="atlas-shell-index" className="atlas-shell-index">
+          <CityGlance />
+          <aside className="atlas-shell-quarters" aria-label="Heritage quarters">
           <div className="atlas-shell-rail-tabs" role="tablist" aria-label="Explore Bangkok heritage">
             <button
               type="button"
@@ -175,7 +194,8 @@ export function HomepageClient({ quarters, initialQuarter }: Props) {
             <Link href="/heritage#register">the register</Link> for source
             notes.
           </p>
-        </aside>
+          </aside>
+        </div>
 
         <div className="atlas-shell-map">
           <iframe
