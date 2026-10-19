@@ -54,6 +54,9 @@ export function HomepageClient({ quarters, initialQuarter }: Props) {
 
   // Reload BKK's own embedded heritage map at the selected quarter.
   function pickQuarter(q: Quarter) {
+    // The index covers the map on a phone. Close it so the jump is visible,
+    // including a second tap on the quarter already showing.
+    setIndexOpen(false);
     if (q.slug === activeSlug) return;
     setActiveSlug(q.slug);
     setIframeKey((k) => k + 1);
@@ -84,21 +87,25 @@ export function HomepageClient({ quarters, initialQuarter }: Props) {
           {indexOpen ? (th ? "แผนที่" : "Map") : (th ? "สารบัญ" : "Index")}
         </button>
         <nav className="atlas-shell-nav" aria-label="Heritage navigation">
-          <Link href="/rowhouses">Rowhouses</Link>
-          <a href="https://shophouses.nonarkara.org" title="Shophouse Metropolis — the essay, the Bible, the citywide pressure map">Shophouses</a>
-          <a href="https://atlas.nonarkara.org" title="The operational city twin — live weather, traffic and block-by-block layers">Digital twin</a>
-          <Link href="/warroom" title="The operational picture — live gauges, cameras and the counted corpus">War room</Link>
-          <Link href="/case-for-bangkok">The case</Link>
-          <Link href="/heritage#register">{t("nav_register")}</Link>
-          <Link href="/heritage#walks">{t("nav_walks")}</Link>
-          <Link href="/about">{t("nav_about")}</Link>
+          <div className="atlas-shell-nav-scroll">
+            <Link href="/rowhouses">Rowhouses</Link>
+            <a href="https://shophouses.nonarkara.org" title="Shophouse Metropolis — the essay, the Bible, the citywide pressure map">Shophouses</a>
+            <a href="https://atlas.nonarkara.org" title="The operational city twin — live weather, traffic and block-by-block layers">Digital twin</a>
+            <Link href="/warroom" title="The operational picture — live gauges, cameras and the counted corpus">War room</Link>
+            <Link href="/case-for-bangkok">The case</Link>
+            <Link href="/heritage#register">{t("nav_register")}</Link>
+            <Link href="/heritage#walks">{t("nav_walks")}</Link>
+            <Link href="/about">{t("nav_about")}</Link>
+          </div>
           <LangToggle />
         </nav>
       </header>
 
       <div className="atlas-shell-stage">
         <div id="atlas-shell-index" className="atlas-shell-index">
-          <CityGlance />
+          <div className="city-glance-frame">
+            <CityGlance />
+          </div>
           <aside className="atlas-shell-quarters" aria-label="Heritage quarters">
           <div className="atlas-shell-rail-tabs" role="tablist" aria-label="Explore Bangkok heritage">
             <button
@@ -121,7 +128,7 @@ export function HomepageClient({ quarters, initialQuarter }: Props) {
             </button>
           </div>
 
-          {railView === "rowhouses" ? <OldTownPicks iframeRef={iframeRef} /> : <section className="atlas-shell-quarter-view">
+          {railView === "rowhouses" ? <OldTownPicks iframeRef={iframeRef} onPick={() => setIndexOpen(false)} /> : <section className="atlas-shell-quarter-view">
             <header className="atlas-shell-quarter-view-head">
               <p className="register-eyebrow">Heritage · Bangkok</p>
               <h2 className="register-section-title atlas-shell-quarters-title">

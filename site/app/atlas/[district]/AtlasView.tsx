@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { FloodEvidence } from "../../flood/FloodEvidence";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import type maplibregl from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
 import type { Stop, World } from "../../walkthrough-data";
@@ -78,6 +78,11 @@ const ESRI_IMAGERY_TILES = [
 ];
 const ESRI_IMAGERY_ATTRIBUTION =
   "Imagery © Esri, Maxar, Earthstar Geographics, and the GIS User Community";
+
+/* Portrait phones, and landscape phones (an 844×390 phone is wider than
+   760). Keep in step with the phone-map media query in globals.css.
+   A 1440 desktop matches neither clause. */
+const PHONE_MAP_MQ = "(max-width: 760px), (max-height: 500px) and (max-width: 1000px)";
 
 const NASA_AEROSOL_LAYER = "MODIS_Combined_MAIAC_L2G_AerosolOpticalDepth";
 const NASA_AEROSOL_SOURCE =
@@ -697,6 +702,20 @@ export function AtlasView({ world, embedded = false, initialView, floodEdition =
   const hasHistoricContext = world.id === "historic-core";
   const [activeStopId, setActiveStopId] = useState<string>(world.stops[0].id);
   const [mapReady, setMapReady] = useState(false);
+  const [mapKeyOpen, setMapKeyOpen] = useState(!floodEdition);
+
+  // The map key and the attribution start expanded. On a phone that covers
+  // about a third of the canvas, so close the key before paint. The user
+  // can still open it; a later resize onto a phone closes it again.
+  useLayoutEffect(() => {
+    const mq = window.matchMedia(PHONE_MAP_MQ);
+    const closeIfPhone = () => {
+      if (mq.matches) setMapKeyOpen(false);
+    };
+    closeIfPhone();
+    mq.addEventListener("change", closeIfPhone);
+    return () => mq.removeEventListener("change", closeIfPhone);
+  }, []);
 
   // Atmosphere Engine States
   const [timeMode, setTimeMode] = useState<"realtime" | "sunrise" | "noon" | "sunset" | "night">("realtime");
@@ -1054,6 +1073,24 @@ export function AtlasView({ world, embedded = false, initialView, floodEdition =
         new maplibregl.ScaleControl({ unit: "metric", maxWidth: 120 }),
         "bottom-left",
       );
+
+      // MapLibre's compact attribution still mounts expanded
+      // (`maplibregl-compact-show`). Drop that class once, after the
+      // control has actually become compact, and then leave it alone so
+      // a tap can open the credits.
+      if (embedded) {
+        let attribCollapsed = false;
+        const collapseAttrib = () => {
+          if (attribCollapsed || !window.matchMedia(PHONE_MAP_MQ).matches) return;
+          const el = map.getContainer().querySelector(".maplibregl-ctrl-attrib");
+          if (!el?.classList.contains("maplibregl-compact")) return;
+          el.classList.remove("maplibregl-compact-show");
+          attribCollapsed = true;
+        };
+        map.on("load", collapseAttrib);
+        map.on("idle", collapseAttrib);
+        map.on("styledata", collapseAttrib);
+      }
 
       // Pause tour on map manipulation
       const handleMapInteract = () => {
@@ -1763,7 +1800,7 @@ export function AtlasView({ world, embedded = false, initialView, floodEdition =
       }
       mapRef.current = null;
     };
-  }, [world, hasHistoricContext, initialView, aerosolDate]);
+  }, [world, hasHistoricContext, initialView, aerosolDate, embedded]);
 
   // Mount / unmount POI markers whenever (a) the map is ready,
   // (b) data is loaded, or (c) the user toggles a layer.
@@ -2333,6 +2370,7 @@ export function AtlasView({ world, embedded = false, initialView, floodEdition =
 
         {embedded && hasHistoricContext && (
           <div className="atlas-embed-tools" aria-label="Map layers">
+            <div className="atlas-embed-tools-scroll">
             <span className="atlas-embed-tools-label">Explore</span>
             <button
               type="button"
@@ -2391,6 +2429,7 @@ export function AtlasView({ world, embedded = false, initialView, floodEdition =
             >
               🏛 Register {FINEARTS_HERITAGE_SITES.length}
             </button>
+            </div>
             <details className="atlas-embed-more">
               <summary>More layers +</summary>
               <div>
@@ -2465,7 +2504,11 @@ export function AtlasView({ world, embedded = false, initialView, floodEdition =
             </details>
           )}
           {hasHistoricContext && (
-            <details className="atlas-map-key" open={!floodEdition}>
+            <details
+              className="atlas-map-key"
+              open={mapKeyOpen}
+              onToggle={(event) => setMapKeyOpen(event.currentTarget.open)}
+            >
             <summary>Map key</summary>
             <div>
               {showArchitecturalDetail && !evidenceMode ? <span><i className="key-building key-fabric" />Old Town full footprints</span> : null}

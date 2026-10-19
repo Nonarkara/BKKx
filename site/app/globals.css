@@ -1120,6 +1120,12 @@ button {
   color: var(--paper-strong);
 }
 
+/* Desktop: the scroller is not a box, so the layer buttons stay one row.
+   Phone overrides this and scrolls the row inside the map. */
+.atlas-embed-tools-scroll {
+  display: contents;
+}
+
 .atlas-embed-tools-label,
 .atlas-embed-tools button,
 .atlas-embed-tools a {
@@ -1379,8 +1385,7 @@ button {
 
 @media (max-width: 680px) {
   .atlas-aerosol-note { right: 10px; bottom: 176px; width: auto; }
-  .atlas-embed-tools { max-width: calc(100% - 20px); overflow: visible; }
-  .atlas-embed-tools > button,
+  .atlas-embed-tools-scroll > button,
   .atlas-embed-more > summary { padding-left: 8px; padding-right: 8px; font-size: 8px; }
 }
 
@@ -3356,6 +3361,12 @@ button {
   align-items: center;
   flex-wrap: wrap;
 }
+/* Desktop: no box, so the links stay direct flex items of the nav.
+   Phone turns this into the scrolling row; the language switch stays
+   outside it so it cannot scroll off the masthead. */
+.atlas-shell-nav-scroll {
+  display: contents;
+}
 .atlas-shell-nav a {
   font-family: var(--font-body);
   font-size: 13px;
@@ -3382,6 +3393,9 @@ button {
  * meaning elsewhere; an active warning reads as an inset bar and an
  * underline, not a second accent). Horizontally
  * scrollable on narrow screens rather than wrapping into a second row. */
+.city-glance-frame {
+  display: contents;
+}
 .city-glance {
   display: flex;
   align-items: stretch;
@@ -3882,8 +3896,12 @@ button {
 
 /* Phone: one masthead strip ≤56px, then the map. The glance and the
    quarters rail are the index, closed on load so nothing covers the
-   map. Surgical table: the map takes the first screen. */
-@media (max-width: 760px) {
+   map. Surgical table: the map takes the first screen.
+
+   The second clause is landscape phones. An 844×390 phone is wider
+   than 760, so max-width alone gives it the desktop masthead and a
+   map under 20% of the screen. A 1440×900 desktop matches neither. */
+@media (max-width: 760px), (max-height: 500px) and (max-width: 1000px) {
   .atlas-shell {
     height: 100vh;
     height: 100dvh;
@@ -3905,7 +3923,9 @@ button {
     display: inline-flex;
     align-items: baseline;
     flex: 0 0 auto;
-    min-height: 0;
+    box-sizing: border-box;
+    min-height: 44px;
+    padding: 12px 2px 10px;
     color: var(--ink);
     font-family: var(--font-display);
     font-size: 18px;
@@ -3939,9 +3959,9 @@ button {
     display: inline-flex;
     flex: 0 0 auto;
     align-items: center;
-    height: 32px;
+    height: 44px;
     margin: 0;
-    padding: 0 8px;
+    padding: 0 10px;
     border: 1px solid var(--ink);
     background: transparent;
     color: var(--ink);
@@ -3961,25 +3981,58 @@ button {
     flex: 1 1 auto;
     flex-wrap: nowrap;
     align-items: center;
-    gap: 12px;
+    gap: 8px;
+    min-width: 0;
+    overflow: hidden;
+  }
+  .atlas-shell-nav-scroll {
+    display: flex;
+    flex: 1 1 auto;
+    align-items: center;
+    gap: 2px;
     min-width: 0;
     overflow-x: auto;
-    scrollbar-width: none;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(17, 18, 15, 0.45) transparent;
+    container-type: scroll-state;
+    container-name: shellnav;
   }
-  .atlas-shell-nav::-webkit-scrollbar { display: none; }
-  .atlas-shell-nav a {
+  .atlas-shell-nav-scroll a {
     flex: 0 0 auto;
-    padding: 0;
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    padding: 0 6px;
     font-size: 12px;
     line-height: 1;
     white-space: nowrap;
+  }
+  /* Right-edge fade only while the row still has somewhere to go,
+     so a fitted row is not dimmed and a cut word reads as a scroll. */
+  .atlas-shell-nav-scroll::after {
+    content: "";
+    position: sticky;
+    right: 0;
+    flex: 0 0 16px;
+    width: 16px;
+    align-self: stretch;
+    margin-left: -16px;
+    background: linear-gradient(to left, var(--paper-strong), transparent);
+    pointer-events: none;
+    opacity: 0;
+  }
+  @container shellnav scroll-state(scrollable: right) {
+    .atlas-shell-nav-scroll::after { opacity: 1; }
+  }
+  @supports not (container-type: scroll-state) {
+    .atlas-shell-nav-scroll::after { opacity: 1; }
   }
   .atlas-shell-nav .lang-toggle {
     flex: 0 0 auto;
   }
   .atlas-shell-nav .lang-toggle button {
-    min-height: 28px;
-    min-width: 32px;
+    min-height: 44px;
+    min-width: 44px;
     padding: 0 8px;
   }
   .atlas-shell-stage {
@@ -4018,11 +4071,127 @@ button {
   .atlas-shell.is-index-open .atlas-shell-map {
     display: none;
   }
-  .atlas-embed-tools {
-    right: 10px;
+  .atlas-shell.is-index-open .atlas-shell-side a {
+    display: flex;
+    align-items: center;
+    min-height: 44px;
+  }
+  .atlas-shell.is-index-open .atlas-shell-footnote a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+  }
+  /* Portrait only: the weather row is wider than the screen. Landscape
+     is wide enough that a permanent fade would dim a row that fits. */
+  @media (max-width: 760px) {
+    .atlas-shell.is-index-open .city-glance-frame {
+      display: block;
+      position: relative;
+    }
+    .atlas-shell.is-index-open .city-glance-frame::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      width: 28px;
+      background: linear-gradient(to left, var(--paper), transparent);
+      pointer-events: none;
+    }
+  }
+
+  /* Embedded map. The layer row scrolls inside itself; it must not
+     widen the iframe document, or a sideways swipe slides the map. */
+  html:has(.atlas-page.is-embedded),
+  body:has(.atlas-page.is-embedded) {
+    overflow: hidden;
+    max-width: 100%;
+  }
+  .atlas-page.is-embedded {
+    overflow: hidden;
+  }
+  .atlas-page.is-embedded .atlas-embed-tools {
+    top: 8px;
+    left: 8px;
+    right: 64px;
+    max-width: none;
+    width: auto;
     overflow: visible;
   }
+  .atlas-page.is-embedded .atlas-embed-tools-scroll {
+    display: flex;
+    flex: 1 1 auto;
+    align-items: stretch;
+    min-width: 0;
+    overflow-x: auto;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(241, 239, 232, 0.45) transparent;
+    container-type: scroll-state;
+    container-name: layers;
+  }
+  .atlas-page.is-embedded .atlas-embed-tools-scroll::after {
+    content: "";
+    position: sticky;
+    right: 0;
+    flex: 0 0 16px;
+    width: 16px;
+    margin-left: -16px;
+    background: linear-gradient(to left, rgba(17, 18, 15, 0.95), transparent);
+    pointer-events: none;
+    opacity: 0;
+  }
+  @container layers scroll-state(scrollable: right) {
+    .atlas-page.is-embedded .atlas-embed-tools-scroll::after { opacity: 1; }
+  }
+  @supports not (container-type: scroll-state) {
+    .atlas-page.is-embedded .atlas-embed-tools-scroll::after { opacity: 1; }
+  }
   .atlas-embed-tools-label { display: none; }
+  .atlas-page.is-embedded .atlas-embed-tools-scroll > button,
+  .atlas-page.is-embedded .atlas-embed-more > summary,
+  .atlas-page.is-embedded .atlas-embed-more > div button,
+  .atlas-page.is-embedded .atlas-embed-more > div a {
+    min-height: 44px;
+  }
+  .atlas-page.is-embedded .atlas-embed-more {
+    flex: 0 0 auto;
+  }
+  .atlas-page.is-embedded .maplibregl-ctrl-group button {
+    width: 44px;
+    height: 44px;
+  }
+  .atlas-page.is-embedded .maplibregl-ctrl-attrib.maplibregl-compact:not(.maplibregl-compact-show) {
+    min-height: 44px;
+    min-width: 44px;
+    margin: 8px;
+    padding: 0;
+    border-radius: 0;
+  }
+  .atlas-page.is-embedded .maplibregl-ctrl-attrib.maplibregl-compact .maplibregl-ctrl-attrib-button {
+    width: 44px;
+    height: 44px;
+    border-radius: 0;
+  }
+  .atlas-page.is-embedded .atlas-key-stack {
+    bottom: 60px;
+  }
+  .atlas-page.is-embedded .atlas-map-key:not([open]) {
+    width: auto;
+  }
+  .atlas-page.is-embedded .atlas-map-key summary {
+    display: flex;
+    align-items: center;
+    min-height: 44px;
+    padding: 0 12px;
+  }
+  .atlas-page.is-embedded .atlas-shortcuts-hint {
+    width: 44px;
+    height: 44px;
+    flex: 0 0 44px;
+  }
+  .atlas-page.is-embedded .atlas-viewlink {
+    min-height: 44px;
+  }
 }
 
 /* ---- language toggle (Editorial + Console mastheads share this) ---- */
