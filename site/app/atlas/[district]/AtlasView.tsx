@@ -46,6 +46,7 @@ import {
   posterFor,
   type CuratedCamera,
 } from "../../data/cctv-cameras";
+import { phoneChromeMedia } from "../../phone-chrome";
 
 // The walks that geographically belong to Historic Core — everything except
 // bang-krachao-loop, a disconnected bike loop far south of the old town.
@@ -79,10 +80,6 @@ const ESRI_IMAGERY_TILES = [
 const ESRI_IMAGERY_ATTRIBUTION =
   "Imagery © Esri, Maxar, Earthstar Geographics, and the GIS User Community";
 
-/* Portrait phones, and landscape phones (an 844×390 phone is wider than
-   760). Keep in step with the phone-map media query in globals.css.
-   A 1440 desktop matches neither clause. */
-const PHONE_MAP_MQ = "(max-width: 760px), (max-height: 500px) and (max-width: 1000px)";
 
 const NASA_AEROSOL_LAYER = "MODIS_Combined_MAIAC_L2G_AerosolOpticalDepth";
 const NASA_AEROSOL_SOURCE =
@@ -703,18 +700,24 @@ export function AtlasView({ world, embedded = false, initialView, floodEdition =
   const [activeStopId, setActiveStopId] = useState<string>(world.stops[0].id);
   const [mapReady, setMapReady] = useState(false);
   const [mapKeyOpen, setMapKeyOpen] = useState(!floodEdition);
+  // Phone chrome follows the shell viewport (see phone-chrome.ts), not this
+  // frame. A Thai masthead shortens the iframe just enough to match a
+  // height query the English frame misses.
+  const [phoneChrome, setPhoneChrome] = useState(false);
 
   // The map key and the attribution start expanded. On a phone that covers
   // about a third of the canvas, so close the key before paint. The user
   // can still open it; a later resize onto a phone closes it again.
   useLayoutEffect(() => {
-    const mq = window.matchMedia(PHONE_MAP_MQ);
-    const closeIfPhone = () => {
-      if (mq.matches) setMapKeyOpen(false);
+    const mq = phoneChromeMedia();
+    const sync = () => {
+      const phone = mq.matches;
+      setPhoneChrome(phone);
+      if (phone) setMapKeyOpen(false);
     };
-    closeIfPhone();
-    mq.addEventListener("change", closeIfPhone);
-    return () => mq.removeEventListener("change", closeIfPhone);
+    sync();
+    mq.addEventListener("change", sync);
+    return () => mq.removeEventListener("change", sync);
   }, []);
 
   // Atmosphere Engine States
@@ -1081,7 +1084,7 @@ export function AtlasView({ world, embedded = false, initialView, floodEdition =
       if (embedded) {
         let attribCollapsed = false;
         const collapseAttrib = () => {
-          if (attribCollapsed || !window.matchMedia(PHONE_MAP_MQ).matches) return;
+          if (attribCollapsed || !phoneChromeMedia().matches) return;
           const el = map.getContainer().querySelector(".maplibregl-ctrl-attrib");
           if (!el?.classList.contains("maplibregl-compact")) return;
           el.classList.remove("maplibregl-compact-show");
@@ -2331,7 +2334,7 @@ export function AtlasView({ world, embedded = false, initialView, floodEdition =
   }, [weatherMode, pm25]);
 
   return (
-    <main className={`atlas-page${embedded ? " is-embedded" : ""}${floodEdition ? " is-flood" : ""}`}>
+    <main className={`atlas-page${embedded ? " is-embedded" : ""}${embedded && phoneChrome ? " is-phone-chrome" : ""}${floodEdition ? " is-flood" : ""}`}>
       {!embedded && <header className="atlas-header">
         <Link className="wordmark" href="/" aria-label="BKKxC(ulture) home">
           <span>BKK</span>

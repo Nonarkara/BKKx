@@ -1075,6 +1075,23 @@ button {
   transform: translateY(-3px) rotate(45deg);
 }
 
+/* Invisible hit pad. The painted box stays 28–32px; MapLibre anchors on
+   that border box, so the pad must not change width, height, or padding.
+   44px is the minimum touch target. A wider label already clears it. */
+.bkkx-marker::after,
+.bkkx-heritage-marker::after,
+.bkkx-poi-marker::after,
+.bkkx-cam-marker::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 44px;
+  height: 44px;
+  transform: translate(-50%, -50%);
+  background: transparent;
+}
+
 @media (max-width: 900px) {
   .atlas-page {
     grid-template-columns: 1fr;
@@ -1769,7 +1786,7 @@ button {
   border-radius: 0;
   max-width: 160px;
   white-space: nowrap;
-  overflow: hidden;
+  overflow: visible;
 }
 
 .bkkx-poi-marker:hover {
@@ -1784,6 +1801,7 @@ button {
 }
 
 .bkkx-poi-marker .poi-label {
+  min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
 }
@@ -4100,97 +4118,142 @@ button {
     }
   }
 
-  /* Embedded map. The layer row scrolls inside itself; it must not
-     widen the iframe document, or a sideways swipe slides the map. */
-  html:has(.atlas-page.is-embedded),
-  body:has(.atlas-page.is-embedded) {
-    overflow: hidden;
-    max-width: 100%;
-  }
-  .atlas-page.is-embedded {
-    overflow: hidden;
-  }
-  .atlas-page.is-embedded .atlas-embed-tools {
-    top: 8px;
+}
+
+/* Embedded map, only when the SHELL is in phone chrome. The class is set
+   from the parent viewport, so a shorter Thai frame does not pick up
+   these rules on a laptop that the English frame leaves alone.
+   The layer row scrolls inside itself; it must not widen the iframe
+   document, or a sideways swipe slides the map. */
+html:has(.atlas-page.is-embedded.is-phone-chrome),
+body:has(.atlas-page.is-embedded.is-phone-chrome) {
+  overflow: hidden;
+  max-width: 100%;
+}
+.atlas-page.is-embedded.is-phone-chrome {
+  overflow: hidden;
+}
+.atlas-page.is-embedded.is-phone-chrome .atlas-embed-tools {
+  top: 8px;
+  left: 8px;
+  right: 64px;
+  max-width: none;
+  width: auto;
+  overflow: visible;
+}
+.atlas-page.is-embedded.is-phone-chrome .atlas-embed-tools-scroll {
+  display: flex;
+  flex: 1 1 auto;
+  align-items: stretch;
+  min-width: 0;
+  overflow-x: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(241, 239, 232, 0.45) transparent;
+  container-type: scroll-state;
+  container-name: layers;
+}
+.atlas-page.is-embedded.is-phone-chrome .atlas-embed-tools-scroll::after {
+  content: "";
+  position: sticky;
+  right: 0;
+  flex: 0 0 16px;
+  width: 16px;
+  margin-left: -16px;
+  background: linear-gradient(to left, rgba(17, 18, 15, 0.95), transparent);
+  pointer-events: none;
+  opacity: 0;
+}
+@container layers scroll-state(scrollable: right) {
+  .atlas-page.is-embedded.is-phone-chrome .atlas-embed-tools-scroll::after { opacity: 1; }
+}
+@supports not (container-type: scroll-state) {
+  .atlas-page.is-embedded.is-phone-chrome .atlas-embed-tools-scroll::after { opacity: 1; }
+}
+.atlas-page.is-embedded.is-phone-chrome .atlas-embed-tools-label { display: none; }
+.atlas-page.is-embedded.is-phone-chrome .atlas-embed-tools-scroll > button,
+.atlas-page.is-embedded.is-phone-chrome .atlas-embed-more > summary,
+.atlas-page.is-embedded.is-phone-chrome .atlas-embed-more > div button,
+.atlas-page.is-embedded.is-phone-chrome .atlas-embed-more > div a {
+  min-height: 44px;
+}
+.atlas-page.is-embedded.is-phone-chrome .atlas-embed-more {
+  flex: 0 0 auto;
+}
+.atlas-page.is-embedded.is-phone-chrome .maplibregl-ctrl-group button {
+  width: 44px;
+  height: 44px;
+}
+.atlas-page.is-embedded.is-phone-chrome .maplibregl-ctrl-attrib.maplibregl-compact:not(.maplibregl-compact-show) {
+  min-height: 44px;
+  min-width: 44px;
+  margin: 8px;
+  padding: 0;
+  border-radius: 0;
+}
+.atlas-page.is-embedded.is-phone-chrome .maplibregl-ctrl-attrib.maplibregl-compact .maplibregl-ctrl-attrib-button {
+  width: 44px;
+  height: 44px;
+  border-radius: 0;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+.atlas-page.is-embedded.is-phone-chrome .atlas-key-stack {
+  bottom: 60px;
+}
+.atlas-page.is-embedded.is-phone-chrome .atlas-map-key:not([open]) {
+  width: auto;
+}
+.atlas-page.is-embedded.is-phone-chrome .atlas-map-key summary {
+  display: flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 12px;
+}
+.atlas-page.is-embedded.is-phone-chrome .atlas-shortcuts-hint {
+  width: 44px;
+  height: 44px;
+  flex: 0 0 44px;
+}
+.atlas-page.is-embedded.is-phone-chrome .atlas-viewlink {
+  min-height: 44px;
+}
+
+/* Short landscape phones: the bottom-right key sits on the compass, and
+   opening it grows above the frame. Park the key on the left, under the
+   layer strip and clear of zoom, and scroll the legend inside the frame
+   so the summary (the close control) stays on screen. Portrait frames
+   are taller than 500px, so this block does not apply there. */
+@media (max-height: 500px) {
+  .atlas-page.is-embedded.is-phone-chrome .atlas-key-stack {
     left: 8px;
-    right: 64px;
-    max-width: none;
-    width: auto;
-    overflow: visible;
-  }
-  .atlas-page.is-embedded .atlas-embed-tools-scroll {
-    display: flex;
-    flex: 1 1 auto;
-    align-items: stretch;
-    min-width: 0;
-    overflow-x: auto;
-    scrollbar-width: thin;
-    scrollbar-color: rgba(241, 239, 232, 0.45) transparent;
-    container-type: scroll-state;
-    container-name: layers;
-  }
-  .atlas-page.is-embedded .atlas-embed-tools-scroll::after {
-    content: "";
-    position: sticky;
-    right: 0;
-    flex: 0 0 16px;
-    width: 16px;
-    margin-left: -16px;
-    background: linear-gradient(to left, rgba(17, 18, 15, 0.95), transparent);
-    pointer-events: none;
-    opacity: 0;
-  }
-  @container layers scroll-state(scrollable: right) {
-    .atlas-page.is-embedded .atlas-embed-tools-scroll::after { opacity: 1; }
-  }
-  @supports not (container-type: scroll-state) {
-    .atlas-page.is-embedded .atlas-embed-tools-scroll::after { opacity: 1; }
-  }
-  .atlas-embed-tools-label { display: none; }
-  .atlas-page.is-embedded .atlas-embed-tools-scroll > button,
-  .atlas-page.is-embedded .atlas-embed-more > summary,
-  .atlas-page.is-embedded .atlas-embed-more > div button,
-  .atlas-page.is-embedded .atlas-embed-more > div a {
-    min-height: 44px;
-  }
-  .atlas-page.is-embedded .atlas-embed-more {
-    flex: 0 0 auto;
-  }
-  .atlas-page.is-embedded .maplibregl-ctrl-group button {
-    width: 44px;
-    height: 44px;
-  }
-  .atlas-page.is-embedded .maplibregl-ctrl-attrib.maplibregl-compact:not(.maplibregl-compact-show) {
-    min-height: 44px;
-    min-width: 44px;
-    margin: 8px;
-    padding: 0;
-    border-radius: 0;
-  }
-  .atlas-page.is-embedded .maplibregl-ctrl-attrib.maplibregl-compact .maplibregl-ctrl-attrib-button {
-    width: 44px;
-    height: 44px;
-    border-radius: 0;
-  }
-  .atlas-page.is-embedded .atlas-key-stack {
+    right: 10px;
+    top: 58px;
     bottom: 60px;
-  }
-  .atlas-page.is-embedded .atlas-map-key:not([open]) {
     width: auto;
+    align-items: flex-end;
+    justify-content: flex-end;
   }
-  .atlas-page.is-embedded .atlas-map-key summary {
-    display: flex;
-    align-items: center;
-    min-height: 44px;
-    padding: 0 12px;
+  .atlas-page.is-embedded.is-phone-chrome .atlas-map-key {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: min(220px, calc(100% - 80px));
+    /* Frame height minus the layer strip, the credits, and a gap.
+       100% would not resolve: the stack's height is stretched, not set. */
+    max-height: calc(100dvh - 126px);
+    overflow-x: hidden;
+    overflow-y: auto;
   }
-  .atlas-page.is-embedded .atlas-shortcuts-hint {
-    width: 44px;
-    height: 44px;
-    flex: 0 0 44px;
+  .atlas-page.is-embedded.is-phone-chrome .atlas-map-key summary {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    background: rgba(17, 18, 15, 0.98);
   }
-  .atlas-page.is-embedded .atlas-viewlink {
-    min-height: 44px;
+  .atlas-page.is-embedded.is-phone-chrome .atlas-map-key:not([open]) {
+    width: auto;
+    max-height: none;
+    overflow: visible;
   }
 }
 
