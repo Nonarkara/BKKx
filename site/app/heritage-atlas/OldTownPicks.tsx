@@ -18,14 +18,16 @@ import { OLDTOWN_SPOTS, OLDTOWN_KIND_LABEL, type OldtownSpot } from "../data/old
 
 type Props = {
   iframeRef: React.RefObject<HTMLIFrameElement | null>;
+  onPick?: () => void;
 };
 
-export function OldTownPicks({ iframeRef }: Props) {
+export function OldTownPicks({ iframeRef, onPick }: Props) {
   const { t, locale } = useLocale();
   const th = locale === "th";
   const [activeSlug, setActiveSlug] = useState<string | null>(null);
 
   function flyTo(spot: OldtownSpot) {
+    onPick?.();
     setActiveSlug(spot.slug);
     const iframe = iframeRef.current;
     if (!iframe) return;
