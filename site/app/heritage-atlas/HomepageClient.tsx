@@ -47,6 +47,12 @@ export function HomepageClient({ quarters, initialQuarter }: Props) {
     if (q.slug === activeSlug) return;
     setActiveSlug(q.slug);
     setIframeKey((k) => k + 1);
+    if (window.matchMedia("(max-width: 760px)").matches) {
+      iframeRef.current?.parentElement?.scrollIntoView({
+        block: "start",
+        behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth",
+      });
+    }
   }
 
   return (

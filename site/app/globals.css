@@ -3669,11 +3669,11 @@ button {
   padding: 0;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 0;
 }
 
 .atlas-shell-oldtown-cards li {
-  border-bottom: 0;
+  border-bottom: 1px solid rgba(17, 18, 15, 0.2);
 }
 
 .atlas-shell-oldtown-cards button {
@@ -3683,10 +3683,10 @@ button {
   column-gap: 12px;
   width: 100%;
   text-align: left;
-  background: var(--paper-strong);
-  border: 1px solid rgba(17, 18, 15, 0.15);
-  border-radius: 5px;
-  padding: 10px 12px;
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  padding: 12px 0;
   font-family: var(--font-body);
   color: var(--ink);
   cursor: pointer;
@@ -3701,7 +3701,7 @@ button {
   background: var(--ink);
   color: var(--paper-strong);
   border-color: var(--ink);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  box-shadow: none;
 }
 
 .atlas-shell-oldtown-photo {
@@ -3711,7 +3711,7 @@ button {
   background-color: rgba(17, 18, 15, 0.08);
   background-size: cover;
   background-position: center;
-  border-radius: 3px;
+  border-radius: 0;
   border: 1px solid rgba(17, 18, 15, 0.2);
 }
 
@@ -3756,7 +3756,7 @@ button {
   font-size: 9.5px;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--signal);
+  color: inherit;
   margin-right: 4px;
 }
 

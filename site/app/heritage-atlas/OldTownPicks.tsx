@@ -33,6 +33,12 @@ export function OldTownPicks({ iframeRef }: Props) {
     const url = `/atlas/historic-core?embed=1&at=${lng},${lat},${spot.zoom}`;
     // Use src + replace so the user can hit Back without re-firing the fly-to.
     iframe.src = url;
+    if (window.matchMedia("(max-width: 760px)").matches) {
+      iframe.parentElement?.scrollIntoView({
+        block: "start",
+        behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth",
+      });
+    }
   }
 
   return (
