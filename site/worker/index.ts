@@ -144,8 +144,8 @@ const worker = {
 //   script-src      self + YouTube iframe + Cloudflare analytics beacon
 //                   (the zone injects static.cloudflareinsights.com/beacon.min.js
 //                   — without an allowlist CSP would silently kill it)
-//   frame-src       YouTube only (the heritage video embeds and the YouTube
-//                   live cams in the war room; nothing else embeds)
+//   frame-src       self (homepage embeds /atlas/historic-core same-origin) +
+//                   YouTube (heritage video embeds & live cams in the war room)
 //   frame-ancestors self (so other sites cannot iframe the heritage shell)
 //   object-src      'none'  (no <embed>, <applet>, etc.)
 //   base-uri        self      (no rogue <base> rewrites)
@@ -183,7 +183,7 @@ function withSecurityHeaders(res: Response, url: URL): Response {
         "connect-src 'self' https:",
         "worker-src 'self' blob:",
         "media-src 'self' blob: https://camerai.iticfoundation.org",
-        "frame-src https://www.youtube.com https://www.youtube-nocookie.com https://www.instagram.com",
+        "frame-src 'self' https://www.youtube.com https://www.youtube-nocookie.com https://www.instagram.com",
         "object-src 'none'",
         "base-uri 'self'",
         "form-action 'none'",

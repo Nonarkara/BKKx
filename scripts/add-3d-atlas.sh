@@ -25,19 +25,23 @@
 set -eu
 
 script_dir=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
+root_dir=$(CDPATH= cd -- "$script_dir/.." && pwd)
 site_dir="$script_dir/../site"
 atlas_page="$site_dir/app/atlas/[district]/page.tsx"
 atlas_view="$site_dir/app/atlas/[district]/AtlasView.tsx"
 
 usage() {
   cat >&2 <<'EOF'
-Usage: $0 [install|check|package|deploy-orphan]
+Usage: $0 [install|check|package|deploy|deploy-orphan]
   (default)       Run build + tests against the 3D atlas page.
   install         Run `npm install` first to refresh maplibre-gl.
   check           Only verify the atlas files and dependency are present.
   package         Build, test, and emit a Codex deploy archive under dist/.
-  deploy-orphan   Deploy to the personal Cloudflare Workers account
-                  (preview URL only — NOT atlas.nonarkara.org).
+  deploy          Build and deploy to PRODUCTION: Worker `bkkx-site`, which
+                  serves bkk.nonarkara.org through edge-proxy/. This is
+                  the deploy that counts.
+  deploy-orphan   Build and deploy to the preview Worker `bkkx-preview`.
+                  Not production.
 EOF
   exit 2
 }
@@ -69,13 +73,26 @@ if [ "$action" = "check" ]; then
   exit 0
 fi
 
-if [ "$action" = "deploy-orphan" ]; then
+if [ "$action" = "deploy" ] || [ "$action" = "deploy-orphan" ]; then
   say "Building site (vinext → Cloudflare Worker bundle)..."
   (cd "$site_dir" && npm run build)
-  say "Deploying to personal Cloudflare (orphan worker, NOT atlas.nonarkara.org)..."
-  (cd "$site_dir" && npx wrangler deploy)
-  say "Orphan deploy complete. Production deploy to atlas.nonarkara.org still"
-  say "requires the Codex Sites plugin (see $0 package + Codex deploy step)."
+
+  # The Worker name must be explicit. `site/package.json` is named
+  # "site-creator-vinext-starter", so a bare `wrangler deploy` publishes
+  # to a stray Worker of that name that nothing routes to — which is
+  # exactly what happened 2026-10-03 → 10-14: the deploy looked
+  # successful and bkk.nonarkara.org never moved.
+  if [ "$action" = "deploy" ]; then
+    say "Deploying to production Worker bkkx-site (serves bkk.nonarkara.org via edge-proxy)..."
+    (cd "$root_dir" && npx wrangler deploy -c site/dist/server/wrangler.json --name bkkx-site)
+    say "Production deploy complete. Verify: curl -sI https://bkk.nonarkara.org/"
+    exit 0
+  fi
+
+  say "Deploying to preview Worker (NOT production)..."
+  (cd "$site_dir" && npx wrangler deploy --name bkkx-preview)
+  say "Preview deploy complete at https://bkkx-preview.drnon.workers.dev"
+  say "For production use: $0 deploy"
   exit 0
 fi
 
@@ -100,16 +117,17 @@ if [ "$action" = "package" ]; then
   mkdir -p "$(dirname "$archive")"
   tar -C "$stage" -czf "$archive" dist
   say "Archive: $archive"
-  say "Next: hand the archive to the Codex Sites plugin to create a new"
-  say "site_version, then call deploy_private_site_version. Production URL"
-  say "remains atlas.nonarkara.org (fronted by edge-proxy)."
+  say "This archive is only needed for the legacy Codex Sites path. The site"
+  say "deploys straight to Cloudflare now (see context.md 'Deploy') — prefer"
+  say "  $0 deploy"
+  say "which publishes to Worker bkkx-site and serves bkk.nonarkara.org."
   exit 0
 fi
 
 say "Done. Next steps:"
 say "  - Add a new district: edit site/app/walkthrough-data.ts (the worlds[]"
 say "    array), then re-run $0"
-say "  - Personal Cloudflare preview (NOT production): $0 deploy-orphan"
-  say "  - Codex hosting archive (for production atlas.nonarkara.org): $0 package"
+say "  - PRODUCTION (bkk.nonarkara.org): $0 deploy"
+say "  - Preview Worker (not production): $0 deploy-orphan"
 say "  - Local preview: cd site && npm run dev, then open"
 say "    http://localhost:3000/atlas/ratchathewi"

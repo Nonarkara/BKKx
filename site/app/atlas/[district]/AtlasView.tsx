@@ -7,6 +7,8 @@ import type maplibregl from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
 import type { Stop, World } from "../../walkthrough-data";
 import type { Camera } from "../../../worker/live";
+import { dataUrl } from "../../data/data-url";
+import { baseBuildingFilter } from "./old-town-cover";
 import {
   FINEARTS_HERITAGE_SITES,
   FINEARTS_HERITAGE_SOURCE,
@@ -589,7 +591,7 @@ type PoiLayerSpec = {
 const POI_LAYERS: PoiLayerSpec[] = [
   {
     kind: "temple",
-    file: "/pois/temples.geojson",
+    file: dataUrl("/pois/temples.geojson"),
     label: "Temples",
     labelTh: "วัด",
     icon: "🛕",
@@ -598,7 +600,7 @@ const POI_LAYERS: PoiLayerSpec[] = [
   },
   {
     kind: "royal-temple",
-    file: "/pois/royal-temples.geojson",
+    file: dataUrl("/pois/royal-temples.geojson"),
     label: "Royal Temples",
     labelTh: "พระอารามหลวง",
     icon: "👑",
@@ -607,7 +609,7 @@ const POI_LAYERS: PoiLayerSpec[] = [
   },
   {
     kind: "national-museum",
-    file: "/pois/national-museums.geojson",
+    file: dataUrl("/pois/national-museums.geojson"),
     label: "National Museums",
     labelTh: "พิพิธภัณฑสถานแห่งชาติ",
     icon: "🏛️",
@@ -616,7 +618,7 @@ const POI_LAYERS: PoiLayerSpec[] = [
   },
   {
     kind: "national-archive",
-    file: "/pois/national-archives.geojson",
+    file: dataUrl("/pois/national-archives.geojson"),
     label: "National Archives",
     labelTh: "หอจดหมายเหตุแห่งชาติ",
     icon: "📜",
@@ -625,7 +627,7 @@ const POI_LAYERS: PoiLayerSpec[] = [
   },
   {
     kind: "national-library",
-    file: "/pois/national-libraries.geojson",
+    file: dataUrl("/pois/national-libraries.geojson"),
     label: "National Libraries",
     labelTh: "หอสมุดแห่งชาติ",
     icon: "📚",
@@ -1201,17 +1203,17 @@ export function AtlasView({ world, embedded = false, initialView, floodEdition =
           try {
             map.addSource("bkkx-heritage-detail-src", {
               type: "geojson",
-              data: "/data/bkk-heritage-detail.geojson",
+              data: dataUrl("/data/bkk-heritage-detail.geojson"),
               attribution: "© OpenStreetMap contributors (ODbL-1.0) · BKKx heritage detail",
             });
             map.addSource("bkkx-heritage-landmarks-src", {
               type: "geojson",
-              data: "/data/bkk-landmarks.geojson",
+              data: dataUrl("/data/bkk-landmarks.geojson"),
               attribution: "BKKx interpretive landmark massing",
             });
             map.addSource("bkkx-hero-monuments-src", {
               type: "geojson",
-              data: "/data/bkk-hero-monuments.geojson",
+              data: dataUrl("/data/bkk-hero-monuments.geojson"),
               attribution: "Fine Arts Department envelope · © OpenStreetMap contributors · BKKx schematic tiering",
             });
             map.addLayer({
@@ -1617,7 +1619,7 @@ export function AtlasView({ world, embedded = false, initialView, floodEdition =
           try {
             map.addSource("bkkx-rowhouse-candidates-src", {
               type: "geojson",
-              data: "/data/bangkok-rowhouse-footprint-candidates.geojson",
+              data: dataUrl("/data/bangkok-rowhouse-footprint-candidates.geojson"),
             });
             map.addLayer({
               id: "bkkx-rowhouse-candidates-possible",
@@ -1959,6 +1961,21 @@ export function AtlasView({ world, embedded = false, initialView, floodEdition =
     map.setLayoutProperty("bkkx-aerosol", "visibility", showAerosol ? "visible" : "none");
   }, [showAerosol, mapReady]);
 
+  // Where the Old Town's own 3D draws, the base map's plain boxes step aside
+  // (old-town-cover.ts); with Old Town 3D off they come back.
+  useEffect(() => {
+    const map = mapRef.current;
+    if (!map || !mapReady || !hasHistoricContext || !map.getLayer("bkkx-3d-buildings")) return;
+    try {
+      map.setFilter(
+        "bkkx-3d-buildings",
+        baseBuildingFilter(showArchitecturalDetail) as maplibregl.FilterSpecification | null,
+      );
+    } catch (err) {
+      console.warn("bkkx: base-building cover filter failed", err);
+    }
+  }, [showArchitecturalDetail, mapReady, hasHistoricContext]);
+
   useEffect(() => {
     const map = mapRef.current;
     if (!map || !mapReady) return;
@@ -2012,7 +2029,7 @@ export function AtlasView({ world, embedded = false, initialView, floodEdition =
       if (map.getLayer("bkkx-heritage-forms") || loading) return;
       loading = true;
       try {
-        const [res, mod] = await Promise.all([fetch("/data/bkk-heritage-forms.json"), import("./heritage-forms-layer")]);
+        const [res, mod] = await Promise.all([fetch(dataUrl("/data/bkk-heritage-forms.json")), import("./heritage-forms-layer")]);
         if (!res.ok) throw new Error(`forms HTTP ${res.status}`);
         const data = (await res.json()) as { forms: import("./heritage-forms").FormSpec[] };
         if (cancelled || map.getLayer(mod.FORMS_LAYER_ID)) return;
