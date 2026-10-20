@@ -4,6 +4,7 @@ import Link from "next/link";
 import { FloodEvidence } from "../../flood/FloodEvidence";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type maplibregl from "maplibre-gl";
+import { resolveMapLibre } from "./maplibre-runtime";
 import "maplibre-gl/dist/maplibre-gl.css";
 import type { Stop, World } from "../../walkthrough-data";
 import type { Camera } from "../../../worker/live";
@@ -1029,7 +1030,7 @@ export function AtlasView({ world, embedded = false, initialView, floodEdition =
 
     import("maplibre-gl").then((MapLibreModule) => {
       if (!active) return;
-      const maplibregl = MapLibreModule.default;
+      const maplibregl = resolveMapLibre(MapLibreModule);
       maplibreModuleRef.current = maplibregl;
 
       const map = new maplibregl.Map({
