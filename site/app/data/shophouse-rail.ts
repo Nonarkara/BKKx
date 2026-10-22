@@ -255,7 +255,7 @@ export const SUPPORT = {
     {
       file: "/shophouses/logos/smart-city-thailand.jpg",
       name: "Thailand Smart City Office",
-      url: "https://www.depa.or.th/th/smart-city-plan",
+      url: "https://www.depa.or.th/th/smart-city-plan/smart-city-office",
     },
   ],
 } as const;
