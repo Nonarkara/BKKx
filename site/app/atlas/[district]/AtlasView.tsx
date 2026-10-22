@@ -462,18 +462,37 @@ function getStylesForConfig(timeMode: string, weatherMode: string) {
   };
 }
 
-interface OpenMeteoAQIResponse {
-  current?: {
-    pm2_5?: number;
+// The live weather and the live PM2.5 come from this project's own Worker
+// route (/api/live/weather), not from Open-Meteo directly. The reason is
+// written into worker/live.ts: a direct call hands every visitor's IP to a
+// third party, and this project's privacy rule forbids collecting that
+// itself — routing through the Worker keeps the same promise about who else
+// receives it. The 15-minute edge cache is the bonus, and it is what stops
+// the free upstream tier from answering 429 to every visitor at once.
+//
+// The Worker fetches weather_code but used to drop it, so it now carries it
+// in the payload. See worker/live.ts.
+type LiveWeatherEnvelope = {
+  ok?: boolean;
+  fetchedAt?: string;
+  source?: string;
+  data?: {
+    forecastAvailable?: boolean;
+    airAvailable?: boolean;
+    partialReason?: string | null;
+    temperatureC?: number | null;
+    humidityPct?: number | null;
+    precipitationMm?: number | null;
+    weatherCode?: number | null;
+    windKph?: number | null;
+    pm25?: number | null;
+    pm10?: number | null;
+    ozone?: number | null;
+    observedAt?: string | null;
+    attribution?: string;
   };
-}
-
-interface OpenMeteoWeatherResponse {
-  current?: {
-    weather_code?: number;
-    precipitation?: number;
-  };
-}
+  reason?: string;
+};
 
 // WMO weather codes 51-99 cover drizzle through thunderstorm — anything in
 // that range means it's actually raining in Bangkok right now.
@@ -846,20 +865,30 @@ export function AtlasView({ world, embedded = false, initialView, floodEdition =
     }
   };
 
-  // Live AQI Fetch
+  // Live conditions — forecast and PM2.5 in one call, through our own
+  // Worker (see LiveWeatherEnvelope above). A degraded upstream is not an
+  // error here: each half is applied only if it is actually present, and a
+  // missing half simply leaves the default alone.
   useEffect(() => {
-    fetch("https://air-quality-api.open-meteo.com/v1/air-quality?latitude=13.7563&longitude=100.5018&current=pm2_5")
-      .then((res) => (res.ok ? (res.json() as Promise<OpenMeteoAQIResponse>) : null))
-      .then((data) => {
-        const val = data?.current?.pm2_5;
-        if (typeof val === "number") {
-          const rounded = Math.round(val);
+    fetch("/api/live/weather", { headers: { accept: "application/json" } })
+      .then((res) => (res.ok ? (res.json() as Promise<LiveWeatherEnvelope>) : null))
+      .then((env) => {
+        const d = env?.data;
+        if (!d) return;
+
+        if (typeof d.pm25 === "number") {
+          const rounded = Math.round(d.pm25);
           setPm25(rounded);
           pm25Ref.current = rounded;
-          applyLiveWeatherDefault();
         }
+
+        liveWeatherRef.current = {
+          code: typeof d.weatherCode === "number" ? d.weatherCode : null,
+          precipitation: typeof d.precipitationMm === "number" ? d.precipitationMm : null,
+        };
+        applyLiveWeatherDefault();
       })
-      .catch((err) => console.warn("bkkx: pm25 fetch failed", err));
+      .catch((err) => console.warn("bkkx: live weather fetch failed", err));
   }, []);
 
   const pm25Status = useMemo(() => {
@@ -869,23 +898,6 @@ export function AtlasView({ world, embedded = false, initialView, floodEdition =
     if (pm25 <= 55) return { text: `${pm25} µg/m³ (Sensitive-Unhealthy)`, color: "#fd9f00" };
     return { text: `${pm25} µg/m³ (Unhealthy)`, color: "#fd3300" };
   }, [pm25]);
-
-  // Live weather fetch — same Bangkok coordinate as the PM2.5 call above.
-  useEffect(() => {
-    fetch("https://api.open-meteo.com/v1/forecast?latitude=13.7563&longitude=100.5018&current=weather_code,precipitation")
-      .then((res) => (res.ok ? (res.json() as Promise<OpenMeteoWeatherResponse>) : null))
-      .then((data) => {
-        const code = data?.current?.weather_code;
-        const precipitation = data?.current?.precipitation;
-        const resolved = {
-          code: typeof code === "number" ? code : null,
-          precipitation: typeof precipitation === "number" ? precipitation : null,
-        };
-        liveWeatherRef.current = resolved;
-        applyLiveWeatherDefault();
-      })
-      .catch((err) => console.warn("bkkx: weather fetch failed", err));
-  }, []);
 
   // Walk route geometry — same file /walks/:slug pages already draw
   // (PlaceMap.tsx), fetched once so any walk can be picked from the panel.
@@ -1277,6 +1289,7 @@ export function AtlasView({ world, embedded = false, initialView, floodEdition =
               filter: ["all", ["has", "name"], ["!=", ["get", "hide_3d"], true]],
               layout: {
                 "text-field": ["coalesce", ["get", "name_en"], ["get", "name"]],
+                "text-font": ["Noto Sans Regular"],
                 "text-size": 10,
                 "text-offset": [0, 1],
                 "text-anchor": "top",
@@ -1308,6 +1321,7 @@ export function AtlasView({ world, embedded = false, initialView, floodEdition =
               ],
               layout: {
                 "text-field": ["coalesce", ["get", "name_en"], ["get", "name"]],
+                "text-font": ["Noto Sans Regular"],
                 "text-size": 11,
                 "text-offset": [0, 1.4],
                 "text-anchor": "top",
@@ -1468,6 +1482,7 @@ export function AtlasView({ world, embedded = false, initialView, floodEdition =
               minzoom: 14.2,
               layout: {
                 "text-field": ["get", "name"],
+                "text-font": ["Noto Sans Regular"],
                 "text-size": 10,
                 "text-offset": [0, 1.15],
                 "text-anchor": "top",
@@ -1582,6 +1597,7 @@ export function AtlasView({ world, embedded = false, initialView, floodEdition =
               layout: {
                 "symbol-placement": "line",
                 "text-field": ["get", "name"],
+                "text-font": ["Noto Sans Regular"],
                 "text-size": 10,
                 "text-letter-spacing": 0.03,
                 "text-max-angle": 35,

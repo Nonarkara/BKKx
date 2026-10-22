@@ -627,6 +627,8 @@ export type WeatherPayload = {
   temperatureC: number | null;
   humidityPct: number | null;
   precipitationMm: number | null;
+  /** WMO weather code for the current hour (0 clear … 99 thunderstorm). */
+  weatherCode: number | null;
   windKph: number | null;
   /** Highest hourly probability of precipitation in the next 24 h. */
   rainChanceNext24h: number | null;
@@ -711,6 +713,11 @@ export async function handleLiveWeather(): Promise<Response> {
         temperatureC: num(forecast?.temperature_2m),
         humidityPct: num(forecast?.relative_humidity_2m),
         precipitationMm: num(forecast?.precipitation),
+        // The forecast URL already asks for weather_code; it was fetched and
+        // then dropped. The atlas needs it to pick the sky icon, and the
+        // atlas must not call Open-Meteo directly to get it — that is what
+        // this route exists to prevent.
+        weatherCode: num(forecast?.weather_code),
         windKph: num(forecast?.wind_speed_10m),
         rainChanceNext24h: probs.length ? Math.max(...probs.map((p) => p ?? 0)) : null,
         rainNext24hMm: rains.length
