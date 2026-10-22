@@ -18,6 +18,13 @@ import {
 interface Env {
   ASSETS: Fetcher;
   DB: D1Database;
+  /**
+   * The commit this deployment was built from, stamped at deploy time
+   * (site/scripts/deploy.sh). It is reported in the x-bkkx-build header and
+   * in a meta tag, so anyone can tell which bytes are live instead of
+   * taking the deployment's word for it.
+   */
+  BUILD_ID?: string;
   /** Optional: a JSON camera registry for the war room's CCTV rail. */
   CCTV_SOURCE_URL?: string;
   /** Optional: Longdo Map API key. Env only — never committed. */
@@ -132,7 +139,7 @@ const worker = {
     }
 
     const upstream = await handler.fetch(request, env, ctx);
-    return withSecurityHeaders(upstream, url);
+    return withSecurityHeaders(upstream, url, env);
   },
 };
 
@@ -161,7 +168,7 @@ const worker = {
 // Also: nosniff, SAMEORIGIN, Referrer-Policy strict-origin-when-cross-origin,
 // Permissions-Policy off for camera/mic/geo (we don't need any of them).
 // All third-party scripts are pinned with SRI (handled in app/loading.tsx).
-function withSecurityHeaders(res: Response, url: URL): Response {
+function withSecurityHeaders(res: Response, url: URL, env?: Env): Response {
   // Skip API + asset endpoints — only HTML/JSON consumed by browsers
   // needs CSP, and adding it to /assets/*.css or *.js breaks the
   // browser's own parser without buying anything.
@@ -195,6 +202,7 @@ function withSecurityHeaders(res: Response, url: URL): Response {
   headers.set("x-frame-options", "SAMEORIGIN");
   headers.set("referrer-policy", "strict-origin-when-cross-origin");
   headers.set("permissions-policy", "camera=(), microphone=(), geolocation=()");
+  if (env?.BUILD_ID) headers.set("x-bkkx-build", env.BUILD_ID);
   return new Response(res.body, { status: res.status, statusText: res.statusText, headers });
 }
 
