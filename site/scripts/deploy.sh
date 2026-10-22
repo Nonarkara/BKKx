@@ -28,7 +28,11 @@ echo "deploy: building ${BUILD_ID}"
 PATH="/opt/homebrew/bin:$PATH" npm run build
 
 echo "deploy: uploading ${BUILD_ID}"
-PATH="/opt/homebrew/bin:$PATH" ./node_modules/.bin/wrangler deploy --var "BUILD_ID=${BUILD_ID}"
+PATH="/opt/homebrew/bin:$PATH" # wrangler's --var takes KEY:VALUE. Passing KEY=VALUE does not fail loudly —
+# it binds a variable whose NAME is "KEY=VALUE", so env.KEY stays undefined
+# and the var silently does nothing. Verified against the deployed worker:
+# Object.keys(env) came back as ["BUILD_ID=probe-...", "DB"].
+./node_modules/.bin/wrangler deploy --var "BUILD_ID:${BUILD_ID}"
 
 echo
 echo "deploy: ${BUILD_ID} is live. The site reports it in the x-bkkx-build header:"

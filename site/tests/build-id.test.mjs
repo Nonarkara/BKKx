@@ -25,9 +25,16 @@ test('the Worker reports which build is live', () => {
 });
 
 test('the deploy script stamps the id it claims to have deployed', () => {
+  // wrangler's --var takes KEY:VALUE. KEY=VALUE does not fail loudly — it
+  // binds a variable NAMED "KEY=VALUE", so env.KEY stays undefined and the
+  // var does nothing at all. The whole feature looks deployed and is not.
   assert.ok(
-    /--var["']?\s*,?\s*["'`]?BUILD_ID=/.test(DEPLOY_SRC) || /--var\s+"?BUILD_ID=/.test(DEPLOY_SRC),
-    'the deploy script does not pass BUILD_ID to wrangler',
+    /--var\s+["']?BUILD_ID:/.test(DEPLOY_SRC),
+    'the deploy script does not pass BUILD_ID to wrangler as KEY:VALUE',
+  );
+  assert.ok(
+    !/--var\s+["']?BUILD_ID=/.test(DEPLOY_SRC),
+    'the deploy script passes BUILD_ID with "=", which wrangler binds as a variable NAMED "BUILD_ID=..."',
   );
   assert.ok(
     /git rev-parse --short HEAD/.test(DEPLOY_SRC),
