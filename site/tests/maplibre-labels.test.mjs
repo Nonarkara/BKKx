@@ -12,6 +12,34 @@ const WORKER_SRC = readFileSync(
   'utf8',
 );
 
+test('place markers retain real names without interpolating them into HTML', () => {
+  assert.match(ATLAS_SRC, /label\.textContent = site\.name;/);
+  assert.match(ATLAS_SRC, /label\.textContent = placeName;/);
+  assert.match(ATLAS_SRC, /el\.setAttribute\("aria-label", `\$\{layer\.label\}: \$\{placeName\}`\)/);
+  assert.doesNotMatch(ATLAS_SRC, /site\.name\.split\(" "\)\[0\]|layer\.label\.split\(" "\)\[0\]/);
+  assert.doesNotMatch(ATLAS_SRC, /el\.innerHTML = `[^`]*(?:fa-label|poi-label)/);
+  const css = readFileSync(new URL('../app/globals.css', import.meta.url), 'utf8');
+  assert.match(css, /\.bkkx-heritage-marker:focus-visible \.fa-label/);
+  assert.match(css, /\.bkkx-poi-marker:focus-visible \.poi-label/);
+});
+
+test('all custom marker names are restored after MapLibre addTo overwrites them', () => {
+  for (const [start, end, label] of [
+    ['// Add Walkthrough Chapter Markers', '// Add Fine Arts Heritage Markers', 'Open chapter'],
+    ['// Add Fine Arts Heritage Markers', 'mapRef.current = map;', 'Heritage site:'],
+    ['for (const feat of features)', '// The registry half', '${layer.label}: ${placeName}'],
+    ['for (const cam of atlasCameras)', '// Keep the corridor geometry', 'Live camera:'],
+  ]) {
+    const from = ATLAS_SRC.indexOf(start);
+    assert.ok(from >= 0, `missing marker block ${start}`);
+    const block = ATLAS_SRC.slice(from, ATLAS_SRC.indexOf(end, from));
+    const install = block.lastIndexOf('.addTo(map)');
+    const naming = block.lastIndexOf('el.setAttribute("aria-label"');
+    assert.ok(install >= 0 && naming > install, `${label} is overwritten by Marker.addTo()`);
+    assert.ok(block.slice(naming).includes(label));
+  }
+});
+
 /**
  * Pull out every map.addLayer({...}) block by brace matching, so a guard
  * reads the layer as the author wrote it rather than as a text match.

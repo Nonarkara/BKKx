@@ -741,7 +741,7 @@ export function AtlasView({ world, embedded = false, initialView, floodEdition =
   const hasHistoricContext = world.id === "historic-core";
   const [activeStopId, setActiveStopId] = useState<string>(world.stops[0].id);
   const [mapReady, setMapReady] = useState(false);
-  const [mapKeyOpen, setMapKeyOpen] = useState(!floodEdition);
+  const [mapKeyOpen, setMapKeyOpen] = useState(false);
   // Phone chrome follows the shell viewport (see phone-chrome.ts), not this
   // frame. A Thai masthead shortens the iframe just enough to match a
   // height query the English frame misses.
@@ -1784,7 +1784,6 @@ export function AtlasView({ world, embedded = false, initialView, floodEdition =
         const el = document.createElement("button");
         el.type = "button";
         el.className = "bkkx-marker";
-        el.setAttribute("aria-label", `Open chapter ${index + 1}: ${stop.name}`);
         const label = document.createElement("span");
         label.textContent = String(index + 1).padStart(2, "0");
         el.appendChild(label);
@@ -1798,6 +1797,7 @@ export function AtlasView({ world, embedded = false, initialView, floodEdition =
         const marker = new maplibregl.Marker({ element: el, anchor: "bottom" })
           .setLngLat(coord)
           .addTo(map);
+        el.setAttribute("aria-label", `Open chapter ${index + 1}: ${stop.name}`);
         markerRefs.current.push(marker);
       });
 
@@ -1807,9 +1807,15 @@ export function AtlasView({ world, embedded = false, initialView, floodEdition =
           const el = document.createElement("button");
           el.type = "button";
           el.className = "bkkx-heritage-marker";
-          el.setAttribute("aria-label", `Heritage site: ${site.name} (${site.thai})`);
           el.title = `${site.name} · ${site.thai}`;
-          el.innerHTML = `<span class="fa-icon">🏛️</span><span class="fa-label">${site.name.split(" ")[0]}</span>`;
+          const point = document.createElement("span");
+          point.className = "fa-icon";
+          point.setAttribute("aria-hidden", "true");
+          const label = document.createElement("span");
+          label.className = "fa-label";
+          label.textContent = site.name;
+          el.appendChild(point);
+          el.appendChild(label);
           el.addEventListener("click", (event) => {
             event.preventDefault();
             event.stopPropagation();
@@ -1826,9 +1832,12 @@ export function AtlasView({ world, embedded = false, initialView, floodEdition =
               essential: true,
             });
           });
-          const marker = new maplibregl.Marker({ element: el, anchor: "bottom" })
+          const marker = new maplibregl.Marker({ element: el, anchor: "center" })
             .setLngLat(site.coordinates)
             .addTo(map);
+          // MapLibre 4 overwrites custom names in addTo(). Restore only
+          // after installation, so assistive technology gets the real place.
+          el.setAttribute("aria-label", `Heritage site: ${site.name} (${site.thai})`);
           heritageMarkerRefs.current.push(marker);
         });
       }
@@ -1885,9 +1894,18 @@ export function AtlasView({ world, embedded = false, initialView, floodEdition =
         el.type = "button";
         el.className = `bkkx-poi-marker bkkx-poi-${layer.kind}`;
         el.style.setProperty("--poi-color", layer.color);
-        el.setAttribute("aria-label", `${layer.label}: ${feat.properties.name_th}`);
-        el.title = feat.properties.name_th;
-        el.innerHTML = `<span class="poi-icon" aria-hidden="true">${layer.icon}</span><span class="poi-label">${layer.label.split(" ")[0]}</span>`;
+        const placeName = feat.properties.name_en
+          ? `${feat.properties.name_en} · ${feat.properties.name_th}`
+          : feat.properties.name_th;
+        el.title = placeName;
+        const point = document.createElement("span");
+        point.className = "poi-icon";
+        point.setAttribute("aria-hidden", "true");
+        const label = document.createElement("span");
+        label.className = "poi-label";
+        label.textContent = placeName;
+        el.appendChild(point);
+        el.appendChild(label);
         el.addEventListener("click", (event) => {
           event.preventDefault();
           event.stopPropagation();
@@ -1902,9 +1920,10 @@ export function AtlasView({ world, embedded = false, initialView, floodEdition =
             essential: true,
           });
         });
-        const marker = new maplibregl.Marker({ element: el, anchor: "bottom" })
+        const marker = new maplibregl.Marker({ element: el, anchor: "center" })
           .setLngLat(feat.geometry.coordinates as [number, number])
           .addTo(map);
+        el.setAttribute("aria-label", `${layer.label}: ${placeName}`);
         poiMarkerRefs.current[layer.kind].push(marker);
       }
     }
@@ -1997,7 +2016,6 @@ export function AtlasView({ world, embedded = false, initialView, floodEdition =
       const el = document.createElement("button");
       el.type = "button";
       el.className = `bkkx-cam-marker is-${cam.origin}`;
-      el.setAttribute("aria-label", `Live camera: ${cam.name}`);
       el.title = cam.place ?? cam.name;
       el.innerHTML = '<span class="cam-dot" aria-hidden="true"></span><span class="cam-pulse" aria-hidden="true"></span>';
       el.addEventListener("click", (event) => {
@@ -2013,6 +2031,7 @@ export function AtlasView({ world, embedded = false, initialView, floodEdition =
       cameraMarkerRefs.current.push(
         new maplibregl.Marker({ element: el, anchor: "center" }).setLngLat([cam.lon, cam.lat]).addTo(map),
       );
+      el.setAttribute("aria-label", `Live camera: ${cam.name}`);
     }
   }, [showCameras, atlasCameras, mapReady]);
 

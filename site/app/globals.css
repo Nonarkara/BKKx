@@ -1905,37 +1905,31 @@ button {
 .bkkx-heritage-marker {
   display: inline-flex;
   align-items: center;
-  gap: 5px;
-  padding: 4px 8px;
-  background: rgba(26, 20, 12, 0.88);
-  border: 1px solid #e5a93c;
-  border-radius: 4px;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  background: transparent;
+  border: 0;
+  border-radius: 0;
   color: #ffc168;
   font-family: var(--font-display);
   font-size: 10px;
   font-weight: 700;
   cursor: pointer;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.6), 0 0 10px rgba(229, 169, 60, 0.25);
-  backdrop-filter: blur(8px);
-  transition: all 140ms ease;
-  transform: translate(-50%, -100%);
   z-index: 10;
 }
 
-.bkkx-heritage-marker:hover {
-  background: #e5a93c;
-  color: #11120f;
-  transform: translate(-50%, -108%) scale(1.06);
-  box-shadow: 0 6px 20px rgba(229, 169, 60, 0.45);
-}
-
 .bkkx-heritage-marker .fa-icon {
-  font-size: 11px;
+  width: 8px;
+  height: 8px;
+  background: #e5a93c;
+  border: 1px solid var(--ink);
+  border-radius: 50%;
 }
 
 .bkkx-heritage-marker .fa-label {
-  white-space: nowrap;
-  letter-spacing: 0.02em;
+  display: none;
 }
 
 /* ==========================================================================
@@ -1967,21 +1961,18 @@ button {
 .bkkx-poi-marker {
   display: inline-flex;
   align-items: center;
-  gap: 4px;
-  padding: 3px 6px;
-  background: rgba(15, 18, 22, 0.92);
-  border: 1px solid var(--poi-color, #888);
-  border-left: 3px solid var(--poi-color, #888);
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  background: transparent;
+  border: 0;
   color: var(--poi-color, #ccc);
   font-family: var(--font-display);
   font-size: 9px;
   font-weight: 700;
   letter-spacing: 0.02em;
   cursor: pointer;
-  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.55);
-  backdrop-filter: blur(6px);
-  transition: background 120ms ease, color 120ms ease, transform 120ms ease;
-  transform: translate(-50%, -100%);
   z-index: 8;
   border-radius: 0;
   max-width: 160px;
@@ -1989,30 +1980,47 @@ button {
   overflow: visible;
 }
 
-.bkkx-poi-marker:hover {
-  background: var(--poi-color, #888);
-  color: #0d1014;
-  transform: translate(-50%, -106%) scale(1.04);
-}
-
 .bkkx-poi-marker .poi-icon {
-  font-size: 11px;
-  line-height: 1;
+  width: 7px;
+  height: 7px;
+  background: var(--poi-color, #ccc);
+  border: 1px solid var(--ink);
 }
 
 .bkkx-poi-marker .poi-label {
-  min-width: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-/* Subdued label when 460 temples are on — drop the label, keep the dot */
-.bkkx-poi-marker.bkkx-poi-temple .poi-label {
   display: none;
 }
 
+/* Location points keep their full 44px hit area. Only the place a reader
+   is inspecting earns a nameplate; unrelated boxes never cover the city. */
+.bkkx-heritage-marker:hover,
+.bkkx-heritage-marker:focus-visible,
+.bkkx-poi-marker:hover,
+.bkkx-poi-marker:focus-visible { z-index: 30; }
+.bkkx-heritage-marker:focus-visible,
+.bkkx-poi-marker:focus-visible { outline: 2px solid var(--paper); outline-offset: -4px; }
+.bkkx-heritage-marker:hover .fa-label,
+.bkkx-heritage-marker:focus-visible .fa-label,
+.bkkx-poi-marker:hover .poi-label,
+.bkkx-poi-marker:focus-visible .poi-label {
+  display: block;
+  position: absolute;
+  bottom: 32px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: max-content;
+  max-width: min(210px, 65vw);
+  padding: 5px 8px;
+  color: var(--paper);
+  background: var(--ink);
+  border: 1px solid currentColor;
+  font: 500 12px/1.4 var(--font-body);
+  white-space: normal;
+  pointer-events: none;
+}
+
 .bkkx-poi-marker.bkkx-poi-temple {
-  padding: 4px 5px;
+  padding: 0;
 }
 
 /* POI inspector card — same shell as heritage but tinted with --poi-color */
