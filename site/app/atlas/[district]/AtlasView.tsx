@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { FloodEvidence } from "../../flood/FloodEvidence";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
 import type maplibregl from "maplibre-gl";
 import { resolveMapLibre } from "./maplibre-runtime";
 import "maplibre-gl/dist/maplibre-gl.css";
@@ -706,6 +706,28 @@ const ROWHOUSE_FABRIC_GEOJSON = {
   })),
 };
 
+
+// Phone layout (2026-10-17): at this width the Atmosphere deck folds into a
+// bottom sheet that starts closed, so the map is the first thing a phone
+// sees (the map-first "surgical table" rule). Read through
+// useSyncExternalStore so there is no setState-in-effect and the server
+// render stays the desktop layout until hydration.
+const NARROW_QUERY = "(max-width: 760px)";
+function subscribeNarrow(onChange: () => void) {
+  const mq = window.matchMedia(NARROW_QUERY);
+  mq.addEventListener("change", onChange);
+  return () => mq.removeEventListener("change", onChange);
+}
+const readNarrow = () => window.matchMedia(NARROW_QUERY).matches;
+const noopSubscribe = () => () => {};
+const TIME_LABELS = {
+  realtime: "Live",
+  sunrise: "Dawn",
+  sunset: "Dusk",
+  noon: "Noon",
+  night: "Night",
+} as const;
+
 export function AtlasView({ world, embedded = false, initialView, floodEdition = false }: Props) {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const mapRef = useRef<maplibregl.Map | null>(null);
@@ -822,6 +844,24 @@ export function AtlasView({ world, embedded = false, initialView, floodEdition =
   // pattern above.
   const [viewLinkCopied, setViewLinkCopied] = useState(false);
   const [showShortcuts, setShowShortcuts] = useState(false);
+  // null = no explicit choice yet: open on desktop, closed on a phone.
+  const [deckChoice, setDeckChoice] = useState<boolean | null>(null);
+  const isNarrow = useSyncExternalStore(subscribeNarrow, readNarrow, () => false);
+  const hydrated = useSyncExternalStore(noopSubscribe, () => true, () => false);
+  const deckOpen = deckChoice ?? !isNarrow;
+  // Before hydration the class is empty and CSS decides (closed on a phone,
+  // open on desktop), so a phone never flashes the full deck over the map.
+  const deckStateClass = hydrated ? (deckOpen ? " is-open" : " is-closed") : "";
+  // The map key ships with its desktop default (open) and the native
+  // <details> owns it from then on; React never re-passes `open`. A phone
+  // folds it once, before the hydrated class lifts the CSS that hides its
+  // body on first paint, so the key never shows open over the map.
+  const mapKeyRef = useRef<HTMLDetailsElement | null>(null);
+  useLayoutEffect(() => {
+    if (mapKeyRef.current && window.matchMedia(NARROW_QUERY).matches) {
+      mapKeyRef.current.open = false;
+    }
+  }, []);
   // The cursor/zoom readout writes straight into these nodes on mousemove —
   // routing a 60 Hz stream through React state would re-render the whole
   // console for every pixel of mouse travel.
@@ -1067,6 +1107,32 @@ export function AtlasView({ world, embedded = false, initialView, floodEdition =
         new maplibregl.ScaleControl({ unit: "metric", maxWidth: 120 }),
         "bottom-left",
       );
+      // Phone: MapLibre opens the compact credit line expanded until the
+      // first drag, which on a 390 px screen is a white box over a third of
+      // the map. Fold it once the map settles; every credit stays one tap
+      // away behind the (i) button, exactly as after a drag.
+      // Runs on load and on every idle (MapLibre can re-expand it when the
+      // style or sources update), but stops for good once the reader taps
+      // the (i) button: from then on the credits are theirs to open or close.
+      let creditsTouched = false;
+      map.getContainer().addEventListener(
+        "click",
+        (event) => {
+          if ((event.target as Element | null)?.closest?.(".maplibregl-ctrl-attrib-button")) {
+            creditsTouched = true;
+          }
+        },
+        { capture: true },
+      );
+      const foldCredits = () => {
+        if (creditsTouched || !window.matchMedia(NARROW_QUERY).matches) return;
+        map
+          .getContainer()
+          .querySelector(".maplibregl-ctrl-attrib.maplibregl-compact-show")
+          ?.classList.remove("maplibregl-compact-show");
+      };
+      map.on("load", foldCredits);
+      map.on("idle", foldCredits);
 
       // Pause tour on map manipulation
       const handleMapInteract = () => {
@@ -2311,7 +2377,7 @@ export function AtlasView({ world, embedded = false, initialView, floodEdition =
   }, [weatherMode, pm25]);
 
   return (
-    <main className={`atlas-page${embedded ? " is-embedded" : ""}${floodEdition ? " is-flood" : ""}`}>
+    <main className={`atlas-page${embedded ? " is-embedded" : ""}${floodEdition ? " is-flood" : ""}${hydrated ? " is-hydrated" : ""}`}>
       {!embedded && <header className="atlas-header">
         <Link className="wordmark" href="/" aria-label="BKKxC(ulture) home">
           <span>BKK</span>
@@ -2331,8 +2397,14 @@ export function AtlasView({ world, embedded = false, initialView, floodEdition =
           <a href="https://shophouses.nonarkara.org" title="Shophouse Metropolis">Shophouses</a>
           <a href="https://atlas.nonarkara.org" title="The operational city twin">Digital twin</a>
           <Link href="/warroom">War room</Link>
-          <a className="atlas-download" href={world.download} target="_blank" rel="noreferrer">
-            Download world <span aria-hidden="true">↓</span>
+          <a
+            className="atlas-download"
+            href={world.download}
+            target="_blank"
+            rel="noreferrer"
+            title={`Download the ${world.name} Minecraft world`}
+          >
+            <span className="atlas-download-label">Download world</span> <span aria-hidden="true">↓</span>
           </a>
         </nav>
       </header>}
@@ -2398,7 +2470,7 @@ export function AtlasView({ world, embedded = false, initialView, floodEdition =
               aria-pressed={showMobility}
               title="Solid lines are rail; dotted lines are scheduled boat and ferry services."
             >
-              ⛴ Transit
+              ≋ Transit
             </button>
             <button
               type="button"
@@ -2406,7 +2478,7 @@ export function AtlasView({ world, embedded = false, initialView, floodEdition =
               onClick={() => setShowHeritage((prev) => !prev)}
               aria-pressed={showHeritage}
             >
-              🏛 Register {FINEARTS_HERITAGE_SITES.length}
+              ◆ Register {FINEARTS_HERITAGE_SITES.length}
             </button>
             <details className="atlas-embed-more">
               <summary>More layers +</summary>
@@ -2482,7 +2554,7 @@ export function AtlasView({ world, embedded = false, initialView, floodEdition =
             </details>
           )}
           {hasHistoricContext && (
-            <details className="atlas-map-key" open={!floodEdition}>
+            <details ref={mapKeyRef} className="atlas-map-key" open={!floodEdition}>
             <summary>Map key</summary>
             <div>
               {showArchitecturalDetail && !evidenceMode ? <span><i className="key-building key-fabric" />Old Town full footprints</span> : null}
@@ -2565,12 +2637,21 @@ export function AtlasView({ world, embedded = false, initialView, floodEdition =
         )}
 
         {/* Full Atmosphere & Tour deck belongs to the standalone atlas. */}
-        {!embedded && <div className="atlas-control-overlay">
+        {!embedded && <div className={`atlas-control-overlay${deckStateClass}`}>
           <div className="control-section">
-            <div className="control-header">
-              <span>ATMOSPHERE ENGINE</span>
+            <button
+              type="button"
+              className="control-header control-toggle"
+              aria-expanded={hydrated ? deckOpen : undefined}
+              aria-controls="atlas-deck-body"
+              onClick={() => setDeckChoice(!deckOpen)}
+            >
+              <span>Atmosphere &amp; layers</span>
               {isTourPlaying && <span className="tour-live-badge">TOUR ACTIVE</span>}
-            </div>
+              <span className="control-toggle-glyph" aria-hidden="true" />
+            </button>
+
+            <div className="control-body" id="atlas-deck-body">
 
             <button
               onClick={() => {
@@ -2585,7 +2666,7 @@ export function AtlasView({ world, embedded = false, initialView, floodEdition =
               }}
               className={`tour-play-btn ${isTourPlaying ? "is-playing" : ""}`}
             >
-              {isTourPlaying ? "⏸ Pause Cinematic Tour" : "▶ Start Cinematic Tour"}
+              {isTourPlaying ? "❚❚ Pause Cinematic Tour" : "▶ Start Cinematic Tour"}
             </button>
 
             <div className="control-row">
@@ -2604,8 +2685,9 @@ export function AtlasView({ world, embedded = false, initialView, floodEdition =
                     className={timeMode === t ? "active" : ""}
                     title={t === "realtime" ? "Live Bangkok Time" : t}
                     aria-label={t === "realtime" ? "Switch to live local time" : `Switch to ${t} lighting`}
+                    aria-pressed={timeMode === t}
                   >
-                    {t === "realtime" ? "🕒" : t === "sunrise" ? "🌅" : t === "noon" ? "☀️" : t === "sunset" ? "🌇" : "🌙"}
+                    {TIME_LABELS[t]}
                   </button>
                 ))}
               </div>
@@ -2629,8 +2711,9 @@ export function AtlasView({ world, embedded = false, initialView, floodEdition =
                     }}
                     className={weatherMode === w ? "active" : ""}
                     aria-label={w === "clear" ? "Switch to clear sky" : w === "rainy" ? "Switch to rain overlay" : "Switch to PM2.5 smog haze"}
+                    aria-pressed={weatherMode === w}
                   >
-                    {w === "clear" ? "☀️ Clear" : w === "rainy" ? "🌧️ Rain" : "🌫️ Smog"}
+                    {w === "clear" ? "Clear" : w === "rainy" ? "Rain" : "Smog"}
                   </button>
                 ))}
               </div>
@@ -2687,7 +2770,7 @@ export function AtlasView({ world, embedded = false, initialView, floodEdition =
                     aria-pressed={showHeritage}
                     aria-label="Toggle Fine Arts Department Heritage Sites"
                   >
-                    🏛️ Heritage ({FINEARTS_HERITAGE_SITES.length})
+                    ◆ Heritage ({FINEARTS_HERITAGE_SITES.length})
                   </button>
                   <button
                     type="button"
@@ -2708,7 +2791,7 @@ export function AtlasView({ world, embedded = false, initialView, floodEdition =
                     aria-pressed={showMobility}
                     aria-label="Toggle public transport for heritage exploration"
                   >
-                    ⛴ Public transport
+                    ≋ Public transport
                   </button>
                   <button
                     type="button"
@@ -2731,6 +2814,8 @@ export function AtlasView({ world, embedded = false, initialView, floodEdition =
                     ◫ Candidates ({ROWHOUSE_CANDIDATE_SUMMARY.candidate_count.toLocaleString()})
                   </button>
                 </div>
+                <details className="control-notes">
+                  <summary>About these layers · sources</summary>
                 <small className="control-source-note">
                   Old Town 3D: {HERITAGE_DETAIL_COUNT.toLocaleString()} full-resolution OSM footprints + {HERITAGE_LANDMARK_PART_COUNT} curated landmark parts + {HERO_MONUMENT_PART_COUNT} hero parts across Wat Arun, Wat Phra Kaew, Wat Pho, Loha Prasat, the palace prasats and the Golden Mount, with the {EVIDENCE_HIDDEN} boxes the hero models replace hidden; {EVIDENCE_CANDIDATES.extruded.toLocaleString()} screened shophouses extruded at statutory storey heights where no OSM footprint stands, {EVIDENCE_CANDIDATES.onDetailBox.toLocaleString()} outlined only where one does.
                   {" "}{HERITAGE_DETAIL_NOTE}{" "}
@@ -2738,6 +2823,7 @@ export function AtlasView({ world, embedded = false, initialView, floodEdition =
                   {" "}{HERITAGE_MOBILITY_NOTE} NASA aerosol is a dated regional optical-depth
                   composite, not street-level PM2.5. Screened shophouse fabric is on by default as 3D massing and remains unverified.
                 </small>
+                </details>
               </div>
             )}
 
@@ -2767,7 +2853,7 @@ export function AtlasView({ world, embedded = false, initialView, floodEdition =
                       }
                     >
                       <span className="poi-chip-dot" aria-hidden="true" />
-                      {layer.icon} {layer.label} ({poiCounts[layer.kind]})
+                      {layer.label} ({poiCounts[layer.kind]})
                     </button>
                   ))}
                 </div>
@@ -2801,6 +2887,7 @@ export function AtlasView({ world, embedded = false, initialView, floodEdition =
                 </div>
               </div>
             )}
+            </div>
           </div>
         </div>}
 
@@ -2826,7 +2913,7 @@ export function AtlasView({ world, embedded = false, initialView, floodEdition =
             >
               <div className="heritage-card-header">
                 <div className="heritage-badge-group">
-                  <span className="heritage-reg-badge">{primary.mode.includes("boat") || primary.mode.includes("ferry") ? "⛴" : "●"} Public transport</span>
+                  <span className="heritage-reg-badge">{primary.mode.includes("boat") || primary.mode.includes("ferry") ? "≋" : "●"} Public transport</span>
                   <span className="heritage-era-badge">{primary.shortName}</span>
                 </div>
                 <button type="button" className="heritage-close-btn" onClick={() => setSelectedMobility(null)} aria-label="Close transport details">✕</button>
@@ -3053,7 +3140,7 @@ export function AtlasView({ world, embedded = false, initialView, floodEdition =
             )}
             <div className="heritage-card-header">
               <div className="heritage-badge-group">
-                <span className="heritage-reg-badge">🏛️ {selectedHeritage.regId}</span>
+                <span className="heritage-reg-badge">◆ {selectedHeritage.regId}</span>
                 <span className="heritage-era-badge">{selectedHeritage.era}</span>
               </div>
               <button

@@ -340,6 +340,38 @@ test("limits Old Town context layers to Historic Core", async () => {
   assert.match(html, /orientation only/i);
 });
 
+test("the atlas deck folds away on a phone and keeps its notes one tap away", async () => {
+  // 2026-10-17 phone fix: the deck is a toggle (closed by default under
+  // 760 px), the long layer note sits behind a summary instead of printing
+  // as a wall of text, and the deck's buttons carry no emoji.
+  const response = await render("/atlas/historic-core");
+  const html = await response.text();
+  assert.match(html, /class="control-header control-toggle"[^>]*aria-controls="atlas-deck-body"/);
+  assert.match(html, /id="atlas-deck-body"/);
+  assert.match(html, /<details class="control-notes"><summary>About these layers · sources<\/summary>/);
+  assert.match(html, /class="atlas-download-label">Download world</);
+  const deck = html.slice(html.indexOf('id="atlas-deck-body"'), html.indexOf("atlas-panel"));
+  assert.ok(deck.length > 0, "deck markup found");
+  assert.doesNotMatch(deck, /[\p{Emoji_Presentation}\uFE0F]/u, "no emoji in the Atmosphere deck");
+  // Before hydration the toggle claims nothing: no aria-expanded, and the
+  // Show/Hide word comes from CSS, so it can't contradict a closed phone sheet.
+  assert.doesNotMatch(html, /class="control-header control-toggle"[^>]*aria-expanded=/);
+  // The map key's body is hidden on a phone until hydration folds it.
+  assert.doesNotMatch(html, /class="atlas-page[^"]*is-hydrated/);
+
+  // The phone layout itself lives in CSS; pin the rules that keep the map first.
+  const { readFileSync } = await import("node:fs");
+  const css = readFileSync(new URL("../app/globals.css", import.meta.url), "utf8");
+  const phone = css.slice(css.indexOf("@media (max-width: 760px) {\n  .atlas-header {"));
+  assert.ok(phone.length > 0, "phone media block present");
+  const phoneBlock = phone.slice(0, phone.indexOf("\n}\n") + 3);
+  assert.match(phoneBlock, /\.atlas-control-overlay:not\(\.is-open\) \.control-body \{ display: none; \}/);
+  assert.match(phoneBlock, /max-height: min\(45dvh, calc\(100% - 8px\)\)/);
+  assert.match(phoneBlock, /\.atlas-map:has\(\.atlas-control-overlay\.is-open\) \.maplibregl-ctrl-bottom-right/);
+  assert.match(phoneBlock, /\.atlas-page:not\(\.is-embedded\) \.atlas-map \.maplibregl-ctrl-bottom-left/);
+  assert.match(phoneBlock, /\.atlas-page:not\(\.is-hydrated\) \.atlas-map-key > div \{ display: none; \}/);
+});
+
 test("returns 404 for an unknown atlas district", async () => {
   const response = await render("/atlas/atlantis");
   assert.equal(response.status, 404);
