@@ -83,4 +83,27 @@ release gates in a separate operational scope. No claim that they were merged.
 
 ## Release
 
-Pending final commit/push/deploy/live interaction check.
+- Source: `e3d2d65`, pushed to main with both merge commits. GitHub PR17 and
+  PR20 report MERGED at 2026-10-25T02:08:41Z.
+- Deployed only `bkkx-site`, version `1ef0d3f0-6139-4a60-b381-523bfe48b2aa`.
+  Live header: `x-bkkx-build: bkkx-20261025-msh-e3d2d65`.
+- Used the explicit built `dist/server/wrangler.json` and the release script's
+  `--var BUILD_ID:...` mechanism, after checking tracked source matched HEAD.
+  The normal script refuses any untracked file; the pre-existing PBF was left
+  untouched instead of silently committing or hiding it to satisfy that guard.
+- Live `/`, `/heritage`, `/rowhouses`, `/shophouses/typology`,
+  `/atlas/historic-core`: HTTP200, all reporting the new build.
+- Application CSS `/assets/index-CsKyP_SM.css` SHA256 matches the local build
+  and contains Browse rules. Production assets include local Jost/Prompt WOFF2.
+- Production browser at 390×844: map390×788; Browse reveals About; Escape
+  closes it; Enter on Rattanakosin Island updates the iframe on this origin,
+  closes the index and restores focus to Index. Thai switch changes the index
+  label, and switching back works. At1280×900 map972.8×732.07 (61.8%).
+- Settled production screenshots saved to `/tmp/bkkx-msh-live-phone.png` and
+  `/tmp/bkkx-msh-live-desktop.png`; geography visibly renders. Overlapping
+  landmark marker labels remain a separate cartographic readability issue.
+- CI run40153327811: build, generated-file cleanliness, typecheck, lint, repo
+  guards, both Node suites and world geometry passed; world-pipeline writes
+  were still running at this receipt. Final status must be checked separately.
+- Temporary preview process stopped; no local development databases were erased.
+  Only the pre-existing untracked PBF remains outside version control.
