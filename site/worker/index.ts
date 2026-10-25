@@ -2,6 +2,7 @@
 import { handleImageOptimization, DEFAULT_DEVICE_SIZES, DEFAULT_IMAGE_SIZES } from "vinext/server/image-optimization";
 import handler from "vinext/server/app-router-entry";
 import { pageviewStats, recordPageview } from "./pageviews";
+import { readPageviewRequest } from "./pageview-request";
 import { floodBulletinResponse, floodEvidenceResponse, floodRoadsResponse } from "./flood";
 import {
   handleLiveRain,
@@ -59,15 +60,13 @@ const worker = {
     if (url.pathname === "/api/flood/roads" && request.method === "GET") return floodRoadsResponse();
 
     if (url.pathname === "/api/pageview" && request.method === "POST") {
-      const body = await request.json().catch(() => ({})) as {
-        path?: unknown;
-        referrer?: unknown;
-      };
+      const body = await readPageviewRequest(request);
+      if (!body.ok) return body.response;
       const cloudflareRequest = request as Request & { cf?: { country?: string } };
 
       await recordPageview(env.DB, {
-        path: typeof body.path === "string" ? body.path : "/",
-        referrer: typeof body.referrer === "string" ? body.referrer : null,
+        path: body.path,
+        referrer: body.referrer,
         country: cloudflareRequest.cf?.country ?? null,
         language: request.headers.get("accept-language"),
       });

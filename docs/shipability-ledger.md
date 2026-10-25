@@ -23,6 +23,8 @@ Do not substitute one green build or one repaired screen for the full audit.
   still runs all current test files and retains least privilege. Verify new CI.
 - PR12: pageview limits remain open; raw IP storage keys lack retention cleanup.
   Fix privacy/retention and audit the spending claim before adding storage.
+  Its request-origin idea is incorporated separately in the boundary repair
+  below; this is not a merge of its limiter or a claim to cap spending.
 - PR13: broad dependency proposal has failing checks; MapLibre/Three/vinext
   migrations need version-specific rendering/worker tests, not a blanket bump.
 - PR4: compact-console/camera contribution is partially superseded; compare its
@@ -78,3 +80,34 @@ do not equate local passing checks with verified remote CI.
 Environment note: this round observed host load averages above379, plus a git
 fetch SSL timeout. Existing build/preview handles were polled rather than
 restarted solely on observation timeouts. Never kill unrelated agents/services.
+
+## Analytics boundary repair — 25 October 2026
+
+Previous turn: verified progress, not completion. GitHub now confirms successful
+CI for d44e1e9, 52dccab and 87794c0 (runs 40163806300, 40164552497,
+40165163197). BKKx has no stash; operational Atlas and BKKxCulture have no dirty
+files. The pre-existing PBF and prunable detached scratch-worktree record remain
+untouched. No historical branch was deleted or rewritten.
+
+PR12 source 85aadfb supplied the origin-check concept. Its proposed persistent
+raw-IP buckets have no expiry, so they remain held. Its JSON parser, like main's,
+also treats `null` as an object; reproduced `TypeError: Cannot read properties
+of null (reading 'path')` before editing.
+
+Main now validates before D1: exact allowed origin (including the custom-domain
+proxy), JSON content type, actual streamed UTF-8 byte limit of 4096, object shape
+and local path. Rejections are 400/403/413/415 with no-store. A forged Origin is
+not authentication: non-browser callers can still spoof it. No new storage,
+per-IP counter, rate limit or hard spending ceiling is claimed.
+
+New analytics records keep only the current pathname and referring origin, not
+queries, fragments, credentials or the previous document path. Existing stored
+history is not purged by this change.
+
+Verification: production build, typecheck, lint and 94 rendered tests pass;
+47 source tests pass in the full run, followed by all six analytics tests after
+adding the built-Worker test (48 distinct source tests total). The built Worker
+rejects six invalid request classes with a D1 getter that throws on access, and
+records a valid sanitized payload against a test-only DB. All ten test files are
+wired into both npm test and CI. Generated public data remains unchanged.
+Production deployment and rejection probes are pending for this repair.
