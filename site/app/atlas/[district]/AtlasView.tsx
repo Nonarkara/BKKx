@@ -47,6 +47,7 @@ import {
   posterFor,
   type CuratedCamera,
 } from "../../data/cctv-cameras";
+import { phoneChromeMedia } from "../../phone-chrome";
 
 // The walks that geographically belong to Historic Core — everything except
 // bang-krachao-loop, a disconnected bike loop far south of the old town.
@@ -79,6 +80,7 @@ const ESRI_IMAGERY_TILES = [
 ];
 const ESRI_IMAGERY_ATTRIBUTION =
   "Imagery © Esri, Maxar, Earthstar Geographics, and the GIS User Community";
+
 
 const NASA_AEROSOL_LAYER = "MODIS_Combined_MAIAC_L2G_AerosolOpticalDepth";
 const NASA_AEROSOL_SOURCE =
@@ -739,6 +741,26 @@ export function AtlasView({ world, embedded = false, initialView, floodEdition =
   const hasHistoricContext = world.id === "historic-core";
   const [activeStopId, setActiveStopId] = useState<string>(world.stops[0].id);
   const [mapReady, setMapReady] = useState(false);
+  const [mapKeyOpen, setMapKeyOpen] = useState(!floodEdition);
+  // Phone chrome follows the shell viewport (see phone-chrome.ts), not this
+  // frame. A Thai masthead shortens the iframe just enough to match a
+  // height query the English frame misses.
+  const [phoneChrome, setPhoneChrome] = useState(false);
+
+  // The map key and the attribution start expanded. On a phone that covers
+  // about a third of the canvas, so close the key before paint. The user
+  // can still open it; a later resize onto a phone closes it again.
+  useLayoutEffect(() => {
+    const mq = phoneChromeMedia();
+    const sync = () => {
+      const phone = mq.matches;
+      setPhoneChrome(phone);
+      if (phone) setMapKeyOpen(false);
+    };
+    sync();
+    mq.addEventListener("change", sync);
+    return () => mq.removeEventListener("change", sync);
+  }, []);
 
   // Atmosphere Engine States
   const [timeMode, setTimeMode] = useState<"realtime" | "sunrise" | "noon" | "sunset" | "night">("realtime");
@@ -852,16 +874,6 @@ export function AtlasView({ world, embedded = false, initialView, floodEdition =
   // Before hydration the class is empty and CSS decides (closed on a phone,
   // open on desktop), so a phone never flashes the full deck over the map.
   const deckStateClass = hydrated ? (deckOpen ? " is-open" : " is-closed") : "";
-  // The map key ships with its desktop default (open) and the native
-  // <details> owns it from then on; React never re-passes `open`. A phone
-  // folds it once, before the hydrated class lifts the CSS that hides its
-  // body on first paint, so the key never shows open over the map.
-  const mapKeyRef = useRef<HTMLDetailsElement | null>(null);
-  useLayoutEffect(() => {
-    if (mapKeyRef.current && window.matchMedia(NARROW_QUERY).matches) {
-      mapKeyRef.current.open = false;
-    }
-  }, []);
   // The cursor/zoom readout writes straight into these nodes on mousemove —
   // routing a 60 Hz stream through React state would re-render the whole
   // console for every pixel of mouse travel.
@@ -1125,7 +1137,7 @@ export function AtlasView({ world, embedded = false, initialView, floodEdition =
         { capture: true },
       );
       const foldCredits = () => {
-        if (creditsTouched || !window.matchMedia(NARROW_QUERY).matches) return;
+        if (creditsTouched || !phoneChromeMedia().matches) return;
         map
           .getContainer()
           .querySelector(".maplibregl-ctrl-attrib.maplibregl-compact-show")
@@ -1846,7 +1858,7 @@ export function AtlasView({ world, embedded = false, initialView, floodEdition =
       }
       mapRef.current = null;
     };
-  }, [world, hasHistoricContext, initialView, aerosolDate]);
+  }, [world, hasHistoricContext, initialView, aerosolDate, embedded]);
 
   // Mount / unmount POI markers whenever (a) the map is ready,
   // (b) data is loaded, or (c) the user toggles a layer.
@@ -2377,7 +2389,7 @@ export function AtlasView({ world, embedded = false, initialView, floodEdition =
   }, [weatherMode, pm25]);
 
   return (
-    <main className={`atlas-page${embedded ? " is-embedded" : ""}${floodEdition ? " is-flood" : ""}${hydrated ? " is-hydrated" : ""}`}>
+    <main className={`atlas-page${embedded ? " is-embedded" : ""}${embedded && phoneChrome ? " is-phone-chrome" : ""}${floodEdition ? " is-flood" : ""}${hydrated ? " is-hydrated" : ""}`}>
       {!embedded && <header className="atlas-header">
         <Link className="wordmark" href="/" aria-label="BKKxC(ulture) home">
           <span>BKK</span>
@@ -2422,6 +2434,7 @@ export function AtlasView({ world, embedded = false, initialView, floodEdition =
 
         {embedded && hasHistoricContext && (
           <div className="atlas-embed-tools" aria-label="Map layers">
+            <div className="atlas-embed-tools-scroll">
             <span className="atlas-embed-tools-label">Explore</span>
             <button
               type="button"
@@ -2480,6 +2493,7 @@ export function AtlasView({ world, embedded = false, initialView, floodEdition =
             >
               ◆ Register {FINEARTS_HERITAGE_SITES.length}
             </button>
+            </div>
             <details className="atlas-embed-more">
               <summary>More layers +</summary>
               <div>
@@ -2554,7 +2568,11 @@ export function AtlasView({ world, embedded = false, initialView, floodEdition =
             </details>
           )}
           {hasHistoricContext && (
-            <details ref={mapKeyRef} className="atlas-map-key" open={!floodEdition}>
+            <details
+              className="atlas-map-key"
+              open={mapKeyOpen}
+              onToggle={(event) => setMapKeyOpen(event.currentTarget.open)}
+            >
             <summary>Map key</summary>
             <div>
               {showArchitecturalDetail && !evidenceMode ? <span><i className="key-building key-fabric" />Old Town full footprints</span> : null}

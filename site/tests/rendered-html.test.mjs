@@ -390,6 +390,8 @@ test("serves the 3D map heritage atlas as the front door", async () => {
   // 3D map front door
   assert.match(html, /atlas-shell/);
   assert.match(html, /atlas-shell-map/);
+  assert.match(html, /atlas-shell-index-toggle/);
+  assert.match(html, /aria-expanded="false"/);
   assert.match(html, /src="\/atlas\/historic-core\?embed=1"/);
   assert.doesNotMatch(html, /src="https:\/\/atlas\.nonarkara\.org/i);
   // Rowhouses are the useful default; quarters remain in the client tab.
