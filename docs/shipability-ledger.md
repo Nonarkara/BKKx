@@ -104,10 +104,15 @@ New analytics records keep only the current pathname and referring origin, not
 queries, fragments, credentials or the previous document path. Existing stored
 history is not purged by this change.
 
-Verification: production build, typecheck, lint and 94 rendered tests pass;
-47 source tests pass in the full run, followed by all six analytics tests after
-adding the built-Worker test (48 distinct source tests total). The built Worker
+Verification: production build, typecheck, lint, 94 rendered tests and the final
+consolidated run of all 48 source tests pass (142 total). The built Worker
 rejects six invalid request classes with a D1 getter that throws on access, and
 records a valid sanitized payload against a test-only DB. All ten test files are
 wired into both npm test and CI. Generated public data remains unchanged.
-Production deployment and rejection probes are pending for this repair.
+Shipped source cb3b69b, pushed to main; Worker version
+`fa5aa9f5-96c1-4173-8bf1-a78c1add301a`. Production homepage returns 200 with
+`x-bkkx-build: bkkx-20261025-analytics-cb3b69b`. All six live rejected-request
+probes return the expected 400/403/413/415 and no-store. No synthetic successful
+pageview was written in production. Initial live GET timed out; the subsequent
+bounded verification completed successfully. GitHub run 40165521101 passed;
+40165600473 was still in progress at the last observation, not claimed passed.
