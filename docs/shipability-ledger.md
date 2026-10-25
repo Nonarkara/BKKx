@@ -64,7 +64,16 @@ Final production build and tests pass (42 source checks and 94 rendered tests),
 typecheck and lint pass, and the independent diff reviewer reports no remaining
 confirmed blocker. Pointer activation also opens the inspector at phone width.
 Additional viewport captures: `/tmp/bkkx-markers-1440.png` and
-`/tmp/bkkx-markers-1024.png`. Production verification is still required.
+`/tmp/bkkx-markers-1024.png`.
+
+Shipped source `52dccab`, pushed to main, Worker version
+`247755bf-5a77-4065-a03e-87109de5285a`. Five production routes return 200
+with `x-bkkx-build: bkkx-20261025-markers-52dccab`; both the new CSS and
+AtlasView JavaScript match the tested local SHA-256 bytes. Reloaded production
+browser confirms the full Grand Palace accessible name. Screenshot:
+`/tmp/bkkx-markers-live.png`. Initial upload failed due to connectivity; one
+retry succeeded. Latest remote CI status could not be retrieved (TLS timeout);
+do not equate local passing checks with verified remote CI.
 
 Environment note: this round observed host load averages above379, plus a git
 fetch SSL timeout. Existing build/preview handles were polled rather than
