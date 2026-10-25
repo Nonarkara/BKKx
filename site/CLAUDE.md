@@ -13,10 +13,12 @@
   case-for-bangkok page opts into the Palette seal as its accent;
   the heritage register stays on the oxide seal until a page chooses
   Palette explicitly.
-- The site typeface is **Sao Chingcha** (self-hosted, `public/fonts/`,
-  three weights, declared in `globals.css`). IBM Plex Sans Thai is its
-  fallback; JetBrains Mono carries coordinates and block numbers. Never
-  Inter/Roboto/Poppins/Montserrat/Open Sans/Lato.
+- Interface typography is **Jost + Prompt** (Latin + non-looped Thai),
+  bundled as local assets by the production build. Jost's fallback must
+  name Prompt before a generic family, or the generic steals Thai glyphs.
+  Numbers use tabular figures. Source Serif 4 remains only for the existing
+  English long-form essay. Preserve the typology page's Chinese font.
+  Never Inter/Roboto/Poppins/Montserrat/Open Sans/Lato.
 - Preserve keyboard access and reduced-motion behavior when adding interactions.
 - **BKKx 1.0.0** ships a real defense-in-depth header set on every HTML
   page from the worker (worker/index.ts `withSecurityHeaders`): CSP

@@ -140,7 +140,7 @@ export function GlobalMap() {
         {/* Country labels */}
         <g
           fontSize={11}
-          fontFamily='"IBM Plex Sans Thai", "Sao Chingcha", sans-serif'
+          fontFamily="var(--font-body)"
           fill="#5f5b66"
           fontWeight={600}
         >
@@ -199,7 +199,7 @@ export function GlobalMap() {
                   y={y + 3}
                   fontSize={10}
                   fontWeight={700}
-                  fontFamily='"IBM Plex Sans Thai", "Sao Chingcha", sans-serif'
+                  fontFamily="var(--font-body)"
                   fill="#14140f"
                 >
                   {p.name}
@@ -239,7 +239,7 @@ export function GlobalMap() {
                   y={y + 3}
                   fontSize={10}
                   fontWeight={isFocus ? 700 : 500}
-                  fontFamily='"IBM Plex Sans Thai", "Sao Chingcha", sans-serif'
+                  fontFamily="var(--font-body)"
                   fill={isFocus ? "#14140f" : "#5f5b66"}
                 >
                   {t.name}

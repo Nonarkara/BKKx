@@ -417,6 +417,33 @@ test("serves the 3D map heritage atlas as the front door", async () => {
   assert.match(html, /application\/ld\+json/);
 });
 
+test("heritage navigation exposes all destinations behind its phone disclosure", async () => {
+  const response = await render("/");
+  const html = await response.text();
+  assert.match(html, /aria-controls="heritage-destinations"/);
+  assert.match(html, /id="heritage-destinations"/);
+  for (const destination of ["/rowhouses", "https://shophouses.nonarkara.org", "https://atlas.nonarkara.org", "/warroom", "/case-for-bangkok", "/heritage#register", "/heritage#walks", "/about"]) {
+    assert.ok(html.includes(`href="${destination}"`), `missing destination ${destination}`);
+  }
+});
+
+test("interface typography retains the Thai fallback before a generic family", async () => {
+  const { readFileSync } = await import("node:fs");
+  const layout = readFileSync(new URL("../app/layout.tsx", import.meta.url), "utf8");
+  assert.match(layout, /const latin = Jost\(/);
+  // The default next/font Jost variable includes sans-serif. That swallows
+  // Thai before the later Prompt variable is ever tried.
+  assert.match(layout, /fallback: \["Prompt"\]/);
+  assert.match(layout, /const thai = Prompt\(/);
+  assert.doesNotMatch(layout, /IBM_Plex_Sans_Thai|JetBrains_Mono/);
+  const typology = readFileSync(new URL("../app/shophouses/typology/typology.css", import.meta.url), "utf8");
+  assert.doesNotMatch(typology, /--font-plex-thai/);
+  assert.match(typology, /var\(--font-jost\), var\(--font-zh\), var\(--font-prompt\)/);
+  const css = readFileSync(new URL("../app/globals.css", import.meta.url), "utf8");
+  assert.match(css, /grid-template-columns: clamp\(280px, 24vw, 340px\) minmax\(0, 1fr\)/);
+  assert.doesNotMatch(css, /@container shellnav|container-name: shellnav/);
+});
+
 test("every quarter photo URL resolves (page.tsx must use the photo slot, not the slug)", async () => {
   // Regression: the front door once built each quarter thumbnail from
   // `${a.slug}.jpg` — but two of nine areas use a photo slot that

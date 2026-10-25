@@ -57,6 +57,11 @@ export default defineConfig(async () => {
       sites(),
       cloudflare({
         viteEnvironment: { name: "rsc", childEnvironments: ["ssr"] },
+        // Isolate local QA from another agent's Miniflare database/version.
+        // Production bindings and the normal development store are unchanged.
+        persistState: process.env.BKKX_PREVIEW_STATE
+          ? { path: process.env.BKKX_PREVIEW_STATE }
+          : true,
         config: localBindingConfig,
       }),
     ],

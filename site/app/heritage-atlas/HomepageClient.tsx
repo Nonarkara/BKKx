@@ -38,25 +38,42 @@ export function HomepageClient({ quarters, initialQuarter }: Props) {
   const [railView, setRailView] = useState<"rowhouses" | "quarters">("rowhouses");
   const [iframeKey, setIframeKey] = useState(0);
   const [indexOpen, setIndexOpen] = useState(false);
+  const [navOpen, setNavOpen] = useState(false);
+  const navToggleRef = useRef<HTMLButtonElement | null>(null);
+  const indexToggleRef = useRef<HTMLButtonElement | null>(null);
   const iframeRef = useRef<HTMLIFrameElement | null>(null);
 
   useEffect(() => {
-    if (!indexOpen) return;
+    if (!indexOpen && !navOpen) return;
     function onKey(event: KeyboardEvent) {
-      if (event.key === "Escape") setIndexOpen(false);
+      if (event.key !== "Escape") return;
+      if (navOpen) {
+        setNavOpen(false);
+        navToggleRef.current?.focus();
+      } else {
+        setIndexOpen(false);
+        indexToggleRef.current?.focus();
+      }
     }
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [indexOpen]);
+  }, [indexOpen, navOpen]);
 
   const activeQuarter = activeSlug ? quarters.find((q) => q.slug === activeSlug) : null;
   const initialSrc = heritageMapUrlFor(activeQuarter ?? null);
+
+  function closeIndex() {
+    setIndexOpen(false);
+    // A chosen row disappears on phones. Return keyboard focus to its
+    // disclosure instead of leaving it in a hidden part of the document.
+    indexToggleRef.current?.focus();
+  }
 
   // Reload BKK's own embedded heritage map at the selected quarter.
   function pickQuarter(q: Quarter) {
     // The index covers the map on a phone. Close it so the jump is visible,
     // including a second tap on the quarter already showing.
-    setIndexOpen(false);
+    closeIndex();
     if (q.slug === activeSlug) return;
     setActiveSlug(q.slug);
     setIframeKey((k) => k + 1);
@@ -69,7 +86,7 @@ export function HomepageClient({ quarters, initialQuarter }: Props) {
   }
 
   return (
-    <div className={indexOpen ? "atlas-shell is-index-open" : "atlas-shell"}>
+    <div className={`atlas-shell${indexOpen ? " is-index-open" : ""}${navOpen ? " is-nav-open" : ""}`}>
       <header className="atlas-shell-masthead" aria-label="BKKx primary">
         <Link className="register-wordmark" href="/" aria-label="BKKxC(ulture) home">
           <span>BKK</span>
@@ -85,15 +102,26 @@ export function HomepageClient({ quarters, initialQuarter }: Props) {
         </div>
         <button
           type="button"
+          ref={indexToggleRef}
           className="atlas-shell-index-toggle"
           aria-expanded={indexOpen}
           aria-controls="atlas-shell-index"
-          onClick={() => setIndexOpen((open) => !open)}
+          onClick={() => { setIndexOpen((open) => !open); setNavOpen(false); }}
         >
           {indexOpen ? (th ? "แผนที่" : "Map") : (th ? "สารบัญ" : "Index")}
         </button>
         <nav className="atlas-shell-nav" aria-label="Heritage navigation">
-          <div className="atlas-shell-nav-scroll">
+          <button
+            ref={navToggleRef}
+            type="button"
+            className="atlas-shell-nav-toggle"
+            aria-expanded={navOpen}
+            aria-controls="heritage-destinations"
+            onClick={() => setNavOpen((open) => !open)}
+          >
+            {th ? "เมนู" : "Browse"}
+          </button>
+          <div id="heritage-destinations" className="atlas-shell-nav-scroll">
             <Link href="/rowhouses">Rowhouses</Link>
             <a href="https://shophouses.nonarkara.org" title="Shophouse Metropolis — the essay, the Bible, the citywide pressure map">Shophouses</a>
             <a href="https://atlas.nonarkara.org" title="The operational city twin — live weather, traffic and block-by-block layers">Digital twin</a>
@@ -134,7 +162,7 @@ export function HomepageClient({ quarters, initialQuarter }: Props) {
             </button>
           </div>
 
-          {railView === "rowhouses" ? <OldTownPicks iframeRef={iframeRef} onPick={() => setIndexOpen(false)} /> : <section className="atlas-shell-quarter-view">
+          {railView === "rowhouses" ? <OldTownPicks iframeRef={iframeRef} onPick={closeIndex} /> : <section className="atlas-shell-quarter-view">
             <header className="atlas-shell-quarter-view-head">
               <p className="register-eyebrow">Heritage · Bangkok</p>
               <h2 className="register-section-title atlas-shell-quarters-title">

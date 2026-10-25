@@ -1,23 +1,20 @@
 import type { Metadata, Viewport } from "next";
-import { IBM_Plex_Sans_Thai, JetBrains_Mono, Source_Serif_4 } from "next/font/google";
+import { Jost, Prompt, Source_Serif_4 } from "next/font/google";
 import { LocaleProvider } from "./i18n/LocaleContext";
 import "./globals.css";
 
-// Sao Chingcha (self-hosted, declared in globals.css) is the site's face.
-// IBM Plex Sans Thai stays as its fallback: non-looped, which is the hard
-// requirement for any Thai-facing surface here — looped faces read as
-// learner material to a Thai reader. Inter is banned workspace-wide.
-const plexThai = IBM_Plex_Sans_Thai({
-  variable: "--font-plex-thai",
-  subsets: ["latin", "thai"],
-  weight: ["400", "500", "600", "700"],
+// Two interface faces: Jost for Latin, non-looped Prompt for Thai.
+// next/font emits local assets; readers do not contact Google's font service.
+const latin = Jost({
+  variable: "--font-jost",
+  subsets: ["latin"],
+  fallback: ["Prompt"],
   display: "swap",
 });
-
-// Coordinates, gazette volumes, block numbers.
-const mono = JetBrains_Mono({
-  variable: "--font-jetbrains",
-  subsets: ["latin"],
+const thai = Prompt({
+  variable: "--font-prompt",
+  subsets: ["thai", "latin"],
+  weight: ["400", "500", "600", "700"],
   display: "swap",
 });
 
@@ -25,8 +22,8 @@ const mono = JetBrains_Mono({
 // for a serif "for the body of the piece", which the rest of this site
 // cannot use — its reading matter is ~90% Thai and every serif-adjacent Thai
 // face carries the looped head banned workspace-wide. The studio essay is
-// English, so the register's own rule is available here and taken. Sao
-// Chingcha still carries every heading, label and number.
+// English, so retain its earned reading face as a scoped exception to the
+// two-family interface rule. It is not used for map controls or numbers.
 const serif = Source_Serif_4({
   variable: "--font-serif",
   subsets: ["latin"],
@@ -83,7 +80,7 @@ export default function RootLayout({
     // substituted using the element it is declared on — so a --font-* living
     // one level down on <body> is invisible to it, the whole chain computes
     // to nothing, and everything silently falls back to system-ui.
-    <html lang="en" className={`${plexThai.variable} ${mono.variable} ${serif.variable}`}>
+    <html lang="en" className={`${latin.variable} ${thai.variable} ${serif.variable}`}>
       <body>
         <LocaleProvider>{children}</LocaleProvider>
       </body>

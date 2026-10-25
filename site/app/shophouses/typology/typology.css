@@ -7,7 +7,7 @@
   grid-template-rows: 48px minmax(0, 1fr) 56px;
   background: #15140f;
   color: #15140f;
-  font-family: "Sao Chingcha", var(--font-zh), var(--font-plex-thai), sans-serif;
+  font-family: var(--font-jost), var(--font-zh), var(--font-prompt), sans-serif;
 }
 
 .typo-top {
@@ -97,7 +97,7 @@
   height: 100%;
   width: 100%;
   background: #ecdfc1;
-  font-family: "Sao Chingcha", var(--font-zh), var(--font-plex-thai), sans-serif;
+  font-family: var(--font-jost), var(--font-zh), var(--font-prompt), sans-serif;
 }
 
 .typo-map .leaflet-tile {
