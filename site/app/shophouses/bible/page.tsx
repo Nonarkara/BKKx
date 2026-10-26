@@ -42,6 +42,7 @@ export default function BiblePage() {
         <nav aria-label="Bible">
           <a href="#quick-reference">Quick reference</a>
           <a href="#full-reference">Full evidence book</a>
+          <Link href="/shophouses/why">Why</Link>
           <Link href="/shophouses/typology">Typology</Link>
           <Link href="/shophouses/research">Sources</Link>
           <Link href="/shophouses">Essay</Link>
