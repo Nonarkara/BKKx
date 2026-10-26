@@ -32,6 +32,9 @@
 
 .typo-top h1 {
   margin: 0;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
   font-size: 16px;
   font-weight: 400;
   letter-spacing: 0;
@@ -44,6 +47,8 @@
   display: flex;
   align-items: center;
   gap: 8px;
+  min-width: 0;
+  overflow-x: auto;
 }
 
 .typo-top a {

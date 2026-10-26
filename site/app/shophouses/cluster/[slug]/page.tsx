@@ -130,6 +130,7 @@ export default async function ClusterPage({ params }: Props) {
             Shophouse<em>Metropolis</em>
           </Link>
           <nav aria-label="Cluster">
+            <Link href="/shophouses/why">Why</Link>
             <Link href="/shophouses/bible#gazetteer">Gazetteer</Link>
             <Link href="/shophouses#atlas">Pressure map</Link>
             <Link href="/shophouses/research">Sources</Link>

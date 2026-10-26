@@ -49,6 +49,7 @@ export default function PressureAtlasPage() {
           <a href="#map">Map</a>
           <a href="#districts">Districts</a>
           <a href="#method">Method</a>
+          <Link href="/shophouses/why">Why</Link>
           <Link href="/shophouses/typology">Typology</Link>
           <Link href="/shophouses">Essay</Link>
           <Link href="/shophouses/bible">Bible</Link>

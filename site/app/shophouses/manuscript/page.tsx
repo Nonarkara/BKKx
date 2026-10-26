@@ -23,6 +23,7 @@ export default function ManuscriptPage() {
           Shophouse<em>Metropolis</em>
         </Link>
         <nav aria-label="Manuscript">
+          <Link href="/shophouses/why">Why</Link>
           <Link href="/shophouses">Essay</Link>
           <Link href="/shophouses/bible">Bible</Link>
           <Link href="/shophouses/research">Sources</Link>
@@ -44,6 +45,10 @@ export default function ManuscriptPage() {
         </p>
 
         <ul className="sh-forwarding-list">
+          <li>
+            <Link href="/shophouses/why">Why shophouses are good for cities</Link>
+            <span>the bilingual section, with credited diagrams held against Bangkok&apos;s frontages</span>
+          </li>
           <li>
             <Link href="/shophouses">The essay</Link>
             <span>

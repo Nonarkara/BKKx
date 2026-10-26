@@ -83,6 +83,7 @@ const CHROME: Record<
   {
     title: string;
     essay: string;
+    why: string;
     language: string;
     types: string;
     noPin: string;
@@ -99,6 +100,7 @@ const CHROME: Record<
   en: {
     title: "Typology",
     essay: "Essay",
+    why: "Why",
     language: "Language",
     types: "types",
     noPin: "No pin yet — a point needs a confirmed latitude and longitude",
@@ -120,6 +122,7 @@ const CHROME: Record<
   th: {
     title: "ประเภทตึก",
     essay: "เรียงความ",
+    why: "ทำไม",
     language: "ภาษา",
     types: "แบบ",
     noPin: "ยังไม่ปักหมุด — จะปักเมื่อมีละติจูดและลองจิจูดที่ยืนยันแล้ว",
@@ -141,6 +144,7 @@ const CHROME: Record<
   zh: {
     title: "店屋类型",
     essay: "文章",
+    why: "为何",
     language: "语言",
     types: "种",
     noPin: "还没有点 — 纬度和经度都确认了才标",
@@ -247,6 +251,7 @@ export function TypologyView() {
         <h1 lang={htmlLang(lang)}>{chrome.title}</h1>
         <nav aria-label={chrome.title}>
           <Link href="/shophouses">{chrome.essay}</Link>
+          <Link href="/shophouses/why">{chrome.why}</Link>
           <div className="typo-lang" role="group" aria-label={chrome.language}>
             {LANGS.map((item) => (
               <button

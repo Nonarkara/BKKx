@@ -1104,6 +1104,52 @@ test("the 3D atlas shell renders the 5 POI layer toggles", async () => {
   assert.match(html, /Evidence-labelled hero model/);
 });
 
+test("why shophouses are good for cities is a bilingual section with credited diagrams", async () => {
+  const { CAROUSEL, PRINCIPLES, SOURCES, STOREYS } = await import("../app/data/shophouse-why.ts");
+  assert.equal(CAROUSEL.author, "Abhinav Bhardwaj");
+  assert.equal(CAROUSEL.handle, "@abhinavbwj");
+  assert.equal(CAROUSEL.postUrl, "https://www.instagram.com/p/DdydSbEkqR-/");
+  assert.equal(PRINCIPLES.length, 9);
+  assert.equal(STOREYS.missing + STOREYS.known, 2433);
+  assert.ok(SOURCES.some((source) => source.id === "jacobs"));
+  assert.ok(SOURCES.some((source) => source.id === "glaeser"));
+  assert.ok(SOURCES.some((source) => source.id === "salerno"));
+
+  const response = await render("/shophouses/why");
+  assert.equal(response.status, 200);
+  const html = await response.text();
+  assert.match(html, /Why shophouses are good for cities/);
+  assert.match(html, /ทำไมตึกแถวจึงดีต่อเมือง/);
+  assert.match(html, /Diagram: Abhinav Bhardwaj @abhinavbwj/);
+  assert.match(html, /instagram\.com\/p\/DdydSbEkqR-/);
+  assert.match(html, /slide-7\.png/);
+  assert.match(html, /slide-12\.png/);
+  assert.match(html, /5\.1/);
+  assert.match(html, /19\.6/);
+  assert.match(html, /2,433/);
+  assert.match(html, /1,664/);
+  assert.match(html, /Close encounters with buildings/);
+  assert.match(html, /Kaefer/);
+  assert.match(html, /not a controlled study/);
+  assert.match(html, /reproduced with credit for educational commentary/);
+  assert.match(html, /lang="th"/);
+  assert.match(html, /href="#grew-up"/);
+  assert.match(html, /Where I grew up/);
+  assert.match(html, /บ้านที่ผมโตมา/);
+  assert.match(html, /The Death and Life of Great American Cities/);
+  assert.match(html, /Triumph of the City/);
+  assert.match(html, /Joseph P\. Salerno/);
+  assert.match(html, /as far as I could tell from the building code/i);
+  assert.match(html, /href="\/shophouses\/typology"/);
+  assert.doesNotMatch(html, /typo-shell/);
+
+  const essay = await (await render("/shophouses")).text();
+  assert.match(essay, /href="\/shophouses\/why"/);
+  const typology = await (await render("/shophouses/typology")).text();
+  assert.match(typology, /href="\/shophouses\/why"/);
+  assert.match(typology, /class="typo-shell"/);
+});
+
 test("the shophouse essay defaults to a short argument without deleting the research", async () => {
   const response = await render("/shophouses");
   assert.equal(response.status, 200);
@@ -1122,7 +1168,7 @@ test("every primary public route renders successfully", async () => {
   for (const route of [
     "/", "/about", "/heritage", "/rowhouses", "/case-for-bangkok", "/worlds",
     "/atlas/historic-core", "/areas/kudi-chin", "/walks/six-faiths",
-    "/shophouses", "/shophouses/typology", "/shophouses/bible", "/shophouses/global",
+    "/shophouses", "/shophouses/why", "/shophouses/typology", "/shophouses/bible", "/shophouses/global",
     "/shophouses/print", "/shophouses/research",
   ]) {
     const response = await render(route);
@@ -1214,6 +1260,7 @@ test("the essay masthead has a Global nav link", async () => {
   const response = await render("/shophouses");
   const html = await response.text();
   assert.match(html, /href="\/shophouses\/global"/, "essay masthead missing Global link");
+  assert.match(html, /href="\/shophouses\/why"/, "essay masthead missing Why link");
   assert.match(html, /href="\/shophouses\/typology"/, "essay masthead missing Typology link");
 });
 
