@@ -8346,7 +8346,7 @@ body:has(.sh-why) {
 }
 .sh-why-lede p {
   margin: 0;
-  max-width: 62ch;
+  max-width: 42ch;
 }
 .sh-why-lede p[lang="th"] {
   font-size: 18px;
@@ -8358,9 +8358,25 @@ body:has(.sh-why) {
 }
 
 @media (min-width: 900px) {
+  .sh-why-hero {
+    display: grid;
+    grid-template-columns: minmax(12rem, 18rem) minmax(0, 1fr);
+    column-gap: clamp(28px, 4vw, 56px);
+    align-items: end;
+  }
+  .sh-why-hero .sh-eyebrow,
+  .sh-why-hero h1 {
+    grid-column: 1;
+    max-width: none;
+  }
+  .sh-why-hero .sh-why-lede {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+    align-self: center;
+  }
   .sh-why-lede {
     grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.95fr);
-    gap: clamp(28px, 4vw, 64px);
+    gap: clamp(28px, 4vw, 48px);
     align-items: start;
   }
 }
@@ -8416,7 +8432,7 @@ body:has(.sh-why) {
 }
 .sh-why-measures-head p {
   margin: 0;
-  max-width: 58ch;
+  max-width: 42ch;
   font-size: 15px;
   line-height: 1.55;
 }
@@ -8533,7 +8549,7 @@ body:has(.sh-why) {
 .sh-why-principle-grid { display: grid; gap: 1.4rem; align-items: start; }
 .sh-why-prose p {
   margin: 0 0 0.9rem;
-  max-width: 65ch;
+  max-width: 42ch;
 }
 .sh-why-prose p[lang="th"] { font-size: 17.5px; line-height: 1.8; }
 .sh-why-prose p[lang="en"] { color: #241f18; font-size: 16.5px; line-height: 1.6; }
@@ -8580,13 +8596,13 @@ body:has(.sh-why) {
   color: var(--why-quiet);
   letter-spacing: 0.04em;
 }
-.sh-why-bangkok p { margin: 0 0 0.7rem; max-width: 65ch; }
+.sh-why-bangkok p { margin: 0 0 0.7rem; max-width: 42ch; }
 .sh-why-bangkok p[lang="th"] { font-size: 16.5px; line-height: 1.75; }
 .sh-why-bangkok p[lang="en"] { font-size: 15.5px; line-height: 1.55; }
 
 .sh-why-caveat {
   margin-top: 0.4rem;
-  max-width: 65ch;
+  max-width: 42ch;
 }
 .sh-why-caveat p {
   margin: 0 0 0.45rem;
@@ -8628,7 +8644,7 @@ body:has(.sh-why) {
 .sh-why-sources { padding-top: calc(var(--sh-page) * 1.6); padding-bottom: 12px; }
 .sh-why-sources h2 { max-width: 18ch; }
 .sh-why-sources-note {
-  max-width: 62ch;
+  max-width: 42ch;
   margin: 0.8rem 0 1.2rem;
   color: var(--why-quiet);
   font-size: 15px;
@@ -8677,7 +8693,7 @@ body:has(.sh-why) {
   padding-top: 1.4rem;
   padding-bottom: calc(var(--sh-page) * 2);
 }
-.sh-why-credit p { max-width: 65ch; margin: 0 0 0.7rem; font-size: 15px; line-height: 1.55; }
+.sh-why-credit p { max-width: 42ch; margin: 0 0 0.7rem; font-size: 15px; line-height: 1.55; }
 .sh-why-footer-links {
   display: flex;
   flex-wrap: wrap;

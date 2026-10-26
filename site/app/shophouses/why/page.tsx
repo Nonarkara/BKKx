@@ -124,6 +124,8 @@ export default function WhyShophousesPage() {
                 <p lang="en">{p.en}</p>
               </div>
               <figure>
+                {/* Fixed credited sheets, already sized. next/image does not serve this worker's public files. */}
+                {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={p.src}
                   alt={p.alt}

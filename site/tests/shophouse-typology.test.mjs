@@ -279,6 +279,10 @@ test("the library tells a contributor to add one entry, and the map chrome stays
   const css = readFileSync(new URL("../app/shophouses/typology/typology.css", import.meta.url), "utf8");
   assert.match(css, /\.typo-top\s*\{[^}]*height:\s*48px/);
   assert.match(css, /\.typo-bottom\s*\{[^}]*height:\s*56px/);
+  assert.match(css, /@media \(max-width: 479px\)/);
+  assert.match(css, /\.typo-top nav a\s*\{[^}]*min-height:\s*44px/);
+  assert.doesNotMatch(css, /\.typo-top nav\s*\{[^}]*overflow-x:\s*auto/);
+  assert.doesNotMatch(css, /\.typo-top h1\s*\{[^}]*text-overflow:\s*ellipsis/);
   assert.doesNotMatch(css, /linear-gradient|radial-gradient/);
   const drawings = readFileSync(new URL("../app/shophouses/typology/elevations.tsx", import.meta.url), "utf8");
   assert.doesNotMatch(drawings, /linear-gradient|radial-gradient|foreignObject/);
