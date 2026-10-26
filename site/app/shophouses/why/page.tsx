@@ -1,6 +1,15 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { CAROUSEL, MEASURES, PRINCIPLES, SOURCES } from "../../data/shophouse-why";
+import {
+  CAROUSEL,
+  MEASURES,
+  NUMBERS_POST,
+  PRINCIPLES,
+  SOURCES,
+  STREET_METRICS,
+  STREET_METRICS_LEDE,
+  STREET_METRICS_NOTE,
+} from "../../data/shophouse-why";
 
 export const metadata: Metadata = {
   title: "Why shophouses are good for cities · Shophouse Metropolis",
@@ -26,6 +35,7 @@ export default function WhyShophousesPage() {
           <a href="#grew-up">Where I grew up</a>
           <a href="#measures">Measures</a>
           <a href="#principles">Nine principles</a>
+          <a href="#four-measures">Four measures</a>
           <a href="#sources">Sources</a>
           <Link href="/shophouses/typology">Typology</Link>
           <Link href="/shophouses/bible">Bible</Link>
@@ -285,6 +295,53 @@ export default function WhyShophousesPage() {
         </div>
       </section>
 
+      <section className="sh-why-metrics" id="four-measures" aria-labelledby="four-measures-title">
+        <h2 id="four-measures-title">
+          <span lang="th">สี่มาตรวัดที่ไฟล์นี้ยังไม่ได้วัด</span>
+          <span lang="en">Four measures this file has not taken</span>
+        </h2>
+        {STREET_METRICS_LEDE.map((block) => (
+          <div className="sh-why-lede" key={block.en}>
+            <p lang="th">{block.th}</p>
+            <p lang="en">{block.en}</p>
+          </div>
+        ))}
+        <ol>
+          {STREET_METRICS.map((metric) => (
+            <li key={metric.id} id={`metric-${metric.id}`}>
+              <h3>
+                <span lang="th">{metric.nameTh}</span>
+                <span lang="en">{metric.nameEn}</span>
+              </h3>
+              <div>
+                <p lang="th">{metric.th}</p>
+                <p lang="en">{metric.en}</p>
+              </div>
+            </li>
+          ))}
+        </ol>
+        <div className="sh-why-lede">
+          <p lang="th">{STREET_METRICS_NOTE.th}</p>
+          <p lang="en">{STREET_METRICS_NOTE.en}</p>
+        </div>
+        <p className="sh-why-metrics-credit" lang="th">
+          <a href={NUMBERS_POST.postUrl}>{NUMBERS_POST.title}</a>
+          {" · "}
+          <a href={NUMBERS_POST.profileUrl}>
+            {NUMBERS_POST.author} ({NUMBERS_POST.handle})
+          </a>
+          {`, ${NUMBERS_POST.dateTh}, แผ่นที่ ${NUMBERS_POST.sheetsTh}. ลายเส้นของโพสต์นี้ไม่ได้โฮสต์ไว้ที่นี่`}
+        </p>
+        <p className="sh-why-metrics-credit" lang="en">
+          <a href={NUMBERS_POST.postUrl}>{NUMBERS_POST.title}</a>
+          {" · "}
+          <a href={NUMBERS_POST.profileUrl}>
+            {NUMBERS_POST.author} ({NUMBERS_POST.handle})
+          </a>
+          {`, ${NUMBERS_POST.dateEn}. Sheets ${NUMBERS_POST.sheetsEn}. No drawing from this post is hosted here.`}
+        </p>
+      </section>
+
       <section className="sh-why-sources" id="sources" aria-labelledby="sources-title">
         <h2 id="sources-title">
           <span lang="th">แหล่งที่อ้าง และรายละเอียดที่ตรวจแล้ว</span>
@@ -292,8 +349,9 @@ export default function WhyShophousesPage() {
         </h2>
         <p className="sh-why-sources-note" lang="en">
           Names, years and page ranges below were checked against the publications, not copied off the
-          diagrams. Where a diagram rounds a figure, the entry says so. The last three entries belong to
-          the section above, not to the drawings.
+          diagrams. Where a diagram rounds a figure, the entry says so. The October 2026 carousel is the
+          exception: its averages were read off the post, and the section above says they are a model, not
+          a Bangkok measurement. The last three entries belong to “Where I grew up”, not to the drawings.
         </p>
         <ol>
           {SOURCES.map((s) => (
@@ -314,12 +372,14 @@ export default function WhyShophousesPage() {
         <p lang="th">
           ภาพประกอบนำมาเผยแพร่พร้อมเครดิต เพื่ออธิบายตึกแถวกรุงเทพฯ ในเชิงการศึกษา ลายเส้นยังเป็นของ{" "}
           {CAROUSEL.author} (<a href={CAROUSEL.profileUrl}>{CAROUSEL.handle}</a>) จากโพสต์{" "}
-          <a href={CAROUSEL.postUrl}>{CAROUSEL.title}</a> วันที่ {CAROUSEL.date}
+          <a href={CAROUSEL.postUrl}>{CAROUSEL.title}</a> วันที่ {CAROUSEL.date} คารูเซลเดือนตุลาคม{" "}
+          <a href={NUMBERS_POST.postUrl}>{NUMBERS_POST.title}</a> มีลิงก์ไว้ด้านบน และไม่ได้โฮสต์ภาพไว้ที่นี่
         </p>
         <p lang="en">
           The diagrams are reproduced with credit for educational commentary on the Bangkok shophouse.
           The drawings remain {CAROUSEL.author}&apos;s (<a href={CAROUSEL.profileUrl}>{CAROUSEL.handle}</a>), from{" "}
-          <a href={CAROUSEL.postUrl}>{CAROUSEL.title}</a>, {CAROUSEL.date}.
+          <a href={CAROUSEL.postUrl}>{CAROUSEL.title}</a>, {CAROUSEL.date}. The later carousel,{" "}
+          <a href={NUMBERS_POST.postUrl}>{NUMBERS_POST.title}</a>, is linked above and is not hosted here.
         </p>
         <p className="sh-why-footer-links">
           <Link href="/shophouses">← The essay</Link>

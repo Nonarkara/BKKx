@@ -8293,6 +8293,7 @@ body:has(.sh-why) {
 .sh-why-contents,
 .sh-why-principles,
 .sh-why-close,
+.sh-why-metrics,
 .sh-why-sources,
 .sh-why-credit {
   max-width: 1184px;
@@ -8402,6 +8403,7 @@ body:has(.sh-why) {
 }
 .sh-why-measures h2,
 .sh-why-close h2,
+.sh-why-metrics h2,
 .sh-why-sources h2,
 .sh-why-principle h2 {
   margin: 0;
@@ -8412,6 +8414,7 @@ body:has(.sh-why) {
 }
 .sh-why-measures h2 [lang="th"],
 .sh-why-close h2 [lang="th"],
+.sh-why-metrics h2 [lang="th"],
 .sh-why-sources h2 [lang="th"],
 .sh-why-principle h2 [lang="th"] {
   display: block;
@@ -8423,6 +8426,7 @@ body:has(.sh-why) {
 }
 .sh-why-measures h2 [lang="en"],
 .sh-why-close h2 [lang="en"],
+.sh-why-metrics h2 [lang="en"],
 .sh-why-sources h2 [lang="en"],
 .sh-why-principle h2 [lang="en"] {
   display: block;
@@ -8640,6 +8644,65 @@ body:has(.sh-why) {
   color: var(--sh-seal);
 }
 .sh-why-grew .sh-why-lede + .sh-why-lede { margin-top: 1.35rem; }
+
+.sh-why-metrics {
+  padding-top: calc(var(--sh-page) * 1.8);
+  padding-bottom: calc(var(--sh-page) * 1.4);
+  border-bottom: 1px solid var(--sh-ink);
+}
+.sh-why-metrics h2 { max-width: 16ch; margin-bottom: 1rem; }
+.sh-why-metrics .sh-why-lede + .sh-why-lede,
+.sh-why-metrics ol + .sh-why-lede { margin-top: 1.35rem; }
+.sh-why-metrics ol {
+  list-style: none;
+  margin: 1.5rem 0 0;
+  padding: 0;
+  border-top: 1px solid var(--sh-ink);
+}
+.sh-why-metrics li {
+  display: grid;
+  gap: 0.35rem 28px;
+  align-items: start;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--why-rule);
+}
+.sh-why-metrics h3 {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--sh-seal);
+}
+.sh-why-metrics h3 [lang="th"],
+.sh-why-metrics h3 [lang="en"] { display: block; }
+.sh-why-metrics h3 [lang="en"] {
+  margin-top: 2px;
+  color: var(--why-quiet);
+  letter-spacing: 0;
+  text-transform: none;
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 500;
+}
+.sh-why-metrics li p {
+  margin: 0 0 0.7rem;
+  max-width: 62ch;
+}
+.sh-why-metrics li p[lang="th"] { font-size: 16.5px; line-height: 1.75; }
+.sh-why-metrics li p[lang="en"] { font-size: 15.5px; line-height: 1.55; }
+.sh-why-metrics-credit {
+  max-width: 62ch;
+  margin: 1.2rem 0 0;
+  font-size: 15px;
+  line-height: 1.55;
+}
+@media (min-width: 800px) {
+  .sh-why-metrics li {
+    grid-template-columns: max-content minmax(0, 62ch);
+  }
+}
 
 .sh-why-sources { padding-top: calc(var(--sh-page) * 1.6); padding-bottom: 12px; }
 .sh-why-sources h2 { max-width: 18ch; }

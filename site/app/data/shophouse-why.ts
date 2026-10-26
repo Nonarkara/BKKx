@@ -6,6 +6,11 @@
 // assumption, and the measured record already in the Bible. Where a diagram
 // rounds a study, the sentence follows the study.
 //
+// STREET_METRICS is a later carousel by the same author, "Why Old Towns feel
+// good, in numbers?" (Instagram, 25 October 2026, De7LxGmCMHa). The averages
+// are his model over ten European pairs. Do not add a temperature from that
+// post, and do not promote 2.3× to a Bangkok target. No image from it is hosted.
+//
 // STOREYS was counted from site/public/data/shophouse-spine.json on this
 // branch (the `storeys` field). Re-count if the spine is rebuilt.
 //   missing 1664 · known 769 · storeys 2–4: 653 · storeys ≥5: 111
@@ -22,6 +27,74 @@ export const CAROUSEL = {
   postUrl: "https://www.instagram.com/p/DdydSbEkqR-/",
   title: "Why Old Towns Feel Better",
   date: "27 September 2026",
+} as const;
+
+/** Later carousel. Averages are his model, not a Bangkok survey. */
+export const NUMBERS_POST = {
+  author: "Abhinav Bhardwaj",
+  handle: "@abhinavbwj",
+  profileUrl: "https://www.instagram.com/abhinavbwj/",
+  postUrl: "https://www.instagram.com/p/De7LxGmCMHa/",
+  title: "Why Old Towns feel good, in numbers?",
+  dateEn: "25 October 2026",
+  dateTh: "25 ตุลาคม 2026",
+  sheetsEn: "13 and 14",
+  sheetsTh: "13 และ 14",
+} as const;
+
+export type StreetMetric = {
+  id: string;
+  nameTh: string;
+  nameEn: string;
+  th: string;
+  en: string;
+};
+
+export const STREET_METRICS_LEDE = [
+  {
+    th: "ผู้เขียนคนเดียวกันโพสต์คารูเซลถัดมา ชื่อ “Why Old Towns feel good, in numbers?” เมื่อวันที่ 25 ตุลาคม 2026 เขาเฉลี่ยถนนเก่าสิบสายในยุโรปกับย่านใหม่สิบแห่ง วิธีคือความสูงอาคารจาก Mapbox กับ OpenStreetMap ตัดกลาง 250 × 250 เมตร ผ่านแบบจำลองวันกลางฤดูร้อนชุดเดียว ค่าเฉลี่ยด้านล่างทุกตัวมาจากแบบจำลองของ Bhardwaj ไม่มีตัวใดเป็นการวัดภาคสนามในกรุงเทพฯ",
+    en: "The same author posted a later carousel, “Why Old Towns feel good, in numbers?”, on 25 October 2026. It averages ten old European streets against ten new districts. His method is Mapbox building heights plus OpenStreetMap, the central 250 × 250 metres, one midsummer model. Every average below comes from Bhardwaj’s model. None of it is a Bangkok field measurement.",
+  },
+  {
+    th: "การโอบล้อม คือกำแพงเทียบกับความกว้างถนน เป็นหลักข้อ 02 อยู่แล้ว และถูกวางคู่กับ Manual for Streets ที่นี่มันเป็นอัตราส่วนเดียว ความสูงหารด้วยความกว้าง วางคู่กับอีกสามมาตรวัด ท้องฟ้าที่เปิดกับชั่วโมงร่มเป็นของใหม่บนหน้านี้ ความหนาแน่นทางแยกเป็นหลักข้อ 09 ซึ่งไม่ยอมแต่งตัวเลขของกรุงเทพฯ และยังไม่ยอม เมื่อไฟล์นี้มีความสูงอาคารกับกราฟถนนที่เดินได้จาก OpenStreetMap สี่มาตรวัดนี้วัดบนถนนกรุงเทพฯ ได้ ไฟล์นี้ยังไม่มีความสูงนั้น จึงไม่เดา",
+    en: "Enclosure, the wall against the width of the street, is already principle 02, held to Manual for Streets. Here it is a single ratio, height divided by width, set beside three further measures. Open sky and hours of shade are new on this page. Junction density is principle 09, which declined to invent a Bangkok count. It still declines. Once this file has building heights and OpenStreetMap’s walkable graph, the four can be measured on a Bangkok street. It does not have those heights, so it does not guess.",
+  },
+] as const;
+
+export const STREET_METRICS: StreetMetric[] = [
+  {
+    id: "enclosure",
+    nameTh: "การโอบล้อม",
+    nameEn: "Enclosure",
+    th: "ความสูงกำแพงหารด้วยความกว้างถนน ในแบบจำลองของ Bhardwaj ซึ่งไม่ใช่การวัดภาคสนามในกรุงเทพฯ ถนนเก่าสิบสายเฉลี่ย 2.3× และย่านใหม่เฉลี่ย 1.4× หน้านี้ไม่ตั้ง 2.3× เป็นเป้าหมายออกแบบของกรุงเทพฯ",
+    en: "Wall height divided by street width. In Bhardwaj’s model, which is not a Bangkok field measurement, the ten old streets average 2.3× and the new districts 1.4×. This page does not set 2.3× as a Bangkok design target.",
+  },
+  {
+    id: "sky",
+    nameTh: "ท้องฟ้าที่เปิด",
+    nameEn: "Open sky",
+    th: "สัดส่วนท้องฟ้าที่เห็นจากถนน เหนือพื้นเปิด ในแบบจำลองของ Bhardwaj ซึ่งไม่ใช่การวัดภาคสนามในกรุงเทพฯ ถนนเก่าเฉลี่ยเปิด 36% และย่านใหม่ 67% หน้านี้ไม่ตั้ง 36% เป็นเพดานของกรุงเทพฯ",
+    en: "The share of sky seen from the street, over open ground. In Bhardwaj’s model, which is not a Bangkok field measurement, the old streets average 36% open and the new districts 67%. This page does not set 36% as a Bangkok limit.",
+  },
+  {
+    id: "shade",
+    nameTh: "ชั่วโมงร่ม",
+    nameEn: "Shade hours",
+    th: "ชั่วโมงที่พื้นเปิดอยู่ในร่ม ตั้งแต่ 07:00 ถึง 21:00 ในแบบจำลองของ Bhardwaj ซึ่งไม่ใช่การวัดภาคสนามในกรุงเทพฯ ถนนเก่าเฉลี่ย 11.0 ชั่วโมง และย่านใหม่ 9.2 ชั่วโมง คารูเซลบอกว่าร่มส่วนใหญ่เกิดจากตัวอาคารเอง ไม่ใช่จากต้นไม้ จึงมีตั้งแต่วันแรก รื้อกำแพงทิ้ง ร่มที่กำแพงทอดไว้ก็หายไป จนกว่าต้นไม้ใหม่จะโต ซึ่งใช้เวลาเป็นปี ข้อนั้นเป็นข้อสรุปของหน้านี้ อ่านจากประโยคของเขา คือการค้านการรื้อกำแพง บันทึกด้านบนปฏิเสธการแช่แข็งถนนอยู่แล้ว และข้อนี้ไม่ดึงการปฏิเสธนั้นกลับ หน้าประเภทอาคารระบุการปฏิเสธเดียวกันกับ Glaeser และกับ Goethert",
+    en: "Hours of shade on open ground, from 07:00 to 21:00. In Bhardwaj’s model, which is not a Bangkok field measurement, the old streets average 11.0 hours and the new districts 9.2 hours. The carousel says most of that shade is cast by the buildings themselves, not by trees, so it is there on the first day. Tear the wall down and the shade it was casting is gone until new trees grow, which takes years. That inference is this page’s, read from his sentence: an argument against tearing the wall down. The note above already refuses to freeze the street, and this point leaves that refusal standing. The typology page names the same refusal with Glaeser and with Goethert.",
+  },
+  {
+    id: "junctions",
+    nameTh: "ความหนาแน่นทางแยก",
+    nameEn: "Junction density",
+    th: "จำนวนทางแยกของถนนที่เดินได้ต่อตารางกิโลเมตร ในแบบจำลองของ Bhardwaj ซึ่งไม่ใช่การวัดภาคสนามในกรุงเทพฯ ถนนเก่าเฉลี่ย 384 และย่านใหม่ 189 สไปน์ยังไม่นับทางแยก และหน้านี้ยังไม่ให้ตัวเลขของกรุงเทพฯ แผ่นปิดของคารูเซลยังชี้บล็อกสั้น และประตูกับหน้าต่างที่ระดับถนน โดยอ้าง Ewing กับ Cervero ปี 2010 และ Gehl, Kaefer กับ Reigstad ปี 2006 กระดาษทั้งสองอยู่บนหน้านี้แล้ว และตรวจกับสิ่งพิมพ์แล้ว คารูเซลเป็นตัวชี้ชั้นที่สอง ไม่ใช่การนับครั้งใหม่",
+    en: "Walkable street junctions per square kilometre. In Bhardwaj’s model, which is not a Bangkok field measurement, the old streets average 384 and the new districts 189. The spine still does not count junctions, and this page still offers no Bangkok figure. The carousel’s closing plate also points at short blocks, and at doors and windows at street level. It cites Ewing and Cervero 2010, and Gehl, Kaefer and Reigstad 2006. Both papers are already on this page, checked against the publications. The carousel is a second pointer, not a new count.",
+  },
+];
+
+export const STREET_METRICS_NOTE = {
+  th: "เมืองทั้งสิบอยู่ในยุโรป ไม่มีเมืองเขตร้อน แดดกรุงเทพฯ อยู่ใกล้ศีรษะกว่า และอากาศฤดูฝนเป็นคนละปัญหา ค่าเฉลี่ยจึงข้ามมาใช้ไม่ได้ แผ่นที่ 13 กับ 14 เป็นแหล่งของสี่คู่ตัวเลข และของประโยคที่ว่าร่มมาจากตัวอาคาร หน้านี้ไม่ยกอุณหภูมิจากโพสต์มาเขียนซ้ำ",
+  en: "The ten cities are European. None is tropical. Bangkok’s sun sits nearer overhead, and wet-season air is a different problem, so the averages do not cross over. Sheets 13 and 14 are the source of the four pairs, and of the sentence that the shade comes from the buildings. No temperature from the post is repeated here.",
 } as const;
 
 /** Counted from the spine JSON. See the file header. */
@@ -362,6 +435,14 @@ export const SOURCES: WhySource[] = [
     url: "https://www.ube.ac.uk/wp-content/uploads/2019/10/Value-of-Community-Building-a-Legacy-Full-Report-1.pdf",
     usedFor:
       "Another market comparison: a new-build premium near 27 percent per square foot since 1996, against Dorchester’s second-hand market. It does not agree with the Knight Frank figure. Neither is evidence about a Bangkok shophouse.",
+  },
+  {
+    id: "bhardwaj-2026-numbers",
+    citation:
+      "Bhardwaj, Abhinav (@abhinavbwj). 2026. “Why Old Towns feel good, in numbers?” Instagram, 25 October 2026.",
+    url: "https://www.instagram.com/p/De7LxGmCMHa/",
+    usedFor:
+      "The four-metric frame on sheets 13 and 14: enclosure as wall height divided by street width, open sky as the share of sky over open ground, shade as hours on open ground from 07:00 to 21:00, junctions as walkable junctions per square kilometre. The pairs 2.3× against 1.4×, 36% against 67%, 11.0 hours against 9.2 hours, and 384 against 189 are his model, averaged over ten European old streets and ten new districts, central 250 × 250 m, Mapbox heights and OpenStreetMap, midsummer. Not a Bangkok field measurement. 2.3× is not a design target on this page. The shade sentence — cast by the buildings, so there on the first day — is his. The teardown reading is this page’s. No temperature from the carousel is repeated. No image from the post is hosted. His citations of Ewing and Cervero 2010 and of Gehl, Kaefer and Reigstad 2006 point at papers already checked above.",
   },
   {
     id: "jacobs",
