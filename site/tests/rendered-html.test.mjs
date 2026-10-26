@@ -1172,7 +1172,10 @@ test("the why page credits Bhardwaj’s four street measures without his tempera
   assert.match(STREET_METRICS_LEDE[0].en, /not a Bangkok field measurement/);
   assert.match(STREET_METRICS_LEDE[1].en, /OpenStreetMap/);
   assert.match(STREET_METRICS_LEDE[1].en, /building heights/);
-  assert.match(STREET_METRICS.find((metric) => metric.id === "enclosure").en, /not a Bangkok design target/);
+  assert.match(
+    STREET_METRICS.find((metric) => metric.id === "enclosure").en,
+    /does not set 2\.3× as a Bangkok design target/,
+  );
   assert.match(STREET_METRICS.find((metric) => metric.id === "shade").en, /first day/);
   assert.match(STREET_METRICS.find((metric) => metric.id === "shade").en, /buildings themselves/);
   assert.match(STREET_METRICS.find((metric) => metric.id === "junctions").en, /Ewing and Cervero 2010/);

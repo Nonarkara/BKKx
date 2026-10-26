@@ -53,7 +53,7 @@ export type StreetMetric = {
 export const STREET_METRICS_LEDE = [
   {
     th: "ผู้เขียนคนเดียวกันโพสต์คารูเซลถัดมา ชื่อ “Why Old Towns feel good, in numbers?” เมื่อวันที่ 25 ตุลาคม 2026 เขาเฉลี่ยถนนเก่าสิบสายในยุโรปกับย่านใหม่สิบแห่ง วิธีคือความสูงอาคารจาก Mapbox กับ OpenStreetMap ตัดกลาง 250 × 250 เมตร ผ่านแบบจำลองวันกลางฤดูร้อนชุดเดียว ค่าเฉลี่ยด้านล่างทุกตัวมาจากแบบจำลองของ Bhardwaj ไม่มีตัวใดเป็นการวัดภาคสนามในกรุงเทพฯ",
-    en: "The same author posted a later carousel, “Why Old Towns feel good, in numbers?”, on 25 October 2026. It averages ten old European streets against ten new districts. His method is Mapbox building heights plus OpenStreetMap, the central 250 × 250 metres, one midsummer model. Every average below comes from Bhardwaj’s model. None of it is a Bangkok field measurement.",
+    en: "The same author posted a later carousel, “Why Old Towns feel good, in numbers?”, on 25 October 2026. It averages ten old European streets against ten new districts. His method is Mapbox building heights plus OpenStreetMap, the central 250 × 250 metres, one midsummer model. Every average below comes from Bhardwaj’s model and is not a Bangkok field measurement.",
   },
   {
     th: "การโอบล้อม คือกำแพงเทียบกับความกว้างถนน เป็นหลักข้อ 02 อยู่แล้ว และถูกวางคู่กับ Manual for Streets ที่นี่มันเป็นอัตราส่วนเดียว ความสูงหารด้วยความกว้าง วางคู่กับอีกสามมาตรวัด ท้องฟ้าที่เปิดกับชั่วโมงร่มเป็นของใหม่บนหน้านี้ ความหนาแน่นทางแยกเป็นหลักข้อ 09 ซึ่งไม่ยอมแต่งตัวเลขของกรุงเทพฯ และยังไม่ยอม เมื่อไฟล์นี้มีความสูงอาคารกับกราฟถนนที่เดินได้จาก OpenStreetMap สี่มาตรวัดนี้วัดบนถนนกรุงเทพฯ ได้ ไฟล์นี้ยังไม่มีความสูงนั้น จึงไม่เดา",
