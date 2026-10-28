@@ -3,6 +3,7 @@ import { handleImageOptimization, DEFAULT_DEVICE_SIZES, DEFAULT_IMAGE_SIZES } fr
 import handler from "vinext/server/app-router-entry";
 import { pageviewStats, recordPageview } from "./pageviews";
 import { readPageviewRequest } from "./pageview-request";
+import { claimDailyCapacity, parseCap } from "./pageview-caps";
 import { floodBulletinResponse, floodEvidenceResponse, floodRoadsResponse } from "./flood";
 import {
   handleLiveRain,
@@ -26,6 +27,13 @@ interface Env {
    * taking the deployment's word for it.
    */
   BUILD_ID?: string;
+  /**
+   * The ceiling on page-view rows written per Bangkok day. Optional: the
+   * default is 10,000 (see worker/pageview-caps.ts). Env only — never
+   * committed, so the limit is not a value somebody can quietly raise in a
+   * pull request.
+   */
+  PAGEVIEW_DAILY_CAP?: string;
   /** Optional: a JSON camera registry for the war room's CCTV rail. */
   CCTV_SOURCE_URL?: string;
   /** Optional: Longdo Map API key. Env only — never committed. */
@@ -63,6 +71,21 @@ const worker = {
       const body = await readPageviewRequest(request);
       if (!body.ok) return body.response;
       const cloudflareRequest = request as Request & { cf?: { country?: string } };
+
+      // The day's ceiling on page-view rows, claimed BEFORE the row is
+      // written. Nothing about the visitor is recorded to claim it — the
+      // counter is one row per day. See worker/pageview-caps.ts for why this
+      // is not a per-address limiter.
+      const capacity = await claimDailyCapacity(env.DB, {
+        cap: parseCap(env.PAGEVIEW_DAILY_CAP),
+        now: Date.now(),
+      });
+      if (!capacity.ok) {
+        return Response.json(
+          { ok: false, error: "This site's own page-view count for today is closed." },
+          { status: 429, headers: { "cache-control": "no-store", "retry-after": String(capacity.retryAfter) } },
+        );
+      }
 
       await recordPageview(env.DB, {
         path: body.path,

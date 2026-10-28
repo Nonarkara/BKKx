@@ -70,13 +70,23 @@ test('built Worker refuses bad requests without D1 and records a valid minimized
     assert.equal(response.status, expected);
   }
   let recorded;
+  let counter = 0;
   const db = {
     async batch() {},
-    prepare(sql) { return { bind(...args) {
-      assert.match(sql, /INSERT INTO pageviews/);
-      recorded = args;
-      return { async run() {} };
-    } }; },
+    prepare(sql) {
+      if (/INSERT INTO pageview_daily/i.test(sql)) {
+        // The daily ceiling is claimed before the row is written.
+        return { bind() { return { async first() { counter++; return { n: counter }; } }; } };
+      }
+      if (/CREATE TABLE/i.test(sql) || /DELETE FROM pageview_daily/i.test(sql)) {
+        return { bind() { return { async run() {} }; }, async run() {} };
+      }
+      return { bind(...args) {
+        assert.match(sql, /INSERT INTO pageviews/);
+        recorded = args;
+        return { async run() {} };
+      } };
+    },
   };
   const response = await worker.fetch(request('{"path":"/worlds?q=secret","referrer":"https://example.test/private?q=secret"}'), { DB: db }, ctx);
   assert.equal(response.status, 201);

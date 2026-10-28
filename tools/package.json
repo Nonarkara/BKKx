@@ -1,0 +1,13 @@
+{
+  "name": "bkkx-tools",
+  "private": true,
+  "type": "module",
+  "description": "Measurement instruments for the BKKx site. Kept out of site/package.json so the deployed bundle and the site lockfile stay untouched.",
+  "scripts": {
+    "audit": "node msh-audit.mjs"
+  },
+  "devDependencies": {
+    "playwright": "^1.49.0",
+    "pngjs": "^7.0.0"
+  }
+}
