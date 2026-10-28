@@ -2468,6 +2468,22 @@ button {
   text-transform: uppercase;
 }
 
+/* Desktop: the destinations are direct flex items of the nav — no wrapper box
+   and no extra band between the wordmark and the links. The phone turns the
+   same list into a disclosure; see the max-width: 760px block below. */
+.register-nav-scroll {
+  display: contents;
+}
+
+.register-nav-toggle {
+  display: none;
+}
+
+.register-nav-toggle:focus-visible {
+  outline: 2px solid var(--seal, #8c2f23);
+  outline-offset: 2px;
+}
+
 .register-nav a {
   display: inline-flex;
   align-items: center;
@@ -2476,32 +2492,71 @@ button {
 }
 
 @media (max-width: 760px) {
+  /* The masthead keeps one row: the wordmark on the left, the controls on
+     the right. The destinations move into a disclosure rather than into a
+     horizontally scrolling strip — eleven links in 294px put eight of them
+     past the fold with the scrollbar hidden, which is not a way to offer a
+     destination. Measured on 176 public pages before the change. */
   .register-masthead {
-    display: block;
-    padding: 12px 0 8px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 12px 0 10px;
   }
   .register-masthead > .register-wordmark {
-    margin-bottom: 6px;
+    margin-bottom: 0;
   }
   .register-nav {
+    flex: 0 0 auto;
     flex-wrap: nowrap;
-    justify-content: flex-start;
-    gap: 0 18px;
-    overflow-x: auto;
-    padding-top: 7px;
-    border-top: 1px solid var(--hairline);
+    align-items: center;
+    gap: 10px;
     font-size: 11px;
-    scrollbar-width: none;
-  }
-  .register-nav::-webkit-scrollbar {
-    display: none;
   }
   .register-nav a,
   .register-nav .lang-toggle {
     flex: 0 0 auto;
   }
-  .register-nav a {
-    min-height: 34px;
+  .register-nav-toggle {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    padding: 0 10px;
+    border: 1px solid var(--ink);
+    background: transparent;
+    color: var(--ink);
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    line-height: 1;
+    text-transform: uppercase;
+    cursor: pointer;
+  }
+  .register-nav-scroll {
+    display: none;
+  }
+  .register-masthead.is-nav-open .register-nav-scroll {
+    display: flex;
+    position: absolute;
+    top: 100%;
+    inset-inline: 0;
+    z-index: 30;
+    flex-wrap: wrap;
+    gap: 0 16px;
+    padding: 4px 0 8px;
+    border-bottom: 1px solid var(--ink);
+    background: var(--paper-strong, var(--paper, #f4f2ec));
+    max-height: 72vh;
+    overflow-y: auto;
+  }
+  .register-nav-scroll a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    font-size: 12px;
   }
 }
 
