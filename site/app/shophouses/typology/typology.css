@@ -1,10 +1,14 @@
 /* Typology library. Map is the field. Palette paper cards float on it.
-   Top bar is 48px. Bottom bar is 56px. Flat colour only. */
+   Top bar is 48px. The bottom bar is 56px unless its text needs more.
+   Flat colour only. */
 
 .typo-shell {
   height: 100dvh;
   display: grid;
-  grid-template-rows: 48px minmax(0, 1fr) 56px;
+  /* The bottom row may grow: the strip states what the map is showing, and
+     a frame that clips its own text is worse than one that takes another
+     line. The map keeps the rest. */
+  grid-template-rows: 48px minmax(0, 1fr) minmax(56px, auto);
   background: #15140f;
   color: #15140f;
   font-family: var(--font-jost), var(--font-zh), var(--font-prompt), sans-serif;
@@ -443,25 +447,27 @@
 }
 
 .typo-bottom {
-  height: 56px;
-  max-height: 56px;
+  min-height: 56px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  padding: 0 12px;
+  padding: 8px 12px;
   background: #f4ebd5;
   color: #15140f;
   border-top: 1px solid #15140f;
-  overflow: hidden;
 }
 
 .typo-bottom p {
   margin: 0;
   min-width: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  /* The bar states how many types are here and whether they are pinned. That
+     sentence is the information; a one-line ellipsis cut it to "5 types · No
+     pin yet — a point nee", which says nothing. It wraps now, and the bar
+     grows if the wrap needs it — the strip is a frame, and a frame must not
+     clip its own content. */
+  overflow-wrap: anywhere;
+  line-height: 1.35;
   font-size: 13px;
 }
 

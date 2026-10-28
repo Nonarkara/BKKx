@@ -5685,9 +5685,12 @@ body:has(.atlas-page.is-embedded.is-phone-chrome) {
 }
 .walk-stop-nearby-name {
   color: var(--ink);
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  /* The name is how a reader recognises the stop. Truncating it to make room
+     for the distance loses the thing the list is for — and a Thai name cut
+     mid-word is unreadable. Let it take a second line instead; the distance
+     stays on the first, on the baseline. */
+  overflow-wrap: anywhere;
+  line-height: 1.35;
 }
 .walk-stop-nearby-m {
   font-family: var(--font-mono);

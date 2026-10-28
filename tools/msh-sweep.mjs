@@ -56,14 +56,45 @@ const GEOMETRY = () => {
     if (cs.visibility === 'hidden' || cs.display === 'none' || +cs.opacity < 0.05) continue;
     const r = el.getBoundingClientRect();
     if (r.width < 2 || r.height < 2) continue;
-    if (r.right > VW + 1 || r.left < -1) {
-      let clippedBy = null;
-      let p = el.parentElement;
-      for (let d = 0; p && d < 12; d++, p = p.parentElement) {
-        const pcs = getComputedStyle(p);
-        if (pcs.overflowX !== 'visible' || pcs.overflow !== 'visible') { clippedBy = path(p); break; }
-      }
-      overflow.push({ sel: path(el), left: Math.round(r.left), right: Math.round(r.right), width: Math.round(r.width), clippedBy, text: (el.innerText || '').trim().replace(/\s+/g, ' ').slice(0, 40) });
+
+    // Classify by WHERE the content goes when it leaves the viewport.
+    //
+    //   clipped     — an ancestor with overflow:hidden takes the content away.
+    //                 Unreachable. A defect.
+    //   scrollable  — an ancestor with overflow:auto|scroll takes it with a
+    //                 gesture. Reachable. Not a geometry failure, but it is
+    //                 reported separately, because a scroll region with no
+    //                 visible affordance is its own kind of problem.
+    //   map         — a map's own tiles and markers sit outside the frame by
+    //                 design. Not a defect.
+    //
+    // Without this distinction the gate cannot tell "the content is gone"
+    // from "the content moves sideways", and the first version of this gate
+    // reported 387 pages as broken when the truth was 176.
+    let kind = 'clipped';
+    let by = null;
+    let p = el.parentElement;
+    for (let d = 0; p && d < 14; d++, p = p.parentElement) {
+      const pcs = getComputedStyle(p);
+      if (pcs.overflowX === 'visible' && pcs.overflow === 'visible') continue;
+      by = p;
+      break;
+    }
+    if (by) {
+      const bcs = getComputedStyle(by);
+      const scrollable = bcs.overflowX === 'auto' || bcs.overflowX === 'scroll';
+      const inMap = by.matches('.maplibregl-map, .leaflet-container, #typology-map') ||
+        by.closest('.maplibregl-map, .leaflet-container, #typology-map') !== null;
+      kind = inMap ? 'map' : scrollable ? 'scrollable' : 'clipped';
+    }
+    if (kind !== 'map') {
+      overflow.push({
+        kind,
+        sel: path(el),
+        left: Math.round(r.left), right: Math.round(r.right), width: Math.round(r.width),
+        clippedBy: by ? path(by) : null,
+        text: (el.innerText || '').trim().replace(/\s+/g, ' ').slice(0, 40),
+      });
     }
     if (el.children.length === 0 && el.clientWidth > 0 && el.scrollWidth > el.clientWidth + 2) {
       if (cs.overflowX === 'hidden' || cs.textOverflow === 'ellipsis' || cs.overflow === 'hidden') {
@@ -154,7 +185,10 @@ async function worker() {
         await page.waitForTimeout(900);
         const g = await page.evaluate(GEOMETRY);
         rec.viewports[w] = { status, ...g };
-        if (status !== 200 || g.overflowCount > 0 || g.clippedCount > 0 || g.docOverflowX) bad = true;
+        const hardFail = (g.overflow || []).filter((o) => o.kind === 'clipped').length > 0;
+        const scrollables = (g.overflow || []).filter((o) => o.kind === 'scrollable');
+        rec.viewports[w].scrollableCount = scrollables.length;
+        if (status !== 200 || hardFail || g.clippedCount > 0 || g.docOverflowX) bad = true;
       } catch (e) {
         rec.viewports[w] = { error: String(e.message || e).split('\n')[0].slice(0, 160) };
         bad = true;
@@ -169,8 +203,10 @@ async function worker() {
         if (v.error) console.error(`     ${w}: ERROR ${v.error}`);
         else if (v.status !== 200) console.error(`     ${w}: HTTP ${v.status}`);
         else {
-          if (v.overflowCount) console.error(`     ${w}: ${v.overflowCount} element(s) outside the viewport`);
-          for (const o of v.overflow) console.error(`        ${o.sel} [${o.left}..${o.right}] ${o.clippedBy ? `(clipped by ${o.clippedBy})` : ''} "${o.text}"`);
+          const hard = (v.overflow || []).filter((o) => o.kind === 'clipped');
+          if (hard.length) console.error(`     ${w}: ${hard.length} element(s) CLIPPED — the content is taken away`);
+          for (const o of hard) console.error(`        ${o.sel} [${o.left}..${o.right}] clipped by ${o.clippedBy} "${o.text}"`);
+          if (v.scrollableCount) console.error(`     ${w}: ${v.scrollableCount} element(s) in a scroll region (reachable, listed for the record)`);
           if (v.clippedCount) console.error(`     ${w}: ${v.clippedCount} clipped text node(s)`);
           for (const c of v.clipped) console.error(`        ${c.sel} ${c.scrollW}>${c.clientW} "${c.text}"`);
         }
