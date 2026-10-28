@@ -1150,6 +1150,81 @@ test("why shophouses are good for cities is a bilingual section with credited di
   assert.match(typology, /class="typo-shell"/);
 });
 
+test("the why page credits Bhardwaj’s four street measures without his temperatures or his art", async () => {
+  const { NUMBERS_POST, SOURCES, STREET_METRICS, STREET_METRICS_LEDE, STREET_METRICS_NOTE } = await import(
+    "../app/data/shophouse-why.ts"
+  );
+  assert.equal(NUMBERS_POST.postUrl, "https://www.instagram.com/p/De7LxGmCMHa/");
+  assert.equal(NUMBERS_POST.handle, "@abhinavbwj");
+  assert.equal(STREET_METRICS.length, 4);
+  assert.deepEqual(
+    STREET_METRICS.map((metric) => metric.id),
+    ["enclosure", "sky", "shade", "junctions"],
+  );
+  for (const metric of STREET_METRICS) {
+    assert.match(metric.en, /Bhardwaj’s model/);
+    assert.match(metric.en, /not a Bangkok field measurement/);
+    assert.match(metric.th, /แบบจำลองของ Bhardwaj/);
+    assert.match(metric.th, /ไม่ใช่การวัดภาคสนามในกรุงเทพฯ/);
+    assert.doesNotMatch(`${metric.en} ${metric.th}`, /°C|5\.9|cooler/i);
+  }
+  assert.match(STREET_METRICS_LEDE[0].en, /Bhardwaj’s model/);
+  assert.match(STREET_METRICS_LEDE[0].en, /not a Bangkok field measurement/);
+  assert.match(STREET_METRICS_LEDE[1].en, /OpenStreetMap/);
+  assert.match(STREET_METRICS_LEDE[1].en, /building heights/);
+  assert.match(
+    STREET_METRICS.find((metric) => metric.id === "enclosure").en,
+    /does not set 2\.3× as a Bangkok design target/,
+  );
+  assert.match(STREET_METRICS.find((metric) => metric.id === "shade").en, /first day/);
+  assert.match(STREET_METRICS.find((metric) => metric.id === "shade").en, /buildings themselves/);
+  assert.match(STREET_METRICS.find((metric) => metric.id === "junctions").en, /Ewing and Cervero 2010/);
+  assert.match(STREET_METRICS.find((metric) => metric.id === "junctions").en, /Gehl, Kaefer and Reigstad 2006/);
+  assert.match(STREET_METRICS_NOTE.en, /No temperature from the post/);
+  const numbersSource = SOURCES.find((source) => source.id === "bhardwaj-2026-numbers");
+  assert.ok(numbersSource);
+  assert.equal(numbersSource.url, NUMBERS_POST.postUrl);
+  assert.doesNotMatch(numbersSource.usedFor, /°C|5\.9/);
+
+  const response = await render("/shophouses/why");
+  assert.equal(response.status, 200);
+  const html = await response.text();
+  const section = html.slice(html.indexOf('id="four-measures"'), html.indexOf('id="sources"'));
+  assert.ok(section.length > 500, "four-measures section missing");
+  assert.match(section, /Four measures this file has not taken/);
+  assert.match(section, /สี่มาตรวัดที่ไฟล์นี้ยังไม่ได้วัด/);
+  assert.match(section, /การโอบล้อม/);
+  assert.match(section, /ท้องฟ้าที่เปิด/);
+  assert.match(section, /ชั่วโมงร่ม/);
+  assert.match(section, /ความหนาแน่นทางแยก/);
+  assert.match(section, /href="https:\/\/www\.instagram\.com\/p\/De7LxGmCMHa\/"/);
+  assert.match(section, /@abhinavbwj/);
+  assert.match(section, /No drawing from this post is hosted here/);
+  assert.match(section, /ไม่ได้โฮสต์ไว้ที่นี่/);
+  assert.match(section, /not a Bangkok field measurement/);
+  assert.match(section, /does not set 2\.3× as a Bangkok design target/);
+  assert.match(section, /1\.4×/);
+  assert.match(section, /36%/);
+  assert.match(section, /67%/);
+  assert.match(section, /11\.0/);
+  assert.match(section, /9\.2/);
+  assert.match(section, /384/);
+  assert.match(section, /189/);
+  assert.match(section, /first day/);
+  assert.match(section, /Goethert/);
+  assert.match(section, /Wall height divided by street width/);
+  assert.match(section, /share of sky seen from the street/);
+  assert.doesNotMatch(section, /<img\b/);
+  assert.doesNotMatch(section, /°C/);
+  assert.doesNotMatch(section, /5\.9/);
+  assert.doesNotMatch(section, /cooler/i);
+  assert.doesNotMatch(html, /instagram-media/);
+  assert.doesNotMatch(html, /src="[^"]*De7LxGmCMHa/);
+  assert.doesNotMatch(html, /°C/);
+  assert.doesNotMatch(html, /5\.9/);
+  assert.match(html, /www\.instagram\.com\/p\/De7LxGmCMHa\//);
+});
+
 test("the shophouse essay defaults to a short argument without deleting the research", async () => {
   const response = await render("/shophouses");
   assert.equal(response.status, 200);
