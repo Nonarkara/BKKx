@@ -84,8 +84,13 @@ if [ "$action" = "deploy" ] || [ "$action" = "deploy-orphan" ]; then
   # successful and bkk.nonarkara.org never moved.
   if [ "$action" = "deploy" ]; then
     say "Deploying to production Worker bkkx-site (serves bkk.nonarkara.org via edge-proxy)..."
-    (cd "$root_dir" && npx wrangler deploy -c site/dist/server/wrangler.json --name bkkx-site)
-    say "Production deploy complete. Verify: curl -sI https://bkk.nonarkara.org/"
+    # site/scripts/deploy.sh is the production release path. It builds, bakes
+    # the build id into the artifact, deploys, and then reads the id back off
+    # the live site to prove the bytes at the edge are the bytes that shipped.
+    # A bare `wrangler deploy -c site/dist/server/wrangler.json` leaves the
+    # `vars` map empty, so the live site stops reporting which build it is —
+    # which is exactly what happened on 2026-10-26.
+    (cd "$site_dir" && bash scripts/deploy.sh)
     exit 0
   fi
 

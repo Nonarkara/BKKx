@@ -1,7 +1,12 @@
-// The site is built by `npm run build --prefix site` and deployed straight to
-// Cloudflare as the `bkkx-site` Worker:
+// The site is built and deployed by `site/scripts/deploy.sh`, which bakes the
+// build id into the artifact before uploading it and then reads the id back
+// off the live site to prove the release shipped:
 //
-//   npx wrangler deploy -c site/dist/server/wrangler.json --name bkkx-site
+//   bash site/scripts/deploy.sh
+//
+// A hand-rolled `wrangler deploy -c site/dist/server/wrangler.json` uploads
+// the same Worker but leaves the `vars` map empty, so the live site stops
+// reporting which build it is.
 //
 // It used to sit on Codex Sites, which meant a page could only go live from
 // ChatGPT. Deploying from the repo removes that dependency; this proxy stays

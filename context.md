@@ -117,9 +117,15 @@ default 64 — these worlds are superflat with ground near y = −60.
 ## Deploy
 
 ```bash
-npm run build --prefix site
-npx wrangler deploy -c site/dist/server/wrangler.json --name bkkx-site
+bash site/scripts/deploy.sh
 ```
+
+That one command builds, bakes the build id into the artifact, deploys the
+`bkkx-site` Worker, and then reads the id back off the live site to prove the
+bytes at the edge are the bytes that shipped. Do not hand-roll the upload:
+the built manifest's `vars` map is empty, so the live site stops reporting
+which build it is — which is what happened on 2026-10-26, when the release
+looked fine and the site reported nothing.
 
 The site was on Codex Sites, which meant a page could only reach production from
 ChatGPT. It now deploys from the repo to Cloudflare. `edge-proxy/` remains only
