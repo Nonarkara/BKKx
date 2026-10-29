@@ -1275,7 +1275,11 @@ button {
 .atlas-embed-more > div {
   position: absolute;
   top: calc(100% + 6px);
-  right: 0;
+  /* Open into the viewport, not away from it. The toolbar is anchored to the
+     top-left of the map, so a panel hung from this summary's RIGHT edge
+     opened 146px off-screen to the left — most of the menu was outside the
+     frame on a phone, and a third of it was. */
+  left: 0;
   z-index: 40;
   display: grid;
   width: 238px;
@@ -2080,6 +2084,22 @@ button {
 .layer-toggle-btn:hover {
   background: rgba(255, 255, 255, 0.1);
   color: var(--paper-strong);
+}
+
+/* The aerosol layer carries its observation date. On one line the button cut
+   it off, so the reader never saw which observation they were looking at.
+   The date takes its own line instead of being truncated away. */
+.layer-toggle-btn.aerosol-toggle {
+  white-space: normal;
+  align-items: center;
+  justify-content: center;
+}
+.aerosol-date {
+  display: block;
+  font-size: 8px;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  opacity: 0.75;
 }
 
 .layer-toggle-btn.active {
@@ -7402,7 +7422,7 @@ body:has(.sh-figexport) { background: #fff !important; }
   color: var(--quiet);
   padding-top: 2px;
 }
-.datasets-provenance dd { margin: 0; max-width: 52em; }
+.datasets-provenance dd { margin: 0; max-width: 52em; min-width: 0; }
 .datasets-provenance code { font-size: 12.5px; }
 .datasets-usedby { display: flex; flex-wrap: wrap; gap: 6px 10px; }
 .datasets-usedby code {

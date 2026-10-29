@@ -2835,10 +2835,14 @@ export function AtlasView({ world, embedded = false, initialView, floodEdition =
                     onClick={() => setShowAerosol((prev) => !prev)}
                     className={`layer-toggle-btn aerosol-toggle ${showAerosol ? "active" : ""}`}
                     aria-pressed={showAerosol}
-                    aria-label="Toggle NASA satellite aerosol optical depth"
-                    title="Regional Terra + Aqua composite; not a street-level pollution sensor."
+                    aria-label={`Toggle NASA satellite aerosol optical depth, observation ${aerosolDate}`}
+                    title={`Regional Terra + Aqua composite, ${aerosolDate}; not a street-level pollution sensor.`}
                   >
-                    ◉ Satellite aerosol · {aerosolDate}
+                    ◉ Satellite aerosol
+                    {/* The date is the layer's data, not the control's name. On one
+                        line the button cut it off — "◉ Satellite aeros…" — so the
+                        reader never saw which observation they were looking at. */}
+                    <span className="aerosol-date">{aerosolDate}</span>
                   </button>
                   <button
                     type="button"

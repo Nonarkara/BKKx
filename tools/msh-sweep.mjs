@@ -57,44 +57,58 @@ const GEOMETRY = () => {
     const r = el.getBoundingClientRect();
     if (r.width < 2 || r.height < 2) continue;
 
-    // Classify by WHERE the content goes when it leaves the viewport.
-    //
-    //   clipped     — an ancestor with overflow:hidden takes the content away.
-    //                 Unreachable. A defect.
-    //   scrollable  — an ancestor with overflow:auto|scroll takes it with a
-    //                 gesture. Reachable. Not a geometry failure, but it is
-    //                 reported separately, because a scroll region with no
-    //                 visible affordance is its own kind of problem.
-    //   map         — a map's own tiles and markers sit outside the frame by
-    //                 design. Not a defect.
-    //
-    // Without this distinction the gate cannot tell "the content is gone"
-    // from "the content moves sideways", and the first version of this gate
-    // reported 387 pages as broken when the truth was 176.
-    let kind = 'clipped';
-    let by = null;
-    let p = el.parentElement;
-    for (let d = 0; p && d < 14; d++, p = p.parentElement) {
-      const pcs = getComputedStyle(p);
-      if (pcs.overflowX === 'visible' && pcs.overflow === 'visible') continue;
-      by = p;
-      break;
-    }
-    if (by) {
-      const bcs = getComputedStyle(by);
-      const scrollable = bcs.overflowX === 'auto' || bcs.overflowX === 'scroll';
-      const inMap = by.matches('.maplibregl-map, .leaflet-container, #typology-map') ||
-        by.closest('.maplibregl-map, .leaflet-container, #typology-map') !== null;
-      kind = inMap ? 'map' : scrollable ? 'scrollable' : 'clipped';
-    }
-    if (kind !== 'map') {
-      overflow.push({
-        kind,
-        sel: path(el),
-        left: Math.round(r.left), right: Math.round(r.right), width: Math.round(r.width),
-        clippedBy: by ? path(by) : null,
-        text: (el.innerText || '').trim().replace(/\s+/g, ' ').slice(0, 40),
-      });
+    // Only elements that actually leave the viewport are in question.
+    if (r.right <= VW + 1 && r.left >= -1) {
+      // still check clipped leaf text below
+    } else {
+      // Classify by WHERE the content goes when it leaves the viewport.
+      //
+      //   clipped     — an ancestor with overflow:hidden takes the content
+      //                 away. Unreachable. A defect.
+      //   scrollable  — an ancestor with overflow:auto|scroll takes it with a
+      //                 gesture. Reachable. Not a geometry failure, but it is
+      //                 reported separately, because a scroll region with no
+      //                 visible affordance is its own kind of problem.
+      //   map         — a map's own tiles and markers sit outside the frame
+      //                 by design. Not a defect.
+      //
+      // Without this distinction the gate cannot tell "the content is gone"
+      // from "the content moves sideways", and the first version of this gate
+      // reported 387 pages as broken when the truth was 176.
+      let kind = 'clipped';
+      let by = null;
+      let p = el.parentElement;
+      for (let d = 0; p && d < 14; d++, p = p.parentElement) {
+        const pcs = getComputedStyle(p);
+        if (pcs.overflowX === 'visible' && pcs.overflow === 'visible') continue;
+        by = p;
+        break;
+      }
+      if (by) {
+        const bcs = getComputedStyle(by);
+        const scrollable = bcs.overflowX === 'auto' || bcs.overflowX === 'scroll';
+        const inMap = by.closest('.maplibregl-map, .leaflet-container, #typology-map') !== null;
+        // A frame that crops an image on purpose is not losing content. What
+        // loses content is a frame that cuts TEXT or a control in half.
+        const hasText = (el.innerText || '').trim().length > 0;
+        const isControl = el.matches('a[href], button, input, select, textarea, [role="button"]');
+        kind = inMap
+          ? 'map'
+          : scrollable
+            ? 'scrollable'
+            : (hasText || isControl)
+              ? 'clipped'
+              : 'cropped';
+      }
+      if (kind !== 'map') {
+        overflow.push({
+          kind,
+          sel: path(el),
+          left: Math.round(r.left), right: Math.round(r.right), width: Math.round(r.width),
+          clippedBy: by ? path(by) : null,
+          text: (el.innerText || '').trim().replace(/\s+/g, ' ').slice(0, 40),
+        });
+      }
     }
     if (el.children.length === 0 && el.clientWidth > 0 && el.scrollWidth > el.clientWidth + 2) {
       if (cs.overflowX === 'hidden' || cs.textOverflow === 'ellipsis' || cs.overflow === 'hidden') {

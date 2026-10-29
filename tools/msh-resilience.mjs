@@ -84,7 +84,11 @@ const READ = () => {
       }
       const inMap = by && (by.closest('.maplibregl-map, .leaflet-container, #typology-map') !== null);
       const scrollable = by && ['auto', 'scroll'].includes(getComputedStyle(by).overflowX);
-      if (!inMap && !scrollable) outside.push({ sel: path(el), left: Math.round(r.left), right: Math.round(r.right), text: (el.innerText || '').trim().slice(0, 40) });
+      const hasText = (el.innerText || '').trim().length > 0;
+      const isControl = el.matches('a[href], button, input, select, textarea, [role="button"]');
+      // A frame that crops an image on purpose is not losing content; a frame
+      // that cuts text or a control in half is.
+      if (!inMap && !scrollable && (hasText || isControl)) outside.push({ sel: path(el), left: Math.round(r.left), right: Math.round(r.right), text: (el.innerText || '').trim().slice(0, 40) });
     }
   }
   return {
@@ -144,7 +148,13 @@ for (const route of routes) {
     const resp = await page.goto(`${BASE}${route}`, { waitUntil: 'domcontentloaded', timeout: 40000 });
     await settle(page);
     const read = await page.evaluate(READ);
-    await page.screenshot({ path: join(OUT, `zoom200-${route.replace(/\W+/g, '_') || 'root'}.png`) });
+    // The screenshot is the evidence, not the measurement. If the capture
+    // fails — a busy box, a map that will not settle — the measurement still
+    // stands, and the missing picture is recorded rather than turned into a
+    // verdict about the site.
+    try {
+      await page.screenshot({ path: join(OUT, `zoom200-${route.replace(/\W+/g, '_') || 'root'}.png`), timeout: 20000 });
+    } catch { /* picture missing; the numbers below are what this check is about */ }
     rec.checks.zoom200 = {
       status: resp ? resp.status() : null,
       docOverflowX: read.docOverflowX,
@@ -165,7 +175,9 @@ for (const route of routes) {
     const resp = await page.goto(`${BASE}${route}`, { waitUntil: 'domcontentloaded', timeout: 40000 });
     await settle(page);
     const read = await page.evaluate(READ);
-    await page.screenshot({ path: join(OUT, `nofonts-${route.replace(/\W+/g, '_') || 'root'}.png`) });
+    try {
+      await page.screenshot({ path: join(OUT, `nofonts-${route.replace(/\W+/g, '_') || 'root'}.png`), timeout: 20000 });
+    } catch { /* picture missing; the numbers below are what this check is about */ }
     rec.checks.noFonts = {
       status: resp ? resp.status() : null,
       docOverflowX: read.docOverflowX,

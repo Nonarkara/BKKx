@@ -30,6 +30,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       "/about",
       "/case-for-bangkok",
       "/datasets",
+      "/flood",
       "/shophouses",
       "/shophouses/why",
       "/shophouses/typology",
