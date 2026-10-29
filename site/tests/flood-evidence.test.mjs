@@ -8,6 +8,40 @@ const report={id:'1',category:'flood',lat:13.75,lng:100.5,start:'2026-09-27T11:0
 test('reports stay located evidence, not passability or inferred depth',()=>{const j=normalizeTraffic({fetched_at:new Date(now).toISOString(),events:[report,report]},now);assert.equal(j.reports.length,1);assert.equal(j.reports[0].depthCm,null);assert.ok(!JSON.stringify(j).includes('0812345678'));assert.ok(!JSON.stringify(j).includes('private name'));assert.equal(j.reports[0].passable,undefined);});
 test('exclude invalid geometry, old and future reports, other categories',()=>{for(const change of [{lat:NaN},{lng:Infinity},{lat:0},{category:'accident'},{start:'invalid'},{start:'2026-09-26T00:00:00Z'},{start:'2026-09-28T00:00:00Z'}])assert.equal(normalizeTraffic({events:[{...report,...change}]},now).reports.length,0);assert.throws(()=>normalizeTraffic({}));});
 test('freshness expires with time and never promotes unknown age',()=>{assert.equal(evidenceIsFresh(new Date(now).toISOString(),now),true);assert.equal(evidenceIsFresh(new Date(now).toISOString(),now+16*60000),false);assert.equal(evidenceIsFresh(null,now),false);});
+
+test('a report the source still lists as current survives the 24-hour window',()=>{
+  // Replays the shape FloodDash actually sends. On 2026-10-29 the upstream
+  // carried a Bangkok road closure on Highway 400 that started 29 hours
+  // earlier and was still listed as running until 10:00 the next morning.
+  // Measured from its start, the 24-hour window threw it away, and the page
+  // read "no reports" while the road was impassable.
+  const upstream={fetched_at:'2026-10-29T20:24:22.802Z',events:[
+    {id:'986705',category:'flood',lat:13.764020156784,lng:100.5382805478,start:'2026-10-28T15:05:31.000Z',stop:'2026-10-30T03:00:01.000Z',passable:false,severity:1,depth_cm:null,title_th:'น้ำท่วมทางหลวง 400 ช่วงห้วยยาง - บางสะพาน (ผ่านไม่ได้)'},
+    {id:'986704',category:'flood',lat:13.7,lng:100.6,start:'2026-10-27T15:05:31.000Z',stop:'2026-10-29T10:00:01.000Z',passable:false,title_th:'closed and over'},
+    {id:'986703',category:'flood',lat:13.7,lng:100.6,start:'2026-10-27T15:05:31.000Z',title_th:'no end time at all'},
+    {id:'986702',category:'flood',lat:13.7,lng:100.6,start:'2026-10-29T19:00:00.000Z',stop:'2026-10-30T03:00:01.000Z',title_th:'recent'}]};
+  const j=normalizeTraffic(upstream,Date.parse('2026-10-29T20:24:22.802Z'));
+  const ids=j.reports.map(r=>r.id);
+  assert.ok(ids.includes('986705'),'a road the source still lists as current was dropped');
+  assert.equal(j.reports.find(r=>r.id==='986705').ongoing,true);
+  assert.ok(!ids.includes('986704'),'a report that ended and is older than the window was kept');
+  assert.ok(!ids.includes('986703'),'a report with no end time was treated as still current');
+  assert.ok(ids.includes('986702'),'a recent report was dropped');
+  // Passability is still not republished: the source is a public report, not
+  // a verified closure.
+  assert.equal(j.reports.find(r=>r.id==='986705').passable,undefined);
+  assert.ok(!JSON.stringify(j).includes('passable'));
+});
+
+test('a report without an end time is treated as ended, not as open',()=>{
+  const old={id:'1',category:'flood',lat:13.75,lng:100.5,start:'2026-09-26T00:00:00Z',title_th:'น้ำท่วม ถนนทดสอบ'};
+  const j=normalizeTraffic({events:[old]},now);
+  assert.equal(j.reports.length,0);
+  const fresh={...old,id:'2',start:'2026-09-27T11:00:00Z'};
+  const k=normalizeTraffic({events:[fresh]},now);
+  assert.equal(k.reports.length,1);
+  assert.equal(k.reports[0].ongoing,false);
+});
 test('contact details with separators and Thai digits are not republished',()=>{for(const contact of ['081-234-5678','081 234 5678','๐๘๑-๒๓๔-๕๖๗๘','test@example.com']){const j=normalizeTraffic({events:[{...report,title_th:'น้ำท่วม ถนนทดสอบ '+contact}]},now);assert.ok(!j.reports[0].title.includes(contact));}});
 test('ThaiWater never converts missing or invalid rainfall to dry readings',()=>{
   for(const v of [null,undefined,'', ' ',false,[],{},-999,'-999'])assert.equal(normaliseThaiwaterRain({data:[{rain_24h:v}]}).stations.length,0);

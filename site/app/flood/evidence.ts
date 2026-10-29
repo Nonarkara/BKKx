@@ -1,4 +1,4 @@
-export type FloodReport = { id:string; title:string; lat:number; lng:number; start:string; depthCm:number|null };
+export type FloodReport = { id:string; title:string; lat:number; lng:number; start:string; depthCm:number|null; ongoing:boolean };
 export type FloodEvidence = { fetchedAt:string|null; reports:FloodReport[] };
 // Report coordinates are not surveyed inundation boundaries.
 export function normalizeTraffic(value: unknown, now=Date.now()): FloodEvidence {
@@ -12,13 +12,27 @@ export function normalizeTraffic(value: unknown, now=Date.now()): FloodEvidence 
     const r=item as Record<string,unknown>;
     if(r.category!=='flood'||typeof r.lat!=='number'||typeof r.lng!=='number'||!Number.isFinite(r.lat)||!Number.isFinite(r.lng)||r.lat<13.4||r.lat>14.2||r.lng<100.2||r.lng>101||typeof r.start!=='string')continue;
     const age=now-Date.parse(r.start),id=String(r.id??'');
-    if(!Number.isFinite(age)||age < -300000||age>86400000||!id||seen.has(id))continue;
+    if(!Number.isFinite(age)||age < -300000||!id||seen.has(id))continue;
+    // A report the source still lists as current is a condition happening now,
+    // however long ago it started: a road officially closed until tomorrow is
+    // still closed today. The source's own end time says so, and a 24-hour
+    // window measured from the start threw those away — the page then read
+    // "no reports" while three Bangkok roads were impassable.
+    //
+    // Only a report that has ENDED and is older than the window is stale. A
+    // report with no end time counts as ended, because we cannot claim it is
+    // still open.
+    const end=typeof r.stop==='string'?Date.parse(r.stop):NaN;
+    const ongoing=Number.isFinite(end)&&end>now;
+    if(!ongoing&&age>86400000)continue;
     seen.add(id);
     // Do not forward descriptions, photos or contributors: they can identify residents.
     const title=typeof r.title_th==='string'?r.title_th.split(/รายงานโดย|Report by|ติดต่อ|โทรศัพท์|โทร\s|contact|phone/i)[0]
       .replace(/[\w.+-]+@[\w.-]+\.[a-z]{2,}/gi,'[redacted]')
       .replace(/[+＋]?[0-9๐-๙][0-9๐-๙\s().-]{7,}[0-9๐-๙]/g,'[redacted]').slice(0,180):'Reported flooding';
-    reports.push({id,title,lat:r.lat,lng:r.lng,start:r.start,depthCm:typeof r.depth_cm==='number'&&Number.isFinite(r.depth_cm)&&r.depth_cm>=0&&r.depth_cm<=1000?r.depth_cm:null});
+    // `passable` stays unpublished: the source is a public report, not a
+    // verified closure, and this layer does not republish passability.
+    reports.push({id,title,lat:r.lat,lng:r.lng,start:r.start,depthCm:typeof r.depth_cm==='number'&&Number.isFinite(r.depth_cm)&&r.depth_cm>=0&&r.depth_cm<=1000?r.depth_cm:null,ongoing});
   }
   return {fetchedAt:typeof v.fetched_at==='string'&&Number.isFinite(Date.parse(v.fetched_at))?v.fetched_at:null,reports:reports.sort((a,b)=>Date.parse(b.start)-Date.parse(a.start))};
 }
