@@ -192,18 +192,21 @@ Found and fixed:
 
 ### Verified
 
-- 639-URL geometry sweep: before the work, 387 of the first 391 URLs checked
-  failed. After it, the same gate reports one failure on the live site — the
-  status-strip line fixed in the next commit.
+- 639-URL geometry sweep, run against production: 639/639 URLs checked at 390
+  and 1440. The only failure was the status-strip line, which is fixed in
+  `dcac1e9` and re-checked live with zero clipped nodes.
+- Before the work the same gate reported 387 failures out of the first 391
+  URLs checked.
 - 200% enlargement, blocked web fonts and keyboard reachability: 9/9 routes
   pass all three after the fixes, and 20/20 routes passed the keyboard check
   (25 tab stops each, every one with a visible focus ring and a real name).
 - Live, after deploy: `bkk.nonarkara.org`, `bkkx-site.drnon.workers.dev` and
-  `shophouses.nonarkara.org` all report `x-bkkx-build: bkkx-20261029-a918958`,
-  which is HEAD.
+  `shophouses.nonarkara.org` all report `x-bkkx-build: bkkx-20261029-dcac1e9`,
+  which is HEAD. The separate shophouses domain serves the essay at `/` and
+  all seven internal destinations at 200.
 - The page-view ceiling is live in production D1: the `pageview_daily` table
-  exists and counts on the Bangkok day boundary. A valid browser-shaped POST
-  returns 201, a forged Origin 403, a `null` body 400.
+  exists and counts on the Bangkok day boundary (`2026-10-29`). A valid
+  browser-shaped POST returns 201, a forged Origin 403, a `null` body 400.
 
 ### PR disposition
 
