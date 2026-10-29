@@ -1,0 +1,347 @@
+{
+  "base": "http://127.0.0.1:43118",
+  "when": "2026-10-29T04:56:29.751Z",
+  "results": [
+    {
+      "route": "/heritage",
+      "checks": {
+        "zoom200": {
+          "status": 200,
+          "docOverflowX": false,
+          "outside": [],
+          "clipped": [],
+          "textChars": 16439,
+          "headings": [
+            "Bangkok's heritage,\nmonument by monument",
+            "The quarters",
+            "The walks",
+            "The register, mapped"
+          ],
+          "pass": true
+        },
+        "noFonts": {
+          "status": 200,
+          "docOverflowX": false,
+          "outside": [],
+          "textChars": 16526,
+          "headings": [
+            "Bangkok's heritage,\nmonument by monument",
+            "The quarters",
+            "The walks",
+            "The register, mapped"
+          ],
+          "pass": true
+        },
+        "keyboard": {
+          "reached": 25,
+          "withoutFocusRing": 0,
+          "withoutName": 0,
+          "samples": [],
+          "pass": true
+        }
+      }
+    },
+    {
+      "route": "/shophouses/why",
+      "checks": {
+        "zoom200": {
+          "status": 200,
+          "docOverflowX": false,
+          "outside": [],
+          "clipped": [],
+          "textChars": 46135,
+          "headings": [
+            "Why shophouses are good for cities\nทำไมต",
+            "ตัวเลขของกรุงเทพฯ ที่ใช้คู่กับภาพ\nThe Ba",
+            "ผนังที่ทำให้ถนนเป็นห้อง\nThe wall that ma",
+            "ถนนกว้างเท่าไร เมื่อเทียบกับกำแพง\nHow wi"
+          ],
+          "pass": true
+        },
+        "noFonts": {
+          "status": 200,
+          "docOverflowX": false,
+          "outside": [],
+          "textChars": 46135,
+          "headings": [
+            "Why shophouses are good for cities\nทำไมต",
+            "ตัวเลขของกรุงเทพฯ ที่ใช้คู่กับภาพ\nThe Ba",
+            "ผนังที่ทำให้ถนนเป็นห้อง\nThe wall that ma",
+            "ถนนกว้างเท่าไร เมื่อเทียบกับกำแพง\nHow wi"
+          ],
+          "pass": true
+        },
+        "keyboard": {
+          "reached": 25,
+          "withoutFocusRing": 0,
+          "withoutName": 0,
+          "samples": [],
+          "pass": true
+        }
+      }
+    },
+    {
+      "route": "/shophouses/typology",
+      "checks": {
+        "zoom200": {
+          "status": 200,
+          "docOverflowX": false,
+          "outside": [],
+          "clipped": [],
+          "textChars": 18125,
+          "headings": [
+            "Typology",
+            "Social capital",
+            "Lat Phrao Road row",
+            "Sources"
+          ],
+          "pass": true
+        },
+        "noFonts": {
+          "status": 200,
+          "docOverflowX": false,
+          "outside": [],
+          "textChars": 18125,
+          "headings": [
+            "Typology",
+            "Social capital",
+            "Lat Phrao Road row",
+            "Sources"
+          ],
+          "pass": true
+        },
+        "keyboard": {
+          "reached": 25,
+          "withoutFocusRing": 0,
+          "withoutName": 0,
+          "samples": [],
+          "pass": true
+        }
+      }
+    },
+    {
+      "route": "/shophouses/bible",
+      "checks": {
+        "zoom200": {
+          "status": 200,
+          "docOverflowX": false,
+          "outside": [],
+          "clipped": [],
+          "textChars": 1430,
+          "headings": [
+            "The Shophouse Bible",
+            "",
+            "",
+            ""
+          ],
+          "pass": true
+        },
+        "noFonts": {
+          "status": 200,
+          "docOverflowX": false,
+          "outside": [],
+          "textChars": 1430,
+          "headings": [
+            "The Shophouse Bible",
+            "",
+            "",
+            ""
+          ],
+          "pass": true
+        },
+        "keyboard": {
+          "reached": 23,
+          "withoutFocusRing": 0,
+          "withoutName": 0,
+          "samples": [],
+          "pass": true
+        }
+      }
+    },
+    {
+      "route": "/shophouses/global",
+      "checks": {
+        "zoom200": {
+          "status": 200,
+          "docOverflowX": false,
+          "outside": [],
+          "clipped": [],
+          "textChars": 6216,
+          "headings": [
+            "The shophouse outside Bangkok",
+            "The numbers at a glance",
+            "The map",
+            "The Shophouse Health Index"
+          ],
+          "pass": true
+        },
+        "noFonts": {
+          "status": 200,
+          "docOverflowX": false,
+          "outside": [],
+          "textChars": 6216,
+          "headings": [
+            "The shophouse outside Bangkok",
+            "The numbers at a glance",
+            "The map",
+            "The Shophouse Health Index"
+          ],
+          "pass": true
+        },
+        "keyboard": {
+          "reached": 25,
+          "withoutFocusRing": 0,
+          "withoutName": 0,
+          "samples": [],
+          "pass": true
+        }
+      }
+    },
+    {
+      "route": "/datasets",
+      "checks": {
+        "zoom200": {
+          "status": 200,
+          "docOverflowX": false,
+          "outside": [],
+          "clipped": [],
+          "textChars": 13925,
+          "headings": [
+            "The datasets",
+            "The Bangkok heritage register",
+            "The rowhouse atlas",
+            "Rowhouse footprint candidates"
+          ],
+          "pass": true
+        },
+        "noFonts": {
+          "status": 200,
+          "docOverflowX": false,
+          "outside": [],
+          "textChars": 14012,
+          "headings": [
+            "The datasets",
+            "The Bangkok heritage register",
+            "The rowhouse atlas",
+            "Rowhouse footprint candidates"
+          ],
+          "pass": true
+        },
+        "keyboard": {
+          "reached": 25,
+          "withoutFocusRing": 0,
+          "withoutName": 0,
+          "samples": [],
+          "pass": true
+        }
+      }
+    },
+    {
+      "route": "/worlds",
+      "checks": {
+        "zoom200": {
+          "status": 200,
+          "docOverflowX": false,
+          "outside": [],
+          "clipped": [],
+          "textChars": 2511,
+          "headings": [
+            "Bangkok,\nblock by block.",
+            "Pick a district.\nFollow the signals.",
+            "Enter Bangkok.",
+            "A city model should never be a black box"
+          ],
+          "pass": true
+        },
+        "noFonts": {
+          "status": 200,
+          "docOverflowX": false,
+          "outside": [],
+          "textChars": 2603,
+          "headings": [
+            "Bangkok,\nblock by block.",
+            "Pick a district.\nFollow the signals.",
+            "Enter Bangkok.",
+            "A city model should never be a black box"
+          ],
+          "pass": true
+        },
+        "keyboard": {
+          "reached": 25,
+          "withoutFocusRing": 0,
+          "withoutName": 0,
+          "samples": [],
+          "pass": true
+        }
+      }
+    },
+    {
+      "route": "/flood",
+      "checks": {
+        "zoom200": {
+          "status": 200,
+          "docOverflowX": false,
+          "outside": [],
+          "clipped": [],
+          "textChars": 1002,
+          "headings": [
+            "กรุงเทพฯ · เฝ้าระวังน้ำ",
+            "ถนนที่มีรายงานน้ำท่วมตอนนี้"
+          ],
+          "pass": true
+        },
+        "noFonts": {
+          "status": 200,
+          "docOverflowX": false,
+          "outside": [],
+          "textChars": 1306,
+          "headings": [
+            "กรุงเทพฯ · เฝ้าระวังน้ำ",
+            "ถนนที่มีรายงานน้ำท่วมตอนนี้"
+          ],
+          "pass": true
+        },
+        "keyboard": {
+          "reached": 25,
+          "withoutFocusRing": 0,
+          "withoutName": 0,
+          "samples": [],
+          "pass": true
+        }
+      }
+    },
+    {
+      "route": "/atlas/historic-core",
+      "checks": {
+        "zoom200": {
+          "status": 200,
+          "docOverflowX": false,
+          "outside": [],
+          "clipped": [],
+          "textChars": 1142,
+          "headings": [
+            "Grand Palace & Wat Phra Kaew"
+          ],
+          "pass": true
+        },
+        "noFonts": {
+          "status": 200,
+          "docOverflowX": false,
+          "outside": [],
+          "textChars": 2257,
+          "headings": [
+            "Grand Palace & Wat Phra Kaew"
+          ],
+          "pass": true
+        },
+        "keyboard": {
+          "reached": 25,
+          "withoutFocusRing": 0,
+          "withoutName": 0,
+          "samples": [],
+          "pass": true
+        }
+      }
+    }
+  ]
+}

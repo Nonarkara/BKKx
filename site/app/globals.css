@@ -3762,9 +3762,12 @@ button {
   font-size: 11px;
   line-height: 1.35;
   color: rgba(17, 18, 15, 0.62);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  /* The source line is the provenance: "111/136 stations wet · heaviest
+     ทุ่งครุ · BMA via ThaiWater" says where the number came from. Truncating
+     it to "111/136 stations wet · heavies…" loses the district and the
+     agency — and the strip exists to say where its numbers come from. It
+     wraps inside the cell; the strip still stays one row. */
+  overflow-wrap: anywhere;
 }
 .city-glance-item.is-alert .city-glance-value { text-decoration: underline; text-underline-offset: 3px; }
 .city-glance-item.is-alert { box-shadow: inset 3px 0 0 var(--ink); }
