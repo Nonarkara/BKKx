@@ -15,7 +15,7 @@ Do not substitute one green build or one repaired screen for the full audit.
 | Usable without pointer precision | Visible focus, real names, reachable controls, keyboard activation, touch targets, enlarged text | Keyboard proven on 20/20 routes with a visible ring and a real name on every tab stop; 44px targets on the new disclosure; 200% enlargement proven. Dialogs still not exercised |
 | Preserve trustworthy data | Observation/model/reference tiers, age, unknown not zero, source links; no invented safe routes or survey precision | Existing safety boundaries retained; the new page-view ceiling adds a count and no identity. PR22's four measures carry their caveats. Not a new validation of all feeds |
 | Production matches tested source | Commit/push, build stamp, asset hash, desktop and phone interaction checks on actual domain | Proven: the stamp travels in the artifact and the live site reports it on three domains; the deploy refuses to finish if it does not |
-| Independent review | Confirmed findings corrected and rechecked against rendered artifacts | An independent reviewer was run over this round's diff and evidence; its findings are recorded below or applied |
+| Independent review | Confirmed findings corrected and rechecked against rendered artifacts | **NOT obtained this round.** Four attempts to run an independent reviewer were made and all four failed on the runtime's token-plan limit, not on the code. The claims above were therefore checked by the agent that made them, which is not independent. Treat the review row as open |
 
 ## Remaining branch and PR work
 
@@ -201,9 +201,19 @@ Found and fixed:
   pass all three after the fixes, and 20/20 routes passed the keyboard check
   (25 tab stops each, every one with a visible focus ring and a real name).
 - Live, after deploy: `bkk.nonarkara.org`, `bkkx-site.drnon.workers.dev` and
-  `shophouses.nonarkara.org` all report `x-bkkx-build: bkkx-20261029-dcac1e9`,
-  which is HEAD. The separate shophouses domain serves the essay at `/` and
-  all seven internal destinations at 200.
+  `shophouses.nonarkara.org` all report `x-bkkx-build: bkkx-20261029-521fa27`,
+  which is HEAD. The built manifest carries `vars.BUILD_ID` with the same
+  value. The separate shophouses domain serves the essay at `/` and all seven
+  internal destinations at 200.
+- The dirty-tree guard was tested, not assumed. A modified tracked file:
+  refused, exit 1. An untracked file inside `site/app/`: refused, exit 1. An
+  unrelated untracked file at the repository root: allowed through — which is
+  the point, because a guard that blocks every release gets bypassed, and
+  bypassing this one is what lost the build stamp in the first place.
+- Every `wrangler deploy` in the repository was enumerated. The only
+  production upload is `site/scripts/deploy.sh`. The others are the edge
+  proxy (a different Worker, no build id to carry), the preview Worker, and
+  comments and audit prose.
 - The page-view ceiling is live in production D1: the `pageview_daily` table
   exists and counts on the Bangkok day boundary (`2026-10-29`). A valid
   browser-shaped POST returns 201, a forged Origin 403, a `null` body 400.
@@ -235,6 +245,11 @@ Found and fixed:
 
 ### Still open
 
+- **The independent review row is open.** Four attempts to run a reviewer this
+  round ended on the runtime's token-plan limit. The verification in this
+  ledger is the work of the agent that did the work. That is not the same
+  thing, and the ledger does not claim it is. A reviewer with a budget would
+  close it.
 - The "all branches" question stands: the active Bangkok products are now
   audited and shipped; `feat/shophouse-fabric`, `audit-typology`, the
   real-data release ref, the KL fork and the broken MapLibre 6 experiment
