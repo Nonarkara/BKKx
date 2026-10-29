@@ -149,7 +149,11 @@ wait_for_build() {
 echo
 echo "deploy: verifying the live site reports ${BUILD_ID}"
 wait_for_build "$UPSTREAM" "upstream worker" 20
-wait_for_build "$LIVE" "bkk.nonarkara.org" 20
+# The custom domain's edge caches HTML for up to 60 seconds
+# (s-maxage=60) and may serve the previous build's response, with the
+# previous build's header, while it catches up. The poll has to outlast that
+# window or a good release reads as a failure. 120 seconds of patience.
+wait_for_build "$LIVE" "bkk.nonarkara.org" 40
 
 echo
 echo "deploy: ${BUILD_ID} is live and says so. Check it yourself:"

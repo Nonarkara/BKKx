@@ -243,4 +243,13 @@ Found and fixed:
   separate work, as recorded in the reconciliation receipt.
 - The Cloudflare rate-limiting rules in `docs/pageview-rate-limits.md` are
   specified but must be confirmed as configured in the zone.
+- The release path does not itself check that CI passed for the commit it is
+  releasing. The discipline is push, wait for CI, deploy — and it was followed
+  this round — but the script would happily upload a commit whose checks had
+  failed. Gating it on `gh` would make the release path depend on a network
+  call to GitHub, which is its own kind of fragility; the honest options are a
+  required status check on the branch, or a deliberate override. Not decided
+  here.
+- Expanded, empty and error states are still not exercised. The proof so far
+  covers the states the pages actually load in.
 
