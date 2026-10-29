@@ -101,7 +101,7 @@ SHA="$(git rev-parse --short HEAD)"
 node scripts/stamp-build-id.mjs --check
 BUILD_ID="$(node -e 'process.stdout.write(JSON.parse(require("fs").readFileSync("dist/server/wrangler.json","utf8")).vars.BUILD_ID)')"
 
-if [ "${BUILD_ID##*$SHA}" = "$SHA" ]; then
+if [[ "$BUILD_ID" == *"$SHA" ]]; then
   echo "deploy: artifact stamped ${BUILD_ID} (commit ${SHA})"
 else
   fail "the artifact stamp ${BUILD_ID} does not carry the commit ${SHA} that is being released."
