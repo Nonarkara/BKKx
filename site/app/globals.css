@@ -1216,7 +1216,6 @@ button {
   align-items: stretch;
   background: rgba(17, 18, 15, 0.9);
   border: 1px solid rgba(255, 255, 255, 0.22);
-  backdrop-filter: blur(8px);
   color: var(--paper-strong);
 }
 
@@ -1285,8 +1284,6 @@ button {
   width: 238px;
   border: 1px solid rgba(255,255,255,.25);
   background: rgba(17,18,15,.96);
-  box-shadow: 0 12px 30px rgba(0,0,0,.45);
-  backdrop-filter: blur(12px);
 }
 .atlas-embed-more > div button,
 .atlas-embed-more > div a {
@@ -3642,14 +3639,6 @@ button {
   gap: 2px;
   min-width: 0;
   flex: 1 1 240px;
-}
-.atlas-shell-masthead-meta strong {
-  font-family: var(--font-display);
-  font-size: 18px;
-  line-height: 1.15;
-  letter-spacing: -0.01em;
-  color: var(--ink);
-  overflow-wrap: anywhere;
 }
 .atlas-shell-masthead-meta small {
   font-family: var(--font-body);
@@ -8857,3 +8846,59 @@ body:has(.sh-why) {
   .sh-why-principle img { max-height: 95mm; width: auto; }
   .sh-why-contents { display: none; }
 }
+
+/* MSH blind audit, 2026-11-01. Measured on the live site by an auditor who
+   did not build it; each rule names the defect it closes.
+   - The page had no <h1>: the masthead line is the heading now.
+   - Masthead + weather strip took 144 px (16% at 1440, 19% at 1024) and the
+     1024 map fell to 59% of the screen. Value and label share one row; the
+     source line (the provenance) stays whole underneath.
+   - The layer chips ran over the zoom group at 1024 (zoom-in unreachable):
+     the row now stops short of it and scrolls.
+   - "More layers" hung from its own button inside that scrolling row, so on
+     a phone it ran 80 px past the frame and over the zoom group. It drops
+     from the toolbar's edge, fixed, inside the frame. (The glass blur on the
+     toolbar would have trapped a fixed menu; glass is banned anyway.)
+   - The closed map key was a 208 px box around "Map key".
+   - Rail tabs: a dense pair, 36 px, not 44. The "?" hint was 18 px.
+   - Map controls sit above quarter markers and chapter labels. */
+.atlas-shell-masthead-title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  overflow-wrap: anywhere;
+}
+.city-glance-item {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: baseline;
+  column-gap: 8px;
+  row-gap: 1px;
+  padding: 5px 14px 6px;
+}
+.city-glance-label { overflow: hidden; text-overflow: ellipsis; }
+.city-glance-sub { grid-column: 1 / -1; }
+.atlas-embed-tools {
+  max-width: calc(100% - 72px);
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.atlas-embed-tools::-webkit-scrollbar { display: none; }
+.atlas-embed-more > div {
+  position: fixed;
+  top: 52px;
+  left: 10px;
+  max-width: calc(100vw - 20px);
+}
+.atlas-page.is-embedded.is-phone-chrome .atlas-embed-more > div { top: 60px; left: 8px; max-width: calc(100vw - 16px); }
+.atlas-key-stack { width: auto; }
+.atlas-map-key[open] { width: min(210px, calc(100vw - 20px)); }
+.atlas-map-key:not([open]) { width: auto; }
+.atlas-shell-rail-tabs button { min-height: 36px; }
+.atlas-shortcuts-hint { width: 24px; height: 24px; }
+.atlas-map .maplibregl-ctrl-top-right,
+.atlas-map .maplibregl-ctrl-bottom-right { z-index: 26; }

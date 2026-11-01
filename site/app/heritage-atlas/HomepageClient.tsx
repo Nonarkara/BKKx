@@ -97,7 +97,7 @@ export function HomepageClient({ quarters, initialQuarter }: Props) {
           <span className="register-eyebrow">
             <span lang="th">กรุงเทพมหานคร · Bangkok</span>
           </span>
-          <strong>Bangkok&apos;s heritage, block by block.</strong>
+          <h1 className="atlas-shell-masthead-title">Bangkok&apos;s heritage, block by block.</h1>
         </div>
         <button
           type="button"
