@@ -60,6 +60,15 @@ function Item({
   );
 }
 
+/** The cell shows a plain state; the exact upstream reason stays in title=.
+ *  "ThaiWater warning table returned HTTP 429." read as a raw server log on
+ *  the front page (MSH audit 2026-11-01). Still never a zero: a failed feed
+ *  says it failed. */
+function plainReason(reason?: string): string {
+  if (!reason) return "no feed";
+  return reason.replace(/ returned HTTP \d+\.?$/, " unavailable now");
+}
+
 export function CityGlance() {
   const [g, setG] = useState<Glance>({});
 
@@ -107,7 +116,7 @@ export function CityGlance() {
             ? "polling the forecast…"
             : wx
               ? "Open-Meteo forecast · war room →"
-              : (g.wx.reason ?? "no feed")
+              : plainReason(g.wx.reason)
         }
         title={g.wx?.ok ? `Forecast ${wx?.observedAt ?? ""}. ${wx?.attribution ?? ""}` : (g.wx?.reason ?? "Forecast unavailable")}
       />
@@ -121,7 +130,7 @@ export function CityGlance() {
             ? "polling the gauges…"
             : rain
               ? `${rain.wet}/${rain.stationCount} stations wet${heaviest?.district ? ` · heaviest ${heaviest.district}` : ""} · BMA via ThaiWater →`
-              : (g.rain.reason ?? "no feed")
+              : plainReason(g.rain.reason)
         }
         title={g.rain?.ok ? (rain?.agency ?? "") : (g.rain?.reason ?? "Gauge network unavailable")}
       />
@@ -133,7 +142,7 @@ export function CityGlance() {
         sub={
           wx?.rainNext24hMm != null
             ? `≈${wx.rainNext24hMm.toFixed(1)} mm forecast · model, not gauges →`
-            : (g.wx === undefined ? "polling the forecast…" : (g.wx?.reason ?? "no feed"))
+            : (g.wx === undefined ? "polling the forecast…" : plainReason(g.wx?.reason))
         }
         title="Open-Meteo hourly precipitation probability, next 24 h. When it disagrees with a gauge, the gauge is what happened."
       />
@@ -145,7 +154,7 @@ export function CityGlance() {
         sub={
           wx?.pm25 != null
             ? `${wx.pm25 > 37.5 ? "above the 24 h guideline · " : "modelled · "}CAMS →`
-            : (g.wx === undefined ? "polling…" : (g.wx?.reason ?? "no feed"))
+            : (g.wx === undefined ? "polling…" : plainReason(g.wx?.reason))
         }
         title="Modelled PM2.5 (CAMS), not a roadside sensor. Air4Thai's station network is the ground truth and is not yet wired."
       />
@@ -160,7 +169,7 @@ export function CityGlance() {
               ? (warn.bangkokCount > 0 && warn.bangkok[0]
                 ? `${warn.bangkok[0].message.slice(0, 64)}${warn.bangkok[0].message.length > 64 ? "…" : ""}`
                 : `none in Bangkok · ${warn.nationalCount} nationwide →`)
-              : (g.warn.reason ?? "no feed")
+              : plainReason(g.warn.reason)
         }
         title={g.warn?.ok ? (warn?.attribution ?? "") : (g.warn?.reason ?? "Warning table unavailable")}
         alert={(warn?.bangkokCount ?? 0) > 0}

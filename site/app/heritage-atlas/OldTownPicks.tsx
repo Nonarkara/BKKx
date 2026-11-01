@@ -89,18 +89,14 @@ export function OldTownPicks({ iframeRef, onPick }: Props) {
                     {kind.icon} {th ? kind.th : kind.en}
                     {spot.units ? <> · {spot.units} units</> : null}
                     {spot.period ? <> · {spot.period}</> : null}
-                    {" · "}
-                    <a
-                      href={spot.sourceUrl}
-                      target="_blank"
-                      rel="noreferrer"
-                      onClick={(e) => e.stopPropagation()}
-                    >
-                      {spot.source}
-                    </a>
                   </span>
                 </span>
               </button>
+              {/* Outside the button: a link inside a button is invalid HTML,
+                  and it rendered as a 15 px target spilling into the map. */}
+              <a className="atlas-shell-oldtown-source" href={spot.sourceUrl} target="_blank" rel="noreferrer">
+                {spot.source} ↗
+              </a>
             </li>
           );
         })}
