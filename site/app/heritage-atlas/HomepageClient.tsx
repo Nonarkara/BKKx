@@ -98,7 +98,6 @@ export function HomepageClient({ quarters, initialQuarter }: Props) {
             <span lang="th">กรุงเทพมหานคร · Bangkok</span>
           </span>
           <strong>Bangkok&apos;s heritage, block by block.</strong>
-          <small>{t("front_door_tagline")}</small>
         </div>
         <button
           type="button"

@@ -55,3 +55,7 @@ __pycache__/
 # build by site/scripts/publish-immutable-data.mjs (the pointer,
 # site/app/data/data-urls.json, is committed).
 site/public/data/v/
+
+# Local audit captures and OSM extracts: evidence and inputs, not source.
+msh-audit-*/
+*.osm.pbf

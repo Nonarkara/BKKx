@@ -45,7 +45,6 @@ export function OldTownPicks({ iframeRef, onPick }: Props) {
 
   return (
     <section className="atlas-shell-oldtown" aria-label="Bangkok rowhouse atlas">
-      <p className="register-eyebrow">BKKx · Bangkok rowhouse atlas</p>
       <h2 className="register-section-title atlas-shell-oldtown-title">Bangkok rowhouse atlas</h2>
       <p className="atlas-shell-oldtown-lede">
         {th

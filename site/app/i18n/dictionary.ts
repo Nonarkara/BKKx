@@ -13,7 +13,6 @@ export const DICTIONARY = {
     nav_github: "GitHub",
 
     hero_eyebrow: "Why this exists",
-    front_door_tagline: "The 3D map is the front door. Nine quarters, seven walks, 571 registered monuments — pick a quarter and fly there.",
 
     section_quarters_title: "The quarters",
     section_walks_title: "The walks",
@@ -83,7 +82,6 @@ export const DICTIONARY = {
     nav_github: "GitHub",
 
     hero_eyebrow: "ที่มาของโครงการนี้",
-    front_door_tagline: "แผนที่ 3 มิติคือหน้าบ้าน — เก้าย่าน เจ็ดเส้นทางเดิน โบราณสถาน 571 แห่ง เลือกย่านแล้วบินไปดูได้เลย",
     home_quarters_heading: "เก้าย่าน",
     home_source_label: "แหล่งข้อมูล",
     home_source_github: "ซอร์สโค้ดบน GitHub",

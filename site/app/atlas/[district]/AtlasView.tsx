@@ -1119,10 +1119,11 @@ export function AtlasView({ world, embedded = false, initialView, floodEdition =
         new maplibregl.ScaleControl({ unit: "metric", maxWidth: 120 }),
         "bottom-left",
       );
-      // Phone: MapLibre opens the compact credit line expanded until the
-      // first drag, which on a 390 px screen is a white box over a third of
-      // the map. Fold it once the map settles; every credit stays one tap
-      // away behind the (i) button, exactly as after a drag.
+      // MapLibre opens the compact credit line expanded until the first
+      // drag: on a phone a white box over a third of the map, on desktop a
+      // two-line band across its foot (MSH audit 2026-11-01). Fold it once
+      // the map settles, at every width; every credit stays one tap away
+      // behind the (i) button, exactly as after a drag.
       // Runs on load and on every idle (MapLibre can re-expand it when the
       // style or sources update), but stops for good once the reader taps
       // the (i) button: from then on the credits are theirs to open or close.
@@ -1137,7 +1138,7 @@ export function AtlasView({ world, embedded = false, initialView, floodEdition =
         { capture: true },
       );
       const foldCredits = () => {
-        if (creditsTouched || !phoneChromeMedia().matches) return;
+        if (creditsTouched) return;
         map
           .getContainer()
           .querySelector(".maplibregl-ctrl-attrib.maplibregl-compact-show")
