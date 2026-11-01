@@ -8874,8 +8874,11 @@ body:has(.sh-why) {
 }
 .city-glance-item {
   display: flex;
+  flex-direction: row; /* the base rule is column: wrapping a column put the
+                          source in a second column, clipped (round 3) */
   flex-wrap: wrap;
   align-items: baseline;
+  align-content: center;
   column-gap: 8px;
   row-gap: 1px;
   padding: 5px 14px 6px;
