@@ -1070,7 +1070,7 @@ button {
   place-items: center;
   width: 22px;
   height: 22px;
-  font-size: 9px;
+  font-size: 10px;
   font-weight: 800;
   letter-spacing: 0.04em;
   transform: rotate(-45deg);
@@ -1266,7 +1266,7 @@ button {
   cursor: pointer;
   list-style: none;
   color: inherit;
-  font: 700 9px/1 var(--font-mono);
+  font: 700 11px/1 var(--font-mono);
   letter-spacing: .04em;
   white-space: nowrap;
 }
@@ -1421,7 +1421,7 @@ button {
 .atlas-map-key summary {
   padding: 8px 10px;
   cursor: pointer;
-  font-size: 8px;
+  font-size: 10px;
   font-weight: 800;
   letter-spacing: .1em;
   text-transform: uppercase;
@@ -1441,7 +1441,7 @@ button {
   gap: 8px;
   padding-top: 7px;
   color: rgba(255, 255, 255, .78);
-  font-size: 8px;
+  font-size: 10px;
   line-height: 1.25;
 }
 
