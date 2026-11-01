@@ -742,6 +742,24 @@ export function AtlasView({ world, embedded = false, initialView, floodEdition =
   const [activeStopId, setActiveStopId] = useState<string>(world.stops[0].id);
   const [mapReady, setMapReady] = useState(false);
   const [mapKeyOpen, setMapKeyOpen] = useState(false);
+  // "More layers" and the map key are both overlays on the map: only one is
+  // open at a time, and More closes on Escape or a tap elsewhere (MSH audit
+  // round 3: together they covered ~60% of a phone map; Escape did nothing).
+  const moreLayersRef = useRef<HTMLDetailsElement>(null);
+  useEffect(() => {
+    const close = () => moreLayersRef.current?.removeAttribute("open");
+    const onKey = (event: KeyboardEvent) => { if (event.key === "Escape") close(); };
+    const onDown = (event: PointerEvent) => {
+      const more = moreLayersRef.current;
+      if (more?.open && !more.contains(event.target as Node)) close();
+    };
+    document.addEventListener("keydown", onKey);
+    document.addEventListener("pointerdown", onDown);
+    return () => {
+      document.removeEventListener("keydown", onKey);
+      document.removeEventListener("pointerdown", onDown);
+    };
+  }, []);
   // Phone chrome follows the shell viewport (see phone-chrome.ts), not this
   // frame. A Thai masthead shortens the iframe just enough to match a
   // height query the English frame misses.
@@ -2514,7 +2532,11 @@ export function AtlasView({ world, embedded = false, initialView, floodEdition =
               ◆ Register {FINEARTS_HERITAGE_SITES.length}
             </button>
             </div>
-            <details className="atlas-embed-more">
+            <details
+              className="atlas-embed-more"
+              ref={moreLayersRef}
+              onToggle={(event) => { if (event.currentTarget.open) setMapKeyOpen(false); }}
+            >
               <summary>More layers +</summary>
               <div>
                 <button
@@ -2591,7 +2613,10 @@ export function AtlasView({ world, embedded = false, initialView, floodEdition =
             <details
               className="atlas-map-key"
               open={mapKeyOpen}
-              onToggle={(event) => setMapKeyOpen(event.currentTarget.open)}
+              onToggle={(event) => {
+                setMapKeyOpen(event.currentTarget.open);
+                if (event.currentTarget.open) moreLayersRef.current?.removeAttribute("open");
+              }}
             >
             <summary>Map key</summary>
             <div>

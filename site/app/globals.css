@@ -8927,4 +8927,19 @@ body:has(.sh-why) {
 }
 .atlas-map .maplibregl-ctrl-attrib.maplibregl-compact { background: rgba(17, 18, 15, 0.86); border-radius: 0; }
 .atlas-map .maplibregl-ctrl-attrib-button { filter: invert(1); }
-.maplibregl-marker.bkkx-marker { z-index: 3; }
+.maplibregl-marker.bkkx-marker { z-index: 11; } /* heritage pins are 10 */
+
+/* MSH blind audit, round 3 (2026-11-01).
+   - Round 2 let value and label wrap, but each source line could still be
+     wider than its cell and printed over the next ("BMA via ThaiWater" over
+     "82%" at 1024). Cells clip to their own width; the source wraps inside.
+   - The 1024 map was 59.4% of the screen. The rail's 280 px floor is a
+     tested guard (Thai card titles), so the masthead gives the 7 px.
+   - Quarter numbers sat under heritage pins (z 10): now 11 (rule above).
+   - EN / ไทย were 40 x 44 px boxes around 2-3 glyphs at every width. */
+.city-glance-item { overflow: hidden; }
+.city-glance-sub { min-width: 0; max-width: 100%; }
+.lang-toggle button { min-height: 32px; }
+@media (min-width: 721px) and (pointer: fine) {
+  .atlas-shell-masthead .register-wordmark { min-height: 36px; }
+}
