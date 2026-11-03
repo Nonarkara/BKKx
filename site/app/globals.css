@@ -8943,8 +8943,9 @@ body:has(.sh-why) {
   overflow-wrap: anywhere;
 }
 @media (max-width: 720px) {
-  .atlas-shell-index-toggle { height: 32px; border: 0; }
-  .atlas-shell-nav .lang-toggle button { min-height: 32px; min-width: 36px; }
+  /* Phone touch targets: ≥44×44px per MSH B13 */
+  .atlas-shell-index-toggle { min-height: 44px; min-width: 44px; border: 0; padding: 0 10px; }
+  .atlas-shell-nav .lang-toggle button { min-height: 44px; min-width: 44px; }
 }
 .atlas-map .maplibregl-ctrl-attrib.maplibregl-compact { background: rgba(17, 18, 15, 0.86); border-radius: 0; }
 .atlas-map .maplibregl-ctrl-attrib-button { filter: invert(1); }
@@ -8960,7 +8961,7 @@ body:has(.sh-why) {
    - EN / ไทย were 40 x 44 px boxes around 2-3 glyphs at every width. */
 .city-glance-item { overflow: hidden; }
 .city-glance-sub { min-width: 0; max-width: 100%; }
-.lang-toggle button { min-height: 32px; }
+.lang-toggle button { min-height: 44px; min-width: 44px; }
 @media (min-width: 721px) and (pointer: fine) {
   .atlas-shell-masthead .register-wordmark { min-height: 36px; }
 }
