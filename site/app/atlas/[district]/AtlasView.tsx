@@ -275,7 +275,7 @@ const HERITAGE_LANDMARK_COLOR: maplibregl.ExpressionSpecification = [
   "golden_mount", "#f0c24a",
   "prasat", "#f6c84f",
   "mondop", "#f6c84f",
-  "throne", "#dca52d",
+  "throne", "#eee1bd",
   "ubosot", "#f7bb2f",
   "viharn", "#dca52d",
   "heritage", "#efb739",
