@@ -87,13 +87,26 @@ jobs:
       # Only this step moves; the geometry suites above stay on the runner's
       # own Python, which is the version that caught the sum() difference in
       # the first place, and math.fsum now makes the output agree on both.
+      #
+      # amulet-leveldb is pinned to 1.0.7 on the install line. amulet-core
+      # asks for amulet-leveldb~=1.0, and 1.1.0 (uploaded 2026-11-03) satisfies
+      # that while shipping wheels for CPython 3.14 only. On this 3.11, pip
+      # takes the sdist. That sdist now requires CMake 4.1 and a C++20
+      # compiler; the runner has CMake 3.31 and the probe raises "Could not
+      # find a C++ 20 compiler". 1.0.7 is the release the last green run
+      # compiled: Cython, -std=c++17. No 1.0.x release publishes a Linux
+      # wheel, so this is still a source build, and it is one the runner's
+      # compiler can finish. Python 3.14 would take the 1.1.0 manylinux wheel
+      # and nothing else — amulet-core 1.9.45 requires numpy~=1.17, which has
+      # no 3.14 build — so the pin stays on the package. LevelDB is the
+      # Bedrock transitive, same as RocksDB; these tests never open it.
       - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
         with:
           python-version: "3.11"
       - name: world pipeline writes
         working-directory: .
         run: |
-          python3 -m pip install --quiet amulet-core==1.9.45 shapely
+          python3 -m pip install --quiet amulet-core==1.9.45 "amulet-leveldb==1.0.7" shapely
           python3 -c "import sys, amulet, shapely; print('python', sys.version.split()[0], '· amulet ok')"
           python3 scripts/test-apply-to-fixture-world.py
           python3 scripts/test-apply-rattanakosin-to-world.py
