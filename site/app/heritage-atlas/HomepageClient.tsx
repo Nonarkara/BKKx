@@ -97,7 +97,6 @@ export function HomepageClient({ quarters, initialQuarter }: Props) {
           <span className="register-eyebrow">
             <span lang="th">กรุงเทพมหานคร · Bangkok</span>
           </span>
-          <h1 className="atlas-shell-masthead-title">Bangkok&apos;s heritage, block by block.</h1>
         </div>
         <button
           type="button"
@@ -139,6 +138,13 @@ export function HomepageClient({ quarters, initialQuarter }: Props) {
           <div className="city-glance-frame">
             <CityGlance />
           </div>
+          {/* Title sits on the map's exit (Glance Path): the map is the heaviest
+             visual entry on the right; the headline lives beside it in the
+             left column, not above it in a masthead band. */}
+          <header className="atlas-shell-index-head">
+            <p className="register-eyebrow">Heritage · Bangkok</p>
+            <h1 className="atlas-shell-index-title">Bangkok&apos;s heritage, block by block.</h1>
+          </header>
           <aside className="atlas-shell-quarters" aria-label="Heritage quarters">
           <div className="atlas-shell-rail-tabs" role="tablist" aria-label="Explore Bangkok heritage">
             <button

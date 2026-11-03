@@ -3622,13 +3622,16 @@ button {
   overflow: hidden;
 }
 
+/* atlas-shell-masthead — thin chrome, no title. The title lives on the map's
+   exit (below the stage), not above the map: Glance Path law (Heaviest visual
+   captures first glance; headline sits on its exit). Named grid: column. */
 .atlas-shell-masthead {
   display: flex;
   justify-content: space-between;
   align-items: center;
   flex-wrap: wrap;
-  gap: 6px 16px;
-  padding: 6px 16px;
+  gap: 6px 12px;
+  padding: 4px 12px;
   border-bottom: 1px solid var(--ink);
   background: var(--paper-strong);
 }
@@ -3776,6 +3779,31 @@ button {
   display: contents;
 }
 
+/* atlas-shell-index-head — title on the map's exit (Glance Path). The map
+   is the heaviest visual on the right; the headline lives beside it here,
+   not above it in a masthead band. Named grid: column. */
+.atlas-shell-index-head {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-bottom: 10px;
+}
+.atlas-shell-index-head .register-eyebrow {
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  color: rgba(17, 18, 15, 0.55);
+  margin: 0;
+}
+.atlas-shell-index-title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  line-height: 1.15;
+  color: var(--ink);
+}
+
 .atlas-shell-stage .city-glance {
   grid-column: 1 / -1;
   grid-row: 1;
@@ -3866,18 +3894,18 @@ button {
 .atlas-shell-quarter-chips li:last-child { border-bottom: 0; }
 .atlas-shell-quarter-chips button {
   display: grid;
-  grid-template-columns: 64px minmax(0, 1fr);
+  grid-template-columns: 48px minmax(0, 1fr);
   align-items: start;
-  column-gap: 12px;
+  column-gap: 10px;
   width: 100%;
   text-align: left;
   background: transparent;
   border: 0;
-  padding: 12px 0;
+  padding: 10px 0;
   font-family: var(--font-body);
   color: var(--ink);
   cursor: pointer;
-  min-height: 96px;
+  min-height: 72px;
   position: relative;
   transition: background 80ms linear;
 }
@@ -3886,9 +3914,9 @@ button {
      pseudo-element so the layout doesn't shift on selection */
   content: "";
   position: absolute;
-  left: -20px;
-  top: 12px;
-  bottom: 12px;
+  left: -14px;
+  top: 10px;
+  bottom: 10px;
   width: 3px;
   background: transparent;
   transition: background 80ms linear;
@@ -3900,8 +3928,8 @@ button {
 
 .atlas-shell-quarter-thumb {
   display: block;
-  width: 64px;
-  height: 64px;
+  width: 48px;
+  height: 48px;
   background-color: rgba(17, 18, 15, 0.08);
   background-size: cover;
   background-position: center;
@@ -8862,16 +8890,6 @@ body:has(.sh-why) {
    - The closed map key was a 208 px box around "Map key".
    - Rail tabs: a dense pair, 36 px, not 44. The "?" hint was 18 px.
    - Map controls sit above quarter markers and chapter labels. */
-.atlas-shell-masthead-title {
-  margin: 0;
-  font-family: var(--font-display);
-  font-size: 18px;
-  font-weight: 700;
-  line-height: 1.15;
-  letter-spacing: -0.01em;
-  color: var(--ink);
-  overflow-wrap: anywhere;
-}
 .city-glance-item {
   display: flex;
   flex-direction: row; /* the base rule is column: wrapping a column put the
