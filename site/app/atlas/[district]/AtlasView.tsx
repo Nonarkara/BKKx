@@ -267,6 +267,13 @@ const EVIDENCE_HIDDEN = EVIDENCE_TALLY.hidden.detail + EVIDENCE_TALLY.hidden.lan
 // footprint stands, outlined only where one does. Counted the same way.
 const EVIDENCE_CANDIDATES = EVIDENCE_TALLY.candidates;
 
+// scripts/mark-slender.py flags named chedis, prangs, mondops and throne
+// pavilions far narrower than their height. As boxes they stand as 20-40 m
+// columns nobody has seen in the Grand Palace; they draw as a low pad, and
+// the Thai form or hero model, where one exists, draws the real taper.
+const SLENDER: maplibregl.ExpressionSpecification = ["==", ["get", "slender"], true];
+const SLENDER_PAD_M = 2;
+
 const HERITAGE_LANDMARK_COLOR: maplibregl.ExpressionSpecification = [
   "match",
   ["get", "kind"],
@@ -1334,9 +1341,11 @@ export function AtlasView({ world, embedded = false, initialView, floodEdition =
               filter: HERITAGE_DETAIL_FILTER,
               paint: {
                 "fill-extrusion-color": HERITAGE_DETAIL_COLOR,
-                "fill-extrusion-height": HERITAGE_DETAIL_HEIGHT,
+                "fill-extrusion-height": ["case", SLENDER, SLENDER_PAD_M, HERITAGE_DETAIL_HEIGHT],
                 "fill-extrusion-base": [
                   "case",
+                  SLENDER,
+                  0,
                   [
                     ">=",
                     ["coalesce", ["get", "render_min_height"], ["get", "min_height"], ["get", "base_height"], 0],
@@ -1359,8 +1368,8 @@ export function AtlasView({ world, embedded = false, initialView, floodEdition =
               filter: ["!=", ["get", "hide_3d"], true],
               paint: {
                 "fill-extrusion-color": HERITAGE_LANDMARK_COLOR,
-                "fill-extrusion-height": ["coalesce", ["get", "height"], 12],
-                "fill-extrusion-base": ["coalesce", ["get", "base_height"], 0],
+                "fill-extrusion-height": ["case", SLENDER, SLENDER_PAD_M, ["coalesce", ["get", "height"], 12]],
+                "fill-extrusion-base": ["case", SLENDER, 0, ["coalesce", ["get", "base_height"], 0]],
                 "fill-extrusion-opacity": 1,
                 "fill-extrusion-vertical-gradient": true,
               },

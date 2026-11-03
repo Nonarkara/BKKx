@@ -17,8 +17,8 @@
     ]
   },
   "/data/bkk-heritage-detail.geojson": {
-    "bytes": 3803678,
-    "sha256": "60cf55f1acdfeb62ebea7de7bcfffd0beab30c967a9a934ca8fd9db7cacc62fc",
+    "bytes": 3804173,
+    "sha256": "88a3ce2bfbdd4ce8355279c1e9eb1add733479b5371e51f630a023307ba4fd5c",
     "features": 9275,
     "kinds": [
       "Polygon"
@@ -41,8 +41,8 @@
     ]
   },
   "/data/bkk-landmarks.geojson": {
-    "bytes": 43609,
-    "sha256": "a9af463d96687f7f9483ce100bb896b38c8ebdad1735e9e94d1d7f122857b654",
+    "bytes": 44119,
+    "sha256": "073c1f246f1bf5854157c4de64e6551c7f7ca1449bdb4f9218bce9df8448d4fa",
     "features": 73,
     "kinds": [
       "Polygon"
