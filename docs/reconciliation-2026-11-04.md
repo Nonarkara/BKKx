@@ -2,6 +2,12 @@
 updated: 2026-11-04
 drafted_by: codex/gpt-5
 reviewed: false
+amended_by: mcode
+amended_note: >
+  The BKKx batch below was taken up, landed and deployed. The Atlas
+  landmark-popup repair was not: it is carried over here with a diagnosis
+  instead of a guess, because the named defect did not reproduce at the
+  named coordinates on the current live build.
 ---
 
 # Multi-agent reconciliation and proposed repair batch
@@ -10,6 +16,15 @@ Scope: BKKx main df6eb1e and bkk-3d-atlas main88b5c73. Audit and local
 preparation only. No commit, push, PR mutation or deployment in this pass.
 The director approval checkpoint is required by planning-discipline before
 integrating/releasing the batch below. This is not a shipability clearance.
+
+> **Amended 4 November 2026.** The approval was given and the BKKx batch
+> below was integrated and released: the CI pin, the water relay fix, the
+> glance strip's explicit error state and its elapsed-time deadline, and the
+> new component test, all on main, all green in CI, all deployed. PR25, PR4
+> and PR12 are closed with their dispositions written on them; PR24 is held
+> with its real root cause. The Atlas popup repair is the one item carried
+> forward, and it now carries a diagnosis rather than a description — see
+> "The Atlas popup repair, carried over with a diagnosis" at the end.
 
 ## Reconciliation
 
@@ -129,3 +144,93 @@ This does not certify enlarged-text behaviour or all routes.
 No complete reconstruction/photo commission, hydraulic forecast validation,
 LONGDO/FIRMS credential provisioning or FloodDash server repair was performed.
 Those are not closed by typography, a clean tree or HTTP200.
+
+## The Atlas popup repair, carried over with a diagnosis
+
+The one item from the batch above that was not carried out. It is a different
+repository, it needs a design decision rather than a patch, and the named
+defect did not reproduce at the named coordinates — so a guess would have been
+worse than an honest handover.
+
+### What was measured
+
+Driving the live Atlas with a headless browser at 1440×900, on the build it
+is currently serving (`bkk-atlas-20261104-1793780426-272dc15`):
+
+- Navigated with the Atlas's own share-link parameter, `?at=100.4913,13.7500,16`.
+  **The parameter takes lng, lat AND zoom** — `parseAtQuery()` (app.js:1748)
+  matches `^(-?\d+(?:\.\d+)?),(-?\d+(?:\.\d+)?),(\d+(?:\.\d+)?)$` and returns
+  null for a two-argument form, which is then silently ignored. A
+  reproduction that omits the zoom never moves the map and appears to prove
+  nothing.
+- Clicked the map centre. The click landed at **100.49265° E, 13.74875° N** —
+  the Grand Palace — and the coordinates are reported in the inspector, so the
+  click was where it was meant to be.
+- Counted what opened: **zero** `.maplibregl-popup` elements; one inspector
+  card in the right panel (225px wide, 1166px tall — it scrolls); one place
+  briefing inside that panel; the bottom "BKK provincial live" strip.
+
+**No three overlapping cards.** The defect did not reproduce at the Grand
+Palace on the current build.
+
+### The mechanism, located
+
+The arbitration already exists in the Atlas and is the right one:
+
+- `pointLayersOwningClick(map, point)` (app.js:7562) returns the overlay
+  features under the cursor, and the generic inspector already defers to
+  them: `if (pointLayersOwningClick(map, event.point).length) return;`
+  (app.js:7591). Every operational overlay — CCTV, live cams, civic POIs,
+  flood roads, canals, water transit — is in that list.
+- The **architectural** layers are not. `INSPECT_BUILDING_LAYERS`
+  (app.js:7295) is `[LANDMARKS_LAYER, RATTANAKOSIN_BUILDINGS_LAYER,
+  BKKX_BUILDINGS_LAYER]` — those are the things the inspector *reads*, not
+  the things that *own* the click. The heritage-detail compound stand-in
+  (`bkk-heritage-detail.geojson`, 9,275 features), the monument drawings
+  (`bkk-landmarks.geojson`, 115 features, `kind: "monument"`) and the 3D
+  heritage forms (`FORMS_LAYER`) are therefore three layers that can each
+  answer the same click, and only the inspector is in the ownership
+  protocol.
+- `public/heritage-forms-layer.js:508` registers a **bare** `map.on('click')`.
+  It opens a MapLibre popup whenever a form is near the cursor. It does not
+  consult `pointLayersOwningClick`, it does not `stopPropagation`, and it
+  does not dispose of a popup it opened on a previous click.
+
+### The shape of the fix
+
+1. Put the three architectural layers into the ownership decision, with
+   deterministic priority: the specific monument over the compound stand-in
+   over the generic form. "Specific" means the feature whose own footprint
+   the cursor is inside, not the nearest one by distance.
+2. Have the forms layer consult that decision before opening its popup, and
+   have the inspector consult it before filling its card.
+3. Give every architectural popup a normal close/dispose lifecycle, so a
+   second click does not leave the first card on the map.
+4. Preserve the full qualifications, the layer toggles and the normal
+   keyboard and close behaviour. This is an ownership repair; it is not a
+   licence to compress the source text.
+
+### The test that must exist, before the fix
+
+- Handler-order permutations: the forms handler registered before and after
+  the inspector must give the same answer.
+- Repeated clicks on the same point: one card, not two.
+- Close and remove lifecycle: closing a card removes it; a later click opens
+  exactly one.
+- Map isolation: a click on a non-architectural feature opens no
+  architectural card.
+- The old three-owner behaviour must fail these cases.
+
+### What is not settled
+
+Whether the defect needs a landmark rather than the palace. The
+reconciliation's third card was a "monument drawing", and the heritage forms
+layer only activates at zoom ≥ 15 (`FORMS_MIN_ZOOM`). A sweep of the landmark
+layer was started and did not complete — the page stopped answering
+mid-sweep — so the landmarks were not checked one by one. The first thing to
+try is a landmark with `kind: "monument"` at zoom ≥ 16.
+
+If it does not reproduce anywhere, the honest disposition is to close the
+finding with the measurement rather than to keep re-reporting it: a defect
+nobody can reproduce is not evidence of a defect, and re-reporting it as one
+spends the next agent's budget.
