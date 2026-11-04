@@ -91,3 +91,39 @@ export async function floodRoadsResponse():Promise<Response>{
     return Response.json({error:`Flooded roads unavailable (${(e as Error)?.message??'unknown'}); absence does not mean dry streets.`},{status:503,headers:{'Cache-Control':'no-store'}});
   }
 }
+
+// Water endpoints proxied from atlas.nonarkara.org (the operational city twin).
+// BKKx is the heritage/cultural site; water data lives on atlas. Proxying
+// same-origin keeps visitor IPs off third hosts and gives BKKx readers
+// real-time water data without cross-origin fetches.
+// Each returns the atlas GeoJSON/JSON payload unchanged, stamped with the
+// BKKx fetch time so readers know when it was last checked.
+const WATER_ENDPOINTS:Record<string,string>={
+  canalGates:'/api/water/bkk/canal-gates',
+  roadsFlooded:'/api/water/bkk/roads-flooded',
+  dams:'/api/water/bkk/dams',
+  emergencyPoints:'/api/water/bkk/emergency-points',
+  alerts:'/api/water/bkk/alerts',
+  newsWatch:'/api/water/bkk/news-watch',
+  sourcesHealth:'/api/water/bkk/sources-health',
+  roadsXref:'/api/water/bkk/roads-xref',
+};
+const ATLAS_BASE='https://atlas.nonarkara.org';
+async function proxyWater(path:string):Promise<Response>{
+  try{
+    const r=await fetch(`${ATLAS_BASE}${path}`,{signal:AbortSignal.timeout(15000),headers:{accept:'application/json','user-agent':'BKKx/1.0 (+https://bkk.nonarkara.org)'}});
+    if(!r.ok)throw Error(`atlas HTTP ${r.status}`);
+    const body=await r.json() as Record<string,unknown>;
+    return Response.json({...body,fetchedAt:new Date().toISOString(),source:`atlas.nonarkara.org${path}`},{headers:{'Cache-Control':'public, max-age=60'}});
+  }catch(e){
+    return Response.json({ok:false,fetchedAt:new Date().toISOString(),source:`atlas.nonarkara.org${path}`,reason:`Water data unavailable (${(e as Error)?.message??'unknown'}).`},{status:503,headers:{'Cache-Control':'no-store'}});
+  }
+}
+export async function waterCanalGatesResponse():Promise<Response>{return proxyWater(WATER_ENDPOINTS.canalGates);}
+export async function waterRoadsFloodedResponse():Promise<Response>{return proxyWater(WATER_ENDPOINTS.roadsFlooded);}
+export async function waterDamsResponse():Promise<Response>{return proxyWater(WATER_ENDPOINTS.dams);}
+export async function waterEmergencyPointsResponse():Promise<Response>{return proxyWater(WATER_ENDPOINTS.emergencyPoints);}
+export async function waterAlertsResponse():Promise<Response>{return proxyWater(WATER_ENDPOINTS.alerts);}
+export async function waterNewsWatchResponse():Promise<Response>{return proxyWater(WATER_ENDPOINTS.newsWatch);}
+export async function waterSourcesHealthResponse():Promise<Response>{return proxyWater(WATER_ENDPOINTS.sourcesHealth);}
+export async function waterRoadsXrefResponse():Promise<Response>{return proxyWater(WATER_ENDPOINTS.roadsXref);}

@@ -4,7 +4,7 @@ import handler from "vinext/server/app-router-entry";
 import { pageviewStats, recordPageview } from "./pageviews";
 import { readPageviewRequest } from "./pageview-request";
 import { claimDailyCapacity, parseCap } from "./pageview-caps";
-import { floodBulletinResponse, floodEvidenceResponse, floodRoadsResponse } from "./flood";
+import { floodBulletinResponse, floodEvidenceResponse, floodRoadsResponse, waterCanalGatesResponse, waterDamsResponse, waterEmergencyPointsResponse, waterAlertsResponse, waterNewsWatchResponse, waterRoadsXrefResponse, waterRoadsFloodedResponse, waterSourcesHealthResponse } from "./flood";
 import {
   handleLiveRain,
   handleLiveCctv,
@@ -66,6 +66,19 @@ const worker = {
     if (url.pathname === "/api/flood/evidence" && request.method === "GET") return floodEvidenceResponse();
     if (url.pathname === "/api/flood/bulletin" && request.method === "GET") return floodBulletinResponse();
     if (url.pathname === "/api/flood/roads" && request.method === "GET") return floodRoadsResponse();
+
+    // Water endpoints proxied from atlas.nonarkara.org (operational city twin).
+    // BKKx is the heritage/cultural site; water data lives on atlas. Proxying
+    // same-origin keeps visitor IPs off third hosts and gives BKKx readers
+    // real-time water data without cross-origin fetches.
+    if (url.pathname === "/api/water/bkk/canal-gates" && request.method === "GET") return waterCanalGatesResponse();
+    if (url.pathname === "/api/water/bkk/roads-flooded" && request.method === "GET") return waterRoadsFloodedResponse();
+    if (url.pathname === "/api/water/bkk/dams" && request.method === "GET") return waterDamsResponse();
+    if (url.pathname === "/api/water/bkk/emergency-points" && request.method === "GET") return waterEmergencyPointsResponse();
+    if (url.pathname === "/api/water/bkk/alerts" && request.method === "GET") return waterAlertsResponse();
+    if (url.pathname === "/api/water/bkk/news-watch" && request.method === "GET") return waterNewsWatchResponse();
+    if (url.pathname === "/api/water/bkk/sources-health" && request.method === "GET") return waterSourcesHealthResponse();
+    if (url.pathname === "/api/water/bkk/roads-xref" && request.method === "GET") return waterRoadsXrefResponse();
 
     if (url.pathname === "/api/pageview" && request.method === "POST") {
       const body = await readPageviewRequest(request);
