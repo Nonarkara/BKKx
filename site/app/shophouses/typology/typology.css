@@ -39,7 +39,7 @@
 .typo-top h1 {
   margin: 0;
   flex-shrink: 0;
-  font-size: 16px;
+  font-size: var(--text-body);
   font-weight: 400;
   letter-spacing: 0;
   color: #d2a14e;
@@ -57,7 +57,7 @@
 .typo-top a {
   color: #f4ebd5;
   text-decoration: none;
-  font-size: 14px;
+  font-size: var(--text-body);
 }
 
 .typo-top nav a {
@@ -171,7 +171,7 @@
 .typo-map .leaflet-control-attribution {
   background: rgba(244, 235, 213, 0.92);
   color: #15140f;
-  font-size: 11px;
+  font-size: var(--text-micro);
   max-width: 46%;
 }
 
@@ -210,14 +210,14 @@
 
 .typo-social h2 {
   margin: 0 0 6px;
-  font-size: 14px;
+  font-size: var(--text-body);
   font-weight: 700;
 }
 
 .typo-social p,
 .typo-social li {
   margin: 0 0 6px;
-  font-size: 13px;
+  font-size: var(--text-body);
   line-height: 1.4;
 }
 
@@ -235,7 +235,7 @@
 
 .typo-social-credit {
   margin: 0;
-  font-size: 13px;
+  font-size: var(--text-body);
   line-height: 1.4;
 }
 
@@ -244,27 +244,27 @@
   padding: 6px 8px;
   border: 1px solid #15140f;
   background: #efe4c4;
-  font-size: 11px;
+  font-size: var(--text-micro);
   line-height: 1.35;
 }
 
 .typo-funfact-kicker {
   margin: 0 0 4px;
-  font-size: 11px;
+  font-size: var(--text-micro);
   font-weight: 700;
   color: #254f82;
 }
 
 .typo-funfact p {
   margin: 0;
-  font-size: 11px;
+  font-size: var(--text-micro);
   line-height: 1.35;
 }
 
 .typo-intro p,
 .typo-intro li {
   margin: 0 0 6px;
-  font-size: 13px;
+  font-size: var(--text-body);
   line-height: 1.4;
 }
 
@@ -319,7 +319,7 @@
 
 .typo-kicker {
   color: #a83332;
-  font-size: 12px;
+  font-size: var(--text-body);
   font-style: normal;
 }
 
@@ -329,7 +329,7 @@
 }
 
 .typo-place {
-  font-size: 13px;
+  font-size: var(--text-body);
   color: #2c2820;
 }
 
@@ -388,7 +388,7 @@
 .typo-embed figcaption,
 .typo-record p,
 .typo-record li {
-  font-size: 12px;
+  font-size: var(--text-body);
   line-height: 1.4;
 }
 
@@ -408,19 +408,19 @@
 
 .typo-record h2 {
   margin: 0 0 6px;
-  font-size: 14px;
+  font-size: var(--text-body);
 }
 
 .typo-detail h2 {
   margin: 0 0 6px;
-  font-size: 18px;
+  font-size: var(--text-body);
   line-height: 1.3;
 }
 
 .typo-detail p,
 .typo-detail li {
   margin: 0 0 6px;
-  font-size: 14px;
+  font-size: var(--text-body);
   line-height: 1.45;
 }
 
@@ -434,7 +434,7 @@
 }
 
 .typo-sources summary {
-  font-size: 14px;
+  font-size: var(--text-body);
 }
 
 .typo-sources ul {
@@ -468,13 +468,13 @@
      clip its own content. */
   overflow-wrap: anywhere;
   line-height: 1.35;
-  font-size: 13px;
+  font-size: var(--text-body);
 }
 
 .typo-bottom a {
   flex: 0 0 auto;
   color: #254f82;
-  font-size: 13px;
+  font-size: var(--text-body);
   white-space: nowrap;
 }
 
