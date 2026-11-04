@@ -45,16 +45,23 @@ reserved for marketing chapter openers only (KINETIC-GRIDS §2.8).
 
 ---
 
-## Type scale (MSH §2.7, Glance Path §3)
+## Type scale (§11.7 hard rule — three sizes per page)
 
-≤8 font sizes. Display vs body is a real step (~1.5–2×), never 16→20px.
+Three tokens, defined in `globals.css :root`. Hierarchy inside a tier comes
+from weight, family and case — never from a fourth size.
 
 | Token | Size | Use |
 |---|---|---|
-| `--size-up` | display | masthead wordmark, section titles |
-| body | 13–16px | prose, labels, chips |
-| `--size-down` | 11–12px | meta, eyebrows, source lines |
-| mono tabular | 10–20px | CityGlance numbers |
+| `--text-display` | clamp(32px, 6vw, 88px) | page title, section display headings, hero numerals |
+| `--text-body` | 14px | prose, labels, chips, buttons, nav, readouts, mono numerics |
+| `--text-micro` | 11px | eyebrows, meta, source lines, uppercase ticks |
+
+Named exemptions (each is not text hierarchy): brand wordmarks
+(`.wordmark`, `.register-wordmark`, `.footer-wordmark`, `.sh-wordmark` —
+logotypes with their own internal ratio), SVG map-label `fontSize`
+attributes (data-viz legibility), `@media print` and `.sh-print-*` paper
+styles (print medium), and the `.wr-tally-unit` suffix inside a composite
+numeral.
 
 ---
 
