@@ -19,6 +19,13 @@ import type { RainPayload, WeatherPayload, ThaiWarningsPayload } from "../../wor
 
 type Envelope<T> = { ok: boolean; fetchedAt: string; source: string; data?: T; reason?: string };
 
+/** How long a feed may take to answer before the cell admits it is unavailable.
+ *  Without this a request that never settles leaves the strip saying
+ *  "polling…" for the life of the page: the unmount signal only fires when
+ *  the reader leaves, so a hung upstream was indistinguishable from a slow
+ *  one. The same deadline the flood rail uses. */
+export const FEED_TIMEOUT_MS = 12_000;
+
 type Glance = {
   wx?: Envelope<WeatherPayload>;
   rain?: Envelope<RainPayload>;
@@ -69,18 +76,27 @@ function plainReason(reason?: string): string {
   return reason.replace(/ returned HTTP \d+\.?$/, " unavailable now");
 }
 
-export function CityGlance() {
+export function CityGlance({ timeoutMs = FEED_TIMEOUT_MS }: { timeoutMs?: number } = {}) {
   const [g, setG] = useState<Glance>({});
 
   useEffect(() => {
     let live = true;
+    const controller = new AbortController();
+    // Two reasons to stop: the reader left, or the feed took too long. The
+    // second one is what stops "polling…" from being the answer forever.
+    const deadline = AbortSignal.any([controller.signal, AbortSignal.timeout(timeoutMs)]);
     (async () => {
-      const get = async <T,>(path: string): Promise<Envelope<T> | undefined> => {
+      const get = async <T,>(path: string): Promise<Envelope<T>> => {
         try {
-          const res = await fetch(path, { headers: { accept: "application/json" } });
-          return (await res.json()) as Envelope<T>;
+          const res = await fetch(path, { headers: { accept: "application/json" }, signal: deadline });
+          if (!res.ok) throw new Error("Feed request failed");
+          const payload = await res.json();
+          if (!payload || typeof payload !== "object" || !("ok" in payload) || typeof payload.ok !== "boolean") throw new Error("Feed envelope unreadable");
+          return payload as Envelope<T>;
         } catch {
-          return undefined;
+          // Undefined is the initial loading state. A settled failed request
+          // must not keep saying "polling" or invent an empty/clear payload.
+          return { ok: false, fetchedAt: new Date().toISOString(), source: path, reason: "Feed unavailable" };
         }
       };
       const [wx, rain, warn] = await Promise.all([
@@ -92,6 +108,7 @@ export function CityGlance() {
     })();
     return () => {
       live = false;
+      controller.abort();
     };
   }, []);
 

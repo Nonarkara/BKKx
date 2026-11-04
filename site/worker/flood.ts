@@ -96,8 +96,9 @@ export async function floodRoadsResponse():Promise<Response>{
 // BKKx is the heritage/cultural site; water data lives on atlas. Proxying
 // same-origin keeps visitor IPs off third hosts and gives BKKx readers
 // real-time water data without cross-origin fetches.
-// Each returns the atlas GeoJSON/JSON payload unchanged, stamped with the
-// BKKx fetch time so readers know when it was last checked.
+// Preserve upstream timestamps and source attribution, including absent or
+// unknown ages. A successful relay is not a new observation. Relay metadata
+// belongs in separate headers, never over the source payload's fields.
 const WATER_ENDPOINTS:Record<string,string>={
   canalGates:'/api/water/bkk/canal-gates',
   roadsFlooded:'/api/water/bkk/roads-flooded',
@@ -113,8 +114,10 @@ async function proxyWater(path:string):Promise<Response>{
   try{
     const r=await fetch(`${ATLAS_BASE}${path}`,{signal:AbortSignal.timeout(15000),headers:{accept:'application/json','user-agent':'BKKx/1.0 (+https://bkk.nonarkara.org)'}});
     if(!r.ok)throw Error(`atlas HTTP ${r.status}`);
-    const body=await r.json() as Record<string,unknown>;
-    return Response.json({...body,fetchedAt:new Date().toISOString(),source:`atlas.nonarkara.org${path}`},{headers:{'Cache-Control':'public, max-age=60'}});
+    const body:unknown=await r.json();
+    if(!body||typeof body!=='object'||Array.isArray(body))throw Error('atlas JSON is not an object');
+    return Response.json(body,{headers:{'Cache-Control':'public, max-age=60',
+      'x-bkkx-relayed-at':new Date().toISOString(),'x-bkkx-upstream':`${ATLAS_BASE}${path}`}});
   }catch(e){
     return Response.json({ok:false,fetchedAt:new Date().toISOString(),source:`atlas.nonarkara.org${path}`,reason:`Water data unavailable (${(e as Error)?.message??'unknown'}).`},{status:503,headers:{'Cache-Control':'no-store'}});
   }

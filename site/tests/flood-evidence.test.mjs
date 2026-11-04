@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import {normalizeTraffic,evidenceIsFresh} from '../app/flood/evidence.ts';
 import {parseRain,parseBulletin,observationTime,readingCurrent,nearbyGauges} from '../app/flood/context-data.ts';
 import {normaliseThaiwaterRain} from '../worker/live.ts';
+import {waterCanalGatesResponse,waterRoadsFloodedResponse,waterDamsResponse,waterEmergencyPointsResponse,waterAlertsResponse,waterNewsWatchResponse,waterSourcesHealthResponse,waterRoadsXrefResponse} from '../worker/flood.ts';
 const now=Date.parse('2026-09-27T12:00:00Z');
 const report={id:'1',category:'flood',lat:13.75,lng:100.5,start:'2026-09-27T11:00:00Z',title_th:'น้ำท่วม ถนนทดสอบ รายงานโดย 0812345678',desc_th:'private name',depth_cm:null};
 test('reports stay located evidence, not passability or inferred depth',()=>{const j=normalizeTraffic({fetched_at:new Date(now).toISOString(),events:[report,report]},now);assert.equal(j.reports.length,1);assert.equal(j.reports[0].depthCm,null);assert.ok(!JSON.stringify(j).includes('0812345678'));assert.ok(!JSON.stringify(j).includes('private name'));assert.equal(j.reports[0].passable,undefined);});
@@ -135,4 +136,62 @@ test('flooded roads: shape-checked, outside-Bangkok and malformed stretches drop
   assert.equal(j.sources.traffy.count, 900);
   for (const bad of [null, {}, { tool: 'other' }, { ...raw, fetchedAt: 'yesterday' }, { ...raw, roads: {} }]) assert.throws(() => normalizeRoads(bad));
   assert.equal(roadsAreFresh(raw.fetchedAt, now), true); assert.equal(roadsAreFresh(raw.fetchedAt, now + 21 * 60000), false); assert.equal(roadsAreFresh(null, now), false);
+});
+
+test('all eight water relays preserve upstream age and source instead of refreshing stale copies',async()=>{
+  const routes=[
+    [waterCanalGatesResponse,'canal-gates'],[waterRoadsFloodedResponse,'roads-flooded'],
+    [waterDamsResponse,'dams'],[waterEmergencyPointsResponse,'emergency-points'],
+    [waterAlertsResponse,'alerts'],[waterNewsWatchResponse,'news-watch'],
+    [waterSourcesHealthResponse,'sources-health'],[waterRoadsXrefResponse,'roads-xref'],
+  ];
+  const upstream={ok:true,fetchedAt:'2020-01-01T00:00:00Z',fetched_at:'2020-01-01T00:00:00Z',source:'BMA original record',stale:true,data:{observedAt:null,value:0}};
+  const original=globalThis.fetch;
+  try{
+    for(const [handler,path]of routes){
+      globalThis.fetch=async(url)=>{
+        assert.equal(url,`https://atlas.nonarkara.org/api/water/bkk/${path}`);
+        return Response.json(upstream);
+      };
+      const r=await handler();
+      assert.equal(r.status,200);
+      assert.deepEqual(await r.json(),upstream);
+      assert.equal(r.headers.get('Cache-Control'),'public, max-age=60');
+      assert.ok(Number.isFinite(Date.parse(r.headers.get('x-bkkx-relayed-at'))));
+      assert.equal(r.headers.get('x-bkkx-upstream'),`https://atlas.nonarkara.org/api/water/bkk/${path}`);
+    }
+  }finally{globalThis.fetch=original;}
+});
+
+test('water relay cannot turn missing or invalid upstream freshness into a current reading',async()=>{
+  const original=globalThis.fetch;
+  try{
+    for(const upstream of [{ok:true,data:[]},{ok:true,fetchedAt:null,source:null},{ok:true,fetchedAt:'unknown',source:'archive'}]){
+      globalThis.fetch=async()=>Response.json(upstream);
+      const r=await waterAlertsResponse();
+      const body=await r.json();
+      assert.deepEqual(body,upstream);
+      assert.equal(Object.hasOwn(body,'fetchedAt'),Object.hasOwn(upstream,'fetchedAt'));
+    }
+  }finally{globalThis.fetch=original;}
+});
+
+test('water relay preserves source-declared failure and rejects unreadable upstream responses',async()=>{
+  const original=globalThis.fetch;
+  try{
+    const upstream={ok:false,fetchedAt:null,source:'BMA',reason:'missing observation'};
+    globalThis.fetch=async()=>Response.json(upstream);
+    const declared=await waterAlertsResponse();
+    assert.equal(declared.status,200);
+    assert.deepEqual(await declared.json(),upstream);
+    for(const response of [()=>new Response('down',{status:502}),()=>new Response('not json'),()=>Response.json(null),()=>Response.json([])]){
+      globalThis.fetch=async()=>response();
+      const r=await waterAlertsResponse();
+      assert.equal(r.status,503);
+      assert.equal(r.headers.get('Cache-Control'),'no-store');
+      const body=await r.json();
+      assert.equal(body.ok,false);
+      assert.match(body.reason,/Water data unavailable/);
+    }
+  }finally{globalThis.fetch=original;}
 });
