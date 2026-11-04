@@ -8,31 +8,40 @@ Do not substitute one green build or one repaired screen for the full audit.
 
 | Requirement | Evidence needed | Current state |
 | --- | --- | --- |
-| Preserve all agents' earned work | Dirty trees, stashes, worktrees, local/remote refs and PR disposition; content comparison for squash merges | Initial inventory recorded in agent-reconciliation-2026-10-25.md; no destructive cleanup. PR22 and PR23 merged this round; PR12 and PR13 answered on the record; no branch deleted or rewritten |
-| Every intended release branch is shippable | Exact SHA, complete build/type/lint/tests, no missing generated data; actual deploy target | main shipped at a918958 with a proven build stamp. Other branch tips still not proven; the KL fork, the broken MapLibre 6 experiment and the feature branches remain out of scope but preserved |
+| Preserve all agents' earned work | Dirty trees, stashes, worktrees, local/remote refs and PR disposition; content comparison for squash merges | Inventory in agent-reconciliation-2026-10-25.md and reconciliation-2026-11-04.md; no destructive cleanup. PR25, PR4 and PR12 closed this round with the disposition recorded on each PR; PR24 held with its real root cause; no branch deleted or rewritten |
+| Every intended release branch is shippable | Exact SHA, complete build/type/lint/tests, no missing generated data; actual deploy target | main shipped with a proven build stamp. Other branch tips still not proven; the KL fork, the broken MapLibre 6 experiment and the feature branches remain out of scope but preserved |
 | No spatial hallucination on every public surface | Actual 390/1024/1440 geometry and screenshots; expanded/empty/error states; task evidence and action together | Whole surface swept at 390 and 1440 with an exhaustive 639-URL gate; 200% enlargement, blocked fonts and keyboard proven on every template. Expanded and error states still not exercised |
 | No AI design slop | Role-based fonts, readable hierarchy, no decorative gradients/glass/glow, content-sized groups and one meaningful accent; independent review | Typography and marker work carried forward. Whole-system slop pass not claimed; the homepage's layer chip hues and the overlapping landmark labels remain open |
 | Usable without pointer precision | Visible focus, real names, reachable controls, keyboard activation, touch targets, enlarged text | Keyboard proven on 20/20 routes with a visible ring and a real name on every tab stop; 44px targets on the new disclosure; 200% enlargement proven. Dialogs still not exercised |
-| Preserve trustworthy data | Observation/model/reference tiers, age, unknown not zero, source links; no invented safe routes or survey precision | Existing safety boundaries retained; the new page-view ceiling adds a count and no identity. PR22's four measures carry their caveats. Not a new validation of all feeds |
+| Preserve trustworthy data | Observation/model/reference tiers, age, unknown not zero, source links; no invented safe routes or survey precision | The water relay no longer overwrites an upstream observation's age with the relay time, so a 2020 reading can no longer arrive as current 2026. A road closure the source still lists as running now survives the 24-hour window instead of being dropped. Existing safety boundaries retained; not a new validation of all feeds |
 | Production matches tested source | Commit/push, build stamp, asset hash, desktop and phone interaction checks on actual domain | Proven: the stamp travels in the artifact and the live site reports it on three domains; the deploy refuses to finish if it does not |
-| Independent review | Confirmed findings corrected and rechecked against rendered artifacts | **NOT obtained this round.** Four attempts to run an independent reviewer were made and all four failed on the runtime's token-plan limit, not on the code. The claims above were therefore checked by the agent that made them, which is not independent. Treat the review row as open |
+| Independent review | Confirmed findings corrected and rechecked against rendered artifacts | **NOT obtained.** Four attempts on 29 October and three on 4 November all failed on the runtime's token-plan limit, not on the code. Every check in this ledger is the work of the agent that did the work. Treat the review row as open |
 
 ## Remaining branch and PR work
 
-- PR19: pinned Actions update merged and pushed as d44e1e9 (GitHub confirms merged); repo guard
-  still runs all current test files and retains least privilege. Verified 25 October; PR23
-  supersedes it and merged 29 October.
-- PR12: held, with the finding and the replacement written down on the PR. A daily page-view
-  ceiling now ships on main; the per-address limit belongs to a Cloudflare rate-limiting
-  rule, specified in `docs/pageview-rate-limits.md` and still to be confirmed in the zone.
-- PR13: split and documented on the PR — a safe batch that could ship, and majors
-  (`vinext` 1, `typescript` 7, `eslint` 10, `three` 0.186, `maplibre-gl` 6,
-  `@types/node` 26) that each need their own round.
-- PR4: compact-console/camera contribution is partially superseded; compare its
-  remaining useful behavior without restoring removed dead/duplicate streams. It needs its own
-  audit and a decision on its information density.
-- `shophouses`: the separate domain was proven live on 29 October — the essay at `/`, all seven
-  internal destinations at 200, and the same build stamp as the main site.
+- PR19 and PR23: pinned Actions updates, merged 25 and 29 October.
+- PR12: **closed 4 November as replaced.** A daily page-view ceiling ships on main; the
+  per-address limit belongs to a Cloudflare rate-limiting rule, specified in
+  `docs/pageview-rate-limits.md` and still to be confirmed in the zone. The
+  disposition is on the PR.
+- PR13 and PR24: the same 24-package dependabot batch, opened twice. **PR24 is
+  held with its real root cause recorded.** The build was not failing on the
+  dependency: `site/scripts/fix-asset-manifest.mjs` hard-coded
+  `dist/client/assets`, and vinext 1.x moved the client statics to
+  `dist/client/_next/static`. The script now finds the chunks instead of
+  assuming where they are, so the path is no longer the blocker. The majors
+  remain, each needing its own round and its own rendering evidence:
+  `vinext` 1, `typescript` 7, `eslint` 10, `three` 0.186, `maplibre-gl` 6,
+  `@types/node` 26.
+- PR25: **closed 4 November as landed** — the amulet-leveldb 1.0.7 pin is on
+  main, adapted from this PR.
+- PR4: **closed 4 November as superseded.** Main already carries the located
+  camera layer (`site/app/data/cctv-cameras.ts`, the `showCameras` toggle) and
+  the war room's camera rail; the branch predates the MSH work on every file
+  it touches.
+- `shophouses`: the separate domain was proven live on 29 October — the essay at
+  `/`, all seven internal destinations at 200, and the same build stamp as
+  the main site.
 - `feat/shophouse-fabric`, `audit-typology`, the real-data release ref, and merged
   phone/data/security/essay refs retain original histories; integration of their
   contributions does not prove their historical tips ship with today's fixes.
@@ -268,3 +277,119 @@ Found and fixed:
 - Expanded, empty and error states are still not exercised. The proof so far
   covers the states the pages actually load in.
 
+
+## Recovery round — 4 November 2026
+
+Base `df6eb1e`. This round took up a batch that had been prepared and never
+shipped, closed the gap its own reconciliation named, found the real cause
+behind every dependency-PR build failure, and settled four open PRs.
+
+### Main had been red, and a live site was deployed from it
+
+The prepared reconciliation reported "current-main CI remains unverified". It
+was not unverified — it was **failing**, for three commits (54100c8, e4ea49b,
+df6eb1e), and the live site was serving the red one. Every JavaScript step
+passed: build, typecheck, lint, the repo guards, thirteen test files, the
+rendered suite, the geometry pipeline. The single failing step was
+`world pipeline writes` — pip resolves `amulet-leveldb` 1.1.0 under
+`amulet-core`'s `~=1.0`, and that sdist now needs CMake 4.1 and a C++20
+compiler the Python 3.11 runner does not have. The pin to 1.0.7 is the release
+the last green run compiled. It is on main now.
+
+### The water relay was making stale copies look current
+
+`proxyWater` spread the upstream payload and then overwrote its `fetchedAt`
+and `source` with the BKKx fetch time. A 2020 observation came back as
+current 2026 with HTTP 200: a relaying proxy inventing a measurement. The
+payload now passes through untouched; when we relayed it and where it came
+from are separate headers, `x-bkkx-relayed-at` and `x-bkkx-upstream`. All
+eight relay routes are covered, and so are the cases that matter — a missing
+or unparseable upstream age stays missing, a source-declared failure passes
+through as the source declared it, and an unreadable upstream still answers
+503 with no-store.
+
+### A road the source still lists as running was thrown away
+
+The flood edition's report layer dropped any report older than 24 hours,
+measured from when it was reported. A road closure is not a past event
+because the report is old. On the night of 29 October the upstream listed a
+closure on Highway 400, Huai Yaiang–Bang Samphao in Ratchathewi, starting at
+22:05 the previous evening and scheduled to end at 10:00 the next morning.
+Measured from its start that was 29 hours, so the window threw it away, and
+the page read "no reports" while the road was officially impassable. The
+honest line below it — "no matching reports — not evidence of no flooding" —
+then reads as "we checked and there is nothing", which is a stronger claim
+than the site can support.
+
+A report the source still lists as current now survives the window, and the
+page says so: the list marks it "still current at the source", the count
+names how many there are, and the inspector records that the source still
+lists the event while resolution and passability stay unverified. The
+source's end time decides, and it is not republished — publishing a reopening
+time would be the passability claim this layer does not make. Two things the
+change deliberately does not do: it does not publish `passable` (the source is
+a public report, not a verified closure, and the repo already has a test that
+says so), and it does not treat a report with no end time as open.
+
+### The glance strip said "polling" forever
+
+A failed feed returned `undefined`, which is also the initial loading
+sentinel, so all five cells read "polling…" indefinitely. A settled failure
+now carries an explicit `ok:false` envelope and the cells read
+"unavailable". The gap the reconciliation named and did not close: the
+unmount signal only fires when the reader leaves, so a request that never
+answered was indistinguishable from a slow one, and the strip polled for the
+life of the page. There is now an elapsed-time deadline — the same one the
+flood rail uses — and a test that fails against the old code. With the old
+code the cells still read "polling the forecast… polling the gauges…
+polling the forecast… polling… polling HII…".
+
+### The dependency PRs were not failing on the dependency
+
+Every failing run of PR13 and PR24 said the same thing:
+
+```
+fix-asset-manifest: no dist/client/assets — run the build first
+```
+
+`npm ci` succeeded, `vinext build` succeeded and emitted the assets, and the
+step that failed was this repository's own script, reading a directory that
+no longer existed. I unpacked both tarballs: vinext 0.0.50 refers to
+`dist/client/assets`, vinext 1.3.1 refers to `dist/client/_next/static` and
+never to `dist/client/assets`. The script looked in exactly one place, so the
+bump moved the ground under it. It now finds the chunks instead of assuming
+where they are — more candidates can only mean more ambiguity, and ambiguity
+means "left as-is" — and it rewrites into the directory the chunk actually
+lives in.
+
+### `npm test` never ran lint
+
+The prepared batch was reported as "typecheck clean" and was about to fail
+CI lint: the new component test assigned to a variable named `module`, which
+Next's own rule forbids. It went unnoticed because `npm test` runs the build,
+the repo guards and the tests — but not the typecheck and not the lint. It
+runs them now, in CI's order. "Verified locally" should mean what CI means.
+
+### PR disposition
+
+- **PR25 closed as landed** — the amulet pin is on main.
+- **PR4 closed as superseded** — main already carries the located camera
+  layer and the war room's camera rail; the branch predates the MSH work on
+  every file it touches.
+- **PR12 closed as replaced** — the daily ceiling ships; the per-address limit
+  belongs at the edge.
+- **PR24 held**, with the real root cause recorded.
+
+No branch was deleted. Each disposition is written on its own PR.
+
+### Still open
+
+- The independent-review row is still open: seven attempts across two rounds
+  ended on the runtime's token-plan limit. Everything above is the work of the
+  agent that did the work.
+- The Atlas landmark-popup repair is carried over with a diagnosis rather
+  than a guess — see `docs/reconciliation-2026-11-04.md`.
+- The Cloudflare rate-limiting rules are specified but must be confirmed as
+  configured in the zone.
+- The release path does not itself gate on CI passing.
+- Expanded, empty and error states are still not exercised.
