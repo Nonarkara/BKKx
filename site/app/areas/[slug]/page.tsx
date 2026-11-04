@@ -67,12 +67,10 @@ export default async function AreaPage({ params }: Props) {
         <p className="register-eyebrow">
           Heritage quarter · <span lang="th">{area.district}</span>
         </p>
-        <h1>
-          {area.name}
-          <small lang="th">{area.thai}</small>
-        </h1>
-        <AreaTagline area={area} />
 
+        {/* Glance Path: the hero image is the heaviest visual entry. The
+           headline (h1) and tagline sit on its exit — below it — so the eye
+           lands on the image, drifts down, and keeps reading. */}
         {photo ? (
           <figure className="register-figure">
             {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -86,6 +84,12 @@ export default async function AreaPage({ params }: Props) {
             </figcaption>
           </figure>
         ) : null}
+
+        <h1>
+          {area.name}
+          <small lang="th">{area.thai}</small>
+        </h1>
+        <AreaTagline area={area} />
 
         <AreaProse area={area} />
       </article>

@@ -55,8 +55,11 @@ export default function HeritageRegister() {
           <p className="register-eyebrow">
             <span lang="th">มรดกวัฒนธรรมกรุงเทพมหานคร</span>
           </p>
-          <RegisterLede />
 
+          {/* Glance Path: the hero image is the heaviest visual entry. The
+             headline (h1) and intro copy sit on its exit — below it — so the
+             eye lands on the image, drifts down, and keeps reading. No
+             upward climb, no leapfrog. */}
           {hero ? (
             <figure className="register-figure">
               {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -75,6 +78,8 @@ export default function HeritageRegister() {
               </figcaption>
             </figure>
           ) : null}
+
+          <RegisterLede />
         </article>
 
         <div className="register-indexes register-lede">
