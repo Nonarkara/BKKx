@@ -29,7 +29,7 @@
  * candidates can only mean more ambiguity, and ambiguity means "leave it
  * alone" — the safe direction. It never rewrites to a guess.
  */
-import { readdirSync, readFileSync, writeFileSync, existsSync, statSync } from "node:fs";
+import { readdirSync, readFileSync, writeFileSync, existsSync } from "node:fs";
 import { join, dirname, relative, resolve, sep } from "node:path";
 import { fileURLToPath } from "node:url";
 

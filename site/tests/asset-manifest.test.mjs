@@ -72,6 +72,7 @@ test('it leaves an entry that already exists alone', () => {
   const result = fixAssetManifest(root);
   assert.equal(result.fixed, 0);
   assert.equal(result.skipped, 0);
+  assert.match(readFileSync(manifestPath, 'utf8'), /assets\/maplibre-gl-BjusSPiM\.js/);
 });
 
 test('it refuses to guess when two chunks match', () => {
@@ -87,7 +88,6 @@ test('it refuses to guess when two chunks match', () => {
   assert.equal(result.skipped, 1);
   assert.match(readFileSync(manifestPath, 'utf8'), /maplibre-gl-B3EYWl7f/);
 });
-
 test('it fails loudly when there is no client build at all', () => {
   const root = mkdtempSync(join(tmpdir(), 'bkkx-manifest-empty-'));
   assert.throws(() => fixAssetManifest(root));

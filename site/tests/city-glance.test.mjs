@@ -12,17 +12,17 @@ function component(fetch, props) {
   let state={},cleanup,started=false,writes=0;
   const effects=[];
   const jsx=(type,props)=>typeof type==='function'?type(props):({type,props});
-  const module={exports:{}};
+  const mod={exports:{}};
   const require=name=>{
     if(name==='react')return {useState:initial=>[started?state:initial,next=>{state=next;writes++;}],useEffect:effect=>{if(!started)effects.push(effect);}};
     if(name==='react/jsx-runtime')return {jsx,jsxs:jsx};
     if(name==='next/link')return {__esModule:true,default:props=>({type:'a',props})};
     throw Error(`Unexpected component import: ${name}`);
   };
-  vm.runInNewContext(code,{exports:module.exports,require,fetch,console,Date,AbortController,AbortSignal});
+  vm.runInNewContext(code,{exports:mod.exports,require,fetch,console,Date,AbortController,AbortSignal});
   return {
-    mount(){const tree=module.exports.CityGlance(props);started=true;cleanup=effects[0]();return tree;},
-    render(){return module.exports.CityGlance(props);},
+    mount(){const tree=mod.exports.CityGlance(props);started=true;cleanup=effects[0]();return tree;},
+    render(){return mod.exports.CityGlance(props);},
     unmount(){cleanup?.();},
     writes(){return writes;},
   };

@@ -110,7 +110,7 @@ export function CityGlance({ timeoutMs = FEED_TIMEOUT_MS }: { timeoutMs?: number
       live = false;
       controller.abort();
     };
-  }, []);
+  }, [timeoutMs]);
 
   const wx = g.wx?.ok ? g.wx.data : undefined;
   const rain = g.rain?.ok ? g.rain.data : undefined;
