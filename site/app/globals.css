@@ -39,6 +39,19 @@
   --orange: #ff6b35;
   --muted: #a4a69b;
   --line: rgba(241, 239, 232, 0.18);
+  /* ── §11.7 type tokens — page-global, not page-scoped. ──
+     These were once declared inside .register, and every selector outside
+     it fell back to the 16px UA default — the "everything grew" regression
+     on the homepage. One display token, one body token, one micro token;
+     hierarchy comes from weight and family, never from a fourth size. */
+  --text-display: clamp(32px, 6vw, 88px);
+  --text-body: 14px;
+  --text-micro: 11px;
+  /* Legacy aliases kept so older rules resolve; every alias is one of
+     the three tokens. */
+  --size-base: var(--text-body);
+  --size-down: var(--text-micro);
+  --size-up: var(--text-body);
   /* Script-aware interface pair. Numeric comparisons use tabular figures;
      keep a true monospace fallback only for code and coordinates. */
   --font-body: var(--font-jost), var(--font-prompt), sans-serif;
@@ -2395,17 +2408,8 @@ button {
   /* One container (§XX rule 1). */
   --shell: 1184px;
 
-  /* Three rendered sizes per page — §11.7 hard rule. One display token,
-     one body token, one micro token; hierarchy comes from weight and
-     family, never from a fourth size. */
-  --text-display: clamp(32px, 6vw, 88px);
-  --text-body: 14px;
-  --text-micro: 11px;
-  /* Legacy aliases kept so older rules resolve; every alias is one of
-     the three tokens. */
-  --size-base: var(--text-body);
-  --size-down: var(--text-micro);
-  --size-up: var(--text-body);
+  /* The §11.7 type tokens live in :root now — they are page-global law.
+     The .register scope keeps only its palette and spacing currencies. */
 
   min-height: 100dvh;
   padding-bottom: calc(var(--page-unit) * 3);
@@ -3773,7 +3777,10 @@ button {
 .atlas-shell-stage {
   display: grid;
   grid-template-columns: clamp(280px, 24vw, 340px) minmax(0, 1fr);
-  grid-template-rows: auto minmax(0, 1fr);
+  /* Row 1: the glance strip. Row 2: the headline at the top of the rail
+     column. Row 3: the rail itself. The map spans rows 2–3 so the added
+     headline row costs the map nothing. */
+  grid-template-rows: auto auto minmax(0, 1fr);
   min-height: 0;
   min-width: 0;
   overflow: hidden;
@@ -3786,13 +3793,17 @@ button {
 }
 
 /* atlas-shell-index-head — title on the map's exit (Glance Path). The map
-   is the heaviest visual on the right; the headline lives beside it here,
-   not above it in a masthead band. Named grid: column. */
+   is the heaviest visual on the right; the eye exits left, so the headline
+   sits at the top of the left column, above the quarters rail — pinned to
+   the page gutter, never flush with the window edge. Named grid: column. */
 .atlas-shell-index-head {
+  grid-column: 1;
+  grid-row: 2;
   display: flex;
   flex-direction: column;
   gap: 2px;
-  margin-bottom: 10px;
+  padding: 0 12px 10px var(--page-unit, 24px);
+  margin-bottom: 0;
 }
 .atlas-shell-index-head .register-eyebrow {
   font-size: var(--text-micro);
@@ -3817,13 +3828,13 @@ button {
 
 .atlas-shell-stage .atlas-shell-quarters {
   grid-column: 1;
-  grid-row: 2;
+  grid-row: 3;
   min-height: 0;
 }
 
 .atlas-shell-stage .atlas-shell-map {
   grid-column: 2;
-  grid-row: 2;
+  grid-row: 2 / span 2;
 }
 
 .atlas-shell-quarters {
