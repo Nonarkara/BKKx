@@ -10,7 +10,7 @@
      line. The map keeps the rest. */
   grid-template-rows: 48px minmax(0, 1fr) minmax(56px, auto);
   background: #15140f;
-  color: #15140f;
+  color: #f1efe8;
   font-family: var(--font-jost), var(--font-zh), var(--font-prompt), sans-serif;
 }
 
