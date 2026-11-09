@@ -5792,8 +5792,9 @@ body:has(.shophouse-essay) {
   --sh-base: 1.7rem;
   --sh-cap: 0.75em;
   --sh-measure: 68ch;
+  --sh-diagonal: repeating-linear-gradient(45deg, transparent, transparent 28px, var(--sh-hairline) 28px, var(--sh-hairline) 29px);
 
-  background: var(--sh-paper);
+  background: var(--sh-paper) var(--sh-diagonal);
   color: var(--sh-ink);
   font-family: var(--font-serif), Georgia, serif;
   font-size: var(--text-body);
@@ -6426,10 +6427,11 @@ body:has(.shophouse-essay) {
   --sh-quiet: #5f5b66;
   --sh-rule: rgba(17, 16, 20, 0.20);
   --sh-hairline: rgba(17, 16, 20, 0.10);
+  --sh-diagonal: repeating-linear-gradient(45deg, transparent, transparent 32px, var(--sh-hairline) 32px, var(--sh-hairline) 33px);
   color-scheme: light;
 }
 
-body:has(.shophouse-essay) { background: #ffffff; color: #111014; }
+body:has(.shophouse-essay) { background: #ffffff var(--sh-diagonal); color: #111014; }
 
 .shophouse-essay a { color: var(--sh-seal); }
 .sh-wordmark { color: var(--sh-ink) !important; }
