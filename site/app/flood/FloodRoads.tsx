@@ -47,7 +47,7 @@ export function FloodRoads({mapRef,ready,motion,reduced,thai,now}:{mapRef:RefObj
   const fresh=!!data&&roadsAreFresh(data.fetchedAt,now)&&!error;
   const ago=data?Math.max(0,Math.round((now-Date.parse(data.fetchedAt))/60000)):null;
   const s=data?.sources??{};
-  return <section className="flood-roads" aria-label={t('ถนนที่มีรายงานน้ำท่วม','Flooded roads')}>
+  return <section className="flood-roads" aria-label={t('ถนนที่มีรายงานน้ำท่วม','Flooded roads')} lang={thai?'th':'en'}>
     <h2>{t('ถนนที่มีรายงานน้ำท่วมตอนนี้','Flooded roads now')}</h2>
     <p role="status">{error&&!data?t('เชื่อมต่อไม่ได้ · ไม่ได้แปลว่าถนนแห้ง','Unavailable · not evidence of dry streets'):data?`${data.stretches} ${t('ช่วงถนน','road stretches')} · ${data.closed} ${t('ปิด/ผ่านไม่ได้','closed')} · ${fresh?t('ล่าสุด','updated'):t('ข้อมูลเก่า','stale')} ${ago} ${t('นาทีก่อน','min ago')}`:t('กำลังโหลด','Loading')}</p>
     {data&&<p className="flood-meta">{t('ประชาชน (Traffy Fondue)','Residents (Traffy Fondue)')} {s.traffy?.count??0} · iTIC {s.itic?.count??0} · {t('สำนักการระบายน้ำ','BMA DDS')} {s.dds?.count??0}{s.dds?.error?` (${t('รายการของ กทม. ยังไม่อัปเดต','DDS list not updated')})`:''} · {t('สถานีวัด','gauges')} {s.sensors?.count??0}</p>}

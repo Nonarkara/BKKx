@@ -36,7 +36,7 @@ export function FloodContext({mapRef,ready,selected,thai,now,reload,reduced}:{ma
   const activeGauge=gauge&&rain?.stations.find(s=>s.id===gauge.id);
   function focus(s:Gauge){setGauge(s);mapRef.current?.flyTo({center:[s.lng,s.lat],zoom:14,pitch:50,duration:reduced?0:900});}
   function reading(s:Gauge){return <><strong>{s.name}</strong><span>{t('1 ชม.','1 h')}: {s.hour1Mm??'—'} mm · {t('24 ชม.','24 h')}: {s.mm} mm</span><span>{s.agency} / ThaiWater · {stamp(s.observedAt)}</span><span>{current(s)?t('ค่าที่วัดได้ · ภายใน 2 ชม.','Observed · within 2 h'):t('ข้อมูลเก่า / ไม่ทราบอายุ / สำเนาเดิม','STALE / age unknown / previous copy')}</span></>;}
-  return <section className="flood-context" aria-label="Rain and drainage evidence">
+  return <section className="flood-context" aria-label="Rain and drainage evidence" lang={thai?'th':'en'}>
     <button aria-pressed={show} onClick={()=>setShow(!show)}>{t('○ สถานีฝน','○ Rain gauges')}: {show?'ON':'OFF'}</button>
     <p className="flood-meta">{t('วงโปร่ง = สถานีฝน · จุดทึบ = รายงานน้ำท่วม','Hollow rings = rain gauges · filled dots = flood reports')}</p>
     {rainError&&<p role="status">{t('ฝน: เชื่อมต่อไม่ได้ สำเนาเดิมถ้ามี','Rain: connection failed; previous copy if available')}</p>}
