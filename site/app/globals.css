@@ -7074,10 +7074,10 @@ body:has(.sh-figexport) { background: #fff !important; }
 .sh-rank-compare.is-empty { padding: var(--sh-base); color: var(--sh-quiet); text-align: center; }
 .sh-rank-compare-head h3 { font-family: var(--font-display); font-size: var(--text-body); font-weight: 800; letter-spacing: -.03em; margin: 0 0 4px; }
 .sh-rank-compare-head p { margin: 0 0 var(--sh-base); color: var(--sh-quiet); font-size: var(--text-body); }
-.sh-rank-compare-grid { display: grid; gap: var(--sh-base); grid-template-columns: 1fr; }
-@media (min-width: 760px) { .sh-rank-compare-grid { grid-template-columns: 1fr 1fr; gap: var(--sh-page); } }
-.sh-rank-compare-card { border: 1px solid var(--sh-ink); padding: var(--sh-base); background: var(--sh-paper); }
-.sh-rank-compare-card header { display: grid; grid-template-columns: 1fr auto; gap: 6px; margin-bottom: 8px; align-items: start; }
+.sh-rank-compare-grid { display: grid; gap: var(--sh-base); grid-template-columns: minmax(0, 1fr); }
+@media (min-width: 760px) { .sh-rank-compare-grid { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: var(--sh-page); } }
+.sh-rank-compare-card { border: 1px solid var(--sh-ink); padding: var(--sh-base); background: var(--sh-paper); min-width: 0; }
+.sh-rank-compare-card header { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 6px; margin-bottom: 8px; align-items: start; }
 .sh-rank-compare-card-eyebrow { grid-column: 1 / -1; margin: 0 0 4px !important; font-family: var(--font-display); font-size: var(--text-micro); color: var(--sh-seal); letter-spacing: .08em; text-transform: uppercase; }
 .sh-rank-compare-card h4 { margin: 0 !important; font-family: var(--font-display); font-size: var(--text-body); font-weight: 800; letter-spacing: -.02em; }
 .sh-rank-compare-card-anchor { font-size: var(--text-body); color: var(--sh-seal); text-decoration: none; margin-left: 4px; }
@@ -7086,9 +7086,9 @@ body:has(.sh-figexport) { background: #fff !important; }
 .sh-rank-compare-card-score { display: flex; align-items: baseline; gap: 8px; margin: 8px 0 12px; padding: 6px 0; border-top: 1px solid var(--sh-ink); border-bottom: 1px solid var(--sh-hairline); }
 .sh-rank-compare-card-score strong { font-family: var(--font-display); font-size: var(--text-body); font-weight: 800; letter-spacing: -.03em; }
 .sh-rank-compare-card-score span { color: var(--sh-quiet); font-family: var(--font-display); font-size: var(--text-micro); letter-spacing: .08em; text-transform: uppercase; }
-.sh-rank-compare-card-metrics { display: grid; gap: 4px var(--sh-base); margin: 0 0 10px; grid-template-columns: 1fr; }
-@media (min-width: 560px) { .sh-rank-compare-card-metrics { grid-template-columns: 1fr 1fr; } }
-.sh-rank-compare-card-metrics div { display: grid; grid-template-columns: 110px 1fr; gap: 6px; align-items: center; }
+.sh-rank-compare-card-metrics { display: grid; gap: 4px var(--sh-base); margin: 0 0 10px; grid-template-columns: minmax(0, 1fr); }
+@media (min-width: 560px) { .sh-rank-compare-card-metrics { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); } }
+.sh-rank-compare-card-metrics div { display: grid; grid-template-columns: 110px minmax(0, 1fr); gap: 6px; align-items: center; }
 .sh-rank-compare-card-metrics dt { font-family: var(--font-display); font-size: var(--text-micro); color: var(--sh-quiet); letter-spacing: .04em; text-transform: uppercase; }
 .sh-rank-compare-card-metrics dd { margin: 0; }
 .sh-rank-compare-card-editorial { font-size: var(--text-body); line-height: 1.5; color: var(--sh-ink); border-top: 1px solid var(--sh-hairline); padding-top: 8px; margin: 0 !important; }
