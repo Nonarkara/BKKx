@@ -192,7 +192,6 @@
   background: #f4ebd5;
   color: #15140f;
   border: 1px solid #15140f;
-  box-shadow: 3px 3px 0 #254f82;
   padding: 8px 10px;
   max-height: 9rem;
   overflow: auto;
@@ -203,7 +202,6 @@
   background: #f4ebd5;
   color: #15140f;
   border: 1px solid #15140f;
-  box-shadow: 3px 3px 0 #254f82;
   padding: 8px 10px;
   flex: 0 0 auto;
 }
@@ -298,7 +296,6 @@
   background: #f4ebd5;
   color: #15140f;
   border: 1px solid #15140f;
-  box-shadow: 3px 3px 0 #254f82;
 }
 
 .typo-card[aria-pressed="true"] {
@@ -307,7 +304,6 @@
 }
 
 .typo-card.is-featured {
-  box-shadow: 3px 3px 0 #a83332;
 }
 
 .typo-card-text {
@@ -348,13 +344,11 @@
   background: #f4ebd5;
   color: #15140f;
   border: 1px solid #15140f;
-  box-shadow: 3px 3px 0 #254f82;
   padding: 10px 12px;
   flex: 0 0 auto;
 }
 
 .typo-detail.is-featured {
-  box-shadow: 3px 3px 0 #a83332;
 }
 
 .typo-pair {
@@ -401,7 +395,6 @@
   background: #f4ebd5;
   color: #15140f;
   border: 1px solid #15140f;
-  box-shadow: 3px 3px 0 #254f82;
   padding: 8px 10px;
   flex: 0 0 auto;
 }

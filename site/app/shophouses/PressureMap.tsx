@@ -199,7 +199,7 @@ export function PressureMap() {
 
       <p className="sh-fig-note">
         Showing {shown.toLocaleString()} of {PRESSURE_TOTAL.toLocaleString()} candidate footprints.
-        Fill is the Treasury (กรมธนารักษ์) peak appraisal per district; dots are candidate
+        Fill is the Treasury (<span lang="th">กรมธนารักษ์</span>) peak appraisal per district; dots are candidate
         shophouses, coloured by whether the ground under them is worth more than the median
         (฿{SPLITS.priceBaht.toLocaleString()}) and whether the plot is shallower than the median{" "}
         {SPLITS.depthM} m — on a {SPLITS.assumedRoadM} m road, a compliant rebuild steps back{" "}

@@ -81,7 +81,7 @@ export function WalkNearby({ stopN, walkSlug }: { stopN: number; walkSlug: strin
     return (
       <p className="walk-stop-nearby-empty">
         {th
-          ? "ร้านและสถานที่ใกล้เคียง — ข้อมูลยังไม่พร้อม"
+          ? <span lang="th">ร้านและสถานที่ใกล้เคียง — ข้อมูลยังไม่พร้อม</span>
           : "Nearby food, drink, shops, history — data not yet available for this stop."}
       </p>
     );
@@ -99,7 +99,7 @@ export function WalkNearby({ stopN, walkSlug }: { stopN: number; walkSlug: strin
         {t("walk_nearby_eyebrow")}
         <span className="walk-stop-nearby-radius">
           {th
-            ? `ในรัศมี ${entry.radiusM} ม. จากจุดนี้`
+            ? <span lang="th">ในรัศมี {entry.radiusM} ม. จากจุดนี้</span>
             : `within ${entry.radiusM} m of this stop`}
         </span>
       </p>
@@ -120,7 +120,7 @@ export function WalkNearby({ stopN, walkSlug }: { stopN: number; walkSlug: strin
       </ul>
       <p className="walk-stop-nearby-source">
         {th
-          ? "ข้อมูลจาก OpenStreetMap (ODbL) — เรียงตามระยะทางจากจุด"
+          ? <span lang="th">ข้อมูลจาก OpenStreetMap (ODbL) — เรียงตามระยะทางจากจุด</span>
           : "OpenStreetMap (ODbL) · sorted by distance from this stop"}
       </p>
     </div>
