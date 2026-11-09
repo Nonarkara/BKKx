@@ -142,7 +142,7 @@ const CHROME: Record<
     },
   },
   zh: {
-    title: "店屋类型",
+    title: "<span lang=\"zh-Hans\">店屋类型</span>",
     essay: "文章",
     why: "为何",
     language: "语言",

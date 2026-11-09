@@ -556,7 +556,7 @@ const BANGKOK_PHOTOS: {
   {
     url: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b3/%E6%9B%BC%E8%B0%B7%E5%94%90%E4%BA%BA%E8%A1%9720190824_03.jpg/1920px-%E6%9B%BC%E8%B0%B7%E5%94%90%E4%BA%BA%E8%A1%9720190824_03.jpg",
     caption: "Chinatown streetscape, Bangkok, 2019.",
-    credit: "西安兵马俑 · Wikimedia Commons · CC BY-SA 4.0.",
+    credit: "<span lang=\"zh-Hans\">西安兵马俑</span> · Wikimedia Commons · CC BY-SA 4.0.",
     source: "https://commons.wikimedia.org/wiki/File:%E6%9B%BC%E8%B0%B7%E5%94%90%E4%BA%BA%E8%A1%9720190824_03.jpg",
     width: 1920,
     height: 2560,
