@@ -23,11 +23,11 @@ export type QuestSpot = {
 };
 
 export const QUEST_THEME_LABEL: Record<QuestTheme, { en: string; th: string; icon: string }> = {
-  eat: { en: "Eat", th: "กิน", icon: "🍜" },
-  mindful: { en: "Sit still", th: "ใคร่ครวญ", icon: "🙏" },
-  explore: { en: "Explore", th: "สำรวจ", icon: "🧭" },
-  create: { en: "Make something", th: "สร้างสรรค์", icon: "✋" },
-  connect: { en: "Talk to someone", th: "พบปะ", icon: "💬" },
+  eat: { en: "Eat", th: "กิน", icon: "" },
+  mindful: { en: "Sit still", th: "ใคร่ครวญ", icon: "" },
+  explore: { en: "Explore", th: "สำรวจ", icon: "" },
+  create: { en: "Make something", th: "สร้างสรรค์", icon: "" },
+  connect: { en: "Talk to someone", th: "พบปะ", icon: "" },
 };
 
 export const QUEST_SPOTS: Record<string, QuestSpot[]> = {

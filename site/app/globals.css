@@ -552,7 +552,6 @@ button {
   border-radius: 50%;
   color: var(--paper);
   background: rgba(17,18,15,.82);
-  box-shadow: 0 0 0 6px rgba(17,18,15,.28);
   cursor: pointer;
   transform: translate(-50%, -50%);
   transition: transform 160ms ease, color 160ms ease, background 160ms ease;
@@ -1455,7 +1454,6 @@ button {
   width: 21px;
   height: 11px;
   border: 1px solid rgba(255, 255, 255, .55);
-  box-shadow: inset -4px -3px 0 rgba(0, 0, 0, .22);
 }
 .key-fabric { background: #b99064; }
 .key-landmark { background: #ffd04d; }
@@ -1644,7 +1642,6 @@ button {
   height: 7px;
   border-radius: 50%;
   flex-shrink: 0;
-  box-shadow: 0 0 8px currentColor;
 }
 
 /* Atmospheric weather overlays */
@@ -8246,7 +8243,6 @@ body:has(.sh-figexport) { background: #fff !important; }
   border: 1px solid rgba(255, 255, 255, .85);
   border-radius: 50%;
   background: #ff4d3d;
-  box-shadow: 0 0 0 1px rgba(0, 0, 0, .5);
 }
 /* Registry cameras read quieter than curated ones: the operator's feed is
    a position we republish, not one we checked. */

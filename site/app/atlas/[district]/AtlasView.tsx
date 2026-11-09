@@ -623,7 +623,7 @@ const POI_LAYERS: PoiLayerSpec[] = [
     file: dataUrl("/pois/temples.geojson"),
     label: "Temples",
     labelTh: "วัด",
-    icon: "🛕",
+    icon: "",
     color: "#9c4a2b",
     defaultOn: false, // 460 pins — opt-in to keep the map clean
   },
@@ -632,7 +632,7 @@ const POI_LAYERS: PoiLayerSpec[] = [
     file: dataUrl("/pois/royal-temples.geojson"),
     label: "Royal Temples",
     labelTh: "พระอารามหลวง",
-    icon: "👑",
+    icon: "",
     color: "#6b4f8c",
     defaultOn: false,
   },
@@ -641,7 +641,7 @@ const POI_LAYERS: PoiLayerSpec[] = [
     file: dataUrl("/pois/national-museums.geojson"),
     label: "National Museums",
     labelTh: "พิพิธภัณฑสถานแห่งชาติ",
-    icon: "🏛️",
+    icon: "",
     color: "#3a3a3a",
     defaultOn: false,
   },
@@ -650,7 +650,7 @@ const POI_LAYERS: PoiLayerSpec[] = [
     file: dataUrl("/pois/national-archives.geojson"),
     label: "National Archives",
     labelTh: "หอจดหมายเหตุแห่งชาติ",
-    icon: "📜",
+    icon: "",
     color: "#5f8a26",
     defaultOn: false,
   },
@@ -659,7 +659,7 @@ const POI_LAYERS: PoiLayerSpec[] = [
     file: dataUrl("/pois/national-libraries.geojson"),
     label: "National Libraries",
     labelTh: "หอสมุดแห่งชาติ",
-    icon: "📚",
+    icon: "",
     color: "#2c5f7c",
     defaultOn: false,
   },
@@ -667,7 +667,7 @@ const POI_LAYERS: PoiLayerSpec[] = [
     kind: "oldtown",
     label: "Rowhouse fabric",
     labelTh: "แผนที่ตึกแถว",
-    icon: "▥",
+    icon: "",
     color: "#e0a23a",
     defaultOn: true,
   },
@@ -2490,7 +2490,7 @@ export function AtlasView({ world, embedded = false, initialView, floodEdition =
               aria-pressed={showPoi.oldtown}
               title="Solid lines: high-confidence documented axes. Dashed lines: curated connections."
             >
-              ▥ Rowhouses {poiCounts.oldtown}
+              Rowhouses {poiCounts.oldtown}
             </button>
             <button
               type="button"
@@ -2992,7 +2992,7 @@ export function AtlasView({ world, embedded = false, initialView, floodEdition =
                   <span className="heritage-reg-badge">{primary.mode.includes("boat") || primary.mode.includes("ferry") ? "≋" : "●"} Public transport</span>
                   <span className="heritage-era-badge">{primary.shortName}</span>
                 </div>
-                <button type="button" className="heritage-close-btn" onClick={() => setSelectedMobility(null)} aria-label="Close transport details">✕</button>
+                <button type="button" className="heritage-close-btn" onClick={() => setSelectedMobility(null)} aria-label="Close transport details">Close</button>
               </div>
               <h4>{service?.name ?? stop?.name}</h4>
               <p className="heritage-thai" lang="th">{service?.thai ?? stop?.thai}</p>
@@ -3037,7 +3037,7 @@ export function AtlasView({ world, embedded = false, initialView, floodEdition =
                 }}
                 aria-label="Close camera"
               >
-                ✕
+                Close
               </button>
             </div>
             <h4>{selectedCamera.name}</h4>
@@ -3115,7 +3115,7 @@ export function AtlasView({ world, embedded = false, initialView, floodEdition =
                   <span className="heritage-era-badge">to {Number(selectedArchitecture.height)} m</span>
                 ) : null}
               </div>
-              <button type="button" className="heritage-close-btn" onClick={() => setSelectedArchitecture(null)} aria-label="Close architectural details">✕</button>
+              <button type="button" className="heritage-close-btn" onClick={() => setSelectedArchitecture(null)} aria-label="Close architectural details">Close</button>
             </div>
             <h4>{selectedArchitecture.name_en ?? selectedArchitecture.name ?? "Old Town landmark part"}</h4>
             {selectedArchitecture.name_en && selectedArchitecture.name ? (
@@ -3162,7 +3162,7 @@ export function AtlasView({ world, embedded = false, initialView, floodEdition =
                 <span className="heritage-reg-badge">◫ {selectedCandidate.candidate_strength}</span>
                 <span className="heritage-era-badge">score {Number(selectedCandidate.morphology_score).toFixed(3)}</span>
               </div>
-              <button type="button" className="heritage-close-btn" onClick={() => setSelectedCandidate(null)} aria-label="Close candidate details">✕</button>
+              <button type="button" className="heritage-close-btn" onClick={() => setSelectedCandidate(null)} aria-label="Close candidate details">Close</button>
             </div>
             <h4>{selectedCandidate.cluster_name}</h4>
             <p className="heritage-desc">
@@ -3225,7 +3225,7 @@ export function AtlasView({ world, embedded = false, initialView, floodEdition =
                 onClick={() => setSelectedHeritage(null)}
                 aria-label="Close heritage details"
               >
-                ✕
+                Close
               </button>
             </div>
             <h4>{selectedHeritage.name}</h4>
@@ -3299,7 +3299,7 @@ export function AtlasView({ world, embedded = false, initialView, floodEdition =
                   onClick={() => setSelectedPoi(null)}
                   aria-label="Close POI details"
                 >
-                  ✕
+                  Close
                 </button>
               </div>
               {p.kind === "oldtown" && p.photo ? (

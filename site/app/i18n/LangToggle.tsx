@@ -20,7 +20,7 @@ export function LangToggle() {
         className={locale === "th" ? "is-active" : undefined}
         onClick={() => setLocale("th")}
       >
-        ไทย
+        <span lang="th">ไทย</span>
       </button>
     </div>
   );

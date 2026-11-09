@@ -55,7 +55,7 @@ export function PlaceMasthead() {
           aria-controls="register-destinations"
           onClick={() => setNavOpen((open) => !open)}
         >
-          {th ? "เมนู" : "Browse"}
+          {th ? <span lang="th">เมนู</span> : "Browse"}
         </button>
         <div id="register-destinations" className="register-nav-scroll">
           <Link href="/rowhouses">Rowhouses</Link>
