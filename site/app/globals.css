@@ -738,8 +738,14 @@ button {
   .steps { grid-template-columns: 1fr; }
   .steps li,
   .steps li:not(:first-child) { min-height: 170px; padding: 26px 0; border-right: 0; border-bottom: 1px solid #aaa99f; }
-  .download-grid { grid-template-columns: 1fr; }
-  .download-card { min-height: 160px; padding: 22px; }
+  .download-grid { grid-template-columns: minmax(0, 1fr); }
+  /* The card was still a three-column grid with a hard 200px action
+     column at phone width, so its min-content (≈390px) exceeded the
+     346px container and /worlds bled 22px to the right. Stack instead:
+     number + title, then the two actions side by side, all content-sized. */
+  .download-card { min-height: 0; padding: 18px; grid-template-columns: auto minmax(0, 1fr); gap: 4px 12px; }
+  .download-actions { grid-column: 1 / -1; flex-direction: row; flex-wrap: wrap; min-width: 0; margin-top: 10px; }
+  .download-action { flex: 1 1 120px; min-width: 0; padding: 10px 12px; }
   .pipeline { justify-content: flex-start; }
   .worlds-footer { grid-template-columns: 1fr; }
   footer > div { justify-content: flex-start; }
@@ -5134,8 +5140,12 @@ body:has(.atlas-page.is-embedded.is-phone-chrome) {
   .onep-coverage-stats { grid-template-columns: 1fr; }
   .onep-coverage-stats div { border-right: 0; border-bottom: 1px solid var(--ink); }
   .onep-coverage-stats div:last-child { border-bottom: 0; }
-  .onep-ledger-row { grid-template-columns: 66px 1fr; gap: 5px 10px; padding: 10px 2px; }
+  /* 46 ledger rows at 121 px each were four stacked lines for five short
+     fields. Type and priority share a line; the map link keeps its own. */
+  .onep-ledger-row { grid-template-columns: 66px minmax(0, 1fr) auto; gap: 4px 10px; padding: 8px 2px; }
   .onep-ledger-row > [role="cell"]:nth-child(n+3) { grid-column: 2; }
+  .onep-ledger-row > [role="cell"]:nth-child(4) { grid-column: 3; text-align: right; }
+  .onep-ledger-row > [role="cell"]:nth-child(5) { grid-column: 2 / -1; }
   .rowhouse-candidate-method { grid-template-columns: 1fr; }
   .rowhouse-candidate-numbers { grid-template-columns: 1fr; }
   .rowhouse-candidate-numbers div { border-right: 0; border-bottom: 1px solid rgba(255,255,255,.3); }
@@ -7151,10 +7161,19 @@ body:has(.sh-figexport) { background: #fff !important; }
 }
 @media (min-width: 768px) { .shophouse-essay { --sh-page: 24px; } }
 
-/* masthead: was 110 px */
-.sh-masthead { padding: var(--s1) var(--sh-page); gap: 6px var(--s2); }
+/* masthead: was 110 px on desktop, 248 px on a phone because eight nav
+   links wrapped at 44 px a row. A dense text-control group is allowed a
+   32-34 px row (§11.12): same links, same tap targets, three rows instead
+   of six, and the header stops eating a quarter of the screen. */
+.sh-masthead { padding: var(--s1) var(--sh-page); gap: 2px var(--s2); }
 .sh-wordmark, .sh-masthead nav a { min-height: 44px; }
-.sh-masthead nav { gap: var(--s2); }
+.sh-masthead nav { gap: 4px var(--s2); }
+@media (max-width: 767px) {
+  .sh-masthead { padding: 4px var(--sh-page) 6px; gap: 0 var(--s1); }
+  .sh-wordmark { min-height: 34px; }
+  .sh-masthead nav { gap: 0 14px; row-gap: 0; }
+  .sh-masthead nav a { min-height: 34px; }
+}
 
 /* lede: was 930 px, h1 76 px */
 .sh-lede { padding: var(--s3) var(--sh-page) var(--s2); }
@@ -7578,7 +7597,10 @@ body:has(.sh-figexport) { background: #fff !important; }
 .wr-panel-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px 14px; margin-bottom: 14px; padding-bottom: 10px; border-bottom: 1px solid var(--wr-line); }
 .wr-panel-head h2 { margin: 0; font-size: var(--text-body); font-weight: 700; letter-spacing: -.01em; flex: 1 1 auto; }
 .wr-panel-meta { font-family: var(--font-mono); font-size: var(--text-micro); color: var(--wr-faint); }
-.wr-panel-note { margin: 12px 0 0; font-size: var(--text-body); line-height: 1.6; color: var(--wr-quiet); }
+/* A raw endpoint URL is the one string here that cannot break, so at 390 px
+   the BMA drainage host pushed /warroom to 426 px wide. Nothing is hidden:
+   the URL wraps at any character instead of the page scrolling sideways. */
+.wr-panel-note { margin: 12px 0 0; font-size: var(--text-body); line-height: 1.6; color: var(--wr-quiet); overflow-wrap: anywhere; }
 .wr-panel-note code { font-family: var(--font-mono); font-size: var(--text-micro); color: var(--wr-ink); background: var(--wr-sunk); padding: 1px 5px; border: 1px solid var(--wr-line); }
 
 /* state chip — icon + word, never colour alone */
@@ -8615,21 +8637,24 @@ body:has(.sh-why) {
   }
 }
 
-.sh-why-contents { padding-top: 18px; padding-bottom: 8px; }
+.sh-why-contents { padding-top: 14px; padding-bottom: 8px; }
 .sh-why-contents ol {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: 6px;
   margin: 0;
   padding: 0;
   list-style: none;
 }
+/* A contents chip is 14 px type in a box, not a 44 px target: 44 forced
+   nine chips to 486 px of header on a 390 px screen. 34 px keeps the group
+   tappable and lets two fit a row. */
 .sh-why-contents a {
   display: inline-flex;
   align-items: baseline;
   gap: 0.45em;
-  min-height: 44px;
-  padding: 8px 10px;
+  min-height: 34px;
+  padding: 4px 8px;
   border: 1px solid var(--sh-ink);
   color: var(--sh-ink);
   font-size: var(--text-body);
@@ -8640,6 +8665,13 @@ body:has(.sh-why) {
   font-family: var(--font-mono);
   font-size: var(--text-micro);
   color: var(--sh-seal);
+}
+/* On a phone the bordered chips stack one per row and take 486 px of a
+   844 px screen for a six-word index. The same links as a two-column
+   numbered list cost 200 px and keep the same 34 px rows. */
+@media (max-width: 640px) {
+  .sh-why-contents ol { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 0 14px; }
+  .sh-why-contents a { align-items: center; padding: 0; border: 0; }
 }
 
 .sh-why-principle {
