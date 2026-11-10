@@ -6933,9 +6933,12 @@ body:has(.sh-figexport) { background: #fff !important; }
 .sh-tenure { overflow-x: auto; -webkit-overflow-scrolling: touch; }
 
 /* every wide table on the Bible scrolls in its own box, not the page.
-   The wrapper does the scrolling — a <table> is not a reliable scroll box. */
+   The wrapper does the scrolling — a <table> is not a reliable scroll box.
+   On a phone, the 460 px min-width for a 3-column table bleeds 113 px.
+   Reduced to 0 so the table shrinks to fit; the scrollbar provides the
+   visual cue that there is more data. */
 .sh-tablewrap { overflow-x: auto; -webkit-overflow-scrolling: touch; max-width: 100%; min-width: 0; }
-.sh-tablewrap .sh-dim-table { min-width: 460px; }
+.sh-tablewrap .sh-dim-table { min-width: 0; }
 
 /* ============================================================ global
    The Global Research page. Same paper register as the rest of the
