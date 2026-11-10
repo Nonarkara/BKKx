@@ -2246,7 +2246,6 @@ button {
   font-family: var(--font-display);
   letter-spacing: 0.05em;
   padding: 3px 6px;
-  border-radius: 2px;
 }
 
 .heritage-era-badge {
@@ -2256,7 +2255,6 @@ button {
   font-size: var(--text-micro);
   font-weight: 700;
   padding: 3px 6px;
-  border-radius: 2px;
 }
 
 .heritage-close-btn {
@@ -7188,6 +7186,14 @@ body:has(.sh-figexport) { background: #fff !important; }
 .sh-contents-strip ol { gap: 4px var(--s1); padding: var(--s1) 0; }
 .sh-contents-strip a { min-height: 34px; font-size: var(--text-body); gap: 4px; }
 .sh-contents-strip a::before { padding: 1px 4px; }
+/* On a phone the thirteen-entry index stacked to 592 px between the title
+   and the first sentence. Two columns with the counter as plain type put
+   the essay 190 px closer to the first screen: 592 → 405 px. */
+@media (max-width: 640px) {
+  .sh-contents-strip ol { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 2px 14px; padding: 10px 0; }
+  .sh-contents-strip a { min-height: 30px; align-items: flex-start; gap: 6px; line-height: 1.25; }
+  .sh-contents-strip a::before { padding: 0 3px; background: transparent; }
+}
 
 /* sections: was 45 px top+bottom, h2 27 px pad + 27 px margin */
 .sh-section { padding: var(--s3) 0; }
@@ -7620,7 +7626,7 @@ body:has(.sh-figexport) { background: #fff !important; }
 .wr-bar-label { font-size: var(--text-body); line-height: 1.25; }
 .wr-bar-label small { display: block; font-size: var(--text-micro); color: var(--wr-faint); }
 .wr-bar-track { height: 9px; background: var(--wr-sunk); border: 1px solid var(--wr-line); }
-.wr-bar-fill { display: block; height: 100%; border-radius: 0 3px 3px 0; transition: filter 120ms ease; }
+.wr-bar-fill { display: block; height: 100%; transition: filter 120ms ease; }
 .wr-bar-value { font-family: var(--font-mono); font-size: var(--text-body); font-variant-numeric: tabular-nums; text-align: right; }
 .wr-bar-value small { color: var(--wr-faint); margin-left: 2px; }
 .wr-fig figcaption { margin-top: 10px; font-size: var(--text-micro); line-height: 1.55; color: var(--wr-faint); }
@@ -7629,13 +7635,13 @@ body:has(.sh-figexport) { background: #fff !important; }
 /* ---- composition bar ---- */
 .wr-comp { display: flex; height: 22px; gap: 2px; background: var(--wr-sunk); border: 1px solid var(--wr-line); }
 .wr-comp-seg { transition: filter 120ms ease; min-width: 3px; }
-.wr-comp-seg:first-child { border-radius: 2px 0 0 2px; }
-.wr-comp-seg:last-child { border-radius: 0 2px 2px 0; }
+.wr-comp-seg:first-child { }
+.wr-comp-seg:last-child { }
 .wr-comp-seg.is-hover { filter: brightness(1.25); }
 .wr-legend { list-style: none; margin: 12px 0 0; padding: 0; display: flex; flex-direction: column; gap: 7px; }
 .wr-legend li { display: grid; grid-template-columns: 11px 1fr auto; gap: 4px 9px; align-items: baseline; font-size: var(--text-body); }
 .wr-legend li.is-hover .wr-legend-label { color: #fff; }
-.wr-swatch { width: 11px; height: 11px; border-radius: 2px; }
+.wr-swatch { width: 11px; height: 11px; }
 .wr-legend-value { font-family: var(--font-mono); font-size: var(--text-body); font-variant-numeric: tabular-nums; }
 .wr-legend-value small { color: var(--wr-faint); margin-left: 6px; }
 .wr-legend-meaning { grid-column: 2 / -1; font-size: var(--text-micro); color: var(--wr-faint); line-height: 1.45; }
