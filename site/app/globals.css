@@ -2461,8 +2461,8 @@ button {
 
 .register-wordmark b {
   color: var(--seal);
-  font-size: calc(var(--size-up) * 1.35);
-  font-weight: 700;
+  font-size: var(--size-up);
+  font-weight: 800;
 }
 
 .register-wordmark em {
@@ -5831,7 +5831,7 @@ body:has(.shophouse-essay) {
 .sh-wordmark {
   font-family: var(--font-display);
   font-weight: 800;
-  font-size: 17px;
+  font-size: var(--text-body);
   letter-spacing: -0.03em;
   color: var(--sh-ink) !important;
   text-decoration: none !important;
@@ -9020,3 +9020,13 @@ body:has(.sh-why) {
 @media (min-width: 721px) and (pointer: fine) {
   .atlas-shell-masthead .register-wordmark { min-height: 36px; }
 }
+
+/* Map-library controls: house style is square, no soft ring (L: radius 0, shadow 0). */
+.maplibregl-ctrl-group,
+.maplibregl-ctrl-attrib,
+.maplibregl-ctrl-group button { border-radius: 0 !important; box-shadow: none !important; }
+.maplibregl-ctrl-group { border: 1px solid var(--line, rgba(0,0,0,.18)); }
+.maplibregl-ctrl-attrib, .maplibregl-ctrl-attrib a, .maplibregl-ctrl-scale { font-size: var(--text-micro) !important; }
+
+/* Bare <small> fell to the browser default 0.83em (11.2px), a fourth size. */
+small { font-size: var(--text-micro); }
