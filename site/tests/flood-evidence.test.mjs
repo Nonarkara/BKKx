@@ -2,9 +2,40 @@ import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import {normalizeTraffic,evidenceIsFresh} from '../app/flood/evidence.ts';
 import {parseRain,parseBulletin,observationTime,readingCurrent,nearbyGauges} from '../app/flood/context-data.ts';
-import {normaliseThaiwaterRain} from '../worker/live.ts';
+import {handleLiveThaiwaterWarnings,normaliseThaiwaterRain,normaliseThaiwaterWarnings} from '../worker/live.ts';
 import {waterCanalGatesResponse,waterRoadsFloodedResponse,waterDamsResponse,waterEmergencyPointsResponse,waterAlertsResponse,waterNewsWatchResponse,waterSourcesHealthResponse,waterRoadsXrefResponse} from '../worker/flood.ts';
 const now=Date.parse('2026-09-27T12:00:00Z');
+
+test('ThaiWater warning failures are not cacheable zero-warning reports',async()=>{
+  const original=globalThis.fetch;
+  try{
+    for(const payload of [{result:'ERROR',data:[]},{result:'OK'},{result:'OK',data:{}},[]]){
+      globalThis.fetch=async()=>Response.json(payload);
+      const response=await handleLiveThaiwaterWarnings();
+      assert.equal(response.headers.get('cache-control'),'no-store');
+      const body=await response.json();
+      assert.equal(body.ok,false);
+      assert.equal(body.data,undefined);
+    }
+    globalThis.fetch=async()=>Response.json({result:'OK',data:[]});
+    const response=await handleLiveThaiwaterWarnings();
+    const body=await response.json();
+    assert.equal(body.ok,true);
+    assert.equal(body.data.bangkokCount,0);
+    assert.equal(body.data.nationalCount,0);
+  }finally{globalThis.fetch=original;}
+});
+
+test('ThaiWater warnings retain text but do not invent missing coordinates',()=>{
+  const warning={message:'Bangkok warning',geocode:{province_code:'10'}};
+  for(const coords of [{lat:null,lng:null},{lat:'',lng:100.5},{lat:13.7,lng:false},{lat:91,lng:100.5},{lat:0,lng:0}]){
+    const {bangkok}=normaliseThaiwaterWarnings({data:[{...warning,...coords}]});
+    assert.equal(bangkok.length,1);
+    assert.deepEqual([bangkok[0].lat,bangkok[0].lon],[null,null]);
+  }
+  const {bangkok}=normaliseThaiwaterWarnings({data:[{...warning,lat:'13.7',lng:100.5}]});
+  assert.deepEqual([bangkok[0].lat,bangkok[0].lon],[13.7,100.5]);
+});
 const report={id:'1',category:'flood',lat:13.75,lng:100.5,start:'2026-09-27T11:00:00Z',title_th:'น้ำท่วม ถนนทดสอบ รายงานโดย 0812345678',desc_th:'private name',depth_cm:null};
 test('reports stay located evidence, not passability or inferred depth',()=>{const j=normalizeTraffic({fetched_at:new Date(now).toISOString(),events:[report,report]},now);assert.equal(j.reports.length,1);assert.equal(j.reports[0].depthCm,null);assert.ok(!JSON.stringify(j).includes('0812345678'));assert.ok(!JSON.stringify(j).includes('private name'));assert.equal(j.reports[0].passable,undefined);});
 test('exclude invalid geometry, old and future reports, other categories',()=>{for(const change of [{lat:NaN},{lng:Infinity},{lat:0},{category:'accident'},{start:'invalid'},{start:'2026-09-26T00:00:00Z'},{start:'2026-09-28T00:00:00Z'}])assert.equal(normalizeTraffic({events:[{...report,...change}]},now).reports.length,0);assert.throws(()=>normalizeTraffic({}));});

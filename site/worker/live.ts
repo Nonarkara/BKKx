@@ -247,6 +247,11 @@ export function normaliseThaiwaterWarnings(raw: unknown): { bangkok: ThaiWarning
     return null;
   };
   const bangkok: ThaiWarning[] = [];
+  const coordinate = (value: unknown, limit: number): number | null => {
+    if (typeof value !== "number" && (typeof value !== "string" || !value.trim())) return null;
+    const n = Number(value);
+    return Number.isFinite(n) && Math.abs(n) <= limit ? n : null;
+  };
   for (const row of rows) {
     if (!row || typeof row !== "object") continue;
     const o = row as Record<string, unknown>;
@@ -254,15 +259,16 @@ export function normaliseThaiwaterWarnings(raw: unknown): { bangkok: ThaiWarning
     if (!message) continue;
     const provinceCode = nested(o, "geocode", "province_code");
     if (provinceCode !== "10" && provinceCode !== "10499") continue;
-    const lat = Number(o["lat"]);
-    const lon = Number(o["lng"] ?? o["lon"]);
+    const lat = coordinate(o["lat"], 90);
+    const lon = coordinate(o["lng"] ?? o["lon"], 180);
+    const located = lat !== null && lon !== null && !(lat === 0 && lon === 0);
     bangkok.push({
       datetime: str(o, "datetime"),
       message,
       province: nested(o, "geocode", "province_name") ?? "กรุงเทพมหานคร",
       district: nested(o, "geocode", "amphoe_name"),
-      lat: Number.isFinite(lat) ? lat : null,
-      lon: Number.isFinite(lon) ? lon : null,
+      lat: located ? lat : null,
+      lon: located ? lon : null,
       kind: str(o, "type"),
       color: str(o, "warning_color"),
     });
@@ -288,7 +294,15 @@ export async function handleLiveThaiwaterWarnings(): Promise<Response> {
     if (raw === null) {
       return envelope({ ...base, ok: false, reason: "ThaiWater warning table returned a body that is not JSON." });
     }
-    const { bangkok, national } = normaliseThaiwaterWarnings(raw);
+    const table = raw as { result?: unknown; data?: unknown };
+    if (table.result !== "OK" || !Array.isArray(table.data)) {
+      return envelope({
+        ...base,
+        ok: false,
+        reason: "ThaiWater did not return a valid warning table. Current warnings are unknown.",
+      });
+    }
+    const { bangkok, national } = normaliseThaiwaterWarnings(table);
     return envelope<ThaiWarningsPayload>({
       ...base,
       ok: true,
