@@ -9030,3 +9030,40 @@ body:has(.sh-why) {
 
 /* Bare <small> fell to the browser default 0.83em (11.2px), a fourth size. */
 small { font-size: var(--text-micro); }
+
+/* Shophouse essay in five parts: contents list, part header, prev/next.
+   Sizes stay on the 14/11 scale (display only on the part title); radius 0, no shadow. */
+.sh-parts { max-width: 1184px; margin: 0 auto; padding: 0 var(--sh-page); border-bottom: 2px solid var(--sh-ink); }
+.sh-parts ol { list-style: none; margin: 0; padding: 0; }
+.sh-parts li { border-top: 1px solid var(--sh-hairline); }
+.sh-parts li:first-child { border-top: 0; }
+.sh-parts a {
+  display: grid; grid-template-columns: 28px 1fr auto; gap: 2px var(--s1); align-items: baseline;
+  padding: var(--s1) 0; color: var(--sh-ink) !important; text-decoration: none !important;
+}
+.sh-part-n { grid-row: 1 / 3; background: var(--sh-mark); color: var(--sh-ink); font-weight: 700; font-size: var(--text-body); text-align: center; padding: 1px 0; align-self: start; }
+.sh-parts strong { font-family: var(--font-display); font-size: var(--text-body); font-weight: 700; }
+.sh-part-dek { grid-column: 2; font-size: var(--text-body); line-height: 1.4; max-width: 60ch; }
+.sh-parts small { grid-column: 3; grid-row: 1; font-size: var(--text-micro); text-transform: uppercase; letter-spacing: .06em; }
+.sh-parts a:hover strong { color: var(--sh-seal); }
+@media (min-width: 720px) {
+  .sh-parts a { grid-template-columns: 28px minmax(160px, 240px) 1fr auto; }
+  .sh-part-n { grid-row: 1; }
+  .sh-part-dek { grid-column: 3; }
+  .sh-parts small { grid-column: 4; }
+}
+.sh-part-head { max-width: 1184px; margin: 0 auto; padding: var(--s3) var(--sh-page) 0; }
+.sh-part-head h1 { font-size: var(--text-display); line-height: 1.02; margin: var(--s1) 0 0; }
+.sh-part-head .sh-eyebrow a { color: inherit; }
+.sh-part-nav {
+  max-width: 1184px; margin: 0 auto; padding: var(--s2) var(--sh-page);
+  display: flex; flex-wrap: wrap; gap: var(--s1); justify-content: space-between;
+  border-top: 2px solid var(--sh-ink);
+}
+.sh-part-nav a {
+  font-family: var(--font-display); font-size: var(--text-body); font-weight: 700;
+  color: var(--sh-ink) !important; text-decoration: none !important;
+  display: inline-flex; align-items: center; min-height: 44px;
+}
+.sh-part-nav a.is-next { margin-left: auto; background: var(--sh-mark); padding: 0 var(--s1); }
+.sh-part-nav a:hover { color: var(--sh-seal) !important; }

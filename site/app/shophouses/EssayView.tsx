@@ -1,62 +1,42 @@
 "use client";
 
 import Link from "next/link";
-import { useMemo, useState } from "react";
-import { ESSAY, ESSAY_META, FOOTNOTES, type Block } from "../data/shophouse-essay";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { ESSAY_META } from "../data/shophouse-essay";
 import { STUDIO } from "../data/shophouse-studio";
-import { SUPPORT } from "../data/shophouse-rail";
-import { Figure } from "./figures";
-import { FoldedFigure } from "./FoldedFigure";
-import { Rail } from "./Rail";
-import { withNotes } from "./footnotes";
+import { PARTS, slugify } from "../data/shophouse-parts";
+import { ShMasthead, ShFooter } from "./chrome";
 
-// The essay is grouped into sections so each one can carry its own side
-// rail. On a wide screen: argument in the left 60%, evidence in the right
-// 40%, both scrolling together. On a phone the rail falls in after the
-// section's prose — the essay still reads top to bottom either way.
+// The essay itself lives in five parts at /shophouses/read/N; this page is the
+// front door: lede, contents with reading times, the pressure map, the brief.
 
 import { PressureMap } from "./PressureMap";
 import { PRESSURE_DISTRICTS, QUADRANTS, PRESSURE_TOTAL } from "../data/shophouse-pressure";
 import { CLUSTERS, SIGNATURE } from "../data/shophouse-gazetteer";
 
-type Section = { slug: string; heading: string | null; blocks: Block[] };
-
-function toSections(blocks: Block[]): Section[] {
-  const out: Section[] = [{ slug: "", heading: null, blocks: [] }];
-  for (const b of blocks) {
-    if (b.kind === "h2") {
-      out.push({ slug: slugify(b.text), heading: b.text, blocks: [] });
-    } else {
-      out[out.length - 1].blocks.push(b);
-    }
+// Old links were /shophouses#section-slug and #note-N; send them to the part that holds them.
+function legacyTarget(hash: string): string | null {
+  const id = hash.replace(/^#/, "");
+  for (const p of PARTS) {
+    if (p.headings.some((h) => slugify(h) === id)) return `/shophouses/read/${p.n}#${id}`;
+    const m = /^(?:note|ref)-(\d+)$/.exec(id);
+    if (m && p.notes.some((f) => f.n === Number(m[1]))) return `/shophouses/read/${p.n}#${id}`;
   }
-  return out.filter((s) => s.blocks.length || s.heading);
+  return null;
 }
 
 export function EssayView() {
   const [showAbstract, setShowAbstract] = useState(false);
-  const sections = useMemo(() => toSections(ESSAY), []);
-  const headings = sections.filter((s) => s.heading).map((s) => s.heading!);
+  const router = useRouter();
+  useEffect(() => {
+    const t = legacyTarget(window.location.hash);
+    if (t) router.replace(t);
+  }, [router]);
 
   return (
     <div className="shophouse-essay">
-      <header className="sh-masthead">
-        <Link href="/shophouses" className="sh-wordmark">
-          Shophouse<em>Metropolis</em>
-        </Link>
-        <nav aria-label="Essay">
-          <a href="#essay">Essay</a>
-          <a href="#research">Notes</a>
-          <Link href="/shophouses/why">Why</Link>
-          <Link href="/shophouses/typology">Typology</Link>
-          <Link href="/shophouses/bible">The Bible</Link>
-          <Link href="/shophouses/global">Global</Link>
-          <Link href="/shophouses/research">Sources</Link>
-          <a href="https://bkk.nonarkara.org" target="_blank" rel="noreferrer">
-            BKKx
-          </a>
-        </nav>
-      </header>
+      <ShMasthead />
 
       <article className="sh-lede sh-lede-split" id="essay">
         <div className="sh-lede-main">
@@ -73,8 +53,8 @@ export function EssayView() {
         <p className="sh-companion">
           <strong>This is the companion, not the chapter.</strong> The essay is published as a
           printed chapter in <em>Shophouse Metropolis</em> (Harvard University Graduate School of
-          Design). Here you can read the map and the ten-minute argument first, then open the long
-          version only when you need the survey, sourced models, anatomy and full bibliography.
+          Design). Read it below in five parts, each with its own notes, or start with the map and the
+          ten-minute argument further down this page.
         </p>
         <p className="sh-dedication-line">{ESSAY_META.dedication}</p>
 
@@ -94,58 +74,28 @@ export function EssayView() {
         </div>
       </article>
 
-      <nav className="sh-contents-strip" aria-label="Contents">
+      <nav className="sh-parts" aria-label="Contents" id="contents">
         <ol>
-          {headings.map((h) => (
-            <li key={h}>
-              <a href={`#${slugify(h)}`}>{h}</a>
+          {PARTS.map((p) => (
+            <li key={p.n}>
+              <Link href={`/shophouses/read/${p.n}`}>
+                <span className="sh-part-n">{p.n}</span>
+                <strong>{p.title}</strong>
+                <span className="sh-part-dek">{p.dek}</span>
+                <small>{p.minutes} min</small>
+              </Link>
             </li>
           ))}
           <li>
-            <a href="#atlas" className="is-atlas">The pressure map</a>
+            <a href="#atlas" className="is-atlas">
+              <span className="sh-part-n">▲</span>
+              <strong>The pressure map</strong>
+              <span className="sh-part-dek">Every candidate footprint, laid over the Treasury appraisal.</span>
+              <small>on this page</small>
+            </a>
           </li>
         </ol>
-        </nav>
-
-        <div className="sh-sections">
-        {sections.map((s) => (
-          <section className="sh-section" key={s.slug || "opening"} id={s.slug || undefined}>
-            <div className="sh-section-prose">
-              {s.heading && <h2>{s.heading}</h2>}
-              {s.blocks.map((block, i) => {
-                switch (block.kind) {
-                  case "p":
-                    return <p key={i}>{withNotes(block.text)}</p>;
-                  case "pull":
-                    return (
-                      <blockquote key={i} className="sh-pull">
-                        {withNotes(block.text)}
-                      </blockquote>
-                    );
-                  case "note":
-                    return (
-                      <p key={i} className="sh-note">
-                        {block.text}
-                      </p>
-                    );
-                  case "figure":
-                    return (
-                      <figure key={i} className="sh-figure" id={`figures-${block.id}`}>
-                        <FoldedFigure id={block.id}>
-                          <Figure id={block.id} />
-                        </FoldedFigure>
-                        <figcaption>{block.caption}</figcaption>
-                      </figure>
-                    );
-                  default:
-                    return null;
-                }
-              })}
-            </div>
-            <Rail section={s.slug} />
-          </section>
-        ))}
-        </div>
+      </nav>
 
         <section className="sh-atlas" id="atlas">
         <div className="sh-atlas-head">
@@ -212,65 +162,7 @@ export function EssayView() {
         </div>
       </section>
 
-      <details className="sh-research-companion" id="research">
-        <summary>
-          <span>Notes</span>
-          <strong>{FOOTNOTES.length} Chicago-style footnotes for the essay above</strong>
-          <small>Open the notes ↓</small>
-        </summary>
-        <section className="sh-sections sh-notes-wrap">
-        <div className="sh-notes">
-          <h2 id="notes">Notes</h2>
-          <ol>
-            {FOOTNOTES.map((f) => (
-              <li key={f.n} id={`note-${f.n}`} value={f.n}>
-                {f.text} <a href={`#ref-${f.n}`} aria-label={`Back to note ${f.n}`}>↩</a>
-              </li>
-            ))}
-          </ol>
-        </div>
-        </section>
-      </details>
-
-      <footer className="sh-footer">
-        <div className="sh-support">
-          <p className="sh-eyebrow">Supported by</p>
-          <p>{SUPPORT.intro}</p>
-          <div className="sh-support-logos">
-            {SUPPORT.logos.map((l) => (
-              <a key={l.file} href={l.url} target="_blank" rel="noreferrer" title={l.name}>
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={l.file} alt={l.name} loading="lazy" />
-              </a>
-            ))}
-          </div>
-        </div>
-        <p>
-          <strong>{STUDIO.name}</strong> — {STUDIO.critic}, with {STUDIO.institution}. Chair:{" "}
-          {STUDIO.chair}. Sponsor: {STUDIO.sponsor}. Site: {STUDIO.site}.
-        </p>
-        <p className="sh-note">{STUDIO.sourceNote}</p>
-        <p>
-          Sibling systems:{" "}
-          <a href="https://bkk.nonarkara.org" target="_blank" rel="noreferrer">
-            bkk.nonarkara.org
-          </a>{" "}
-          — the heritage register, nine quarters and the rowhouse atlas this corridor screen was
-          built from ·{" "}
-          <a href="https://atlas.nonarkara.org" target="_blank" rel="noreferrer">
-            atlas.nonarkara.org
-          </a>{" "}
-          — Bangkok&apos;s operational digital twin.
-        </p>
-      </footer>
+      <ShFooter />
     </div>
   );
-}
-
-function slugify(s: string): string {
-  return s
-    .toLowerCase()
-    .replace(/[^a-z0-9\s-]/g, "")
-    .trim()
-    .replace(/\s+/g, "-");
 }

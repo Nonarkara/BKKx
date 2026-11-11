@@ -1225,25 +1225,39 @@ test("the why page credits Bhardwaj’s four street measures without his tempera
   assert.match(html, /www\.instagram\.com\/p\/De7LxGmCMHa\//);
 });
 
-test("the shophouse essay defaults to a short argument without deleting the research", async () => {
+test("the shophouse essay is a short front door plus five parts that lose no section or note", async () => {
   const response = await render("/shophouses");
   assert.equal(response.status, 200);
   const html = await response.text();
   assert.match(html, /The ten-minute version/);
   assert.match(html, /run out of excuses for not counting them/);
-  assert.match(html, /Chicago-style footnotes/);
-  assert.match(html, /Open the notes/);
   assert.match(html, /documented clusters/);
   assert.match(html, /candidate footprints/);
   assert.match(html, /Open Bangkok(?:&#x27;|')s rowhouse register/);
-  assert.match(html, /<details[^>]+sh-research-companion/);
+  const { ESSAY } = await import("../app/data/shophouse-essay.ts");
+  const pages = [];
+  for (let n = 1; n <= 5; n++) {
+    assert.match(html, new RegExp(`href="/shophouses/read/${n}"`));
+    const r = await render(`/shophouses/read/${n}`);
+    assert.equal(r.status, 200);
+    const t = await r.text();
+    assert.match(t, /aria-label="Parts"/);
+    pages.push(t);
+  }
+  const all = pages.join("\n");
+  const esc = (x) => x.replace(/&/g, "&amp;").replace(/'/g, "&#x27;").replace(/"/g, "&quot;");
+  for (const b of ESSAY) {
+    if (b.kind === "h2") assert.ok(all.includes(esc(b.text)), `heading "${b.text}" is in a part`);
+  }
+  const cited = new Set([...JSON.stringify(ESSAY).matchAll(/\[\[(\d+)\]\]/g)].map((m) => m[1]));
+  for (const n of cited) assert.ok(all.includes(`id=\"note-${n}\"`) || all.includes(`id="note-${n}"`), `note ${n} is printed in a part`);
 });
 
 test("every primary public route renders successfully", async () => {
   for (const route of [
     "/", "/about", "/heritage", "/rowhouses", "/case-for-bangkok", "/worlds",
     "/atlas/historic-core", "/areas/kudi-chin", "/walks/six-faiths",
-    "/shophouses", "/shophouses/why", "/shophouses/typology", "/shophouses/bible", "/shophouses/global",
+    "/shophouses", "/shophouses/read/1", "/shophouses/read/5", "/shophouses/why", "/shophouses/typology", "/shophouses/bible", "/shophouses/global",
     "/shophouses/print", "/shophouses/research",
   ]) {
     const response = await render(route);
