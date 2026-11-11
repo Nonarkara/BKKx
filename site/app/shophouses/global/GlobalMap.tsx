@@ -107,7 +107,7 @@ export function GlobalMap() {
                 strokeWidth={0.6}
                 strokeDasharray="2 4"
               />
-              <text x={PAD_L + 4} y={y - 3} fontSize={9} fill="#5f5b66" fontFamily="ui-monospace, monospace">
+              <text x={PAD_L + 4} y={y - 3} fontSize={11} fill="#5f5b66" fontFamily="ui-monospace, monospace">
                 equator
               </text>
             </g>
@@ -197,7 +197,7 @@ export function GlobalMap() {
                 <text
                   x={x + 9}
                   y={y + 3}
-                  fontSize={10}
+                  fontSize={11}
                   fontWeight={700}
                   fontFamily="var(--font-body)"
                   fill="#14140f"
@@ -237,7 +237,7 @@ export function GlobalMap() {
                 <text
                   x={x + 9}
                   y={y + 3}
-                  fontSize={10}
+                  fontSize={11}
                   fontWeight={isFocus ? 700 : 500}
                   fontFamily="var(--font-body)"
                   fill={isFocus ? "#14140f" : "#5f5b66"}
