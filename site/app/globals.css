@@ -5825,7 +5825,7 @@ body:has(.shophouse-essay) {
   justify-content: space-between;
   max-width: 1184px;
   margin: 0 auto;
-  padding: var(--sh-page);
+  padding: var(--s1) var(--sh-page) var(--s1);
   border-bottom: 1px solid var(--sh-ink);
 }
 .sh-wordmark {
@@ -5845,7 +5845,7 @@ body:has(.shophouse-essay) {
   letter-spacing: 0.04em;
   display: inline-flex;
   align-items: center;
-  min-height: 44px;
+  min-height: 34px;
 }
 
 /* ---- lede ---- */
@@ -9052,7 +9052,7 @@ small { font-size: var(--text-micro); }
   .sh-part-dek { grid-column: 3; }
   .sh-parts small { grid-column: 4; }
 }
-.sh-part-head { max-width: 1184px; margin: 0 auto; padding: var(--s3) var(--sh-page) 0; }
+.sh-part-head { max-width: 1184px; margin: 0 auto; padding: var(--s2) var(--sh-page) 0; }
 .sh-part-head h1 { font-size: var(--text-display); line-height: 1.02; margin: var(--s1) 0 0; }
 .sh-part-head .sh-eyebrow a { color: inherit; }
 .sh-part-nav {
@@ -9063,9 +9063,9 @@ small { font-size: var(--text-micro); }
 .sh-part-nav a {
   font-family: var(--font-display); font-size: var(--text-body); font-weight: 700;
   color: var(--sh-ink) !important; text-decoration: none !important;
-  display: inline-flex; align-items: center; min-height: 44px;
+  display: inline-flex; align-items: center; min-height: 34px;
 }
-.sh-part-nav a.is-next { margin-left: auto; background: var(--sh-mark); padding: 0 var(--s1); }
+.sh-part-nav a.is-next { margin-left: auto; background: var(--sh-mark); padding: 0 8px; }
 .sh-part-nav a:hover { color: var(--sh-seal) !important; }
 
 /* Leaflet zoom glyphs defaulted to 22px and rounded corners (house: 14/11 scale, radius 0). */
