@@ -227,6 +227,22 @@ Found and fixed:
   exists and counts on the Bangkok day boundary (`2026-10-29`). A valid
   browser-shaped POST returns 201, a forged Origin 403, a `null` body 400.
 
+### Everything re-checked on the deployed build
+
+One pass over the live surface with `tools/audit-live.mjs`, measuring the
+deployed bytes rather than the source:
+
+| | before | after |
+|---|---|---|
+| homepage clipped text nodes (1440) | 19 | **0** |
+| homepage clipped text nodes (390) | — | **0** |
+| war room tally unit size | **7px** | **11px** |
+| atlas layer buttons clipping their label | 5 of 8 | **0 of 21** |
+
+The last row is the one the user named — the toolbar whose buttons were
+cutting their own words. "National Archives (1)" needed 134px and the button
+had 112; every button now measures its own width exactly.
+
 ### PR disposition
 
 - PR22 (four street measures on Why, from Bhardwaj's October carousel) and
@@ -459,6 +475,8 @@ behind the benchmark, and it is a product decision rather than a quality gap.
   that reported 137 failures was measuring a broken network, not the site.
 - The independent-review row is still open. Everything in this ledger is the
   work of the agent that did the work.
+- The KL framing gap: a city-wide 3D tab. The modelling is on par; the
+  framing is not, and that is a product decision rather than a defect.
 - The KL framing gap: a city-wide 3D tab.
 - The Cloudflare rate-limiting rules are specified but must be confirmed as
   configured in the zone.
