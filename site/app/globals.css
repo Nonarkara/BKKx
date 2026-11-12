@@ -2080,9 +2080,14 @@ button {
   text-align: center;
   transition: all 120ms ease;
   line-height: 1.2;
-  white-space: nowrap;
+  /* The label is what tells you which layer you are switching on, so it is the
+     one thing a layer button may not cut. A third of the toolbar is 112px and
+     "National Archives (1)" needs 134 of them, so five of the eight buttons
+     were ellipsised. The label takes two lines now. */
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
   overflow: hidden;
-  text-overflow: ellipsis;
 }
 
 .layer-toggle-btn:hover {
