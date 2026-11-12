@@ -393,3 +393,71 @@ No branch was deleted. Each disposition is written on its own PR.
   configured in the zone.
 - The release path does not itself gate on CI passing.
 - Expanded, empty and error states are still not exercised.
+
+## Audit round — 12 November 2026
+
+Base `5577083`. This round took up a batch another agent had left
+uncommitted, closed the screenshot-review blocker it could not clear, and
+audited the whole surface with instruments rather than by eye.
+
+### The blocker, cleared
+
+`docs/context-save-screenshot-review.md` recorded six screenshots and a
+first-screen read that were blocked because the previous agent's browser
+could not capture in headless mode. A headless Chromium can. All six are
+captured, the first-screen read is written, and the legacy-anchor redirect
+is proved: `/shophouses/#the-arithmetic-that-eats-a-street` redirects
+client-side to `/shophouses/read/1#the-arithmetic-that-eats-a-street` with
+the anchor intact. See `docs/msh-audit-final-2026-11-12.md`.
+
+### Four real defects, found by measuring and fixed
+
+- **The homepage's Old Town list** — the meta line under each card was one
+  line with an ellipsis; nineteen were cut mid-word. That line is the
+  classification and the era, and it is what tells you what you are looking
+  at. Two lines now, the same clamp the note beneath it uses.
+- **The war room's tally units** — `.wr-tally-unit` was `.5em` of a 14px
+  number, so the units on live figures rendered at **7px**. The type scale
+  this project consolidated to is 14 / 11 / display; 7px was on no scale. It
+  is `--text-micro` now. An audit of twelve pages at both widths returns
+  four sizes — 14, 11, 32, 86.4 — and the 32 and 86.4 are the display scale.
+- **The Atlas's massing note** — absolutely positioned over the 3D city in
+  grey with no background and no shadow, unreadable over the buildings, on
+  the one sentence that says the model is a stand-in and not a survey. It
+  has the same ground the map's own attribution uses now. Released as
+  `bkk-atlas-20261112-1794465969-ce34d8c`, 34 live smoke checks green.
+- **The dependency PRs' real blocker was ours, not theirs** — PR13 and PR24
+  both failed on `fix-asset-manifest: no dist/client/assets`, a hard-coded
+  path in our own script that vinext 1.x had moved. Fixed on `main` in the
+  4 November round; PR24's branch predates it and has been asked to rebase.
+
+### The 3D models against the KL benchmark
+
+KL is the same Atlas codebase pointed at Kuala Lumpur. **The modelling is on
+par** — the same extruded masses over satellite, the same material language,
+the same landmark accents; Bangkok's schematic Grand Palace stand-in has its
+own height, material and footprint-fitting work. **The framing is not**: KL
+opens on the 3D city, Bangkok opens on the flat operational map with the 3D
+models scoped to two landmarks. That is the one measured place where BKKx is
+behind the benchmark, and it is a product decision rather than a quality gap.
+
+### PR disposition
+
+- PR26 (pinned `github/codeql-action/upload-sarif` 4.39.1 → 4.39.3): **merged.**
+- PR24 (the 24-package npm batch): **held, and asked to rebase.** The path
+  bug that failed it is fixed on `main`; the majors — `vinext` 1,
+  `typescript` 7, `eslint` 10, `three` 0.186, `maplibre-gl` 6,
+  `@types/node` 26 — still need one round each with their own rendering
+  evidence.
+
+### Still open
+
+- **A clean whole-surface sweep.** The 639-URL run against the live site was
+  broken by network failures — 267 of the measurements never loaded the page.
+  It surfaced one real defect (the nineteen clipped meta lines, now fixed)
+  and it is **not** reported as a pass.
+- The independent-review row is still open. Everything in this ledger is the
+  work of the agent that did the work.
+- The KL framing gap: a city-wide 3D tab.
+- The Cloudflare rate-limiting rules are specified but must be confirmed as
+  configured in the zone.
