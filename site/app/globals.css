@@ -6042,7 +6042,7 @@ body:has(.shophouse-essay) {
 .sh-carbon-controls output small { font-weight: 400; color: var(--sh-quiet); }
 .sh-carbon-toggle { display: flex; flex-wrap: wrap; gap: 6px; }
 .sh-carbon-toggle button {
-  flex: 1 1 auto; min-height: 44px; padding: 0 var(--sh-base);
+  flex: 1 1 auto; min-height: 34px; padding: 0 var(--sh-base);
   background: none; border: 1px solid var(--sh-rule);
   font-family: var(--font-display); font-size: var(--text-body); font-weight: 600;
   color: var(--sh-ink); cursor: pointer;
@@ -6661,7 +6661,7 @@ body:has(.sh-figexport) { background: #fff !important; }
    collapse the button that wraps them before they load (house rule §11.8) */
 .sh-rail img { min-height: 120px; background: var(--sh-panel); }
 .sh-rail-diagram > button { min-height: 120px; }
-.sh-contents-strip a { min-height: 44px; }
+.sh-contents-strip a { min-height: 34px; }
 /* 44 px targets without letting tall boxes drift the baseline layout */
 .sh-masthead { align-items: center; }
 .sh-masthead nav { align-items: center; row-gap: 0; }
