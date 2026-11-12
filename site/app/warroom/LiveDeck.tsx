@@ -474,7 +474,7 @@ function CuratedTile({ cam }: { cam: CuratedCamera }) {
           {/* The fallback text already reads "press to play"; a glyph on
               top of it collides. Only shown over a real poster. */}
           {posterFailed ? null : (
-            <span className="wr-cam-playicon" aria-hidden="true">play</span>
+            <span className="wr-cam-playicon" aria-hidden="true">▶</span>
           )}
         </button>
       )}

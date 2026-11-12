@@ -134,7 +134,7 @@ export function SuggestLocation({ cam }: { cam: CuratedCamera }) {
               .catch(() => {});
           }}
         >
-          {copied ? "copied" : "Copy suggestion"}
+          {copied ? "✓ copied" : "Copy suggestion"}
         </button>
         {picked ? (
           <a className="wr-btn" href={githubIssueUrl(cam, picked.lat, picked.lon)} target="_blank" rel="noreferrer">

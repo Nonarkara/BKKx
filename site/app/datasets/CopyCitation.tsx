@@ -21,7 +21,7 @@ export function CopyCitation({ text }: { text: string }) {
           .catch(() => {})
       }
     >
-      {copied ? "copied" : "copy"}
+      {copied ? "✓ copied" : "copy"}
     </button>
   );
 }
