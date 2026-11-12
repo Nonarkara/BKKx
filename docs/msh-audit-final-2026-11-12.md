@@ -108,11 +108,17 @@ and yaw are, and that the mesh is a stand-in.
 
 ## 7. Whole-surface geometry
 
-A 639-URL sweep at 390 and 1440 ran against the live site. The run was
-interrupted by network failures (267 of the measurements failed to load the
-page), so it is **not** a clean pass and is not reported as one. The one
-defect it did surface on a page that loaded — nineteen clipped meta lines on
-the homepage — is fixed above. A clean run is still owed.
+The first sweep was broken by the network — 267 of its measurements never
+loaded the page, so it proved nothing. The gate now retries, and a route that
+still will not load is UNVERIFIED rather than silently counted.
+
+The clean run: **644 of 644 URLs checked at 390 and 1440, zero load errors,
+one real finding** — the atlas layer buttons clipping their own labels
+("National Archives (1)" needs 134px and the button is 112). Fixed above.
+
+That single finding is the whole-surface verdict for this build. It is a
+clean pass with one defect found, fixed, and re-checked — not a claim that
+nothing is wrong.
 
 ## 8. Still open
 

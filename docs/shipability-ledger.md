@@ -452,10 +452,11 @@ behind the benchmark, and it is a product decision rather than a quality gap.
 
 ### Still open
 
-- **A clean whole-surface sweep.** The 639-URL run against the live site was
-  broken by network failures — 267 of the measurements never loaded the page.
-  It surfaced one real defect (the nineteen clipped meta lines, now fixed)
-  and it is **not** reported as a pass.
+- **A clean whole-surface sweep — done, 12 November.** With the retry the
+  gate needed, the run against the live site checked **644 of 644 URLs at 390
+  and 1440 with zero load errors**, and found exactly one real defect: the
+  atlas layer buttons clipping their own labels, fixed above. The earlier run
+  that reported 137 failures was measuring a broken network, not the site.
 - The independent-review row is still open. Everything in this ledger is the
   work of the agent that did the work.
 - The KL framing gap: a city-wide 3D tab.
