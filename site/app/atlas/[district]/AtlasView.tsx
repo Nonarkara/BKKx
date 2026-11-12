@@ -2662,7 +2662,7 @@ export function AtlasView({ world, embedded = false, initialView, floodEdition =
             disabled={!mapReady}
             title="Copy a link that reopens this atlas at exactly the current view — center, zoom, pitch and bearing. Shortcut: C"
           >
-            {viewLinkCopied ? "✓ View link copied" : "⧉ Cite this view"}
+            {viewLinkCopied ? "View link copied" : "Cite this view"}
           </button>
           <p className="atlas-cursor-readout" aria-hidden="true">
             <span ref={cursorReadoutRef}>—</span>
@@ -2738,7 +2738,7 @@ export function AtlasView({ world, embedded = false, initialView, floodEdition =
               }}
               className={`tour-play-btn ${isTourPlaying ? "is-playing" : ""}`}
             >
-              {isTourPlaying ? "❚❚ Pause Cinematic Tour" : "▶ Start Cinematic Tour"}
+              {isTourPlaying ? "Pause Cinematic Tour" : "Start Cinematic Tour"}
             </button>
 
             <div className="control-row">
@@ -3062,7 +3062,7 @@ export function AtlasView({ world, embedded = false, initialView, floodEdition =
                 >
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img src={posterFor(selectedCamera.videoId)} alt="" loading="lazy" />
-                  <span className="cam-play-glyph" aria-hidden="true">▶</span>
+                  <span className="cam-play-glyph" aria-hidden="true">play</span>
                   <span className="cam-play-note">press to play · nothing loads until you do</span>
                 </button>
               ) : selectedCamera.snapshotUrl ? (

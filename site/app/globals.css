@@ -1472,7 +1472,7 @@ button {
 .key-landmark { background: #ffd04d; }
 .key-candidate { background: #d4a056; }
 .key-hero {
-  background: linear-gradient(90deg, #e7d4aa 0 40%, #eee2c5 40% 72%, #f4c84d 72%);
+  background: #f4c84d;
   border-color: #fff0c2;
 }
 .key-rowhouse { color: #e0a23a; }
@@ -1482,7 +1482,7 @@ button {
 .key-dashed { border-top-style: dashed; color: #f4d492; }
 .key-dotted { border-top-style: dotted; }
 .key-area { display: block; width: 26px; height: 8px; border: 1px dashed #d2a56a; background: rgba(178, 132, 74, .32); }
-.key-aerosol { display: block; width: 26px; height: 8px; background: linear-gradient(90deg, #6a52a3, #cf5b8f, #f5b63e); }
+.key-aerosol { display: block; width: 26px; height: 8px; background: #cf5b8f; }
 
 .atlas-aerosol-note {
   position: absolute;
