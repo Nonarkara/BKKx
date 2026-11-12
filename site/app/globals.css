@@ -1438,6 +1438,11 @@ button {
 
 .atlas-map-key > div {
   display: grid;
+  /* An auto grid column is sized by its content's max-content width, so one
+     long label pushed the whole key 12px past the right edge of a 390px
+     screen — six rows of it, all off the viewport. The column is the
+     container's width now, and the label wraps inside it. */
+  grid-template-columns: minmax(0, 1fr);
   gap: 7px;
   padding: 0 10px 10px;
   border-top: 1px solid rgba(255, 255, 255, .12);
@@ -1445,13 +1450,15 @@ button {
 
 .atlas-map-key span {
   display: grid;
-  grid-template-columns: 27px 1fr;
+  grid-template-columns: 27px minmax(0, 1fr);
   align-items: center;
   gap: 8px;
+  min-width: 0;
   padding-top: 7px;
   color: rgba(255, 255, 255, .78);
   font-size: var(--text-micro);
   line-height: 1.25;
+  overflow-wrap: anywhere;
 }
 
 .key-line { display: block; height: 0; border-top: 3px solid currentColor; }
