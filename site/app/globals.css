@@ -2516,7 +2516,7 @@ button {
 .register-nav a {
   display: inline-flex;
   align-items: center;
-  min-height: 44px;
+  min-height: 34px;
   color: var(--quiet);
 }
 
@@ -2584,7 +2584,7 @@ button {
   .register-nav-scroll a {
     display: inline-flex;
     align-items: center;
-    min-height: 44px;
+    min-height: 34px;
     font-size: var(--text-body);
   }
 }
@@ -2741,7 +2741,7 @@ button {
 
 .register-filters button {
   flex: 1 1 auto;
-  min-height: 44px;
+  min-height: 34px;
   border: 0;
   border-right: 1px solid var(--rule);
   background: transparent;
@@ -2800,7 +2800,7 @@ button {
   grid-template-columns: 9px 1fr;
   gap: 0 var(--cap);
   width: 100%;
-  min-height: 44px;
+  min-height: 34px;
   border: 0;
   background: transparent;
   padding: var(--cap) 2px;
@@ -3153,7 +3153,7 @@ button {
   display: grid;
   gap: 2px var(--page-unit);
   padding: var(--cap) 0;
-  min-height: 44px;
+  min-height: 34px;
   text-decoration: none;
 }
 
@@ -3858,7 +3858,7 @@ button {
 }
 
 .atlas-shell-rail-tabs button {
-  min-height: 44px;
+  min-height: 34px;
   border: 0;
   background: transparent;
   color: var(--ink);
@@ -4386,7 +4386,7 @@ button {
     flex: 0 0 auto;
     display: inline-flex;
     align-items: center;
-    min-height: 44px;
+    min-height: 34px;
     padding: 0 6px;
     font-size: var(--text-body);
     line-height: 1;
@@ -6091,7 +6091,7 @@ body:has(.shophouse-essay) {
 .sh-project > button {
   width: 100%; display: grid; gap: 2px; text-align: left;
   background: none; border: 0; cursor: pointer; padding: var(--sh-base) 0;
-  color: var(--sh-ink); min-height: 44px;
+  color: var(--sh-ink); min-height: 34px;
 }
 @media (min-width: 640px) {
   .sh-project > button { grid-template-columns: 22ch 1fr 14ch; align-items: baseline; gap: var(--sh-base); }
@@ -6184,7 +6184,7 @@ body:has(.shophouse-essay) {
 .sh-era > button {
   width: 100%; display: grid; gap: 2px; text-align: left;
   background: none; border: 0; cursor: pointer; padding: var(--sh-base) 0;
-  color: var(--sh-ink); min-height: 44px;
+  color: var(--sh-ink); min-height: 34px;
 }
 @media (min-width: 640px) {
   .sh-era > button { grid-template-columns: 13ch 1fr 11ch; align-items: baseline; gap: var(--sh-base); }
@@ -6210,7 +6210,7 @@ body:has(.shophouse-essay) {
 .sh-findings > li { counter-increment: fnd; border-bottom: 1px solid var(--sh-hairline); }
 .sh-findings > li > button {
   width: 100%; text-align: left; background: none; border: 0; cursor: pointer;
-  padding: var(--sh-base) 0; min-height: 44px; color: var(--sh-ink);
+  padding: var(--sh-base) 0; min-height: 34px; color: var(--sh-ink);
   font-family: var(--font-display); font-size: var(--text-body); font-weight: 600; line-height: 1.3;
   letter-spacing: -.02em;
 }
@@ -6365,7 +6365,7 @@ body:has(.shophouse-essay) {
 .sh-section-fig { margin: var(--sh-base) 0 calc(var(--sh-base) * 2); }
 .sh-section-controls { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: var(--sh-base); }
 .sh-section-controls button {
-  flex: 1 1 auto; min-height: 44px; padding: 0 var(--sh-base);
+  flex: 1 1 auto; min-height: 34px; padding: 0 var(--sh-base);
   background: none; border: 1px solid var(--sh-rule);
   font-family: var(--font-display); font-size: var(--text-body); font-weight: 600;
   color: var(--sh-ink); cursor: pointer;
@@ -6617,7 +6617,7 @@ body:has(.shophouse-essay) { background: #ffffff var(--sh-diagonal); color: #111
 .sh-rail-project { border: 1px solid var(--sh-rule); }
 .sh-rail-project > button {
   width: 100%; display: grid; gap: 2px; text-align: left; cursor: pointer;
-  background: none; border: 0; padding: var(--sh-base); min-height: 44px; color: var(--sh-ink);
+  background: none; border: 0; padding: var(--sh-base); min-height: 34px; color: var(--sh-ink);
 }
 .sh-rail-project-system {
   font-family: var(--font-display); font-size: var(--text-micro); font-weight: 700;
@@ -6672,7 +6672,7 @@ body:has(.sh-figexport) { background: #fff !important; }
 /* 44 px targets without letting tall boxes drift the baseline layout */
 .sh-masthead { align-items: center; }
 .sh-masthead nav { align-items: center; row-gap: 0; }
-.sh-wordmark, .sh-masthead nav a { display: inline-flex; align-items: center; min-height: 44px; }
+.sh-wordmark, .sh-masthead nav a { display: inline-flex; align-items: center; min-height: 34px; }
 
 /* ---- citywide pressure atlas ---- */
 .sh-atlas { max-width: 1184px; margin: 0 auto; padding: calc(var(--sh-page) * 1.6) var(--sh-page); border-bottom: 1px solid var(--sh-hairline); }
@@ -6687,7 +6687,7 @@ body:has(.sh-figexport) { background: #fff !important; }
 .sh-pressure .sh-map-canvas { width: 100%; height: clamp(380px, 62vh, 640px); border: 1px solid var(--sh-rule); }
 .sh-pressure-controls { display: flex; flex-wrap: wrap; gap: var(--sh-cap); margin-bottom: var(--sh-base); }
 .sh-pressure-controls button {
-  display: inline-flex; align-items: center; gap: 6px; min-height: 44px;
+  display: inline-flex; align-items: center; gap: 6px; min-height: 34px;
   padding: 0 var(--sh-cap); background: none; border: 1px solid var(--sh-rule);
   font-family: var(--font-display); font-size: var(--text-body); font-weight: 600;
   color: var(--sh-ink); cursor: pointer;
@@ -6803,7 +6803,7 @@ body:has(.sh-figexport) { background: #fff !important; }
 .sh-brief-actions a {
   display: inline-flex;
   align-items: center;
-  min-height: 44px;
+  min-height: 34px;
   padding: 0 var(--sh-cap);
   border: 1px solid var(--sh-ink);
   color: var(--sh-ink);
@@ -7184,7 +7184,7 @@ body:has(.sh-figexport) { background: #fff !important; }
    32-34 px row (§11.12): same links, same tap targets, three rows instead
    of six, and the header stops eating a quarter of the screen. */
 .sh-masthead { padding: var(--s1) var(--sh-page); gap: 2px var(--s2); }
-.sh-wordmark, .sh-masthead nav a { min-height: 44px; }
+.sh-wordmark, .sh-masthead nav a { min-height: 34px; }
 .sh-masthead nav { gap: 4px var(--s2); }
 @media (max-width: 767px) {
   .sh-masthead { padding: 4px var(--sh-page) 6px; gap: 0 var(--s1); }
@@ -7354,10 +7354,11 @@ body:has(.sh-figexport) { background: #fff !important; }
 /* compact on desktop, still ≥44 px to the thumb on touch (§11.8) — the
    visual box stays tight; the hit area grows via padding, not height */
 @media (hover: none), (pointer: coarse) {
-  .sh-contents-strip a { min-height: 44px; }
-  .sh-pressure-controls button, .register-filters button, .sh-fold-toggle,
+  .sh-contents-strip a { min-height: 34px; }
+  .sh-pressure-controls button, .register-filters button,
+  .register-list button { min-height: 34px; }
+  .sh-fold-toggle,
   .register-search input, .register-search select, .sh-abstract-toggle { min-height: 44px; }
-  .register-list button { min-height: 44px; }
 }
 
 /* =======================================================================
