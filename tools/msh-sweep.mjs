@@ -194,8 +194,23 @@ async function worker() {
       const ctx = await browser.newContext({ viewport: { width: w, height: h }, deviceScaleFactor: 1, isMobile: w < 500, hasTouch: w < 500, locale: 'th-TH', timezoneId: 'Asia/Bangkok', ignoreHTTPSErrors: true });
       const page = await ctx.newPage();
       try {
-        const resp = await page.goto(`${BASE}${route}`, { waitUntil: 'domcontentloaded', timeout: 30000 });
-        const status = resp ? resp.status() : null;
+        let status = null;
+        let lastError = null;
+        for (let attempt = 1; attempt <= 4; attempt++) {
+          try {
+            const resp = await page.goto(`${BASE}${route}`, { waitUntil: 'domcontentloaded', timeout: 45000 });
+            status = resp ? resp.status() : null;
+            break;
+          } catch (e) {
+            // A network failure is not a finding about the page. Retry, and if
+            // it never loads, say so — a route that never loaded is
+            // UNVERIFIED, not clean and not broken.
+            lastError = String(e.message || e).split('\n')[0];
+            if (attempt === 4) break;
+            await page.waitForTimeout(2500 * attempt);
+          }
+        }
+        if (lastError) throw new Error(lastError);
         await page.waitForTimeout(900);
         const g = await page.evaluate(GEOMETRY);
         rec.viewports[w] = { status, ...g };
