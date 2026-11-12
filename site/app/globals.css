@@ -4170,9 +4170,14 @@ button {
   letter-spacing: 0.02em;
   color: rgba(17, 18, 15, 0.55);
   margin-top: 2px;
-  white-space: nowrap;
+  /* The classification and the era are the information — "Market row · Rama V
+     market history; later markets" is what tells you what you are looking at.
+     A one-line ellipsis cut it mid-word on 19 of the cards. It takes two
+     lines, the same clamp the note below it uses. */
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
   overflow: hidden;
-  text-overflow: ellipsis;
 }
 .atlas-shell-oldtown-source { margin-top: 0; }
 .atlas-shell-oldtown-source a {
@@ -7596,7 +7601,7 @@ body:has(.sh-figexport) { background: #fff !important; }
 }
 .wr-tally.is-signal .wr-tally-value { color: var(--signal); }
 .wr-tally.is-warn .wr-tally-value { color: var(--wr-warn); }
-.wr-tally-unit { font-size: .5em; font-weight: 400; color: var(--wr-quiet); margin-left: 5px; letter-spacing: 0; }
+.wr-tally-unit { font-size: var(--text-micro); font-weight: 400; color: var(--wr-quiet); margin-left: 5px; letter-spacing: 0; }
 .wr-tally-label { margin: 7px 0 0; font-size: var(--text-micro); letter-spacing: .07em; text-transform: uppercase; color: var(--wr-quiet); }
 .wr-tally-sub { margin: 3px 0 0; font-size: var(--text-micro); color: var(--wr-faint); }
 
