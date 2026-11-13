@@ -9064,6 +9064,23 @@ small { font-size: var(--text-micro); }
 .sh-part-dek { grid-column: 2; font-size: var(--text-body); line-height: 1.4; max-width: 60ch; }
 .sh-parts small { grid-column: 3; grid-row: 1; font-size: var(--text-micro); text-transform: uppercase; letter-spacing: .06em; }
 .sh-parts a:hover strong { color: var(--sh-seal); }
+@media (max-width: 719px) {
+  /* The contents is a way in; it is not the page's identity. On a phone each
+     entry took a title line and a three-line dek, so six of them filled the
+     first screen and pushed the essay's own title to the bottom edge. The
+     dek is a teaser — the part itself carries its own text — so it takes one
+     line here and the title and the reading time stay together on one.
+     The six parts are still all above the fold, and the title is now in it
+     with the lede under it. */
+  .sh-parts a { padding: 7px 0; }
+  .sh-part-dek {
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    line-height: 1.35;
+  }
+}
 @media (min-width: 720px) {
   .sh-parts a { grid-template-columns: 28px minmax(160px, 240px) 1fr auto; }
   .sh-part-n { grid-row: 1; }
