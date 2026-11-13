@@ -503,20 +503,25 @@ behind the benchmark, and it is a product decision rather than a quality gap.
   and 1440 with zero load errors**, and found exactly one real defect: the
   atlas layer buttons clipping their own labels, fixed above. The earlier run
   that reported 137 failures was measuring a broken network, not the site.
-- **The independent-review row is still open.** Ten attempts across three
-  rounds have ended on the runtime's token-plan limit rather than on the code.
-  What stands in its place is a self-audit, and it is worth recording what
-  that self-audit found, because both findings were blind spots in my own
-  instruments rather than opinions about the code:
-  - the geometry gate counted a page that never loaded as a failure, and
-    could have counted a broken page as clean if the break were in the
-    vertical axis — it now retries, and `tools/vertical-audit.mjs` measures
-    the vertical axis;
-  - the CSS comment claiming "≥44 px to the thumb on touch" described a
-    rule that was never written, and would have misled the next agent into
-    "fixing" a target size that was already correct.
-  Everything in this ledger is still the work of the agent that did the work.
-  A reviewer with a budget would close the row.
+- **The independent-review row: closed on 13 November, and it found two real
+  things.** Ten earlier attempts had ended on the runtime's token-plan limit.
+  The eleventh ran, and its first two findings were both correct:
+  - **the deploy verified two of the three public domains.** It probed the
+    upstream worker and bkk.nonarkara.org, but shophouses.nonarkara.org is
+    served by a separate proxy Worker, so a release could exit 0 with a third
+    public domain still on an older build. It is verified now, and a test
+    holds that it stays verified;
+  - **the build-id test was asserting a comment.** It required deploy.sh to
+    contain "--var BUILD_ID:", which it did — in a comment explaining why the
+    flag is not the mechanism. The id is baked into the artifact and the flag
+    was abandoned, so the assertion passed whether or not the real chain was
+    intact. It now asserts every link of the chain that actually runs.
+  A review is worth having: both findings were things I had written and
+  believed. What is left open is the sweep's own blind spots, which the
+  review prompted me to look for and fix — the geometry gate counted a page
+  that never loaded as a failure and could not see the vertical axis at all
+  (`tools/vertical-audit.mjs` now does), and a CSS comment claimed a 44px
+  touch target the code never had.
 - The KL framing gap: a city-wide 3D tab. The modelling is on par; the
   framing is not, and that is a product decision rather than a defect.
 - The KL framing gap: a city-wide 3D tab.
