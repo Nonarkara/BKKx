@@ -38,6 +38,29 @@ export function EssayView() {
     <div className="shophouse-essay">
       <ShMasthead />
 
+      <nav className="sh-parts" aria-label="Contents" id="contents">
+        <ol>
+          {PARTS.map((p) => (
+            <li key={p.n}>
+              <Link href={`/shophouses/read/${p.n}`}>
+                <span className="sh-part-n">{p.n}</span>
+                <strong>{p.title}</strong>
+                <span className="sh-part-dek">{p.dek}</span>
+                <small>{p.minutes} min</small>
+              </Link>
+            </li>
+          ))}
+          <li>
+            <a href="#atlas" className="is-atlas">
+              <span className="sh-part-n">▲</span>
+              <strong>The pressure map</strong>
+              <span className="sh-part-dek">Every candidate footprint, laid over the Treasury appraisal.</span>
+              <small>on this page</small>
+            </a>
+          </li>
+        </ol>
+      </nav>
+
       <article className="sh-lede sh-lede-split" id="essay">
         <div className="sh-lede-main">
         <p className="sh-eyebrow">
@@ -73,29 +96,6 @@ export function EssayView() {
         )}
         </div>
       </article>
-
-      <nav className="sh-parts" aria-label="Contents" id="contents">
-        <ol>
-          {PARTS.map((p) => (
-            <li key={p.n}>
-              <Link href={`/shophouses/read/${p.n}`}>
-                <span className="sh-part-n">{p.n}</span>
-                <strong>{p.title}</strong>
-                <span className="sh-part-dek">{p.dek}</span>
-                <small>{p.minutes} min</small>
-              </Link>
-            </li>
-          ))}
-          <li>
-            <a href="#atlas" className="is-atlas">
-              <span className="sh-part-n">▲</span>
-              <strong>The pressure map</strong>
-              <span className="sh-part-dek">Every candidate footprint, laid over the Treasury appraisal.</span>
-              <small>on this page</small>
-            </a>
-          </li>
-        </ol>
-      </nav>
 
         <section className="sh-atlas" id="atlas">
         <div className="sh-atlas-head">
