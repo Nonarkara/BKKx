@@ -7351,8 +7351,15 @@ body:has(.sh-figexport) { background: #fff !important; }
   .register-lede:has(> .register-figure) > .register-figure { grid-column: 1 / -1; }
   .register-lede .register-intro p { max-width: 52ch; }
 }
-/* compact on desktop, still ≥44 px to the thumb on touch (§11.8) — the
-   visual box stays tight; the hit area grows via padding, not height */
+/* Dense groups stay compact on every pointer type (§11.12: ≥32px). An
+   isolated control — a fold toggle, a search field, a disclosure — keeps
+   44px, because there is nothing dense about it and a thumb needs the room.
+   (This block used to claim the dense groups were still "≥44 px to the
+   thumb on touch" with the hit area grown by padding. No such rule existed:
+   the dense groups are 34px on touch too, and stay that way. The house rule
+   §11.8 itself is not in this repository, so whether a dense group on a
+   touch screen should carry a larger hit area than its box is the owner's
+   call, not something to guess at here.) */
 @media (hover: none), (pointer: coarse) {
   .sh-contents-strip a { min-height: 34px; }
   .sh-pressure-controls button, .register-filters button,

@@ -421,6 +421,14 @@ No branch was deleted. Each disposition is written on its own PR.
   than a guess — see `docs/reconciliation-2026-11-04.md`.
 - The Cloudflare rate-limiting rules are specified but must be confirmed as
   configured in the zone.
+- **A house rule this repository does not contain.** §11.8 and §11.12 are
+  cited in the CSS but live in no document here, so "dense groups ≥32px" and
+  "≥44px to the thumb on touch" cannot be checked against their own text.
+  The code follows §11.12 (dense groups at 34px everywhere, isolated
+  controls at 44px) and the comment that claimed otherwise has been corrected
+  to describe what the code does. Whether a dense group on a touch screen
+  should carry a larger hit area than its visual box is the owner's call
+  against the rule text, not a guess to make here.
 - The release path does not itself gate on CI passing.
 - Expanded, empty and error states are still not exercised.
 
