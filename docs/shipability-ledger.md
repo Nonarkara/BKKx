@@ -421,6 +421,14 @@ No branch was deleted. Each disposition is written on its own PR.
   than a guess — see `docs/reconciliation-2026-11-04.md`.
 - The Cloudflare rate-limiting rules are specified but must be confirmed as
   configured in the zone.
+- **Vertical truncation is not in the geometry gate.** A clamped element can
+  be cut vertically — a third line hidden — and the horizontal gate sees
+  nothing, because `scrollWidth` is happy and only `scrollHeight` knows.
+  `tools/vertical-audit.mjs` now measures it. It found 38: the thirteen
+  Old Town card notes on the homepage (deliberate two-line teasers, kept)
+  and the shophouse deks, where my own one-line clamp was cutting two
+  thirds of the thesis. The deks take two lines now: the title and the lede
+  stay in the first screen and the dek still says what the part is about.
 - **A house rule this repository does not contain.** §11.8 and §11.12 are
   cited in the CSS but live in no document here, so "dense groups ≥32px" and
   "≥44px to the thumb on touch" cannot be checked against their own text.

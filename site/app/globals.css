@@ -9075,14 +9075,16 @@ small { font-size: var(--text-micro); }
   /* The contents is a way in; it is not the page's identity. On a phone each
      entry took a title line and a three-line dek, so six of them filled the
      first screen and pushed the essay's own title to the bottom edge. The
-     dek is a teaser — the part itself carries its own text — so it takes one
-     line here and the title and the reading time stay together on one.
-     The six parts are still all above the fold, and the title is now in it
-     with the lede under it. */
+     reader landed on an index for a piece they had not been introduced to.
+
+     Two lines of dek and one of title and reading time: the title and the
+     lede are back in the first screen with the six parts, and the dek still
+     says what the part is about. One line was too mean — it cut two thirds
+     of the thesis. */
   .sh-parts a { padding: 7px 0; }
   .sh-part-dek {
     display: -webkit-box;
-    -webkit-line-clamp: 1;
+    -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
     line-height: 1.35;
