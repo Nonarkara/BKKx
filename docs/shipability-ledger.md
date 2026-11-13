@@ -503,9 +503,20 @@ behind the benchmark, and it is a product decision rather than a quality gap.
   and 1440 with zero load errors**, and found exactly one real defect: the
   atlas layer buttons clipping their own labels, fixed above. The earlier run
   that reported 137 failures was measuring a broken network, not the site.
-- The independent-review row is still open. Nine attempts across three
+- **The independent-review row is still open.** Ten attempts across three
   rounds have ended on the runtime's token-plan limit rather than on the code.
-  Everything in this ledger is the work of the agent that did the work.
+  What stands in its place is a self-audit, and it is worth recording what
+  that self-audit found, because both findings were blind spots in my own
+  instruments rather than opinions about the code:
+  - the geometry gate counted a page that never loaded as a failure, and
+    could have counted a broken page as clean if the break were in the
+    vertical axis — it now retries, and `tools/vertical-audit.mjs` measures
+    the vertical axis;
+  - the CSS comment claiming "≥44 px to the thumb on touch" described a
+    rule that was never written, and would have misled the next agent into
+    "fixing" a target size that was already correct.
+  Everything in this ledger is still the work of the agent that did the work.
+  A reviewer with a budget would close the row.
 - The KL framing gap: a city-wide 3D tab. The modelling is on par; the
   framing is not, and that is a product decision rather than a defect.
 - The KL framing gap: a city-wide 3D tab.
