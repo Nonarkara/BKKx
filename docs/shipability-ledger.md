@@ -243,6 +243,20 @@ The last row is the one the user named — the toolbar whose buttons were
 cutting their own words. "National Archives (1)" needed 134px and the button
 had 112; every button now measures its own width exactly.
 
+### The phone first screen was a table of contents with no title
+
+Another round moved the shophouse contents list above the lede, so the five
+parts would be above the fold on a phone. That is right on the desktop — the
+list is a clean six-row table and the title still leads the page below it —
+and wrong on the phone, where the list was 660px tall and pushed the essay's
+own title, "Bangkok Doesn't Need a Smart City", to the bottom edge. The
+reader landed on an index for a piece they had not been introduced to.
+
+The phone now takes one line for the dek and one for the title and the
+reading time. Measured on the built page: every one of the six parts is
+still above the fold, and the title and the lede are now in the first screen
+with them.
+
 ### PR disposition
 
 - PR22 (four street measures on Why, from Bhardwaj's October carousel) and
@@ -473,8 +487,9 @@ behind the benchmark, and it is a product decision rather than a quality gap.
   and 1440 with zero load errors**, and found exactly one real defect: the
   atlas layer buttons clipping their own labels, fixed above. The earlier run
   that reported 137 failures was measuring a broken network, not the site.
-- The independent-review row is still open. Everything in this ledger is the
-  work of the agent that did the work.
+- The independent-review row is still open. Nine attempts across three
+  rounds have ended on the runtime's token-plan limit rather than on the code.
+  Everything in this ledger is the work of the agent that did the work.
 - The KL framing gap: a city-wide 3D tab. The modelling is on par; the
   framing is not, and that is a product decision rather than a defect.
 - The KL framing gap: a city-wide 3D tab.
