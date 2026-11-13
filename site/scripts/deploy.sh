@@ -28,6 +28,11 @@ REPO_ROOT="$(cd .. && pwd)"
 
 UPSTREAM="https://bkkx-site.drnon.workers.dev"
 LIVE="https://bkk.nonarkara.org"
+# The shophouse proxy is a SEPARATE Worker. It serves the same site bytes
+# behind its own custom domain, so it must be checked too: a release that
+# verified only the upstream and the main domain would exit 0 with a third
+# public domain still on an older build.
+SHOPHOUSE="https://shophouses.nonarkara.org"
 
 fail() {
   echo "deploy: $*" >&2
@@ -154,6 +159,9 @@ wait_for_build "$UPSTREAM" "upstream worker" 20
 # previous build's header, while it catches up. The poll has to outlast that
 # window or a good release reads as a failure. 120 seconds of patience.
 wait_for_build "$LIVE" "bkk.nonarkara.org" 40
+# The third public domain. Same bytes, separate Worker, and it has to answer
+# with the same build or the release is not whole.
+wait_for_build "$SHOPHOUSE" "shophouses.nonarkara.org" 40
 
 echo
 echo "deploy: ${BUILD_ID} is live and says so. Check it yourself:"

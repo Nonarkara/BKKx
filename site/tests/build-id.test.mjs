@@ -47,12 +47,31 @@ test('the build bakes the id into the artifact, not into a command flag', () => 
 });
 
 test('the deploy script stamps the id it claims to have deployed', () => {
-  // wrangler's --var takes KEY:VALUE. KEY=VALUE does not fail loudly — it
-  // binds a variable NAMED "KEY=VALUE", so env.KEY stays undefined and the
-  // var does nothing at all. The whole feature looks deployed and is not.
+  // This test used to assert that deploy.sh contained "--var BUILD_ID:", which
+  // it did — in a COMMENT explaining why the flag is not the mechanism. The
+  // real mechanism is that the id is baked into the built manifest, and the
+  // assertion passed whether or not that was still true.
+  //
+  // So assert the chain that actually runs, end to end:
+  //   the stamp script writes vars.BUILD_ID into the built manifest →
+  //   the deploy script uploads THAT manifest →
+  //   the Worker reads env.BUILD_ID and sets the header from it →
+  //   the deploy script reads the header back and compares it to the id.
   assert.ok(
-    /--var\s+["']?BUILD_ID:/.test(DEPLOY_SRC),
-    'the deploy script does not pass BUILD_ID to wrangler as KEY:VALUE',
+    /\.vars\b/.test(STAMP_SRC) && /BUILD_ID\s*[:=]/.test(STAMP_SRC),
+    'the stamp script does not write a BUILD_ID var into the built manifest',
+  );
+  assert.ok(
+    /BUILD_ID/.test(WORKER_SRC) && /env\.BUILD_ID/.test(WORKER_SRC),
+    'the Worker does not read the build id out of its environment',
+  );
+  assert.ok(
+    /x-bkkx-build/.test(WORKER_SRC),
+    'the Worker does not report the build id in a header',
+  );
+  assert.ok(
+    /dist\/server\/wrangler\.json/.test(DEPLOY_SRC),
+    'the deploy script does not upload the built manifest, so the stamp baked into it would never reach the Worker',
   );
   assert.ok(
     !/--var\s+["']?BUILD_ID=/.test(DEPLOY_SRC),
@@ -83,6 +102,16 @@ test('the deploy script proves the live site is running what it uploaded', () =>
   assert.ok(
     /bkk\.nonarkara\.org/.test(DEPLOY_SRC),
     'the deploy script does not verify the real domain, only some other URL',
+  );
+  // Three public domains serve these bytes. A release that checked two of
+  // them could exit 0 with the third still on an older build.
+  assert.ok(
+    /shophouses\.nonarkara\.org/.test(DEPLOY_SRC),
+    'the deploy script does not verify the shophouse domain, so a release can be half-done',
+  );
+  assert.ok(
+    /workers\.dev/.test(DEPLOY_SRC),
+    'the deploy script does not verify the upstream worker',
   );
 });
 
