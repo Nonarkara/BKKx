@@ -1,6 +1,9 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import { readFileSync } from 'node:fs';
+// The built Worker imports `cloudflare:workers`, which only the Workers runtime
+// can load; this installs the resolver that lets Node import the artifact.
+import './support/cloudflare-scheme.mjs';
 import {
   CAP_RETENTION_DAYS,
   DEFAULT_DAILY_CAP,

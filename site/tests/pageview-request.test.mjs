@@ -2,6 +2,10 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import { readFileSync } from 'node:fs';
 import { readPageviewRequest } from '../worker/pageview-request.ts';
+// The built Worker imports `cloudflare:workers`, which only the Workers
+// runtime can load. This installs the resolver so the test can import and
+// exercise the SHIPPED artifact rather than a stand-in for it.
+import './support/cloudflare-scheme.mjs';
 
 function request(body, headers = {}, url = 'https://bkkx-site.drnon.workers.dev/api/pageview') {
   return new Request(url, { method: 'POST', headers: {

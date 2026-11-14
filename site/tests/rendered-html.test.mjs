@@ -1,5 +1,8 @@
 import assert from "node:assert/strict";
 import test from "node:test";
+// The built Worker imports `cloudflare:workers`, which only the Workers runtime
+// can load; this installs the resolver that lets Node import the artifact.
+import './support/cloudflare-scheme.mjs';
 
 test('Flood Edition preserves the 3D atlas and exposes evidence controls', async()=>{
   const response=await render('/flood');

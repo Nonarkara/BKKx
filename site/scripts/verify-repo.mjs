@@ -115,6 +115,27 @@ if (!problems.length) pass(`${files.length} workflow(s) — actions on commit SH
     }
   }
 
+  // Direction five: a test that imports the built Worker must install the
+  // `cloudflare:` resolver. vinext 1's bundle imports `cloudflare:workers`,
+  // which only the Workers runtime can load, so Node refuses the import
+  // with ERR_UNSUPPORTED_ESM_URL_SCHEME. A test that forgets the resolver
+  // fails with a stack trace that looks like a broken build rather than a
+  // missing line — so the guard names it instead.
+  const supportDir = join(site, "tests", "support");
+  for (const f of onDisk) {
+    const src = readFileSync(join(testsDir, f), "utf8");
+    if (!/dist\/server\/(index|ssr\/index)\.js/.test(src)) continue;
+    if (!/support\/cloudflare-scheme\.mjs/.test(src)) {
+      fail(
+        `tests/${f} imports the built Worker but does not import ./support/cloudflare-scheme.mjs — ` +
+          `the artifact imports cloudflare:workers, which Node cannot load without it`,
+      );
+    }
+  }
+  if (!existsSync(join(supportDir, "cloudflare-scheme.mjs"))) {
+    fail("tests/support/cloudflare-scheme.mjs is missing — the built Worker cannot be imported without it");
+  }
+
   if (!problems.length) {
     pass(`${onDisk.length} test file(s) all named in npm test: ${onDisk.join(", ")}`);
   }

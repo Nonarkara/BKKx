@@ -46,7 +46,20 @@ let stopping = false;
 function start() {
   const child = spawn(
     process.execPath,
-    [join(SITE, "node_modules", "vinext", "dist", "cli.js"), "start", "--port", PORT, "--hostname", "127.0.0.1"],
+    [
+      // vinext 1's bundle imports `cloudflare:workers`, a scheme only the
+      // Workers runtime can load. `vinext start` serves the built artifact
+      // in Node, so the resolver is preloaded — see
+      // site/scripts/preload-cloudflare-scheme.mjs.
+      "--import",
+      join(SITE, "scripts", "preload-cloudflare-scheme.mjs"),
+      join(SITE, "node_modules", "vinext", "dist", "cli.js"),
+      "start",
+      "--port",
+      PORT,
+      "--hostname",
+      "127.0.0.1",
+    ],
     {
       cwd: SITE,
       env: {
