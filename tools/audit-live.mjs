@@ -4,13 +4,15 @@
 // Each evaluated function is self-contained — `page.evaluate` serialises the
 // function, not its closure, so a helper defined outside it is not in scope.
 import { chromium } from 'playwright';
+import { retarget } from './lib/base.mjs';
 
 const CLIP = `const __c=[];for(const el of document.querySelectorAll('body *')){if(el.closest('svg')&&el.tagName!=='svg')continue;const cs=getComputedStyle(el);if(cs.display==='none'||cs.visibility==='hidden')continue;if(el.children.length)continue;if(el.clientWidth>0&&el.scrollWidth>el.clientWidth+2&&(cs.overflowX==='hidden'||cs.textOverflow==='ellipsis'||cs.overflow==='hidden'))__c.push((typeof el.className==='string'?el.className:el.tagName)+': "'+(el.innerText||'').trim().replace(/\\s+/g,' ').slice(0,34)+'"');}const clipped=__c;`;
 
 const browser = await chromium.launch({ args: ['--use-gl=swiftshader', '--enable-unsafe-swiftshader'] });
 const checks = [];
 
-async function measure(url, w, h, body, label) {
+async function measure(rawUrl, w, h, body, label) {
+  const url = retarget(rawUrl);
   const ctx = await browser.newContext({
     viewport: { width: w, height: h }, deviceScaleFactor: 1,
     isMobile: w < 500, hasTouch: w < 500, locale: 'th-TH', timezoneId: 'Asia/Bangkok',

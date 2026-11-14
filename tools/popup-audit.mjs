@@ -2,8 +2,10 @@
 // measure what is inside it: clipped text, overlaps, and whether it covers
 // the chrome it sits on.
 import { chromium } from 'playwright';
+import { retarget } from './lib/base.mjs';
 const b=await chromium.launch({args:['--use-gl=swiftshader','--enable-unsafe-swiftshader']});
-for (const [url,w,h] of [['https://bkk.nonarkara.org/',1440,900],['https://bkk.nonarkara.org/atlas/historic-core',1440,900],['https://bkk.nonarkara.org/atlas/historic-core',390,844]]) {
+for (const [rawUrl,w,h] of [['https://bkk.nonarkara.org/',1440,900],['https://bkk.nonarkara.org/atlas/historic-core',1440,900],['https://bkk.nonarkara.org/atlas/historic-core',390,844]]) {
+  const url=retarget(rawUrl);
   const ctx=await b.newContext({viewport:{width:w,height:h},deviceScaleFactor:1,isMobile:w<500,hasTouch:w<500,locale:'th-TH',timezoneId:'Asia/Bangkok'});
   const p=await ctx.newPage();
   for(let a=1;a<=4;a++){try{await p.goto(url,{waitUntil:'domcontentloaded',timeout:60000});break;}catch(e){if(a===4){console.log(url,'LOAD FAIL');await ctx.close();continue;}await p.waitForTimeout(3000*a);}}

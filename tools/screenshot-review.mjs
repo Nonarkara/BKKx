@@ -1,12 +1,13 @@
 // The review the context-save could not finish: six rendered pages, the
 // first-screen read at each, and the legacy-anchor redirect.
 import { chromium } from 'playwright';
-const OUT = '/tmp/bkkx-shots';
+import { retarget } from './lib/base.mjs';
+const OUT = process.argv.find(a=>a.startsWith('--out='))?.slice(6) || '/tmp/bkkx-shots';
 const PAGES = [
   { url: 'https://shophouses.nonarkara.org/', name: 'shophouses-front' },
   { url: 'https://shophouses.nonarkara.org/shophouses/read/1', name: 'shophouses-read-1' },
   { url: 'https://bkk.nonarkara.org/worlds', name: 'worlds' },
-];
+].map(p => ({ ...p, url: retarget(p.url) }));
 const browser = await chromium.launch({ args: ['--use-gl=swiftshader', '--enable-unsafe-swiftshader'] });
 for (const p of PAGES) {
   for (const [label, w, h] of [['390', 390, 844], ['1440', 1440, 900]]) {

@@ -2,19 +2,21 @@
 // VERTICALLY (a third line hidden), and scrollHeight says so while
 // scrollWidth says nothing.
 import { chromium } from 'playwright';
+import { retarget } from './lib/base.mjs';
+import { loadPage, Coverage } from './lib/measure.mjs';
 const PAGES=['https://bkk.nonarkara.org/','https://bkk.nonarkara.org/atlas/historic-core',
  'https://bkk.nonarkara.org/heritage','https://bkk.nonarkara.org/warroom','https://bkk.nonarkara.org/datasets',
  'https://shophouses.nonarkara.org/','https://shophouses.nonarkara.org/shophouses/read/1',
- 'https://shophouses.nonarkara.org/shophouses/typology'];
+ 'https://shophouses.nonarkara.org/shophouses/typology'].map(retarget);
 const b=await chromium.launch({args:['--use-gl=swiftshader','--enable-unsafe-swiftshader']});
+const coverage=new Coverage('vertical audit');
 let found=0;
 for(const url of PAGES) for(const [w,h] of [[390,844],[1440,900]]){
   const ctx=await b.newContext({viewport:{width:w,height:h},deviceScaleFactor:1,isMobile:w<500,hasTouch:w<500,locale:'th-TH',timezoneId:'Asia/Bangkok'});
   const p=await ctx.newPage();
-  let ok=false;
-  for(let a=1;a<=3;a++){try{await p.goto(url,{waitUntil:'domcontentloaded',timeout:60000});ok=true;break;}catch(e){if(a===3)break;await p.waitForTimeout(2500*a);}}
+  const ok=await loadPage(p,url,{attempts:3,settle:6000});
+  coverage.record(url,ok);
   if(!ok){await ctx.close();continue;}
-  await p.waitForTimeout(6000);
   const cut=await p.evaluate(()=>{
     const out=[];
     for(const el of document.querySelectorAll('body *')){
@@ -32,4 +34,6 @@ for(const url of PAGES) for(const [w,h] of [[390,844],[1440,900]]){
   await ctx.close();
 }
 console.log(found? `\n${found} vertically-clamped element(s) are cut` : '\nno clamped element is cut vertically on any page checked');
+const code=coverage.summary();
 await b.close();
+process.exit(code);

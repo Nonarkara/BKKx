@@ -1,20 +1,24 @@
 // Verify the house type scale (14px / 11px / display) actually holds, and
 // check what the underlined magenta eyebrow on the essay parts actually is.
 import { chromium } from 'playwright';
+import { retarget } from './lib/base.mjs';
+import { loadPage, Coverage } from './lib/measure.mjs';
 const PAGES=[
  'https://bkk.nonarkara.org/','https://bkk.nonarkara.org/worlds','https://bkk.nonarkara.org/heritage',
  'https://bkk.nonarkara.org/datasets','https://bkk.nonarkara.org/warroom','https://bkk.nonarkara.org/about',
  'https://shophouses.nonarkara.org/','https://shophouses.nonarkara.org/shophouses/read/1',
  'https://shophouses.nonarkara.org/shophouses/typology','https://shophouses.nonarkara.org/shophouses/global',
  'https://bkk.nonarkara.org/areas/rattanakosin','https://bkk.nonarkara.org/walks/royal-axis',
-];
+].map(retarget);
 const b=await chromium.launch({args:['--use-gl=swiftshader','--enable-unsafe-swiftshader']});
 const sizes=new Map(); const outliers=new Map();
+const coverage=new Coverage('scale audit');
 for(const url of PAGES) for(const w of [390,1440]){
   const ctx=await b.newContext({viewport:{width:w,height:900},deviceScaleFactor:1,isMobile:w<500,hasTouch:w<500,locale:'ja'});
   const page=await ctx.newPage();
-  for(let a=1;a<=3;a++){try{await page.goto(url,{waitUntil:'domcontentloaded',timeout:60000});break;}catch(e){if(a===3)throw e;await page.waitForTimeout(2500*a);}}
-  await page.waitForTimeout(2500);
+  const ok=await loadPage(page,url,{attempts:3,settle:2500});
+  coverage.record(url,ok);
+  if(!ok){await ctx.close();continue;}
   const r=await page.evaluate(()=>{
     const out={sizes:{},outliers:[],eyebrow:null};
     const seen=new Set();
@@ -46,4 +50,6 @@ console.log([...sizes.entries()].sort((a,b)=>b[1]-a[1]).map(([s,n])=>`${s}px×${
 console.log('\n=== distinct sizes ===', [...sizes.keys()].sort((a,b)=>a-b).join(', '));
 console.log('\n=== elements at the rare sizes ===');
 [...outliers.entries()].filter(([k])=>{const m=/ @([\d.]+)$/.exec(k);return m&&![11,14].includes(parseFloat(m[1]));}).slice(0,22).forEach(([k,n])=>console.log('  ',k));
+const code=coverage.summary();
 await b.close();
+process.exit(code);
