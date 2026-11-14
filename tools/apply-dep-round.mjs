@@ -70,12 +70,24 @@ const ROUNDS = {
     },
   },
   // Toolchain majors, each of which changes what a gate even means.
+  //
+  // typescript goes to 6.0.3, NOT 7.0.2. TypeScript 7 is the Go port and it
+  // type-checks this repo cleanly — but typescript-eslint refuses it:
+  //
+  //   Error: typescript-eslint does not support TS 7.0.
+  //
+  // Its own message points at running against the TypeScript 6 API, and
+  // typescript-eslint's support for TS >= 7.1 is tracked upstream
+  // (typescript-eslint#10940). So 6.0.3 is the newest TypeScript this
+  // repo's lint gate can actually run against, and 7 is held until the
+  // ecosystem catches up — a hold with a reason and a tracking number, not
+  // a shrug.
   C: {
     dependencies: {},
     devDependencies: {
       "@types/node": "26.6.6",
       eslint: "10.14.0",
-      typescript: "7.0.2",
+      typescript: "6.0.3",
     },
   },
   // three: under 0.x every minor is breaking. One file uses it.
