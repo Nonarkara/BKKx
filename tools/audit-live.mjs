@@ -50,12 +50,21 @@ await measure('https://bkk.nonarkara.org/atlas/historic-core', 1440, 900,
     layerButtons:[...document.querySelectorAll('.layer-toggle-btn')].map(e=>({t:(e.innerText||'').trim().replace(/\\s+/g,' ').slice(0,24),sw:e.scrollWidth,cw:e.clientWidth,clamp:getComputedStyle(e).webkitLineClamp}))};`,
   'atlas 1440');
 
-await measure('https://shophouses.nonarkara.org/shophouses/read/1', 390, 844,
-  `const a=document.querySelector('.sh-contents-strip a');
+// 15 Nov 2026: this check used to measure '.sh-contents-strip a' on read/1 —
+// a strip that no longer exists (the contents became the sh-parts nav on the
+// front page in 4e76f6f). It reported chip:null, stripRows:0 — measured
+// nothing, read as data. It now measures the real contents nav on the front
+// page: row heights (34px dense rows, not 44px-inflated), and the fold
+// position of the essay title, the regression this page actually keeps
+// having (cc08808).
+await measure('https://shophouses.nonarkara.org/', 390, 844,
+  `const rows=[...document.querySelectorAll('.sh-parts a')];
+   const h1=document.querySelector('h1'), r=h1?.getBoundingClientRect();
    return {clippedCount:clipped.length, clipped:clipped.slice(0,4),
-     chip:a?{h:Math.round(a.getBoundingClientRect().height),min:getComputedStyle(a).minHeight}:null,
-     stripRows:new Set([...document.querySelectorAll('.sh-contents-strip a')].map(e=>Math.round(e.getBoundingClientRect().top))).size};`,
-  'shophouses read/1 390');
+     partRows:rows.map(e=>Math.round(e.getBoundingClientRect().height)),
+     partsCount:rows.length,
+     h1Bottom:Math.round(r?.bottom??-1), h1InFold:r? r.bottom<=innerHeight : false};`,
+  'shophouses front 390');
 
 for (const [label, out] of checks) console.log(label, '→', JSON.stringify(out));
 await browser.close();
