@@ -25,14 +25,19 @@ Do not substitute one green build or one repaired screen for the full audit.
   `docs/pageview-rate-limits.md` and still to be confirmed in the zone. The
   disposition is on the PR.
 - PR13 and PR24: the same 24-package dependabot batch, opened twice. **PR24 is
-  held with its real root cause recorded.** The build was not failing on the
-  dependency: `site/scripts/fix-asset-manifest.mjs` hard-coded
-  `dist/client/assets`, and vinext 1.x moved the client statics to
+  closed as landed — in five rounds, each with its own evidence (PR28).** The
+  build was not failing on the dependency: `site/scripts/fix-asset-manifest.mjs`
+  hard-coded `dist/client/assets`, and vinext 1.x moved the client statics to
   `dist/client/_next/static`. The script now finds the chunks instead of
   assuming where they are, so the path is no longer the blocker. The majors
-  remain, each needing its own round and its own rendering evidence:
-  `vinext` 1, `typescript` 7, `eslint` 10, `three` 0.186, `maplibre-gl` 6,
-  `@types/node` 26.
+  were then taken one connected component at a time — the peer graph forces
+  the order — and each was measured, not merely compiled. See "The staged
+  dependency upgrade" below.
+- PR27: dependabot's next batch, opened against the new main. **Closed as
+  superseded**, with the disposition recorded on the PR: the three and
+  MapLibre parts are landed by PR28 with rendering evidence, and the
+  TypeScript 7 part cannot land while typescript-eslint refuses TS 7
+  (typescript-eslint#10940).
 - PR25: **closed 4 November as landed** — the amulet-leveldb 1.0.7 pin is on
   main, adapted from this PR.
 - PR4: **closed 4 November as superseded.** Main already carries the located
@@ -527,3 +532,72 @@ behind the benchmark, and it is a product decision rather than a quality gap.
 - The KL framing gap: a city-wide 3D tab.
 - The Cloudflare rate-limiting rules are specified but must be confirmed as
   configured in the zone.
+
+## The staged dependency upgrade — 15 November 2026
+
+**Found.** PR24 carried 24 packages. It had been held with a stated reason —
+"each major needs its own round with its own rendering evidence" — and the
+reason turned out to be stronger than the note assumed: the bump set is not
+six independent changes. The peer graph makes it five connected components,
+and one of them is forced rather than chosen:
+
+```
+vinext 0.0.50 peers react ^19.2.6      vinext 1.4.4 peers react ^19.3.1
+wrangler 4.158 peers workers-types ^5  @cloudflare/vite-plugin 1.67 peers wrangler ^4.156
+```
+
+React 19.3 cannot be installed without vinext 1 — npm refuses the tree — and
+vinext 1 cannot be installed without the Cloudflare plugin, wrangler and
+workers-types moving with it. TypeScript 7 type-checks this repo cleanly but
+**typescript-eslint refuses it**, so it is held at 6.0.3 with the tracking
+number attached rather than landed and left unable to lint.
+
+**Changed.** Five rounds, each a commit, each measured:
+
+| Round | Packages | Landed |
+| --- | --- | --- |
+| A | drizzle, next 16.4, vite 8.3, tailwind 4.3, the vite plugins, eslint-config-next | `a7ec503` |
+| B | react 19.3.1, vinext 1.4.4, wrangler 4.158, cloudflare plugin 1.67, workers-types 5 | `ba7802c` |
+| C | eslint 10, @types/node 26, typescript 6.0.3 (7 held) | `4380876` |
+| D | three 0.187 | `8e69197` |
+| E | maplibre-gl 6.16 | `1e6d2a4` |
+
+Three defects were found by measuring, all of them invisible to a compile:
+
+1. **The fix-asset-manifest step failed a successful build.** vinext 1 names a
+   chunk by its hash alone, so the script's pattern matched nothing. It no
+   longer cares what a chunk is called, and it now checks the invariant it
+   never checked — every chunk the RSC manifest names must be on disk.
+2. **The built Worker could not be imported by Node** (`cloudflare:workers` is
+   a Workers-only scheme), so the test that exercises the *shipped* artifact
+   could not load it.
+3. **MapLibre 6's web worker was never emitted.** MapLibre spawns it as a
+   sibling of the module that starts it, the bundler did not emit it, the
+   worker 404'd, and every map on the site became a grey rectangle: 2,647
+   WebGL draw calls before, 93 after. No crash, no failing test, green build.
+   `site/scripts/emit-maplibre-worker.mjs` now places it — finding the
+   directory by searching, not by assuming a path — and fails the build if a
+   chunk refers to a worker it cannot place.
+
+**Verified.** Every round: build, no generated-file drift, `tsc --noEmit`,
+lint, 97 source tests, 96 rendered tests, and a 644-URL geometry sweep at
+390/1024/1440 compared field by field against the pre-upgrade baseline —
+same routes, same statuses, same overflow findings, same clipped findings,
+not merely "zero failures on both sides". For what a compile cannot see, the
+Thai-forms layer is measured by its WebGL draw signature (the merged mesh's
+vertex count) with the layer on and off, and the maps are measured the same
+way: production and the new build both draw `drawArrays/4/193950`, with zero
+console errors, and the popup audit is identical.
+
+Three instruments were corrected first, because they could report a result
+they had not earned: the audits skipped pages they could not load and then
+reported "no clamped element is cut vertically on any page checked"; the
+measurement rig served a **hollow site** (every public file returned HTTP 200
+with an empty body, so the atlas lost its data while the geometry sweep still
+called it identical to baseline); and the sweep died at 192 of 644 URLs and
+left a report reading "192/644, 0 failures".
+
+**Remaining.** PR27 (dependabot's next batch) is closed as superseded, with
+its disposition recorded: TypeScript 7 still cannot land while
+typescript-eslint refuses it. The Cloudflare rate-limiting rules still need
+confirming in the zone.
