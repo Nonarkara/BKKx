@@ -176,9 +176,27 @@ await assertRightSite();
 const routes = await getRoutes();
 console.error(`msh-sweep: ${routes.length} URLs × ${VIEWPORTS.length} viewport(s) against ${BASE}`);
 
-const browser = await chromium.launch({
-  args: ['--use-gl=swiftshader', '--enable-unsafe-swiftshader', '--ignore-gpu-blocklist'],
-});
+const LAUNCH_ARGS = ['--use-gl=swiftshader', '--enable-unsafe-swiftshader', '--ignore-gpu-blocklist'];
+
+let browser = await chromium.launch({ args: LAUNCH_ARGS });
+
+// The browser can die under load — the software GL stack on a heavy page is
+// enough. A dead browser used to throw out of `newContext`, outside the
+// per-page try, and take the whole sweep down at 192 of 644 URLs: the run
+// ended with a partial report and a non-zero exit, but the REPORT on disk
+// said "192/644, 0 failures", which reads like a clean pass over a smaller
+// surface. So the browser is relaunched when it goes, and the run refuses to
+// finish unless every URL was checked.
+function browserAlive() {
+  return browser && browser.isConnected();
+}
+async function ensureBrowser() {
+  if (browserAlive()) return browser;
+  console.error('msh-sweep: the browser died — launching a new one');
+  browser = await chromium.launch({ args: LAUNCH_ARGS });
+  return browser;
+}
+
 const failures = [];
 const checked = [];
 const queue = [...routes];
@@ -191,8 +209,20 @@ async function worker() {
     let bad = false;
     for (const w of VIEWPORTS) {
       const h = w === 390 ? 844 : w === 1024 ? 900 : 900;
-      const ctx = await browser.newContext({ viewport: { width: w, height: h }, deviceScaleFactor: 1, isMobile: w < 500, hasTouch: w < 500, locale: 'th-TH', timezoneId: 'Asia/Bangkok', ignoreHTTPSErrors: true });
-      const page = await ctx.newPage();
+      let ctx = null;
+      let page = null;
+      try {
+        await ensureBrowser();
+        ctx = await browser.newContext({ viewport: { width: w, height: h }, deviceScaleFactor: 1, isMobile: w < 500, hasTouch: w < 500, locale: 'th-TH', timezoneId: 'Asia/Bangkok', ignoreHTTPSErrors: true });
+        page = await ctx.newPage();
+      } catch (e) {
+        // The browser itself is gone, not the page. Relaunch and retry this
+        // viewport rather than recording a finding against a route that was
+        // never really measured.
+        await ensureBrowser();
+        ctx = await browser.newContext({ viewport: { width: w, height: h }, deviceScaleFactor: 1, isMobile: w < 500, hasTouch: w < 500, locale: 'th-TH', timezoneId: 'Asia/Bangkok', ignoreHTTPSErrors: true });
+        page = await ctx.newPage();
+      }
       try {
         let status = null;
         let lastError = null;
@@ -222,7 +252,7 @@ async function worker() {
         rec.viewports[w] = { error: String(e.message || e).split('\n')[0].slice(0, 160) };
         bad = true;
       }
-      await ctx.close();
+      try { await ctx.close(); } catch { /* the context died with the browser */ }
     }
     checked.push(rec);
     if (bad) {
@@ -246,7 +276,17 @@ async function worker() {
 }
 
 await Promise.all(Array.from({ length: CONCURRENCY }, worker));
-await browser.close();
+try { await browser.close(); } catch { /* already gone */ }
 writeFileSync(join(OUT, 'sweep-report.json'), JSON.stringify({ base: BASE, when: new Date().toISOString(), total: routes.length, checked: checked.length, failures, records: checked }, null, 2));
 console.error(`\nmsh-sweep: ${checked.length}/${routes.length} URLs checked · ${failures.length} with geometry failures`);
 console.error(`report: ${join(OUT, 'sweep-report.json')}`);
+
+// A sweep that did not finish is UNVERIFIED, not a pass. Half a surface with
+// zero findings is a measurement, and it must not be read as a clearance.
+if (checked.length !== routes.length) {
+  console.error(
+    `msh-sweep: UNVERIFIED — ${routes.length - checked.length} of ${routes.length} URLs were never checked. ` +
+      `That is not a pass.`,
+  );
+  process.exit(1);
+}

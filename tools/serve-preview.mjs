@@ -47,17 +47,25 @@ function start() {
   const child = spawn(
     process.execPath,
     [
-      // vinext 1's bundle imports `cloudflare:workers`, a scheme only the
-      // Workers runtime can load. `vinext start` serves the built artifact
-      // in Node, so the resolver is preloaded — see
-      // site/scripts/preload-cloudflare-scheme.mjs.
-      "--import",
-      join(SITE, "scripts", "preload-cloudflare-scheme.mjs"),
-      join(SITE, "node_modules", "vinext", "dist", "cli.js"),
-      "start",
+      // `vite preview` runs the built Worker under workerd through the
+      // Cloudflare plugin, and serves dist/client through the assets binding —
+      // the same runtime model as production.
+      //
+      // It replaced `vinext start` here because vinext 1's Node preview
+      // answers every file outside /_next/static with HTTP 200 and an EMPTY
+      // BODY: the whole public tree — the immutable data, the heritage
+      // register, the favicon — came back with zero bytes. Nothing on the
+      // page said so. The atlas simply lost its data, the Thai-forms layer
+      // never loaded, and every DOM-geometry sweep still reported "identical
+      // to baseline" because an empty data file does not move a box.
+      //
+      // So the rig serves the artifact the way the cloud does, and the
+      // instruments are pointed at it.
+      join(SITE, "node_modules", "vite", "bin", "vite.js"),
+      "preview",
       "--port",
       PORT,
-      "--hostname",
+      "--host",
       "127.0.0.1",
     ],
     {
@@ -92,5 +100,65 @@ for (const sig of ["SIGINT", "SIGTERM"]) {
   });
 }
 
-console.log(`serve-preview: supervising vinext start on 127.0.0.1:${PORT} (state ${STATE})`);
+/**
+ * The canary: the rig must serve the artifact BYTE-COMPLETE, or it is not
+ * measuring the artifact.
+ *
+ * vinext 1's Node preview answered every public file with HTTP 200 and an
+ * empty body. Nothing said so. The atlas lost its data, the Thai-forms layer
+ * never loaded, and every DOM-geometry sweep still reported "identical to
+ * baseline" — because an empty data file does not move a box. The rig was
+ * measuring a broken site and calling it a clean one.
+ *
+ * So the rig checks itself before any instrument is pointed at it: a page
+ * that must have a body, and a static file that must have bytes. If either
+ * comes back empty, the rig says so loudly instead of serving a hollow site.
+ */
+async function canary() {
+  const base = `http://127.0.0.1:${PORT}`;
+  for (let attempt = 1; attempt <= 30; attempt++) {
+    try {
+      const page = await fetch(`${base}/`, { redirect: "follow" });
+      const pageBytes = (await page.arrayBuffer()).byteLength;
+      if (pageBytes === 0) {
+        console.error(`serve-preview: CANARY FAILED — / returned 200 with an empty body`);
+        return false;
+      }
+      // Any file in the public tree that is on disk must come back with its
+      // bytes. The heritage register is large and stable, so an empty body
+      // cannot be a coincidence.
+      const res = await fetch(`${base}/heritage-register.json`);
+      const bytes = (await res.arrayBuffer()).byteLength;
+      if (bytes === 0) {
+        console.error(
+          `serve-preview: CANARY FAILED — /heritage-register.json returned ${res.status} with an empty body`,
+        );
+        console.error(
+          "serve-preview: the rig is serving a hollow site; measurements taken against it prove nothing",
+        );
+        return false;
+      }
+      console.log(
+        `serve-preview: canary passed — / is ${pageBytes} bytes, /heritage-register.json is ${bytes} bytes`,
+      );
+      return true;
+    } catch {
+      if (attempt === 30) {
+        console.error("serve-preview: CANARY FAILED — the server never answered");
+        return false;
+      }
+      await new Promise((r) => setTimeout(r, 2000));
+    }
+  }
+  return false;
+}
+
+console.log(`serve-preview: supervising vite preview on 127.0.0.1:${PORT} (state ${STATE})`);
 start();
+
+const ok = await canary();
+if (!ok) {
+  console.error("serve-preview: refusing to serve an artifact that is not byte-complete");
+  stopping = true;
+  process.exit(1);
+}
