@@ -5,6 +5,7 @@
 // stops with the Animation toggle and for reduced motion.
 import {useEffect,useState,type RefObject} from 'react';
 import type {Map as MapLibreMap,GeoJSONSource,MapLayerMouseEvent} from 'maplibre-gl';
+import type {FeatureCollection} from 'geojson';
 import {roadsAreFresh,type FloodRoads as Roads,type RoadProps} from './roads';
 const roadSrc='flood-roads',heatSrc='flood-roads-heat';
 const heatL='flood-roads-heat',closedL='flood-roads-closed',waterL='flood-roads-water',flowL='flood-roads-flow';
@@ -25,7 +26,7 @@ export function FloodRoads({mapRef,ready,motion,reduced,thai,now}:{mapRef:RefObj
   useEffect(()=>{let active=true;async function load(){try{const r=await fetch('/api/flood/roads',{signal:AbortSignal.timeout(15000)});if(!r.ok)throw Error();const j=await r.json() as Roads;if(!Array.isArray(j.roads?.features))throw Error();if(active){setData(j);setError(false);}}catch{if(active)setError(true);}}void load();const timer=setInterval(load,120000);return()=>{active=false;clearInterval(timer);};},[]);
   useEffect(()=>{
     const map=mapRef.current;if(!map||!ready||!data)return;
-    for(const [id,d] of [[roadSrc,data.roads],[heatSrc,data.heat]] as const){const s=map.getSource(id) as GeoJSONSource|undefined;if(s)s.setData(d as GeoJSON.FeatureCollection);else map.addSource(id,{type:'geojson',data:d as GeoJSON.FeatureCollection});}
+    for(const [id,d] of [[roadSrc,data.roads],[heatSrc,data.heat]] as const){const s=map.getSource(id) as GeoJSONSource|undefined;if(s)s.setData(d as FeatureCollection);else map.addSource(id,{type:'geojson',data:d as FeatureCollection});}
     if(!map.getLayer(heatL))map.addLayer({id:heatL,type:'heatmap',source:heatSrc,paint:{
       'heatmap-weight':['interpolate',['linear'],['get','w'],0,0,0.1,0.2,0.6,0.5,2.5,1],'heatmap-intensity':heatIntensity(),'heatmap-radius':heatRadius(),
       'heatmap-color':['interpolate',['linear'],['heatmap-density'],0,'rgba(0,0,0,0)',0.1,'rgba(98,201,255,0.3)',0.3,'rgba(56,160,255,0.52)',0.55,'rgba(40,100,255,0.66)',0.8,'rgba(106,61,255,0.76)',1,'rgba(176,38,201,0.86)'],

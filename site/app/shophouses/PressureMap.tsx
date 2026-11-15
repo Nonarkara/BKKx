@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import type maplibregl from "maplibre-gl";
+import type * as maplibregl from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
 import { QUADRANTS, PRESSURE_TOTAL, SPLITS } from "../data/shophouse-pressure";
 import { dataUrl } from "../data/data-url";
@@ -42,7 +42,7 @@ export function PressureMap() {
     let disposed = false;
 
     void (async () => {
-      const maplibre = (await import("maplibre-gl")).default;
+      const maplibre = await import("maplibre-gl");
       if (disposed || !containerRef.current) return;
 
       const map = new maplibre.Map({

@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import type maplibregl from "maplibre-gl";
+import type * as maplibregl from "maplibre-gl";
+import type { FeatureCollection } from "geojson";
 import "maplibre-gl/dist/maplibre-gl.css";
 import { PROJECTS } from "../data/shophouse-studio";
 import { dataUrl } from "../data/data-url";
@@ -36,7 +37,7 @@ export function CorridorMap() {
     let observer: ResizeObserver | null = null;
 
     void (async () => {
-      const maplibre = (await import("maplibre-gl")).default;
+      const maplibre = await import("maplibre-gl");
       if (disposed || !containerRef.current) return;
 
       const map = new maplibre.Map({
@@ -47,7 +48,7 @@ export function CorridorMap() {
         minZoom: 11,
         renderWorldCopies: false,
         attributionControl: false,
-        antialias: true,
+        canvasContextAttributes: { antialias: true },
       });
       mapRef.current = map;
       map.addControl(new maplibre.NavigationControl({ showCompass: false }), "top-right");
@@ -57,7 +58,7 @@ export function CorridorMap() {
         if (disposed) return;
         try {
           const res = await fetch(DATA);
-          const fc = (await res.json()) as GeoJSON.FeatureCollection & { properties?: Meta };
+          const fc = (await res.json()) as FeatureCollection & { properties?: Meta };
           setMeta(fc.properties ?? null);
 
           map.addSource("corridor", { type: "geojson", data: fc });
