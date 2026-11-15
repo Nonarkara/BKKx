@@ -524,6 +524,5 @@ behind the benchmark, and it is a product decision rather than a quality gap.
   touch target the code never had.
 - The KL framing gap: a city-wide 3D tab. The modelling is on par; the
   framing is not, and that is a product decision rather than a defect.
-- The KL framing gap: a city-wide 3D tab.
 - The Cloudflare rate-limiting rules are specified but must be confirmed as
   configured in the zone.
