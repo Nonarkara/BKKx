@@ -374,6 +374,10 @@ button {
 .map-coordinate-bottom { right: 30px; bottom: 90px; }
 
 .hero-map-label {
+  /* Deliberate full-width caption band across the hero map's bottom edge —
+     the map is the page's dominant element and this band is its label, a
+     photo-credit bar, not a layout box competing for page space. Named so
+     the slop gate's stretch detector can be waived for it by hand. */
   position: absolute;
   z-index: 3;
   right: 0;
@@ -481,7 +485,9 @@ button {
 
 .world-switcher button {
   display: grid;
-  min-height: 112px;
+  /* No min-height: the tab is its number, name and Thai line plus padding
+     (~68px). A 112px min-height made the two-tab switcher 1.7× its content —
+     the one real stretch hit the slop gate found on /worlds at 1440. */
   grid-template-columns: auto 1fr auto;
   align-items: center;
   gap: 22px;
@@ -726,7 +732,7 @@ button {
   .section-heading > p:last-child,
   .enter-heading > p { margin-top: 18px; }
   .world-switcher { grid-template-columns: 1fr; }
-  .world-switcher button { min-height: 88px; border-right: 0; border-bottom: 1px solid #b8b8ae; }
+  .world-switcher button { min-height: 0; border-right: 0; border-bottom: 1px solid #b8b8ae; }
   .world-switcher button:last-child { border-bottom: 0; }
   .world-intro { grid-template-columns: 1fr; padding-top: 48px; }
   .world-intro dl { grid-column: auto; }
@@ -9077,14 +9083,15 @@ small { font-size: var(--text-micro); }
      first screen and pushed the essay's own title to the bottom edge. The
      reader landed on an index for a piece they had not been introduced to.
 
-     Two lines of dek and one of title and reading time: the title and the
-     lede are back in the first screen with the six parts, and the dek still
-     says what the part is about. One line was too mean — it cut two thirds
-     of the thesis. */
+     One line was too mean — it cut two thirds of the thesis. Two lines still
+     cut the third line of the two longest deks, and the dek appears nowhere
+     else on the site, so the cut was a loss of information, not a teaser.
+     Three lines: the vertical gate reports zero cut deks, and the title
+     still sits in the first screen with ~70px to spare (measured). */
   .sh-parts a { padding: 7px 0; }
   .sh-part-dek {
     display: -webkit-box;
-    -webkit-line-clamp: 2;
+    -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
     overflow: hidden;
     line-height: 1.35;
