@@ -596,7 +596,25 @@ with an empty body, so the atlas lost its data while the geometry sweep still
 called it identical to baseline); and the sweep died at 192 of 644 URLs and
 left a report reading "192/644, 0 failures".
 
+**Verified, whole surface.** The five rounds together were swept once more on
+the faithful rig: 644 URLs × 3 viewports (390, 1024, 1440). Two viewport/route
+pairs came back unmeasured — a browser died mid-sweep — and the pages behind
+them load in under 400 ms, so the sweep was re-run for exactly those two
+routes and they came back clean, 2/2 with 0 failures. `tools/msh-sweep.mjs`
+now takes `--routes=` for that, and validates the list before launching a
+browser: a filter that silently ignores a typo would measure nothing and
+report a clean sweep.
+
+**Released.** PR #28 merged as `1439762` with the five rounds preserved in
+history, and deployed: `bkkx-20261116-1439762` reports on
+bkk.nonarkara.org, bkkx-site.drnon.workers.dev and shophouses.nonarkara.org.
+The MapLibre worker asset is live at
+`/_next/static/chunks/maplibre-gl-worker.mjs` — 200, 519,372 bytes — and the
+live atlas draws the same 193,950-vertex Thai-forms mesh with zero console
+errors.
+
 **Remaining.** PR27 (dependabot's next batch) is closed as superseded, with
 its disposition recorded: TypeScript 7 still cannot land while
 typescript-eslint refuses it. The Cloudflare rate-limiting rules still need
-confirming in the zone.
+confirming in the zone. The Atlas sibling repo and the KL framing gap are
+untouched.
