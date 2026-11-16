@@ -173,12 +173,58 @@ async function assertRightSite() {
 
 mkdirSync(OUT, { recursive: true });
 await assertRightSite();
-const routes = await getRoutes();
+const allRoutes = await getRoutes();
+
+// --routes=/a,/b measures a subset. It exists because a release needs to
+// RE-MEASURE after a transient failure — a browser that died mid-sweep
+// leaves one viewport of one page unmeasured, and re-running 644 URLs to
+// learn whether that page is fine is not a proportionate answer.
+//
+// The list is validated BEFORE any browser is launched. A filter that
+// silently ignores a typo would measure nothing and report a clean sweep,
+// which is the same false pass this file has been fixed for twice: a
+// comma-split list that swallowed the whole command line once, and a run
+// that died at 192 of 644 URLs and left a report reading "192/644, 0
+// failures". A member that does not exist is named and the sweep refuses
+// to start.
+const routeFilter = arg('routes', '');
+let routes = allRoutes;
+if (routeFilter.trim()) {
+  const wanted = routeFilter.split(',').map((r) => r.trim()).filter(Boolean);
+  const known = new Set(allRoutes);
+  const unknown = wanted.filter((r) => !known.has(r));
+  if (unknown.length > 0) {
+    console.error(
+      `msh-sweep: ${unknown.length} route(s) in --routes do not exist:\n  ${unknown.join('\n  ')}`,
+    );
+    console.error('msh-sweep: refusing to start — a filter that matches nothing measures nothing.');
+    process.exit(2);
+  }
+  routes = wanted;
+}
 console.error(`msh-sweep: ${routes.length} URLs × ${VIEWPORTS.length} viewport(s) against ${BASE}`);
 
-const browser = await chromium.launch({
-  args: ['--use-gl=swiftshader', '--enable-unsafe-swiftshader', '--ignore-gpu-blocklist'],
-});
+const LAUNCH_ARGS = ['--use-gl=swiftshader', '--enable-unsafe-swiftshader', '--ignore-gpu-blocklist'];
+
+let browser = await chromium.launch({ args: LAUNCH_ARGS });
+
+// The browser can die under load — the software GL stack on a heavy page is
+// enough. A dead browser used to throw out of `newContext`, outside the
+// per-page try, and take the whole sweep down at 192 of 644 URLs: the run
+// ended with a partial report and a non-zero exit, but the REPORT on disk
+// said "192/644, 0 failures", which reads like a clean pass over a smaller
+// surface. So the browser is relaunched when it goes, and the run refuses to
+// finish unless every URL was checked.
+function browserAlive() {
+  return browser && browser.isConnected();
+}
+async function ensureBrowser() {
+  if (browserAlive()) return browser;
+  console.error('msh-sweep: the browser died — launching a new one');
+  browser = await chromium.launch({ args: LAUNCH_ARGS });
+  return browser;
+}
+
 const failures = [];
 const checked = [];
 const queue = [...routes];
@@ -191,8 +237,20 @@ async function worker() {
     let bad = false;
     for (const w of VIEWPORTS) {
       const h = w === 390 ? 844 : w === 1024 ? 900 : 900;
-      const ctx = await browser.newContext({ viewport: { width: w, height: h }, deviceScaleFactor: 1, isMobile: w < 500, hasTouch: w < 500, locale: 'th-TH', timezoneId: 'Asia/Bangkok', ignoreHTTPSErrors: true });
-      const page = await ctx.newPage();
+      let ctx = null;
+      let page = null;
+      try {
+        await ensureBrowser();
+        ctx = await browser.newContext({ viewport: { width: w, height: h }, deviceScaleFactor: 1, isMobile: w < 500, hasTouch: w < 500, locale: 'th-TH', timezoneId: 'Asia/Bangkok', ignoreHTTPSErrors: true });
+        page = await ctx.newPage();
+      } catch (e) {
+        // The browser itself is gone, not the page. Relaunch and retry this
+        // viewport rather than recording a finding against a route that was
+        // never really measured.
+        await ensureBrowser();
+        ctx = await browser.newContext({ viewport: { width: w, height: h }, deviceScaleFactor: 1, isMobile: w < 500, hasTouch: w < 500, locale: 'th-TH', timezoneId: 'Asia/Bangkok', ignoreHTTPSErrors: true });
+        page = await ctx.newPage();
+      }
       try {
         let status = null;
         let lastError = null;
@@ -222,7 +280,7 @@ async function worker() {
         rec.viewports[w] = { error: String(e.message || e).split('\n')[0].slice(0, 160) };
         bad = true;
       }
-      await ctx.close();
+      try { await ctx.close(); } catch { /* the context died with the browser */ }
     }
     checked.push(rec);
     if (bad) {
@@ -246,7 +304,17 @@ async function worker() {
 }
 
 await Promise.all(Array.from({ length: CONCURRENCY }, worker));
-await browser.close();
+try { await browser.close(); } catch { /* already gone */ }
 writeFileSync(join(OUT, 'sweep-report.json'), JSON.stringify({ base: BASE, when: new Date().toISOString(), total: routes.length, checked: checked.length, failures, records: checked }, null, 2));
 console.error(`\nmsh-sweep: ${checked.length}/${routes.length} URLs checked · ${failures.length} with geometry failures`);
 console.error(`report: ${join(OUT, 'sweep-report.json')}`);
+
+// A sweep that did not finish is UNVERIFIED, not a pass. Half a surface with
+// zero findings is a measurement, and it must not be read as a clearance.
+if (checked.length !== routes.length) {
+  console.error(
+    `msh-sweep: UNVERIFIED — ${routes.length - checked.length} of ${routes.length} URLs were never checked. ` +
+      `That is not a pass.`,
+  );
+  process.exit(1);
+}

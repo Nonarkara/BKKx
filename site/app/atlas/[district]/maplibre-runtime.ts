@@ -1,4 +1,4 @@
-import type maplibregl from "maplibre-gl";
+import type * as maplibregl from "maplibre-gl";
 
 // Vite can expose this UMD package as a default export or named namespace.
 export function resolveMapLibre(module: unknown): typeof maplibregl {

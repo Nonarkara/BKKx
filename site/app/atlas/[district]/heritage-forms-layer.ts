@@ -6,7 +6,7 @@
 // One merged mesh, one material, vertex colours, Lambert light. The specs
 // come from /data/bkk-heritage-forms.json; the shapes from heritage-forms.ts.
 import * as THREE from "three";
-import type maplibregl from "maplibre-gl";
+import type * as maplibregl from "maplibre-gl";
 import { buildForm, ORIGIN, type FormSpec } from "./heritage-forms";
 
 export const FORMS_LAYER_ID = "bkkx-heritage-forms";
@@ -54,9 +54,14 @@ export function createFormsLayer(ml: typeof maplibregl, forms: FormSpec[]): mapl
       renderer = new THREE.WebGLRenderer({ canvas: m.getCanvas(), context: gl, antialias: true });
       renderer.autoClear = false;
     },
-    render(_gl, matrix) {
+    // MapLibre 6 passes a structured render input instead of a bare matrix.
+    // The projection matrix this layer needs is the default projection's main
+    // matrix — the same one v4 handed over as a plain number[].
+    render(_gl, args) {
       if (!renderer || !map) return;
-      camera.projectionMatrix = new THREE.Matrix4().fromArray(matrix as number[]).multiply(model);
+      camera.projectionMatrix = new THREE.Matrix4()
+        .fromArray(args.defaultProjectionData.mainMatrix)
+        .multiply(model);
       renderer.resetState();
       renderer.render(scene, camera);
     },

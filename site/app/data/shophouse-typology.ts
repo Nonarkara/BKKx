@@ -465,9 +465,11 @@ export const SHOPHOUSE_TYPES: ShophouseTypeEntry[] = [
   },
 ];
 
+import type { FeatureCollection } from "geojson";
+
 export function typologyPoints(
   types: ShophouseTypeEntry[] = SHOPHOUSE_TYPES,
-): GeoJSON.FeatureCollection {
+): FeatureCollection {
   return {
     type: "FeatureCollection",
     features: types.flatMap((t) =>

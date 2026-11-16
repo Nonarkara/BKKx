@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { FloodEvidence } from "../../flood/FloodEvidence";
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
-import type maplibregl from "maplibre-gl";
+import type * as maplibregl from "maplibre-gl";
 import { resolveMapLibre } from "./maplibre-runtime";
 import "maplibre-gl/dist/maplibre-gl.css";
 import type { Stop, World } from "../../walkthrough-data";
