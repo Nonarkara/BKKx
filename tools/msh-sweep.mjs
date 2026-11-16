@@ -173,7 +173,35 @@ async function assertRightSite() {
 
 mkdirSync(OUT, { recursive: true });
 await assertRightSite();
-const routes = await getRoutes();
+const allRoutes = await getRoutes();
+
+// --routes=/a,/b measures a subset. It exists because a release needs to
+// RE-MEASURE after a transient failure — a browser that died mid-sweep
+// leaves one viewport of one page unmeasured, and re-running 644 URLs to
+// learn whether that page is fine is not a proportionate answer.
+//
+// The list is validated BEFORE any browser is launched. A filter that
+// silently ignores a typo would measure nothing and report a clean sweep,
+// which is the same false pass this file has been fixed for twice: a
+// comma-split list that swallowed the whole command line once, and a run
+// that died at 192 of 644 URLs and left a report reading "192/644, 0
+// failures". A member that does not exist is named and the sweep refuses
+// to start.
+const routeFilter = arg('routes', '');
+let routes = allRoutes;
+if (routeFilter.trim()) {
+  const wanted = routeFilter.split(',').map((r) => r.trim()).filter(Boolean);
+  const known = new Set(allRoutes);
+  const unknown = wanted.filter((r) => !known.has(r));
+  if (unknown.length > 0) {
+    console.error(
+      `msh-sweep: ${unknown.length} route(s) in --routes do not exist:\n  ${unknown.join('\n  ')}`,
+    );
+    console.error('msh-sweep: refusing to start — a filter that matches nothing measures nothing.');
+    process.exit(2);
+  }
+  routes = wanted;
+}
 console.error(`msh-sweep: ${routes.length} URLs × ${VIEWPORTS.length} viewport(s) against ${BASE}`);
 
 const LAUNCH_ARGS = ['--use-gl=swiftshader', '--enable-unsafe-swiftshader', '--ignore-gpu-blocklist'];
