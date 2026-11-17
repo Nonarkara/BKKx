@@ -855,6 +855,12 @@ button {
 
 .atlas-header-nav a {
   color: var(--paper);
+  /* 18 Nov: measured 17px tall in the deck-open state — under the WCAG
+     24px floor for a tappable nav link, same fix the generic site header
+     got. */
+  display: inline-flex;
+  align-items: center;
+  min-height: 24px;
   transition: color 180ms ease;
 }
 
@@ -2092,6 +2098,10 @@ button {
 .layer-toggle-btn {
   flex: 1 1 calc(33% - 3px);
   min-width: 0;
+  /* 18 Nov: measured 23px tall — below even the WCAG floor, on the one
+     control that decides what the map shows. A dense group: 34px, the
+     house standard, reached by the label's own two lines. */
+  min-height: 34px;
   background: rgba(255, 255, 255, 0.05);
   border: 1px solid rgba(255, 255, 255, 0.12);
   color: var(--paper-muted);
@@ -2294,6 +2304,13 @@ button {
   cursor: pointer;
   padding: 4px;
   line-height: 1;
+  /* 18 Nov: measured 41x22 — two pixels under the floor on the button that
+     dismisses the inspector card. */
+  min-height: 24px;
+  min-width: 24px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   transition: color 120ms ease;
 }
 

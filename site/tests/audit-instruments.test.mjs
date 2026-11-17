@@ -201,7 +201,7 @@ test("the geometry audit does not report contained overflow, sr-only text or inl
   // Inline links and the map's own attribution are exempt from the 24px
   // floor, and the exemption must be recorded per target, not assumed.
   assert.match(source, /exempt: inline \|\| attribution/);
-  assert.match(source, /el\.closest\('p, figcaption, li, td, blockquote, \[class\*=provenance\]'\)/);
+  assert.match(source, /el\.closest\('p, figcaption, li, td, blockquote, small, \[class\*=provenance\], \[class\*=source\]'\)/);
 });
 
 test("the 24px floor fixes the 18 November audit found stay in the stylesheet", () => {

@@ -197,7 +197,7 @@ function mshMetrics() {
         // WCAG 2.2 §2.5.8 excepts targets inline in a block of text, and the
         // map attribution control is a legal minimum the map owns. Record the
         // exemption so the remaining list is what a thumb actually misses.
-        const inline = !!el.closest('p, figcaption, li, td, blockquote, [class*=provenance]');
+        const inline = !!el.closest('p, figcaption, li, td, blockquote, small, [class*=provenance], [class*=source]');
         const attribution = !!el.closest('.maplibregl-ctrl-attrib, .maplibregl-ctrl-scale');
         smallTargets.push({ sel: path(el), w: Math.round(r.width), h: Math.round(r.height), inline, attribution, exempt: inline || attribution, text: (el.innerText || el.getAttribute('aria-label') || '').trim().slice(0, 32) });
       }

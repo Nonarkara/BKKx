@@ -130,8 +130,13 @@ export function inPageMetrics(ALLOW = []) {
     // line length (em) for prose blocks. `div` and `span` are layout groups —
     // a button grid like the /worlds switcher measured 94em because the whole
     // grid is one div. `td` is data, not prose: the catalogue's table cells
-    // measured 62em passing for long prose lines. Prose is p, li, dd, blockquote.
-    const blk = pe.closest('p,li,dd,blockquote'); if (blk && !paraSeen.has(blk) && (blk.innerText || '').length > 120) {
+    // measured 62em passing for long prose lines. Provenance lines, photo
+    // credits and captions are records too — /heritage's Thai provenance
+    // citation measured 62em passing for prose. Prose is p, li, dd, blockquote
+    // minus those record classes.
+    const blk = pe.closest('p,li,dd,blockquote');
+    const record = blk && (blk.closest('[class*=provenance],[class*=caption],figcaption,[class*=cite]') || /provenance|caption/.test(String(blk.className)));
+    if (blk && !record && !paraSeen.has(blk) && (blk.innerText || '').length > 120) {
       paraSeen.add(blk); const fsz = parseFloat(getComputedStyle(blk).fontSize) || 16;
       const r2 = document.createRange(); r2.selectNodeContents(blk); const lr = [...r2.getClientRects()]; const byLine = new Map();
       for (const q of lr) { const k = Math.round(q.top / 4); const o = byLine.get(k) || [1e9, -1e9]; o[0] = Math.min(o[0], q.left); o[1] = Math.max(o[1], q.right); byLine.set(k, o); }

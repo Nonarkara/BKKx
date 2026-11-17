@@ -96,7 +96,7 @@ const MEASURE = () => {
       && (cs.overflowX === 'hidden' || cs.textOverflow === 'ellipsis' || cs.overflow === 'hidden'))
       out.clipped.push((typeof el.className === 'string' ? el.className : el.tagName).slice(0, 50) + ' "' + (el.innerText || '').trim().slice(0, 40) + '"');
     if (el.matches('a[href], button, input, select, textarea, [role=button]') && (r.width < 24 || r.height < 24)) {
-      const inline = !!el.closest('p, figcaption, li, td, blockquote, [class*=provenance]');
+      const inline = !!el.closest('p, figcaption, li, td, blockquote, small, [class*=provenance], [class*=source]');
       const attr = !!el.closest('.maplibregl-ctrl-attrib, .leaflet-control-attribution');
       if (!inline && !attr) out.small.push((typeof el.className === 'string' ? el.className : el.tagName).slice(0, 50) + ' ' + Math.round(r.width) + 'x' + Math.round(r.height));
     }
