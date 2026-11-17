@@ -285,13 +285,21 @@ async function worker() {
     }
     checked.push(rec);
     if (bad) {
-      // A route where no viewport loaded is UNVERIFIED, not a finding about
-      // the page — a geometry failure is the site's; a load failure is the
-      // run's and asks for a re-run of those routes.
-      const anyLoaded = Object.values(rec.viewports).some((v) => !v.error && v.status === 200);
-      if (anyLoaded) failures.push(rec);
-      else loadFailures.push(rec);
-      console.error(`${anyLoaded ? 'FAIL' : 'UNVERIFIED'} ${route}`);
+      // A failure that never loaded a viewport is UNVERIFIED, not a finding
+      // about the page — a geometry failure is the site's; a load failure is
+      // the run's and asks for a re-run of those routes. Judge per viewport:
+      // one clean viewport does not make the other's reset a defect.
+      const views = Object.values(rec.viewports);
+      const failedViews = views.filter((v) => v.error || v.status !== 200);
+      const anyGeometry = views.some((v) => !v.error && v.status === 200
+        && (v.clippedCount > 0 || v.docOverflowX || (v.overflow || []).some((o) => o.kind === 'clipped')));
+      loadFailures.push(rec);
+      if (anyGeometry) {
+        failures.push(rec);
+        console.error(`FAIL ${route} (${failedViews.length} viewport(s) also unmeasured)`);
+      } else {
+        console.error(`UNVERIFIED ${route} (${failedViews.length} viewport(s) never loaded)`);
+      }
       for (const [w, v] of Object.entries(rec.viewports)) {
         if (v.error) console.error(`     ${w}: ERROR ${v.error}`);
         else if (v.status !== 200) console.error(`     ${w}: HTTP ${v.status}`);
