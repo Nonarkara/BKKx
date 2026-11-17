@@ -17,6 +17,12 @@ export function RegisterLede() {
           <br />
           monument by monument.
         </h1>
+        {/* 18 Nov: the register's search sits far below the lede. The jump
+            belongs with the title, where a register-first reader looks —
+            under the h1, not after the intro. */}
+        <p className="register-jump">
+          <a href="#register">↓ Straight to the 571-item register</a>
+        </p>
         <div className="register-intro">
           <p>
             The Fine Arts Department keeps a register of Thailand&apos;s ancient
@@ -40,14 +46,6 @@ export function RegisterLede() {
             read it register-first, you&apos;re in the right place.
           </p>
         </div>
-        {/* 18 Nov: msh-audit measured the register's search 4.6 phone
-            screens below its lede, and the law says the thing that matters
-            must not leave the viewport before the reader finds it. One
-            jump line from the lede to the register — no words of the essay
-            changed, and the anchor the home page already links to. */}
-        <p className="register-jump">
-          <a href="#register">↓ Straight to the 571-item register</a>
-        </p>
       </>
     );
   }
@@ -59,6 +57,11 @@ export function RegisterLede() {
         <br />
         {REGISTER_LEDE_TH.h1Line2}
       </h1>
+      {/* Same affordance, Thai: the register's search sits far below the
+          lede on a phone, and a reader here reads register-first. */}
+      <p className="register-jump" lang={lang}>
+        <a href="#register">↓ ไปที่ทะเบียนบูรณะทั้ง 571 แห่ง</a>
+      </p>
       <div className="register-intro">
         {REGISTER_LEDE_TH.intro.map((p, i) => (
           <p key={i} lang={lang}>
@@ -74,11 +77,6 @@ export function RegisterLede() {
           </p>
         ))}
       </div>
-      {/* Same affordance, Thai: the register's search sits far below the
-          lede on a phone, and a reader here reads register-first. */}
-      <p className="register-jump" lang={lang}>
-        <a href="#register">↓ ไปที่ทะเบียนบูรณะทั้ง 571 แห่ง</a>
-      </p>
     </>
   );
 }
