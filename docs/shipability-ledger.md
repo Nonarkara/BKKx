@@ -10,7 +10,7 @@ Do not substitute one green build or one repaired screen for the full audit.
 | --- | --- | --- |
 | Preserve all agents' earned work | Dirty trees, stashes, worktrees, local/remote refs and PR disposition; content comparison for squash merges | Inventory in agent-reconciliation-2026-10-25.md and reconciliation-2026-11-04.md; no destructive cleanup. PR25, PR4 and PR12 closed with dispositions on each PR. PR24 was held with its root cause recorded, then **landed as the 16 November PR #28 merge (`1439762`, merged as a fast-forward of the staged batch)**; PR27 (dependabot's next batch) closed as superseded — TypeScript 7 still cannot land while typescript-eslint refuses it. No branch deleted or rewritten |
 | Every intended release branch is shippable | Exact SHA, complete build/type/lint/tests, no missing generated data; actual deploy target | main shipped with a proven build stamp. Other branch tips still not proven; the KL fork, the broken MapLibre 6 experiment and the feature branches remain out of scope but preserved |
-| No spatial hallucination on every public surface | Actual 390/1024/1440 geometry and screenshots; expanded/empty/error states; task evidence and action together | Whole surface swept at 390, 1024 and 1440 with an exhaustive 644-URL gate, field by field against the pre-upgrade baseline; 200% enlargement, blocked fonts and keyboard proven on every template. Expanded and error states exercised by `tools/states-audit.mjs` since the 17 November round (entry below) |
+| No spatial hallucination on every public surface | Actual 390/1024/1440 geometry and screenshots; expanded/empty/error states; task evidence and action together | Whole surface swept at 390, 1024 and 1440 with an exhaustive 644-URL gate, field by field against the pre-upgrade baseline; 200% enlargement, blocked fonts and keyboard proven on every template. **Expanded, empty and error states: closed 17 November** — `tools/states-audit.mjs`, 16/16 clean (see the round entry) |
 | No AI design slop | Role-based fonts, readable hierarchy, no decorative gradients/glass/glow, content-sized groups and one meaningful accent; independent review | Typography and marker work carried forward. Whole-system slop pass not claimed; the homepage's layer chip hues and the overlapping landmark labels remain open |
 | Usable without pointer precision | Visible focus, real names, reachable controls, keyboard activation, touch targets, enlarged text | Keyboard proven on 20/20 routes with a visible ring and a real name on every tab stop; 44px targets on the new disclosure; 200% enlargement proven. Dialogs still not exercised |
 | Preserve trustworthy data | Observation/model/reference tiers, age, unknown not zero, source links; no invented safe routes or survey precision | The water relay no longer overwrites an upstream observation's age with the relay time, so a 2020 reading can no longer arrive as current 2026. A road closure the source still lists as running now survives the 24-hour window instead of being dropped. Existing safety boundaries retained; not a new validation of all feeds |
@@ -791,3 +791,39 @@ Continuation, same day — the instruments' findings, 18 November
   those into "geometry failures". It keeps two buckets now, prints UNVERIFIED
   for the load kind, and exits non-zero when a route went unmeasured —
   unverified is not a pass.
+
+## The states round, closed 17 November (live `bkkx-20261117-545c929`)
+
+The post-deploy gates on the shipped build: vertical audit 32 cuts = the
+documented Old Town teasers only (0 unverified); `/shophouses` title and all
+six parts in the first screen at both widths with the deks at their
+three-line clamp; homepage and war room zero clipped nodes with the tally
+units at 11px; popup audit 3/3 inspector cards, zero clipped inside; scale
+audit 11/14/32/86.4 only. The atlas route's first msh-audit said "chrome
+takes 200% of the viewport" — the full-viewport fixed control overlay was
+counted as a chrome band; chrome is a band, never a screen, and with the
+correction `/atlas/historic-core` passes all three widths.
+
+The atlas deck-open state (measured only by the states audit, not by the
+load-time gates) held three more floors, now fixed: the deck's
+`.layer-toggle-btn` group at 23px tall — below even the WCAG floor on the
+controls that decide what the map shows, now the dense-group 34px; the
+`.atlas-header-nav` links at 17px; and the inspector card's close button
+at 41x22. The exemption learned `small` and `[class*=source]` for the
+deck's citation link in a source note, which is a record, not a thumb
+target.
+
+`tools/states-audit.mjs` after the fixes: **16/16 clean** — the home
+quarter index and heritage card through the embed frame, the heritage
+search's empty result, the atlas deck and inspector, the folded figure,
+the typology detail, and the flood page with every `/api/flood` route
+aborted (its failure states are honest in Thai and English; the audit's
+honesty detector knows both scripts now). The ledger's "expanded, empty
+and error states not exercised" row is closed.
+
+Known, recorded, not waived: `/heritage` and `/datasets` sit at REVIEW 3
+(void, long-lines) — their longest lines are the catalogue's citation and
+provenance rows (45-62em), records rather than prose; the calibration
+excludes records from the prose measure and the remainder is a tuning note
+for whoever next touches the rule, with the measurements in the round
+entries above.
