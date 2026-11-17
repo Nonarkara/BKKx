@@ -126,6 +126,10 @@ function mshMetrics() {
     if (!visible(el)) continue;
     const r = el.getBoundingClientRect();
     if (r.height < 2 || r.width < VW * 0.5) continue;
+    // Chrome is a band, never a screen. The atlas runs a full-viewport
+    // fixed control overlay over its map; measured as chrome it reported
+    // "chrome takes 200% of the viewport" on a full-screen map app.
+    if (r.height > VH * 0.9) continue;
     chromeEls.push({ el, r, cs });
   }
   // Group overlapping bands into rows so a header made of three stacked
