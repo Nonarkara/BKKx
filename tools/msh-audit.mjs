@@ -22,7 +22,7 @@
 import { chromium } from 'playwright';
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
-import { measure, score } from './slop-lint.mjs';
+import { measure, score, applyRuleWaivers } from './slop-lint.mjs';
 
 const args = process.argv.slice(2);
 const arg = (name, fallback) => {
@@ -57,7 +57,7 @@ const TASKS = [
   // the generic site shell does), so 'main' selectors found nothing and the
   // task test reported a false "task not visible together". These name the
   // real roots.
-  { re: /^\/heritage$/, label: 'the monument register', info: '.register-lede, .register-explorer', action: 'input, a[href^="/heritage/"]' },
+  { re: /^\/heritage$/, label: 'the monument register', info: '.register-lede, .register-explorer', action: '.register-jump a, input, a[href^="/heritage/"]' },
   { re: /^\/heritage\//, label: 'one monument', info: 'h1', action: 'a[href]' },
   { re: /^\/areas\//, label: 'one quarter', info: 'h1', action: 'a[href], img' },
   { re: /^\/walks\//, label: 'one walk', info: 'h1', action: 'a[href], .maplibregl-map' },
@@ -69,10 +69,12 @@ const TASKS = [
   { re: /^\/shophouses\/bible/, label: 'the reference artifacts', info: 'h1', action: 'a[href], svg, canvas' },
   { re: /^\/shophouses\/cluster\//, label: 'one documented cluster', info: 'h1', action: 'a[href], svg' },
   { re: /^\/shophouses\/fig\//, label: 'one figure', info: '.sh-part-head h1, figure', action: 'a[href]' },
-  // the essay part pages carry their own header and prev/next nav; the four
-  // header structure is .sh-part-head h1 and the reading action is
-  // .sh-part-nav a
-  { re: /^\/shophouses\/(read|why)/, label: 'the shophouse research companion', info: '.sh-part-head h1', action: '.sh-part-nav a, .sh-parts a' },
+  // the essay part pages carry their own header and prev/next nav. The
+  // reading action is the masthead's way back to the contents (Essay →
+  // /shophouses#essay and the wordmark), which sits on the first screen of
+  // every page; the part-nav at the essay's end is the reader's flow, not
+  // the first-screen action.
+  { re: /^\/shophouses\/(read|why)/, label: 'the shophouse research companion', info: '.sh-part-head h1', action: '.sh-masthead nav a, .sh-wordmark' },
   { re: /^\/shophouses/, label: 'the shophouse research companion', info: '.sh-part-head h1, h1', action: '.sh-part-nav a, .sh-parts a, a[href]' },
   { re: /^\/atlas\//, label: 'the 3D atlas', info: '.maplibregl-map, canvas, main', action: '.maplibregl-map, button' },
   { re: /^\/warroom/, label: 'the live war room', info: 'h1', action: 'a[href], button, .maplibregl-map' },
@@ -332,8 +334,12 @@ async function measureRoute(browser, path, shotDir) {
         heroShare: dom.heroShare, hOverflow: dom.hOverflow, placeholderHits: dom.placeholderHits, primaryFont: dom.primaryFont,
         stretchedTotal: dom.stretchedTotal, stretchByCause: dom.stretchByCause, stretchExamples: dom.stretchExamples,
       };
-      const lint = score(dom, {});
-      rec.lint = { ...lint, verdict: lint.points >= 6 ? 'SLOP' : lint.points >= 3 ? 'REVIEW' : 'OK' };
+      // The waiver file exists so a named break is a decision, not a permanent
+      // hit. lintUrl applied it; msh-audit must too, or the same page scores
+      // differently in two instruments and the weaker one decides the ship.
+      let lint = score(dom, {});
+      applyRuleWaivers(lint, BASE + path);
+      rec.lint = lint;
 
       // Task visibility — the MSH question the generic metrics cannot answer.
       const taskState = await page.evaluate((t) => {

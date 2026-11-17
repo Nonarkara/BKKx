@@ -235,12 +235,24 @@ test("the slop linter can honor a named exemption and still reports it", () => {
   const entries = JSON.parse(readFileSync(allow, "utf8"));
   assert.ok(entries.length >= 4, "the waivers it holds: the hero band, the switcher, the hero map, and the two rule decisions");
   for (const e of entries) assert.ok(e.reason && e.reason.length > 40, "every waiver must carry its written reason");
-  assert.match(source, /ALLOW\.filter\(w => w\.rule\)/, "the linter must apply rule-level waivers");
+  assert.match(source, /ALLOW\.filter\(\(?\w+\)? => \w+\.rule\)/, "the linter must apply rule-level waivers");
+  assert.match(source, /applyRuleWaivers/, "the waiver application must be one shared function both scorers call");
   assert.match(source, /waived rule:/, "the linter must print what it waived");
   // emoji proper, not Extended_Pictographic (which counts the house's own
   // geometric glyphs ◩ ◆ ≋ as emoji)
   assert.match(source, /emojiCharRe/, "the emoji count must use the strict emoji definition");
   assert.match(source, /iframe\[src\*="\/atlas\/"\]/, "the map selector must see the iframe embeds the front door actually uses");
+});
+
+test("the sweep separates load failures from geometry failures", () => {
+  // 18 Nov: eight /heritage pages failed page.goto on a broken local link
+  // and the headline read "8 with geometry failures". A route that never
+  // loaded is the run's, not the site's — the sweep says UNVERIFIED and
+  // exits non-zero either way, because unverified is not a pass.
+  const source = readFileSync(join(TOOLS, "msh-sweep.mjs"), "utf8");
+  assert.match(source, /loadFailures/, "the sweep must bucket unverified routes separately");
+  assert.match(source, /UNVERIFIED/, "an unloaded route must be named, not folded into failures");
+  assert.match(source, /process\.exit\(failures\.length \|\| loadFailures\.length \? 1 : 0\)/, "the sweep must exit non-zero when a route went unverified");
 });
 
 // ---------------------------------------------------------------- helpers

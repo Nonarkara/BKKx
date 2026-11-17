@@ -763,3 +763,31 @@ audit's first honesty regex only knew English and the fix knows both.
   (fixed, awaiting deploy), and the `/heritage` register search sitting
   4.6 phone screens below its lede — an editorial structure from previous
   rounds, recorded here rather than redesigned without the owner.
+
+Continuation, same day — the instruments' findings, 18 November
+
+- **`msh-audit` and `slop-lint` disagreed about `/worlds`** because each
+  applied the waiver file alone. The waiver application is one shared
+  function now (`applyRuleWaivers`), called by both scorers — the weaker
+  instrument must not decide the ship.
+- **`slop-lint` counted table cells as prose.** The catalogue's wide `<td>`
+  measured 62em passing for a long line; prose is `p, li, dd, blockquote`
+  again, and `/datasets`' long-lines hit closes with it.
+- **`msh-audit`'s task action for the essay part pages picked the wrong
+  affordance**: the prev/next nav at the essay's end, instead of the
+  masthead's way back to the contents that sits on every part page's first
+  screen. With the real action, `/shophouses/read/1` passes at all three
+  widths.
+- **The `/heritage` task finding was real and is fixed, minimally.** The
+  register's search sat 4.6 phone screens below its lede, and the law says
+  the thing that matters must not leave the viewport before the reader
+  finds it. One jump line now links the lede to `#register` — the anchor
+  the home page already used — in English and Thai, with no word of the
+  essay changed.
+- **The post-deploy sweep's eight failures were the run's, not the site's**
+  — eight scattered `/heritage/fad-*` pages failing `page.goto` with
+  `ERR_ADDRESS_UNREACHABLE`, re-measured 8/8 clean. The sweep's own comment
+  already said a route that never loaded is UNVERIFIED; the code folded
+  those into "geometry failures". It keeps two buckets now, prints UNVERIFIED
+  for the load kind, and exits non-zero when a route went unmeasured —
+  unverified is not a pass.

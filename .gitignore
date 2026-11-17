@@ -59,3 +59,5 @@ site/public/data/v/
 # Local audit captures and OSM extracts: evidence and inputs, not source.
 msh-audit-*/
 *.osm.pbf
+tools/node_modules
+tools/verify-local-fixes.mjs

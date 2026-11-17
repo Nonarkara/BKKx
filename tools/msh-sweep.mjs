@@ -226,6 +226,7 @@ async function ensureBrowser() {
 }
 
 const failures = [];
+  const loadFailures = [];
 const checked = [];
 const queue = [...routes];
 
@@ -284,8 +285,13 @@ async function worker() {
     }
     checked.push(rec);
     if (bad) {
-      failures.push(rec);
-      console.error(`FAIL ${route}`);
+      // A route where no viewport loaded is UNVERIFIED, not a finding about
+      // the page — a geometry failure is the site's; a load failure is the
+      // run's and asks for a re-run of those routes.
+      const anyLoaded = Object.values(rec.viewports).some((v) => !v.error && v.status === 200);
+      if (anyLoaded) failures.push(rec);
+      else loadFailures.push(rec);
+      console.error(`${anyLoaded ? 'FAIL' : 'UNVERIFIED'} ${route}`);
       for (const [w, v] of Object.entries(rec.viewports)) {
         if (v.error) console.error(`     ${w}: ERROR ${v.error}`);
         else if (v.status !== 200) console.error(`     ${w}: HTTP ${v.status}`);
@@ -299,15 +305,16 @@ async function worker() {
         }
       }
     }
-    writeFileSync(join(OUT, 'sweep-report.json'), JSON.stringify({ base: BASE, when: new Date().toISOString(), total: routes.length, checked: checked.length, failures, records: checked }, null, 2));
+    writeFileSync(join(OUT, 'sweep-report.json'), JSON.stringify({ base: BASE, when: new Date().toISOString(), total: routes.length, checked: checked.length, failures, loadFailures, records: checked }, null, 2));
   }
 }
 
 await Promise.all(Array.from({ length: CONCURRENCY }, worker));
 try { await browser.close(); } catch { /* already gone */ }
-writeFileSync(join(OUT, 'sweep-report.json'), JSON.stringify({ base: BASE, when: new Date().toISOString(), total: routes.length, checked: checked.length, failures, records: checked }, null, 2));
-console.error(`\nmsh-sweep: ${checked.length}/${routes.length} URLs checked · ${failures.length} with geometry failures`);
+writeFileSync(join(OUT, 'sweep-report.json'), JSON.stringify({ base: BASE, when: new Date().toISOString(), total: routes.length, checked: checked.length, failures, loadFailures, records: checked }, null, 2));
+console.error(`\nmsh-sweep: ${checked.length}/${routes.length} URLs checked · ${failures.length} with geometry failures · ${loadFailures.length} unverified (never loaded — re-run those routes)`);
 console.error(`report: ${join(OUT, 'sweep-report.json')}`);
+process.exit(failures.length || loadFailures.length ? 1 : 0);
 
 // A sweep that did not finish is UNVERIFIED, not a pass. Half a surface with
 // zero findings is a measurement, and it must not be read as a clearance.

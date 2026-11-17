@@ -2645,6 +2645,10 @@ button {
   margin: 0 0 var(--baseline);
 }
 
+/* The jump from the lede to the register (18 Nov): a plain link line, the
+   site's own prose-link colouring, the arrow does the meaning. */
+.register-jump { margin: 4px 0 0; font-weight: 700; }
+
 .register-intro p:last-child {
   margin-bottom: 0;
 }

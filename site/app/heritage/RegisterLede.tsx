@@ -40,6 +40,14 @@ export function RegisterLede() {
             read it register-first, you&apos;re in the right place.
           </p>
         </div>
+        {/* 18 Nov: msh-audit measured the register's search 4.6 phone
+            screens below its lede, and the law says the thing that matters
+            must not leave the viewport before the reader finds it. One
+            jump line from the lede to the register — no words of the essay
+            changed, and the anchor the home page already links to. */}
+        <p className="register-jump">
+          <a href="#register">↓ Straight to the 571-item register</a>
+        </p>
       </>
     );
   }
@@ -66,6 +74,11 @@ export function RegisterLede() {
           </p>
         ))}
       </div>
+      {/* Same affordance, Thai: the register's search sits far below the
+          lede on a phone, and a reader here reads register-first. */}
+      <p className="register-jump" lang={lang}>
+        <a href="#register">↓ ไปที่ทะเบียนบูรณะทั้ง 571 แห่ง</a>
+      </p>
     </>
   );
 }

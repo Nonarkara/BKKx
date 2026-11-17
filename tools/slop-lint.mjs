@@ -129,8 +129,9 @@ export function inPageMetrics(ALLOW = []) {
     for (const q of rects) add(n, q, true, t.length / rects.length, /\d/.test(t));
     // line length (em) for prose blocks. `div` and `span` are layout groups —
     // a button grid like the /worlds switcher measured 94em because the whole
-    // grid is one div. Prose lives in p, li, dd, blockquote and cells.
-    const blk = pe.closest('p,li,dd,blockquote,td'); if (blk && !paraSeen.has(blk) && (blk.innerText || '').length > 120) {
+    // grid is one div. `td` is data, not prose: the catalogue's table cells
+    // measured 62em passing for long prose lines. Prose is p, li, dd, blockquote.
+    const blk = pe.closest('p,li,dd,blockquote'); if (blk && !paraSeen.has(blk) && (blk.innerText || '').length > 120) {
       paraSeen.add(blk); const fsz = parseFloat(getComputedStyle(blk).fontSize) || 16;
       const r2 = document.createRange(); r2.selectNodeContents(blk); const lr = [...r2.getClientRects()]; const byLine = new Map();
       for (const q of lr) { const k = Math.round(q.top / 4); const o = byLine.get(k) || [1e9, -1e9]; o[0] = Math.min(o[0], q.left); o[1] = Math.max(o[1], q.right); byLine.set(k, o); }
@@ -348,24 +349,29 @@ export async function lintUrl(browser, url, { shotsDir, slug, settleMs = 7000, s
   else if (dd && dd.textChars < 400 && !dd.mapCount && (dd.largestFlatRegion || 0) > 0.6) { res.status = 'DEAD/EMPTY'; }
   else if (dd) res.status = 'OK';
   if (res.desktop && res.status === 'OK') res.lint = score(res.desktop, res.mobile || {});
-  if (res.lint) res.lint.verdict = res.lint.points >= SLOP_THRESHOLD_POINTS ? 'SLOP' : res.lint.points >= REVIEW_THRESHOLD_POINTS ? 'REVIEW' : 'OK';
-  // Rule-level waivers: a named register or a known metric blind spot for
-  // THIS URL. The waived rule is subtracted, logged, and kept in the output —
-  // a verdict that hides the hit it waived is the thing this file prevents.
-  if (res.lint) {
-    const ruleWaivers = ALLOW.filter(w => w.rule);
-    for (const w of ruleWaivers) {
-      if (!res.lint.hits.includes(w.rule)) continue;
-      if (w.pages && !w.pages.some(p => url.includes(p))) continue;
-      const rule = RULES.find(r => r.id === w.rule);
-      res.lint.points -= rule ? rule.w : 0;
-      res.lint.hits = res.lint.hits.filter(h => h !== w.rule);
-      (res.lint.waivedRules = res.lint.waivedRules || []).push(w.rule);
-      console.log(`  waived rule: ${w.rule} — ${w.reason}`);
-    }
-    res.lint.verdict = res.lint.points >= SLOP_THRESHOLD_POINTS ? 'SLOP' : res.lint.points >= REVIEW_THRESHOLD_POINTS ? 'REVIEW' : 'OK';
-  }
+  if (res.lint) applyRuleWaivers(res.lint, url);
   return res;
+}
+
+// Rule-level waivers: a named register or a known metric blind spot for THIS
+// URL. Applied by whoever scores — lintUrl AND msh-audit, which vendors the
+// scorer but used to skip the waiver file and so re-reported the /worlds
+// decisions it was written down to cover. The waived rule is subtracted,
+// logged, and kept in the output: a verdict that hides the hit it waived is
+// the thing this file prevents.
+export function applyRuleWaivers(lint, url) {
+  if (!lint) return lint;
+  for (const w of ALLOW.filter((x) => x.rule)) {
+    if (!lint.hits.includes(w.rule)) continue;
+    if (w.pages && !w.pages.some((p) => url.includes(p))) continue;
+    const rule = RULES.find((r) => r.id === w.rule);
+    lint.points -= rule ? rule.w : 0;
+    lint.hits = lint.hits.filter((h) => h !== w.rule);
+    (lint.waivedRules = lint.waivedRules || []).push(w.rule);
+    console.log(`  waived rule: ${w.rule} — ${w.reason}`);
+  }
+  lint.verdict = lint.points >= SLOP_THRESHOLD_POINTS ? 'SLOP' : lint.points >= REVIEW_THRESHOLD_POINTS ? 'REVIEW' : 'OK';
+  return lint;
 }
 
 // ---------------------------------------------------------------- CLI
