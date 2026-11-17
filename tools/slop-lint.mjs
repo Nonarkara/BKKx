@@ -6,12 +6,25 @@
 // Exports: measurePage(page), pixelStats(pngBuffer), score(desktop, mobile), lintUrl(browser,url,opts)
 import { chromium } from 'playwright';
 import { PNG } from 'pngjs';
+import { existsSync, readFileSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
+
+// Named exemptions, recorded in slop-allowlist.json with the reason each one
+// is load-bearing. A waived element is not a pass — it is a decision, and the
+// linter reports what it waived on every run so a silent waiver cannot drift
+// into being one.
+const ALLOW_FILE = fileURLToPath(new URL('./slop-allowlist.json', import.meta.url));
+const ALLOW = existsSync(ALLOW_FILE) ? JSON.parse(readFileSync(ALLOW_FILE, 'utf8')) : [];
 import fs from 'fs';
 
 // ---------------------------------------------------------------- in-page DOM metrics
-export function inPageMetrics() {
+export function inPageMetrics(ALLOW = []) {
   const VW = innerWidth, VH = innerHeight, VA = VW * VH;
-  const MAPSEL = '.leaflet-container,.maplibregl-map,.mapboxgl-map,.gm-style,.ol-viewport,.esri-view,.cesium-widget,.cesium-viewer,.deckgl-overlay,iframe[src*="map"],iframe[src*="arcgis"],[class*="MapContainer"],[id^="map"]';
+  // The BKKx homepage and atlas embeds are IFRAMES pointing at /atlas/... —
+  // 'map' appears nowhere in that src, so the front door's map was measured
+  // as "no map on the first screen" and the hero looked data-free. The map
+  // selector must recognise what this site actually embeds.
+  const MAPSEL = '.leaflet-container,.maplibregl-map,.mapboxgl-map,.gm-style,.ol-viewport,.esri-view,.cesium-widget,.cesium-viewer,.deckgl-overlay,iframe[src*="map"],iframe[src*="/atlas/"],iframe[src*="/atlas?"],iframe[src*="arcgis"],[class*="MapContainer"],[id^="map"]';
   const big = e => { const r = e.getBoundingClientRect(); return r.width * r.height > VA * 0.04; };
   let maps = [...document.querySelectorAll(MAPSEL)].filter(big);
   // a large canvas (WebGL map / 3D) that is not inside a found map counts as map
@@ -100,17 +113,24 @@ export function inPageMetrics() {
   const tw = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
   let n, tcount = 0; const range = document.createRange();
   const lines = []; const emojiRe = /\p{Extended_Pictographic}/u; let emoji = 0, emojiIcons = 0;
+  // Emoji proper: a pictographic codepoint in the emoji block, or one carrying
+  // the U+FE0F emoji-presentation selector. Monochrome geometric symbols
+  // (◩ ◈ ◆ ≋ ↑) that the house type law uses as icons are NOT emoji and
+  // used to be counted as such.
+  const emojiCharRe = /(?:\p{Extended_Pictographic}\uFE0F|[\u{1F000}-\u{1FAFF}\u{1F900}-\u{1F9FF}\u{1FA70}-\u{1FAFF}])/gu;
   const paraSeen = new Set();
   while ((n = tw.nextNode()) && tcount < 6000) {
     const t = n.textContent.trim(); if (!t) continue; const pe = n.parentElement; if (!pe || pe.closest('script,style,noscript')) continue;
     if (inMap(pe)) continue;
     range.selectNodeContents(n); const rects = [...range.getClientRects()].filter(q => q.width > 0 && q.top < docTopLimit);
     if (!rects.length) continue; tcount++;
-    const em = [...t.matchAll(/\p{Extended_Pictographic}/gu)].length; emoji += em;
+    const em = [...t.matchAll(emojiCharRe)].length; emoji += em;
     if (em && (t.length <= 40 || emojiRe.test(t.slice(0, 3))) ) emojiIcons++;
     for (const q of rects) add(n, q, true, t.length / rects.length, /\d/.test(t));
-    // line length (em) for prose blocks
-    const blk = pe.closest('p,li,dd,blockquote,div,span,td'); if (blk && !paraSeen.has(blk) && (blk.innerText || '').length > 120) {
+    // line length (em) for prose blocks. `div` and `span` are layout groups —
+    // a button grid like the /worlds switcher measured 94em because the whole
+    // grid is one div. Prose lives in p, li, dd, blockquote and cells.
+    const blk = pe.closest('p,li,dd,blockquote,td'); if (blk && !paraSeen.has(blk) && (blk.innerText || '').length > 120) {
       paraSeen.add(blk); const fsz = parseFloat(getComputedStyle(blk).fontSize) || 16;
       const r2 = document.createRange(); r2.selectNodeContents(blk); const lr = [...r2.getClientRects()]; const byLine = new Map();
       for (const q of lr) { const k = Math.round(q.top / 4); const o = byLine.get(k) || [1e9, -1e9]; o[0] = Math.min(o[0], q.left); o[1] = Math.max(o[1], q.right); byLine.set(k, o); }
@@ -157,7 +177,19 @@ export function inPageMetrics() {
   }
   // ---- direct stretch test: how much bigger is each content box than its own content wants to be?
   const stretch = { w: 0, h: 0, byCause: {}, examples: [] };
-  const cand = boxes.filter(b => b.text > 0 && b.text <= 80 && b.r.width >= 60 && b.r.top < VH * 2 && b.r.width < VW * 0.995).slice(0, 350);
+  // Named exemptions first: an element on the waiver list is not measured
+  // for stretch, because its size is a decision, not an inflation. What was
+  // waived is reported back, never silently dropped.
+  const waivers = [];
+  for (const el of document.querySelectorAll('body *')) {
+    for (const w of ALLOW) {
+      try { if (el.matches(w.selector)) { waivers.push({ sel: w.selector, cls: (typeof el.className === 'string' ? el.className : el.tagName).slice(0, 50) }); break; } } catch {}
+    }
+  }
+  out.waivers = waivers;
+  const cand = boxes.filter(b => b.text > 0 && b.text <= 80 && b.r.width >= 60 && b.r.top < VH * 2 && b.r.width < VW * 0.995)
+    .filter(b => !ALLOW.some(w => { try { return b.el.matches(w.selector); } catch { return false; } }))
+    .slice(0, 350);
   for (const b of cand) {
     const el = b.el, st = el.style, saved = st.cssText, r0 = el.getBoundingClientRect();
     const pcs = el.parentElement ? getComputedStyle(el.parentElement) : null;
@@ -289,7 +321,8 @@ export const SLOP_THRESHOLD_POINTS = +(process.env.SLOP_THRESHOLD || 6);
 export const REVIEW_THRESHOLD_POINTS = +(process.env.REVIEW_THRESHOLD || 3);
 
 export async function measure(page) {
-  const dom = await page.evaluate(inPageMetrics);
+  const dom = await page.evaluate(inPageMetrics, ALLOW);
+      if (dom.waivers) for (const wv of dom.waivers) console.log(`  waived: ${wv.sel} (${wv.cls.slice(0, 40)}) — see tools/slop-allowlist.json`);
   const shot = await page.screenshot({ type: 'png' });
   return { dom: { ...dom, ...pixelStats(shot) }, shot };
 }
@@ -316,6 +349,22 @@ export async function lintUrl(browser, url, { shotsDir, slug, settleMs = 7000, s
   else if (dd) res.status = 'OK';
   if (res.desktop && res.status === 'OK') res.lint = score(res.desktop, res.mobile || {});
   if (res.lint) res.lint.verdict = res.lint.points >= SLOP_THRESHOLD_POINTS ? 'SLOP' : res.lint.points >= REVIEW_THRESHOLD_POINTS ? 'REVIEW' : 'OK';
+  // Rule-level waivers: a named register or a known metric blind spot for
+  // THIS URL. The waived rule is subtracted, logged, and kept in the output —
+  // a verdict that hides the hit it waived is the thing this file prevents.
+  if (res.lint) {
+    const ruleWaivers = ALLOW.filter(w => w.rule);
+    for (const w of ruleWaivers) {
+      if (!res.lint.hits.includes(w.rule)) continue;
+      if (w.pages && !w.pages.some(p => url.includes(p))) continue;
+      const rule = RULES.find(r => r.id === w.rule);
+      res.lint.points -= rule ? rule.w : 0;
+      res.lint.hits = res.lint.hits.filter(h => h !== w.rule);
+      (res.lint.waivedRules = res.lint.waivedRules || []).push(w.rule);
+      console.log(`  waived rule: ${w.rule} — ${w.reason}`);
+    }
+    res.lint.verdict = res.lint.points >= SLOP_THRESHOLD_POINTS ? 'SLOP' : res.lint.points >= REVIEW_THRESHOLD_POINTS ? 'REVIEW' : 'OK';
+  }
   return res;
 }
 

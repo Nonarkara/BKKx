@@ -36,7 +36,10 @@ for(const url of PAGES) for(const w of [390,1440]){
       const key=el.tagName+'.'+(typeof el.className==='string'?el.className.split(/\s+/).slice(0,2).join('.'):'');
       if(!seen.has(key+'|'+size)){seen.add(key+'|'+size); out.outliers.push({sel:key,size});}
     }
-    const eb=document.querySelector('.sh-part-eyebrow, .sh-part-head a, [class*=eyebrow]');
+    // .sh-part-eyebrow was the essay's own class before the five-part split;
+    // it is gone from the app, and a leading stale selector made the first
+    // fallback carry the whole check. .sh-part-head a is the real one.
+    const eb=document.querySelector('.sh-part-head a, [class*=eyebrow]');
     if(eb) out.eyebrow={tag:eb.tagName, cls:eb.className, href:eb.getAttribute('href'), text:(eb.innerText||'').trim().slice(0,60), decoration:getComputedStyle(eb).textDecorationLine};
     return out;
   });

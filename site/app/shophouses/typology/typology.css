@@ -58,6 +58,11 @@
   color: #f4ebd5;
   text-decoration: none;
   font-size: var(--text-body);
+  /* 18 Nov 2026: measured 21px tall — under the WCAG 24px floor for a
+     tappable bar link. min-height keeps the 48px bar's height. */
+  display: inline-flex;
+  align-items: center;
+  min-height: 24px;
 }
 
 .typo-top nav a {
@@ -465,6 +470,9 @@
 }
 
 .typo-bottom a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 24px;
   flex: 0 0 auto;
   color: #254f82;
   font-size: var(--text-body);

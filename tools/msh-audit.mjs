@@ -49,30 +49,43 @@ const VIEWPORTS = [
  */
 const TASKS = [
   { re: /^\/$/, label: 'the 3D heritage map', info: 'iframe, .maplibregl-map', action: 'a[href], button' },
-  { re: /^\/heritage$/, label: 'the monument register', info: 'main', action: 'input, a[href^="/heritage/"]' },
-  { re: /^\/heritage\//, label: 'one monument', info: 'main h1', action: 'a[href]' },
-  { re: /^\/areas\//, label: 'one quarter', info: 'main h1', action: 'a[href], img' },
-  { re: /^\/walks\//, label: 'one walk', info: 'main h1', action: 'a[href], .maplibregl-map' },
-  { re: /^\/rowhouses/, label: 'the rowhouse atlas', info: 'main', action: 'a[href], .maplibregl-map' },
-  { re: /^\/shophouses\/atlas/, label: 'the shophouse pressure map', info: '.maplibregl-map, main', action: '.maplibregl-map, a[href]' },
-  { re: /^\/shophouses\/why/, label: 'the shophouse essay', info: 'main h1, article', action: 'a[href], figure, svg' },
-  { re: /^\/shophouses\/typology/, label: 'the typology library', info: 'main h1', action: 'a[href], img' },
-  { re: /^\/shophouses\/bible/, label: 'the reference artifacts', info: 'main h1', action: 'a[href], svg, canvas' },
-  { re: /^\/shophouses\/cluster\//, label: 'one documented cluster', info: 'main h1', action: 'a[href], svg' },
-  { re: /^\/shophouses\/fig\//, label: 'one figure', info: 'main h1, figure', action: 'a[href]' },
-  { re: /^\/shophouses/, label: 'the shophouse research companion', info: 'main h1', action: 'a[href], svg' },
+  // NOTE: only the generic site shell renders <main> — the essay, register,
+  // war-room, dossier and walk shells render their own roots, so 'main'
+  // selectors found nothing and the task test reported failures that were
+  // the instrument's own. Roots below are real.
+  // The register, essay and map shells don't render a <main> element (only
+  // the generic site shell does), so 'main' selectors found nothing and the
+  // task test reported a false "task not visible together". These name the
+  // real roots.
+  { re: /^\/heritage$/, label: 'the monument register', info: '.register-lede, .register-explorer', action: 'input, a[href^="/heritage/"]' },
+  { re: /^\/heritage\//, label: 'one monument', info: 'h1', action: 'a[href]' },
+  { re: /^\/areas\//, label: 'one quarter', info: 'h1', action: 'a[href], img' },
+  { re: /^\/walks\//, label: 'one walk', info: 'h1', action: 'a[href], .maplibregl-map' },
+  { re: /^\/rowhouses/, label: 'the rowhouse atlas', info: 'h1', action: 'a[href], .maplibregl-map' },
+  { re: /^\/shophouses\/atlas/, label: 'the shophouse pressure map', info: '.maplibregl-map, .sh-lede h1', action: '.maplibregl-map, a[href]' },
+  { re: /^\/shophouses$/, label: 'the shophouse research companion', info: '.sh-lede h1', action: '.sh-parts a' },
+  { re: /^\/shophouses\/why/, label: 'the shophouse essay', info: '.sh-part-head h1, article', action: 'a[href], figure, svg' },
+  { re: /^\/shophouses\/typology/, label: 'the typology library', info: 'h1', action: 'a[href], img' },
+  { re: /^\/shophouses\/bible/, label: 'the reference artifacts', info: 'h1', action: 'a[href], svg, canvas' },
+  { re: /^\/shophouses\/cluster\//, label: 'one documented cluster', info: 'h1', action: 'a[href], svg' },
+  { re: /^\/shophouses\/fig\//, label: 'one figure', info: '.sh-part-head h1, figure', action: 'a[href]' },
+  // the essay part pages carry their own header and prev/next nav; the four
+  // header structure is .sh-part-head h1 and the reading action is
+  // .sh-part-nav a
+  { re: /^\/shophouses\/(read|why)/, label: 'the shophouse research companion', info: '.sh-part-head h1', action: '.sh-part-nav a, .sh-parts a' },
+  { re: /^\/shophouses/, label: 'the shophouse research companion', info: '.sh-part-head h1, h1', action: '.sh-part-nav a, .sh-parts a, a[href]' },
   { re: /^\/atlas\//, label: 'the 3D atlas', info: '.maplibregl-map, canvas, main', action: '.maplibregl-map, button' },
-  { re: /^\/warroom/, label: 'the live war room', info: 'main', action: 'a[href], button, .maplibregl-map' },
-  { re: /^\/datasets/, label: 'the dataset catalogue', info: 'main h1, table', action: 'a[href]' },
-  { re: /^\/about/, label: 'why the project exists', info: 'main h1', action: 'a[href], img' },
-  { re: /^\/case-for-bangkok/, label: 'the comparative dossier', info: 'main h1', action: 'a[href], table' },
-  { re: /^\/worlds/, label: 'the generated worlds', info: 'main h1', action: 'a[href], img' },
-  { re: /^\/flood/, label: 'the flood edition', info: 'main', action: 'a[href], button' },
+  { re: /^\/warroom/, label: 'the live war room', info: 'h1', action: 'a[href], button, .maplibregl-map' },
+  { re: /^\/datasets/, label: 'the dataset catalogue', info: 'h1, table', action: 'a[href]' },
+  { re: /^\/about/, label: 'why the project exists', info: 'h1', action: 'a[href], img' },
+  { re: /^\/case-for-bangkok/, label: 'the comparative dossier', info: 'h1', action: 'a[href], table' },
+  { re: /^\/worlds/, label: 'the generated worlds', info: 'h1', action: 'a[href], img' },
+  { re: /^\/flood/, label: 'the flood edition', info: 'h1', action: 'a[href], button' },
 ];
 
 function taskFor(pathname) {
   for (const t of TASKS) if (t.re.test(pathname)) return t;
-  return { label: 'the page', info: 'main', action: 'a[href], button' };
+  return { label: 'the page', info: 'h1', action: 'a[href], button' };
 }
 
 /**
@@ -166,6 +179,11 @@ function mshMetrics() {
         clippedBy,
       });
     }
+    // The sr-only pattern (clip: rect(0,0,0,0), 1px box) is a deliberate
+    // accessibility device: a heading hidden from the screen, kept in the
+    // tree. It is not a clip defect — the typology title uses it on phones
+    // and read as a clipped text node for two runs.
+    if (el.clientWidth <= 1 && el.clientHeight <= 1) continue;
     if (el.children.length === 0 && el.scrollWidth > el.clientWidth + 2 && el.clientWidth > 0) {
       const cs2 = cs;
       if (cs2.overflowX === 'hidden' || cs2.textOverflow === 'ellipsis' || cs2.overflow === 'hidden') {
@@ -174,7 +192,12 @@ function mshMetrics() {
     }
     if (el.matches('a[href], button, input, select, textarea, [role="button"], [tabindex]:not([tabindex="-1"])')) {
       if (r.width < 24 || r.height < 24) {
-        smallTargets.push({ sel: path(el), w: Math.round(r.width), h: Math.round(r.height), text: (el.innerText || el.getAttribute('aria-label') || '').trim().slice(0, 32) });
+        // WCAG 2.2 §2.5.8 excepts targets inline in a block of text, and the
+        // map attribution control is a legal minimum the map owns. Record the
+        // exemption so the remaining list is what a thumb actually misses.
+        const inline = !!el.closest('p, figcaption, li, td, blockquote, [class*=provenance]');
+        const attribution = !!el.closest('.maplibregl-ctrl-attrib, .maplibregl-ctrl-scale');
+        smallTargets.push({ sel: path(el), w: Math.round(r.width), h: Math.round(r.height), inline, attribution, exempt: inline || attribution, text: (el.innerText || el.getAttribute('aria-label') || '').trim().slice(0, 32) });
       }
     }
   }
@@ -235,11 +258,16 @@ function mshMetrics() {
     geometry: {
       docOverflowX: document.documentElement.scrollWidth > VW + 2,
       overflowing: overflowing.slice(0, 12),
-      overflowingCount: overflowing.length,
+      // A record an ancestor already clips is contained — map tiles inside
+      // their map, an image cropped inside its own overflow:hidden frame.
+      // The sweep treats those as the page fitting; so does this. Only
+      // records that reach the document edge count.
+      overflowingCount: overflowing.filter((o) => !o.clippedBy).length,
       clipped: clipped.slice(0, 10),
       clippedCount: clipped.length,
-      smallTargets: smallTargets.slice(0, 10),
-      smallTargetCount: smallTargets.length,
+      smallTargets: smallTargets.filter((s) => !s.exempt).slice(0, 10),
+      smallTargetExemptCount: smallTargets.filter((s) => s.exempt).length,
+      smallTargetCount: smallTargets.filter((s) => !s.exempt).length,
     },
     hierarchy: {
       distinctFontSizes: fontSizes.size,
@@ -321,6 +349,10 @@ async function measureRoute(browser, path, shotDir) {
         const action = pick(t.action);
         return {
           info, action,
+          // A task selector that finds nothing is UNVERIFIED, not a failure:
+          // the instrument stops describing the page and starts describing
+          // itself. Both null → UNVERIFIED; one found → report visibly.
+          selectorsFound: [!!info, !!action],
           bothVisible: !!(info && action && info.onScreen && action.onScreen),
         };
       }, task);
@@ -454,7 +486,11 @@ for (const r of results) {
     if (v.msh.geometry.clippedCount) issues.push(`${vpName}: ${v.msh.geometry.clippedCount} clipped text node(s)`);
     if (v.msh.geometry.smallTargetCount) issues.push(`${vpName}: ${v.msh.geometry.smallTargetCount} target(s) under 24px`);
     if (v.msh.chrome.combinedShare > 0.25) issues.push(`${vpName}: chrome takes ${(v.msh.chrome.combinedShare * 100).toFixed(0)}% of the viewport`);
-    if (v.taskVisibility && !v.taskVisibility.bothVisible) issues.push(`${vpName}: task not visible together (${r.task})`);
+    if (v.taskVisibility && !v.taskVisibility.bothVisible) {
+      const sf = v.taskVisibility.selectorsFound || [true, true];
+      if (!sf.every(Boolean)) issues.push(`${vpName}: UNVERIFIED — task selectors missing: info=${sf[0]} action=${sf[1]}`);
+      else issues.push(`${vpName}: task not visible together (${r.task})`);
+    }
     if (v.lint.points >= 3) issues.push(`${vpName}: slop-lint ${v.lint.points} pts — ${v.lint.hits.join(', ')}`);
     if (v.preservation && v.preservation.focusReached > 0 && v.preservation.focusVisibleCount === 0) issues.push(`${vpName}: no visible focus ring`);
   }

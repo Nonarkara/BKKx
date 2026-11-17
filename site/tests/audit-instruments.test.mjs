@@ -21,7 +21,7 @@
 // put the false pass back.
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { readFileSync } from "node:fs";
+import { readFileSync, existsSync, readdirSync, statSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -118,6 +118,129 @@ test("no audit can report a clean run without saying how much it measured", () =
       `${name} must exit non-zero when something went unmeasured`,
     );
   }
+});
+
+// ------------------------------------------- the 17-18 November repairs
+
+test("the popup audit measures the cards markers actually open, or says it measured nothing", () => {
+  const source = readFileSync(join(TOOLS, "popup-audit.mjs"), "utf8");
+  // Heritage markers open inspector cards; the numbered chapter markers
+  // only fly the camera. The click must reach for the heritage ones first,
+  // and a comma list returns the first match in DOCUMENT order, so the
+  // query is two steps, not one list with heritage written first.
+  assert.match(
+    source,
+    /querySelector\('\.bkkx-heritage-marker'\)/,
+    "the popup audit must query the heritage marker alone before its fallback chain",
+  );
+  assert.match(
+    source,
+    /querySelectorAll\('\.maplibregl-popup, \.atlas-heritage-popup, \.heritage-inspector-card/,
+    "the popup audit must match the inspector cards markers actually open",
+  );
+  assert.match(
+    source,
+    /MEASURED NOTHING/,
+    "the popup audit must refuse to read as a pass when no popup appeared",
+  );
+  assert.match(
+    source,
+    /process\.exit\(measuredPages \? 0 : 1\)/,
+    "the popup audit must exit non-zero when nothing was measured",
+  );
+});
+
+test("no instrument keeps measuring a selector the app no longer renders", () => {
+  // 15 Nov: audit-live measured .sh-contents-strip — a strip that stopped
+  // existing when the contents became the front-page parts nav (4e76f6f) —
+  // and reported chip:null as data. 18 Nov: scale-audit's first selector was
+  // a class from before the five-part split. Every app selector an
+  // instrument reads must exist in site/app.
+  const appText = (() => {
+    const out = [];
+    const walk = (dir) => {
+      for (const entry of readdirSync(dir)) {
+        const p = join(dir, entry);
+        if (statSync(p).isDirectory()) walk(p);
+        else if (/\.(tsx?|css)$/.test(entry)) out.push(readFileSync(p, "utf8"));
+      }
+    };
+    walk(join(SITE, "app"));
+    return out.join("\n");
+  })();
+  for (const name of ["audit-live.mjs", "scale-audit.mjs", "verify-front.mjs", "shot-local.mjs"]) {
+    // Comments may NARRATE a selector that stopped existing (the repair
+    // comments do exactly that); only code queries count.
+    const source = readFileSync(join(TOOLS, name), "utf8").replace(/\/\*[\s\S]*?\*\//g, "").replace(/^\s*\/\/.*$/gm, "");
+    for (const m of source.matchAll(/\.((?:sh|wr|atlas|typo|register|bkkx|maplibre)-[a-z0-9-]+)/g)) {
+      assert.ok(
+        appText.includes(m[1]),
+        `${name} still measures .${m[1]}, which no app file renders`,
+      );
+    }
+  }
+  // and the two repairs must be present: the front-page nav instead of the
+  // dead strip, and no dead class leading scale-audit's chain. Comments
+  // narrate the history; only the code queries.
+  const strip = (s) => s.replace(/\/\*[\s\S]*?\*\//g, "").replace(/^\s*\/\/.*$/gm, "");
+  const audit = strip(readFileSync(join(TOOLS, "audit-live.mjs"), "utf8"));
+  assert.ok(!audit.includes("sh-contents-strip"), "audit-live still measures the contents strip that stopped existing in 4e76f6f");
+  assert.ok(audit.includes(".sh-parts a"), "audit-live must measure the front-page parts nav");
+  const scale = strip(readFileSync(join(TOOLS, "scale-audit.mjs"), "utf8"));
+  assert.ok(!scale.includes("sh-part-eyebrow"), "scale-audit still leads with the pre-split eyebrow class");
+});
+
+test("the geometry audit does not report contained overflow, sr-only text or inline links as defects", () => {
+  const source = readFileSync(join(TOOLS, "msh-audit.mjs"), "utf8");
+  // Map tiles inside their map, an image cropped inside its overflow:hidden
+  // frame: an ancestor catches them, the page fits, and the record must say
+  // so rather than count against the route.
+  assert.match(source, /overflowingCount: overflowing\.filter\(\(o\) => !o\.clippedBy\)\.length/);
+  // The sr-only pattern is an accessibility device, not a clip.
+  assert.match(source, /el\.clientWidth <= 1 && el\.clientHeight <= 1\) continue/);
+  // Inline links and the map's own attribution are exempt from the 24px
+  // floor, and the exemption must be recorded per target, not assumed.
+  assert.match(source, /exempt: inline \|\| attribution/);
+  assert.match(source, /el\.closest\('p, figcaption, li, td, blockquote, \[class\*=provenance\]'\)/);
+});
+
+test("the 24px floor fixes the 18 November audit found stay in the stylesheet", () => {
+  const css = readFileSync(join(SITE, "app", "globals.css"), "utf8");
+  const typo = readFileSync(join(SITE, "app", "shophouses", "typology", "typology.css"), "utf8");
+  const both = css + "\n" + typo;
+  // Every tappable surface the audit measured under 24px carries a floor now
+  // The failing dimension decides the fix: a bar link grows taller, the
+  // narrow support-logo anchor grows wider. Either dimension meets the floor.
+  const floorRule = (sel, dim) =>
+    new RegExp(sel.replace(/[.*+?^${}()|[\]\\]/g, "\\$&") + `[\\s\\S]{0,420}?min-${dim}: 24px`);
+  for (const [sel, dim] of [
+    [".site-header nav a", "height"], [".wordmark", "height"], [".text-link", "height"],
+    [".worlds-footer > div a", "height"], [".sh-support-logos a", "width"],
+    [".typo-top a", "height"], [".typo-bottom a", "height"],
+  ]) {
+    assert.ok(floorRule(sel, dim).test(both), `${sel} must carry min-${dim}: 24px`);
+  }
+  // The dek's three-line clamp and the switcher's content sizing stay put
+  assert.match(css, /\.sh-part-dek\s*\{[\s\S]*?-webkit-line-clamp: 3;/);
+  assert.ok(
+    !/\.world-switcher button\s*\{[^}]*min-height: (8[89]|9[0-9]|1[0-9][0-9])px/.test(css),
+    "the world-switcher tabs must not carry the 88-112px min-height inflation again",
+  );
+});
+
+test("the slop linter can honor a named exemption and still reports it", () => {
+  const source = readFileSync(join(TOOLS, "slop-lint.mjs"), "utf8");
+  const allow = join(TOOLS, "slop-allowlist.json");
+  assert.ok(existsSync(allow), "the waiver file must exist");
+  const entries = JSON.parse(readFileSync(allow, "utf8"));
+  assert.ok(entries.length >= 4, "the waivers it holds: the hero band, the switcher, the hero map, and the two rule decisions");
+  for (const e of entries) assert.ok(e.reason && e.reason.length > 40, "every waiver must carry its written reason");
+  assert.match(source, /ALLOW\.filter\(w => w\.rule\)/, "the linter must apply rule-level waivers");
+  assert.match(source, /waived rule:/, "the linter must print what it waived");
+  // emoji proper, not Extended_Pictographic (which counts the house's own
+  // geometric glyphs ◩ ◆ ≋ as emoji)
+  assert.match(source, /emojiCharRe/, "the emoji count must use the strict emoji definition");
+  assert.match(source, /iframe\[src\*="\/atlas\/"\]/, "the map selector must see the iframe embeds the front door actually uses");
 });
 
 // ---------------------------------------------------------------- helpers
