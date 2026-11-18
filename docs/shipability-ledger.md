@@ -719,7 +719,9 @@ and fixed what the instruments found.
 
 ### What the repaired instruments found, and what was fixed
 
-Every tappable surface the audits measured under the 24px floor:
+Every tappable surface the audits measured under the 24px floor — the full
+set is ten, and the later three were found by the states audit and the atlas
+run rather than the load-time gates:
 
 | Route | Was | Fix |
 |---|---|---|
@@ -730,6 +732,10 @@ Every tappable surface the audits measured under the 24px floor:
 | `/shophouses` support logos | 16px wide | `.sh-support-logos a` min-width 24px (image keeps its aspect) |
 | `/shophouses/typology` top bar | 21px | `.typo-top a` inline-flex, min-height 24px |
 | `/shophouses/typology` bottom bar | 21px | `.typo-bottom a` inline-flex, min-height 24px |
+| `/atlas/historic-core` header nav | 17px (deck open) | `.atlas-header-nav a` inline-flex, min-height 24px |
+| `/atlas/historic-core` layer buttons | 23px | `.layer-toggle-btn` min-height 34px — a dense group, the house standard |
+| `/atlas/historic-core` card close | 41x22 | `.heritage-close-btn` 24px both dimensions |
+| `/warroom` camera-card actions | 17px | `.wr-cam figcaption a` inline-flex, min-height 24px (see the review round below) |
 
 `tools/states-audit.mjs` new: the ledger carried "expanded, empty and error
 states not exercised" across three rounds. It now exercises eight states —
@@ -827,3 +833,50 @@ provenance rows (45-62em), records rather than prose; the calibration
 excludes records from the prose measure and the remainder is a tuning note
 for whoever next touches the rule, with the measurements in the round
 entries above.
+
+## Independent review — 17 November 2026
+
+A different agent reviewed this session's five commits against the live
+sites with its own measurements (`/tmp/independent-review-2026-11-17.md`,
+266 lines, 8 findings). Verdict: **ship it.** What it found, and what the
+next commits did with each:
+
+- **The floors render and break nothing.** All measured at 24px (34px for
+  the dense layer group) with correct shapes — the support-logo anchor grew,
+  the picture kept its aspect.
+- **B1, the waiver reason named the wrong accent.** The dark-command-centre
+  waiver's reason said "single amber accent"; the measured signal is the
+  BKKx lime `#c9ff38` (site/STYLE.md's Console-scope signal). The decision
+  stands, the reason now states the measured fact and cites where the lime
+  is named. A reason this repo treats as evidence cannot get a verifiable
+  fact wrong.
+- **D1, block-level figcaption action links.** 30 `wr-cam` card actions
+  ("live stream ↗", "source ↗") at 17px — not inline-in-text, so the WCAG
+  exception does not cover them. They take the real 24px floor now, and the
+  exemption itself is narrowed to its wording: a link in a text context is
+  exempt only when it actually flows **inline** (`display` check); a
+  block/flex-item link in the same container is a control. The loose
+  `[class*=source]` clause — which had exempted a whole war-room panel link
+  — is now `[class*=source-note]`.
+- **A1, the floor guard was a source regex.** A source-text assertion cannot
+  tell a floor that renders from one that does not. The guard now reads the
+  **built CSS asset** (the bytes the browser applies, minifier-tolerant),
+  covering all eleven floors; the browser instruments (states-audit,
+  msh-audit) remain the rendered-height check per round.
+- **E1, the chrome skip was silent.** `msh-audit`'s full-viewport chrome
+  skip now reports `chromeSkippedCount` — a route that hid an inflated
+  full-height panel behind it cannot read clean.
+- **E3, states-audit's success text was a literal.** It printed
+  "small-targets 0" on the typology page, which has 39 sub-24px targets,
+  every one exempt. It now reports what was measured and how many were
+  exempted, the way msh-audit does.
+- **E2, `applyRuleWaivers` was not idempotent** — a second caller would
+  double-subtract. It guards on `waivedRules`.
+- **A2/E4, the record.** The ledger's floor table now lists all eleven; the
+  waiver file's reasons are measured facts; `context.md` said Josefin Sans
+  where `layout.tsx` has loaded Jost since the display-face change.
+
+Residuals the review named and this repo owns rather than fixes: the
+`#register` anchor lands ~1.2 screens above the search (owner's call if
+"straight" must be literal), and the reviewer could not re-run the 644-URL
+sweep or `npm test` in its session.

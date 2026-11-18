@@ -14,7 +14,7 @@
   {
     "rule": "dark-command-centre",
     "pages": ["/worlds"],
-    "reason": "Named register: /worlds is the marketing surface for the generated Minecraft worlds, and its dark ground is the product's own identity (mean luminance measured 55-62, single amber accent, glow 0, shadows 0, pills 5, radius 0). The rule's other triggers — glow, glass, pills — measure zero; what fires it is 'dark' plus 2 gradients, both of them the 12%-opacity hero grid pattern and the dark legibility shade over the hero photo, which the zero-gradient law explicitly allows."
+    "reason": "Named register: /worlds is the marketing surface for the generated Minecraft worlds, and its dark ground is the product's own identity (mean luminance measured 55-62; the one signal accent is the BKKx lime #c9ff38, named in site/STYLE.md and scoped to dark Console surfaces — NOT amber, which this page does not use; glow 0, shadows 0, pills 5, radius 0). The rule's other triggers — glow, glass, pills — measure zero; what fires it is 'dark' plus 2 gradients, both of them the 12%-opacity hero grid pattern and the dark legibility shade over the hero photo, which the zero-gradient law explicitly allows. (18 Nov: the independent review found the earlier reason said 'amber'; corrected to the measured fact.)"
   },
   {
     "rule": "void",

@@ -7769,7 +7769,12 @@ body:has(.sh-figexport) { background: #fff !important; }
 .wr-cam figcaption { padding: 7px 9px 9px; display: flex; flex-direction: column; gap: 2px; }
 .wr-cam figcaption b { font-size: var(--text-body); font-weight: 600; line-height: 1.25; }
 .wr-cam figcaption small { font-size: var(--text-micro); color: var(--wr-faint); }
-.wr-cam figcaption a { font-family: var(--font-mono); font-size: var(--text-micro); color: var(--signal); margin-top: 2px; }
+/* 18 Nov: the independent review measured 30 of these at 17px — block-level
+   action links ("live stream ↗", "source ↗") on the camera cards, which is
+   not a target inline in a block of text, so the WCAG 2.5.8 exception does
+   not cover them. They are secondary actions on a dense rail, but they are
+   still the card's action: 24px floor, not a waiver. */
+.wr-cam figcaption a { display: inline-flex; align-items: center; min-height: 24px; font-family: var(--font-mono); font-size: var(--text-micro); color: var(--signal); margin-top: 2px; }
 
 /* ---- foot ---- */
 .wr-foot { margin-top: 26px; padding-top: 16px; border-top: 1px solid var(--wr-line-hi); font-size: var(--text-body); line-height: 1.6; color: var(--wr-faint); }

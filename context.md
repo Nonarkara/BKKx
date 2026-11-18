@@ -71,7 +71,10 @@ The reading matter is ~90% Thai, and every serif-adjacent Thai face — Sarabun,
 TH Sarabun New, the looped families — is banned workspace-wide because large
 head-loops read as learner material to a Thai reader. There is no permitted
 Thai serif. Body is therefore set in **IBM Plex Sans Thai** (non-looped),
-display in **Josefin Sans**, data in **JetBrains Mono**.
+display in **Jost**, data in **JetBrains Mono**. (18 Nov: corrected — this
+line said Josefin Sans; `layout.tsx` has loaded Jost since the display-face
+change, and ANTI-SLOP.md permits either. The doc was the thing that was
+wrong.)
 
 ## Fonts — two live traps
 

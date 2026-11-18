@@ -201,7 +201,10 @@ test("the geometry audit does not report contained overflow, sr-only text or inl
   // Inline links and the map's own attribution are exempt from the 24px
   // floor, and the exemption must be recorded per target, not assumed.
   assert.match(source, /exempt: inline \|\| attribution/);
-  assert.match(source, /el\.closest\('p, figcaption, li, td, blockquote, small, \[class\*=provenance\], \[class\*=source\]'\)/);
+  assert.match(source, /el\.closest\('p, figcaption, li, td, blockquote, small, \[class\*=provenance\], \[class\*=source-note\]'\)/, "the exemption must name source notes, not any class containing 'source'");
+  // WCAG 2.5.8 excepts a target INLINE in a block of text; a block-level
+  // link in the same container is a control and takes the floor.
+  assert.match(source, /blockified = !\/\^inline\/\.test\(cs\.display\)/, "an inline-flow check must gate the text-context exemption");
 });
 
 test("the 24px floor fixes the 18 November audit found stay in the stylesheet", () => {
@@ -253,6 +256,33 @@ test("the sweep separates load failures from geometry failures", () => {
   assert.match(source, /loadFailures/, "the sweep must bucket unverified routes separately");
   assert.match(source, /UNVERIFIED/, "an unloaded route must be named, not folded into failures");
   assert.match(source, /process\.exit\(failures\.length \|\| loadFailures\.length \? 1 : 0\)/, "the sweep must exit non-zero when a route went unverified");
+});
+
+test("the touch floors are in the bytes that ship, not only in the source", () => {
+  // The independent review's A1: a source-text regex cannot tell a floor
+  // that renders from one that does not, and the browser instruments run
+  // per round rather than per commit. The built asset is what the browser
+  // applies, so the durable check reads it — if the CSS never made the
+  // build, or a refactor dropped it in the bundle step, this fails.
+  const cssDir = join(SITE, "dist", "client", "_next", "static", "css");
+  assert.ok(existsSync(cssDir), "the built CSS assets are missing — run the build first (npm test builds before the tests)");
+  const css = readdirSync(cssDir).filter((f) => f.endsWith(".css"))
+    .map((f) => readFileSync(join(cssDir, f), "utf8")).join("\n");
+  const window = 420; // the rules carry reason comments before the value
+  // The minifier strips spaces around combinators (`.worlds-footer > div a`
+  // ships as `.worlds-footer>div a`), so the selector is compiled with
+  // flexible whitespace, not copied literally.
+  const selRe = (sel) => sel.split(/\s+/).map((p) => p.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")).join("\\s*");
+  for (const [sel, dim, px] of [
+    [".site-header nav a", "height", 24], [".wordmark", "height", 24], [".text-link", "height", 24],
+    [".worlds-footer > div a", "height", 24], [".sh-support-logos a", "width", 24],
+    [".typo-top a", "height", 24], [".typo-bottom a", "height", 24],
+    [".atlas-header-nav a", "height", 24], [".layer-toggle-btn", "height", 34],
+    [".heritage-close-btn", "height", 24], [".wr-cam figcaption a", "height", 24],
+  ]) {
+    const rule = new RegExp(selRe(sel) + `\\s*\\{[\\s\\S]{0,${window}}?min-${dim}: ?${px}px`);
+    assert.ok(rule.test(css), `${sel} must carry min-${dim}: ${px}px in the built bytes`);
+  }
 });
 
 // ---------------------------------------------------------------- helpers

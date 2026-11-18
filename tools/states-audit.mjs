@@ -96,9 +96,15 @@ const MEASURE = () => {
       && (cs.overflowX === 'hidden' || cs.textOverflow === 'ellipsis' || cs.overflow === 'hidden'))
       out.clipped.push((typeof el.className === 'string' ? el.className : el.tagName).slice(0, 50) + ' "' + (el.innerText || '').trim().slice(0, 40) + '"');
     if (el.matches('a[href], button, input, select, textarea, [role=button]') && (r.width < 24 || r.height < 24)) {
-      const inline = !!el.closest('p, figcaption, li, td, blockquote, small, [class*=provenance], [class*=source]');
+      // the same WCAG-wording rule as msh-audit: a link inline in flowing text
+      // is the exception; a block/flex-item link in the same container is a
+      // control and takes the floor.
+      const textContext = !!el.closest('p, figcaption, li, td, blockquote, small, [class*=provenance], [class*=source-note]');
+      const blockified = !/^inline/.test(cs.display);
+      const inline = textContext && !blockified;
       const attr = !!el.closest('.maplibregl-ctrl-attrib, .leaflet-control-attribution');
-      if (!inline && !attr) out.small.push((typeof el.className === 'string' ? el.className : el.tagName).slice(0, 50) + ' ' + Math.round(r.width) + 'x' + Math.round(r.height));
+      if (!inline && !attr) { out.small.push((typeof el.className === 'string' ? el.className : el.tagName).slice(0, 50) + ' ' + Math.round(r.width) + 'x' + Math.round(r.height)); out.smallTotal = (out.smallTotal || 0) + 1; }
+      else out.exemptCount = (out.exemptCount || 0) + 1;
     }
     // honesty state: an unconditional error-bearing surface must SAY it is
     // failing, not render an empty success
@@ -167,7 +173,14 @@ for (const st of STATES) {
     if (m.small.length) problems.push(`${m.small.length} under-24 targets: ${m.small.slice(0, 3).join(' | ')}`);
     const apiErrors = consoleErrors.filter((e) => !/Failed to load resource|net::ERR_ABORTED|API called with fetch/i.test(e));
     if (apiErrors.length) problems.push(`${apiErrors.length} console errors: ${apiErrors.slice(0, 2).join(' | ')}`);
-    console.log(`${problems.length ? 'FAIL' : 'ok  '} ${st.label} @${w}${problems.length ? '\n      ' + problems.join('\n      ') : ` — clipped 0, small-targets 0${st.abortApi ? ', failed feeds surfaced: ' + (m.exposed.length || 0) : ''}`}`);
+    // E3: the old line printed "small-targets 0" as a literal on any clean
+      // page — the typology page has 39 sub-24px targets and every one of
+      // them exempt. A reader took that as "none under 24px", which is
+      // false. Report what was measured and what was exempted, the way
+      // msh-audit does.
+      const smalls = m.smallTotal || m.small.length;
+      const exempts = m.exemptCount || 0;
+      console.log(`${problems.length ? 'FAIL' : 'ok  '} ${st.label} @${w}${problems.length ? '\n      ' + problems.join('\n      ') : ` — clipped ${m.clipped.length}, sub-24 targets ${smalls} (${exempts} exempt by the WCAG inline/record clauses)${st.abortApi ? ', failed feeds surfaced: ' + (m.exposed.length || 0) : ''}`}`);
     if (problems.length) failed++;
     await ctx.close();
   }

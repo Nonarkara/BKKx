@@ -120,6 +120,7 @@ function mshMetrics() {
   // Stacked fixed/sticky bands, plus the page's own top band. The number that
   // matters is the combined footprint, including the gaps between them.
   const chromeEls = [];
+  let chromeSkipped = 0;
   for (const el of document.querySelectorAll('body *')) {
     const cs = getComputedStyle(el);
     if (cs.position !== 'fixed' && cs.position !== 'sticky') continue;
@@ -129,7 +130,7 @@ function mshMetrics() {
     // Chrome is a band, never a screen. The atlas runs a full-viewport
     // fixed control overlay over its map; measured as chrome it reported
     // "chrome takes 200% of the viewport" on a full-screen map app.
-    if (r.height > VH * 0.9) continue;
+    if (r.height > VH * 0.9) { chromeSkipped++; continue; }
     chromeEls.push({ el, r, cs });
   }
   // Group overlapping bands into rows so a header made of three stacked
@@ -201,7 +202,13 @@ function mshMetrics() {
         // WCAG 2.2 §2.5.8 excepts targets inline in a block of text, and the
         // map attribution control is a legal minimum the map owns. Record the
         // exemption so the remaining list is what a thumb actually misses.
-        const inline = !!el.closest('p, figcaption, li, td, blockquote, small, [class*=provenance], [class*=source]');
+        // Provenance lines and source notes are records; links inline in flowing
+      // text are the WCAG 2.5.8 exception. A link that renders BLOCK — a
+      // flex item in a column figcaption, like the war-room camera cards'
+      // action links — is a control, not inline text, and takes the floor.
+      const textContext = !!el.closest('p, figcaption, li, td, blockquote, small, [class*=provenance], [class*=source-note]');
+      const blockified = !/^inline/.test(cs.display);
+      const inline = textContext && !blockified;
         const attribution = !!el.closest('.maplibregl-ctrl-attrib, .maplibregl-ctrl-scale');
         smallTargets.push({ sel: path(el), w: Math.round(r.width), h: Math.round(r.height), inline, attribution, exempt: inline || attribution, text: (el.innerText || el.getAttribute('aria-label') || '').trim().slice(0, 32) });
       }
@@ -260,6 +267,9 @@ function mshMetrics() {
       bottomShare: +(bottomH / VH).toFixed(3),
       combinedShare: +((effectiveTop + bottomH) / VH).toFixed(3),
       bands: rows.map((r) => ({ top: Math.round(r.top), height: Math.round(r.bottom - r.top), parts: r.els.length })),
+      // E1: the full-viewport chrome skip is visible — a route that hid an
+      // inflated full-height panel behind it would otherwise report clean.
+      chromeSkipped,
     },
     geometry: {
       docOverflowX: document.documentElement.scrollWidth > VW + 2,

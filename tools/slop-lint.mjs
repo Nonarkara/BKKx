@@ -366,13 +366,16 @@ export async function lintUrl(browser, url, { shotsDir, slug, settleMs = 7000, s
 // the thing this file prevents.
 export function applyRuleWaivers(lint, url) {
   if (!lint) return lint;
+  lint.waivedRules = lint.waivedRules || [];
   for (const w of ALLOW.filter((x) => x.rule)) {
     if (!lint.hits.includes(w.rule)) continue;
     if (w.pages && !w.pages.some((p) => url.includes(p))) continue;
+    // E2: idempotent — a second caller must not double-subtract the weight.
+    if (lint.waivedRules.includes(w.rule)) continue;
     const rule = RULES.find((r) => r.id === w.rule);
     lint.points -= rule ? rule.w : 0;
     lint.hits = lint.hits.filter((h) => h !== w.rule);
-    (lint.waivedRules = lint.waivedRules || []).push(w.rule);
+    lint.waivedRules.push(w.rule);
     console.log(`  waived rule: ${w.rule} — ${w.reason}`);
   }
   lint.verdict = lint.points >= SLOP_THRESHOLD_POINTS ? 'SLOP' : lint.points >= REVIEW_THRESHOLD_POINTS ? 'REVIEW' : 'OK';
