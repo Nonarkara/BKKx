@@ -917,6 +917,19 @@ the reading surfaces**: the essay, the walk pages and the quarters run
 line length on pages whose composition is earned content, and it goes to
 the owner with these measurements rather than being narrowed unilaterally.
 
+**Update, 19 November: the owner decided.** The reading measure was
+tightened to `65ch` across the house prose (`5fd8d01`, with the stale
+screenshot review note removed), and this agent closed the strays that
+decision left: `.sh-fig-note` (60-80em, the figure notes under the map
+and the atlas plates), the atlas page's caveat list and the cluster
+caveats (71-78em, the widest prose on their pages), the rowhouse
+directory's explorer notes (64.8em) and the essay rail's facts (51-65em
+at tablet). The `/shophouses` first screen was re-measured after every
+step of the narrowing — title at 772 with all six parts above the fold at
+390, unchanged. What still reads REVIEW on three routes is the
+records-family: `void` (pixel-derived) and `long-lines` on citation and
+provenance **rows** at 44-46em, which are data records, not prose.
+
 ### Verified on `ddceedc`
 
 - 18 routes × 3 widths: zero non-exempt sub-24 targets; every route passes
