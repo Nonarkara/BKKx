@@ -2654,7 +2654,7 @@ button {
 /* Text is capped at the 2/3 main column, inside a 65–75ch measure
    (§XX rule 5). The map below is what runs full width. */
 .register-intro {
-  max-width: 68ch;
+  max-width: 65ch;
   margin-top: calc(var(--page-unit) * 1.5);
 }
 
@@ -3028,7 +3028,7 @@ button {
 
 .register-prose p {
   margin: 0;
-  max-width: 68ch;
+  max-width: 65ch;
   line-height: 1.8;
 }
 
@@ -3155,7 +3155,7 @@ button {
 }
 
 .register-section-lede {
-  max-width: 68ch;
+  max-width: 65ch;
   margin: var(--cap) 0 0;
   color: var(--quiet);
 }
@@ -3255,7 +3255,7 @@ button {
 }
 
 .place-tagline {
-  max-width: 68ch;
+  max-width: 65ch;
   margin: var(--baseline) 0 0;
   color: var(--quiet);
   font-size: var(--size-up);
@@ -4993,7 +4993,7 @@ body:has(.atlas-page.is-embedded.is-phone-chrome) {
   color: var(--paper-strong);
 }
 .rowhouse-candidate-method h2 { max-width: 18ch; margin: 7px 0 14px; font: 700 var(--text-display)/1 var(--font-display); letter-spacing: -.03em; }
-.rowhouse-candidate-method p { max-width: 68ch; margin: 0; font: 400 var(--text-body)/1.55 var(--font-body); }
+.rowhouse-candidate-method p { max-width: 65ch; margin: 0; font: 400 var(--text-body)/1.55 var(--font-body); }
 .rowhouse-candidate-numbers { display: grid; grid-template-columns: repeat(3, 1fr); align-self: end; border: 1px solid rgba(255,255,255,.45); }
 .rowhouse-candidate-numbers div { min-width: 0; padding: 12px; border-right: 1px solid rgba(255,255,255,.3); }
 .rowhouse-candidate-numbers div:last-child { border-right: 0; }
@@ -5373,7 +5373,7 @@ body:has(.atlas-page.is-embedded.is-phone-chrome) {
   margin-bottom: calc(var(--cap, 32px) * 1.5);
 }
 .numbers-section-head {
-  max-width: 72ch;
+  max-width: 65ch;
   margin-bottom: calc(var(--cap, 32px) * 0.5);
 }
 .numbers-section-eyebrow {
@@ -5552,7 +5552,7 @@ body:has(.atlas-page.is-embedded.is-phone-chrome) {
 }
 
 .numbers-endnote {
-  max-width: 72ch;
+  max-width: 65ch;
   margin-top: calc(var(--cap, 32px) * 1.2);
   padding-top: calc(var(--cap, 32px) * 0.8);
   border-top: 1px solid var(--ink);
@@ -5866,7 +5866,7 @@ body:has(.shophouse-essay) {
   --sh-page: 24px;
   --sh-base: 1.7rem;
   --sh-cap: 0.75em;
-  --sh-measure: 68ch;
+  --sh-measure: 65ch;
   --sh-diagonal: repeating-linear-gradient(45deg, transparent, transparent 28px, var(--sh-hairline) 28px, var(--sh-hairline) 29px);
 
   background: var(--sh-paper) var(--sh-diagonal);
@@ -6310,8 +6310,8 @@ body:has(.shophouse-essay) {
 .sh-biblio-section h3 small { color: var(--sh-quiet); letter-spacing: 0; }
 .sh-biblio { margin: 0; padding: 0 0 0 3ch; }
 .sh-biblio li { padding: var(--sh-base) 0; border-bottom: 1px solid var(--sh-hairline); }
-.sh-biblio-title { font-family: var(--font-display); font-size: var(--text-body); font-weight: 600; line-height: 1.35; margin: 0 !important; max-width: 70ch; }
-.sh-biblio-th { margin: 2px 0 0 !important; font-family: var(--font-body); font-size: var(--text-body); color: var(--sh-quiet); max-width: 70ch; }
+.sh-biblio-title { font-family: var(--font-display); font-size: var(--text-body); font-weight: 600; line-height: 1.35; margin: 0 !important; max-width: 65ch; }
+.sh-biblio-th { margin: 2px 0 0 !important; font-family: var(--font-body); font-size: var(--text-body); color: var(--sh-quiet); max-width: 65ch; }
 .sh-biblio-meta { margin: var(--sh-cap) 0 0 !important; font-family: var(--font-display); font-size: var(--text-body); color: var(--sh-quiet); }
 .sh-biblio-links { display: flex; flex-wrap: wrap; gap: var(--sh-base); margin: 4px 0 0 !important; }
 .sh-biblio-links a { font-family: var(--font-display); font-size: var(--text-body); }
@@ -6659,7 +6659,7 @@ body:has(.shophouse-essay) { background: #ffffff var(--sh-diagonal); color: #111
   gap: var(--sh-base); padding: var(--sh-page); overflow: auto; cursor: zoom-out;
 }
 .sh-lightbox img { max-width: min(1100px, 96vw); max-height: 76vh; width: auto; border: 1px solid; }
-.sh-lightbox p { max-width: 68ch; font-size: var(--text-body); text-align: left; }
+.sh-lightbox p { max-width: 65ch; font-size: var(--text-body); text-align: left; }
 .sh-lightbox button {
   min-height: 44px; padding: 0 var(--sh-base); background: none;
   border: 1px solid; font-family: var(--font-display); font-size: var(--text-body); font-weight: 600; cursor: pointer;
@@ -6851,7 +6851,7 @@ body:has(.sh-figexport) { background: #fff !important; }
   font-variant-numeric: tabular-nums;
 }
 .sh-brief-numbers small { display: block; margin-top: 7px; font-size: var(--text-micro); font-weight: 500; line-height: 1.3; letter-spacing: 0; color: var(--sh-quiet); }
-.sh-brief-verdict { max-width: 72ch; margin: var(--sh-base) 0 0; font-size: var(--text-body); }
+.sh-brief-verdict { max-width: 65ch; margin: var(--sh-base) 0 0; font-size: var(--text-body); }
 .sh-brief-verdict strong { padding: 2px 5px; background: var(--sh-mark); font-family: var(--font-display); font-weight: 800; }
 .sh-brief-actions { display: flex; flex-wrap: wrap; gap: var(--sh-cap); margin-top: var(--sh-base); }
 .sh-brief-actions a {
@@ -7700,7 +7700,7 @@ body:has(.sh-figexport) { background: #fff !important; }
 /* 18 Nov: measured 94-95em lines on a desktop panel — ~130 characters a
    line. Panel notes are prose; they take the same ch column the essay and
    the register intro use. */
-.wr-panel-note { margin: 12px 0 0; max-width: 70ch; font-size: var(--text-body); line-height: 1.6; color: var(--wr-quiet); overflow-wrap: anywhere; }
+.wr-panel-note { margin: 12px 0 0; max-width: 65ch; font-size: var(--text-body); line-height: 1.6; color: var(--wr-quiet); overflow-wrap: anywhere; }
 .wr-panel-note code { font-family: var(--font-mono); font-size: var(--text-micro); color: var(--wr-ink); background: var(--wr-sunk); padding: 1px 5px; border: 1px solid var(--wr-line); }
 
 /* state chip — icon + word, never colour alone */
@@ -7767,7 +7767,7 @@ body:has(.sh-figexport) { background: #fff !important; }
 
 /* ---- degraded state ---- */
 .wr-degraded { border-left: 2px solid var(--wr-crit); padding-left: 12px; }
-.wr-degraded-reason { margin: 0; max-width: 70ch; font-family: var(--font-mono); font-size: var(--text-body); line-height: 1.55; color: var(--wr-crit); }
+.wr-degraded-reason { margin: 0; max-width: 65ch; font-family: var(--font-mono); font-size: var(--text-body); line-height: 1.55; color: var(--wr-crit); }
 .wr-btn { margin-top: 12px; padding: 6px 13px; min-height: 32px; border: 1px solid var(--wr-line-hi); background: none; color: var(--wr-ink); font-family: var(--font-mono); font-size: var(--text-micro); cursor: pointer; }
 .wr-btn:hover, .wr-btn:focus-visible { border-color: var(--signal); color: var(--signal); outline: none; }
 .wr-btn.is-icon { padding: 3px 9px; min-height: 26px; }
@@ -7802,7 +7802,7 @@ body:has(.sh-figexport) { background: #fff !important; }
 
 /* ---- foot ---- */
 .wr-foot { margin-top: 26px; padding-top: 16px; border-top: 1px solid var(--wr-line-hi); font-size: var(--text-body); line-height: 1.6; color: var(--wr-faint); }
-.wr-foot p { margin: 0 0 8px; max-width: 76ch; }
+.wr-foot p { margin: 0 0 8px; max-width: 65ch; }
 .wr-foot code { font-family: var(--font-mono); font-size: var(--text-micro); color: var(--wr-quiet); }
 .wr-foot a { color: var(--wr-quiet); font-family: var(--font-mono); font-size: var(--text-micro); margin-right: 10px; }
 .wr-foot a:hover, .wr-foot a:focus-visible { color: var(--signal); }
@@ -8010,7 +8010,7 @@ body:has(.sh-figexport) { background: #fff !important; }
   flex-wrap: wrap;
   align-items: baseline;
   gap: 0 8px;
-  max-width: 68ch;
+  max-width: 65ch;
   margin: var(--baseline) 0 0;
   color: var(--quiet);
   font-size: var(--size-down);
@@ -8025,7 +8025,7 @@ body:has(.sh-figexport) { background: #fff !important; }
 }
 
 .mrec-body > section {
-  max-width: 68ch;
+  max-width: 65ch;
   margin: 0 0 calc(var(--page-unit) * 2);
 }
 .mrec-body > section:last-child { margin-bottom: 0; }
