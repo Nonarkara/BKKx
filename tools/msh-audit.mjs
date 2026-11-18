@@ -135,6 +135,10 @@ function mshMetrics() {
     // hero, not chrome: /flood's hero map read as a 178px chrome band on
     // a phone. UI bands carry labels; content bands carry the payload.
     if (el.querySelector('img,canvas,iframe,video,[class*=map],[class*=leaflet]') && !(el.innerText || '').trim()) { chromeSkipped++; continue; }
+    // A tool palette inside a map container is the map's instrument, not
+    // page chrome: /flood's layer switcher is a fixed band clipped by
+    // .atlas-map and counted as 178px of chrome on a phone.
+    if (el.closest('.maplibregl-map, .leaflet-container, .atlas-map, [class*=deckgl]')) { chromeSkipped++; continue; }
     chromeEls.push({ el, r, cs });
   }
   // Group overlapping bands into rows so a header made of three stacked
