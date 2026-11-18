@@ -5027,7 +5027,8 @@ body:has(.atlas-page.is-embedded.is-phone-chrome) {
 .rowhouse-directory-copy dl div { padding: 8px 10px 8px 0; border-bottom: 1px solid rgba(17,18,15,.16); }
 .rowhouse-directory-copy dt { font: 700 var(--text-micro)/1 var(--font-mono); letter-spacing: .07em; text-transform: uppercase; color: rgba(17,18,15,.5); }
 .rowhouse-directory-copy dd { margin: 4px 0 0; font: 600 var(--text-micro)/1.35 var(--font-body); }
-.rowhouse-directory-tip { margin: 14px 0; padding: 10px; background: rgba(224,162,58,.12); font: 400 var(--text-micro)/1.45 var(--font-body); }
+/* 19 Nov: measured 64.8em — the directory's explorer notes are prose. */
+.rowhouse-directory-tip { margin: 14px 0; padding: 10px; background: rgba(224,162,58,.12); font: 400 var(--text-micro)/1.45 var(--font-body); max-width: 65ch; }
 .rowhouse-directory-tip strong { display: block; margin-bottom: 3px; font: 700 var(--text-micro)/1 var(--font-mono); letter-spacing: .08em; text-transform: uppercase; }
 .rowhouse-directory-links { display: flex; flex-wrap: wrap; gap: 7px; }
 .rowhouse-directory-links a:first-child { background: var(--ink); color: var(--signal); }
@@ -6527,6 +6528,8 @@ body:has(.shophouse-essay) { background: #ffffff var(--sh-diagonal); color: #111
 }
 .sh-contents-strip a::before { color: var(--sh-ink); background: var(--sh-mark); padding: 1px 4px; }
 .sh-rail-fact { background: var(--sh-mark); border-left: 4px solid var(--sh-ink); }
+/* 19 Nov: measured 51-65em at tablet — the rail's facts are prose. */
+.sh-rail-fact p { max-width: 65ch; }
 .sh-rail-fact p, .sh-rail-fact small { color: var(--sh-ink); }
 .sh-carbon-result strong, .sh-land-m2, .sh-dim-value { color: var(--sh-seal); }
 .sh-stock-fill, .sh-carbon-seg.is-reuse { background: var(--sh-seal); }
