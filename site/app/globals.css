@@ -4827,6 +4827,11 @@ body:has(.atlas-page.is-embedded.is-phone-chrome) {
   font: 800 var(--text-micro)/1.3 var(--font-mono);
   text-transform: uppercase;
   text-underline-offset: 3px;
+  /* 18 Nov: measured 14px tall — the explorer's start links are the way in
+     to the atlas, and 14px is below even the WCAG floor. */
+  display: inline-flex;
+  align-items: center;
+  min-height: 24px;
 }
 
 .rowhouse-research-disclosure {
@@ -5345,6 +5350,11 @@ body:has(.atlas-page.is-embedded.is-phone-chrome) {
   border-bottom: 1px solid transparent;
   padding: 2px 0;
   white-space: nowrap;
+  /* 18 Nov: measured 23.5px — the /about page's nav links sat just under
+     the WCAG floor at every width. */
+  display: inline-flex;
+  align-items: center;
+  min-height: 24px;
 }
 .numbers-masthead-nav a:hover {
   border-bottom-color: var(--ink);
@@ -7555,6 +7565,9 @@ body:has(.sh-figexport) { background: #fff !important; }
 .datasets-provenance dd { margin: 0; max-width: 52em; min-width: 0; }
 .datasets-provenance code { font-size: var(--text-body); }
 .datasets-usedby { display: flex; flex-wrap: wrap; gap: 6px 10px; }
+/* 18 Nov: measured 22px — the catalogue's used-by links sat two pixels
+   under the floor. */
+.datasets-usedby a { display: inline-flex; align-items: center; min-height: 24px; }
 .datasets-usedby code {
   background: var(--paper-raised);
   border: 1px solid var(--rule);
