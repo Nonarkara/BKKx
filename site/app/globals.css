@@ -6059,6 +6059,9 @@ body:has(.shophouse-essay) {
   font-size: var(--text-body);
   line-height: 1.5;
   color: var(--sh-quiet);
+  /* 19 Nov: measured 60-80em — the one prose block the 65ch measure family
+     missed (the figure notes under the map and the atlas plates). */
+  max-width: 65ch;
 }
 .sh-fig { border-top: 1px solid var(--sh-ink); padding-top: var(--sh-base); }
 
