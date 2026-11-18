@@ -6786,7 +6786,9 @@ body:has(.sh-figexport) { background: #fff !important; }
 .sh-district-table .is-tell { color: #e5007d; font-weight: 700; }
 .sh-district-table tfoot th, .sh-district-table tfoot td { border-top: 2px solid var(--sh-ink); border-bottom: none; font-weight: 700; }
 .sh-caveats { margin: 0; padding-left: 1.2em; }
-.sh-caveats li { margin-bottom: 10px; }
+/* 19 Nov: measured 78em — the atlas caveat list was the widest prose on
+   the page. Same 65ch measure the rest of the house prose uses. */
+.sh-caveats li { margin-bottom: 10px; max-width: 65ch; }
 
 /* ---- The manuscript's forwarding address (/shophouses/manuscript) ----
    A single card of a page: the lede register carries the explanation, and
@@ -8282,6 +8284,7 @@ body:has(.sh-figexport) { background: #fff !important; }
   list-style: none;
   margin: 0 0 var(--sh-base);
   padding: 0;
+  max-width: 65ch;
 }
 .sh-cluster-clauses > li {
   border-top: 1px solid var(--sh-hairline);
