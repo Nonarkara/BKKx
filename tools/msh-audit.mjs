@@ -131,6 +131,10 @@ function mshMetrics() {
     // fixed control overlay over its map; measured as chrome it reported
     // "chrome takes 200% of the viewport" on a full-screen map app.
     if (r.height > VH * 0.9) { chromeSkipped++; continue; }
+    // A textless fixed band carrying a map, image or canvas is the page's
+    // hero, not chrome: /flood's hero map read as a 178px chrome band on
+    // a phone. UI bands carry labels; content bands carry the payload.
+    if (el.querySelector('img,canvas,iframe,video,[class*=map],[class*=leaflet]') && !(el.innerText || '').trim()) { chromeSkipped++; continue; }
     chromeEls.push({ el, r, cs });
   }
   // Group overlapping bands into rows so a header made of three stacked
@@ -449,7 +453,14 @@ async function fetchRoutes() {
     const res = await fetch(`${BASE}/sitemap.xml`);
     const xml = await res.text();
     const urls = [...xml.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => new URL(m[1]).pathname);
-    if (urls.length) return urls;
+    if (urls.length) {
+      // The sitemap does not list every public route (the sweep carries a
+      // test for that): /warroom and /flood are public and linked, and an
+      // --only= that names one of them would otherwise measure nothing and
+      // report a clean run.
+      for (const extra of ['/warroom', '/flood']) if (!urls.includes(extra)) urls.push(extra);
+      return urls;
+    }
   } catch { /* the site may not expose a sitemap; fall back to the known list */ }
   return [
     '/', '/heritage', '/rowhouses', '/shophouses', '/shophouses/why', '/shophouses/typology',

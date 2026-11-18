@@ -7784,8 +7784,14 @@ body:has(.sh-figexport) { background: #fff !important; }
 .wr-foot a:hover, .wr-foot a:focus-visible { color: var(--signal); }
 
 @media (max-width: 620px) {
-  .wr-masthead { flex-direction: column; align-items: flex-start; }
-  .wr-clock { align-items: flex-start; }
+  /* 18 Nov: msh-audit measured the masthead at 263px on a phone — 31% of
+     the first screen, over the MSH 25% ceiling, on a route the audit had
+     never reached (/warroom is public but not in the sitemap). Trim to its
+     contents: the padding was 58px of the 263, and the clock's three
+     stacked lines another stretch. */
+  .wr-masthead { flex-direction: column; align-items: flex-start; padding: 14px 0 12px; gap: 8px 16px; }
+  .wr-clock { align-items: flex-start; flex-direction: row; flex-wrap: wrap; gap: 2px 10px; }
+  .wr-clock-time { line-height: 1.1; }
   .wr-bar-row { grid-template-columns: minmax(72px, 40%) 1fr auto; }
   .wr-sources li { grid-template-columns: 1fr auto; }
   .wr-src-layer { grid-column: 1 / -1; }
