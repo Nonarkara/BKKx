@@ -4948,7 +4948,9 @@ body:has(.atlas-page.is-embedded.is-phone-chrome) {
   font: 500 var(--text-micro)/1.45 var(--font-mono);
 }
 .heritage-mobility-note strong { text-transform: uppercase; }
-.heritage-mobility-note a { margin-left: auto; color: var(--seal, #8c2f23); font-weight: 800; white-space: nowrap; }
+/* 18 Nov: measured 16px — the mobility guide's note link sat under the
+   floor. */
+.heritage-mobility-note a { margin-left: auto; color: var(--seal, #8c2f23); font-weight: 800; white-space: nowrap; display: inline-flex; align-items: center; min-height: 24px; }
 
 .onep-coverage {
   padding: clamp(34px, 5vw, 64px) var(--gutter, 5vw);
@@ -7102,6 +7104,12 @@ body:has(.sh-figexport) { background: #fff !important; }
   color: inherit;
   cursor: pointer;
   text-decoration: none;
+  /* 18 Nov: measured 18px — the rank table's sort buttons are a dense
+     text-control group (the §11.12 kind), so the house standard's 34px
+     row, not the WCAG floor. */
+  display: inline-flex;
+  align-items: center;
+  min-height: 34px;
 }
 .sh-rank-sort:hover, .sh-rank-sort:focus-visible { text-decoration: underline; text-decoration-color: #e5007d; text-decoration-thickness: 2px; outline: none; }
 .sh-rank-sort.is-active { text-decoration: underline; text-decoration-color: #e5007d; text-decoration-thickness: 2px; }
