@@ -880,3 +880,49 @@ Residuals the review named and this repo owns rather than fixes: the
 `#register` anchor lands ~1.2 screens above the search (owner's call if
 "straight" must be literal), and the reviewer could not re-run the 644-URL
 sweep or `npm test` in its session.
+
+## The 18-route audit — 18 November 2026 (live `bkkx-20261118-ddceedc`)
+
+The deepest single run of the round: `msh-audit` over eighteen routes ×
+three widths, which the sitemap's gaps had hidden from every earlier pass
+(`/warroom` and `/flood` are public and absent from the sitemap — the audit
+now unions them in, so an `--only=` naming a public page can never measure
+nothing). It found, and this entry closes:
+
+- **Fourteen more floors** — `/rowhouses`' explorer start links at 14px,
+  `/about`'s masthead nav at 23.5px, `/datasets`' used-by links at 22px,
+  the rank table's sort buttons at 18px (a dense group, so the 34px row),
+  the mobility guide's note link at 16px, the war-room camera-card actions
+  at 17px, the atlas deck's layer group at 23px, the atlas nav at 17px, the
+  inspector close at 41x22, and the three from the earlier passes. **Zero
+  non-exempt sub-24px targets remain on eighteen routes × three widths.**
+- **The war-room masthead took 263px on a phone** — 31% of the first screen,
+  over the MSH ceiling. It trims to its contents (58px of padding to 26,
+  the clock's three stacked lines inline); `/warroom` phone passes.
+- **The war-room's panel notes ran 94-95em lines** on desktop — ~130
+  characters. They are prose; they take the 70ch column the essay and the
+  register intro use.
+- **Two instrument calibrations from this run's own false alarms**: the
+  flood hero map read as a 178px chrome band (a fixed band with a map and
+  no labels is content), and the flood layer switcher read as chrome (a
+  tool palette inside a map container is the map's instrument). Both skip
+  now, both counted and printed.
+
+What remains, measured and recorded rather than changed at the end of a
+round: the REVIEW-band metrics — `void` (pixel-derived flat regions on
+map/catalogue surfaces) and `long-lines` on citation, provenance and
+panel-note **records** (44-51em), plus the **long-form prose measure on
+the reading surfaces**: the essay, the walk pages and the quarters run
+~70-85em lines on desktop. That last one is an editorial decision about
+line length on pages whose composition is earned content, and it goes to
+the owner with these measurements rather than being narrowed unilaterally.
+
+### Verified on `ddceedc`
+
+- 18 routes × 3 widths: zero non-exempt sub-24 targets; every route passes
+  at phone except the recorded REVIEW metrics on records and prose.
+- states audit 16/16 clean, vertical audit 32 cuts (the documented teasers)
+  with 0 unverified, verify-front title-and-parts in fold at both widths,
+  popup audit 3/3 cards, audit-live zero clipped, scale audit 11/14/32/86.4.
+- 111/111 source tests (12 instrument tests, each failing against the
+  pre-repair code) and 96/96 rendered tests, on the commit that ships.
