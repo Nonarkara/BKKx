@@ -107,6 +107,29 @@ const ROUNDS = {
     },
     devDependencies: {},
   },
+
+  // The next dependabot batch, in the same shape as every other one: the
+  // bumps that can land, and TypeScript held because typescript-eslint
+  // refuses TS 7 (typescript-eslint#10940). Twelve packages, one of them
+  // blocked by the lint gate rather than by the dependency.
+  F: {
+    dependencies: {
+      "maplibre-gl": "6.18.0",
+      next: "16.4.6",
+    },
+    devDependencies: {
+      "@cloudflare/vite-plugin": "1.69.1",
+      "@cloudflare/workers-types": "5.20261113.1",
+      "@tailwindcss/postcss": "4.3.5",
+      "@vitejs/plugin-react": "6.3.0",
+      "eslint-config-next": "16.4.6",
+      tailwindcss: "4.3.5",
+      typescript: "6.0.3",
+      vinext: "1.4.5",
+      vite: "8.3.8",
+      wrangler: "4.161.0",
+    },
+  },
 };
 
 const round = (process.argv[2] || "").toUpperCase();
