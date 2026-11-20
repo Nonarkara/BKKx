@@ -578,6 +578,19 @@ WebGL signature against production: `drawArrays/4/193950` on both, zero
 console errors. The geometry sweep over the whole surface: 644/644 URLs × 3
 viewports, 0 failures, 0 unverified.
 
+**Released.** `bkkx-20261120-dbf006b` — PR #30 merged as `063193f`, and the
+release script's own proof: the upstream worker, bkk.nonarkara.org and
+shophouses.nonarkara.org all report the new build. The MapLibre worker asset
+is live at `/_next/static/chunks/maplibre-gl-worker.mjs` (200, 519,547
+bytes), and the live atlas draws the same 193,950-vertex Thai-forms mesh with
+zero console errors.
+
+The release gate compared the Round F build field by field against the live
+production build it would replace — 644 URLs × 3 viewports, 0 failures, 0
+unverified on both sides, and **1932 route×viewport comparisons with zero
+differences**: same routes, same statuses, same overflow findings, same
+clipped findings. A dependency batch that a reader cannot see.
+
 **Remaining.** The Cloudflare rate-limiting rules still need confirming in
 the zone. The Atlas's location-evidence Worker is merged but not deployed —
 it ships with its own config, and deploying it is a separate decision.
