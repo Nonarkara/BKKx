@@ -8,14 +8,14 @@ Do not substitute one green build or one repaired screen for the full audit.
 
 | Requirement | Evidence needed | Current state |
 | --- | --- | --- |
-| Preserve all agents' earned work | Dirty trees, stashes, worktrees, local/remote refs and PR disposition; content comparison for squash merges | Inventory in agent-reconciliation-2026-10-25.md and reconciliation-2026-11-04.md; no destructive cleanup. PR25, PR4 and PR12 closed with dispositions on each PR. PR24 was held with its root cause recorded, then **landed as the 16 November PR #28 merge (`1439762`, merged as a fast-forward of the staged batch)**; PR27 (dependabot's next batch) closed as superseded — TypeScript 7 still cannot land while typescript-eslint refuses it. No branch deleted or rewritten |
+| Preserve all agents' earned work | Dirty trees, stashes, worktrees, local/remote refs and PR disposition; content comparison for squash merges | Inventory in agent-reconciliation-2026-10-25.md and reconciliation-2026-11-04.md; no destructive cleanup. PR25, PR4, PR12, PR27 closed with dispositions on each PR. The dependabot batch landed across six rounds (PR #28 `1439762`, PR #30 `063193f`, `dbf006b` live) with TypeScript 7 still held where typescript-eslint refuses it; **both repositories are at zero open PRs**, and the Atlas's PR25/16/27/29 are merged. No branch deleted or rewritten |
 | Every intended release branch is shippable | Exact SHA, complete build/type/lint/tests, no missing generated data; actual deploy target | main shipped with a proven build stamp. Other branch tips still not proven; the KL fork, the broken MapLibre 6 experiment and the feature branches remain out of scope but preserved |
 | No spatial hallucination on every public surface | Actual 390/1024/1440 geometry and screenshots; expanded/empty/error states; task evidence and action together | Whole surface swept at 390, 1024 and 1440 with an exhaustive 644-URL gate, field by field against the pre-upgrade baseline; 200% enlargement, blocked fonts and keyboard proven on every template. **Expanded, empty and error states: closed 17 November** — `tools/states-audit.mjs`, 16/16 clean (see the round entry) |
 | No AI design slop | Role-based fonts, readable hierarchy, no decorative gradients/glass/glow, content-sized groups and one meaningful accent; independent review | Typography and marker work carried forward. Whole-system slop pass not claimed; the homepage's layer chip hues and the overlapping landmark labels remain open |
 | Usable without pointer precision | Visible focus, real names, reachable controls, keyboard activation, touch targets, enlarged text | Keyboard proven on 20/20 routes with a visible ring and a real name on every tab stop; 44px targets on the new disclosure; 200% enlargement proven. Dialogs still not exercised |
 | Preserve trustworthy data | Observation/model/reference tiers, age, unknown not zero, source links; no invented safe routes or survey precision | The water relay no longer overwrites an upstream observation's age with the relay time, so a 2020 reading can no longer arrive as current 2026. A road closure the source still lists as running now survives the 24-hour window instead of being dropped. Existing safety boundaries retained; not a new validation of all feeds |
 | Production matches tested source | Commit/push, build stamp, asset hash, desktop and phone interaction checks on actual domain | Proven: the stamp travels in the artifact and the live site reports it on three domains; the deploy refuses to finish if it does not |
-| Independent review | Confirmed findings corrected and rechecked against rendered artifacts | **NOT obtained.** Four attempts on 29 October and three on 4 November all failed on the runtime's token-plan limit, not on the code. Every check in this ledger is the work of the agent that did the work. Treat the review row as open |
+| Independent review | Confirmed findings corrected and rechecked against rendered artifacts | **Obtained 17 November** — an outside agent measured this session's five commits against the live sites with its own instruments (report: `/tmp/independent-review-2026-11-17.md`, 8 findings), verdict *ship it*; every finding was answered in code or in the record (ledger entry: "Independent review — 17 November 2026"). The eleven earlier attempts had ended on the runtime's token-plan limit. A reviewer with budget closes this row; one has now run once against the instrument work |
 
 ## Remaining branch and PR work
 
@@ -998,3 +998,37 @@ provenance **rows** at 44-46em, which are data records, not prose.
   popup audit 3/3 cards, audit-live zero clipped, scale audit 11/14/32/86.4.
 - 111/111 source tests (12 instrument tests, each failing against the
   pre-repair code) and 96/96 rendered tests, on the commit that ships.
+
+## Verification of the staged upgrade — 20 November 2026
+
+Another agent landed the full dependabot batch across six rounds (PR #28
+`1439762`, PR #30 `063193f`, `dbf006b` live) with TypeScript 6.0.3 as the
+newest version whose lint gate can start — 7 stays held everywhere with
+the reason attached. Three defects were found by measuring rather than by
+compiling: MapLibre 6's web worker was never emitted (every map a grey
+rectangle, 2,647 draw calls to 93 — no crash, no failing test), the asset
+manifest step failed a *successful* build and never checked its own
+invariant, and the built Worker imports `cloudflare:workers` so Node
+could not load the shipped artifact at all. Four instruments that could
+report a result they had not earned were pinned by tests: audits that
+skipped unloadable pages and printed a clean bill of health, a rig serving
+a hollow site (HTTP 200, empty body — the atlas lost its data while the
+geometry sweep called it identical to baseline), a sweep that died at
+192/644 and left "0 failures" in its report, and a diff keyed by array
+index. The release gate compared the new build against what it would
+replace, field by field: 644 URLs × 3 viewports, 1,932 comparisons, zero
+differences.
+
+Verified here on the shipped build (`bkkx-20261120-dbf006b`, all three
+domains): the maplibre worker asset is 200 (519,547 bytes), the Atlas
+answers at its own stamp `bkk-atlas-20261119-1795079778-e06df0d`, the
+`/shophouses` first screen is unchanged (title 707–772, all six parts
+above the fold at 390, deks at the three-line clamp), and this round's
+gates were re-run on the deployed bytes (sweep, states, vertical, popup,
+audit-live) — results in the close-out of this entry.
+
+**New owner item from this round:** the Rokehan question — whether Dr Non
+is MIYADAIKU decides whether a patched build of it may be delivered at
+all. Its Terms prohibit publishing modified versions, so the patched
+build stands as personal-use only until that is answered. Recorded here
+so it survives the session.
