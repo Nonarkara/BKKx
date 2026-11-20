@@ -536,6 +536,52 @@ behind the benchmark, and it is a product decision rather than a quality gap.
 - The Cloudflare rate-limiting rules are specified but must be confirmed as
   configured in the zone.
 
+## Round F — the next batch, and the TypeScript wall — 20 November 2026
+
+**Found.** Dependabot's next batch carried twelve packages and its CI failed
+with one line:
+
+```
+Error: typescript-eslint does not support TS 7.0.
+```
+
+The same wall every batch has hit since the first: TypeScript 7 is the Go
+port, and the lint gate cannot start against it. Its support for TS ≥ 7.1 is
+tracked upstream (typescript-eslint#10940). TypeScript 6.0.3 keeps the
+classic compiler API this repo's gates run on, so 6.0.3 is the newest
+TypeScript whose lint gate can run at all. A dependency bump that leaves the
+lint gate unable to start is not an upgrade; it is a broken gate wearing a
+version number.
+
+**Changed.** Eleven packages landed, TypeScript held:
+
+| Package | From | To |
+| --- | --- | --- |
+| maplibre-gl | 6.16.0 | 6.18.0 |
+| next | 16.4.5 | 16.4.6 |
+| @cloudflare/vite-plugin | 1.67.0 | 1.69.1 |
+| @cloudflare/workers-types | 5.20261106.1 | 5.20261113.1 |
+| @tailwindcss/postcss | 4.3.4 | 4.3.5 |
+| @vitejs/plugin-react | 6.2.1 | 6.3.0 |
+| eslint-config-next | 16.4.5 | 16.4.6 |
+| tailwindcss | 4.3.4 | 4.3.5 |
+| vinext | 1.4.4 | 1.4.5 |
+| vite | 8.3.6 | 8.3.8 |
+| wrangler | 4.158.0 | 4.161.0 |
+| typescript | 6.0.3 | **held** |
+
+**Verified.** `npm ci` exit 0 (the lock is in sync and reproducible), build
+exit 0, no generated-file drift, `tsc --noEmit` exit 0, lint exit 0, 111/111
+source tests, 96/96 rendered tests. MapLibre 6.18 is a minor bump over 6.16
+and the atlas layer is hand-written, so the Thai forms were measured by their
+WebGL signature against production: `drawArrays/4/193950` on both, zero
+console errors. The geometry sweep over the whole surface: 644/644 URLs × 3
+viewports, 0 failures, 0 unverified.
+
+**Remaining.** The Cloudflare rate-limiting rules still need confirming in
+the zone. The Atlas's location-evidence Worker is merged but not deployed —
+it ships with its own config, and deploying it is a separate decision.
+
 ## The staged dependency upgrade — 15 November 2026
 
 **Found.** PR24 carried 24 packages. It had been held with a stated reason —
