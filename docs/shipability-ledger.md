@@ -1032,3 +1032,44 @@ is MIYADAIKU decides whether a patched build of it may be delivered at
 all. Its Terms prohibit publishing modified versions, so the patched
 build stands as personal-use only until that is answered. Recorded here
 so it survives the session.
+
+## Final audit — 23 November 2026
+
+Base `ba33933` (live `bkkx-20261120-dbf006b`). This session ran the full
+instrument suite against the shipped bytes one final time.
+
+### Gates re-verified on the shipped build
+
+| Gate | Result |
+|------|--------|
+| **Geometry sweep** | 644/644 URLs at 390 and 1440 — **0 geometry failures, 0 unverified** |
+| **States audit** | 16/16 states clean (empty search, failed flood feeds, opened decks/cards/figures); 0 clipped, 0 non-exempt sub-24 targets |
+| **Vertical audit** | 32 clamped cuts = documented Old Town teasers only; 0 unverified |
+| **Popup audit** | 3/3 heritage inspector cards measured, 0 clipped text nodes inside |
+| **Audit-live (deployed bytes)** | Homepage, war room, atlas, shophouses front: 0 clipped; war-room tally units at 11px; all 20 atlas layer buttons measure their own width exactly; shophouses front part rows 96/77, title in fold |
+| **MSH audit (18 routes × 3 widths)** | Zero non-exempt sub-24 targets on all 18 routes × 3 widths; all routes pass at phone |
+| **Tests** | 111/111 source + 96/96 rendered = 207/207 pass |
+
+### Remaining REVIEW metrics (documented, not defects)
+
+| Route | Metric | What it is |
+|-------|--------|------------|
+| `/heritage`, `/datasets`, `/areas/rattanakosin` | REVIEW 3 (void, long-lines) | Citation/provenance **rows** at 44-46em — data records, not prose |
+| `/walks/royal-axis`, `/areas/rattanakosin` | REVIEW 3-5 (stretch, void, long-lines) | Reading surfaces with long-form prose (editorial decision) |
+| `/shophouses/read/1`, `/shophouses/atlas` | REVIEW 1 (long-lines) | Long-form essay/atlas prose — earned content, ~64-78em |
+
+### Owner items still open
+
+1. **Cloudflare WAF** — Confirm rate-limiting rules in `docs/pageview-rate-limits.md` are active in the `nonarkara.org` zone
+2. **KL Framing** — Bangkok opens flat, Kuala Lumpur opens 3D (product decision)
+3. **Phone Check** — Open `https://shophouses.nonarkara.org/` on physical phone
+4. **Rokehan/MIYADAIKU** — Whether a patched build may be delivered (Terms prohibit publishing modified versions)
+
+### Ledger & Memory
+- **Shipability ledger** fully current through 23 November 2026
+- **Session memories**: `Memory/Sessions/2026-11-20-102905-bkkx.md`, `2026-11-18-041508-bkkx.md`
+- **Both repos at zero open PRs**
+
+---
+
+**Verdict: Ship it.** All engineering gates pass. The only blockers are owner decisions outside the engineering scope.
