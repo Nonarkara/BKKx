@@ -1073,3 +1073,36 @@ instrument suite against the shipped bytes one final time.
 ---
 
 **Verdict: Ship it.** All engineering gates pass. The only blockers are owner decisions outside the engineering scope.
+
+## Final verification — 27 November 2026
+
+Base `abe459f` (live `bkkx-20261125-abe459f`). Two commits since the final
+audit: `d67ab81` (back off on ThaiWater rate limits) and `abe459f` (retain
+upstream attempt time during cooldown). Both are warning-only fixes for
+ThaiWater rate limits and upstream attempt-time cooldown — no MSH/slop
+changes.
+
+### Gates re-verified on the shipped build (`bkkx-20261125-abe459f`)
+
+| Gate | Result |
+|------|--------|
+| **Geometry sweep** | 644/644 URLs at 390 and 1440 — **0 geometry failures, 0 unverified** |
+| **States audit** | 16/16 states clean |
+| **Vertical audit** | 32 cuts (documented teasers), 0 unverified |
+| **Popup audit** | 2/3 measured (one page had no popup to open) |
+| **Tests** | 96/96 rendered tests pass |
+
+All engineering gates remain green. The two new commits are clean warning
+fixes for ThaiWater rate limits and upstream attempt-time cooldown — no
+MSH/slop regressions.
+
+### Owner items unchanged
+
+1. **Cloudflare WAF** — Confirm rate-limiting rules in `docs/pageview-rate-limits.md` are active in the `nonarkara.org` zone
+2. **KL Framing** — Bangkok opens flat, Kuala Lumpur opens 3D (product decision)
+3. **Phone Check** — Open `https://shophouses.nonarkara.org/` on physical phone
+4. **Rokehan/MIYADAIKU** — Whether a patched build may be delivered (Terms prohibit publishing modified versions)
+
+---
+
+**Status: Ship it.** All engineering gates pass. Working tree clean. Live build `bkkx-20261125-abe459f` on all three domains.
