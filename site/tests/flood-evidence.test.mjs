@@ -7,12 +7,16 @@ import {handleLiveThaiwaterWarnings,normaliseThaiwaterRain,normaliseThaiwaterWar
 test('ThaiWater honours a bounded 429 cooldown without publishing a warning count', async () => {
   const { handleLiveThaiwaterWarnings: warnings } = await import('../worker/live.ts?warning-cooldown');
   const original = globalThis.fetch;
+  const originalNow = Date.now;
+  let clock = originalNow();
+  Date.now = () => clock;
   let calls = 0;
   globalThis.fetch = async () => {
     calls++;
     return new Response(null, { status: 429, headers: { 'retry-after': '900' } });
   };
   try {
+    let firstAttempt;
     for (let i = 0; i < 2; i++) {
       const r = await warnings();
       assert.equal(r.headers.get('cache-control'), 'no-store');
@@ -20,10 +24,17 @@ test('ThaiWater honours a bounded 429 cooldown without publishing a warning coun
       const body = await r.json();
       assert.equal(body.ok, false);
       assert.equal(body.data, undefined);
+      firstAttempt ??= body.fetchedAt;
+      assert.equal(body.fetchedAt, firstAttempt);
+      clock += 1000;
     }
     assert.equal(calls, 1);
+    clock += 300000;
+    await warnings();
+    assert.equal(calls, 2);
   } finally {
     globalThis.fetch = original;
+    Date.now = originalNow;
   }
 });
 import {waterCanalGatesResponse,waterRoadsFloodedResponse,waterDamsResponse,waterEmergencyPointsResponse,waterAlertsResponse,waterNewsWatchResponse,waterSourcesHealthResponse,waterRoadsXrefResponse} from '../worker/flood.ts';

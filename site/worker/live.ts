@@ -30,7 +30,7 @@ const TTL_SECONDS = 300;
 const THAIWATER_TTL_SECONDS = 900;
 // A rate-limited isolate must not immediately retry for every new visitor.
 // No stale warning counts are returned through the current CityGlance contract.
-let thaiwaterWarningRetryAt = 0;
+let thaiwaterWarningCooldown: { retryAt: number; fetchedAt: string } | undefined;
 
 export type LiveEnvelope<T> = {
   ok: boolean;
@@ -283,15 +283,16 @@ export async function handleLiveThaiwaterWarnings(): Promise<Response> {
   const now = Date.now();
   const fetchedAt = new Date(now).toISOString();
   const base = { fetchedAt, source: THAIWATER_WARNINGS_UPSTREAM };
-  const limited = () => {
+  const limited = ({ retryAt, fetchedAt: attemptedAt }: NonNullable<typeof thaiwaterWarningCooldown>) => {
     const response = envelope({
-      ...base, ok: false,
+      ...base, fetchedAt: attemptedAt, ok: false,
       reason: "ThaiWater warning table returned HTTP 429. Current warnings are unknown.",
     });
-    response.headers.set("retry-after", String(Math.max(1, Math.ceil((thaiwaterWarningRetryAt - Date.now()) / 1000))));
+    response.headers.set("retry-after", String(Math.max(1, Math.ceil((retryAt - Date.now()) / 1000))));
     return response;
   };
-  if (now < thaiwaterWarningRetryAt) return limited();
+  if (thaiwaterWarningCooldown && now < thaiwaterWarningCooldown.retryAt)
+    return limited(thaiwaterWarningCooldown);
 
   const ctrl = new AbortController();
   const timer = setTimeout(() => ctrl.abort(), UPSTREAM_TIMEOUT_MS);
@@ -307,8 +308,10 @@ export async function handleLiveThaiwaterWarnings(): Promise<Response> {
         ? Number(retryAfter)
         : (Date.parse(retryAfter) - observedAt) / 1000;
       const seconds = Number.isFinite(requested) ? Math.min(300, Math.max(30, requested)) : 60;
-      thaiwaterWarningRetryAt = Math.max(thaiwaterWarningRetryAt, observedAt + seconds * 1000);
-      return limited();
+      const retryAt = observedAt + seconds * 1000;
+      if (!thaiwaterWarningCooldown || retryAt > thaiwaterWarningCooldown.retryAt)
+        thaiwaterWarningCooldown = { retryAt, fetchedAt };
+      return limited(thaiwaterWarningCooldown);
     }
     if (!res.ok) {
       return envelope({ ...base, ok: false, reason: `ThaiWater warning table returned HTTP ${res.status}.` });
