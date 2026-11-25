@@ -28,6 +28,9 @@ const THAIWATER_WARNINGS_UPSTREAM =
 const UPSTREAM_TIMEOUT_MS = 6_000;
 const TTL_SECONDS = 300;
 const THAIWATER_TTL_SECONDS = 900;
+// A rate-limited isolate must not immediately retry for every new visitor.
+// No stale warning counts are returned through the current CityGlance contract.
+let thaiwaterWarningRetryAt = 0;
 
 export type LiveEnvelope<T> = {
   ok: boolean;
@@ -277,8 +280,18 @@ export function normaliseThaiwaterWarnings(raw: unknown): { bangkok: ThaiWarning
 }
 
 export async function handleLiveThaiwaterWarnings(): Promise<Response> {
-  const fetchedAt = new Date().toISOString();
+  const now = Date.now();
+  const fetchedAt = new Date(now).toISOString();
   const base = { fetchedAt, source: THAIWATER_WARNINGS_UPSTREAM };
+  const limited = () => {
+    const response = envelope({
+      ...base, ok: false,
+      reason: "ThaiWater warning table returned HTTP 429. Current warnings are unknown.",
+    });
+    response.headers.set("retry-after", String(Math.max(1, Math.ceil((thaiwaterWarningRetryAt - Date.now()) / 1000))));
+    return response;
+  };
+  if (now < thaiwaterWarningRetryAt) return limited();
 
   const ctrl = new AbortController();
   const timer = setTimeout(() => ctrl.abort(), UPSTREAM_TIMEOUT_MS);
@@ -287,6 +300,16 @@ export async function handleLiveThaiwaterWarnings(): Promise<Response> {
       signal: ctrl.signal,
       headers: { accept: "application/json", "user-agent": "BKKx/1.0 (+https://bkk.nonarkara.org)" },
     });
+    if (res.status === 429) {
+      const retryAfter = res.headers.get("retry-after")?.trim() ?? "";
+      const observedAt = Date.now();
+      const requested = /^\d+$/.test(retryAfter)
+        ? Number(retryAfter)
+        : (Date.parse(retryAfter) - observedAt) / 1000;
+      const seconds = Number.isFinite(requested) ? Math.min(300, Math.max(30, requested)) : 60;
+      thaiwaterWarningRetryAt = Math.max(thaiwaterWarningRetryAt, observedAt + seconds * 1000);
+      return limited();
+    }
     if (!res.ok) {
       return envelope({ ...base, ok: false, reason: `ThaiWater warning table returned HTTP ${res.status}.` });
     }
